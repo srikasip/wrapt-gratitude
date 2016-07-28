@@ -1,21 +1,27 @@
 %p#notice= notice
 
-%p
-  %b Title:
+%h1
   = @product.title
-%p
-  %b Description:
-  = @product.description
-%p
-  %b Price:
-  = @product.price
-%p
-  %b Price:
-  = @product.price
-%p
-  %b Public:
-  = @product.public
+  %small
+    = link_to 'Edit', edit_product_path(@product)
+    \|
+    = link_to 'Back', products_path
 
-= link_to 'Edit', edit_product_path(@product)
-\|
-= link_to 'Back', products_path
+
+%p
+  = @product.description
+
+%p
+  %b Price:
+  = number_to_currency @product.price
+
+%p
+  - if @product.public?
+    Visible to the Public
+  - else
+    Hidden from the Public
+
+%p
+  = image_tag @product.image_url(:large) if @product.image?
+
+

@@ -4,7 +4,13 @@
   .form-inputs
     = f.input :title
     = f.input :description
-    = f.input :price
+    
+    = f.input :image, as: :file
+    = f.hidden_field :image_cache
+    = image_tag @product.image_url(:small) if @product.image?
+    = f.input :remove_image, as: :boolean
+
+    
     = f.input :price
     = f.input :public
 
