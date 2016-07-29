@@ -6,7 +6,24 @@
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
+
+    %nav.navbar.navbar-inverse.navbar-static-top
+      .container-fluid
+        .navbar-header
+        .collapse.navbar-collapse
+          %ul.nav.navbar-nav
+            %li= link_to "Home", root_path
+            %li= link_to "Products", products_path
+
+
+
+         
     .container
       = yield
+
+    %footer
+      .container-fluid
+        .row(style="text-align: center;")
+          = link_to image_tag('logo-full-size.png', height: 50), root_path
 
     = yield :page_js
