@@ -1,0 +1,8 @@
+= simple_form_for(@survey_question) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :prompt
+
+  .form-actions
+    = f.button :submit
