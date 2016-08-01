@@ -1,17 +1,6 @@
-%h1 Listing surveys
+%h1 Surveys
 
-%table.table
-  %thead
-    %tr
-      %th Title
-
-  %tbody
-    - @surveys.each do |survey|
-      %tr
-        %td= survey.title
-        %td= link_to 'Edit', edit_survey_path(survey)
-        %td= link_to 'Destroy', survey, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-%br
-
-= link_to 'New Survey', new_survey_path
+%ul
+  - @surveys.each do |survey|
+    %li= link_to survey.title, survey
+%p= link_to 'Create a New Survey', new_survey_path, class: 'btn btn-default'

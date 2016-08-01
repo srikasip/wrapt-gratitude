@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :products
-  resources :surveys, except: :show do
+  resources :surveys do
     resources :questions, except: :show, controller: 'survey_questions' do
       resources :options, except: [:index, :show], controller: 'survey_question_options'
     end
