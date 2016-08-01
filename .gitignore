@@ -21,3 +21,5 @@
 .byebug_history
 *.sublime-project
 *.sublime-workspace
+
+/public/uploads
