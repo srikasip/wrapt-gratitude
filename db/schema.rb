@@ -10,10 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160729165839) do
+ActiveRecord::Schema.define(version: 20160801183308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "product_categories", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "lft",                        null: false
+    t.integer  "rgt",                        null: false
+    t.integer  "parent_id"
+    t.integer  "depth",          default: 0, null: false
+    t.integer  "children_count", default: 0, null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["lft"], name: "index_product_categories_on_lft", using: :btree
+    t.index ["parent_id"], name: "index_product_categories_on_parent_id", using: :btree
+    t.index ["rgt"], name: "index_product_categories_on_rgt", using: :btree
+  end
 
   create_table "products", force: :cascade do |t|
     t.string   "title"

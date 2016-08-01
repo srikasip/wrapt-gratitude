@@ -1,0 +1,9 @@
+= simple_form_for(@product_category) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name
+    = f.association :parent, collection: ProductCategory.top_level
+
+  .form-actions
+    = f.button :submit

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :product_categories
   resources :products
   resources :surveys do
     resources :questions, except: [:index, :show], controller: 'survey_questions' do
