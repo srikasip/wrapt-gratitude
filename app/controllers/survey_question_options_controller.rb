@@ -21,7 +21,7 @@ class SurveyQuestionOptionsController < ApplicationController
     @survey_question_option = @survey_question.options.new(survey_question_option_params)
     
     if @survey_question_option.save
-      redirect_to survey_path(@survey), notice: 'Survey Question Option was successfully created.'
+      redirect_to survey_question_path(@survey, @survey_question), notice: 'Changes Saved.'
     else
       render :new
     end
@@ -29,7 +29,7 @@ class SurveyQuestionOptionsController < ApplicationController
 
   def update    
     if @survey_question_option.update(survey_question_option_params)
-      redirect_to survey_path(@survey), notice: 'Survey Question Option was successfully updated.'
+      redirect_to survey_question_path(@survey, @survey_question), notice: 'Changes Saved.'
     else
       render :edit
     end
@@ -37,7 +37,7 @@ class SurveyQuestionOptionsController < ApplicationController
 
   def destroy
     @survey_question_option.destroy
-    redirect_to surveys_url, notice: 'Survey Question Option was successfully destroyed.'
+     redirect_to survey_question_path(@survey, @survey_question), notice: 'Option Deleted.'
   end
 
   private

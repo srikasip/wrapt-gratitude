@@ -3,4 +3,5 @@
 %ul
   - @surveys.each do |survey|
     %li= link_to survey.title, survey
-%p= link_to 'Create a New Survey', new_survey_path, class: 'btn btn-default'
+
+%p= link_to 'Create a New Survey', new_survey_path, class: 'btn btn-success'

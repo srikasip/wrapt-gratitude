@@ -1,24 +1,15 @@
 %h1
   = @survey.title
-  = link_to "Edit Title", edit_survey_path(@survey), class: 'btn btn-default btn-sm'
+  = link_to "Edit Title", edit_survey_path(@survey), class: 'btn btn-primary btn-sm'
 
-- @survey.questions.each_with_index do |question, i|
+%p= link_to "Add New Question", new_survey_question_path(@survey), class: 'btn btn-success'
+
+- @survey.questions.preload(:options).each_with_index do |question, i|
   %p
     #{i+1}.
     = question.prompt
-    = link_to 'Edit', edit_survey_question_path(@survey, question), class: 'btn btn-default btn-xs'
+    = link_to 'Edit Text', edit_survey_question_path(@survey, question), class: 'btn btn-primary btn-xs'
+    = link_to 'Manage Options', survey_question_path(@survey, question), class: 'btn btn-primary btn-xs'
     = link_to 'Delete', survey_question_path(@survey, question), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'
-  %ul
-    - question.options.each do |option|
-      %li
-        = option.text
-        - if option.image
-          %br
-          = image_tag option.image_url(:small)
-        %br
-        %br  
-        = link_to 'Edit', edit_survey_question_option_path(@survey, question, option), class: 'btn btn-default btn-xs'
-        = link_to 'Delete', survey_question_option_path(@survey, question, option), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'
-  %p= link_to "Add new option", new_survey_question_option_path(@survey, question), class: 'btn btn-default btn-xs'
 
-%p= link_to "Add New Question", new_survey_question_path(@survey), class: 'btn btn-default'
+

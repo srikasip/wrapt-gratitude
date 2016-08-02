@@ -1,6 +1,6 @@
 class SurveyQuestionsController < ApplicationController
   before_action :set_survey
-  before_action :set_survey_question, only: [:edit, :update, :destroy]
+  before_action :set_survey_question, only: [:show, :edit, :update, :destroy]
 
   def new
     @survey_question = @survey.questions.new
