@@ -17,10 +17,12 @@
             %li= link_to "Product Categories", product_categories_path
             %li= link_to "Surveys", surveys_path
 
+    
 
 
          
     .container
+      = render 'layouts/alerts'
       = yield
 
     %footer

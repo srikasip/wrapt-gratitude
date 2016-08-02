@@ -1,29 +1,27 @@
 %h1 Listing products
 
+%p= link_to 'Add a Product', new_product_path, class: 'btn btn-default'
+
 %table.table
   %thead
     %tr
       %th Title
       %th Description
       %th Price
-      %th Price
-      %th Public
       %th
-      %th
-      %th
+
 
   %tbody
     - @products.each do |product|
       %tr
         %td= product.title
         %td= product.description
-        %td= product.price
-        %td= product.price
-        %td= product.public
-        %td= link_to 'Show', product
-        %td= link_to 'Edit', edit_product_path(product)
-        %td= link_to 'Destroy', product, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %td= number_to_currency product.price
+        %td
+          = link_to 'Show', product, class: 'btn btn-primary btn-xs'
+          = link_to 'Edit', edit_product_path(product), class: 'btn btn-primary btn-xs'
+          = link_to 'Destroy', product, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
 
 %br
 
-= link_to 'New Product', new_product_path
+
