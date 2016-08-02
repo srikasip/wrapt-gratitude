@@ -69,6 +69,13 @@ class ProductCategoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_category_params
-      params.require(:product_category).permit(:name, :lft, :rgt, :parent_id, :depth, :children_count)
+      params.require(:product_category).permit(
+        :name,
+        :lft,
+        :rgt,
+        :parent_id,
+        :depth,
+        :children_count
+      )
     end
 end

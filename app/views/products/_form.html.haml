@@ -14,5 +14,8 @@
     = f.input :price
     = f.input :public
 
+    %h3 Categories
+    = f.association :product_categories, as: :check_boxes, collection: ProductCategory.all_for_product_form, label_method: :name_for_product_form
+
   .form-actions
     = f.button :submit

@@ -11,7 +11,7 @@
       - if product_category.children.any?
         %ul
           - product_category.children.each do |subcategory|
-            %li
+            %li(style="margin: 5px;")
               = subcategory.name
               = link_to 'Edit', edit_product_category_path(subcategory), class: 'btn btn-default btn-xs'
               = link_to 'Delete', product_category_path(subcategory), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'
