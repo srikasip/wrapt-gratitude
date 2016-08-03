@@ -1,10 +1,9 @@
-= simple_form_for(@training_set_product_question) do |f|
+= simple_form_for(@training_set_product_question, url: url) do |f|
   = f.error_notification
 
   .form-inputs
-    = f.association :training_set
     = f.association :product
-    = f.association :question
+    = f.association :survey_question, label: 'Question', label_method: :prompt, collection: @training_set.survey.questions
 
   .form-actions
-    = f.button :submit
+    = f.button :submit, "Save"

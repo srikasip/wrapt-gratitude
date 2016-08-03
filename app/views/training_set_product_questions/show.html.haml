@@ -1,15 +1,12 @@
-%p#notice= notice
-
 %p
   %b Training set:
-  = @training_set_product_question.training_set
+  = @training_set_product_question.training_set.name
 %p
   %b Product:
-  = @training_set_product_question.product
+  = link_to @training_set_product_question.product.title, @training_set_product_question.product
 %p
   %b Question:
-  = @training_set_product_question.question
+  = @training_set_product_question.survey_question.prompt
 
 = link_to 'Edit', edit_training_set_product_question_path(@training_set_product_question)
-\|
-= link_to 'Back', training_set_product_questions_path
+
