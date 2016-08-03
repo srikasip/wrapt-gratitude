@@ -16,6 +16,7 @@ class TrainingSetProductQuestionsController < ApplicationController
     @training_set_product_question = @training_set.product_questions.new(training_set_product_question_params)
 
     if @training_set_product_question.save
+      @training_set_product_question.create_response_impacts
       redirect_to @training_set, notice: 'Product-Question was successfully created.'
     else
       render :new
@@ -45,6 +46,10 @@ class TrainingSetProductQuestionsController < ApplicationController
     end
 
     def training_set_product_question_params
-      params.require(:training_set_product_question).permit(:product_id, :survey_question_id)
+      params.require(:training_set_product_question).permit(
+        :product_id,
+        :survey_question_id,
+        response_impacts_attributes: [:id, :impact]
+      )
     end
 end
