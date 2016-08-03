@@ -1,4 +1,6 @@
-%h1= @training_set.name
+%h1
+  = @training_set.name
+  = link_to 'Edit Title', edit_training_set_path(@training_set), class: 'btn btn-default'
 
 %p
   %b Survey:
@@ -15,16 +17,12 @@
       %th Question
       %th
   %tbody
-    - @training_set.product_questions.each do |product_question|
+    - @training_set_product_questions.preload(:product, :survey_question).each do |product_question|
       %tr
         %td= product_question.product&.title
         %td= product_question.survey_question&.prompt
         %td
           = link_to 'Edit', edit_training_set_product_question_path(@training_set, product_question), class: 'btn btn-xs btn-primary'
           = link_to 'Destroy', training_set_product_question_path(@training_set, product_question), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'
-  
 
-
-= link_to 'Edit', edit_training_set_path(@training_set)
-\|
-= link_to 'Back', training_sets_path
+= paginate @training_set_product_questions

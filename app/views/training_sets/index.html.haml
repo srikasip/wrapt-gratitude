@@ -10,7 +10,7 @@
       %th
 
   %tbody
-    - @training_sets.each do |training_set|
+    - @training_sets.preload(:survey).each do |training_set|
       %tr
         %td= training_set.name
         %td= training_set.survey&.title
@@ -18,7 +18,5 @@
           = link_to 'Show', training_set, class: 'btn btn-xs btn-primary'
           = link_to 'Edit', edit_training_set_path(training_set), class: 'btn btn-xs btn-primary'
           = link_to 'Destroy', training_set, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'
-
-%br
 
 

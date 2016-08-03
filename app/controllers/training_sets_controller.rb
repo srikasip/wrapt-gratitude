@@ -10,6 +10,7 @@ class TrainingSetsController < ApplicationController
   # GET /training_sets/1
   # GET /training_sets/1.json
   def show
+    @training_set_product_questions = @training_set.product_questions.page(params[:page]).per(50)
   end
 
   # GET /training_sets/new
@@ -69,6 +70,8 @@ class TrainingSetsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def training_set_params
-      params.require(:training_set).permit(:name, :survey_id)
+      permitted_params = [:name]
+      if @training_set.new_record? then permitted_params << :survey_id end
+      params.require(:training_set).permit *permitted_params
     end
 end

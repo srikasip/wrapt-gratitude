@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   end
 
   resources :training_sets do
-    resources :product_questions, controller: 'training_set_product_questions', except: [:index]
+    resources :product_questions, controller: 'training_set_product_questions', except: [:index, :show]
   end
   root to: 'home_pages#show' 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

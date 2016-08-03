@@ -3,7 +3,7 @@
 
   .form-inputs
     = f.input :name
-    = f.association :survey
+    = f.association :survey, disabled: !@training_set.new_record?
 
   .form-actions
-    = f.button :submit
+    = f.button :submit, 'Save'

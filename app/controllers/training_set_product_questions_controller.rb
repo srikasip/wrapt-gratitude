@@ -2,9 +2,6 @@ class TrainingSetProductQuestionsController < ApplicationController
   before_action :set_training_set
   before_action :set_training_set_product_question, only: [:show, :edit, :update, :destroy]
 
-  def show
-  end
-
   def new
     @training_set_product_question = @training_set.product_questions.new
   end
@@ -17,7 +14,7 @@ class TrainingSetProductQuestionsController < ApplicationController
 
     if @training_set_product_question.save
       @training_set_product_question.create_response_impacts
-      redirect_to @training_set, notice: 'Product-Question was successfully created.'
+      redirect_to edit_training_set_product_question_path(@training_set, @training_set_product_question), notice: 'Product-Question was successfully created.'
     else
       render :new
     end
