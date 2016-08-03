@@ -1,0 +1,23 @@
+%h1 Listing training_sets
+
+%table
+  %thead
+    %tr
+      %th Name
+      %th Survey
+      %th
+      %th
+      %th
+
+  %tbody
+    - @training_sets.each do |training_set|
+      %tr
+        %td= training_set.name
+        %td= training_set.survey_id
+        %td= link_to 'Show', training_set
+        %td= link_to 'Edit', edit_training_set_path(training_set)
+        %td= link_to 'Destroy', training_set, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Training set', new_training_set_path

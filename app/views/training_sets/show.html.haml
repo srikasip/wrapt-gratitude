@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @training_set.name
+%p
+  %b Survey:
+  = @training_set.survey_id
+
+= link_to 'Edit', edit_training_set_path(@training_set)
+\|
+= link_to 'Back', training_sets_path

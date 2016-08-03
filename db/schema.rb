@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160802155523) do
+ActiveRecord::Schema.define(version: 20160803171703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,35 @@ ActiveRecord::Schema.define(version: 20160802155523) do
     t.string "title"
   end
 
+  create_table "training_set_product_questions", force: :cascade do |t|
+    t.integer  "training_set_id"
+    t.integer  "product_id"
+    t.integer  "survey_question_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.index ["product_id"], name: "index_training_set_product_questions_on_product_id", using: :btree
+    t.index ["survey_question_id"], name: "index_training_set_product_questions_on_survey_question_id", using: :btree
+    t.index ["training_set_id"], name: "index_training_set_product_questions_on_training_set_id", using: :btree
+  end
+
+  create_table "training_set_response_impacts", force: :cascade do |t|
+    t.integer  "training_set_product_question_id"
+    t.integer  "survey_question_option_id"
+    t.integer  "impact",                           default: 0, null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.index ["survey_question_option_id"], name: "index_response_impacts_option_id", using: :btree
+    t.index ["training_set_product_question_id"], name: "index_response_impacts_pq_id", using: :btree
+  end
+
+  create_table "training_sets", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "survey_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["survey_id"], name: "index_training_sets_on_survey_id", using: :btree
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
@@ -88,4 +117,7 @@ ActiveRecord::Schema.define(version: 20160802155523) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "training_set_product_questions", "products"
+  add_foreign_key "training_set_product_questions", "survey_questions"
+  add_foreign_key "training_set_product_questions", "training_sets"
 end

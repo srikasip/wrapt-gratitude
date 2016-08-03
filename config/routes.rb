@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :training_set_product_questions
+  resources :training_sets
   get 'home_pages/show'
 
   devise_for :users

@@ -1,0 +1,10 @@
+= simple_form_for(@training_set_product_question) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.association :training_set
+    = f.association :product
+    = f.association :question
+
+  .form-actions
+    = f.button :submit

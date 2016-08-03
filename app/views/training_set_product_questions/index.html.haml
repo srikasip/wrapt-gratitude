@@ -1,0 +1,25 @@
+%h1 Listing training_set_product_questions
+
+%table
+  %thead
+    %tr
+      %th Training set
+      %th Product
+      %th Question
+      %th
+      %th
+      %th
+
+  %tbody
+    - @training_set_product_questions.each do |training_set_product_question|
+      %tr
+        %td= training_set_product_question.training_set
+        %td= training_set_product_question.product
+        %td= training_set_product_question.question
+        %td= link_to 'Show', training_set_product_question
+        %td= link_to 'Edit', edit_training_set_product_question_path(training_set_product_question)
+        %td= link_to 'Destroy', training_set_product_question, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Training set product question', new_training_set_product_question_path
