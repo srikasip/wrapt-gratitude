@@ -42,6 +42,6 @@ class SurveyQuestionsController < ApplicationController
     end
 
     def survey_params
-      params.require(:survey_question).permit(:prompt)
+      params.require(:survey_question).permit(:prompt, :secondary_prompt)
     end
 end

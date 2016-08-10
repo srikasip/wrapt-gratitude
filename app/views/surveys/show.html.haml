@@ -4,12 +4,12 @@
 
 %p= link_to "Add New Question", new_survey_question_path(@survey), class: 'btn btn-success'
 
-- @survey.questions.preload(:options).each_with_index do |question, i|
-  %p
-    #{i+1}.
-    = question.prompt
-    = link_to 'Edit Text', edit_survey_question_path(@survey, question), class: 'btn btn-primary btn-xs'
-    = link_to 'Manage Options', survey_question_path(@survey, question), class: 'btn btn-primary btn-xs'
-    = link_to 'Delete', survey_question_path(@survey, question), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'
+%ol(style="list-style: decimal inside; padding: 0;")
+  - @survey.questions.preload(:options).each_with_index do |question, i|
+    %li
+      = question.prompt
+      = link_to 'Edit Question', edit_survey_question_path(@survey, question), class: 'btn btn-primary btn-xs'
+      = link_to 'Manage Options', survey_question_path(@survey, question), class: 'btn btn-primary btn-xs'
+      = link_to 'Delete', survey_question_path(@survey, question), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'
 
 

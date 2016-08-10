@@ -1,9 +1,15 @@
 %h1
   = @survey_question.prompt
 
-%p= #@survey_question.prompt
+- if @survey_question.secondary_prompt.present?
+  %p
+    %b Additional Response Prompt:
+    = @survey_question.secondary_prompt
 
-%p= link_to "Add new option", new_survey_question_option_path(@survey, @survey_question), class: 'btn btn-success btn-xs'
+
+%p
+  = link_to 'Edit Question', edit_survey_question_path(@survey, @survey_question), class: 'btn btn-primary btn-xs'
+  = link_to "Add new option", new_survey_question_option_path(@survey, @survey_question), class: 'btn btn-success btn-xs'
 
 %ol(style="list-style:lower-alpha;")
   - @survey_question.options.each do |option|
