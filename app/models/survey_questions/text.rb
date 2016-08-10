@@ -5,5 +5,9 @@ module SurveyQuestions
       false
     end
 
+    def type_label
+      "Text"
+    end
+
   end
 end

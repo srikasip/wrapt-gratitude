@@ -2,14 +2,24 @@
   = @survey.title
   = link_to "Edit Title", edit_survey_path(@survey), class: 'btn btn-primary btn-sm'
 
-%p= link_to "Add New Question", new_survey_multiple_choice_question_path(@survey), class: 'btn btn-success'
+.btn-group
+  %a.btn.btn-success.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+    Add New Question
+    %span.caret
+  %ul.dropdown-menu
+    %li= link_to "Multiple Choice", new_survey_multiple_choice_question_path(@survey)
+    %li= link_to "Text", new_survey_text_question_path(@survey)
+
+
+%p
 
 %ol(style="list-style: decimal inside; padding: 0;")
   - @survey.questions.preload(:options).each_with_index do |question, i|
     %li(style="margin: 10px 0;")
       = question.prompt
-      = link_to 'Edit Question', edit_survey_multiple_choice_question_path(@survey, question), class: 'btn btn-primary btn-xs'
-      = link_to 'Manage Options', survey_multiple_choice_question_path(@survey, question), class: 'btn btn-primary btn-xs'
+      = link_to "Edit #{question.type_label} Question", edit_survey_multiple_choice_question_path(@survey, question), class: 'btn btn-primary btn-xs'
+      - if question.is_a? SurveyQuestions::MultipleChoice
+        = link_to 'Manage Options', survey_multiple_choice_question_path(@survey, question), class: 'btn btn-primary btn-xs'
       = link_to 'Delete', survey_multiple_choice_question_path(@survey, question), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'
 
 
