@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :options, except: [:index, :show], controller: 'survey_question_options'
     end
     resources :text_questions, except: [:index, :show], controller: 'survey_questions/texts'
+    resources :range_questions, except: [:index, :show], controller: 'survey_questions/ranges'
   end
 
   resources :training_sets do

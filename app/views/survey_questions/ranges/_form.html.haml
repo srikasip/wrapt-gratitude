@@ -1,0 +1,12 @@
+= simple_form_for @survey_question, url: url do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :prompt
+    = f.input :min_label, label: "Left Label"
+    = f.input :max_label, label: "Right Label"
+    = f.input :mid_label, label: "Center Label (optional)"
+    = f.input :secondary_prompt, label: 'Prompt for explanatory text response'
+
+  .form-actions
+    = f.button :submit, 'Save'

@@ -4,5 +4,6 @@ class Survey < ApplicationRecord
 
   has_many :multiple_choice_questions, class_name: 'SurveyQuestions::MultipleChoice'
   has_many :text_questions, class_name: 'SurveyQuestions::Text'
+  has_many :range_questions, class_name: 'SurveyQuestions::Range'
 
 end

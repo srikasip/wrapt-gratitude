@@ -1,0 +1,3 @@
+= question.prompt
+= link_to "Edit #{question.type_label} Question", edit_survey_text_question_path(@survey, question), class: 'btn btn-primary btn-xs'
+= link_to 'Delete', survey_text_question_path(@survey, question), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'
