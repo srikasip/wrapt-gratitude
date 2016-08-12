@@ -1,0 +1,22 @@
+= simple_form_for RangeImpactCorrelationSwitching.new(@training_set_product_question), url: training_set_product_question_range_impact_correlation_switchings_path(@training_set, @training_set_product_question) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = render 'product_question_details'
+    
+    %h3 Response Impacts
+    %table.table
+      %thead
+        %tr
+          %th Direction
+          %th Impact
+      %tbody
+        %tr
+          %td= @training_set_product_question.survey_question.min_label
+          %td= @training_set_product_question.range_impact_direct_correlation? ? 'Negative' : 'Positive'
+        %tr
+          %td= @training_set_product_question.survey_question.max_label
+          %td= @training_set_product_question.range_impact_direct_correlation? ? 'Positive' : 'Negative'
+
+  .form-actions
+    = f.button :submit, "Switch Direction"

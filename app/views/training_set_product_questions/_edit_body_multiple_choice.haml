@@ -1,0 +1,17 @@
+= simple_form_for(@training_set_product_question, url: training_set_product_question_path(@training_set, @training_set_product_question)) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = render 'product_question_details'
+
+    
+    %h3 Response Impacts
+    %table.table
+      = f.simple_fields_for :response_impacts do |response_impact_fields|
+        %tr
+          %td= response_impact_fields.object.survey_question_option.text
+          %td= response_impact_fields.input :impact, label: false, wrapper: false
+
+  .form-actions
+    = f.button :submit, "Save"
+

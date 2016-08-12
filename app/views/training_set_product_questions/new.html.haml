@@ -1,5 +1,14 @@
-%h1 New training_set_product_question
+%h1 New Product-Question
 
-= render 'form', url: training_set_product_questions_path(@training_set)
+= simple_form_for(@training_set_product_question, url: training_set_product_questions_path(@training_set)) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.association :product
+    = f.association :survey_question, label: 'Question', label_method: :prompt, collection: @training_set.survey.questions
+
+  .form-actions
+    = f.button :submit, "Save"
+
 
 = link_to 'Back', training_set_product_questions_path

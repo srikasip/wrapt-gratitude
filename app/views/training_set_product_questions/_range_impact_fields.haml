@@ -1,0 +1,12 @@
+%table.table
+  %thead
+    %tr
+      %th Direction
+      %th Impact
+  %tbody
+    %tr
+      %td= @training_set_product_question.survey_question.min_label
+      %td= @training_set_product_question.range_impact_direct_correlation? ? 'Negative' : 'Positive'
+    %tr
+      %td= @training_set_product_question.survey_question.max_label
+      %td= @training_set_product_question.range_impact_direct_correlation? ? 'Positive' : 'Negative'
