@@ -5,10 +5,7 @@
 
   .form-inputs
     = f.association :product
-    = f.association :survey_question, label: 'Question', label_method: :prompt, collection: @training_set.survey.questions
+    = f.association :survey_question, label: 'Question', label_method: :prompt, collection: @training_set.survey.questions.where.not(type: 'SurveyQuestions::Text')
 
   .form-actions
     = f.button :submit, "Save"
-
-
-= link_to 'Back', training_set_product_questions_path
