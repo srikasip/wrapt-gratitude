@@ -1,0 +1,19 @@
+%h1 Listing Profile Sets
+
+%p= link_to 'New Profile Set', new_profile_set_path, class: 'btn btn-success'
+
+%table.table
+  %thead
+    %tr
+      %th Name
+      %th
+
+  %tbody
+    - @profile_sets.each do |profile_set|
+      %tr
+        %td= profile_set.name
+        %td
+          = link_to 'Change Name', edit_profile_set_path(profile_set), class: 'btn btn-xs btn-primary'
+          = link_to 'Destroy', profile_set, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'
+
+

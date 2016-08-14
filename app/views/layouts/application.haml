@@ -6,18 +6,7 @@
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
-
-    %nav.navbar.navbar-inverse.navbar-static-top
-      .container-fluid
-        .navbar-header
-        .collapse.navbar-collapse
-          %ul.nav.navbar-nav
-            %li= link_to "Home", root_path
-            %li= link_to "Products", products_path
-            %li= link_to "Product Categories", product_categories_path
-            %li= link_to "Surveys", surveys_path
-            %li= link_to "Training Sets", training_sets_path
-
+    = render 'layouts/top_nav'
     
 
 

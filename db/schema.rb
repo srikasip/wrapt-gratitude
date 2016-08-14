@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160812130104) do
+ActiveRecord::Schema.define(version: 20160814201543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,22 @@ ActiveRecord::Schema.define(version: 20160812130104) do
     t.string   "image"
   end
 
+  create_table "profile_set_survey_responses", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "profile_set_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["profile_set_id"], name: "index_profile_set_survey_responses_on_profile_set_id", using: :btree
+  end
+
+  create_table "profile_sets", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "survey_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["survey_id"], name: "index_profile_sets_on_survey_id", using: :btree
+  end
+
   create_table "survey_question_options", force: :cascade do |t|
     t.integer  "survey_question_id", null: false
     t.text     "text"
@@ -55,6 +71,20 @@ ActiveRecord::Schema.define(version: 20160812130104) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.index ["survey_question_id"], name: "index_survey_question_options_on_survey_question_id", using: :btree
+  end
+
+  create_table "survey_question_responses", force: :cascade do |t|
+    t.integer  "profile_set_survey_response_id", null: false
+    t.integer  "survey_question_id",             null: false
+    t.text     "text_response"
+    t.integer  "survey_question_option_id"
+    t.float    "range_response"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "name"
+    t.index ["profile_set_survey_response_id"], name: "index_question_response_on_survey_response_id", using: :btree
+    t.index ["survey_question_id"], name: "index_survey_question_responses_on_survey_question_id", using: :btree
+    t.index ["survey_question_option_id"], name: "index_survey_question_responses_on_survey_question_option_id", using: :btree
   end
 
   create_table "survey_questions", force: :cascade do |t|
@@ -123,6 +153,11 @@ ActiveRecord::Schema.define(version: 20160812130104) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "profile_set_survey_responses", "profile_sets"
+  add_foreign_key "profile_sets", "surveys"
+  add_foreign_key "survey_question_responses", "profile_set_survey_responses"
+  add_foreign_key "survey_question_responses", "survey_question_options"
+  add_foreign_key "survey_question_responses", "survey_questions"
   add_foreign_key "training_set_product_questions", "products"
   add_foreign_key "training_set_product_questions", "survey_questions"
   add_foreign_key "training_set_product_questions", "training_sets"

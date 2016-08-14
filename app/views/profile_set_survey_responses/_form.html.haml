@@ -1,0 +1,14 @@
+= simple_form_for(@profile_set_survey_response, url: url) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name, label: 'Name for this response'
+
+    = f.simple_fields_for :question_responses do |question_response_fields|
+      %h3= question_response_fields.object.survey_question.prompt
+      = question_response_fields.input :survey_question_id, as: :hidden
+      = render question_response_fields_partial(question_response_fields.object), question_response_fields: question_response_fields
+
+
+  .form-actions
+    = f.button :submit, "Save"

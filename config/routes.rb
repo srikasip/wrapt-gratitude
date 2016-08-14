@@ -20,6 +20,11 @@ Rails.application.routes.draw do
       resources :range_impact_correlation_switchings, only: :create
     end
   end
+
+  resources :profile_sets do
+    resources :survey_responses, controller: 'profile_set_survey_responses', except: [:index, :show]
+  end
+
   root to: 'home_pages#show' 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

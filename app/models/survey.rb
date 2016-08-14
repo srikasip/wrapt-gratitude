@@ -6,4 +6,7 @@ class Survey < ApplicationRecord
   has_many :text_questions, class_name: 'SurveyQuestions::Text'
   has_many :range_questions, class_name: 'SurveyQuestions::Range'
 
+  has_many :profile_sets, inverse_of: :survey, dependent: :destroy
+  has_many :training_sets, inverse_of: :survey, dependent: :destroy
+
 end
