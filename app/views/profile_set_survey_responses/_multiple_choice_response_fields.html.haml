@@ -1,1 +1,18 @@
-= question_response_fields.association :survey_question_option, label: false, as: :radio_buttons, collection: question_response_fields.object.survey_question.options, label_method: :text
+.form-group.radio_buttons.optional.profile_set_survey_response_question_responses_survey_question_option
+  %input{:name => "profile_set_survey_response[question_responses_attributes][0][survey_question_option_id]", :type => "hidden", :value => ""}
+  - question_response_fields.object.survey_question.options.each do |option|
+    %span.radio
+      %label{:for => "profile_set_survey_response_question_responses_attributes_#{question_response_fields.index}_survey_question_option_id_#{option.id}"}
+        = question_response_fields.radio_button :survey_question_option_id, option.id
+        = option.text
+        - if option.image?
+          %br
+          = image_tag option.image_url(:small)
+
+        / %input#profile_set_survey_response_question_responses_attributes_0_survey_question_option_id_1.radio_buttons.optional{:name => "profile_set_survey_response[question_responses_attributes][0][survey_question_option_id]", :type => "radio", :value => "1"}>/
+        / A tropical island
+
+
+
+
+/ = question_response_fields.association :survey_question_option, label: false, as: :radio_buttons, collection: question_response_fields.object.survey_question.options, label_method: :text
