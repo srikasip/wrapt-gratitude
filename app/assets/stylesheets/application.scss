@@ -16,12 +16,8 @@
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "bootstrap-sliders-custom";
 
 .main.container {
   min-height: 80vh;
-}
-
-body .slider-track {
-  background-color: #BABABA;
-  background-image: none;
 }
