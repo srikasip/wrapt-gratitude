@@ -1,0 +1,17 @@
+%h1= @training_set_evaluation.training_set.name
+
+- if @recommendations_by_survey_response_id.empty?
+  %p We're still generating recommendations for this training set.  Please refresh the page.
+
+- else
+  - @training_set_evaluation.profile_sets.preload(:survey_responses).each do |profile_set|  
+    %h3
+      Profile Set:
+      = profile_set.name
+    - profile_set.survey_responses.each do |response|
+      %h4= response.name
+      %table.table.table-bordered
+        %tr
+          - @recommendations_by_survey_response_id[response.id].sort_by(&:score).reverse.each do |recommendation|
+            %td= link_to "#{recommendation.product.title} (#{recommendation.score.round(2)})", recommendation.product
+          
