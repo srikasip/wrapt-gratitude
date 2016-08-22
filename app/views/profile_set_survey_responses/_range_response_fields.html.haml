@@ -1,1 +1,8 @@
-= question_response_fields.input :range_response, label: false
+- response = question_response_fields.object
+- question = response.survey_question
+
+.form-group
+  %span.slider-min-label= question.min_label
+  = question_response_fields.input :range_response, label: false, wrapper: false, input_html: { data: {provide: 'slider', slider_min: -1, slider_max: 1, slider_step: '.01', slider_tooltip: 'hide', slider_value: (response.range_response || 0), slider_selection: 'none' }}
+  %span.slider-max-label= question.max_label
+=# question_response_fields.input :range_response, label: false, input_html: { data: {provide: 'slider', slider_min: -1, slider_max: 1, slider_step: '.01', slider_tooltip: 'hide', slider_value: (response.range_response || 0), slider_selection: 'none' }}

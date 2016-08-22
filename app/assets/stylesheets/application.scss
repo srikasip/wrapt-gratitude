@@ -11,10 +11,12 @@
  * It is generally better to create a new file per style scope.
  *
  *= require_self
+ *= require bootstrap-slider
  */
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "bootstrap-sliders-custom";
 
 .main.container {
   min-height: 80vh;

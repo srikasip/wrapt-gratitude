@@ -21,6 +21,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :training_set_evaluations, except: [:edit, :update]
+
   resources :profile_sets do
     resources :survey_responses, controller: 'profile_set_survey_responses', except: [:index, :show]
   end
