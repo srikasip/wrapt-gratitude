@@ -23,6 +23,6 @@
         %td= product_question.survey_question&.prompt
         %td
           = link_to 'Edit', edit_training_set_product_question_path(@training_set, product_question), class: 'btn btn-xs btn-primary'
-          = link_to 'Destroy', training_set_product_question_path(@training_set, product_question), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'
+          = link_to 'Delete', training_set_product_question_path(@training_set, product_question), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'
 
 = paginate @training_set_product_questions

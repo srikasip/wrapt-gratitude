@@ -30,7 +30,7 @@ module SurveyQuestions
 
     def destroy
       @survey.destroy
-      redirect_to surveys_url, notice: 'Survey was successfully destroyed.'
+      redirect_to surveys_url, notice: 'Survey was successfully deleted.'
     end
 
     private

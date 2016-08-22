@@ -23,7 +23,7 @@ class TrainingSetEvaluationsController < ApplicationController
 
   def destroy
     @training_set_product_question.destroy
-    redirect_to @training_set, notice: 'Product-Question was successfully destroyed.'
+    redirect_to @training_set, notice: 'Product-Question was successfully deleted.'
   end
 
   private

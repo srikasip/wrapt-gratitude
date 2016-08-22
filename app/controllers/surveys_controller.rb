@@ -52,7 +52,7 @@ class SurveysController < ApplicationController
   def destroy
     @survey.destroy
     respond_to do |format|
-      format.html { redirect_to surveys_url, notice: 'Survey was successfully destroyed.' }
+      format.html { redirect_to surveys_url, notice: 'Survey was successfully deleted.' }
     end
   end
 
