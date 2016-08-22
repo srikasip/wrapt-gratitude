@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %title Wrapt with Gratitude
+    %title Wrapt
     = csrf_meta_tags
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
@@ -19,6 +19,6 @@
     %footer
       .container-fluid
         .row(style="text-align: center;")
-          = link_to image_tag('logo-full-size.png', height: 50), root_path
+          = link_to image_tag('logo-full-size.png', height: 150), root_path
 
     = yield :page_js
