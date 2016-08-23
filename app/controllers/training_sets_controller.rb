@@ -10,7 +10,8 @@ class TrainingSetsController < ApplicationController
   # GET /training_sets/1
   # GET /training_sets/1.json
   def show
-    @training_set_product_questions = @training_set.product_questions.page(params[:page]).per(50)
+    @products = Product.all.page(params[:page]).per(50)
+    @product_question_product_ids = @training_set.product_questions.pluck "DISTINCT product_id"
   end
 
   # GET /training_sets/new

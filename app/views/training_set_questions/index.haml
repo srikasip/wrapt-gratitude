@@ -1,0 +1,7 @@
+- @product_questions.each do |product_question|
+  %tr
+    %td
+    %td= product_question.survey_question.prompt
+    %td
+      = link_to 'Edit Impact', edit_training_set_product_question_path(@training_set, product_question), class: 'btn btn-xs btn-primary'
+      = link_to 'Delete', training_set_product_question_path(@training_set, product_question), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'

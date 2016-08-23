@@ -8,21 +8,28 @@
 
 %h3 Product-Questions
 
-%p= link_to 'Add a New Product Question', new_training_set_product_question_path(@training_set), class: 'btn btn-success'
-
 %table.table
   %thead
     %tr
       %th Product
-      %th Question
+      %th
       %th
   %tbody
-    - @training_set_product_questions.order(:id).preload(:product, :survey_question).each do |product_question|
-      %tr
-        %td= product_question.product&.title
-        %td= product_question.survey_question&.prompt
+    - @products.each do |product|
+      %tr{data: {product_row: product.id}}
+        %td= product.title
+        %th
         %td
-          = link_to 'Edit', edit_training_set_product_question_path(@training_set, product_question), class: 'btn btn-xs btn-primary'
-          = link_to 'Delete', training_set_product_question_path(@training_set, product_question), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'
+          = link_to "Add Question", new_training_set_product_question_path(@training_set, product_id: product.id), class: 'btn btn-success', class: 'btn btn-success btn-xs'
+          - if product.id.in? @product_question_product_ids
+            = link_to training_set_product_questions_path(@training_set, product), class: 'btn btn-primary btn-xs', data: {view_questions_btn: product.id} do
+              View Questions
+              %span.caret
 
-= paginate @training_set_product_questions
+
+= paginate @products
+
+- content_for :page_js do
+  :javascript
+    $('[data-view-questions-btn]').each(function(_i, element) { new App.ProductQuestionListLoader(element)} );
+    
