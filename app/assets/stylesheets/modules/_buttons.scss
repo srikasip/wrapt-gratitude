@@ -4,3 +4,9 @@
 h1 .btn {
   font-family: 'Open Sans', sans-serif;
 }
+.btn.disabled, 
+.btn[disabled], 
+fieldset[disabled] .btn {
+  opacity: 0.55;
+  filter: alpha(opacity=55);
+}
