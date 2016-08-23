@@ -1,9 +1,9 @@
 %h1
   = @survey.title
-  = link_to "Edit Title", edit_survey_path(@survey), class: 'btn btn-primary btn-sm'
+  = link_to "Edit Title", edit_survey_path(@survey), class: 'btn btn-default btn-sm'
 
 .btn-group
-  %a.btn.btn-success.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+  %a.btn.btn-primary.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
     Add New Question
     %span.caret
   %ul.dropdown-menu

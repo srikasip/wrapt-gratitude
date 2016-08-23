@@ -1,6 +1,6 @@
 %h1 Product Catalog
 
-%p= link_to 'Add a Product', new_product_path, class: 'btn btn-success btn-default'
+%p= link_to 'Add a Product', new_product_path, class: 'btn btn-primary'
 
 %table.table
   %thead
@@ -18,8 +18,8 @@
         %td= product.description
         %td= number_to_currency product.price
         %td
-          = link_to 'View', product, class: 'btn btn-primary btn-xs'
-          = link_to 'Edit', edit_product_path(product), class: 'btn btn-primary btn-xs'
+          = link_to 'View', product, class: 'btn btn-default btn-xs'
+          = link_to 'Edit', edit_product_path(product), class: 'btn btn-default btn-xs'
           = link_to 'Delete', product, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
 
 %p=paginate @products
