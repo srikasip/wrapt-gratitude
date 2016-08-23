@@ -15,8 +15,10 @@
  */
 
 @import "bootstrap-sprockets";
-@import "bootstrap";
+@import 'bootstrap-custom';
 @import "bootstrap-sliders-custom";
+@import "helpers/mixins";
+
 
 .main.container {
   min-height: 80vh;

@@ -28,7 +28,7 @@ class SurveysController < ApplicationController
 
     respond_to do |format|
       if @survey.save
-        format.html { redirect_to surveys_path, notice: 'Survey was successfully created.' }
+        format.html { redirect_to surveys_path, notice: 'Quiz was successfully created.' }
       else
         format.html { render :new }
       end
@@ -40,7 +40,7 @@ class SurveysController < ApplicationController
   def update
     respond_to do |format|
       if @survey.update(survey_params)
-        format.html { redirect_to surveys_path, notice: 'Survey was successfully updated.' }
+        format.html { redirect_to surveys_path, notice: 'Quiz was successfully updated.' }
       else
         format.html { render :edit }
       end
@@ -52,7 +52,7 @@ class SurveysController < ApplicationController
   def destroy
     @survey.destroy
     respond_to do |format|
-      format.html { redirect_to surveys_url, notice: 'Survey was successfully deleted.' }
+      format.html { redirect_to surveys_url, notice: 'Quiz was successfully deleted.' }
     end
   end
 

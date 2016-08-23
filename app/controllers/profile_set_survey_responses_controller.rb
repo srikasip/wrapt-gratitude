@@ -14,7 +14,7 @@ class ProfileSetSurveyResponsesController < ApplicationController
     @profile_set_survey_response = @profile_set.survey_responses.new(profile_set_survey_response_params)
 
     if @profile_set_survey_response.save
-      redirect_to @profile_set, notice: 'Survey Response was successfully created.'
+      redirect_to @profile_set, notice: 'Quiz Response was successfully created.'
     else
       render :new
     end
@@ -22,7 +22,7 @@ class ProfileSetSurveyResponsesController < ApplicationController
 
   def update
     if @profile_set_survey_response.update(profile_set_survey_response_params)
-      redirect_to @profile_set, notice: 'Survey Response was successfully updated.'
+      redirect_to @profile_set, notice: 'Quiz Response was successfully updated.'
     else
       render :edit
     end
@@ -30,7 +30,7 @@ class ProfileSetSurveyResponsesController < ApplicationController
 
   def destroy
     @profile_set_survey_response.destroy
-    redirect_to @profile_set, notice: 'Survey Response was successfully destroyed.'
+    redirect_to @profile_set, notice: 'Quiz Response was successfully deleted.'
   end
 
   private

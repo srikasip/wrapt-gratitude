@@ -14,7 +14,7 @@ module SurveyQuestions
       @survey_question = @survey.multiple_choice_questions.new(survey_params)
       
       if @survey_question.save
-        redirect_to survey_path(@survey), notice: 'Survey Question was successfully created.'
+        redirect_to survey_path(@survey), notice: 'Quiz Question was successfully created.'
       else
         render :new
       end
@@ -22,7 +22,7 @@ module SurveyQuestions
 
     def update    
       if @survey_question.update(survey_params)
-        redirect_to survey_path(@survey), notice: 'Survey Question was successfully updated.'
+        redirect_to survey_path(@survey), notice: 'Quiz Question was successfully updated.'
       else
         render :edit
       end
@@ -30,7 +30,7 @@ module SurveyQuestions
 
     def destroy
       @survey.destroy
-      redirect_to surveys_url, notice: 'Survey was successfully deleted.'
+      redirect_to surveys_url, notice: 'Quiz was successfully deleted.'
     end
 
     private
