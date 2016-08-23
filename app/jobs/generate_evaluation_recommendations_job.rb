@@ -18,5 +18,7 @@ class GenerateEvaluationRecommendationsJob < ApplicationJob
 
       end
     end
+
+    training_set_evaluation.touch
   end
 end

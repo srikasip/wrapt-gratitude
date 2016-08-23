@@ -1,7 +1,7 @@
-%h1 Surveys
+%h1 Survey Versions
 
 %ul
   - @surveys.each do |survey|
     %li= link_to survey.title, survey
 
-%p= link_to 'Create a New Survey', new_survey_path, class: 'btn btn-success'
+%p= link_to 'Create a New Version of the Survey', new_survey_path, class: 'btn btn-success'

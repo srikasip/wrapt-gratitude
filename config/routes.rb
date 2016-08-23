@@ -19,9 +19,9 @@ Rails.application.routes.draw do
     resources :product_questions, controller: 'training_set_product_questions', except: [:index, :show] do
       resources :range_impact_correlation_switchings, only: :create
     end
+    resource :evaluate, only: :show, controller: 'training_set_evaluations'
   end
 
-  resources :training_set_evaluations, except: [:edit, :update]
 
   resources :profile_sets do
     resources :survey_responses, controller: 'profile_set_survey_responses', except: [:index, :show]

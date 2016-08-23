@@ -1,6 +1,6 @@
 %h1= @training_set_evaluation.training_set.name
 
-- if @recommendations_by_survey_response_id.empty?
+- if @training_set_evaluation.stale? || @recommendations_by_survey_response_id.empty?
   %p We're still generating recommendations for this training set.  Please refresh the page.
 
 - else
