@@ -3,4 +3,5 @@ class SurveyQuestionOption < ApplicationRecord
   mount_uploader :image, SurveyQuestionOptionImageUploader
 
   has_many :training_set_response_impacts, dependent: :destroy
+  has_many :survey_question_responses, dependent: :destroy
 end

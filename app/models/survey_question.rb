@@ -6,6 +6,7 @@ class SurveyQuestion < ApplicationRecord
   # type-specific associations are on the base class for preloading
   has_many :options, inverse_of: :question, dependent: :destroy, class_name: 'SurveyQuestionOption'
 
+  has_many :survey_question_responses, dependent: :destroy
 
   def use_secondary_prompt?
     true
