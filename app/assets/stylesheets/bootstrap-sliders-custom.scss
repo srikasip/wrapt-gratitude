@@ -2,3 +2,8 @@ body .slider-track {
   background-color: #BABABA;
   background-image: none;
 }
+
+body .slider-handle {
+  background-color: $red-007 !important;
+  background-image: none;
+}
