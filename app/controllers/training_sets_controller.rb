@@ -25,7 +25,8 @@ class TrainingSetsController < ApplicationController
   # POST /training_sets
   # POST /training_sets.json
   def create
-    @training_set = TrainingSet.new(training_set_params)
+    @training_set = TrainingSet.new
+    @training_set.assign_attributes training_set_params
 
     respond_to do |format|
       if @training_set.save
