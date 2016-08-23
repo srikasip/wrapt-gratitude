@@ -3,10 +3,10 @@
     .navbar-header
     .collapse.navbar-collapse
       %ul.nav.navbar-nav
-        %li= link_to "Wrapt Admin Home", root_path
-        %li= link_to "Products", products_path
-        %li= link_to "Product Categories", product_categories_path
-        %li= link_to "Quizzes", surveys_path
-        %li= link_to "Training Sets", training_sets_path
-        %li= link_to "Profile Sets", profile_sets_path
+        %li{class: ("active" if active_top_nav_section == 'home_pages')}= link_to "Wrapt Admin Home", root_path
+        %li{class: ("active" if active_top_nav_section == 'products')}= link_to "Products", products_path
+        %li{class: ("active" if active_top_nav_section == 'product_categories')}= link_to "Product Categories", product_categories_path
+        %li{class: ("active" if active_top_nav_section == 'surveys')}= link_to "Quizzes", surveys_path
+        %li{class: ("active" if active_top_nav_section == 'training_sets')}= link_to "Training Sets", training_sets_path
+        %li{class: ("active" if active_top_nav_section == 'profile_sets')}= link_to "Profile Sets", profile_sets_path
 
