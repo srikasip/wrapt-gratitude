@@ -18,7 +18,7 @@ SimpleForm.setup do |config|
     b.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
   end
 
-  config.wrappers :vertical_form_hint_first, tag: 'div', class: 'control-group', error_class: 'error' do |b|
+  config.wrappers :vertical_form_hint_first, tag: 'div', class: 'form-group', error_class: 'error' do |b|
     b.use :html5
     b.use :placeholder
     b.optional :maxlength
