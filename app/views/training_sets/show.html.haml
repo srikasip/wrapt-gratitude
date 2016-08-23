@@ -17,7 +17,7 @@
       %th Question
       %th
   %tbody
-    - @training_set_product_questions.preload(:product, :survey_question).each do |product_question|
+    - @training_set_product_questions.order(:id).preload(:product, :survey_question).each do |product_question|
       %tr
         %td= product_question.product&.title
         %td= product_question.survey_question&.prompt

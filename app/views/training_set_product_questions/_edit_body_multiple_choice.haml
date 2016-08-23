@@ -4,13 +4,23 @@
   .form-inputs
     = render 'product_question_details'
 
+    .form-group
+      %label Overall Question Importance
+      %br
+      .slider-with-labels
+        %span.slider-min-label Low
+        = f.input :question_impact, label: false, wrapper: false, input_html: { data: {provide: 'slider', slider_min: -1, slider_max: 1, slider_step: '.01', slider_tooltip: 'hide', slider_value: (f.object.question_impact), slider_selection: 'none' }}
+        %span.slider-min-label High
     
     %h3 Response Impacts
     %table.table
       = f.simple_fields_for :response_impacts do |response_impact_fields|
         %tr
           %td= response_impact_fields.object.survey_question_option.text
-          %td= response_impact_fields.input :impact, label: false, wrapper: false
+          %td
+            \-
+            = response_impact_fields.input :impact, label: false, wrapper: false, input_html: { data: {provide: 'slider', slider_min: -1, slider_max: 1, slider_step: '.01', slider_tooltip: 'hide', slider_value: (response_impact_fields.object.impact), slider_selection: 'none' }}
+            +
 
   .form-actions
     = f.button :submit, "Save"

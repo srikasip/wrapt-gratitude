@@ -8,7 +8,7 @@ class TrainingSetProductQuestion < ApplicationRecord
   has_many :response_impacts, class_name: 'TrainingSetResponseImpact', inverse_of: :training_set_product_question, dependent: :destroy
   accepts_nested_attributes_for :response_impacts
 
-  validate :validate_unique_question_for_product, if: -> {product && survey_question}
+  validate :validate_unique_question_for_product, if: -> {product && survey_question}, on: :create
 
   # assumes there are no response impacts
   def create_response_impacts

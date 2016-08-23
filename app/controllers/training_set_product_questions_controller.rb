@@ -46,6 +46,7 @@ class TrainingSetProductQuestionsController < ApplicationController
       params.require(:training_set_product_question).permit(
         :product_id,
         :survey_question_id,
+        :question_impact,
         response_impacts_attributes: [:id, :impact]
       )
     end
