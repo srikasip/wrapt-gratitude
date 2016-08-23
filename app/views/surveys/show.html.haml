@@ -17,6 +17,7 @@
 %ol(style="list-style: decimal inside; padding: 0;")
   - @survey.questions.preload(:options).each_with_index do |question, i|
     %li(style="margin: 10px 0;")
+      %i{class: question.system_type_label}
       = render question_partial(question), question: question
 
 

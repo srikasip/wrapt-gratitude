@@ -4,6 +4,7 @@ class TrainingSetProductQuestionsController < ApplicationController
 
   def new
     @training_set_product_question = @training_set.product_questions.new
+    @training_set_product_question.product_id = params[:product_id]
   end
 
   def edit
