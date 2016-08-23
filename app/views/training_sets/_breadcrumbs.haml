@@ -1,2 +1,6 @@
-- unless params[:action] == 'index'
-  %p= link_to "&laquo; Training Sets".html_safe, training_sets_path
+- if params[:action] != 'index'
+  %p
+    = link_to "Training Sets".html_safe, training_sets_path
+    - if params[:action] == 'edit'
+      &raquo;
+      = link_to "#{@training_set.name}".html_safe, @training_set

@@ -1,2 +1,6 @@
 - unless params[:action] == 'index'
-  %p= link_to "&laquo; Profile Sets".html_safe, profile_sets_path
+  %p
+    = link_to "Profile Sets".html_safe, profile_sets_path
+    - if params[:action] == 'edit'
+      &raquo;
+      = link_to "#{@profile_set.name}".html_safe, @profile_set

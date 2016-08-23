@@ -1,4 +1,6 @@
-%h1 Listing training_sets
+%h1 Listing Training Sets
+
+%p Training Sets are the models that drive the recommendation engine.  From here you can manage training sets, configure the importance of question responses to products, and view the recommendations that a model would produce.
 
 %p= link_to 'New Training set', new_training_set_path, class: 'btn btn-success'
 
@@ -15,8 +17,8 @@
         %td= training_set.name
         %td= training_set.survey&.title
         %td
-          = link_to 'Manage Products and Questions', training_set, class: 'btn btn-xs btn-primary'
-          = link_to 'Change Name', edit_training_set_path(training_set), class: 'btn btn-xs btn-primary'
+          = link_to 'Configure', training_set, class: 'btn btn-xs btn-primary'
+          = link_to "View Recommendations", training_set_evaluate_path(training_set), class: 'btn btn-xs btn-primary'
           = link_to 'Delete', training_set, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'
 
 
