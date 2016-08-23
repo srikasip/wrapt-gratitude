@@ -11,4 +11,13 @@ class SurveyQuestion < ApplicationRecord
   def use_secondary_prompt?
     true
   end
+
+  def type_label
+    raise "Abstract Method"
+  end
+  
+  def system_type_label
+    type_label.underscore.gsub(" ", "_")
+  end
+
 end
