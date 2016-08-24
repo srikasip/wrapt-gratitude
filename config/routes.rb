@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :product_categories
   resources :products
   resources :surveys do
+    resources :questions, except: :index, controller: 'survey_questions'
     resources :multiple_choice_questions, except: [:index], controller: 'survey_questions/multiple_choices' do
       resources :options, except: [:index, :show], controller: 'survey_question_options'
     end

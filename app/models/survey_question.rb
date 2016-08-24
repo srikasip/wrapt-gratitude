@@ -8,6 +8,12 @@ class SurveyQuestion < ApplicationRecord
 
   has_many :survey_question_responses, dependent: :destroy
 
+  TYPES = {
+    'SurveyQuestions::MultipleChoice' => 'Multiple Choice',
+    'SurveyQuestions::Range' => 'Slider',
+    'SurveyQuestions::Text' => 'Free Text'
+  }
+
   def use_secondary_prompt?
     true
   end

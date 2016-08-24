@@ -1,0 +1,18 @@
+%row
+  .col-sm-6
+    %h2 Edit Question
+    = simple_form_for @survey_question, url: survey_question_path(@survey, @survey_question) do |form|
+
+      .form-inputs
+        = form.input :prompt
+        = render form_fields_partial(@survey_question), form: form
+
+      .form-actions
+        = form.submit 'Save'
+
+  .col-sm-6
+    %h2 Preview
+
+    %h3= @survey_question.prompt
+
+    = render preview_partial(@survey_question)
