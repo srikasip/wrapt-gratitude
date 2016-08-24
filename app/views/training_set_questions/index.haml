@@ -1,5 +1,5 @@
 - @product_questions.each do |product_question|
-  %tr
+  %tr{data: {product_question_row_for_product: product_question.product_id}}
     %td
     %td= product_question.survey_question.prompt
     %td

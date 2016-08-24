@@ -8,7 +8,7 @@
 
 %h3 Product-Questions
 
-%table.table
+%table.table(style="table-layout: fixed;")
   %thead
     %tr
       %th Product
@@ -17,14 +17,18 @@
   %tbody
     - @products.each do |product|
       %tr{data: {product_row: product.id}}
-        %td= product.title
-        %th
+        %td= link_to product.title, product
         %td
           = link_to "Add Question", new_training_set_product_question_path(@training_set, product_id: product.id), class: 'btn btn-success', class: 'btn btn-success btn-xs'
           - if product.id.in? @product_question_product_ids
             = link_to training_set_product_questions_path(@training_set, product), class: 'btn btn-primary btn-xs', data: {view_questions_btn: product.id} do
               View Questions
               %span.caret
+            = link_to '#', class: 'btn btn-primary btn-xs', style: 'display: none;', data: {hide_questions_btn: product.id} do
+              Hide Questions
+              %span.dropup
+                %span.caret
+        %td
 
 
 = paginate @products
