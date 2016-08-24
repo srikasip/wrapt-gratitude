@@ -10,7 +10,7 @@ class SurveyQuestionsController < ApplicationController
   end
 
   def create
-    @survey_question = @survey.multiple_choice_questions.new(create_survey_question_params)
+    @survey_question = @survey.multiple_choice_questions.new(create_params)
     
     if @survey_question.save
       redirect_to edit_survey_question_path(@survey, @survey_question), notice: 'Quiz Question was successfully created.'
@@ -20,8 +20,8 @@ class SurveyQuestionsController < ApplicationController
   end
 
   def update    
-    if @survey_question.update(survey_params)
-      redirect_to survey_path(@survey), notice: 'Quiz Question was successfully updated.'
+    if @survey_question.update(update_params)
+      redirect_to edit_survey_question_path(@survey, @survey_question), notice: 'Quiz Question was successfully updated.'
     else
       render :edit
     end
@@ -41,8 +41,17 @@ class SurveyQuestionsController < ApplicationController
     @survey_question = @survey.questions.find(params[:id])
   end
 
-  def create_survey_question_params
+  def create_params
     params.require(:survey_question).permit(:prompt, :type)
+  end
+
+  def update_params
+    params.require(@survey_question.model_name.param_key).permit(
+        :prompt,
+        :min_label,
+        :max_label,
+        :mid_label
+      )
   end
 
 end
