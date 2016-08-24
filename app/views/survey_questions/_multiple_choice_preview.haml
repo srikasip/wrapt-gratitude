@@ -1,0 +1,11 @@
+%form.form
+  .form-inputs
+    .form-group.radio_buttons.optional
+      - @survey_question.options.each_with_index do |option, i|
+        %span.radio
+          %label
+            = radio_button_tag :response, option.id
+            = option.text
+            - if option.image?
+              %br
+              = image_tag option.image_url(:small)

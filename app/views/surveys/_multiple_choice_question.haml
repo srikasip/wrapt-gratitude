@@ -1,4 +1,0 @@
-= question.prompt
-= link_to "Edit #{question.type_label} Question", edit_survey_question_path(@survey, question), class: 'btn btn-default btn-xs'
-= link_to 'Manage Options', survey_multiple_choice_question_path(@survey, question), class: 'btn btn-default btn-xs'
-= link_to 'Delete', survey_multiple_choice_question_path(@survey, question), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'

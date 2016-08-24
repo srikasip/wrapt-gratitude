@@ -11,6 +11,8 @@
   - @survey.questions.preload(:options).each_with_index do |question, i|
     %li(style="margin: 10px 0;")
       %i{class: question.system_type_label}
-      = render question_partial(question), question: question
+      = question.prompt
+      = link_to "Edit #{question.type_label} Question", edit_survey_question_path(@survey, question), class: 'btn btn-default btn-xs'
+      = link_to 'Delete', survey_question_path(@survey, question), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'
 
 
