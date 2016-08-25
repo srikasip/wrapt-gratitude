@@ -1,0 +1,19 @@
+.question-list__item {
+  margin-bottom: 18px;
+}
+.question-list__icon {
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: 30px;
+  padding-left: 30px;
+}
+i.multiple_choice {
+  background-image: image-url('icons/multiple-choice.svg');
+}
+i.slider {
+  background-image: image-url('icons/slider.svg');
+  display: inline;
+}
+i.text {
+  background-image: image-url('icons/text-input.svg');
+}

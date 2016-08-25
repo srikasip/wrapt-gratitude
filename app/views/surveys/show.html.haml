@@ -2,7 +2,7 @@
   .col-sm-12
     %h1
       = @survey.title
-      = link_to "Edit Title", edit_survey_path(@survey), class: 'btn btn-default btn-sm'
+      = link_to "Edit Title", edit_survey_path(@survey), class: 'btn btn-default btn-xs'
 .row.admin__actions
   .col-sm-12
     .btn-group
@@ -15,12 +15,10 @@
         %li= link_to "Range", new_survey_range_question_path(@survey)
 .row
   .col-sm-12
-    %p
-
-    %ol(style="list-style: decimal inside; padding: 0;")
+    %ol.question-list
       - @survey.questions.preload(:options).each_with_index do |question, i|
-        %li(style="margin: 10px 0;")
-          %i{class: question.system_type_label}
+        %li.question-list__item
+          %i.question-list__icon{class: question.system_type_label}
           = render question_partial(question), question: question
 
 
