@@ -1,6 +1,8 @@
-%h1 New Multiple Choice Question
+.row
+  .col-sm-12
+    %h1 New Multiple Choice Question
 
 
-= render 'form', url: survey_multiple_choice_questions_path(@survey)
+    = render 'form', url: survey_multiple_choice_questions_path(@survey)
 
-= link_to 'Back', edit_survey_path(@survey)
+    = link_to 'Back', edit_survey_path(@survey)

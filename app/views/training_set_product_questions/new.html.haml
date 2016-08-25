@@ -1,11 +1,13 @@
-%h1 New Product-Question
+.row
+  .col-sm-12
+    %h1 New Product-Question
 
-= simple_form_for(@training_set_product_question, url: training_set_product_questions_path(@training_set)) do |f|
-  = f.error_notification
+    = simple_form_for(@training_set_product_question, url: training_set_product_questions_path(@training_set)) do |f|
+      = f.error_notification
 
-  .form-inputs
-    = f.association :product
-    = f.association :survey_question, label: 'Question', label_method: :prompt, collection: @training_set.survey.questions.where.not(type: 'SurveyQuestions::Text')
+      .form-inputs
+        = f.association :product
+        = f.association :survey_question, label: 'Question', label_method: :prompt, collection: @training_set.survey.questions.where.not(type: 'SurveyQuestions::Text')
 
-  .form-actions
-    = f.button :submit, "Save"
+      .form-actions
+        = f.button :submit, "Save"
