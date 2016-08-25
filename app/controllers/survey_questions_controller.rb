@@ -7,10 +7,14 @@ class SurveyQuestionsController < ApplicationController
   end
 
   def edit
+    if @survey_question.is_a? SurveyQuestions::MultipleChoice
+      @survey_question_option = SurveyQuestionOption.new
+      render :edit_multiple_choice
+    end
   end
 
   def create
-    @survey_question = @survey.multiple_choice_questions.new(create_params)
+    @survey_question = @survey.questions.new(create_params)
     
     if @survey_question.save
       redirect_to edit_survey_question_path(@survey, @survey_question), notice: 'Quiz Question was successfully created.'

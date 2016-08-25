@@ -1,4 +1,6 @@
-App.ProductQuestionListLoader = class ProductQuestionListLoader {
+//= require ./namespace
+
+App.Admin.ProductQuestionListLoader = class ProductQuestionListLoader {
   constructor(viewBtnElement) {
     this.viewBtnElement = viewBtnElement;
     this.hideBtnElement = $(viewBtnElement).siblings('[data-hide-questions-btn]')[0];

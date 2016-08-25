@@ -1,4 +1,4 @@
-class SurveyQuestionOptionsController < ApplicationController
+class LegacySurveyQuestionOptionsController < ApplicationController
   before_action :set_survey
   before_action :set_survey_question
   before_action :set_survey_question_option, only: [:edit, :update, :destroy]
