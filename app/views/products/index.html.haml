@@ -1,27 +1,33 @@
-%h1 Products
+.row.admin__intro
+  .col-sm-12
+    %h1 Products
 
-%p= link_to 'Add a Product', new_product_path, class: 'btn btn-primary'
+.row.admin__actions
+  .col-sm-12
+    = link_to 'Add a Product', new_product_path, class: 'btn btn-primary'
 
-%table.table
-  %thead
-    %tr
-      %th Title
-      %th Description
-      %th Price
-      %th
+.row
+  .col-sm-12
+    %table.table
+      %thead
+        %tr
+          %th Title
+          %th Description
+          %th Price
+          %th
 
 
-  %tbody
-    - @products.each do |product|
-      %tr
-        %td= product.title
-        %td= product.description
-        %td= number_to_currency product.price
-        %td
-          = link_to 'View', product, class: 'btn btn-default btn-xs'
-          = link_to 'Edit', edit_product_path(product), class: 'btn btn-default btn-xs'
-          = link_to 'Delete', product, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+      %tbody
+        - @products.each do |product|
+          %tr
+            %td= product.title
+            %td= product.description
+            %td= number_to_currency product.price
+            %td
+              = link_to 'View', product, class: 'btn btn-default btn-xs'
+              = link_to 'Edit', edit_product_path(product), class: 'btn btn-default btn-xs'
+              = link_to 'Delete', product, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
 
-%p=paginate @products
+    %p=paginate @products
 
 

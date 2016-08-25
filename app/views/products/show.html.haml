@@ -1,25 +1,27 @@
-%h1
-  = @product.title
-  = link_to 'Edit', edit_product_path(@product), class: 'btn btn-default btn-sm'
+.row
+  .col-sm-12
+    %h1
+      = @product.title
+      = link_to 'Edit', edit_product_path(@product), class: 'btn btn-default btn-xs'
 
-%p
-  = @product.description
+    %p
+      = @product.description
 
-%p
-  %b Price:
-  = number_to_currency @product.price
+    %p
+      %b Price:
+      = number_to_currency @product.price
 
-%p
-  - @product.product_categories.each do |category|
-    %span.label.label-default= category.name
+    %p
+      - @product.product_categories.each do |category|
+        %span.label.label-default= category.name
 
-%p
-  - if @product.public?
-    Visible to the Public
-  - else
-    Hidden from the Public
+    %p
+      - if @product.public?
+        Visible to the Public
+      - else
+        Hidden from the Public
 
-%p
-  = image_tag @product.image_url(:large) if @product.image?
+    %p
+      = image_tag @product.image_url(:large) if @product.image?
 
 

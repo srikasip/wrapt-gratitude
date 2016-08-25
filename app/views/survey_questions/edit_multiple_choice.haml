@@ -1,6 +1,8 @@
 %row(data-survey-question-builder)
   .col-sm-6
-    %h2 Edit Question
+    %h2.heading__has-icon
+      %i.multiple-choice 
+      Edit Multiple-Choice Question
     = simple_form_for @survey_question, url: survey_question_path(@survey, @survey_question) do |form|
 
       .form-inputs

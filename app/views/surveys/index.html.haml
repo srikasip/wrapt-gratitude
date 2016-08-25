@@ -1,7 +1,13 @@
-%h1 Quizzes
+.row.admin__intro
+  .col-sm-12
+    %h1 Quizzes
 
-%p= link_to 'Create a New Quiz', new_survey_path, class: 'btn btn-primary'
+.row.admin__actions
+  .col-sm-12
+    = link_to 'Create a New Quiz', new_survey_path, class: 'btn btn-primary'
 
-%ul
-  - @surveys.each do |survey|
-    %li= link_to survey.title, survey
+.row
+  .col-sm-12
+    %ul
+      - @surveys.each do |survey|
+        %li= link_to survey.title, survey

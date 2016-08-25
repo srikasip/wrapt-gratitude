@@ -1,2 +1,4 @@
 - unless params[:action] == 'index'
-  %p= link_to "&laquo; #{@survey.title}".html_safe, survey_path(@survey)
+  .row.breadcrumbs
+    .col-sm-12
+      = link_to "&laquo; #{@survey.title}".html_safe, survey_path(@survey)

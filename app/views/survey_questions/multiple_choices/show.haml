@@ -1,20 +1,22 @@
-%h1
-  = @survey_question.prompt
+.row
+  .col-sm-12
+    %h1
+      = @survey_question.prompt
 
 
-%p
-  = link_to 'Edit Question', edit_survey_multiple_choice_question_path(@survey, @survey_question), class: 'btn btn-primary btn-xs'
-  = link_to "Add new option", new_survey_multiple_choice_question_option_path(@survey, @survey_question), class: 'btn btn-success btn-xs'
+    %p
+      = link_to 'Edit Question', edit_survey_multiple_choice_question_path(@survey, @survey_question), class: 'btn btn-primary btn-xs'
+      = link_to "Add new option", new_survey_multiple_choice_question_option_path(@survey, @survey_question), class: 'btn btn-success btn-xs'
 
-%ol(style="list-style:lower-alpha;")
-  - @survey_question.options.each do |option|
-    %li(style="margin-top: 30px;")
-      = option.text
-      - if option.image?
-        %br
-        = image_tag option.image_url(:small)
-      %br
-      %br
-      = link_to 'Edit', edit_survey_multiple_choice_question_option_path(@survey, @survey_question, option), class: 'btn btn-primary btn-xs'
-      = link_to 'Delete', survey_multiple_choice_question_option_path(@survey, @survey_question, option), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'
+    %ol(style="list-style:lower-alpha;")
+      - @survey_question.options.each do |option|
+        %li(style="margin-top: 30px;")
+          = option.text
+          - if option.image?
+            %br
+            = image_tag option.image_url(:small)
+          %br
+          %br
+          = link_to 'Edit', edit_survey_multiple_choice_question_option_path(@survey, @survey_question, option), class: 'btn btn-primary btn-xs'
+          = link_to 'Delete', survey_multiple_choice_question_option_path(@survey, @survey_question, option), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'
 

@@ -1,22 +1,26 @@
-%p
-  %b Name:
-  = @product_category.name
-%p
-  %b Lft:
-  = @product_category.lft
-%p
-  %b Rgt:
-  = @product_category.rgt
-%p
-  %b Parent:
-  = @product_category.parent_id
-%p
-  %b Depth:
-  = @product_category.depth
-%p
-  %b Children count:
-  = @product_category.children_count
+.row
+  .col-sm-12
+    %h1 Product Category Details
+    %p
+      %b Name:
+      = @product_category.name
+    %p
+      %b Parent:
+      = @product_category.parent_id
+    %p
+      %b Depth:
+      = @product_category.depth
+    %p
+      %b Children Count:
+      = @product_category.children_count
+    %p
+      %b Left:
+      = @product_category.lft
+    %p
+      %b Right:
+      = @product_category.rgt
 
-= link_to 'Edit', edit_product_category_path(@product_category)
-\|
-= link_to 'Back', product_categories_path
+    .links__view-back
+      = link_to 'Edit', edit_product_category_path(@product_category)
+      \|
+      = link_to 'Back', product_categories_path

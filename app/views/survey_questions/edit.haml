@@ -1,6 +1,10 @@
 %row
   .col-sm-6
-    %h2 Edit Question
+    %h2.heading__has-icon
+      %i{class: @survey_question.system_type_label}
+      Edit 
+      = @survey_question.system_type_label.titlecase
+      Question
     = simple_form_for @survey_question, url: survey_question_path(@survey, @survey_question) do |form|
 
       .form-inputs
@@ -8,7 +12,7 @@
         = render form_fields_partial(@survey_question), form: form
 
       .form-actions
-        = form.submit 'Save'
+        = form.submit 'Save', class: 'btn btn-primary'
 
   .col-sm-6
     %h2 Preview

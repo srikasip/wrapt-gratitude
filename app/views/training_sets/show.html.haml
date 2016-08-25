@@ -1,37 +1,39 @@
-%h1
-  = @training_set.name
-  = link_to 'Edit Title', edit_training_set_path(@training_set), class: 'btn btn-default'
+.row
+  .col-sm-12
+    %h1
+      = @training_set.name
+      = link_to 'Edit Title', edit_training_set_path(@training_set), class: 'btn btn-default'
 
-%p
-  %b Quiz:
-  = @training_set.survey&.title
+    %p
+      %b Quiz:
+      = @training_set.survey&.title
 
-%h3 Product-Questions
+    %h3 Product-Questions
 
-%table.table(style="table-layout: fixed;")
-  %thead
-    %tr
-      %th Product
-      %th
-      %th
-  %tbody
-    - @products.each do |product|
-      %tr{data: {product_row: product.id}}
-        %td= link_to product.title, product
-        %td
-          = link_to "Add Question", new_training_set_product_question_path(@training_set, product_id: product.id), class: 'btn btn-success', class: 'btn btn-success btn-xs'
-          - if product.id.in? @product_question_product_ids
-            = link_to training_set_product_questions_path(@training_set, product), class: 'btn btn-primary btn-xs', data: {view_questions_btn: product.id} do
-              View Questions
-              %span.caret
-            = link_to '#', class: 'btn btn-primary btn-xs', style: 'display: none;', data: {hide_questions_btn: product.id} do
-              Hide Questions
-              %span.dropup
-                %span.caret
-        %td
+    %table.table(style="table-layout: fixed;")
+      %thead
+        %tr
+          %th Product
+          %th
+          %th
+      %tbody
+        - @products.each do |product|
+          %tr{data: {product_row: product.id}}
+            %td= link_to product.title, product
+            %td
+              = link_to "Add Question", new_training_set_product_question_path(@training_set, product_id: product.id), class: 'btn btn-success', class: 'btn btn-success btn-xs'
+              - if product.id.in? @product_question_product_ids
+                = link_to training_set_product_questions_path(@training_set, product), class: 'btn btn-primary btn-xs', data: {view_questions_btn: product.id} do
+                  View Questions
+                  %span.caret
+                = link_to '#', class: 'btn btn-primary btn-xs', style: 'display: none;', data: {hide_questions_btn: product.id} do
+                  Hide Questions
+                  %span.dropup
+                    %span.caret
+            %td
 
 
-= paginate @products
+    = paginate @products
 
 - content_for :page_js do
   :javascript
