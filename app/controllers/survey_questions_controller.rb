@@ -1,6 +1,6 @@
 class SurveyQuestionsController < ApplicationController
   before_action :set_survey
-  before_action :set_survey_question, only: [:show, :edit, :update, :destroy]
+  before_action :set_survey_question, only: [:show, :edit, :update, :destroy, :preview]
 
   def new
     @survey_question = @survey.questions.new
@@ -34,6 +34,11 @@ class SurveyQuestionsController < ApplicationController
   def destroy
     @survey_question.destroy
     redirect_to surveys_url, notice: 'Quiz was successfully deleted.'
+  end
+
+  # ajax member action for multi-choice edit
+  def preview
+    render '_preview', layout: 'xhr'
   end
 
   private

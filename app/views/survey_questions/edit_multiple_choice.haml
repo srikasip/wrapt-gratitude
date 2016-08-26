@@ -22,11 +22,7 @@
 
 
   .col-sm-6
-    %h2 Preview
-
-    %h3= @survey_question.prompt
-
-    = render preview_partial(@survey_question)
+    = render 'preview'
 
 = content_for :page_js do
   :javascript
