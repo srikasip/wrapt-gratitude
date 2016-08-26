@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     resources :products, only: :none do
       resources :questions, only: :index, controller: 'training_set_questions'
     end
-    resources :product_questions, controller: 'training_set_product_questions', except: [:index, :show] do
+    resources :product_question_impacts, controller: 'product_question_impacts', except: [:index, :show] do
       resources :range_impact_correlation_switchings, only: :create
     end
     resource :evaluate, only: :show, controller: 'training_set_evaluations'

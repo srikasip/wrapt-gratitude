@@ -1,5 +1,5 @@
 # Ajax controller that drives the question display on TrainingSets#index
-# for Product-Question Crud see TrainingSetProductQuestionsController
+# for Product-Question Crud see ProductQuestionImpactsController
 class TrainingSetQuestionsController < ApplicationController
   
   def index
