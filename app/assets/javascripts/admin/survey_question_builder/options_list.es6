@@ -6,8 +6,7 @@ window.App.Admin.SurveyQuestionBuilder.OptionsList = class OptionsList {
     this.element = $(this.controller.element).find('[data-option-list]')[0]
     this.options = {};
     this.addExistingOptions();
-    this.render();
-    this.handleDeleteButtons();
+    // this.render();
   }
 
   addExistingOptions() {
@@ -34,15 +33,10 @@ window.App.Admin.SurveyQuestionBuilder.OptionsList = class OptionsList {
     }
   }
 
-  handleDeleteButtons() {
-    $(this.element).on("click", '[data-delete-option]', evt => {
-      evt.preventDefault();
-      // TODO delete on server
-      console.log(evt.currentTarget);
-      const optionId = evt.currentTarget.getAttribute('data-delete-option');
-      $(this.element).find(`[data-option-row][data-option-id=${optionId}]`).remove();
-      delete this.options[optionId];
-    })
+  appendOptionRow(html) {
+    console.log(this.element.innerHtml)
+    console.log(html)
+    $(this.element).append(html);
   }
 
 

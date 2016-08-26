@@ -13,13 +13,12 @@
 
     %h3 Choices
     %ol(style="list-style: lower-alpha; padding-left: 15px;" data-option-list)
-    -# initialized by Javascript
-    - @survey_question.options.each do |option|
-      %div{data: {option: true, option_text: option.text, option_id: option.id}}
+      - @survey_question.options.each do |option|
+        = render 'option_row', option: option
 
-    = simple_form_for @survey_question_option, url: survey_question_options_path(@survey, @survey_question), remote: true, html: {class: 'form form-inline', data: {new_option_form: true}} do |option_form|
+    = simple_form_for @survey_question_option, url: survey_question_options_path(@survey, @survey_question), remote: true, html: {class: 'form form-inline', data: {new_option_form: true, type: 'html'}} do |option_form|
       = option_form.input :text, label: false, as: :string, input_html: {data: {new_option_text: true}}
-      = option_form.submit 'Add New Option', class: 'btn btn-primary'
+      = option_form.submit 'Add New Option', class: 'btn btn-primary', data: {disable_with: 'Adding...'}
 
 
   .col-sm-6

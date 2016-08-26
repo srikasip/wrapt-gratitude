@@ -1,0 +1,10 @@
+%li(style="margin-bottom: 10px;" data-option-row)
+  = option.text
+  = link_to "#" do
+    %span.glyphicon.glyphicon-pencil(aria-hidden="true")
+  = link_to survey_question_option_path(@survey, @survey_question, option), data: {method: :delete, remote: true, delete_option_link: option.id} do
+    %span.glyphicon.glyphicon-remove(aria-hidden="true")
+
+- content_for :page_js do
+  :javascript
+    new App.Admin.SurveyQuestionBuilder.DeleteOptionLink($('[data-delete-option-link="#{option.id}"]')[0])

@@ -17,8 +17,6 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require bootstrap-slider
-//= require handlebars.runtime
-//= require_tree ./templates
 
 // Application Code
 //= require init

@@ -40,7 +40,6 @@ gem 'devise'
 gem 'kaminari'
 
 # Javascript
-gem 'handlebars_assets'
 gem 'sprockets-es6'
 
 

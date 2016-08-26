@@ -6,16 +6,12 @@ window.App.Admin.SurveyQuestionBuilder.NewOptionForm = class NewOptionForm {
     this.controller = controller;
     this.element = $(this.controller.element).find('[data-new-option-form]');
     this.newOptionTextInput = $(this.element).find('input[data-new-option-text]')[0]
-    this.handleSubmit();
+    this.handleSubmitSuccess();
   }
 
-  handleSubmit() {
-    $(this.element).on('submit', evt => {
-      evt.preventDefault();
-      this.updateServer();
-      const optionText = $(this.newOptionTextInput).val();
-      this.controller.optionsList.addOption({text: optionText});
-      this.controller.optionsList.render();
+  handleSubmitSuccess() {
+    $(this.element).on('ajax:success', (evt, data) => {
+      this.controller.optionsList.appendOptionRow(data);
       this.reset();
     });
   }
