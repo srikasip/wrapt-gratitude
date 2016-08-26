@@ -1,6 +1,8 @@
-.row
-  .col-sm-12
-    %h1 Edit quiz question option
+= simple_form_for @survey_question_option, url: survey_question_option_path(@survey, @survey_question, @survey_question_option), remote: true, html: {data: {type: 'html', class: 'form form-inline', edit_option_form: true}} do |form|
 
+  = form.input :text, label: false, as: :string, input_html: {class: 'input-sm'}
+  = form.submit "Save", class: 'btn btn-sm'
 
-    = render 'form', url: survey_multiple_choice_question_option_path(@survey, @survey_question, @survey_question_option)
+- content_for :page_js do
+  :javascript
+    new App.Admin.SurveyQuestionBuilder.EditOptionForm($('[data-edit-option-form]')[0])

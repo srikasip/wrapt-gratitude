@@ -18,7 +18,7 @@
 
     = simple_form_for @survey_question_option, url: survey_question_options_path(@survey, @survey_question), remote: true, html: {class: 'form form-inline', data: {new_option_form: true, type: 'html'}} do |option_form|
       = option_form.input :text, label: false, as: :string, input_html: {data: {new_option_text: true}}
-      = option_form.submit 'Add New Option', class: 'btn btn-primary', data: {disable_with: 'Adding...'}
+      = option_form.submit 'Add New Choice', class: 'btn btn-primary', data: {disable_with: 'Adding...'}
 
 
   .col-sm-6

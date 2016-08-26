@@ -1,13 +1,14 @@
 //= require ./namespace
 
-// Top-level controller for the whole builder
 window.App.Admin.SurveyQuestionBuilder.EditOptionForm = class EditOptionForm {
-  constructor(optionsList, option) {
-    this.controller = controller;
-    this.option = option;
+  constructor(element) {
+    this.element = element;
+    this.handleAjaxSuccess();
   }
 
-  reset() {
-    $(this.newOptionTextInput).val('');
+  handleAjaxSuccess() {
+    $(this.element).on('ajax:success', (evt, data) => {
+      $(this.element).parent().replaceWith(data);
+    });
   }
 }

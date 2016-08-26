@@ -3,13 +3,25 @@
 class SurveyQuestionOptionsController < ApplicationController
   before_action :set_survey
   before_action :set_survey_question
+  before_action :set_survey_question_option, except: :create
   layout 'xhr'
 
 
   def create
     @survey_question_option = @survey_question.options.new(survey_question_option_params)
     
-    if @survey_question.save
+    if @survey_question_option.save
+      render 'survey_questions/_option_row', locals: {option: @survey_question_option}
+    else
+      head :bad_request
+    end
+  end
+
+  def edit
+  end
+
+  def update    
+    if @survey_question_option.update(survey_question_option_params)
       render 'survey_questions/_option_row', locals: {option: @survey_question_option}
     else
       head :bad_request
@@ -17,17 +29,8 @@ class SurveyQuestionOptionsController < ApplicationController
   end
 
   def destroy
-    @survey_question_option = @survey_question.options.find params[:id]
     @survey_question_option.destroy
     head :ok
-  end
-
-  def update    
-    if @survey_question.update(update_params)
-      redirect_to edit_survey_question_path(@survey, @survey_question), notice: 'Quiz Question was successfully updated.'
-    else
-      render :edit
-    end
   end
 
   private
@@ -37,6 +40,10 @@ class SurveyQuestionOptionsController < ApplicationController
 
   def set_survey_question
     @survey_question = @survey.questions.find(params[:question_id])
+  end
+
+  def set_survey_question_option
+    @survey_question_option = @survey_question.options.find params[:id]
   end
 
   def survey_question_option_params
