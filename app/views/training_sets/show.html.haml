@@ -21,7 +21,7 @@
           %tr{data: {product_row: product.id}}
             %td= link_to product.title, product
             %td
-              = link_to "Add Question", new_training_set_product_question_path(@training_set, product_id: product.id), class: 'btn btn-success', class: 'btn btn-success btn-xs'
+              = link_to "Add Question", new_training_set_product_question_impact_path(@training_set, product_id: product.id), class: 'btn btn-success', class: 'btn btn-success btn-xs'
               - if product.id.in? @product_question_product_ids
                 = link_to training_set_product_questions_path(@training_set, product), class: 'btn btn-primary btn-xs', data: {view_questions_btn: product.id} do
                   View Questions
