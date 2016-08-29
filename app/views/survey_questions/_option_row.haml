@@ -2,6 +2,8 @@
   = option.text
   = link_to edit_survey_question_option_path(@survey, @survey_question, option), data: {remote: true, edit_option_link: option.id} do
     %span.glyphicon.glyphicon-pencil(aria-hidden="true")
+  = link_to edit_survey_question_option_image_path(@survey, @survey_question, option), data: {remote: true, edit_option_image_link: option.id} do
+    %span.glyphicon.glyphicon-picture
   = link_to survey_question_option_path(@survey, @survey_question, option), data: {method: :delete, remote: true, delete_option_link: option.id} do
     %span.glyphicon.glyphicon-remove(aria-hidden="true")
 
