@@ -10,12 +10,15 @@
 
 .row
   .col-sm-12
-    %ol.question-list
+    %ol.question-list{data: {sortable_list: true, sortable_list_href: survey_question_ordering_path(@survey)}}
       - @survey.questions.preload(:options).each_with_index do |question, i|
-        %li.question-list__item
+        %li.question-list__item{data: {question: true, question_id: question.id}}
           %i.question-list__icon{class: question.system_type_label}
           = question.prompt
           = link_to "Edit", edit_survey_question_path(@survey, question), class: 'btn btn-default btn-xs'
           = link_to 'Delete', survey_question_path(@survey, question), method: :delete, confirm: "This will delete '#{question.prompt}'", class: 'btn btn-danger btn-xs'
 
 
+- content_for :page_js do
+  :javascript
+    new App.SortableList($('[data-sortable-list]')[0]);

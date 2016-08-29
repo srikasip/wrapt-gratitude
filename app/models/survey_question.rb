@@ -14,6 +14,8 @@ class SurveyQuestion < ApplicationRecord
     'SurveyQuestions::Text' => 'Free Text'
   }
 
+  before_create :set_initial_sort_order
+
   def use_secondary_prompt?
     true
   end
@@ -24,6 +26,11 @@ class SurveyQuestion < ApplicationRecord
   
   def system_type_label
     type_label.underscore.gsub(" ", "_")
+  end
+
+  private def set_initial_sort_order
+    next_sort_order = ( survey.questions.max(:sort_order) || 0 ) + 1
+    self.sort_order = next_sort_order
   end
 
 end

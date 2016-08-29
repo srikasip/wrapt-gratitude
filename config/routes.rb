@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       end
       resources :options, except: [:index, :show], controller: 'survey_question_options'
     end
+    resource :question_ordering, only: :create, controller: 'survey_question_orderings'
     resources :multiple_choice_questions, except: [:index], controller: 'survey_questions/multiple_choices' do
       resources :options, except: [:index, :show], controller: 'legacy_survey_question_options'
     end

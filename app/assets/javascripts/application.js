@@ -17,7 +17,8 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require bootstrap-slider
+//= require jquery-ui
 
 // Application Code
-//= require init
+//= require app/init
 //= require_tree .
