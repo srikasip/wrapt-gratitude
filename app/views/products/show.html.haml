@@ -12,6 +12,10 @@
       = number_to_currency @product.price
 
     %p
+      %b Wrapt SKU:
+      = @product.wrapt_sku
+
+    %p
       - @product.product_categories.each do |category|
         %span.label.label-default= category.name
 
