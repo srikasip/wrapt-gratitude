@@ -13,13 +13,9 @@ Rails.application.routes.draw do
         get :preview
       end
       resources :options, except: [:index, :show], controller: 'survey_question_options'
+      resource :option_ordering, only: :create, controller: 'survey_question_option_orderings'
     end
     resource :question_ordering, only: :create, controller: 'survey_question_orderings'
-    resources :multiple_choice_questions, except: [:index], controller: 'survey_questions/multiple_choices' do
-      resources :options, except: [:index, :show], controller: 'legacy_survey_question_options'
-    end
-    resources :text_questions, except: [:index, :show], controller: 'survey_questions/texts'
-    resources :range_questions, except: [:index, :show], controller: 'survey_questions/ranges'
   end
 
   resources :training_sets do

@@ -1,23 +1,24 @@
 window.App.SortableList = class SortableList {
   constructor(element) {
     this.element = element;
-    $(element).sortable();
+    $(element).sortable({
+      items: "[data-sortable-item]"
+    });
     this.updateServerOnSortStop();
   }
 
   updateServerOnSortStop() {
     $(this.element).on('sortstop', evt => {
       const url = this.element.getAttribute('data-sortable-list-href');
-      console.log(this.orderingData);
-      $.post(url, this.orderingData);
+      $.post(url, this.orderingData, () => {$(this.element).trigger('ajax:success')});
     })
   }
 
   get orderingData() {
-    var result = {survey_question_ordering: {ordering: []}};
-    $(this.element).children('[data-question]').each( (_i, question_element) => {
-      const id = question_element.getAttribute('data-question-id');
-      result.survey_question_ordering.ordering.push(id);
+    var result = {ordering: []};
+    $(this.element).children('[data-sortable-item]').each( (_i, question_element) => {
+      const id = question_element.getAttribute('data-sortable-item-id');
+      result.ordering.push(id);
     } )
     return result;
   }

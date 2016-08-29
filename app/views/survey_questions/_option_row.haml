@@ -1,4 +1,4 @@
-%li(style="margin-bottom: 10px;" data-option-row)
+%li{style: "margin-bottom: 10px;", data: {option_row: true, sortable_item: true, sortable_item_id: option.id}}
   = option.text
   = link_to edit_survey_question_option_path(@survey, @survey_question, option), data: {remote: true, edit_option_link: option.id} do
     %span.glyphicon.glyphicon-pencil(aria-hidden="true")

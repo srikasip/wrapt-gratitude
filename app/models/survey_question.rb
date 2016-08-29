@@ -4,7 +4,7 @@ class SurveyQuestion < ApplicationRecord
   has_many :training_set_product_questions, dependent: :destroy
 
   # type-specific associations are on the base class for preloading
-  has_many :options, inverse_of: :question, dependent: :destroy, class_name: 'SurveyQuestionOption'
+  has_many :options, -> {order :sort_order}, inverse_of: :question, dependent: :destroy, class_name: 'SurveyQuestionOption'
 
   has_many :survey_question_responses, dependent: :destroy
 

@@ -22,12 +22,9 @@ window.App.Admin.SurveyQuestionBuilder.Controller = class Controller {
   handleAjaxSuccess() {
     $(this.element).on('ajax:success', evt => {
       const previewElement = $(this.element).find('[data-question-preview]')[0]
-      console.log(previewElement)
       const href = previewElement.getAttribute('data-question-preview-href')
-      console.log('Refreshing preview')
       $.get(href, data => {
         $(previewElement).replaceWith(data);
-        console.log('preview replaced')
       }, 'html')
     })
   }

@@ -12,7 +12,7 @@
         = form.submit 'Save Prompt', class: 'btn btn-primary'
 
     %h3 Choices
-    %ol(style="list-style: lower-alpha; padding-left: 15px;" data-option-list)
+    %ol{style: "list-style: lower-alpha; padding-left: 15px;", data: {option_list: true, sortable_list: true, sortable_list_href: survey_question_option_ordering_path(@survey, @survey_question)}}
       - @survey_question.options.each do |option|
         = render 'option_row', option: option
 
@@ -27,3 +27,4 @@
 = content_for :page_js do
   :javascript
     new App.Admin.SurveyQuestionBuilder.Controller($('[data-survey-question-builder]')[0]);
+    new App.SortableList($('[data-sortable-list]')[0])
