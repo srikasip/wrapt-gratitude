@@ -5,7 +5,7 @@ class RangeImpactCorrelationSwitchingsController < ApplicationController
 
   def create
     RangeImpactCorrelationSwitching.new(@training_set_product_question).save
-    redirect_to edit_training_set_product_question_path(@training_set, @training_set_product_question)
+    redirect_to edit_training_set_product_question_impact_path(@training_set, @training_set_product_question)
   end
 
   private 
@@ -14,7 +14,7 @@ class RangeImpactCorrelationSwitchingsController < ApplicationController
     end
 
     def set_training_set_product_question
-      @training_set_product_question = @training_set.product_questions.find(params[:product_question_id])
+      @training_set_product_question = @training_set.product_questions.find(params[:product_question_impact_id])
     end
 
 end
