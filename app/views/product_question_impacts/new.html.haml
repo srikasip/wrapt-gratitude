@@ -1,7 +1,8 @@
 .row
   .col-sm-12
     %h1 New Product-Question
-
+.row
+  .col-sm-6
     = simple_form_for(@training_set_product_question, url: training_set_product_question_impacts_path(@training_set)) do |f|
       = f.error_notification
 

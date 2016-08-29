@@ -8,9 +8,9 @@
     %p= link_to 'Add a New Survey Response', new_profile_set_survey_response_path(@profile_set), class: 'btn btn-success'
 
     %table.table
-    - @profile_set_survey_responses.each do |response|
-      %tr
-        %td= response.name
-        %td
-          = link_to 'Edit', edit_profile_set_survey_response_path(@profile_set, response), class: 'btn btn-xs btn-primary'
-          = link_to 'Delete', profile_set_survey_response_path(@profile_set, response), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'
+      - @profile_set_survey_responses.each do |response|
+        %tr
+          %td= response.name
+          %td
+            = link_to 'Edit', edit_profile_set_survey_response_path(@profile_set, response), class: 'btn btn-xs btn-primary'
+            = link_to 'Delete', profile_set_survey_response_path(@profile_set, response), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'

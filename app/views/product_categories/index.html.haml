@@ -8,14 +8,14 @@
 
 .row
   .col-sm-12
-    %ul
+    %ul.admin-index-list
       - @product_categories.each do |product_category|
         %li
           = product_category.name
           = link_to 'Edit', edit_product_category_path(product_category), class: 'btn btn-default btn-xs'
           = link_to 'Delete', product_category_path(product_category), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'
           - if product_category.children.any?
-            %ul
+            %ul.admin-index-list
               - product_category.children.each do |subcategory|
                 %li
                   = subcategory.name
