@@ -1,7 +1,8 @@
 window.App || (window.App = {})
 
 App.init = function(){
-  $('[data-provide="slider"]').slider()
+  console.log($('[data-provide="slider"]'))
+  $('[data-provide="slider"]').bootstrapSlider()
 }
 
 $(document).on( "turbolinks:load", ( () => App.init()) )
