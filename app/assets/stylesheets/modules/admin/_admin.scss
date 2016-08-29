@@ -10,3 +10,10 @@
   margin-top: 24px;
   margin-bottom: 24px;
 }
+.shadowed-box__01 {
+  @include shadowed-box__01;
+}
+.form-panel__left {
+  margin-top: 24px;
+  padding-bottom: 18px;
+}
