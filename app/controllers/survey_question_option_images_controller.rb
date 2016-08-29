@@ -32,7 +32,7 @@ class SurveyQuestionOptionImagesController < ApplicationController
   end
 
   def set_survey_question_option
-    @survey_question_option = @survey_question.options.find params[:id]
+    @survey_question_option = @survey_question.options.find params[:option_id]
   end
 
   def survey_question_option_params

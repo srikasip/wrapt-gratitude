@@ -1,0 +1,11 @@
+= simple_form_for @survey_question_option, url: survey_question_option_image_path(@survey, @survey_question, @survey_question_option), remote: true do |form|
+  
+  %p= @survey_question_option.text
+
+  .form-inputs
+    = form.input :image, as: :file, label: "Add/Change Image"
+    = form.hidden_field :image_cache
+    = image_tag @survey_question_option.image_url(:small) if @survey_question_option.image?
+
+  .form-actions
+    = form.submit 'Save', class: 'btn btn-primary'
