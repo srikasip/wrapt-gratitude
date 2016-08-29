@@ -29,7 +29,7 @@ class SurveyQuestion < ApplicationRecord
   end
 
   private def set_initial_sort_order
-    next_sort_order = ( survey.questions.max(:sort_order) || 0 ) + 1
+    next_sort_order = ( survey.questions.maximum(:sort_order) || 0 ) + 1
     self.sort_order = next_sort_order
   end
 
