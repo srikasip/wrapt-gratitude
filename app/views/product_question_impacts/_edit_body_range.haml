@@ -1,5 +1,5 @@
 
-= simple_form_for @training_set_product_question, url: training_set_product_question_impact_path(@training_set, @training_set_product_question), html: {class: 'form'} do |f|
+= simple_form_for @training_set_product_question, url: training_set_product_question_impact_path(@training_set, @training_set_product_question), html: {class: 'form edit_training_set_product_question'} do |f|
   = f.error_notification
 
   .form-inputs
@@ -24,10 +24,10 @@
       %th Impact
   %tbody
     %tr
-      %td.slider-label.slider-label__min= @training_set_product_question.survey_question.min_label
+      %td= @training_set_product_question.survey_question.min_label
       %td.slider-control= @training_set_product_question.range_impact_direct_correlation? ? 'Negative' : 'Positive'
     %tr
-      %td.slider-label.slider-label__max= @training_set_product_question.survey_question.max_label
+      %td= @training_set_product_question.survey_question.max_label
       %td= @training_set_product_question.range_impact_direct_correlation? ? 'Positive' : 'Negative'
 
 = simple_form_for RangeImpactCorrelationSwitching.new(@training_set_product_question), url: training_set_product_question_impact_range_impact_correlation_switchings_path(@training_set, @training_set_product_question) do |f|
