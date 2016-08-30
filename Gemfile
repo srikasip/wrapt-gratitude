@@ -39,6 +39,9 @@ gem 'awesome_nested_set'
 gem 'devise'
 gem 'kaminari'
 
+# rails 5 compatible fork per https://github.com/JangoSteve/remotipart/issues/155
+gem 'remotipart', github: 'sr3d/remotipart'
+
 # Javascript
 gem 'sprockets-es6'
 

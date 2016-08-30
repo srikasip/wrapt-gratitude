@@ -6,6 +6,9 @@
     %span.glyphicon.glyphicon-picture
   = link_to survey_question_option_path(@survey, @survey_question, option), data: {method: :delete, remote: true, delete_option_link: option.id} do
     %span.glyphicon.glyphicon-remove(aria-hidden="true")
+  - if option.image?
+    %br
+    = image_tag option.image_url(:small) 
 
 - content_for :page_js do
   :javascript

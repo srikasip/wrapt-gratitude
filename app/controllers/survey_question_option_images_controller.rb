@@ -18,8 +18,9 @@ class SurveyQuestionOptionImagesController < ApplicationController
   end
 
   def destroy
-    @survey_question_option.destroy
-    head :ok
+    @survey_question_option.remove_image!
+    @survey_question_option.save!
+    render 'survey_questions/_option_row', locals: {option: @survey_question_option}
   end
 
   private

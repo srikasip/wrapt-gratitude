@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/sr3d/remotipart.git
+  revision: 572f45d234a8d1ce4158609fe18bd54086fc5735
+  specs:
+    remotipart (1.2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -237,6 +243,7 @@ DEPENDENCIES
   pry-rails
   puma (~> 3.0)
   rails (~> 5.0.0)
+  remotipart!
   sass-rails (~> 5.0)
   simple_form
   spring
