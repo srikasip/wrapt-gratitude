@@ -1,6 +1,12 @@
 module Recommendations
   class Engine
 
+    # TODO as of 8/31/16
+    # accomodate the front end survey responses
+    # accomodate multiple multiple choice questions
+    # exclude text questions
+    # tests
+
     attr_reader :training_set, :response
 
     NEGATIVE_RANK_PENALTY = 2
