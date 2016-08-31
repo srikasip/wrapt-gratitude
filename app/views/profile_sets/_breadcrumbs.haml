@@ -1,7 +1,7 @@
 - unless params[:action] == 'index'
   .row.breadcrumbs
     .col-sm-12
-      = link_to "Profile Sets".html_safe, profile_sets_path
+      = link_to "Response Sets".html_safe, profile_sets_path
       - if params[:action] == 'edit'
         &raquo;
         = link_to "#{@profile_set.name}".html_safe, @profile_set
