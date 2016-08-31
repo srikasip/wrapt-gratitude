@@ -18,6 +18,9 @@
 //= require bootstrap-sprockets
 //= require bootstrap-slider
 //= require jquery-ui
+//= require jquery.ui.widget
+//= require jquery.iframe-transport
+//= require jquery.fileupload
 
 // Application Code
 //= require app/init

@@ -12,7 +12,9 @@ Rails.application.routes.draw do
       member do
         get :preview
       end
-      resources :options, except: [:index, :show], controller: 'survey_question_options'
+      resources :options, except: [:index], controller: 'survey_question_options' do
+        resource :image, only: [:edit, :update, :destroy], controller: 'survey_question_option_images'
+      end
       resource :option_ordering, only: :create, controller: 'survey_question_option_orderings'
     end
     resource :question_ordering, only: :create, controller: 'survey_question_orderings'
