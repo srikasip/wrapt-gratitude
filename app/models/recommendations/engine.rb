@@ -21,9 +21,9 @@ module Recommendations
     end
 
     def generate_recommendations!
-      Product.all.each do |product|
+      products.each do |product|
         product_rank = 0
-        @response.survey.questions.each do |question|
+        questions_by_product[product].each do |question|
           question_rank = calculate_question_rank(product, question)
           question_rank = Recommendations::NegativeRankPenaltyApplicator.new(question_rank).modified_rank
           question_rank = Recommendations::ProductQuestionWeightApplicator.new(question_rank, engine: self, product: product, question: question).modified_rank
@@ -34,12 +34,23 @@ module Recommendations
       end
     end
 
+    private def products
+      Product.where id: training_set.product_questions.select(:product_id)
+    end
+
+    private def questions_by_product
+      training_set.product_questions.preload(:product, :survey_question).to_a.reduce(Hash.new()) do |result, product_question|
+        result[product_question.product] ||= []
+        result[product_question.product] << product_question.survey_question
+        result
+      end
+    end
+
     private def calculate_question_rank product, question
-      calculator_class = case question
+      case question
       when SurveyQuestions::MultipleChoice then calculate_multiple_choice_question_rank product, question
       when SurveyQuestions::Range then calculate_range_question_rank product, question
       end
-      calculator_class.new(product, question, engine: self).get_question_rank
     end
     
 
@@ -65,21 +76,32 @@ module Recommendations
         result = impact.impact
       end
       result
-    end
-
-    private def apply_product_question_weight question_rank, product, question
-      weight = product_questions_by_product_and_question[product][question].question_impact
-      question * (4 ** weight)
+    rescue Exception => e
+      pp product_question
+      pp product_question.response_impacts
+      raise e
     end
     
     def product_questions_by_product_and_question
       @product_questions_by_product_and_question ||= {}.tap do |result|
-        training_set.product_questions.preload(:product, :question, :response_impacts).each do |product_question|
+        training_set.product_questions.preload(:product, :survey_question, :response_impacts).each do |product_question|
+          product = product_question.product
+          question = product_question.survey_question
           result[product] ||= {}
           result[product][question] = product_question
         end
       end
     end
+
+    private def question_responses_by_question
+      @_question_responses_by_question ||= {}.tap do |result|
+        response.question_responses.each do |question_response|
+          result[question_response.survey_question] = question_response
+        end
+      end
+      
+    end
+    
 
     class SurveyMismatchError; end
 

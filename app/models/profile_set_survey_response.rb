@@ -5,6 +5,8 @@ class ProfileSetSurveyResponse < ApplicationRecord
 
   accepts_nested_attributes_for :question_responses, update_only: true
 
+  delegate :survey, to: :profile_set
+
   def build_question_responses
     profile_set.survey.questions.each do |question|
       question_responses.new survey_question: question
