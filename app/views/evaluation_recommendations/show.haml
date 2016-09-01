@@ -1,0 +1,25 @@
+%h1 Recommendation Breakdown for #{@recommendation.product.title}
+
+%p
+  %b Survey Response:
+  = @recommendation.survey_response.name
+
+%p
+  %b Overall Score:
+  = @recommendation.score
+
+%table
+  %thead
+    %tr
+      %th Question
+      %th Question Weight
+      %th Response
+      %th Question Rank
+  %tbody
+    - @recommendation.training_set.product_questions.where(product_id: @recommendation.product_id).preload(:survey_question).each do |product_question|
+      - question_response = recommendation.survey_response.question_responses.detect{|question_response| question_response.survey_question_id == product_question.survey_question_id}
+      %tr
+        %td= product_question.survey_question.prompt
+        %td= product_question.question_impact
+        %td= get_displayable_response(question_response)
+        %td= calculate_question_rank(product_question, question_response)
