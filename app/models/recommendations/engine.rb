@@ -24,14 +24,31 @@ module Recommendations
       products.each do |product|
         product_rank = 0
         questions_by_product[product].each do |question|
+          product_question = product_questions_by_product_and_question[product][question]
+          
           question_rank = calculate_question_rank(product, question)
           question_rank = Recommendations::NegativeRankPenaltyApplicator.new(question_rank).modified_rank
-          question_rank = Recommendations::ProductQuestionWeightApplicator.new(question_rank, engine: self, product: product, question: question).modified_rank
+          question_rank = Recommendations::ProductQuestionWeightApplicator.new(question_rank, product_question&.question_impact).modified_rank
+          
           product_rank += question_rank
         end
         # TODO accomodate front-end responses
         EvaluationRecommendation.create survey_response: response, product: product, training_set_evaluation: training_set.evaluation, score: product_rank
       end
+    end
+
+    private def calculate_question_rank product, question
+      result = 0
+      question_response = question_responses_by_question[question]
+      product_question = product_questions_by_product_and_question[product][question]
+      if question_response && product_question
+        calculator_class = case question
+        when SurveyQuestions::MultipleChoice then Recommendations::QuestionRankCalculators::MultipleChoice
+        when SurveyQuestions::Range then Recommendations::QuestionRankCalculators::Range
+        end
+        result = calculator_class.new(product_question, question_response).question_rank
+      end
+      result
     end
 
     private def products
@@ -44,42 +61,6 @@ module Recommendations
         result[product_question.product] << product_question.survey_question
         result
       end
-    end
-
-    private def calculate_question_rank product, question
-      case question
-      when SurveyQuestions::MultipleChoice then calculate_multiple_choice_question_rank product, question
-      when SurveyQuestions::Range then calculate_range_question_rank product, question
-      end
-    end
-    
-
-    private def calculate_range_question_rank product, question
-      result = 0
-      question_response = question_responses_by_question[question]
-      product_question = product_questions_by_product_and_question[product][question]
-      if question_response && product_question
-        modifier = product_question.range_impact_direct_correlation? ? 1 : -1
-        result = question_response.range_response * modifier
-      end
-      result
-    end
-
-    private def calculate_multiple_choice_question_rank product, question
-      # TODO accomodate multiple responses
-      result = 0
-      question_response = question_responses_by_question[question]
-      product_question = product_questions_by_product_and_question[product][question]
-      if question_response && product_question
-        chosen_option_id = question_response.survey_question_option_id
-        impact = product_question.response_impacts.detect{|impact| impact.survey_question_option_id == chosen_option_id}
-        result = impact.impact
-      end
-      result
-    rescue Exception => e
-      pp product_question
-      pp product_question.response_impacts
-      raise e
     end
     
     def product_questions_by_product_and_question
@@ -98,11 +79,9 @@ module Recommendations
         response.question_responses.each do |question_response|
           result[question_response.survey_question] = question_response
         end
-      end
-      
+      end  
     end
     
-
     class SurveyMismatchError; end
 
   end
