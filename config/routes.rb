@@ -28,7 +28,7 @@ Rails.application.routes.draw do
       resources :range_impact_correlation_switchings, only: :create
     end
     resource :evaluate, only: :show, controller: 'training_set_evaluations' do
-      resources :evaluation_recommendations, only: :show
+      resources :recommendations, only: :show, controller: 'evaluation_recommendations'
     end
   end
 

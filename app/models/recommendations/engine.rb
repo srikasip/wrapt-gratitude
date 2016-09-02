@@ -24,20 +24,33 @@ module Recommendations
       products.each do |product|
         product_rank = 0
         questions_by_product[product].each do |question|
-          product_question = product_questions_by_product_and_question[product][question]
-          
-          question_rank = calculate_question_rank(product, question)
-          question_rank = Recommendations::NegativeRankPenaltyApplicator.new(question_rank).modified_rank
-          question_rank = Recommendations::ProductQuestionWeightApplicator.new(question_rank, product_question&.question_impact).modified_rank
-          
-          product_rank += question_rank
+          product_rank += calculate_question_rank(product, question)
         end
         # TODO accomodate front-end responses
         EvaluationRecommendation.create survey_response: response, product: product, training_set_evaluation: training_set.evaluation, score: product_rank
       end
     end
 
-    private def calculate_question_rank product, question
+    def calculate_question_rank product, question
+      product_question = product_questions_by_product_and_question[product][question]
+
+      result = initial_question_rank(product, question)
+      result = Recommendations::NegativeRankPenaltyApplicator.new(result).modified_rank
+      result = Recommendations::ProductQuestionWeightApplicator.new(result, product_question&.question_impact).modified_rank
+    end
+
+    # TODO this is used by EvaluationRecommendations#show and could be moved closer to there
+    def calculate_question_rank_intermediate_products product, question
+      product_question = product_questions_by_product_and_question[product][question]
+      result = {}
+      result[:initial_question_rank] = initial_question_rank(product, question)
+      result[:negative_rank_penalty_applied] = Recommendations::NegativeRankPenaltyApplicator.new(result[:initial_question_rank]).modified_rank
+      result[:question_weight_applied] = Recommendations::ProductQuestionWeightApplicator.new(result[:negative_rank_penalty_applied], product_question&.question_impact).modified_rank
+      result[:final_question_rank] = result[:question_weight_applied]
+      result
+    end
+
+    private def initial_question_rank product, question
       result = 0
       question_response = question_responses_by_question[question]
       product_question = product_questions_by_product_and_question[product][question]

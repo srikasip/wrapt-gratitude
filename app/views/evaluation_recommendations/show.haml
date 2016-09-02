@@ -6,20 +6,27 @@
 
 %p
   %b Overall Score:
-  = @recommendation.score
+  = @recommendation.score.round(2)
 
-%table
+%table.table
   %thead
     %tr
       %th Question
-      %th Question Weight
       %th Response
-      %th Question Rank
+      %th Question Weight
+      %th Response Weight
+      %th Initial Question Rank
+      %th Apply Negative Penalty
+      %th Apply Question Weight (Final Rank)
   %tbody
     - @recommendation.training_set.product_questions.where(product_id: @recommendation.product_id).preload(:survey_question).each do |product_question|
-      - question_response = recommendation.survey_response.question_responses.detect{|question_response| question_response.survey_question_id == product_question.survey_question_id}
+      - question_response = @recommendation.survey_response.question_responses.detect{|question_response| question_response.survey_question_id == product_question.survey_question_id}
+      - intermediate_products = @engine.calculate_question_rank_intermediate_products(product_question.product, product_question.survey_question)
       %tr
         %td= product_question.survey_question.prompt
-        %td= product_question.question_impact
-        %td= get_displayable_response(question_response)
-        %td= calculate_question_rank(product_question, question_response)
+        %td= displayable_response(question_response)
+        %td= product_question.question_impact.round(2)
+        %td= displayable_response_weight(product_question, question_response)
+        %td= intermediate_products[:initial_question_rank].round(2)
+        %td= intermediate_products[:negative_rank_penalty_applied].round(2)
+        %td= intermediate_products[:final_question_rank].round(2)
