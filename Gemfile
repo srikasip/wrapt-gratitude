@@ -36,6 +36,7 @@ gem 'simple_form'
 gem 'haml-rails'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'carrierwave'
+gem "fog-aws"
 gem 'mini_magick'
 gem 'awesome_nested_set'
 gem 'devise'

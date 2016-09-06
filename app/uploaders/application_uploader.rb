@@ -3,7 +3,7 @@ class ApplicationUploader < CarrierWave::Uploader::Base
 
   include CarrierWave::MiniMagick
 
-  storage :file
+  storage(Rails.env.production? ? :fog : :file)
 
   def store_dir
     "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
