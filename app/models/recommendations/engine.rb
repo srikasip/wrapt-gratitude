@@ -15,7 +15,7 @@ module Recommendations
     def initialize training_set, response
       @training_set = training_set
       @response = response
-      if training_set.survey != response.survey
+      if training_set.survey_id != response.survey_id
         raise SurveyMismatchError
       end
     end
@@ -89,7 +89,7 @@ module Recommendations
 
     private def question_responses_by_question
       @_question_responses_by_question ||= {}.tap do |result|
-        response.question_responses.each do |question_response|
+        response.question_responses.preload(:survey_question).each do |question_response|
           result[question_response.survey_question] = question_response
         end
       end  

@@ -36,7 +36,7 @@
             %td= training_set.survey&.title
             %td
               = link_to 'View', training_set, class: 'btn btn-xs btn-default'
-              = link_to "Recommendations", training_set_evaluate_path(training_set), class: 'btn btn-xs btn-default'
+              = link_to "Recommendations", training_set_evaluation_path(training_set), class: 'btn btn-xs btn-default'
               = link_to 'Delete', training_set, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'
 
 

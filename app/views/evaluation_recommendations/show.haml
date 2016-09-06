@@ -19,8 +19,8 @@
       %th Apply Negative Penalty
       %th Apply Question Weight (Final Rank)
   %tbody
-    - @recommendation.training_set.product_questions.where(product_id: @recommendation.product_id).preload(:survey_question).each do |product_question|
-      - question_response = @recommendation.survey_response.question_responses.detect{|question_response| question_response.survey_question_id == product_question.survey_question_id}
+    - @recommendation.training_set.product_questions.where(product_id: @recommendation.product_id).preload(:survey_question, :product).each do |product_question|
+      - question_response = @recommendation.survey_response.question_responses.preload(:survey_question_option).detect{|question_response| question_response.survey_question_id == product_question.survey_question_id}
       - intermediate_products = @engine.calculate_question_rank_intermediate_products(product_question.product, product_question.survey_question)
       %tr
         %td= product_question.survey_question.prompt

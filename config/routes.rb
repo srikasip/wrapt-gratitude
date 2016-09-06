@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     resources :product_question_impacts, controller: 'product_question_impacts', except: [:index, :show] do
       resources :range_impact_correlation_switchings, only: :create
     end
-    resource :evaluate, only: :show, controller: 'training_set_evaluations' do
+    resource :evaluation, only: :show, controller: 'training_set_evaluations' do
       resources :recommendations, only: :show, controller: 'evaluation_recommendations'
     end
   end
