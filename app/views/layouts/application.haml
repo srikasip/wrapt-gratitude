@@ -23,4 +23,5 @@
         .row(style="text-align: center;")
           = link_to image_tag('logo-full-size.png', height: 150), root_path
 
+    = render 'pjax_modal_frame'
     = yield :page_js

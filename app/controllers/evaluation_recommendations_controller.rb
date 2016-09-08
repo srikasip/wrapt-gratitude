@@ -1,5 +1,6 @@
 class EvaluationRecommendationsController < ApplicationController
 
+  include PjaxModalController
 
   def show
     @training_set = TrainingSet.find params[:training_set_id] # for breadcrumbs

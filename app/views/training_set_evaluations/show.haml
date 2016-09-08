@@ -15,5 +15,5 @@
           %table.table.table-bordered
             %tr
               - @recommendations_by_survey_response_id[response.id].sort_by(&:score).reverse.each do |recommendation|
-                %td= link_to "#{recommendation.product.title} (#{recommendation.score.round(2)})", training_set_evaluation_recommendation_path(@training_set, recommendation)
+                %td= link_to "#{recommendation.product.title} (#{recommendation.score.round(2)})", training_set_evaluation_recommendation_path(@training_set, recommendation), data: {loads_in_pjax_modal: true}
           
