@@ -13,6 +13,8 @@ gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
 
+gem 'dotenv-rails'
+
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -34,6 +36,7 @@ gem 'simple_form'
 gem 'haml-rails'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'carrierwave'
+gem "fog-aws"
 gem 'mini_magick'
 gem 'awesome_nested_set'
 gem 'devise'
@@ -56,6 +59,10 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'pry-rails'
+  gem 'capistrano-rails'
+  gem 'capistrano-bundler'
+  gem 'capistrano-passenger'
+  gem 'capistrano-rvm'
 end
 
 group :test do
