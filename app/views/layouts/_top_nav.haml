@@ -10,5 +10,7 @@
         %li.divider-vertical
         %li{class: ("active" if active_top_nav_section == 'profile_sets')}= link_to "Response Sets", profile_sets_path
         %li{class: ("active" if active_top_nav_section == 'training_sets')}= link_to "Training Sets", training_sets_path
+        %li.divider-vertical
+        %li= link_to "Log Out", private_access_session_path, method: :delete
         
 

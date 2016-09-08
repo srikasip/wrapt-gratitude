@@ -37,6 +37,8 @@ Rails.application.routes.draw do
     resources :survey_responses, controller: 'profile_set_survey_responses', except: [:index, :show]
   end
 
+  resource :private_access_session, only: [:new, :create, :destroy]
+
   root to: 'home_pages#show' 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

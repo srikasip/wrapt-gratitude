@@ -4,4 +4,8 @@ module ApplicationHelper
     controller_name
   end
 
+  def show_top_nav?
+    !controller.devise_controller?
+  end
+
 end

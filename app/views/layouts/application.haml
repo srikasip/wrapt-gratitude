@@ -7,7 +7,7 @@
     %link{href: '//fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans:400,600|Raleway:400,600', rel: 'stylesheet', type: 'text/css'}
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
-    - unless controller_name == "sessions"
+    - if show_top_nav?
       = render 'layouts/top_nav'
     
 

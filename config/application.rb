@@ -19,5 +19,7 @@ module WraptGratitude
       generate.jbuilder false
     end
 
+    config.action_controller.include_all_helpers = false
+
   end
 end
