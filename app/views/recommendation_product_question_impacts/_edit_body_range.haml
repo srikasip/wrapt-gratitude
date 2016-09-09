@@ -1,4 +1,4 @@
-= simple_form_for @training_set_product_question, url: training_set_product_question_impact_path(@training_set, @training_set_product_question), html: {class: 'form edit_training_set_product_question'} do |f|
+= simple_form_for @training_set_product_question, url: training_set_evaluation_recommendation_product_question_impact_path(@training_set, @recommendation, @training_set_product_question), html: {class: 'form edit_training_set_product_question', data: {submits_to_pjax_modal: true}} do |f|
   = f.error_notification
 
   .form-inputs
@@ -30,3 +30,4 @@
 
   .form-actions
     = f.submit "Save", class: 'btn btn-primary'
+    = link_to 'Cancel', training_set_evaluation_recommendation_path(@training_set, @recommendation), class: 'btn btn-default', data: {loads_in_pjax_modal: true}

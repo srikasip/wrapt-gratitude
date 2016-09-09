@@ -24,11 +24,11 @@ Rails.application.routes.draw do
     resources :products, only: :none do
       resources :questions, only: :index, controller: 'training_set_questions'
     end
-    resources :product_question_impacts, controller: 'product_question_impacts', except: [:index, :show] do
-      resources :range_impact_correlation_switchings, only: :create
-    end
+    resources :product_question_impacts, controller: 'product_question_impacts', except: [:index, :show]
     resource :evaluation, only: :show, controller: 'training_set_evaluations' do
-      resources :recommendations, only: :show, controller: 'evaluation_recommendations'
+      resources :recommendations, only: :show, controller: 'evaluation_recommendations' do
+        resources :product_question_impacts, only: [:edit, :update], controller: 'recommendation_product_question_impacts'
+      end
     end
   end
 

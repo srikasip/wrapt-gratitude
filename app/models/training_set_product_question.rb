@@ -8,6 +8,9 @@ class TrainingSetProductQuestion < ApplicationRecord
   has_many :response_impacts, class_name: 'TrainingSetResponseImpact', inverse_of: :training_set_product_question, dependent: :destroy
   accepts_nested_attributes_for :response_impacts
 
+  attr_accessor :switch_range_impact_direct_correlation
+  before_update :switch_range_impact_direct_correlation!, if: :switch_range_impact_direct_correlation
+
   # validate :validate_unique_question_for_product, if: -> {product && survey_question}, on: :create
 
   # assumes there are no response impacts
@@ -22,4 +25,10 @@ class TrainingSetProductQuestion < ApplicationRecord
       errors.add :survey_question, "Already exists for this product in this training set"
     end
   end
+
+  private def switch_range_impact_direct_correlation!
+    self.range_impact_direct_correlation =  !range_impact_direct_correlation
+  end
+  
+
 end

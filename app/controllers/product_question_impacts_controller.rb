@@ -48,6 +48,7 @@ class ProductQuestionImpactsController < ApplicationController
         :product_id,
         :survey_question_id,
         :question_impact,
+        :switch_range_impact_direct_correlation,
         response_impacts_attributes: [:id, :impact]
       )
     end

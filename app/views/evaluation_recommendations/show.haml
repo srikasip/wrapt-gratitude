@@ -24,7 +24,7 @@
       = intermediate_products[:final_question_rank].round(2)
     %p
       = link_to "Show Details", "#", class: 'btn btn-xs btn-primary', data: {question_rank_details_toggle: true, question_id: product_question.survey_question_id}
-      = link_to "Adjust Question Weight", '#', class: 'btn btn-xs btn-primary'
+      = link_to "Adjust Question Impact", edit_training_set_evaluation_recommendation_product_question_impact_path(@training_set, @recommendation, product_question), class: 'btn btn-xs btn-primary', data: {loads_in_pjax_modal: true}
 
     %table.table.question-rank-details-table{style: 'display: none;', data: {question_rank_details: true, question_id: product_question.survey_question_id}}
       %thead
