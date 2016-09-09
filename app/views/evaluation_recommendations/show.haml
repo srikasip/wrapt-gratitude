@@ -8,25 +8,40 @@
   %b Overall Score:
   = @recommendation.score.round(2)
 
-%table.table
-  %thead
-    %tr
-      %th Question
-      %th Response
-      %th Question Weight
-      %th Response Weight
-      %th Initial Question Rank
-      %th Apply Negative Penalty
-      %th Apply Question Weight (Final Rank)
-  %tbody
-    - @recommendation.training_set.product_questions.where(product_id: @recommendation.product_id).preload(:survey_question, :product).each do |product_question|
-      - question_response = @recommendation.survey_response.question_responses.preload(:survey_question_option).detect{|question_response| question_response.survey_question_id == product_question.survey_question_id}
-      - intermediate_products = @engine.calculate_question_rank_intermediate_products(product_question.product, product_question.survey_question)
-      %tr
-        %td= product_question.survey_question.prompt
-        %td= displayable_response(question_response)
-        %td= product_question.question_impact.round(2)
-        %td= displayable_response_weight(product_question, question_response)
-        %td= intermediate_products[:initial_question_rank].round(2)
-        %td= intermediate_products[:negative_rank_penalty_applied].round(2)
-        %td= intermediate_products[:final_question_rank].round(2)
+- @recommendation.training_set.product_questions.where(product_id: @recommendation.product_id).preload(:survey_question, :product).each do |product_question|
+  - question_response = @recommendation.survey_response.question_responses.preload(:survey_question_option).detect{|question_response| question_response.survey_question_id == product_question.survey_question_id}
+  - intermediate_products = @engine.calculate_question_rank_intermediate_products(product_question.product, product_question.survey_question)
+
+  .well
+    %p
+      %b Question:
+      = product_question.survey_question.prompt
+    %p
+      %b Response:
+      = displayable_response(question_response)
+    %p
+      %b Contribution to Overall Score
+      = intermediate_products[:final_question_rank].round(2)
+    %p
+      = link_to "Show Details", "#", class: 'btn btn-xs btn-primary', data: {question_rank_details_toggle: true, question_id: product_question.survey_question_id}
+      = link_to "Adjust Question Weight", '#', class: 'btn btn-xs btn-primary'
+
+    %table.table.question-rank-details-table{style: 'display: none;', data: {question_rank_details: true, question_id: product_question.survey_question_id}}
+      %thead
+        %tr
+          %th Question Weight
+          %th Response Weight
+          %th Initial Question Rank
+          %th Apply Negative Penalty
+          %th Apply Question Weight (Final Rank)
+      %tbody
+        %tr
+          %td= product_question.question_impact.round(2)
+          %td= displayable_response_weight(product_question, question_response)
+          %td= intermediate_products[:initial_question_rank].round(2)
+          %td= intermediate_products[:negative_rank_penalty_applied].round(2)
+          %td= intermediate_products[:final_question_rank].round(2)
+
+- content_for :page_js do
+  :javascript
+    $("[data-question-rank-details-toggle]").each(function(_i, element) {new App.Admin.QuestionRankDetailsToggle(element)})
