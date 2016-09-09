@@ -12,7 +12,7 @@
           = profile_set.name
         - profile_set.survey_responses.each do |response|
           %h4= response.name
-          %ul          
+          %ul.admin-index-list        
             - @recommendations_by_survey_response_id[response.id].sort_by(&:score).reverse.each do |recommendation|
               %li
                 = "#{recommendation.product.title} (#{recommendation.score.round(2)})"
