@@ -11,6 +11,7 @@
     %table.table
       %thead
         %tr
+          %th
           %th Title
           %th Description
           %th Price
@@ -20,6 +21,9 @@
       %tbody
         - @products.each do |product|
           %tr
+            %th(style="text-align: center;")
+              - if product.image?
+                = image_tag product.image_url(:small), style: 'max-height: 50px; align: center;'
             %td= product.title
             %td= product.description
             %td= number_to_currency product.price
