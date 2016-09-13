@@ -63,6 +63,7 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-passenger'
   gem 'capistrano-rvm'
+  gem 'seed_dump'
 end
 
 group :test do

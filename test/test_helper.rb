@@ -4,16 +4,15 @@ require 'rails/test_help'
 require 'minitest/reporters'
 require 'capybara/rails'
 require "rspec/mocks"
-
-
+require "support/test_data"
+require "support/loads_test_data"
+require 'support/integration_test_authenticator'
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new(:color => !ENV["MINITEST_NOCOLOR"]),
   ENV,
   Minitest.backtrace_filter
 
 class ActiveSupport::TestCase
-  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-  # Add more helper methods to be used by all tests here...
 end
 
 class ActionDispatch::IntegrationTest
