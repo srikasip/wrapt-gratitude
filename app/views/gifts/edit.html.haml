@@ -1,0 +1,12 @@
+.row
+  .col-sm-12
+    %h1 Edit Gift
+
+.row
+  .col-sm-8
+    = render 'form'
+
+    .links__view-back
+      = link_to 'Show', @gift
+      \|
+      = link_to 'Back', gifts_path

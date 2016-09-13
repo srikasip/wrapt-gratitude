@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
 
 
+  resources :gifts
   get 'home_pages/show'
 
   devise_for :users

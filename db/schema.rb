@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160829154509) do
+ActiveRecord::Schema.define(version: 20160913180549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,27 @@ ActiveRecord::Schema.define(version: 20160829154509) do
     t.index ["product_id"], name: "index_evaluation_recommendations_on_product_id", using: :btree
     t.index ["profile_set_survey_response_id"], name: "eval_rec_survey_response", using: :btree
     t.index ["training_set_evaluation_id"], name: "index_evaluation_recommendations_on_training_set_evaluation_id", using: :btree
+  end
+
+  create_table "gift_products", force: :cascade do |t|
+    t.integer  "gift_id"
+    t.integer  "product_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gift_id"], name: "index_gift_products_on_gift_id", using: :btree
+    t.index ["product_id"], name: "index_gift_products_on_product_id", using: :btree
+  end
+
+  create_table "gifts", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.decimal  "selling_price",     precision: 10, scale: 2
+    t.decimal  "cost",              precision: 10, scale: 2
+    t.string   "wrapt_sku"
+    t.date     "date_available"
+    t.date     "date_discontinued"
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
   end
 
   create_table "product_categories", force: :cascade do |t|
@@ -178,6 +199,8 @@ ActiveRecord::Schema.define(version: 20160829154509) do
   add_foreign_key "evaluation_recommendations", "products"
   add_foreign_key "evaluation_recommendations", "profile_set_survey_responses"
   add_foreign_key "evaluation_recommendations", "training_set_evaluations"
+  add_foreign_key "gift_products", "gifts"
+  add_foreign_key "gift_products", "products"
   add_foreign_key "profile_set_survey_responses", "profile_sets"
   add_foreign_key "profile_sets", "surveys"
   add_foreign_key "survey_question_responses", "profile_set_survey_responses"

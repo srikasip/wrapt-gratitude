@@ -1,0 +1,27 @@
+.row
+  .col-sm-12
+    %h1
+      = @gift.title
+      = link_to 'Edit', edit_gift_path(@gift), class: 'btn btn-default btn-xs'
+
+    %p
+      %b Name:
+      = @gift.name
+    %p
+      %b Description:
+      = @gift.description
+    %p
+      %b Selling price:
+      = @gift.selling_price
+    %p
+      %b Cost:
+      = @gift.cost
+    %p
+      %b Wrapt sku:
+      = @gift.wrapt_sku
+    %p
+      %b Date available:
+      = @gift.date_available
+    %p
+      %b Date discontinued:
+      = @gift.date_discontinued

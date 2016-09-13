@@ -4,4 +4,7 @@ class Product < ApplicationRecord
 
   has_many :training_set_product_questions, dependent: :destroy
   has_many :evaluation_recommendations, dependent: :destroy
+
+  has_many :gift_products, inverse_of: :product, dependent: :destroy
+  has_many :gifts, through: :gift_products
 end

@@ -4,6 +4,7 @@
     .collapse.navbar-collapse
       %ul.nav.navbar-nav
         %li{class: ("active" if active_top_nav_section == 'home_pages')}= link_to "Wrapt Admin Home", root_path
+        %li{class: ("active" if active_top_nav_section == 'gifts')}= link_to "Gifts", gifts_path
         %li{class: ("active" if active_top_nav_section == 'products')}= link_to "Products", products_path
         %li{class: ("active" if active_top_nav_section == 'product_categories')}= link_to "Product Categories", product_categories_path
         %li{class: ("active" if active_top_nav_section == 'surveys')}= link_to "Quizzes", surveys_path
