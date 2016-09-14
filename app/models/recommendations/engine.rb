@@ -21,68 +21,68 @@ module Recommendations
     end
 
     def generate_recommendations!
-      products.each do |product|
-        product_rank = 0
-        questions_by_product[product].each do |question|
-          product_rank += calculate_question_rank(product, question)
+      gifts.each do |gift|
+        gift_rank = 0
+        questions_by_gift[gift].each do |question|
+          gift_rank += calculate_question_rank(gift, question)
         end
         # TODO accomodate front-end responses
-        EvaluationRecommendation.create survey_response: response, product: product, training_set_evaluation: training_set.evaluation, score: product_rank
+        EvaluationRecommendation.create survey_response: response, gift: gift, training_set_evaluation: training_set.evaluation, score: gift_rank
       end
     end
 
-    def calculate_question_rank product, question
-      product_question = product_questions_by_product_and_question[product][question]
+    def calculate_question_rank gift, question
+      gift_question = gift_question_impacts_by_gift_and_question[gift][question]
 
-      result = initial_question_rank(product, question)
+      result = initial_question_rank(gift, question)
       result = Recommendations::NegativeRankPenaltyApplicator.new(result).modified_rank
-      result = Recommendations::ProductQuestionWeightApplicator.new(result, product_question&.question_impact).modified_rank
+      result = Recommendations::ProductQuestionWeightApplicator.new(result, gift_question&.question_impact).modified_rank
     end
 
     # TODO this is used by EvaluationRecommendations#show and could be moved closer to there
-    def calculate_question_rank_intermediate_products product, question
-      product_question = product_questions_by_product_and_question[product][question]
+    def calculate_question_rank_intermediate_gifts gift, question
+      gift_question = gift_question_impacts_by_gift_and_question[gift][question]
       result = {}
-      result[:initial_question_rank] = initial_question_rank(product, question)
+      result[:initial_question_rank] = initial_question_rank(gift, question)
       result[:negative_rank_penalty_applied] = Recommendations::NegativeRankPenaltyApplicator.new(result[:initial_question_rank]).modified_rank
-      result[:question_weight_applied] = Recommendations::ProductQuestionWeightApplicator.new(result[:negative_rank_penalty_applied], product_question&.question_impact).modified_rank
+      result[:question_weight_applied] = Recommendations::ProductQuestionWeightApplicator.new(result[:negative_rank_penalty_applied], gift_question&.question_impact).modified_rank
       result[:final_question_rank] = result[:question_weight_applied]
       result
     end
 
-    private def initial_question_rank product, question
+    private def initial_question_rank gift, question
       result = 0
       question_response = question_responses_by_question[question]
-      product_question = product_questions_by_product_and_question[product][question]
-      if question_response && product_question
+      gift_question = gift_question_impacts_by_gift_and_question[gift][question]
+      if question_response && gift_question
         calculator_class = case question
         when SurveyQuestions::MultipleChoice then Recommendations::QuestionRankCalculators::MultipleChoice
         when SurveyQuestions::Range then Recommendations::QuestionRankCalculators::Range
         end
-        result = calculator_class.new(product_question, question_response).question_rank
+        result = calculator_class.new(gift_question, question_response).question_rank
       end
       result
     end
 
-    private def products
-      Product.where id: training_set.product_questions.select(:product_id)
+    private def gifts
+      Gift.where id: training_set.gift_question_impacts.select(:gift_id)
     end
 
-    private def questions_by_product
-      training_set.product_questions.preload(:product, :survey_question).to_a.reduce(Hash.new()) do |result, product_question|
-        result[product_question.product] ||= []
-        result[product_question.product] << product_question.survey_question
+    private def questions_by_gift
+      training_set.gift_question_impacts.preload(:gift, :survey_question).to_a.reduce(Hash.new()) do |result, gift_question|
+        result[gift_question.gift] ||= []
+        result[gift_question.gift] << gift_question.survey_question
         result
       end
     end
     
-    def product_questions_by_product_and_question
-      @product_questions_by_product_and_question ||= {}.tap do |result|
-        training_set.product_questions.preload(:product, :survey_question, :response_impacts).each do |product_question|
-          product = product_question.product
-          question = product_question.survey_question
-          result[product] ||= {}
-          result[product][question] = product_question
+    def gift_question_impacts_by_gift_and_question
+      @gift_question_impacts_by_gift_and_question ||= {}.tap do |result|
+        training_set.gift_question_impacts.preload(:gift, :survey_question, :response_impacts).each do |gift_question|
+          gift = gift_question.gift
+          question = gift_question.survey_question
+          result[gift] ||= {}
+          result[gift][question] = gift_question
         end
       end
     end
