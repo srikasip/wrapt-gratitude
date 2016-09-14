@@ -8,34 +8,34 @@
       %b Quiz:
       = @training_set.survey&.title
 
-    %h3 Product-Questions
+    %h3 Gift-Questions
 
     %table.table(style="table-layout: fixed;")
       %thead
         %tr
-          %th Product
+          %th Gift
           %th
           %th
       %tbody
-        - @products.each do |product|
-          %tr{data: {product_row: product.id}}
-            %td= link_to product.title, product
+        - @gifts.each do |gift|
+          %tr{data: {gift_row: gift.id}}
+            %td= link_to gift.title, gift
             %td
-              = link_to "Add Question", new_training_set_product_question_impact_path(@training_set, product_id: product.id), class: 'btn btn-success', class: 'btn btn-success btn-xs'
-              - if product.id.in? @product_question_product_ids
-                = link_to training_set_product_questions_path(@training_set, product), class: 'btn btn-primary btn-xs', data: {view_questions_btn: product.id} do
+              = link_to "Add Question", new_training_set_gift_question_impact_path(@training_set, gift_id: gift.id), class: 'btn btn-success', class: 'btn btn-success btn-xs'
+              - if gift.id.in? @gift_question_impact_gift_ids
+                = link_to training_set_gift_questions_path(@training_set, gift), class: 'btn btn-primary btn-xs', data: {view_questions_btn: gift.id} do
                   View Questions
                   %span.caret
-                = link_to '#', class: 'btn btn-primary btn-xs', style: 'display: none;', data: {hide_questions_btn: product.id} do
+                = link_to '#', class: 'btn btn-primary btn-xs', style: 'display: none;', data: {hide_questions_btn: gift.id} do
                   Hide Questions
                   %span.dropup
                     %span.caret
             %td
 
 
-    = paginate @products
+    = paginate @gifts
 
 - content_for :page_js do
   :javascript
-    $('[data-view-questions-btn]').each(function(_i, element) { new App.Admin.ProductQuestionListLoader(element)} );
+    $('[data-view-questions-btn]').each(function(_i, element) { new App.Admin.GiftQuestionListLoader(element)} );
     

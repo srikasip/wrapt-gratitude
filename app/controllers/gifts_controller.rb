@@ -18,7 +18,7 @@ class GiftsController < ApplicationController
   def create
     @gift = Gift.new(gift_params)
     if @gift.save
-      redirect_to gifts_path, notice: 'Gift was successfully created.  Now add some products.'
+      redirect_to gift_products_path(@gift), notice: 'Gift was successfully created.  Now add some products.'
     else
       render :new
     end
@@ -43,6 +43,6 @@ class GiftsController < ApplicationController
   end
 
   private def gift_params
-    params.require(:gift).permit(:name, :description, :selling_price, :cost, :wrapt_sku, :date_available, :date_discontinued)
+    params.require(:gift).permit(:title, :description, :selling_price, :cost, :wrapt_sku, :date_available, :date_discontinued)
   end
 end

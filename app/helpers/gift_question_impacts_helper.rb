@@ -1,7 +1,7 @@
-module ProductQuestionImpactsHelper
+module GiftQuestionImpactsHelper
 
-  def edit_body_partial training_set_product_question
-    case training_set_product_question.survey_question
+  def edit_body_partial gift_question_impact
+    case gift_question_impact.survey_question
     when SurveyQuestions::MultipleChoice then "edit_body_multiple_choice"
     when SurveyQuestions::Range then "edit_body_range"
     end
