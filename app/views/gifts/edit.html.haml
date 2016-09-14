@@ -4,9 +4,7 @@
 
 .row
   .col-sm-8
+    %ul.nav.nav-tabs
+      %li(role="presentation" class="active")= link_to 'Details', edit_gift_path(@gift)
+      %li(role="presentation")= link_to 'Products', gift_products_path(@gift)
     = render 'form'
-
-    .links__view-back
-      = link_to 'Show', @gift
-      \|
-      = link_to 'Back', gifts_path

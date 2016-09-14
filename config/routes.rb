@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
 
-
-
-  resources :gifts
   get 'home_pages/show'
-
   devise_for :users
+  
   resources :product_categories
   resources :products
+  resources :gifts do
+    resources :products, only: [:index, :create, :destroy], controller: 'gift_products'
+  end
   resources :surveys do
     resources :questions, except: :index, controller: 'survey_questions' do
       member do

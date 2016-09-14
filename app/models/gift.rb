@@ -13,4 +13,9 @@ class Gift < ApplicationRecord
       "Not available"
     end
   end
+
+  # products available to add to this gift
+  def available_products
+    Product.where.not(id: gift_products.select(:product_id))
+  end
 end

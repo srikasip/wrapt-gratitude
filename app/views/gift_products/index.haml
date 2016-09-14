@@ -1,0 +1,22 @@
+.row
+  .col-sm-12
+    %h1 Edit Gift
+
+.row
+  .col-sm-8
+    %ul.nav.nav-tabs
+      %li(role="presentation")= link_to 'Details', edit_gift_path(@gift)
+      %li(role="presentation" class="active")= link_to 'Products', gift_products_path(@gift)
+
+.row
+  .col-sm-8
+    %table.table
+      %tbody
+        - @gift.gift_products.preload(:product).each do |gift_product|
+          %tr
+            %td= gift_product.product.title
+            %td= link_to 'Remove', gift_product_path(@gift, gift_product), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'btn btn-xs btn-danger'
+
+    = simple_form_for @gift_product, url: gift_products_path(@gift), html: {class: 'form form-inline'} do |form|
+      %td= form.association :product, label: false, include_blank: false, collection: @gift.available_products
+      %td= form.submit 'Add Product', class: 'btn btn-primary'

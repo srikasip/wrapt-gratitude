@@ -1,10 +1,11 @@
 .row
   .col-sm-12
-    %h1 New Product
+    %h1 New Gift
+
 
 .row
   .col-sm-8
-    = render 'form'
-
-    .links__view-back
-      = link_to 'Back', products_path
+    %ul.nav.nav-tabs
+      %li(role="presentation" class="active")= link_to 'Details', new_gift_path
+      %li(role="presentation" class="disabled")= link_to 'Products', '#', disabled: true
+    = render 'form' 
