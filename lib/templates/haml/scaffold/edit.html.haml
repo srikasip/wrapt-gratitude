@@ -1,0 +1,12 @@
+.row
+  .col-sm-12
+    %h1 Edit <%= singular_table_name %>
+
+.row
+  .col-sm-8
+    = render 'form'
+
+    .links__view-back
+      = link_to 'Show', @<%= singular_table_name %>
+      \|
+      = link_to 'Back', <%= index_helper %>_path

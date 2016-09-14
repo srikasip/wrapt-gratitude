@@ -1,0 +1,4 @@
+- unless params[:action] == 'index'
+  .row.breadcrumbs
+    .col-sm-12
+      = link_to "&laquo; <%= singular_table_name.pluralize.capitalize %>".html_safe, <%= index_helper %>_path
