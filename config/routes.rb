@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :products
   resources :gifts do
     resources :products, only: [:index, :create, :destroy], controller: 'gift_products'
+    resources :images, only: [:index, :create, :destroy], controller: 'gift_images'
   end
   resources :surveys do
     resources :questions, except: :index, controller: 'survey_questions' do
