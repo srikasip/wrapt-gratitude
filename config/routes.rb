@@ -7,6 +7,10 @@ Rails.application.routes.draw do
   resources :products
   resources :gifts do
     resources :products, only: [:index, :create, :destroy], controller: 'gift_products'
+    resources :images, only: [:index, :create, :destroy], controller: 'gift_images' do
+      member { post 'make_primary' }
+    end
+    resource :image_ordering, only: :create, controller: 'gift_image_orderings'
   end
   resources :surveys do
     resources :questions, except: :index, controller: 'survey_questions' do

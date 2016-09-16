@@ -10,21 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160914152150) do
+ActiveRecord::Schema.define(version: 20160916152207) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "evaluation_recommendations", force: :cascade do |t|
-    t.integer  "product_id"
     t.float    "score",                          default: 0.0, null: false
     t.integer  "training_set_evaluation_id"
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
     t.integer  "profile_set_survey_response_id"
-    t.index ["product_id"], name: "index_evaluation_recommendations_on_product_id", using: :btree
+    t.integer  "gift_id",                                      null: false
+    t.index ["gift_id"], name: "index_evaluation_recommendations_on_gift_id", using: :btree
     t.index ["profile_set_survey_response_id"], name: "eval_rec_survey_response", using: :btree
     t.index ["training_set_evaluation_id"], name: "index_evaluation_recommendations_on_training_set_evaluation_id", using: :btree
+  end
+
+  create_table "gift_images", force: :cascade do |t|
+    t.integer  "gift_id"
+    t.string   "image"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "primary",    default: false, null: false
+    t.integer  "sort_order", default: 0,     null: false
+    t.index ["gift_id"], name: "index_gift_images_on_gift_id", using: :btree
+    t.index ["primary"], name: "index_gift_images_on_primary", using: :btree
   end
 
   create_table "gift_products", force: :cascade do |t|
@@ -36,8 +47,21 @@ ActiveRecord::Schema.define(version: 20160914152150) do
     t.index ["product_id"], name: "index_gift_products_on_product_id", using: :btree
   end
 
+  create_table "gift_question_impacts", force: :cascade do |t|
+    t.integer  "training_set_id",                                null: false
+    t.integer  "survey_question_id",                             null: false
+    t.boolean  "range_impact_direct_correlation", default: true, null: false
+    t.float    "question_impact",                 default: 0.0,  null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.integer  "gift_id",                                        null: false
+    t.index ["gift_id"], name: "index_gift_question_impacts_on_gift_id", using: :btree
+    t.index ["survey_question_id"], name: "index_gift_question_impacts_on_survey_question_id", using: :btree
+    t.index ["training_set_id"], name: "index_gift_question_impacts_on_training_set_id", using: :btree
+  end
+
   create_table "gifts", force: :cascade do |t|
-    t.string   "name"
+    t.string   "title"
     t.text     "description"
     t.decimal  "selling_price",     precision: 10, scale: 2
     t.decimal  "cost",              precision: 10, scale: 2
@@ -147,27 +171,14 @@ ActiveRecord::Schema.define(version: 20160914152150) do
     t.index ["training_set_id"], name: "index_training_set_evaluations_on_training_set_id", using: :btree
   end
 
-  create_table "training_set_product_questions", force: :cascade do |t|
-    t.integer  "training_set_id",                                null: false
-    t.integer  "product_id",                                     null: false
-    t.integer  "survey_question_id",                             null: false
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
-    t.boolean  "range_impact_direct_correlation", default: true, null: false
-    t.float    "question_impact",                 default: 0.0,  null: false
-    t.index ["product_id"], name: "index_training_set_product_questions_on_product_id", using: :btree
-    t.index ["survey_question_id"], name: "index_training_set_product_questions_on_survey_question_id", using: :btree
-    t.index ["training_set_id"], name: "index_training_set_product_questions_on_training_set_id", using: :btree
-  end
-
   create_table "training_set_response_impacts", force: :cascade do |t|
-    t.integer  "training_set_product_question_id"
     t.integer  "survey_question_option_id"
-    t.float    "impact",                           default: 0.0, null: false
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
+    t.float    "impact",                    default: 0.0, null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.integer  "gift_question_impact_id",                 null: false
+    t.index ["gift_question_impact_id"], name: "index_training_set_response_impacts_on_gift_question_impact_id", using: :btree
     t.index ["survey_question_option_id"], name: "index_response_impacts_option_id", using: :btree
-    t.index ["training_set_product_question_id"], name: "index_response_impacts_pq_id", using: :btree
   end
 
   create_table "training_sets", force: :cascade do |t|
@@ -196,18 +207,20 @@ ActiveRecord::Schema.define(version: 20160914152150) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
-  add_foreign_key "evaluation_recommendations", "products"
+  add_foreign_key "evaluation_recommendations", "gifts"
   add_foreign_key "evaluation_recommendations", "profile_set_survey_responses"
   add_foreign_key "evaluation_recommendations", "training_set_evaluations"
+  add_foreign_key "gift_images", "gifts"
   add_foreign_key "gift_products", "gifts"
   add_foreign_key "gift_products", "products"
+  add_foreign_key "gift_question_impacts", "gifts"
+  add_foreign_key "gift_question_impacts", "survey_questions"
+  add_foreign_key "gift_question_impacts", "training_sets"
   add_foreign_key "profile_set_survey_responses", "profile_sets"
   add_foreign_key "profile_sets", "surveys"
   add_foreign_key "survey_question_responses", "profile_set_survey_responses"
   add_foreign_key "survey_question_responses", "survey_question_options"
   add_foreign_key "survey_question_responses", "survey_questions"
   add_foreign_key "training_set_evaluations", "training_sets"
-  add_foreign_key "training_set_product_questions", "products"
-  add_foreign_key "training_set_product_questions", "survey_questions"
-  add_foreign_key "training_set_product_questions", "training_sets"
+  add_foreign_key "training_set_response_impacts", "gift_question_impacts"
 end

@@ -7,4 +7,5 @@
     %ul.nav.nav-tabs
       %li(role="presentation" class="active")= link_to 'Details', edit_gift_path(@gift)
       %li(role="presentation")= link_to 'Products', gift_products_path(@gift)
+      %li(role="presentation")= link_to 'Images', gift_images_path(@gift)
     = render 'form'

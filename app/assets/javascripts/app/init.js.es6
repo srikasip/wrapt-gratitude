@@ -4,6 +4,8 @@ window.App || (window.App = {})
 // PjaxModal modal frame load
 App.init = function(){
   $('[data-provide="slider"]').bootstrapSlider();
+  // TODO fix tooltips
+  // $('[data-toggle="tooltip"]').tooltip()
   (new window.PjaxModal).listen()
 }
 
