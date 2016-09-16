@@ -3,8 +3,8 @@
 }
 
 
-.admin__gift-image-col:nth-child(4n+1) {
-  clear: both;
+.admin__gift-image-col {
+  height: 240px;
 }
 
 .admin__gift-image-cell {
@@ -38,32 +38,35 @@
   line-height: 240px;
 }
 
-.admin__gift-image-hover-link {
+.admin__gift-image-actions {
   position: absolute;
   top: 5px;
+
+  &.left { left: 5px; }
+  &.right { right: 5px; }
+  
+  .btn {opacity: 0.75; }
+}
+
+.admin__gift-image-hover-link {
   display: none;
-  opacity: 0.75;
 }
 
 .admin__gift-image-cell-inner:hover .admin__gift-image-hover-link {
   display: inline-block;
 }
 
-.admin__set-primary-gift-image-link {
-  left: 5px;
-}
+// .admin__is-primary-gift-image-badge {
+//  position: absolute;
+//  top: 5px;
+//  left: 5px;
+//  opacity: 0.75; 
+// }
 
-.admin__delete-gift-image-link {
-  right: 5px;
+.admin__gift-image-upload-form {
+  margin-top: 20px;
+  margin-left: 20px;
 }
-
-.admin__is-primary-gift-image-badge {
- position: absolute;
- top: 5px;
- left: 5px;
- opacity: 0.75; 
-}
-
 
 [data-gift-image-upload-trigger] {
   position: relative;

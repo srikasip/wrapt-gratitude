@@ -20,6 +20,13 @@ class GiftImagesController < ApplicationController
     redirect_to gift_images_path(@gift)
   end
 
+  def make_primary
+    @gift_image = @gift.gift_images.find params[:id]
+    @gift.gift_images.update_all primary: false
+    @gift_image.update primary: true
+    redirect_to gift_images_path(@gift)
+  end
+
   private def set_gift
     @gift = Gift.find params[:gift_id]
   end

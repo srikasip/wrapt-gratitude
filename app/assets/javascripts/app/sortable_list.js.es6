@@ -1,9 +1,11 @@
 window.App.SortableList = class SortableList {
-  constructor(element) {
+  constructor(element, additionalSortableOptions = {}) {
     this.element = element;
-    $(element).sortable({
+    const sortableOptions = {
       items: "[data-sortable-item]"
-    });
+    };
+    $.extend(sortableOptions, additionalSortableOptions);
+    $(element).sortable(sortableOptions);
     this.updateServerOnSortStop();
   }
 

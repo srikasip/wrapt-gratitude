@@ -2,7 +2,7 @@ class Gift < ApplicationRecord
   has_many :gift_products, inverse_of: :gift, dependent: :destroy
   has_many :products, through: :gift_products
 
-  has_many :gift_images, inverse_of: :gift, dependent: :destroy
+  has_many :gift_images, -> {order :sort_order}, inverse_of: :gift, dependent: :destroy
 
   def available?
     date_available >= Date.today && date_discontinued <= Date.today
@@ -24,4 +24,5 @@ class Gift < ApplicationRecord
   def name
     title
   end
+
 end
