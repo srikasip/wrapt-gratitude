@@ -1,8 +1,8 @@
-= simple_form_for @training_set_product_question, url: training_set_product_question_impact_path(@training_set, @training_set_product_question), html: {class: 'form edit_training_set_product_question'} do |f|
+= simple_form_for @gift_question_impact, url: training_set_gift_question_impact_path(@training_set, @gift_question_impact), html: {class: 'form edit_gift_question_impact'} do |f|
   = f.error_notification
 
   .form-inputs
-    = render 'product_question_details'
+    = render 'gift_question_details'
 
     .form-group
       %h3 Overall Question Importance
@@ -21,11 +21,11 @@
           %th Impact
       %tbody
         %tr
-          %td= @training_set_product_question.survey_question.min_label
-          %td.slider-control= @training_set_product_question.range_impact_direct_correlation? ? 'Negative' : 'Positive'
+          %td= @gift_question_impact.survey_question.min_label
+          %td.slider-control= @gift_question_impact.range_impact_direct_correlation? ? 'Negative' : 'Positive'
         %tr
-          %td= @training_set_product_question.survey_question.max_label
-          %td= @training_set_product_question.range_impact_direct_correlation? ? 'Positive' : 'Negative'
+          %td= @gift_question_impact.survey_question.max_label
+          %td= @gift_question_impact.range_impact_direct_correlation? ? 'Positive' : 'Negative'
     = f.input :switch_range_impact_direct_correlation, as: :boolean, label: 'Switch Direction'
 
   .form-actions

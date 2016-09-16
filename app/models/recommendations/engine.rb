@@ -40,7 +40,7 @@ module Recommendations
     end
 
     # TODO this is used by EvaluationRecommendations#show and could be moved closer to there
-    def calculate_question_rank_intermediate_gifts gift, question
+    def calculate_question_rank_intermediate_products gift, question
       gift_question = gift_question_impacts_by_gift_and_question[gift][question]
       result = {}
       result[:initial_question_rank] = initial_question_rank(gift, question)
