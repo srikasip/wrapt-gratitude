@@ -4,7 +4,8 @@
   .form-inputs
     = f.input :title
     = f.input :description
-    
+    = f.association :vendor
+
     = f.input :image, as: :file
     = f.hidden_field :image_cache
     = image_tag @product.image_url(:small) if @product.image?
@@ -14,9 +15,13 @@
     .row
       .col-xs-2
         = f.input :price
+        = f.input :vendor_retail_price
+        = f.input :vendor_cost
+        = f.input :units_available
     .row
       .col-xs-4
         = f.input :wrapt_sku, label: 'Wrapt SKU'
+
     = f.input :public
 
     %h3 Categories

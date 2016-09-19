@@ -4,4 +4,6 @@ class Product < ApplicationRecord
 
   has_many :gift_products, inverse_of: :product, dependent: :destroy
   has_many :gifts, through: :gift_products
+
+  belongs_to :vendor, required: true
 end

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :vendors
   get 'home_pages/show'
   devise_for :users
   

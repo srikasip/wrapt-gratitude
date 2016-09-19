@@ -1,0 +1,24 @@
+.row.admin__intro
+  .col-sm-12
+    %h1 Vendors
+
+.row.admin__actions
+  .col-sm-12
+    = link_to link_to 'Add a Vendor', new_vendor_path, class: 'btn btn-primary'
+
+.row
+  .col-md-6
+    %table.table
+      %thead
+        %tr
+          %th Name
+          %th
+
+      %tbody
+        - @vendors.each do |vendor|
+          %tr
+            %td= vendor.name
+            %td
+              = link_to 'View', vendor, class: 'btn btn-default btn-xs'
+              = link_to 'Edit', edit_vendor_path(vendor), class: 'btn btn-default btn-xs'
+              = link_to 'Delete', vendor, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'

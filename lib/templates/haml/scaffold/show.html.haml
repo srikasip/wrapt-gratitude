@@ -1,7 +1,7 @@
 .row
   .col-sm-12
     %h1
-      = Viewing <%= singular_table_name.capitalize %>
+      Viewing <%= singular_table_name.capitalize %>
       = link_to 'Edit', edit_<%= singular_table_name %>_path(@<%= singular_table_name %>), class: 'btn btn-default btn-xs'
 
 <% for attribute in attributes -%>
