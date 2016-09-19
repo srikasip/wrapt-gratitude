@@ -21,4 +21,6 @@
             %td
               = link_to 'View', vendor, class: 'btn btn-default btn-xs'
               = link_to 'Edit', edit_vendor_path(vendor), class: 'btn btn-default btn-xs'
-              = link_to 'Delete', vendor, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+              = link_to 'Delete', vendor, :method => :delete, :data => { :confirm => "This will also delete #{pluralize vendor.products.count, "product"} associated with the vendor.  Are you sure you want to do this?" }, class: 'btn btn-danger btn-xs'
+
+    = paginate @vendors
