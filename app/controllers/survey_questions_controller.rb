@@ -23,7 +23,7 @@ class SurveyQuestionsController < ApplicationController
     end
   end
 
-  def update    
+  def update
     if @survey_question.update(update_params)
       redirect_to edit_survey_question_path(@survey, @survey_question), notice: 'The question was successfully updated.'
     else
@@ -59,7 +59,8 @@ class SurveyQuestionsController < ApplicationController
         :prompt,
         :min_label,
         :max_label,
-        :mid_label
+        :mid_label,
+        :code
       )
   end
 

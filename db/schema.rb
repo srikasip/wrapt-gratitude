@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160919142338) do
+ActiveRecord::Schema.define(version: 20160919184737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -162,6 +162,7 @@ ActiveRecord::Schema.define(version: 20160919142338) do
     t.string   "max_label"
     t.string   "mid_label"
     t.integer  "sort_order", default: 0, null: false
+    t.string   "code"
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
   end
 
