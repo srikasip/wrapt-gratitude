@@ -4,8 +4,8 @@ class TrainingSetQuestionsController < ApplicationController
   
   def index
     @training_set = TrainingSet.find params[:training_set_id]
-    @product = Product.find params[:product_id]
-    @product_questions = @training_set.product_questions.where(product_id: @product.id).order(:created_at)
+    @gift = Gift.find params[:gift_id]
+    @gift_question_impacts = @training_set.gift_question_impacts.where(gift_id: @gift.id).order(:created_at)
     render layout: 'xhr'
   end
 

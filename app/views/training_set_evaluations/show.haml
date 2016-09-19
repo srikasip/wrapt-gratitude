@@ -6,7 +6,7 @@
       %p We're still generating recommendations for this training set.  Please refresh the page.
 
     - else
-      - @training_set_evaluation.profile_sets.preload(:survey_responses).each do |profile_set|  
+      - @training_set_evaluation.profile_sets.preload(:survey_responses).each do |profile_set|
         %h3
           Profile Set:
           = profile_set.name
@@ -15,6 +15,6 @@
           %ul.admin-index-list        
             - @recommendations_by_survey_response_id[response.id].sort_by(&:score).reverse.each do |recommendation|
               %li
-                = "#{recommendation.product.title} (#{recommendation.score.round(2)})"
+                = "#{recommendation.gift.title} (#{recommendation.score.round(2)})"
                 = link_to 'Breakdown', training_set_evaluation_recommendation_path(@training_set, recommendation), data: {loads_in_pjax_modal: true}, class: 'btn btn-default btn-xs'
         

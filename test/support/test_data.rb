@@ -2,6 +2,9 @@ class TestData
   
   attr_reader :incense_product,
     :tipi_product,
+    :incense_gift,
+    :tipi_product,
+    :tipi_gift,
     :survey,
     :training_set,
     :rafe_response,
@@ -10,6 +13,9 @@ class TestData
   def load_data!
     @incense_product = Product.create! title: "Juniper Ridge Campfire Incese", description: "", price: "5.99"
     @tipi_product = Product.create! title: "Tipi", description: "A \"guest bedroom\" for The Big Kid by Nomadic Tipi Makers", price: "1199.99"
+
+    @incense_gift = Gift.create! title: "Juniper Ridge Campfire Incese", description: "", selling_price: "5.99", products: [@incense_product]
+    @tipi_gift = Gift.create! title: "Tipi", description: "A \"guest bedroom\" for The Big Kid by Nomadic Tipi Makers", selling_price: "1199.99", products: [@tipi_product]
 
     @survey = Survey.create! title: "Test Survey"
 
@@ -73,19 +79,19 @@ class TestData
     @training_set.create_evaluation!
 
 
-    @tipi_multiple_choice = TrainingSetProductQuestion.create! training_set: @training_set, product: @tipi_product, survey_question: @multiple_choice_question, question_impact: 0.79
-    @tipi_range = TrainingSetProductQuestion.create! training_set: @training_set, product: @tipi_product, survey_question: @range_question, question_impact: -0.34
+    @tipi_multiple_choice = GiftQuestionImpact.create! training_set: @training_set, gift: @tipi_gift, survey_question: @multiple_choice_question, question_impact: 0.79
+    @tipi_range = GiftQuestionImpact.create! training_set: @training_set, gift: @tipi_gift, survey_question: @range_question, question_impact: -0.34
 
-    @incense_multiple_choice = TrainingSetProductQuestion.create! training_set: @training_set, product: @incense_product, survey_question: @multiple_choice_question, question_impact: -0.5
-    @incense_range = TrainingSetProductQuestion.create! training_set: @training_set, product: @incense_product, survey_question: @range_question, question_impact: 0.55, range_impact_direct_correlation: false
+    @incense_multiple_choice = GiftQuestionImpact.create! training_set: @training_set, gift: @incense_gift, survey_question: @multiple_choice_question, question_impact: -0.5
+    @incense_range = GiftQuestionImpact.create! training_set: @training_set, gift: @incense_gift, survey_question: @range_question, question_impact: 0.55, range_impact_direct_correlation: false
 
-    TrainingSetResponseImpact.create! training_set_product_question: @tipi_multiple_choice, survey_question_option: @red_option, impact: -0.6
-    TrainingSetResponseImpact.create! training_set_product_question: @tipi_multiple_choice, survey_question_option: @green_option, impact: 0.73
-    TrainingSetResponseImpact.create! training_set_product_question: @tipi_multiple_choice, survey_question_option: @blue_option, impact: 0
+    TrainingSetResponseImpact.create! gift_question_impact: @tipi_multiple_choice, survey_question_option: @red_option, impact: -0.6
+    TrainingSetResponseImpact.create! gift_question_impact: @tipi_multiple_choice, survey_question_option: @green_option, impact: 0.73
+    TrainingSetResponseImpact.create! gift_question_impact: @tipi_multiple_choice, survey_question_option: @blue_option, impact: 0
 
-    TrainingSetResponseImpact.create! training_set_product_question: @incense_multiple_choice, survey_question_option: @red_option, impact: 0.4
-    TrainingSetResponseImpact.create! training_set_product_question: @incense_multiple_choice, survey_question_option: @green_option, impact: -0.8
-    TrainingSetResponseImpact.create! training_set_product_question: @incense_multiple_choice, survey_question_option: @blue_option, impact: 0.2
+    TrainingSetResponseImpact.create! gift_question_impact: @incense_multiple_choice, survey_question_option: @red_option, impact: 0.4
+    TrainingSetResponseImpact.create! gift_question_impact: @incense_multiple_choice, survey_question_option: @green_option, impact: -0.8
+    TrainingSetResponseImpact.create! gift_question_impact: @incense_multiple_choice, survey_question_option: @blue_option, impact: 0.2
 
   end
 
@@ -93,6 +99,8 @@ class TestData
     # this should clean everything up via dependent: destroy
     incense_product.destroy!
     tipi_product.destroy!
+    tipi_gift.destroy!
+    incense_gift.destroy!
     survey.destroy!
   end
 

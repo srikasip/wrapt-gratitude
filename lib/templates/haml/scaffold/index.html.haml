@@ -6,21 +6,23 @@
   .col-sm-12
     = link_to link_to 'Add a <%= human_name %>', new_<%= singular_table_name %>_path, class: 'btn btn-primary'
 
-%table
-  %thead
-    %tr
-<% for attribute in attributes -%>
-      %th <%= attribute.human_name %>
-<% end -%>
-      %th
+.row
+  .col-sm-12
+    %table.table
+      %thead
+        %tr
+    <% for attribute in attributes -%>
+          %th <%= attribute.human_name %>
+    <% end -%>
+          %th
 
-  %tbody
-    - @<%= plural_table_name %>.each do |<%= singular_table_name %>|
-      %tr
-<% for attribute in attributes -%>
-        %td= <%= singular_table_name %>.<%= attribute.name %>
-<% end -%>
-        %td
-          = link_to 'View', <%= singular_table_name %>, class: 'btn btn-default btn-xs'
-          = link_to 'Edit', edit_<%= singular_table_name %>_path(<%= singular_table_name %>), class: 'btn btn-default btn-xs'
-          = link_to 'Delete', <%= singular_table_name %>, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+      %tbody
+        - @<%= plural_table_name %>.each do |<%= singular_table_name %>|
+          %tr
+    <% for attribute in attributes -%>
+            %td= <%= singular_table_name %>.<%= attribute.name %>
+    <% end -%>
+            %td
+              = link_to 'View', <%= singular_table_name %>, class: 'btn btn-default btn-xs'
+              = link_to 'Edit', edit_<%= singular_table_name %>_path(<%= singular_table_name %>), class: 'btn btn-default btn-xs'
+              = link_to 'Delete', <%= singular_table_name %>, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'

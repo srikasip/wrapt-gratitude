@@ -17,7 +17,7 @@ class SurveyQuestionsController < ApplicationController
     @survey_question = @survey.questions.new(create_params)
     
     if @survey_question.save
-      redirect_to edit_survey_question_path(@survey, @survey_question), notice: 'Quiz Question was successfully created.'
+      redirect_to edit_survey_question_path(@survey, @survey_question), notice: 'The question was successfully created.'
     else
       render :new
     end
@@ -25,7 +25,7 @@ class SurveyQuestionsController < ApplicationController
 
   def update    
     if @survey_question.update(update_params)
-      redirect_to edit_survey_question_path(@survey, @survey_question), notice: 'Quiz Question was successfully updated.'
+      redirect_to edit_survey_question_path(@survey, @survey_question), notice: 'The question was successfully updated.'
     else
       render :edit
     end
@@ -33,7 +33,7 @@ class SurveyQuestionsController < ApplicationController
 
   def destroy
     @survey_question.destroy
-    redirect_to surveys_url, notice: 'Quiz was successfully deleted.'
+    redirect_to surveys_url, notice: 'The question was successfully deleted.'
   end
 
   # ajax member action for multi-choice edit

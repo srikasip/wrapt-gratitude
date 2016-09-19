@@ -1,12 +1,12 @@
 .row
   .col-sm-12
     %h1
-      = @gift.name
+      = @gift.title
       = link_to 'Edit', edit_gift_path(@gift), class: 'btn btn-default btn-xs'
 
     %p
-      %b Name:
-      = @gift.name
+      %b Title:
+      = @gift.title
     %p
       %b Description:
       = @gift.description

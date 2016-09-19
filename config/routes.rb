@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :vendors
   get 'home_pages/show'
   devise_for :users
   
@@ -7,6 +8,10 @@ Rails.application.routes.draw do
   resources :products
   resources :gifts do
     resources :products, only: [:index, :create, :destroy], controller: 'gift_products'
+    resources :images, only: [:index, :create, :destroy], controller: 'gift_images' do
+      member { post 'make_primary' }
+    end
+    resource :image_ordering, only: :create, controller: 'gift_image_orderings'
   end
   resources :surveys do
     resources :questions, except: :index, controller: 'survey_questions' do
@@ -22,13 +27,13 @@ Rails.application.routes.draw do
   end
 
   resources :training_sets do
-    resources :products, only: :none do
+    resources :gifts, only: :none do
       resources :questions, only: :index, controller: 'training_set_questions'
     end
-    resources :product_question_impacts, controller: 'product_question_impacts', except: [:index, :show]
+    resources :gift_question_impacts, controller: 'gift_question_impacts', except: [:index, :show]
     resource :evaluation, only: :show, controller: 'training_set_evaluations' do
       resources :recommendations, only: :show, controller: 'evaluation_recommendations' do
-        resources :product_question_impacts, only: [:edit, :update], controller: 'recommendation_product_question_impacts'
+        resources :gift_question_impacts, only: [:edit, :update], controller: 'recommendation_gift_question_impacts'
       end
     end
   end

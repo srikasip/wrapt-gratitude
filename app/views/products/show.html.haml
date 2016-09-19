@@ -8,8 +8,24 @@
       = @product.description
 
     %p
+      %b Vendor:
+      = @product.vendor.name
+
+    %p
       %b Price:
       = number_to_currency @product.price
+
+    %p
+      %b Vendor Retail Price:
+      = number_to_currency @product.vendor_retail_price
+
+    %p
+      %b Vendor Cost:
+      = number_to_currency @product.vendor_cost
+
+    %p
+      %b Units Available:
+      = number_with_delimiter @product.units_available
 
     %p
       %b Wrapt SKU:

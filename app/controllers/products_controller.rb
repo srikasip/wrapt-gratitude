@@ -73,11 +73,14 @@ class ProductsController < ApplicationController
         :title,
         :description,
         :price,
-        :price,
         :wrapt_sku,
         :public,
         :image,
         :remove_image,
+        :vendor_retail_price,
+        :vendor_cost,
+        :units_available,
+        :vendor_id,
         product_category_ids: []
       )
     end

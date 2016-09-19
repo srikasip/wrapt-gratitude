@@ -1,11 +1,11 @@
 //= require ./namespace
 
-App.Admin.ProductQuestionListLoader = class ProductQuestionListLoader {
+App.Admin.GiftQuestionListLoader = class GiftQuestionListLoader {
   constructor(viewBtnElement) {
     this.viewBtnElement = viewBtnElement;
     this.hideBtnElement = $(viewBtnElement).siblings('[data-hide-questions-btn]')[0];
-    this.productRowElement = $(this.viewBtnElement).parents('tr[data-product-row]')[0];
-    this.productId = $(this.productRowElement).data('product-row');
+    this.giftRowElement = $(this.viewBtnElement).parents('tr[data-gift-row]')[0];
+    this.giftId = $(this.giftRowElement).data('gift-row');
     this._registerViewBtnClick();
     this._registerHideBtnClick();
   }
@@ -19,14 +19,14 @@ App.Admin.ProductQuestionListLoader = class ProductQuestionListLoader {
   }
 
   _afterFetchQuestionList(html) {
-    $(html).hide().insertAfter(this.productRowElement).show('normal');
+    $(html).hide().insertAfter(this.giftRowElement).show('normal');
     this._enableHideBtn();
   }
 
   _registerHideBtnClick() {
     $(this.hideBtnElement).click( evt => {
       evt.preventDefault();
-      $(`[data-product-question-row-for-product="${this.productId}"]`).hide('normal', rowElement => {
+      $(`[data-gift-question-impact-row-for-gift="${this.giftId}"]`).hide('normal', rowElement => {
         $(rowElement).remove();
         this._enableViewBtn();
       });

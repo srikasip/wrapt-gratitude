@@ -1,20 +1,20 @@
-class RecommendationProductQuestionImpactsController < ApplicationController
+class RecommendationGiftQuestionImpactsController < ApplicationController
   # Ajax controller for driving quick adjustments to the product questions from
   # a recommendation details view.
   # For the standard CRUD controller for a ProductQuestion, see ProductQuestionImpactsController
   before_action :set_training_set
   before_action :set_recommendation
-  before_action :set_training_set_product_question
+  before_action :set_gift_question_impact
 
   include PjaxModalController
-  helper ProductQuestionImpactsHelper
+  helper GiftQuestionImpactsHelper
 
   def edit
   end
 
   def update
-    if @training_set_product_question.update(training_set_product_question_params)
-      flash[:notice] = 'Product-Question was successfully updated.'
+    if @gift_question_impact.update(gift_question_impact_params)
+      flash[:notice] = 'Gift-Question was successfully updated.'
       redirect_to training_set_evaluation_path(@training_set)
     else
       render :edit
@@ -30,12 +30,12 @@ class RecommendationProductQuestionImpactsController < ApplicationController
       @recommendation = @training_set.evaluation.recommendations.find params[:recommendation_id]
     end
 
-    def set_training_set_product_question
-      @training_set_product_question = @training_set.product_questions.find(params[:id])
+    def set_gift_question_impact
+      @gift_question_impact = @training_set.gift_question_impacts.find(params[:id])
     end
 
-    def training_set_product_question_params
-      params.require(:training_set_product_question).permit(
+    def gift_question_impact_params
+      params.require(:gift_question_impact).permit(
         :product_id,
         :survey_question_id,
         :question_impact,
