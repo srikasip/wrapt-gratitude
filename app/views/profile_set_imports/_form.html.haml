@@ -1,0 +1,7 @@
+= simple_form_for @profile_set_import do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :question_responses_file, as: :file
+  .form-actions
+    = f.submit 'Import'
