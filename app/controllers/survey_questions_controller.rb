@@ -59,7 +59,9 @@ class SurveyQuestionsController < ApplicationController
         :prompt,
         :min_label,
         :max_label,
-        :mid_label
+        :mid_label,
+        :include_other_option,
+        :multiple_option_responses
       )
   end
 
