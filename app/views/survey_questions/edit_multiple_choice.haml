@@ -7,9 +7,10 @@
 
       .form-inputs
         = form.input :prompt
+        = form.input :code, hint: '(required for importing)'
 
       .form-actions
-        = form.submit 'Save Prompt', class: 'btn btn-primary'
+        = form.submit 'Save Prompt and Code', class: 'btn btn-primary'
 
     %h3 Choices
     %ol{style: "list-style: lower-alpha; padding-left: 15px;", data: {option_list: true, sortable_list: true, sortable_list_href: survey_question_option_ordering_path(@survey, @survey_question)}}
