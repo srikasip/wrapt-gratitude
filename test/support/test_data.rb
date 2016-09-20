@@ -1,6 +1,7 @@
 class TestData
   
-  attr_reader :incense_product,
+  attr_reader :vendor,
+    :incense_product,
     :tipi_product,
     :incense_gift,
     :tipi_product,
@@ -11,8 +12,10 @@ class TestData
     :ely_response
 
   def load_data!
-    @incense_product = Product.create! title: "Juniper Ridge Campfire Incese", description: "", price: "5.99"
-    @tipi_product = Product.create! title: "Tipi", description: "A \"guest bedroom\" for The Big Kid by Nomadic Tipi Makers", price: "1199.99"
+    @vendor = Vendor.create! name: 'Test Vendor'
+
+    @incense_product = @vendor.products.create! title: "Juniper Ridge Campfire Incese", description: "", price: "5.99"
+    @tipi_product = @vendor.products.create! title: "Tipi", description: "A \"guest bedroom\" for The Big Kid by Nomadic Tipi Makers", price: "1199.99"
 
     @incense_gift = Gift.create! title: "Juniper Ridge Campfire Incese", description: "", selling_price: "5.99", products: [@incense_product]
     @tipi_gift = Gift.create! title: "Tipi", description: "A \"guest bedroom\" for The Big Kid by Nomadic Tipi Makers", selling_price: "1199.99", products: [@tipi_product]
@@ -54,7 +57,7 @@ class TestData
     SurveyQuestionResponse.create!(
       survey_response: @ely_response,
       survey_question: @multiple_choice_question,
-      survey_question_option: @red_option
+      survey_question_options: [@red_option]
     )
     
     SurveyQuestionResponse.create!(
@@ -66,7 +69,7 @@ class TestData
     SurveyQuestionResponse.create!(
       survey_response: @rafe_response,
       survey_question: @multiple_choice_question,
-      survey_question_option: @green_option
+      survey_question_options: [@green_option]
     )
 
     SurveyQuestionResponse.create!(
@@ -97,9 +100,7 @@ class TestData
 
   def cleanup!
     # this should clean everything up via dependent: destroy
-    incense_product.destroy!
-    tipi_product.destroy!
-    tipi_gift.destroy!
+    vendor.destroy!
     incense_gift.destroy!
     survey.destroy!
   end

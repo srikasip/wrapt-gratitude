@@ -3,9 +3,14 @@ module Recommendations
     class MultipleChoice < Base
 
       def question_rank
-        chosen_option_id = question_response.survey_question_option_id
-        impact = product_question.response_impacts.detect{|impact| impact.survey_question_option_id == chosen_option_id}
-        impact&.impact || 0
+        result = 0
+        chosen_option_ids = question_response.survey_question_option_ids
+        product_question.response_impacts.each do |impact|
+          if impact.survey_question_option_id.in? chosen_option_ids
+            result += impact.impact
+          end
+        end
+        return result
       end
 
     end
