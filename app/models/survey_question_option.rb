@@ -8,6 +8,8 @@ class SurveyQuestionOption < ApplicationRecord
 
   before_create :set_initial_sort_order
 
+  scope :standard, -> {where type: ['SurveyQuestionOption', nil]}
+
   private def set_initial_sort_order
     next_sort_order = ( question&.options&.maximum(:sort_order) || 0 ) + 1
     self.sort_order = next_sort_order
