@@ -2,9 +2,12 @@
   .form-inputs
     .form-group.radio_buttons.optional
       - @survey_question.options.each_with_index do |option, i|
-        %span.radio
+        %span{class: (@survey_question.multiple_option_responses? ? 'checkbox' : 'radio')}
           %label
-            = radio_button_tag :response, option.id
+            - if @survey_question.multiple_option_responses?
+              = check_box_tag :response, option.id
+            - else
+              = radio_button_tag :response, option.id
             = option.text
             - if option.image?
               %br
