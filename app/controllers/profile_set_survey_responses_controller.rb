@@ -50,6 +50,7 @@ class ProfileSetSurveyResponsesController < ApplicationController
           :text_response,
           :range_response,
           :survey_question_id,
+          :survey_question_option_id,
           survey_question_option_ids: [],
         ]
       )

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160919173413) do
+ActiveRecord::Schema.define(version: 20160920180524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -150,14 +150,12 @@ ActiveRecord::Schema.define(version: 20160919173413) do
     t.integer  "profile_set_survey_response_id", null: false
     t.integer  "survey_question_id",             null: false
     t.text     "text_response"
-    t.integer  "survey_question_option_id"
     t.float    "range_response"
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
     t.string   "name"
     t.index ["profile_set_survey_response_id"], name: "index_question_response_on_survey_response_id", using: :btree
     t.index ["survey_question_id"], name: "index_survey_question_responses_on_survey_question_id", using: :btree
-    t.index ["survey_question_option_id"], name: "index_survey_question_responses_on_survey_question_option_id", using: :btree
   end
 
   create_table "survey_questions", force: :cascade do |t|
@@ -249,7 +247,6 @@ ActiveRecord::Schema.define(version: 20160919173413) do
   add_foreign_key "survey_question_response_options", "survey_question_options"
   add_foreign_key "survey_question_response_options", "survey_question_responses"
   add_foreign_key "survey_question_responses", "profile_set_survey_responses"
-  add_foreign_key "survey_question_responses", "survey_question_options"
   add_foreign_key "survey_question_responses", "survey_questions"
   add_foreign_key "training_set_evaluations", "training_sets"
   add_foreign_key "training_set_response_impacts", "gift_question_impacts"
