@@ -30,7 +30,16 @@
 .row
   .col-sm-8
     %h3 Add Products to this Gift
-    %table.table
+    %form.form-inline(method="GET")
+      .form-group
+        %input{type: 'hidden', name: 'page', value: params[:page]}
+        %input.form-control{type: 'search', name: 'q', value: params[:q]}
+        %button.btn.btn-primary
+          %i.glyphicon.glyphicon-search
+          Search
+        = link_to 'Show All', gift_products_path(@gift, context_params.merge(q: nil)), class: 'btn btn-default'
+
+    %table.table.admin__gift-available-products
       %tbody
         - @available_products.each do |product|
           %tr
