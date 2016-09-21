@@ -11,36 +11,36 @@
 
 .row
   .col-sm-12
-    = simple_form_for @gift_image, url: gift_images_path(@gift), html: {class: 'form form-inline admin__gift-image-upload-form', data: {gift_image_upload_form: true}} do |form|
+    = simple_form_for @gift_image, url: gift_images_path(@gift), html: {class: 'form form-inline admin__image-upload-form', data: {image_upload_form: true}} do |form|
       %span.btn.btn-default(data-image-upload-trigger)
         %i.glyphicon.glyphicon-plus
         %span Upload New Image
-        = form.file_field :image, data: {gift_image_upload_input: true, url: gift_images_path(@gift)}
+        = form.file_field :image, data: {image_upload_input: true, url: gift_images_path(@gift)}
 
 
-.row.admin__gift-images-grid{data: {sortable_list: true, sortable_list_href: gift_image_ordering_path(@gift)}}
+.row.admin__images-grid{data: {sortable_list: true, sortable_list_href: gift_image_ordering_path(@gift)}}
   - @gift.gift_images.each do |gift_image|
     - if gift_image.image? #don't include @gift_image here
-      .col-sm-3.admin__gift-image-col{data: {sortable_item: true, sortable_item_id: gift_image.id}}
-        .admin__gift-image-cell{class: ('primary' if gift_image.primary?)}
-          .admin__gift-image-cell-inner
+      .col-sm-3.admin__image-col{data: {sortable_item: true, sortable_item_id: gift_image.id}}
+        .admin__image-cell{class: ('primary' if gift_image.primary?)}
+          .admin__image-cell-inner
             = image_tag gift_image.image_url(:small)
-            .admin__gift-image-actions.left
-              %span.btn.btn-xs.btn-default.admin__gift-image-hover-link
+            .admin__image-actions.left
+              %span.btn.btn-xs.btn-default.admin__image-hover-link
                 %i.glyphicon.glyphicon-move
-            .admin__gift-image-actions.right
-              = link_to gift_image_path(@gift, gift_image), method: :delete, data: {confirm: 'Are you sure?'}, class: 'admin__gift-image-hover-link btn btn-xs btn-default' do
+            .admin__image-actions.right
+              = link_to gift_image_path(@gift, gift_image), method: :delete, data: {confirm: 'Are you sure?'}, class: 'admin__image-hover-link btn btn-xs btn-default' do
                 %i.glyphicon.glyphicon-trash
               - if gift_image.primary?
                 %span.btn.btn-primary.btn-xs.admin__is-primary-gift-image-badge{data: {toggle: 'tooltip', placement: 'top'}, title: 'This is the primary image for this gift'}
                   %i.glyphicon.glyphicon-ok
               - else
-                = link_to make_primary_gift_image_path(@gift, gift_image), class: ' admin__gift-image-hover-link btn btn-xs btn-default', data: {method: :post, toggle: 'tooltip', placement: 'top'}, title: 'Make this the primary image for this gift' do
+                = link_to make_primary_gift_image_path(@gift, gift_image), class: ' admin__image-hover-link btn btn-xs btn-default', data: {method: :post, toggle: 'tooltip', placement: 'top'}, title: 'Make this the primary image for this gift' do
                   %i.glyphicon.glyphicon-ok
 
 
 - content_for :page_js do
   :javascript
-    new App.Admin.GiftImageUploadForm($('[data-gift-image-upload-form]')[0])
+    new App.Admin.ImageUploadForm($('[data-image-upload-form]')[0])
     new App.SortableList($('[data-sortable-list]')[0], {placeholder: 'col-sm-3'});
 

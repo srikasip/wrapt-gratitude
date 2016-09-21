@@ -5,7 +5,12 @@ Rails.application.routes.draw do
   devise_for :users
   
   resources :product_categories
-  resources :products
+  resources :products do
+    resources :images, only: [:index, :create, :destroy], controller: 'product_images' do
+      member { post 'make_primary' }
+    end
+    resource :image_ordering, only: :create, controller: 'product_image_orderings'
+  end
   resources :gifts do
     resources :products, only: [:index, :create, :destroy], controller: 'gift_products'
     resources :images, only: [:index, :create, :destroy], controller: 'gift_images' do

@@ -5,12 +5,6 @@
     = f.input :title
     = f.input :description
     = f.association :vendor
-
-    = f.input :image, as: :file
-    = f.hidden_field :image_cache
-    = image_tag @product.image_url(:small) if @product.image?
-    = f.input :remove_image, as: :boolean
-
     
     .row
       .col-xs-2

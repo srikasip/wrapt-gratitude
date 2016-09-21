@@ -1,9 +1,9 @@
 //= require ./namespace
 
-App.Admin.GiftImageUploadForm = class GiftImageUploadForm {
+App.Admin.ImageUploadForm = class ImageUploadForm {
   constructor(formElement) {
     this.formElement = formElement
-    this.inputElement = $(formElement).find('[data-gift-image-upload-input]')[0]
+    this.inputElement = $(formElement).find('[data-image-upload-input]')[0]
     this.submitOnChange();
   }
 

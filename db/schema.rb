@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160920185222) do
+ActiveRecord::Schema.define(version: 20160921162314) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,6 +95,17 @@ ActiveRecord::Schema.define(version: 20160920185222) do
     t.index ["product_id"], name: "index_product_categories_products_on_product_id", using: :btree
   end
 
+  create_table "product_images", force: :cascade do |t|
+    t.integer  "product_id"
+    t.string   "image"
+    t.integer  "sort_order", default: 0, null: false
+    t.boolean  "primary"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.index ["primary"], name: "index_product_images_on_primary", using: :btree
+    t.index ["product_id"], name: "index_product_images_on_product_id", using: :btree
+  end
+
   create_table "products", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
@@ -102,7 +113,6 @@ ActiveRecord::Schema.define(version: 20160920185222) do
     t.boolean  "public"
     t.datetime "created_at",                                               null: false
     t.datetime "updated_at",                                               null: false
-    t.string   "image"
     t.string   "wrapt_sku"
     t.integer  "vendor_id"
     t.decimal  "vendor_retail_price", precision: 10, scale: 2
@@ -243,6 +253,7 @@ ActiveRecord::Schema.define(version: 20160920185222) do
   add_foreign_key "gift_question_impacts", "gifts"
   add_foreign_key "gift_question_impacts", "survey_questions"
   add_foreign_key "gift_question_impacts", "training_sets"
+  add_foreign_key "product_images", "products"
   add_foreign_key "products", "vendors"
   add_foreign_key "profile_set_survey_responses", "profile_sets"
   add_foreign_key "profile_sets", "surveys"
