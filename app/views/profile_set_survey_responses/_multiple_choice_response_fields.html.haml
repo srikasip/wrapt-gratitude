@@ -21,12 +21,10 @@
     - option = question.other_option
     - index = question.options.standard.length
     %span{class: (question.multiple_option_responses? ? 'checkbox' : 'radio')}
-      %label{:for => "profile_set_survey_response_question_responses_attributes_#{index}_survey_question_option_id_#{option.id}[]"}
+      %label{:for => "profile_set_survey_response_question_responses_attributes_#{question_response_fields.index}_survey_question_option_id_#{option.id}[]"}
         - if question.multiple_option_responses?
-          = check_box_tag "profile_set_survey_response[question_responses_attributes][#{index}][survey_question_option_ids][]", option.id, (option.id.in? question_response.survey_question_option_ids)
+          = check_box_tag "profile_set_survey_response[question_responses_attributes][#{question_response_fields.index}][survey_question_option_ids][]", option.id, (option.id.in? question_response.survey_question_option_ids)
         - else
           = question_response_fields.radio_button :survey_question_option_id, option.id
-        = option.text
-        - if option.image?
-          %br
-          = image_tag option.image_url(:small)
+        Other
+        = question_response_fields.text_field :other_option_text
