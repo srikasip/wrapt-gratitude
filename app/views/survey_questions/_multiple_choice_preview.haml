@@ -1,7 +1,7 @@
 %form.form
   .form-inputs
     .form-group.radio_buttons.optional
-      - @survey_question.options.each_with_index do |option, i|
+      - @survey_question.options.standard.each_with_index do |option, i|
         %span{class: (@survey_question.multiple_option_responses? ? 'checkbox' : 'radio')}
           %label
             - if @survey_question.multiple_option_responses?
@@ -12,3 +12,16 @@
             - if option.image?
               %br
               = image_tag option.image_url(:small)
+      
+
+        - if @survey_question.include_other_option?
+          - option = @survey_question.other_option
+          - index = @survey_question.options.standard.length
+          %span{class: (@survey_question.multiple_option_responses? ? 'checkbox' : 'radio')}
+            %label
+              - if @survey_question.multiple_option_responses?
+                = check_box_tag :response, option.id
+              - else
+                = radio_button_tag :response, option.id
+              Other
+              = text_field_tag :other_option_text
