@@ -9,6 +9,7 @@
 %table.table
   %thead
     %tr
+      %th
       %th Title
       %th Description
       %th Selling price
@@ -18,6 +19,9 @@
   %tbody
     - @gifts.each do |gift|
       %tr
+        %th(style="text-align: center;")
+          - if gift.primary_gift_image.present?
+            = image_tag gift.primary_gift_image.image_url(:small), style: 'max-height: 50px; align: center;'
         %td= gift.title
         %td= gift.description
         %td= gift.selling_price
