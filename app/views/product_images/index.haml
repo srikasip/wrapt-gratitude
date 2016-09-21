@@ -1,0 +1,45 @@
+.row
+  .col-sm-12
+    %h1 Edit Gift
+
+.row
+  .col-sm-8
+    %ul.nav.nav-tabs
+      %li(role="presentation")= link_to 'Details', edit_product_path(@product)
+      %li(role="presentation" class="active")= link_to 'Images', product_images_path(@product)
+
+.row
+  .col-sm-12
+    = simple_form_for @product_image, url: product_images_path(@product), html: {class: 'form form-inline admin__image-upload-form', data: {image_upload_form: true}} do |form|
+      %span.btn.btn-default(data-image-upload-trigger)
+        %i.glyphicon.glyphicon-plus
+        %span Upload New Image
+        = form.file_field :image, data: {image_upload_input: true, url: product_images_path(@product)}
+
+
+.row.admin__images-grid{data: {sortable_list: true, sortable_list_href: product_image_ordering_path(@product)}}
+  - @product.product_images.each do |product_image|
+    - if product_image.image? #don't include @product_image here
+      .col-sm-3.admin__image-col{data: {sortable_item: true, sortable_item_id: product_image.id}}
+        .admin__image-cell{class: ('primary' if product_image.primary?)}
+          .admin__image-cell-inner
+            = image_tag product_image.image_url(:small)
+            .admin__image-actions.left
+              %span.btn.btn-xs.btn-default.admin__image-hover-link
+                %i.glyphicon.glyphicon-move
+            .admin__image-actions.right
+              = link_to product_image_path(@product, product_image), method: :delete, data: {confirm: 'Are you sure?'}, class: 'admin__image-hover-link btn btn-xs btn-default' do
+                %i.glyphicon.glyphicon-trash
+              - if product_image.primary?
+                %span.btn.btn-primary.btn-xs.admin__is-primary-product-image-badge{data: {toggle: 'tooltip', placement: 'top'}, title: 'This is the primary image for this product'}
+                  %i.glyphicon.glyphicon-ok
+              - else
+                = link_to make_primary_product_image_path(@product, product_image), class: ' admin__image-hover-link btn btn-xs btn-default', data: {method: :post, toggle: 'tooltip', placement: 'top'}, title: 'Make this the primary image for this product' do
+                  %i.glyphicon.glyphicon-ok
+
+
+- content_for :page_js do
+  :javascript
+    new App.Admin.ImageUploadForm($('[data-image-upload-form]')[0])
+    new App.SortableList($('[data-sortable-list]')[0], {placeholder: 'col-sm-3'});
+

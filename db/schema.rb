@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160919184737) do
+ActiveRecord::Schema.define(version: 20160921162314) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,6 +95,17 @@ ActiveRecord::Schema.define(version: 20160919184737) do
     t.index ["product_id"], name: "index_product_categories_products_on_product_id", using: :btree
   end
 
+  create_table "product_images", force: :cascade do |t|
+    t.integer  "product_id"
+    t.string   "image"
+    t.integer  "sort_order", default: 0, null: false
+    t.boolean  "primary"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.index ["primary"], name: "index_product_images_on_primary", using: :btree
+    t.index ["product_id"], name: "index_product_images_on_product_id", using: :btree
+  end
+
   create_table "products", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
@@ -102,7 +113,6 @@ ActiveRecord::Schema.define(version: 20160919184737) do
     t.boolean  "public"
     t.datetime "created_at",                                               null: false
     t.datetime "updated_at",                                               null: false
-    t.string   "image"
     t.string   "wrapt_sku"
     t.integer  "vendor_id"
     t.decimal  "vendor_retail_price", precision: 10, scale: 2
@@ -134,35 +144,46 @@ ActiveRecord::Schema.define(version: 20160919184737) do
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
     t.integer  "sort_order",         default: 0, null: false
+    t.string   "type"
     t.index ["survey_question_id"], name: "index_survey_question_options_on_survey_question_id", using: :btree
+  end
+
+  create_table "survey_question_response_options", force: :cascade do |t|
+    t.integer  "survey_question_response_id", null: false
+    t.integer  "survey_question_option_id",   null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.index ["survey_question_option_id"], name: "response_options_on_option_id", using: :btree
+    t.index ["survey_question_response_id"], name: "response_options_on_response_id", using: :btree
   end
 
   create_table "survey_question_responses", force: :cascade do |t|
     t.integer  "profile_set_survey_response_id", null: false
     t.integer  "survey_question_id",             null: false
     t.text     "text_response"
-    t.integer  "survey_question_option_id"
     t.float    "range_response"
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
     t.string   "name"
+    t.text     "other_option_text"
     t.index ["profile_set_survey_response_id"], name: "index_question_response_on_survey_response_id", using: :btree
     t.index ["survey_question_id"], name: "index_survey_question_responses_on_survey_question_id", using: :btree
-    t.index ["survey_question_option_id"], name: "index_survey_question_responses_on_survey_question_option_id", using: :btree
   end
 
   create_table "survey_questions", force: :cascade do |t|
-    t.integer  "survey_id",              null: false
+    t.integer  "survey_id",                                 null: false
     t.text     "prompt"
     t.integer  "position"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
     t.string   "type"
     t.string   "min_label"
     t.string   "max_label"
     t.string   "mid_label"
-    t.integer  "sort_order", default: 0, null: false
+    t.integer  "sort_order",                default: 0,     null: false
     t.string   "code"
+    t.boolean  "multiple_option_responses", default: false, null: false
+    t.boolean  "include_other_option",      default: false, null: false
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
   end
 
@@ -233,11 +254,13 @@ ActiveRecord::Schema.define(version: 20160919184737) do
   add_foreign_key "gift_question_impacts", "gifts"
   add_foreign_key "gift_question_impacts", "survey_questions"
   add_foreign_key "gift_question_impacts", "training_sets"
+  add_foreign_key "product_images", "products"
   add_foreign_key "products", "vendors"
   add_foreign_key "profile_set_survey_responses", "profile_sets"
   add_foreign_key "profile_sets", "surveys"
+  add_foreign_key "survey_question_response_options", "survey_question_options"
+  add_foreign_key "survey_question_response_options", "survey_question_responses"
   add_foreign_key "survey_question_responses", "profile_set_survey_responses"
-  add_foreign_key "survey_question_responses", "survey_question_options"
   add_foreign_key "survey_question_responses", "survey_questions"
   add_foreign_key "training_set_evaluations", "training_sets"
   add_foreign_key "training_set_response_impacts", "gift_question_impacts"

@@ -14,13 +14,21 @@
 
     %h3 Choices
     %ol{style: "list-style: lower-alpha; padding-left: 15px;", data: {option_list: true, sortable_list: true, sortable_list_href: survey_question_option_ordering_path(@survey, @survey_question)}}
-      - @survey_question.options.each do |option|
+      - @survey_question.options.standard.each do |option|
         = render 'option_row', option: option
 
     = simple_form_for @survey_question_option, url: survey_question_options_path(@survey, @survey_question), remote: true, html: {class: 'form form-inline', data: {new_option_form: true, type: 'html'}} do |option_form|
       = option_form.input :text, label: false, as: :string, input_html: {data: {new_option_text: true}}
       = option_form.submit 'Add New Choice', class: 'btn btn-primary', data: {disable_with: 'Adding...'}
 
+    %h3 Additional Options
+    = simple_form_for @survey_question, url: survey_question_path(@survey, @survey_question) do |form|
+      .form-inputs
+        = form.input :include_other_option, as: :boolean, label: "Allow 'Other' with text box"
+        = form.input :multiple_option_responses, as: :boolean, label: 'Allow multiple selections'
+
+      .form-actions
+        = form.submit 'Save Options', class: 'btn btn-primary'
 
   .col-sm-6
     = render 'preview'

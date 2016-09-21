@@ -13,7 +13,7 @@ module Recommendations
       end
 
       def test_question_rank
-        allow(question_response).to receive(:survey_question_option_id) { 78 }
+        allow(question_response).to receive(:survey_question_option_ids) { [78] }
 
         selected_response_impact = object_double(TrainingSetResponseImpact.new, survey_question_option_id: 78, impact: 0.75)
         other_response_impact = object_double(TrainingSetResponseImpact.new, survey_question_option_id: 84, impact: -0.33)
@@ -23,7 +23,7 @@ module Recommendations
       end
 
       def test_question_rank_when_impact_not_found
-        allow(question_response).to receive(:survey_question_option_id) { 78 }
+        allow(question_response).to receive(:survey_question_option_ids) { [78] }
 
         other_response_impact = object_double(TrainingSetResponseImpact.new, survey_question_option_id: 84, impact: -0.33)
         allow(gift_question_impact).to receive(:response_impacts) { [other_response_impact] }

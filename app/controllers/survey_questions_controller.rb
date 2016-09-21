@@ -61,6 +61,8 @@ class SurveyQuestionsController < ApplicationController
         :max_label,
         :mid_label,
         :code
+        :include_other_option,
+        :multiple_option_responses
       )
   end
 

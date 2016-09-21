@@ -45,7 +45,15 @@ class ProfileSetSurveyResponsesController < ApplicationController
     def profile_set_survey_response_params
       params.require(:profile_set_survey_response).permit(
         :name,
-        question_responses_attributes: [:id, :text_response, :survey_question_option_id, :range_response, :survey_question_id]
+        question_responses_attributes: [
+          :id,
+          :text_response,
+          :range_response,
+          :other_option_text,
+          :survey_question_id,
+          :survey_question_option_id,
+          survey_question_option_ids: [],
+        ]
       )
     end
 end
