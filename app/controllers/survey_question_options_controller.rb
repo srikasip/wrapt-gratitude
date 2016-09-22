@@ -6,6 +6,8 @@ class SurveyQuestionOptionsController < ApplicationController
   before_action :set_survey_question_option, except: :create
   layout 'xhr'
 
+  helper SurveyQuestionsHelper
+
   def show
     render 'survey_questions/_option_row', locals: {option: @survey_question_option}
   end

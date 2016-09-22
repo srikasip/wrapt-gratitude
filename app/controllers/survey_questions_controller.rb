@@ -9,6 +9,7 @@ class SurveyQuestionsController < ApplicationController
   def edit
     if @survey_question.is_a? SurveyQuestions::MultipleChoice
       @survey_question_option = SurveyQuestionOption.new
+      @options = @survey_question.options.standard
       render :edit_multiple_choice
     end
   end
