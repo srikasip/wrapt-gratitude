@@ -19,7 +19,7 @@ class ProductCategory < ApplicationRecord
     if depth == 0
       name
     else
-      "&nbsp;&nbsp;#{name}".html_safe
+      "&nbsp;&nbsp;&nbsp;&nbsp;#{name}".html_safe
     end
   end
 
