@@ -21,9 +21,9 @@
         - @gift.gift_products.preload(product: :primary_product_image).each do |gift_product|
           - product = gift_product.product
           %tr
-            %td(style="text-align: center;")
+            %td.admin-index-table--image-cell
               - if product.primary_product_image.present?
-                = image_tag product.primary_product_image.image_url(:small), style: 'max-height: 50px; align: center;'
+                = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image'
             %td= product.title
             %td= link_to 'Remove', gift_product_path(@gift, gift_product, context_params), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'btn btn-xs btn-danger'
 
@@ -43,10 +43,10 @@
       %tbody
         - @available_products.each do |product|
           %tr
-            %td(style="text-align: center;")
+            %td.admin-index-table--image-cell
               - if product.primary_product_image.present?
                 = image_tag product.primary_product_image.image_url(:small), style: 'max-height: 50px; align: center;'
             %td= product.title
-            %td= link_to 'Add', gift_products_path(@gift, context_params.merge(gift_product: {product_id: product.id})), method: 'post', class: 'btn btn-xs btn-primary'
+            %td= link_to 'Add', gift_products_path(@gift, context_params.merge(gift_product: {product_id: product.id})), method: 'post', class: 'admin-index-table--image'
 
     = paginate @available_products

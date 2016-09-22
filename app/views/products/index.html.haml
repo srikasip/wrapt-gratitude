@@ -8,7 +8,7 @@
 
 .row
   .col-sm-12
-    %table.table
+    %table.table.index-table
       %thead
         %tr
           %th
@@ -21,9 +21,9 @@
       %tbody
         - @products.preload(:primary_product_image).each do |product|
           %tr
-            %th(style="text-align: center;")
+            %td.admin-index-table--image-cell
               - if product.primary_product_image.present?
-                = image_tag product.primary_product_image.image_url(:small), style: 'max-height: 50px; align: center;'
+                = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image'
             %td= product.title
             %td= product.description
             %td= number_to_currency product.price

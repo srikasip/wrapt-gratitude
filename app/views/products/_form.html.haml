@@ -7,11 +7,17 @@
     = f.association :vendor
     
     .row
-      .col-xs-2
-        = f.input :price
-        = f.input :vendor_retail_price
-        = f.input :vendor_cost
-        = f.input :units_available
+      .col-xs-3
+        = f.input :price, wrapper: :vertical_input_group do
+          .input-group-addon $
+          = f.input_field :price, class: 'form-control'
+        = f.input :vendor_retail_price, label: 'Vendor Retail Price', wrapper: :vertical_input_group do
+          .input-group-addon $
+          = f.input_field :vendor_retail_price, class: 'form-control'
+        = f.input :vendor_cost, label: 'Vendor Cost', wrapper: :vertical_input_group do
+          .input-group-addon $
+          = f.input_field :vendor_cost, class: 'form-control'
+        = f.input :units_available,label: 'Units Available'
     .row
       .col-xs-4
         = f.input :wrapt_sku, label: 'Wrapt SKU'
