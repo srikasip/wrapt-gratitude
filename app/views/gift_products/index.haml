@@ -12,7 +12,7 @@
       %li(role="presentation")= link_to 'Images', gift_images_path(@gift)
 
 .row
-  .col-sm-8
+  .col-sm-6
     %h3 Products in this Gift
     - if @gift.gift_products.empty?
       %i None yet, add some below!
@@ -35,8 +35,7 @@
               %td= product.wrapt_sku
               %td= link_to 'Remove', gift_product_path(@gift, gift_product, context_params), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'btn btn-xs btn-danger'
 
-.row
-  .col-sm-8
+  .col-sm-6
     %h3 Add Products to this Gift
     %form.form-inline(method="GET")
       .form-group
