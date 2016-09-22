@@ -16,16 +16,22 @@
     %h3 Products in this Gift
     - if @gift.gift_products.empty?
       %i None yet, add some below!
-    %table.table
-      %tbody
-        - @gift.gift_products.preload(product: :primary_product_image).each do |gift_product|
-          - product = gift_product.product
-          %tr
-            %td(style="text-align: center;")
-              - if product.primary_product_image.present?
-                = image_tag product.primary_product_image.image_url(:small), style: 'max-height: 50px; align: center;'
-            %td= product.title
-            %td= link_to 'Remove', gift_product_path(@gift, gift_product, context_params), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'btn btn-xs btn-danger'
+    - else
+      %table.table
+        %thead
+          %th
+          %th Title
+          %th Units Available 
+          %th
+        %tbody
+          - @gift.gift_products.preload(product: :primary_product_image).each do |gift_product|
+            - product = gift_product.product
+            %tr
+              %td(style="text-align: center;")
+                - if product.primary_product_image.present?
+                  = image_tag product.primary_product_image.image_url(:small), style: 'max-height: 50px; align: center;'
+              %td= product.title
+              %td= link_to 'Remove', gift_product_path(@gift, gift_product, context_params), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'btn btn-xs btn-danger'
 
 .row
   .col-sm-8
@@ -39,14 +45,24 @@
           Search
         = link_to 'Show All', gift_products_path(@gift, context_params.merge(q: nil)), class: 'btn btn-default'
 
-    %table.table.admin__gift-available-products
-      %tbody
-        - @available_products.each do |product|
-          %tr
-            %td(style="text-align: center;")
-              - if product.primary_product_image.present?
-                = image_tag product.primary_product_image.image_url(:small), style: 'max-height: 50px; align: center;'
-            %td= product.title
-            %td= link_to 'Add', gift_products_path(@gift, context_params.merge(gift_product: {product_id: product.id})), method: 'post', class: 'btn btn-xs btn-primary'
+    - if @available_products.empty?
+      %p(style="margin-top: 10px;")
+        %i None found
+    - else
+      %table.table.admin__gift-available-products
+        %thead
+          %th
+          %th Title
+          %th Units Available 
+          %th
+        %tbody
+          - @available_products.each do |product|
+            %tr
+              %td(style="text-align: center;")
+                - if product.primary_product_image.present?
+                  = image_tag product.primary_product_image.image_url(:small), style: 'max-height: 50px; align: center;'
+              %td= product.title
+              %td= number_with_delimiter product.units_available
+              %td= link_to 'Add', gift_products_path(@gift, context_params.merge(gift_product: {product_id: product.id})), method: 'post', class: 'btn btn-xs btn-primary'
 
     = paginate @available_products

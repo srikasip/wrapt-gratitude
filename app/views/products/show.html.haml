@@ -9,7 +9,7 @@
 
     %p
       %b Vendor:
-      = @product.vendor.name
+      = @product.vendor&.name
 
     %p
       %b Price:
@@ -35,13 +35,8 @@
       - @product.product_categories.each do |category|
         %span.label.label-default= category.name
 
-    %p
-      - if @product.public?
-        Visible to the Public
-      - else
-        Hidden from the Public
-
-    %p
-      = image_tag @product.image_url(:large) if @product.image?
+    - @product.product_images.each do |product_image|
+      %p
+        = image_tag product_image.image_url(:small)
 
 

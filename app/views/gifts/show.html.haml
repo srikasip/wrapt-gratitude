@@ -21,7 +21,11 @@
       = @gift.wrapt_sku
     %p
       %b Date available:
-      = @gift.date_available
+      = @gift.display_date_available
     %p
       %b Date discontinued:
-      = @gift.date_discontinued
+      = @gift.display_date_discontinued
+
+    - @gift.gift_images.each do |gift_image|
+      %p
+        = image_tag gift_image.image_url(:small)
