@@ -1,6 +1,14 @@
-.admin-index-list li,
-.question-list__item {
+.admin-index-list li {
   margin-top: 18px;
+}
+.question-list__item {
+  margin-top: 28px;
+  position: relative;
+}
+.question-list__item .glyphicon {
+  position: absolute;
+  left: -40px;
+  top: 2px;
 }
 .question-list__icon {
   background-position: left center;
@@ -10,6 +18,10 @@
 }
 .question-list__icon.multiple_choice {
   background-size: 25px;
+}
+.question-list__edit-links {
+  margin-left: 24px;
+  display: inline-block;
 }
 .ui-sortable-handle {
   cursor: pointer;
