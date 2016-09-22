@@ -1,4 +1,11 @@
 = simple_form_for @profile_set_import do |f|
+  - if @missing_resources_exception
+    .alert.alert-danger.alert-dismissable
+      There was a problem with your upload. The following
+      #{@missing_resources_exception.resource_name.pluralize} could not be found:
+      #{@missing_resources_exception.values.join(', ')}
+      %button.close{'data-dismiss' => 'alert', type: :button}
+        %span ×
   = f.error_notification
 
   .form-inputs

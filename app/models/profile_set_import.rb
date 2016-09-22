@@ -71,7 +71,7 @@ class ProfileSetImport
       if require_existence
         missing_lookups = lookups - @preloads[resource_class].keys
         if missing_lookups.any?
-          exception = ProfileSets::Imports::Exceptions::PreloadsNotFound.new(lookup_attr_name, missing_lookups)
+          exception = ProfileSets::Imports::Exceptions::PreloadsNotFound.new(resource_class, missing_lookups)
           add_exception(exception)
           raise exception
         end

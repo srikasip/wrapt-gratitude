@@ -13,7 +13,7 @@ module ProfileSets
         @profile_set_import.valid? && @profile_set_import.save_question_responses
         redirect_to @profile_set, notice: 'You imported survey responses into a profile set.'
       rescue ProfileSets::Imports::Exceptions::PreloadsNotFound => exception
-        flash.now[:alert] = "There was a problem with your upload. The following #{exception.sheet_column_name.to_s.pluralize} could not be found: #{exception.lookups.join(', ')}"
+        @missing_resources_exception = exception
         render :new
       end
     end
