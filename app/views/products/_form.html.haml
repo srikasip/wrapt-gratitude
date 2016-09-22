@@ -22,8 +22,6 @@
       .col-xs-4
         = f.input :wrapt_sku, label: 'Wrapt SKU'
 
-    = f.input :public
-
     %h3 Categories
     = f.association :product_categories, as: :check_boxes, collection: ProductCategory.all_for_product_form, label_method: :name_for_product_form
 

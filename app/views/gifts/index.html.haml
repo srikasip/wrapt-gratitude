@@ -24,7 +24,7 @@
             = image_tag gift.primary_gift_image.image_url(:small), class: 'admin-index-table--image'
         %td= gift.title
         %td= gift.description
-        %td= gift.selling_price
+        %td= number_to_currency gift.selling_price
         %td= gift.availability_string
         %td
           = link_to 'View', gift, class: 'btn btn-default btn-xs'

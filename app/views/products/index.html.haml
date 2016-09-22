@@ -13,8 +13,9 @@
         %tr
           %th
           %th Title
-          %th Description
-          %th Price
+          %th Vendor Cost
+          %th Vendor Retail Price
+          %th Units Available
           %th
 
 
@@ -25,8 +26,9 @@
               - if product.primary_product_image.present?
                 = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image'
             %td= product.title
-            %td= product.description
-            %td= number_to_currency product.price
+            %td= number_to_currency product.vendor_cost
+            %td= number_to_currency product.vendor_retail_price
+            %td= number_with_delimiter product.units_available
             %td
               = link_to 'View', product, class: 'btn btn-default btn-xs'
               = link_to 'Edit', edit_product_path(product), class: 'btn btn-default btn-xs'
