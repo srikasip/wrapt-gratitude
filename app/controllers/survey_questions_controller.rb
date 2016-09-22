@@ -33,7 +33,7 @@ class SurveyQuestionsController < ApplicationController
 
   def destroy
     @survey_question.destroy
-    redirect_to surveys_url, notice: 'The question was successfully deleted.'
+    redirect_to survey_url(@survey), notice: 'The question was successfully deleted.'
   end
 
   # ajax member action for multi-choice edit
