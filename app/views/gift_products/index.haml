@@ -22,6 +22,7 @@
           %th
           %th Title
           %th Units Available 
+          %th Wrapt SKU
           %th
         %tbody
           - @gift.gift_products.preload(product: :primary_product_image).each do |gift_product|
@@ -31,6 +32,7 @@
                 - if product.primary_product_image.present?
                   = image_tag product.primary_product_image.image_url(:small), style: 'max-height: 50px; align: center;'
               %td= product.title
+              %td= product.wrapt_sku
               %td= link_to 'Remove', gift_product_path(@gift, gift_product, context_params), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'btn btn-xs btn-danger'
 
 .row
@@ -39,7 +41,7 @@
     %form.form-inline(method="GET")
       .form-group
         %input{type: 'hidden', name: 'page', value: params[:page]}
-        %input.form-control{type: 'search', name: 'q', value: params[:q]}
+        %input.form-control{type: 'search', name: 'q', value: params[:q], placeholder: 'Title or SKU'}
         %button.btn.btn-primary
           %i.glyphicon.glyphicon-search
           Search
@@ -53,6 +55,7 @@
         %thead
           %th
           %th Title
+          %th Wrapt SKU
           %th Units Available 
           %th
         %tbody
@@ -62,6 +65,7 @@
                 - if product.primary_product_image.present?
                   = image_tag product.primary_product_image.image_url(:small), style: 'max-height: 50px; align: center;'
               %td= product.title
+              %td= product.wrapt_sku
               %td= number_with_delimiter product.units_available
               %td= link_to 'Add', gift_products_path(@gift, context_params.merge(gift_product: {product_id: product.id})), method: 'post', class: 'btn btn-xs btn-primary'
 
