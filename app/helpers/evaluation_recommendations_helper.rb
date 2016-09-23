@@ -2,7 +2,7 @@ module EvaluationRecommendationsHelper
   
   def displayable_response question_response
     case question_response.survey_question
-    when SurveyQuestions::MultipleChoice then question_response.survey_question_option.text
+    when SurveyQuestions::MultipleChoice then question_response.survey_question_options.map(&:text).join(", ")
     when SurveyQuestions::Range then question_response.range_response
     end    
   end
