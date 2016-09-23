@@ -7,3 +7,8 @@ body .slider-handle {
   background-color: $red-007 !important;
   background-image: none;
 }
+
+.slider.slider-horizontal {
+  margin-left: 14px;
+  margin-right: 14px;
+}

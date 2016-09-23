@@ -2,13 +2,15 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :name, label: 'Name for this response'
+    .admin-quiz-question.mb5
+      = f.input :name, label: 'Name for this response'
 
     = f.simple_fields_for :question_responses do |question_response_fields|
-      %h3 #{question_response_fields.index + 1}. #{question_response_fields.object.survey_question.prompt}
-      = question_response_fields.input :survey_question_id, as: :hidden
-      = render question_response_fields_partial(question_response_fields.object), question_response_fields: question_response_fields
+      .admin-quiz-question.mb5
+        %h4.admin-quiz-question__label #{question_response_fields.index + 1}. #{question_response_fields.object.survey_question.prompt}
+        = question_response_fields.input :survey_question_id, as: :hidden
+        = render question_response_fields_partial(question_response_fields.object), question_response_fields: question_response_fields
 
 
   .form-actions
-    = f.button :submit, "Save"
+    = f.button :submit, "Save", class: 'btn btn-primary'
