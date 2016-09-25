@@ -1,16 +1,17 @@
 @import "navs";
 @import "buttons";
 @import "icons";
-@import "lists";
+@import "lists_tables";
 @import "forms";
 @import "typography";
 @import "image_gallery_manager";
 @import "gift_products";
+// @import "gift_images";
 
 .admin__actions,
 .links__view-back {
   margin-top: 24px;
-  margin-bottom: 24px;
+  margin-bottom: 30px;
 }
 .shadowed-box__01 {
   @include shadowed-box__01;
@@ -18,4 +19,7 @@
 .form-panel__left {
   margin-top: 24px;
   padding-bottom: 18px;
+}
+footer {
+  margin-top: 36px;
 }

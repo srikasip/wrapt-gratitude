@@ -16,4 +16,16 @@ module SurveyQuestionsHelper
     end
   end
 
+  def option_list_classes
+    if @options.any? {|option| option.image? }
+      'multiple-choice--has-images'
+    end
+  end
+
+  def option_item_classes option
+    if option.image?
+      'multiple-choice__option--has-image'
+    end
+  end
+
 end

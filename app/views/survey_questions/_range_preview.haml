@@ -1,5 +1,5 @@
 %form.form
   .form-group
-    %span.slider-min-label= @survey_question.min_label
+    %span.slider-label.slider-label__min= @survey_question.min_label
     = number_field_tag :range_response, 0, data: {provide: 'slider', slider_min: -1, slider_max: 1, slider_step: '.01', slider_tooltip: 'hide', slider_value: 0, slider_selection: 'none' }
-    %span.slider-max-label= @survey_question.max_label
+    %span.slider-label.slider-label__max= @survey_question.max_label

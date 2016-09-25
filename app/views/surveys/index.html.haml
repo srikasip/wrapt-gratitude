@@ -8,6 +8,11 @@
 
 .row
   .col-sm-12
-    %ul
-      - @surveys.each do |survey|
-        %li= link_to survey.title, survey
+    %table.table
+      %thead
+        %tr
+          %th Name
+
+      %tbody
+        - @surveys.each do |survey|
+          %td= link_to survey.title, survey

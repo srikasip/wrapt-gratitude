@@ -7,6 +7,7 @@ class GiftProductsController < ApplicationController
     if params[:q].present?
       @available_products = @available_products
         .where("LOWER(title) LIKE ?", "%#{params[:q].downcase}%")
+        .or(Product.where("wrapt_sku LIKE ?", "%#{params[:q]}%"))
     end
     @available_products = @available_products
       .page(params[:page])

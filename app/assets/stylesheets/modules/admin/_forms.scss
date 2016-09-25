@@ -3,9 +3,19 @@
 .edit_profile_set_survey_response .slider-horizontal {
   float: left;
 }
+.slider {
+  float: left;
+  display: block;
+}
+.slider-label {
+  max-width: 140px;
+}
 .slider-label__min {
   margin-right: 10px;
 }
 .slider-label__max {
   margin-left: 10px;
+}
+.min-width-03 {
+  min-width: 300px;
 }

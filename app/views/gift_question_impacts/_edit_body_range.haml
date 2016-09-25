@@ -26,7 +26,7 @@
         %tr
           %td= @gift_question_impact.survey_question.max_label
           %td= @gift_question_impact.range_impact_direct_correlation? ? 'Positive' : 'Negative'
-    = f.input :switch_range_impact_direct_correlation, as: :boolean, label: 'Switch Direction'
+    = f.input :switch_range_impact_direct_correlation, as: :boolean, label: 'Switch Direction (this will change after you click save)'
 
   .form-actions
     = f.submit "Save", class: 'btn btn-primary'
