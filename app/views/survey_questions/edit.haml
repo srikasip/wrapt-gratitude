@@ -9,6 +9,7 @@
 
       .form-inputs
         = form.input :prompt
+        = form.input :code, hint: '(required for importing)'
         = render form_fields_partial(@survey_question), form: form
 
       .form-actions
