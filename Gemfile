@@ -42,6 +42,9 @@ gem 'awesome_nested_set'
 gem 'devise'
 gem 'kaminari'
 
+# For reading an excel file
+gem 'roo'
+
 # Javascript
 gem 'sprockets-es6'
 

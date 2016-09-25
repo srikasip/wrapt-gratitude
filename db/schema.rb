@@ -180,6 +180,7 @@ ActiveRecord::Schema.define(version: 20160922140221) do
     t.string   "max_label"
     t.string   "mid_label"
     t.integer  "sort_order",                default: 0,     null: false
+    t.string   "code"
     t.boolean  "multiple_option_responses", default: false, null: false
     t.boolean  "include_other_option",      default: false, null: false
     t.string   "code"
