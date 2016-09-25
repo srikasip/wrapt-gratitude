@@ -10,8 +10,11 @@ module ProfileSets
     def create
       @profile_set_import = ProfileSetImport.new(permitted_params.merge({profile_set: @profile_set}))
       begin
-        @profile_set_import.valid? && @profile_set_import.save_question_responses
-        redirect_to @profile_set, notice: 'You imported survey responses into a profile set.'
+        if @profile_set_import.valid? && @profile_set_import.save_question_responses
+          redirect_to @profile_set, notice: 'You imported survey responses into a profile set.'
+        else
+          render :new
+        end
       rescue ProfileSets::Imports::Exceptions::PreloadsNotFound => exception
         @missing_resources_exception = exception
         render :new

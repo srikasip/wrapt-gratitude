@@ -1,14 +1,55 @@
 = simple_form_for @profile_set_import do |f|
+  %p 
+    Here you can upload an Excel spreadsheet containing responses to questions.
+    For the format, see the description below the import button.
+  %p
+    Start with
+    #{link_to 'this template', '/profile_sets/imports/Wrapt Response Set Import Template.xlsx'}.
+
   - if @missing_resources_exception
     .alert.alert-danger.alert-dismissable
       There was a problem with your upload. The following
       #{@missing_resources_exception.resource_name.pluralize} could not be found:
       #{@missing_resources_exception.values.join(', ')}
+
       %button.close{'data-dismiss' => 'alert', type: :button}
         %span ×
   = f.error_notification
 
   .form-inputs
     = f.input :question_responses_file, as: :file
+
   .form-actions
-    = f.submit 'Import'
+    = f.submit 'Import', class: 'btn btn-primary'
+
+  %h3 Format
+  %p Each row is a single response to a single question.
+  %p 
+    The template spreadsheet has headers at the top to guide you. Do not remove the header
+    row. Here is a description of the columns:
+  %ol
+    %li
+      Survey Response Name - The same as the name given when you create a new
+      response set in the interface. For the import, the name indicates which
+      response set the responses are to be part of. If one with the same name already exists,
+      any responses in the import will overwrite their corresponding responses
+      given previously.
+    %li
+      Question Code - The code given when creating the question. This is used
+      to match the response to the right one.
+    %li
+      Text Response - If the response is for a text question, that text goes
+      here, for other question types leave it blank.
+    %li
+      Numeric Response 1, 2, etc. -
+      %ul
+        %li
+          If the response is for a slider question, Numeric Repsonse 1
+          specifies where the slider is, -1, -0.5, 0, 0.5, or 1.0, proceeding from
+          left to right. For this type of question the remaining columns should be blank.
+        %li
+          If the response is for a multiple choice question, the remaining
+          columns specify whether each option is chosen (on or off). They are
+          expected to be in the same order that the options show up in the quiz
+          on this site. Putting a 1 in the column means selected, 0 or blank
+          means not selected.
