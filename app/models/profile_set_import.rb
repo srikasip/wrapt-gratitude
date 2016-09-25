@@ -77,6 +77,7 @@ class ProfileSetImport
             survey_question_response_options.
             new(survey_question_option: options[i])
         end
+        i += 1
       end
     end
 

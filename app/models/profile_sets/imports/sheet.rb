@@ -54,7 +54,7 @@ module ProfileSets
       ####
 
       def header_row
-        @_header_row ||= @roo_sheet.row(1)
+        @_header_row ||= @roo_sheet.row(1).compact
       end
     end
   end
