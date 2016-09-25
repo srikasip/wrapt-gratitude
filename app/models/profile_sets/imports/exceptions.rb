@@ -9,7 +9,7 @@ module ProfileSets
         end
 
         def resource_name
-          @preload_class.to_s.humanize
+          @preload_class.to_s.titleize
         end
 
         def values
