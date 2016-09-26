@@ -12,7 +12,7 @@
   .col-sm-12
     %ol.question-list{data: {sortable_list: true, sortable_list_href: survey_question_ordering_path(@survey)}}
       - @survey.questions.preload(:options).each_with_index do |question, i|
-        %li.question-list__item{data: {sortable_item: true, sortable_item_id: question.id}}
+        %li.mb4.question-list__item{data: {sortable_item: true, sortable_item_id: question.id}}
           %i.glyphicon.glyphicon-move
           %i.question-list__icon{class: question.system_type_label}
           = question.prompt
