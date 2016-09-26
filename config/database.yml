@@ -11,7 +11,6 @@ default: &default
 
 development:
   <<: *default
-  user: tcesere
   database: wrapt_gratitude_development
 
 # Warning: The database defined as "test" will be erased and
