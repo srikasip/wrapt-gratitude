@@ -1,31 +1,9 @@
-class ProfileSetImport
+class ProfileSetImport < ExcelImport
 
-  include ActiveModel::Model
-  extend CarrierWave::Mount
+  importable_name :profile_set
 
-  REQUIRED_HEADERS = ProfileSets::Imports::Row::ATTRIBUTE_HEADERS + %w{numeric_response_1}
-
-  attr_accessor :profile_set, :question_responses_file
-
-  mount_uploader :question_responses_file, ProfileSetImportResponsesFileUploader
-
-  validates_presence_of :question_responses_file
-  validate :presence_of_headers
-
-  def presence_of_headers
-    if question_responses_file.present?
-      absent_headers = REQUIRED_HEADERS - sheet.header_row
-      if absent_headers.any?
-        count = absent_headers.count
-        errors.add(
-          :question_responses_file,
-          "#{absent_headers.to_sentence} #{count == 1 ? 'was' : 'were'} "+
-            "missing from the header row. Please make sure "+
-            "#{count == 1 ? 'it is' : 'they are'} there at the top "+
-            "of the proper #{'column'.pluralize(absent_headers.count)}."
-        )
-      end
-    end
+  def required_headers
+    ProfileSets::Imports::Row::ATTRIBUTE_HEADERS + %w{numeric_response_1}
   end
 
   def save_question_responses
@@ -132,16 +110,5 @@ class ProfileSetImport
         index_by do |record|
           [record.profile_set_survey_response_id, record.survey_question_id]
         end
-  end
-
-  ###
-
-  def add_exception(exception)
-    @_exceptions ||= []
-    @_exceptions << exception
-  end
-
-  def sheet
-    @_sheet ||= ProfileSets::Imports::Sheet.new(question_responses_file)
   end
 end

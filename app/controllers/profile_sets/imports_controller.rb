@@ -30,7 +30,7 @@ module ProfileSets
     def permitted_params
       subparams = params.dig(:profile_set_import)
       if subparams
-        subparams.permit(:question_responses_file)
+        subparams.permit(:records_file)
       else
         {}
       end

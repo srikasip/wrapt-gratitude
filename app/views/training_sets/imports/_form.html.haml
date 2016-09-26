@@ -1,0 +1,3 @@
+= simple_form_for @training_set_import do |f|
+  .form-inputs= f.input :records_file, label: 'Impacts File', as: :file
+  .form-actions= f.submit 'Import', class: 'btn btn-primary'

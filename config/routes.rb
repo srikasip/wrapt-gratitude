@@ -41,6 +41,7 @@ Rails.application.routes.draw do
         resources :gift_question_impacts, only: [:edit, :update], controller: 'recommendation_gift_question_impacts'
       end
     end
+    resources :imports, controller: 'training_sets/imports', only: [:new, :create]
   end
 
 
