@@ -16,10 +16,6 @@ class SurveyQuestion < ApplicationRecord
 
   before_create :set_initial_sort_order
 
-  def use_secondary_prompt?
-    true
-  end
-
   def type_label
     raise "Abstract Method"
   end
@@ -31,6 +27,14 @@ class SurveyQuestion < ApplicationRecord
   private def set_initial_sort_order
     next_sort_order = ( survey&.questions.maximum(:sort_order) || 0 ) + 1
     self.sort_order = next_sort_order
+  end
+
+  def prompt_with_name survey_response
+    if name_question = survey.name_question
+      if name_response = survey_response.question_responses.where(survey_question: name_question).first&.text_response.presence
+        prompt.gsub '<name>', name_response
+      end
+    end
   end
 
 end
