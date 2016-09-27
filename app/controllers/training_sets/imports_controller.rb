@@ -9,9 +9,14 @@ module TrainingSets
 
     def create
       @training_set_import = TrainingSetImport.new(permitted_params.merge({training_set: @training_set}))
-      if @training_set_import.valid?
-        redirect_to @training_set, notice: 'You imported impacts into a training set.'
-      else
+      begin
+        if @training_set_import.save_records
+          redirect_to @training_set, notice: 'You imported impacts into a training set.'
+        else
+          render :new
+        end
+      rescue ::Imports::Exceptions::PreloadsNotFound => exception
+        @missing_resources_exception = exception
         render :new
       end
     end

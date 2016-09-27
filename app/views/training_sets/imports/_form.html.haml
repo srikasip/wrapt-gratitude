@@ -1,3 +1,18 @@
 = simple_form_for @training_set_import do |f|
+  %p
+    Here you can upload an Excel spreadsheet containing impacts for questions
+    and individual responses. For the format, see the description below the
+    import button.
+
+  %p
+    Start with
+    #{link_to 'this template', '/training_sets/imports/Wrapt Training Set Import Template.xlsx'}
+
+  - if @missing_resources_exception
+    .alert.alert-danger.alert-dismissable
+      There was a problem with your upload. The following
+      #{@missing_resources_exception.resource_name.pluralize} could not be found:
+      #{@missing_resources_exception.values.join(', ')}
+
   .form-inputs= f.input :records_file, label: 'Impacts File', as: :file
   .form-actions= f.submit 'Import', class: 'btn btn-primary'
