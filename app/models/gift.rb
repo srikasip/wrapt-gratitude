@@ -15,7 +15,7 @@ class Gift < ApplicationRecord
   DEFAULT_DATE_DISCONTINUED = Date.new(2999, 12, 31)
 
   def available?
-    date_available >= Date.today && date_discontinued <= Date.today
+    date_available <= Date.today && date_discontinued >= Date.today
   end
 
   def availability_string
