@@ -1,0 +1,11 @@
+:javascript
+  $(function() {
+    $('form').submit(function() {
+      $('#processing-import-modal').modal('show');
+    });
+  });
+#processing-import-modal.modal.fade(tabindex="-1" role="dialog")
+  .modal-dialog(role="document")
+    .modal-content
+      .modal-body.clearfix
+        %div Processing import...please wait.
