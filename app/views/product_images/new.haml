@@ -1,4 +1,5 @@
-= image_tag "ajax-loader.gif"
+%p
+  Redirecting...
 = form_for @product_image, url: product_images_path(@product), html: {class: 'form form-inline admin__image-upload-form', data: {auto_submit_form: true}} do |form|
   = form.hidden_field :key
 

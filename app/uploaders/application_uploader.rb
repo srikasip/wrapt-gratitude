@@ -3,8 +3,7 @@ class ApplicationUploader < CarrierWave::Uploader::Base
 
   include CarrierWave::MiniMagick
 
-  # storage(Rails.env.production? ? :fog : :file)
-  include CarrierWaveDirect::Uploader
+  storage(Rails.env.production? ? :fog : :file)
 
   include CarrierWave::MimeTypes
   process :set_content_type

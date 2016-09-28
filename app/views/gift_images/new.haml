@@ -1,0 +1,8 @@
+%p
+  Redirecting...
+
+= form_for @gift_image, url: gift_images_path(@gift), html: {data: {auto_submit_form: true}} do |form|
+  = form.hidden_field :key
+
+:javascript
+  $('[data-auto-submit-form]')[0].submit()

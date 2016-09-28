@@ -11,11 +11,11 @@
 
 .row
   .col-sm-12
-    = simple_form_for @gift_image, url: gift_images_path(@gift), html: {class: 'form form-inline admin__image-upload-form', data: {image_upload_form: true}} do |form|
+    = direct_upload_form_for @uploader, html: {class: 'form form-inline admin__image-upload-form', data: {image_upload_form: true}} do |form|
       %span.btn.btn-default(data-image-upload-trigger)
         %i.glyphicon.glyphicon-plus
         %span Upload New Image
-        = form.file_field :image, data: {image_upload_input: true, url: gift_images_path(@gift)}
+      = form.file_field :image, data: {image_upload_input: true, url: gift_images_path(@gift)}
 
 
 .row.admin__images-grid{data: {sortable_list: true, sortable_list_href: gift_image_ordering_path(@gift)}}
@@ -24,7 +24,10 @@
       .col-sm-3.admin__image-col{data: {sortable_item: true, sortable_item_id: gift_image.id}}
         .admin__image-cell{class: ('primary' if gift_image.primary?)}
           .admin__image-cell-inner
-            = image_tag gift_image.image_url(:small)
+            - if gift_image.image_processed?
+              = image_tag gift_image.image_url(:small)
+            - else
+              = image_tag 'ajax-loader.gif'
             .admin__image-actions.left
               %span.btn.btn-xs.btn-default.admin__image-hover-link
                 %i.glyphicon.glyphicon-move

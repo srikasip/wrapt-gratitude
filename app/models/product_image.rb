@@ -19,7 +19,7 @@ class ProductImage < ApplicationRecord
   end
 
   private def enqueue_processing
-    ProductImageProcessingJob.perform_later(self, key)
+    DirectUploadedImageProcessingJob.perform_later(self, key)
   end
 
 end
