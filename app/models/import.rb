@@ -60,12 +60,25 @@ class Import
     end
   end
 
+  def preload!
+  end
+
+  def record_association_name
+    nil
+  end
+
   def save_records
     if valid?
       preload!
 
       sheet.each do |row|
-        importable.send(record_association) << row_record(row)
+        record = row_record(row)
+
+        if record_association_name
+          importable.send(record_association_name) << record
+        else
+          record.save
+        end
       end
 
       importable.save

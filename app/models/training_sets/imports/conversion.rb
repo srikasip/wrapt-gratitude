@@ -15,20 +15,18 @@ module TrainingSets
       end
 
       def response_impacts(question)
+        impacts = []
         if question.is_a? SurveyQuestions::MultipleChoice
           options = question.options.order(:sort_order).to_a
-          impacts = []
           i = 0
 
           @row.response_impacts.each do |impact|
             impacts << options[i].training_set_response_impacts.new(impact: impact)
             i += 1
           end
-
-          impacts
-        else
-          []
         end
+
+        impacts
       end
     end
   end

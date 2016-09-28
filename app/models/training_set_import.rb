@@ -2,7 +2,14 @@ class TrainingSetImport < Import
 
   importable_name :training_set, ExcelImportRecordsFileUploader
 
-  def record_association
+  def preload!
+    sheet.cache_columns_scan!(:gift_sku, :question_code)
+    preload_one!(Gift, :gift_sku, :wrapt_sku)
+    preload_one!(SurveyQuestion, :question_code, :code)
+    preload_question_impacts!
+  end
+
+  def record_association_name
     :gift_question_impacts
   end
 
@@ -11,13 +18,12 @@ class TrainingSetImport < Import
   end
 
   def row_record(row)
-    question_impact = @preloads.dig(GiftQuestionImpact, [row.question_code, row.gift_sku])
+    question = @preloads[SurveyQuestion, row.question_code]
+    gift = @preloads[Gift, row.gift_sku]
 
-    if !question_impact
-      question = @preloads.dig(SurveyQuestion, row.question_code)
-      gift = @preloads.dig(Gift, row.gift_sku)
-      question_impact = question.gift_question_impacts.new(gift: gift)
-    end
+    question_impact =
+      @preloads[GiftQuestionImpact, [question.id, gift.id]] ||
+      question.gift_question_impacts.new(gift: gift)
 
     conversion = TrainingSets::Imports::Conversion.new(row)
 
@@ -33,15 +39,6 @@ class TrainingSetImport < Import
 
   #
 
-  def preload!
-    sheet.cache_columns_scan!(:gift_sku, :question_code)
-    preload_one!(Gift, :gift_sku, :wrapt_sku)
-    preload_one!(SurveyQuestion, :question_code, :code)
-    preload_question_impacts!
-  end
-
-  ##
-
   def preload_question_impacts!
     @preloads ||= {}
 
@@ -50,7 +47,8 @@ class TrainingSetImport < Import
         where(
           survey_question: @preloads[SurveyQuestion].values,
           gift: @preloads[Gift].values
-        ).index_by do |record|
+        ).
+        index_by do |record|
           [record.survey_question_id, record.gift_id]
         end
   end
