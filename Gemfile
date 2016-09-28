@@ -36,11 +36,13 @@ gem 'simple_form'
 gem 'haml-rails'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'carrierwave'
+gem 'carrierwave_direct'
 gem "fog-aws"
 gem 'mini_magick'
 gem 'awesome_nested_set'
 gem 'devise'
 gem 'kaminari'
+gem 'delayed_job_active_record'
 
 # Javascript
 gem 'sprockets-es6'
@@ -64,6 +66,7 @@ group :development do
   gem 'capistrano-passenger'
   gem 'capistrano-rvm'
   gem 'seed_dump'
+  gem 'foreman'
 end
 
 group :test do

@@ -1,6 +1,6 @@
 .row
   .col-sm-12
-    %h1 Edit Gift
+    %h1 Edit Product
 
 .row
   .col-sm-8
@@ -10,11 +10,11 @@
 
 .row
   .col-sm-12
-    = simple_form_for @product_image, url: product_images_path(@product), html: {class: 'form form-inline admin__image-upload-form', data: {image_upload_form: true}} do |form|
+    = direct_upload_form_for @uploader, url: product_images_path(@product), html: {class: 'form form-inline admin__image-upload-form', data: {image_upload_form: true}} do |form|
       %span.btn.btn-default(data-image-upload-trigger)
         %i.glyphicon.glyphicon-plus
         %span Upload New Image
-        = form.file_field :image, data: {image_upload_input: true, url: product_images_path(@product)}
+      = form.file_field :image, data: {image_upload_input: true, url: product_images_path(@product)}
 
 
 .row.admin__images-grid{data: {sortable_list: true, sortable_list_href: product_image_ordering_path(@product)}}
@@ -23,7 +23,10 @@
       .col-sm-3.admin__image-col{data: {sortable_item: true, sortable_item_id: product_image.id}}
         .admin__image-cell{class: ('primary' if product_image.primary?)}
           .admin__image-cell-inner
-            = image_tag product_image.image_url(:small)
+            - if product_image.image_processed?
+              = image_tag product_image.image_url(:small)
+            - else
+              = image_tag 'ajax-loader.gif'
             .admin__image-actions.left
               %span.btn.btn-xs.btn-default.admin__image-hover-link
                 %i.glyphicon.glyphicon-move

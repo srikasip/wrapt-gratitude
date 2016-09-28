@@ -10,10 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160922140221) do
+ActiveRecord::Schema.define(version: 20160928181338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  end
 
   create_table "evaluation_recommendations", force: :cascade do |t|
     t.float    "score",                          default: 0.0, null: false
@@ -98,10 +113,11 @@ ActiveRecord::Schema.define(version: 20160922140221) do
   create_table "product_images", force: :cascade do |t|
     t.integer  "product_id"
     t.string   "image"
-    t.integer  "sort_order", default: 0, null: false
+    t.integer  "sort_order",      default: 0,     null: false
     t.boolean  "primary"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "image_processed", default: false, null: false
     t.index ["primary"], name: "index_product_images_on_primary", using: :btree
     t.index ["product_id"], name: "index_product_images_on_product_id", using: :btree
   end
@@ -183,6 +199,7 @@ ActiveRecord::Schema.define(version: 20160922140221) do
     t.boolean  "multiple_option_responses", default: false, null: false
     t.boolean  "include_other_option",      default: false, null: false
     t.string   "code"
+    t.boolean  "use_response_as_name",      default: false, null: false
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
   end
 

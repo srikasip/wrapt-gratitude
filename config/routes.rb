@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   
   resources :product_categories
   resources :products do
-    resources :images, only: [:index, :create, :destroy], controller: 'product_images' do
+    resources :images, only: [:index, :new, :create, :destroy], controller: 'product_images' do
       member { post 'make_primary' }
     end
     resource :image_ordering, only: :create, controller: 'product_image_orderings'

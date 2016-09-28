@@ -3,11 +3,18 @@ class ProductImagesController < ApplicationController
 
   def index
     @product_image = @product.product_images.new
+    @uploader = @product_image.image
+    @uploader.success_action_redirect = new_product_image_url(@product)
+  end
+
+  def new
+    @product_image = @product.product_images.new key: params[:key]
   end
 
   def create
     @product_image = @product.product_images.new product_image_params
     if @product_image.save
+      flash[:notice] = "Your image was successfully uploaded.  It's still being processed and will be available shortly."
       redirect_to product_images_path(@product)
     else
       render :index
@@ -32,7 +39,7 @@ class ProductImagesController < ApplicationController
   end
 
   private def product_image_params
-    params.require(:product_image).permit :image
+    params.require(:product_image).permit :key
   end
 
 end
