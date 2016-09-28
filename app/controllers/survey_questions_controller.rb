@@ -63,7 +63,9 @@ class SurveyQuestionsController < ApplicationController
         :mid_label,
         :code,
         :include_other_option,
-        :multiple_option_responses
+        :multiple_option_responses,
+        :use_response_as_name,
+        :code
       )
   end
 

@@ -9,7 +9,7 @@
   = @recommendation.score.round(2)
 
 - @recommendation.training_set.gift_question_impacts.where(gift_id: @recommendation.gift_id).preload(:survey_question, :gift).each do |gift_question_impact|
-  - question_response = @recommendation.survey_response.question_responses.preload(:survey_question_option).detect{|question_response| question_response.survey_question_id == gift_question_impact.survey_question_id}
+  - question_response = @recommendation.survey_response.question_responses.preload(:survey_question_options).detect{|question_response| question_response.survey_question_id == gift_question_impact.survey_question_id}
   - intermediate_products = @engine.calculate_question_rank_intermediate_products(gift_question_impact.gift, gift_question_impact.survey_question)
 
   .well

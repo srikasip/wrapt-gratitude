@@ -7,7 +7,7 @@
 
     = f.simple_fields_for :question_responses do |question_response_fields|
       .admin-quiz-question.mb5
-        %h4.admin-quiz-question__label #{question_response_fields.index + 1}. #{question_response_fields.object.survey_question.prompt}
+        %h4.admin-quiz-question__label #{question_response_fields.index + 1}. #{question_response_fields.object.survey_question.prompt_with_name(@profile_set_survey_response)}
         = question_response_fields.input :survey_question_id, as: :hidden
         = render question_response_fields_partial(question_response_fields.object), question_response_fields: question_response_fields
 

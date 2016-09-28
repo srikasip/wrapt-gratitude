@@ -13,20 +13,16 @@
         %span.slider-label.slider-label__max High
 
 
-    %h3 Response Impacts
-    %table.table
-      %thead
-        %tr
-          %th Direction
-          %th Impact
-      %tbody
-        %tr
-          %td= @gift_question_impact.survey_question.min_label
-          %td.slider-control= @gift_question_impact.range_impact_direct_correlation? ? 'Negative' : 'Positive'
-        %tr
-          %td= @gift_question_impact.survey_question.max_label
-          %td= @gift_question_impact.range_impact_direct_correlation? ? 'Positive' : 'Negative'
-    = f.input :switch_range_impact_direct_correlation, as: :boolean, label: 'Switch Direction'
+    %h4 Which side of the response has a positive impact on gift recommendation?
+    .row
+      .col-sm-2
+        %label(for="gift_question_impact_range_impact_direct_correlation_false")= f.object.survey_question.min_label
+      .col-sm-8.admin__impact-correlation-line-wrapper
+        = f.radio_button :range_impact_direct_correlation, false
+        %span.admin__impact-correlation-range-line
+        = f.radio_button :range_impact_direct_correlation, true
+      .col-sm-2
+        %label(for="gift_question_impact_range_impact_direct_correlation_true")= f.object.survey_question.max_label
 
   .form-actions
     = f.submit "Save", class: 'btn btn-primary'
