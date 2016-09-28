@@ -14,7 +14,7 @@ class TrainingSetImport < Import
   end
 
   def required_headers
-    TrainingSets::Imports::Row::ATTRIBUTE_HEADERS + %w{response_impact_1}
+    TrainingSets::Imports::Row::ATTRIBUTE_HEADERS + TrainingSets::Imports::Row::MANY_TO_ONE_HEADERS
   end
 
   def row_record(row)

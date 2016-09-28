@@ -21,7 +21,9 @@ module TrainingSets
           i = 0
 
           @row.response_impacts.each do |impact|
-            impacts << options[i].training_set_response_impacts.new(impact: impact)
+            if options[i].present?
+              impacts << options[i].training_set_response_impacts.new(impact: impact)
+            end
             i += 1
           end
         end

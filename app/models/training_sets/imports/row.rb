@@ -4,8 +4,8 @@ module TrainingSets
 
       include ActiveModel::Model
 
-      ATTRIBUTE_HEADERS = %w{gift_sku question_code question_impact}
-      MANY_TO_ONE_HEADERS = %w{response_impact_1 response_impact_2 etc.}
+      ATTRIBUTE_HEADERS = %w{gift_sku question_code question_impact slider_impact_direction}
+      MANY_TO_ONE_HEADERS = 10.times.map {|number| "choice_#{number + 1}_impact"}
 
       attr_accessor *ATTRIBUTE_HEADERS, :response_impacts
 
