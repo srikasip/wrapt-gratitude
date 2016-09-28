@@ -10,7 +10,7 @@ class ProfileSetImport < Import
   end
 
   def required_headers
-    ProfileSets::Imports::Row::ATTRIBUTE_HEADERS + %w{numeric_response_1}
+    ProfileSets::Imports::Row::ATTRIBUTE_HEADERS + ProfileSets::Imports::Row::MANY_TO_ONE_HEADERS
   end
 
   def row_record(row)

@@ -39,17 +39,13 @@
       to match the response to the right one.
     %li
       Text Response - If the response is for a text question, that text goes
-      here, for other question types leave it blank.
+      here. For other question types leave it blank.
     %li
-      Numeric Response 1, 2, etc. -
-      %ul
-        %li
-          If the response is for a slider question, Numeric Repsonse 1
-          specifies where the slider is, -1, -0.5, 0, 0.5, or 1.0, proceeding from
-          left to right. For this type of question the remaining columns should be blank.
-        %li
-          If the response is for a multiple choice question, the remaining
-          columns specify whether each option is chosen (on or off). They are
-          expected to be in the same order that the options show up in the quiz
-          on this site. Putting a 1 in the column means selected, 0 or blank
-          means not selected.
+      Slider Response - If the response is for a slider question, the value
+      (from -1 to 1) goes here. For other question types, leave it blank.
+    %li
+      Choice 1, 2, ..., 9, 10 -
+      If the response is for a multiple choice question, the "choice"
+      columns specify whether each option is chosen (on or off). They are
+      expected to be in the same order that the options show up in the quiz.
+      Putting a 1 in the column means selected, 0 or blank means not selected.

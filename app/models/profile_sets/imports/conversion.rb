@@ -8,7 +8,7 @@ module ProfileSets
 
       def range_response(question)
         if question.is_a? SurveyQuestions::Range
-          @row.numeric_responses.first
+          @row.slider_response
         end
       end
 

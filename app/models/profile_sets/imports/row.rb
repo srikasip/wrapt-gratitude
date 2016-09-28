@@ -4,8 +4,8 @@ module ProfileSets
 
       include ActiveModel::Model
 
-      ATTRIBUTE_HEADERS = %w{survey_response_name question_code text_response}
-      MANY_TO_ONE_HEADERS = %w{numeric_response_1 numeric_response_2 etc}
+      ATTRIBUTE_HEADERS = %w{survey_response_name question_code text_response slider_response}
+      MANY_TO_ONE_HEADERS = 10.times.map {|number| "choice_#{number + 1}"}
 
       attr_accessor *ATTRIBUTE_HEADERS, :numeric_responses
 
