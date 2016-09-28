@@ -18,11 +18,11 @@ class TrainingSetImport < Import
   end
 
   def row_record(row)
-    question = @preloads[SurveyQuestion, row.question_code]
-    gift = @preloads[Gift, row.gift_sku]
+    question = @preloads[SurveyQuestion][row.question_code]
+    gift = @preloads[Gift][row.gift_sku]
 
     question_impact =
-      @preloads[GiftQuestionImpact, [question.id, gift.id]] ||
+      @preloads[GiftQuestionImpact][[question.id, gift.id]] ||
       question.gift_question_impacts.new(gift: gift)
 
     conversion = TrainingSets::Imports::Conversion.new(row)
