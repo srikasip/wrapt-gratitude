@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160929180458) do
+ActiveRecord::Schema.define(version: 20160929180824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,7 +133,7 @@ ActiveRecord::Schema.define(version: 20160929180458) do
     t.string   "wrapt_sku"
     t.integer  "vendor_id"
     t.decimal  "vendor_retail_price", precision: 10, scale: 2
-    t.decimal  "vendor_cost",         precision: 10, scale: 2
+    t.decimal  "wrapt_cost",          precision: 10, scale: 2
     t.integer  "units_available",                              default: 0, null: false
     t.string   "vendor_sku"
     t.index ["vendor_id"], name: "index_products_on_vendor_id", using: :btree
