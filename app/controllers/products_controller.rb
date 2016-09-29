@@ -78,6 +78,7 @@ class ProductsController < ApplicationController
         :wrapt_cost,
         :units_available,
         :vendor_id,
+        :source_vendor_id,
         :notes,
         product_category_ids: []
       )

@@ -8,4 +8,5 @@ class Product < ApplicationRecord
   has_one :primary_product_image, -> {where primary: true}, class_name: 'ProductImage'
 
   belongs_to :vendor, required: true
+  belongs_to :source_vendor, required: false, class_name: 'Vendor'
 end

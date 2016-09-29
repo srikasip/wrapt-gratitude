@@ -12,6 +12,10 @@
       = @product.vendor&.name
 
     %p
+      %b Source Vendor:
+      = @product.source_vendor&.name
+
+    %p
       %b Price:
       = number_to_currency @product.price
 
