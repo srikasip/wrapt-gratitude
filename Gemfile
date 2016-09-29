@@ -43,7 +43,6 @@ gem 'awesome_nested_set'
 gem 'devise'
 gem 'kaminari'
 gem 'delayed_job_active_record'
-
 # Javascript
 gem 'sprockets-es6'
 
@@ -61,6 +60,7 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'pry-rails'
+  gem 'capistrano3-delayed-job', '~> 1.0'
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
   gem 'capistrano-passenger'
