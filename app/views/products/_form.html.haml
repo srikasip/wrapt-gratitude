@@ -26,5 +26,9 @@
     %h3 Categories
     = f.association :product_categories, as: :check_boxes, collection: ProductCategory.all_for_product_form, label_method: :name_for_product_form
 
+    .row
+      .col-sm-12
+        = f.input :notes, as: :text, input_html: {rows: 6}
+
   .form-actions
     = f.button :submit, class: 'btn btn-primary'

@@ -35,6 +35,10 @@
       - @product.product_categories.each do |category|
         %span.label.label-default= category.name
 
+    %p
+      %b Notes:
+      = @product.notes
+
     - @product.product_images.each do |product_image|
       %p
         = image_tag product_image.image_url(:small)
