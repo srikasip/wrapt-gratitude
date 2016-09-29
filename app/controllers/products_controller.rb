@@ -70,6 +70,7 @@ class ProductsController < ApplicationController
         :description,
         :price,
         :wrapt_sku,
+        :vendor_sku,
         :public,
         :image,
         :remove_image,
