@@ -16,13 +16,13 @@ class ProfileSetImport < Import
   def row_record(row)
     survey_response =
       @preloads[ProfileSetSurveyResponse][row.survey_response_name] ||=
-        profile_set.survey_responses.new(name: row.name)
+        profile_set.survey_responses.new(name: row.survey_response_name)
 
     question = @preloads[SurveyQuestion][row.question_code]
 
     question_response =
       @preloads[SurveyQuestionResponse][[survey_response.id, question.id]] ||
-      survey_response.question_responses.new(question: question)
+      survey_response.question_responses.new(survey_question: question)
 
     conversion = ProfileSets::Imports::Conversion.new(row)
 
