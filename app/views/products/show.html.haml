@@ -43,6 +43,18 @@
       %b Notes:
       = @product.notes
 
+    %p
+      %b Included in the following Gifts:
+      %table.table
+        %tbody
+          - @product.gifts.preload(:primary_gift_image).each do |gift|
+            %tr
+              %td
+                - if gift.primary_gift_image&.image?
+                  = image_tag gift.primary_gift_image.image_url(:small)
+              %td
+                = link_to gift.name, gift
+
     - @product.product_images.each do |product_image|
       %p
         = image_tag product_image.image_url(:small)
