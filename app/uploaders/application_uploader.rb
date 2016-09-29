@@ -10,9 +10,9 @@ class ApplicationUploader < CarrierWave::Uploader::Base
 
   def store_dir
     if Rails.env.production?
-      "uploads/#{model.class.to_s.underscore}/#{mounted_as}/"
+      "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
     else
-      "development-#{`whoami`.chomp}/uploads/#{model.class.to_s.underscore}/#{mounted_as}/"
+      "development-#{`whoami`.chomp}/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
     end
   end
 
