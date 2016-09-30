@@ -46,4 +46,12 @@ class Gift < ApplicationRecord
     end
   end
 
+  def selling_price
+    if calculate_price_from_products?
+      products.sum(:price)
+    else
+      super
+    end
+  end
+
 end

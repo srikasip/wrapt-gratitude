@@ -8,7 +8,8 @@
       .col-xs-2
         = f.input :selling_price, wrapper: :vertical_input_group, label: 'Selling Price' do
           .input-group-addon $
-          = f.input_field :selling_price, class: 'form-control'
+          = f.input_field :selling_price, class: 'form-control', disabled: @gift.calculate_price_from_products?
+        = f.input :calculate_price_from_products, label: 'Auto-Calculate Price from Products'
         = f.input :cost, wrapper: :vertical_input_group do
           .input-group-addon $
           = f.input_field :cost, class: 'form-control', disabled: @gift.calculate_cost_from_products?

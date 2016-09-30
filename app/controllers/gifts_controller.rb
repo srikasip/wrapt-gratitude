@@ -50,9 +50,8 @@ class GiftsController < ApplicationController
       :wrapt_sku,
       :date_available,
       :date_discontinued,
-      :calculate_cost_from_products
+      :calculate_cost_from_products,
+      :calculate_price_from_products,
       )
-    # result[:cost] = nil if result[:calculate_cost_from_products]
-    # result
   end
 end

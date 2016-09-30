@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160930180357) do
+ActiveRecord::Schema.define(version: 20160930182523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,14 +80,15 @@ ActiveRecord::Schema.define(version: 20160930180357) do
   create_table "gifts", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
-    t.decimal  "selling_price",                precision: 10, scale: 2
-    t.decimal  "cost",                         precision: 10, scale: 2
+    t.decimal  "selling_price",                 precision: 10, scale: 2
+    t.decimal  "cost",                          precision: 10, scale: 2
     t.string   "wrapt_sku"
-    t.date     "date_available",                                        default: '1900-01-01', null: false
-    t.date     "date_discontinued",                                     default: '2999-12-31', null: false
-    t.datetime "created_at",                                                                   null: false
-    t.datetime "updated_at",                                                                   null: false
-    t.boolean  "caluclate_cost_from_products",                          default: false,        null: false
+    t.date     "date_available",                                         default: '1900-01-01', null: false
+    t.date     "date_discontinued",                                      default: '2999-12-31', null: false
+    t.datetime "created_at",                                                                    null: false
+    t.datetime "updated_at",                                                                    null: false
+    t.boolean  "calculate_cost_from_products",                           default: false,        null: false
+    t.boolean  "calculate_price_from_products",                          default: false,        null: false
   end
 
   create_table "product_categories", force: :cascade do |t|
