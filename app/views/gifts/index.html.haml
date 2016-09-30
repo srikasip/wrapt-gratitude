@@ -12,6 +12,7 @@
       %th
       %th Title
       %th Description
+      %th Wrapt SKU
       %th Selling price
       %th Availability
       %th
@@ -24,6 +25,7 @@
             = image_tag gift.primary_gift_image.image_url(:small), class: 'admin-index-table--image'
         %td= gift.title
         %td= gift.description
+        %td= gift.wrapt_sku
         %td= number_to_currency gift.selling_price
         %td= gift.availability_string
         %td
