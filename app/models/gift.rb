@@ -38,4 +38,12 @@ class Gift < ApplicationRecord
     (date_discontinued == DEFAULT_DATE_DISCONTINUED) ? '' : date_discontinued.strftime(format)
   end
 
+  def cost
+    if calculate_cost_from_products?
+      products.sum(:wrapt_cost)
+    else
+      super
+    end
+  end
+
 end

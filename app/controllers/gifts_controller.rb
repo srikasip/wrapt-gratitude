@@ -43,6 +43,16 @@ class GiftsController < ApplicationController
   end
 
   private def gift_params
-    params.require(:gift).permit(:title, :description, :selling_price, :cost, :wrapt_sku, :date_available, :date_discontinued)
+    result = params.require(:gift).permit(:title,
+      :description,
+      :selling_price,
+      :cost,
+      :wrapt_sku,
+      :date_available,
+      :date_discontinued,
+      :calculate_cost_from_products
+      )
+    # result[:cost] = nil if result[:calculate_cost_from_products]
+    # result
   end
 end
