@@ -43,7 +43,7 @@ class ProfileSetImport < Import
       response_attribute = ProfileSets::Imports::Row::REQUIRED_RESPONSES_FOR_TYPE[type]
 
       if response_attribute == :numeric_responses
-        if !row.numeric_responses.none? {|response| response == 1}
+        if row.numeric_responses.none? {|response| response == 1}
           headers = ProfileSets::Imports::Row::MANY_TO_ONE_HEADERS
           @row_errors[row.row_number] ||= {}
           @row_errors[row.row_number][headers] ||= []

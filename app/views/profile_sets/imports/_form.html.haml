@@ -20,7 +20,7 @@
   .form-inputs
     = f.input :records_file, as: :file
 
-  - if @profile_set_import.row_errors.any?
+  - if @profile_set_import.try(:row_errors).try(:any?)
     .form-group.has-error
       %span.help-block
         %ul
