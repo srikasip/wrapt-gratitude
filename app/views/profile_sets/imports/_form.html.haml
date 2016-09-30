@@ -20,6 +20,20 @@
   .form-inputs
     = f.input :records_file, as: :file
 
+  - if @profile_set_import.row_errors.any?
+    .form-group.has-error
+      %span.help-block
+        %ul
+          - @profile_set_import.row_errors.each do |row_number, row_error|
+            %li
+              Row #{row_number}
+              %ul
+                - row_error.each do |attribute, messages|
+                  - if attribute.is_a? Array
+                    %li #{attribute.join(', ')}: #{messages.join(', ')}
+                  - else
+                    %li #{attribute}: #{messages.join(', ')}
+
   .form-actions
     = f.submit 'Import', class: 'btn btn-primary'
 
