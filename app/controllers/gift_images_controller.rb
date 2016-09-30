@@ -3,11 +3,18 @@ class GiftImagesController < ApplicationController
 
   def index
     @gift_image = @gift.gift_images.new
+    @uploader = @gift_image.image
+    @uploader.success_action_redirect = new_gift_image_url(@gift)
+  end
+
+  def new
+    @gift_image = @gift.gift_images.new key: params[:key]
   end
 
   def create
     @gift_image = @gift.gift_images.new gift_image_params
     if @gift_image.save
+      flash[:notice] = "Your image was successfully uploaded.  It's still being processed and will be available shortly."
       redirect_to gift_images_path(@gift)
     else
       render :index
@@ -32,7 +39,7 @@ class GiftImagesController < ApplicationController
   end
 
   private def gift_image_params
-    params.require(:gift_image).permit :image
+    params.require(:gift_image).permit :key
   end
 
 end

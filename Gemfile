@@ -36,11 +36,13 @@ gem 'simple_form'
 gem 'haml-rails'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'carrierwave'
+gem 'carrierwave_direct'
 gem "fog-aws"
 gem 'mini_magick'
 gem 'awesome_nested_set'
 gem 'devise'
 gem 'kaminari'
+gem 'delayed_job_active_record'
 
 # For reading an excel file
 gem 'roo'
@@ -48,10 +50,13 @@ gem 'roo'
 # Javascript
 gem 'sprockets-es6'
 
-
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+end
+
+group :production do
+  gem 'daemons'
 end
 
 group :development do
@@ -62,11 +67,13 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'pry-rails'
+  gem 'capistrano3-delayed-job', '~> 1.0'
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
   gem 'capistrano-passenger'
   gem 'capistrano-rvm'
   gem 'seed_dump'
+  gem 'foreman'
 end
 
 group :test do

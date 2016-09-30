@@ -19,6 +19,18 @@
   &.primary img {
     border: solid 4px $brand-primary;
   }
+  &.primary img.loading-spinner {
+    border: none;
+  }
+  .admin__image-loading-wrapper {
+    height: 240px;
+    width: 240px;
+    line-height: 240px;
+  }
+  &.primary .admin__image-loading-wrapper {
+    border-radius: $border-radius-base;
+    border: solid 4px $brand-primary;
+  }
 }
 
 .admin__image-cell-inner {

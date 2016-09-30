@@ -1,4 +1,4 @@
-class ProductImageUploader < ApplicationUploader
+class ProductImageUploader < DirectUploader
 
   version :small do
     process :resize_to_fit => [240, 240]

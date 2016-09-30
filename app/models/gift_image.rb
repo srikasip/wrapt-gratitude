@@ -5,6 +5,8 @@ class GiftImage < ApplicationRecord
   before_create :make_primary_if_only_gift_image
   before_create :set_initial_sort_order
 
+  after_save :enqueue_processing, if: :key, unless: :image_processed?
+
   private def make_primary_if_only_gift_image
     if gift.gift_images.length <= 1
       self.primary = true
@@ -16,5 +18,8 @@ class GiftImage < ApplicationRecord
     self.sort_order = next_sort_order
   end
 
+  private def enqueue_processing
+    DirectUploadedImageProcessingJob.perform_later(self, key)
+  end
 
 end
