@@ -3,10 +3,11 @@ class Import
   include ActiveModel::Model
   extend CarrierWave::Mount
 
-  attr_accessor :records_file
+  attr_accessor :records_file, :row_errors
 
   validates_presence_of :records_file
   validate :presence_of_headers
+  validate :validity_of_rows
 
   def self.importable_name(name = nil, uploader_class = nil)
     if name.present?
@@ -87,6 +88,16 @@ class Import
     end
   end
 
+  def validity_of_rows
+    preload!
+
+    sheet.each {|row| validity_of_row(row)}
+
+    if @row_errors.any?
+      errors.add(:records_file, "Some rows have problems:")
+    end
+  end
+
   #
 
   def add_exception(exception)
@@ -96,5 +107,13 @@ class Import
 
   def sheet
     @_sheet ||= Imports::Sheet.new(records_file, importable.class.to_s.pluralize.constantize)
+  end
+
+  def validity_of_row(row)
+    @row_errors ||= {}
+
+    if !row.valid?
+      @row_errors[row.row_number] = row.errors.messages
+    end
   end
 end

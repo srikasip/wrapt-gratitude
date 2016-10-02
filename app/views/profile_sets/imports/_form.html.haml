@@ -17,11 +17,10 @@
         %span ×
   = f.error_notification
 
-  .form-inputs
-    = f.input :records_file, as: :file
+  .form-inputs= f.input :records_file, as: :file
+  = render 'imports/row_errors', importable: @profile_set_import
 
-  .form-actions
-    = f.submit 'Import', class: 'btn btn-primary'
+  .form-actions= f.submit 'Import', class: 'btn btn-primary'
 
   %h3 Format
   %p Each row is a single response to a single question.

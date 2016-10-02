@@ -16,6 +16,8 @@
       #{@missing_resources_exception.values.join(', ')}
 
   .form-inputs= f.input :records_file, label: 'Impacts File', as: :file
+  = render 'imports/row_errors', importable: @training_set_import
+
   .form-actions= f.submit 'Import', class: 'btn btn-primary'
 
   %h3 Format
