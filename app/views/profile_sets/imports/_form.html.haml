@@ -17,25 +17,10 @@
         %span ×
   = f.error_notification
 
-  .form-inputs
-    = f.input :records_file, as: :file
+  .form-inputs= f.input :records_file, as: :file
+  = render 'imports/row_errors', importable: @profile_set_import
 
-  - if @profile_set_import.try(:row_errors).try(:any?)
-    .form-group.has-error
-      %span.help-block
-        %ul
-          - @profile_set_import.row_errors.each do |row_number, row_error|
-            %li
-              Row #{row_number}
-              %ul
-                - row_error.each do |attribute, messages|
-                  - if attribute.is_a? Array
-                    %li #{attribute.join(', ')}: #{messages.join(', ')}
-                  - else
-                    %li #{attribute}: #{messages.join(', ')}
-
-  .form-actions
-    = f.submit 'Import', class: 'btn btn-primary'
+  .form-actions= f.submit 'Import', class: 'btn btn-primary'
 
   %h3 Format
   %p Each row is a single response to a single question.
