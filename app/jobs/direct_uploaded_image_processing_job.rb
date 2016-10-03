@@ -10,7 +10,8 @@ class DirectUploadedImageProcessingJob < ApplicationJob
     image_owner.image_processed = true
     image_owner.save!
     # TODO make type agnostic
-    ActionCable.server.broadcast "product_image_processing", html: render_product_image(image_owner), product_image_id: image_owner.id
+    puts ">>>>>>>>>> Sending on product_image_processing_#{image_owner.product.id}"
+    ActionCable.server.broadcast "product_image_processing_#{image_owner.product.id}", html: render_product_image(image_owner), product_image_id: image_owner.id
   end
 
   private def render_product_image image_owner
