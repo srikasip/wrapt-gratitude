@@ -1,4 +1,7 @@
 class ProductCategory < ApplicationRecord
+  has_many :products, dependent: :destroy
+  has_many :gifts, dependent: :destroy
+
   acts_as_nested_set
   scope :top_level, -> { where depth: 0 }
 

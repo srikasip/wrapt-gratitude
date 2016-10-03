@@ -14,6 +14,8 @@
           .input-group-addon $
           = f.input_field :cost, class: 'form-control', disabled: @gift.calculate_cost_from_products?
         = f.input :calculate_cost_from_products, label: 'Auto-Calculate Cost from Products'
+        %h3 Category
+        = f.association :product_category, as: :select, collection: ProductCategory.all_for_product_form, label_method: :name_for_product_form
         = f.input :wrapt_sku, label: 'Wrapt SKU'
     = f.input :date_available, html5: true, label: 'Date Available'
     = f.input :date_discontinued, html5: true, label: 'Date Discontinued'

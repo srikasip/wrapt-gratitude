@@ -8,6 +8,8 @@ class Gift < ApplicationRecord
   has_many :gift_images, -> {order :sort_order}, inverse_of: :gift, dependent: :destroy
   has_one :primary_gift_image, -> {where primary: true}, class_name: 'GiftImage'
 
+  belongs_to :product_category, required: true
+
   # These are implemented as not null in the database
   # so we can treat them as not null for sorting purposese
   # and nullable for display purposes

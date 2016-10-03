@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160930182523) do
+ActiveRecord::Schema.define(version: 20161003180709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,8 @@ ActiveRecord::Schema.define(version: 20160930182523) do
     t.datetime "updated_at",                                                                    null: false
     t.boolean  "calculate_cost_from_products",                           default: false,        null: false
     t.boolean  "calculate_price_from_products",                          default: false,        null: false
+    t.integer  "product_category_id"
+    t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
   end
 
   create_table "product_categories", force: :cascade do |t|
@@ -103,15 +105,6 @@ ActiveRecord::Schema.define(version: 20160930182523) do
     t.index ["lft"], name: "index_product_categories_on_lft", using: :btree
     t.index ["parent_id"], name: "index_product_categories_on_parent_id", using: :btree
     t.index ["rgt"], name: "index_product_categories_on_rgt", using: :btree
-  end
-
-  create_table "product_categories_products", force: :cascade do |t|
-    t.integer  "product_category_id"
-    t.integer  "product_id"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-    t.index ["product_category_id"], name: "index_product_categories_products_on_product_category_id", using: :btree
-    t.index ["product_id"], name: "index_product_categories_products_on_product_id", using: :btree
   end
 
   create_table "product_images", force: :cascade do |t|
@@ -140,6 +133,8 @@ ActiveRecord::Schema.define(version: 20160930182523) do
     t.string   "vendor_sku"
     t.text     "notes"
     t.integer  "source_vendor_id"
+    t.integer  "product_category_id"
+    t.index ["product_category_id"], name: "index_products_on_product_category_id", using: :btree
     t.index ["vendor_id"], name: "index_products_on_vendor_id", using: :btree
   end
 
@@ -277,7 +272,9 @@ ActiveRecord::Schema.define(version: 20160930182523) do
   add_foreign_key "gift_question_impacts", "gifts"
   add_foreign_key "gift_question_impacts", "survey_questions"
   add_foreign_key "gift_question_impacts", "training_sets"
+  add_foreign_key "gifts", "product_categories"
   add_foreign_key "product_images", "products"
+  add_foreign_key "products", "product_categories"
   add_foreign_key "products", "vendors"
   add_foreign_key "profile_set_survey_responses", "profile_sets"
   add_foreign_key "profile_sets", "surveys"

@@ -5,6 +5,9 @@
       = link_to 'Edit', edit_gift_path(@gift), class: 'btn btn-default btn-xs'
 
     %p
+      %span.label.label-default= @gift.product_category&.name
+
+    %p
       %b Title:
       = @gift.title
     %p

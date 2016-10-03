@@ -52,6 +52,7 @@ class GiftsController < ApplicationController
       :date_discontinued,
       :calculate_cost_from_products,
       :calculate_price_from_products,
+      :product_category_id
       )
   end
 end
