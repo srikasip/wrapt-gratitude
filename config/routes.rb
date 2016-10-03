@@ -52,6 +52,10 @@ Rails.application.routes.draw do
 
   resource :private_access_session, only: [:new, :create, :destroy]
 
+  if Rails.env.development?
+    resource 'console', only: :show
+  end
+
   root to: 'home_pages#show' 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

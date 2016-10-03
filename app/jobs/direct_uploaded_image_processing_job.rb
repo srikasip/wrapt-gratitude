@@ -9,6 +9,13 @@ class DirectUploadedImageProcessingJob < ApplicationJob
     image_owner.remote_image_url = image_owner.image.direct_fog_url(with_path: true)
     image_owner.image_processed = true
     image_owner.save!
+    # TODO make type agnostic
+    ActionCable.server.broadcast "product_image_processing", html: render_product_image(image_owner), product_image_id: image_owner.id
   end
+
+  private def render_product_image image_owner
+    ApplicationController.renderer.render partial: 'product_images/product_image', locals: {product_image: image_owner}
+  end
+  
 
 end
