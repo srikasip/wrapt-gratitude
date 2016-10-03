@@ -5,9 +5,9 @@ class Import
 
   attr_accessor :records_file, :row_errors
 
-  validates_presence_of :records_file
+  validates_presence_of :records_file, message: 'You must choose a file.'
   validate :presence_of_headers
-  validate :validity_of_rows
+  validate :validity_of_rows, if: 'records_file.present?'
 
   def self.importable_name(name = nil, uploader_class = nil)
     if name.present?
