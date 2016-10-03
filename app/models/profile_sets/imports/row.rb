@@ -20,6 +20,14 @@ module ProfileSets
       }
 
       attr_accessor *ATTRIBUTE_HEADERS, :numeric_responses, :row_number
+      
+      def question_code
+        @question_code.to_s.strip
+      end
+
+      def survey_response_name
+        @survey_response_name.to_s.strip
+      end
 
       validate :having_one_or_zero_of_present_choices
 
