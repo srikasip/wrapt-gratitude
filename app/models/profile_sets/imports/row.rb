@@ -13,12 +13,6 @@ module ProfileSets
 
       MANY_TO_ONE_HEADERS = 10.times.map {|number| "choice_#{number + 1}"}
 
-      REQUIRED_RESPONSES_FOR_TYPE = {
-        'SurveyQuestions::Text' => :text_response,
-        'SurveyQuestions::Range' => :slider_response,
-        'SurveyQuestions::MultipleChoice' => :numeric_responses
-      }
-
       attr_accessor *ATTRIBUTE_HEADERS, :numeric_responses, :row_number
       
       def question_code
