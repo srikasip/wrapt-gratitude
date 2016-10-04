@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
   belongs_to :product_category, required: true
+  belongs_to :product_subcategory, required: true, class_name: 'ProductCategory'
 
   has_many :gift_products, inverse_of: :product, dependent: :destroy
   has_many :gifts, through: :gift_products

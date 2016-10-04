@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161003180709) do
+ActiveRecord::Schema.define(version: 20161004154929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20161003180709) do
     t.boolean  "primary",         default: false, null: false
     t.integer  "sort_order",      default: 0,     null: false
     t.boolean  "image_processed", default: false, null: false
+    t.string   "type"
     t.index ["gift_id"], name: "index_gift_images_on_gift_id", using: :btree
     t.index ["primary"], name: "index_gift_images_on_primary", using: :btree
   end
@@ -89,6 +90,7 @@ ActiveRecord::Schema.define(version: 20161003180709) do
     t.boolean  "calculate_cost_from_products",                           default: false,        null: false
     t.boolean  "calculate_price_from_products",                          default: false,        null: false
     t.integer  "product_category_id"
+    t.integer  "product_subcategory_id"
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
   end
 
@@ -101,6 +103,7 @@ ActiveRecord::Schema.define(version: 20161003180709) do
     t.integer  "children_count", default: 0, null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.string   "wrapt_sku_code"
     t.index ["lft"], name: "index_product_categories_on_lft", using: :btree
     t.index ["parent_id"], name: "index_product_categories_on_parent_id", using: :btree
     t.index ["rgt"], name: "index_product_categories_on_rgt", using: :btree
@@ -121,18 +124,19 @@ ActiveRecord::Schema.define(version: 20161003180709) do
   create_table "products", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
-    t.decimal  "price",               precision: 10, scale: 2
-    t.datetime "created_at",                                               null: false
-    t.datetime "updated_at",                                               null: false
+    t.decimal  "price",                  precision: 10, scale: 2
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
     t.string   "wrapt_sku"
     t.integer  "vendor_id"
-    t.decimal  "vendor_retail_price", precision: 10, scale: 2
-    t.decimal  "wrapt_cost",          precision: 10, scale: 2
-    t.integer  "units_available",                              default: 0, null: false
+    t.decimal  "vendor_retail_price",    precision: 10, scale: 2
+    t.decimal  "wrapt_cost",             precision: 10, scale: 2
+    t.integer  "units_available",                                 default: 0, null: false
     t.string   "vendor_sku"
     t.text     "notes"
     t.integer  "source_vendor_id"
     t.integer  "product_category_id"
+    t.integer  "product_subcategory_id"
     t.index ["product_category_id"], name: "index_products_on_product_category_id", using: :btree
     t.index ["vendor_id"], name: "index_products_on_vendor_id", using: :btree
   end
@@ -258,8 +262,9 @@ ActiveRecord::Schema.define(version: 20161003180709) do
     t.string   "email"
     t.string   "phone"
     t.text     "notes"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.string   "wrapt_sku_code"
   end
 
   add_foreign_key "evaluation_recommendations", "gifts"

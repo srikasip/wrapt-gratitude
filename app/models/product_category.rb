@@ -4,6 +4,7 @@ class ProductCategory < ApplicationRecord
 
   acts_as_nested_set
   scope :top_level, -> { where depth: 0 }
+  scope :subcategories, -> { where depth: 1 }
 
   # returns an array of all product categories
   # with sub categories following their parent
