@@ -57,7 +57,9 @@ class TrainingSetImport < Import
         end
 
         missing.keys.each do |header|
-          @row_errors[row.row_number]["choice_#{header + 1}_impact"] << "can't be blank"
+          full_header = "choice_#{header + 1}_impact"
+          @row_errors[row.row_number][full_header] ||= []
+          @row_errors[row.row_number][full_header] << "can't be blank"
         end
       end
     end
