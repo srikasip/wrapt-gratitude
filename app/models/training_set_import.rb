@@ -37,34 +37,6 @@ class TrainingSetImport < Import
     question_impact
   end
 
-  def validity_of_row(row)
-    super
-    question = @preloads[SurveyQuestion][row.question_code]
-
-    type = question.try(:type)
-
-    if type
-      case type
-      when 'SurveyQuestions::MultipleChoice'
-        impacts = row.response_impacts
-
-        missing = question.options.map.with_index do |option, index|
-          !impacts[index].present? && [index, impacts[index]]
-        end.select(&:itself).to_h
-
-        if missing.any?
-          @row_errors[row.row_number] ||= {}
-        end
-
-        missing.keys.each do |header|
-          full_header = "choice_#{header + 1}_impact"
-          @row_errors[row.row_number][full_header] ||= []
-          @row_errors[row.row_number][full_header] << "can't be blank"
-        end
-      end
-    end
-  end
-
   #
 
   def preload_question_impacts!

@@ -15,7 +15,7 @@ module TrainingSets
 
       attr_accessor *ATTRIBUTE_HEADERS, :response_impacts, :row_number
 
-      validates_presence_of :gift_sku, :question_code, :question_impact
+      validates_presence_of :gift_sku, :question_code
 
       def gift_sku
         @gift_sku.to_s.strip

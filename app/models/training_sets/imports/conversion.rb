@@ -7,11 +7,13 @@ module TrainingSets
       end
 
       def question_impact
-        @row.question_impact
+        @row.question_impact || 0
       end
 
       def range_impact_direct_correlation(question)
-        !question.is_a?(SurveyQuestions::Range) || @row.response_impacts.first.to_i == 1
+        if question.is_a?(SurveyQuestions::Range)
+          !@row.slider_impact_direction.present? || @row.slider_impact_direction == 1
+        end
       end
 
       def response_impacts(question)
@@ -22,7 +24,7 @@ module TrainingSets
 
           @row.response_impacts.each do |impact|
             if options[i].present?
-              impacts << options[i].training_set_response_impacts.new(impact: impact)
+              impacts << options[i].training_set_response_impacts.new(impact: impact || 0)
             end
             i += 1
           end
