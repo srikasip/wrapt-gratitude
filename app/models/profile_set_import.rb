@@ -35,28 +35,6 @@ class ProfileSetImport < Import
     question_response
   end
 
-  def validity_of_row(row)
-    super
-
-    type = @preloads[SurveyQuestion][row.question_code].try(:type)
-    if type
-      response_attribute = ProfileSets::Imports::Row::REQUIRED_RESPONSES_FOR_TYPE[type]
-
-      if response_attribute == :numeric_responses
-        if row.numeric_responses.none? {|response| response == 1}
-          headers = ProfileSets::Imports::Row::MANY_TO_ONE_HEADERS
-          @row_errors[row.row_number] ||= {}
-          @row_errors[row.row_number][headers] ||= []
-          @row_errors[row.row_number][headers] << "one of them must have a '1'"
-        end
-      elsif !row.send(response_attribute).present?
-        @row_errors[row.row_number] ||= {}
-        @row_errors[row.row_number][response_attribute] ||= []
-        @row_errors[row.row_number][response_attribute] << "can't be blank"
-      end
-    end
-  end
-
   #
 
   def preload_question_responses!

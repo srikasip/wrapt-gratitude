@@ -80,7 +80,8 @@ class ProductsController < ApplicationController
         :vendor_id,
         :source_vendor_id,
         :notes,
-        product_category_ids: []
+        :product_category_id,
+        :product_subcategory_id
       )
     end
 end

@@ -4,6 +4,7 @@
   .form-inputs
     = f.input :name
     = f.association :parent, collection: ProductCategory.top_level
+    = f.input :wrapt_sku_code, label: 'SKU Code (3 uppercase letters)'
 
   .form-actions
     = f.button :submit, 'Update Product Category', class: 'btn btn-primary'

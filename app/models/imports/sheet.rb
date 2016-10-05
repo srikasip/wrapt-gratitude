@@ -3,6 +3,10 @@ module Imports
     attr_accessor :cached_columns
 
     def initialize(uploader, importable_class)
+      if !uploader || !uploader.file
+        raise Exceptions::NoFileForSheet.new
+      end
+
       @cached_columns = {}
       @roo_sheet = Roo::Spreadsheet.open(uploader.file)
       @importable_class = importable_class

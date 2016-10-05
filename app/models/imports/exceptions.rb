@@ -15,5 +15,8 @@ module Imports
         @lookups
       end
     end
+
+    class NoFileForSheet < StandardError
+    end
   end
 end
