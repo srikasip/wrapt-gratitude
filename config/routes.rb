@@ -4,7 +4,9 @@ Rails.application.routes.draw do
   get 'home_pages/show'
   devise_for :users
   
-  resources :product_categories
+  resources :product_categories, except: :show do
+    resource :subcategories, controller: 'product_subcategories', only: :show
+  end
   resources :products do
     resources :images, only: [:index, :new, :create, :destroy], controller: 'product_images' do
       member { post 'make_primary' }

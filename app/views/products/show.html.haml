@@ -36,8 +36,8 @@
       = @product.wrapt_sku
 
     %p
-      - @product.product_categories.each do |category|
-        %span.label.label-default= category.name
+      %span.label.label-default= @product.product_category&.name
+      %span.label.label-default= @product.product_subcategory&.name
 
     %p
       %b Notes:

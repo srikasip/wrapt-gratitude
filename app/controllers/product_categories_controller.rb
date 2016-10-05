@@ -7,11 +7,6 @@ class ProductCategoriesController < ApplicationController
     @product_categories = ProductCategory.top_level.preload(:children)
   end
 
-  # GET /product_categories/1
-  # GET /product_categories/1.json
-  def show
-  end
-
   # GET /product_categories/new
   def new
     @product_category = ProductCategory.new
@@ -28,7 +23,7 @@ class ProductCategoriesController < ApplicationController
 
     respond_to do |format|
       if @product_category.save
-        format.html { redirect_to @product_category, notice: 'Product category was successfully created.' }
+        format.html { redirect_to product_categories_path, notice: 'Product category was successfully created.' }
         format.json { render :show, status: :created, location: @product_category }
       else
         format.html { render :new }
@@ -42,7 +37,7 @@ class ProductCategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @product_category.update(product_category_params)
-        format.html { redirect_to @product_category, notice: 'Product category was successfully updated.' }
+        format.html { redirect_to product_categories_path, notice: 'Product category was successfully updated.' }
         format.json { render :show, status: :ok, location: @product_category }
       else
         format.html { render :edit }
@@ -71,11 +66,8 @@ class ProductCategoriesController < ApplicationController
     def product_category_params
       params.require(:product_category).permit(
         :name,
-        :lft,
-        :rgt,
         :parent_id,
-        :depth,
-        :children_count
+        :wrapt_sku_code
       )
     end
 end
