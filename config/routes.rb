@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get 'home_pages/show'
   devise_for :users
   
-  resources :product_categories do
+  resources :product_categories, except: :show do
     resource :subcategories, controller: 'product_subcategories', only: :show
   end
   resources :products do
