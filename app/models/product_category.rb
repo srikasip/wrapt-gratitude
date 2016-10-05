@@ -10,9 +10,9 @@ class ProductCategory < ApplicationRecord
 
   validates :wrapt_sku_code, presence: true, format: {with: /\A[A-Z]{3}\z/, message: 'must be 3 uppercase letters'}, uniqueness: true
   
-  # attr_accessor :skus_need_regeneration
-  # before_save :set_skus_need_regeneration, if: :wrapt_sku_code_changed?
-  # after_save :regenerate_dependent_skus!, if: :skus_need_regeneration
+  attr_accessor :skus_need_regeneration
+  before_save :set_skus_need_regeneration, if: :wrapt_sku_code_changed?
+  after_save :regenerate_dependent_skus!, if: :skus_need_regeneration
 
   # returns an array of all product categories
   # with sub categories following their parent
