@@ -12,7 +12,7 @@ class Gift < ApplicationRecord
   belongs_to :product_category, required: true
   belongs_to :product_subcategory, required: true, class_name: 'ProductCategory'
 
-  before_save :generate_wrapt_sku, if: :sku_needs_updating?
+  # before_save :generate_wrapt_sku, if: :sku_needs_updating?
 
   # These are implemented as not null in the database
   # so we can treat them as not null for sorting purposese

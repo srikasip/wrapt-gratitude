@@ -11,7 +11,7 @@ class Product < ApplicationRecord
   belongs_to :vendor, required: true
   belongs_to :source_vendor, required: false, class_name: 'Vendor'
 
-  before_save :generate_wrapt_sku, if: :sku_needs_updating?
+  # before_save :generate_wrapt_sku, if: :sku_needs_updating?
 
   private def sku_prefix
     segments = []
