@@ -2,7 +2,7 @@ class Vendor < ApplicationRecord
   has_many :products, inverse_of: :vendor, dependent: :destroy
 
 
-  validates :wrapt_sku_code, presence: true, format: {with: /\A[A-Z]{2}\z/, message: 'must be 2 uppercase letters'}
+  validates :wrapt_sku_code, presence: true, format: {with: /\A[A-Z]{2}\z/, message: 'must be 2 uppercase letters'}, uniqueness: true
   
   attr_accessor :skus_need_regeneration
   before_save :set_skus_need_regeneration, if: :wrapt_sku_code_changed?

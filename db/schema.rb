@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161004181937) do
+ActiveRecord::Schema.define(version: 20161005143748) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 20161004181937) do
     t.integer  "product_category_id"
     t.integer  "product_subcategory_id"
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
+    t.index ["wrapt_sku"], name: "index_gifts_on_wrapt_sku", using: :btree
   end
 
   create_table "product_categories", force: :cascade do |t|
@@ -107,6 +108,7 @@ ActiveRecord::Schema.define(version: 20161004181937) do
     t.index ["lft"], name: "index_product_categories_on_lft", using: :btree
     t.index ["parent_id"], name: "index_product_categories_on_parent_id", using: :btree
     t.index ["rgt"], name: "index_product_categories_on_rgt", using: :btree
+    t.index ["wrapt_sku_code"], name: "index_product_categories_on_wrapt_sku_code", using: :btree
   end
 
   create_table "product_images", force: :cascade do |t|
@@ -139,6 +141,7 @@ ActiveRecord::Schema.define(version: 20161004181937) do
     t.integer  "product_subcategory_id"
     t.index ["product_category_id"], name: "index_products_on_product_category_id", using: :btree
     t.index ["vendor_id"], name: "index_products_on_vendor_id", using: :btree
+    t.index ["wrapt_sku"], name: "index_products_on_wrapt_sku", using: :btree
   end
 
   create_table "profile_set_survey_responses", force: :cascade do |t|
@@ -265,6 +268,7 @@ ActiveRecord::Schema.define(version: 20161004181937) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.string   "wrapt_sku_code"
+    t.index ["wrapt_sku_code"], name: "index_vendors_on_wrapt_sku_code", using: :btree
   end
 
   add_foreign_key "evaluation_recommendations", "gifts"
