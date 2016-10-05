@@ -30,11 +30,13 @@ class SurveyQuestion < ApplicationRecord
   end
 
   def prompt_with_name survey_response
+    result = prompt
     if name_question = survey.name_question
       if name_response = survey_response.question_responses.where(survey_question: name_question).first&.text_response.presence
-        prompt.gsub '<name>', name_response
+        result = prompt.gsub '<name>', name_response
       end
     end
+    return result
   end
 
 end
