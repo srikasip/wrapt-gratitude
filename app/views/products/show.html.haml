@@ -4,6 +4,8 @@
       = @product.title
       = link_to 'Edit', edit_product_path(@product), class: 'btn btn-default btn-xs'
 
+    %p= link_to "Create a Gift from this Product", product_single_product_gift_path(@product), class: 'btn btn-primary', data: {method: :post}
+
     %p
       = @product.description
 
