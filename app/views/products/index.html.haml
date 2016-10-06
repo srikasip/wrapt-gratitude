@@ -14,6 +14,7 @@
           %th
           %th Title
           %th Wrapt SKU
+          %th Categories
           %th Wrapt Cost
           %th Vendor Retail Price
           %th Units Available
@@ -28,6 +29,11 @@
                 = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image'
             %td= product.title
             %td= product.wrapt_sku
+            %td
+              - if product.product_category.present?
+                %span.label.label-default= product.product_category&.name
+              - if product.product_subcategory.present?
+                %span.label.label-default= product.product_subcategory&.name
             %td= number_to_currency product.wrapt_cost
             %td= number_to_currency product.vendor_retail_price
             %td= number_with_delimiter product.units_available

@@ -2,7 +2,10 @@ class GiftsController < ApplicationController
   before_action :set_gift, only: [:show, :edit, :update, :destroy]
 
   def index
-    @gifts = Gift.all
+    @gifts = Gift
+      .includes(:product_category, :product_subcategory)
+      .page(params[:page])
+      .per(50)
   end
 
   def show
