@@ -102,4 +102,8 @@ class Gift < ApplicationRecord
     products.first
   end
 
+  def self.default_product_category
+    ProductCategory.where(wrapt_sku_code: 'GFT').first_or_create!(name: 'Gift')
+  end
+
 end
