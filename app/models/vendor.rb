@@ -14,8 +14,8 @@ class Vendor < ApplicationRecord
 
   private def regenerate_dependent_skus!
     products.order(:wrapt_sku).each do |product|
-      product.generate_wrapt_sku
-      product.save validate: false
+      product.generate_wrapt_sku!
+      product.regenerate_dependent_skus!
     end
   end
 

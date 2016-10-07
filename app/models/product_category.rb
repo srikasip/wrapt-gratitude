@@ -52,8 +52,7 @@ class ProductCategory < ApplicationRecord
 
     relations.each do |relation|
       relation.order(:wrapt_sku).each do |skuable|
-        skuable.generate_wrapt_sku
-        skuable.save validate: false
+        skuable.generate_wrapt_sku!
       end
     end
   end
