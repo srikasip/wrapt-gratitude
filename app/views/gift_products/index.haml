@@ -21,6 +21,7 @@
         %thead
           %th
           %th Title
+          %th SKU
           %th Units Available 
           %th
         %tbody
@@ -30,7 +31,8 @@
               %td.admin__gift-available-products
                 - if product.primary_product_image.present?
                   = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image'
-              %td= product.title
+              %td= link_to product.title, product
+              %td= product.wrapt_sku
               %td= number_with_delimiter product.units_available
               %td= link_to 'Remove', gift_product_path(@gift, gift_product, context_params), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'btn btn-xs btn-danger'
 
@@ -53,7 +55,7 @@
         %thead
           %th
           %th Title
-          %th Wrapt SKU
+          %th SKU
           %th Units Available 
           %th
         %tbody
@@ -62,7 +64,7 @@
               %td.admin-index-table--image-cell
                 - if product.primary_product_image.present?
                   = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image'
-              %td= product.title
+              %td= link_to product.title, product
               %td= product.wrapt_sku
               %td= number_with_delimiter product.units_available
               %td= link_to 'Add', gift_products_path(@gift, context_params.merge(gift_product: {product_id: product.id})), method: 'post', class: 'btn btn-xs btn-primary'
