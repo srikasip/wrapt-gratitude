@@ -10,7 +10,7 @@
         = form.input :code, hint: '(required for importing)'
 
       .form-actions.pb4
-        = form.submit 'Save Prompt and Code', class: 'btn btn-primary'
+        = form.submit '1. Save Prompt and Code', class: 'btn btn-primary'
 
     %h3 Choices
     %ol.pl5.edit-question-list.question-list{data: {option_list: true, sortable_list: true, sortable_list_href: survey_question_option_ordering_path(@survey, @survey_question)}, class: option_list_classes}
@@ -31,7 +31,7 @@
           = form.input :multiple_option_responses, as: :boolean, label: 'Allow multiple selections'
 
       .form-actions
-        = form.submit 'Save Options', class: 'btn btn-primary'
+        = form.submit '2. Save Options', class: 'btn btn-primary'
 
   .col-sm-6
     = render 'preview'

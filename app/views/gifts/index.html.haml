@@ -6,18 +6,18 @@
   .col-sm-12
     = link_to 'Add a Gift', new_gift_path, class: 'btn btn-primary'
 
+
 .row
   .col-sm-12
     %table.table
       %thead
         %tr
           %th
-          %th Title
-          %th Description
-          %th Wrapt SKU
+          %th Title & Description
           %th Categories
-          %th Selling price
-          %th Availability
+          %th Wrapt SKU
+          %th.text-right Selling price
+          %th.text-right Availability
           %th
 
       %tbody
@@ -26,19 +26,19 @@
             %td.admin-index-table--image-cell
               - if gift.primary_gift_image.present?
                 = image_tag gift.primary_gift_image.image_url(:small), class: 'admin-index-table--image'
-            %td= gift.title
-            %td= gift.description
-            %td= gift.wrapt_sku
+            %td
+              %h4.admin-index-table--item-title= gift.title
+              .admin-index-table--item-description= gift.description
             %td
               - if gift.product_category.present?
                 %span.label.label-default= gift.product_category&.name
               - if gift.product_subcategory.present?
                 %span.label.label-default= gift.product_subcategory&.name
-            %td= number_to_currency gift.selling_price
-            %td= gift.availability_string
-            %td
+            %td= gift.wrapt_sku
+            %td.text-right= number_to_currency gift.selling_price
+            %td.text-right= gift.availability_string
+            %td.admin-index-table--buttons-cell
               = link_to 'View', gift, class: 'btn btn-default btn-xs'
               = link_to 'Edit', edit_gift_path(gift), class: 'btn btn-default btn-xs'
-              = link_to 'Delete', gift, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
-
+              = link_to 'Delete', gift, :method => :delete, :data => { :confirm => 'Are you sure you want to delete this gift?' }, class: 'btn btn-danger btn-xs'
     %p= paginate @gifts
