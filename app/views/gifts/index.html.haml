@@ -13,8 +13,8 @@
       %th Title
       %th Description
       %th Wrapt SKU
-      %th Selling price
-      %th Availability
+      %th.text-right Selling price
+      %th.text-right Availability
       %th
 
   %tbody
@@ -26,9 +26,9 @@
         %td= gift.title
         %td= gift.description
         %td= gift.wrapt_sku
-        %td= number_to_currency gift.selling_price
-        %td= gift.availability_string
-        %td
+        %td.text-right= number_to_currency gift.selling_price
+        %td.text-right= gift.availability_string
+        %td.admin-index-table--buttons-cell
           = link_to 'View', gift, class: 'btn btn-default btn-xs'
           = link_to 'Edit', edit_gift_path(gift), class: 'btn btn-default btn-xs'
           = link_to 'Delete', gift, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
