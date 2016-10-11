@@ -10,6 +10,7 @@ class SurveyCopyingJob < ApplicationJob
     copy_question_options!
   ensure
     @target_survey.update! copy_in_progress: false
+    ActionCable.server.broadcast "survey_copyings", html: render_survey(target_survey), survey_id: target_survey.id
   end
 
   private def copy_questions!
@@ -42,7 +43,10 @@ class SurveyCopyingJob < ApplicationJob
     target_option.remote_image_url = source_option.image.url
   end
   
-  
+  private def render_survey survey
+    ApplicationController.renderer.render partial: 'surveys/survey', locals: {survey: survey}
+  end
+      
   
 
 end

@@ -12,6 +12,7 @@ class PrivateAccessSessionsController < ApplicationController
     @private_access_session = PrivateAccessSession.new create_params
     if @private_access_session.save
       session[:private_access_granted] = true
+      cookies.signed[:private_access_granted] = true
       redirect_to root_path
     else
       render :new

@@ -23,11 +23,8 @@
       .col-sm-3.admin__image-col{data: {sortable_item: true, sortable_item_id: product_image.id}}
         .admin__image-cell{class: ('primary' if product_image.primary?)}
           .admin__image-cell-inner
-            - if product_image.image_processed?
-              = image_tag product_image.image_url(:small)
-            - else
-              .admin__image-loading-wrapper
-                = image_tag 'ajax-loader.gif', class: 'loading-spinner'
+            %div{data: {product_image_id: product_image.id}}
+              = render product_image
             .admin__image-actions.left
               %span.btn.btn-xs.btn-default.admin__image-hover-link
                 %i.glyphicon.glyphicon-move
@@ -46,4 +43,6 @@
   :javascript
     new App.Admin.ImageUploadForm($('[data-image-upload-form]')[0])
     new App.SortableList($('[data-sortable-list]')[0], {placeholder: 'col-sm-3'});
+    // turning this off because gift images aren't supported yet and we don't want them to look broken
+    //new App.Admin.ProductImageProcessingSubscription(#{@product.id})
 
