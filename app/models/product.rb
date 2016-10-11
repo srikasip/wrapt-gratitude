@@ -13,6 +13,10 @@ class Product < ApplicationRecord
 
   before_save :generate_wrapt_sku, if: :sku_needs_updating?
 
+  attr_accessor :dependent_skus_need_regeneration
+  before_save :set_dependent_skus_need_regeneration, if: :vendor_id_changed?
+  after_save :regenerate_dependent_skus!, if: :dependent_skus_need_regeneration
+
   private def sku_prefix
     segments = []
     segments << "P"
@@ -41,12 +45,28 @@ class Product < ApplicationRecord
     self.wrapt_sku = "#{sku_prefix}-#{next_sku_unique_id}"
   end
 
+  def generate_wrapt_sku! **save_opts
+    generate_wrapt_sku
+    save({validate: false}.merge save_opts)
+  end
+
   private def sku_needs_updating?
     vendor_id_changed? ||
     product_category_id_changed? ||
     product_subcategory_id_changed?
   end
-  
-  
+
+  private def set_dependent_skus_need_regeneration
+    self.dependent_skus_need_regeneration = true
+  end
+
+  def regenerate_dependent_skus!
+    gifts.preload(:products).each do |gift|
+      if gift.vendor_product == self
+        gift.generate_wrapt_sku
+        gift.save validate: false
+      end
+    end
+  end
 
 end

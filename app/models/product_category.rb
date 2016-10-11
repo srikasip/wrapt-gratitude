@@ -1,8 +1,8 @@
 class ProductCategory < ApplicationRecord
-  has_many :products, dependent: :destroy
-  has_many :products_as_subcategory, dependent: :destroy, foreign_key: :product_subcategory_id, class_name: 'Product'
-  has_many :gifts, dependent: :destroy
-  has_many :gifts_as_subcategory, dependent: :destroy, foreign_key: :gift_subcategory_id, class_name: 'Gift'
+  has_many :products
+  has_many :products_as_subcategory, foreign_key: :product_subcategory_id, class_name: 'Product'
+  has_many :gifts
+  has_many :gifts_as_subcategory, foreign_key: :product_subcategory_id, class_name: 'Gift'
 
   acts_as_nested_set
   scope :top_level, -> { where depth: 0 }
@@ -52,8 +52,7 @@ class ProductCategory < ApplicationRecord
 
     relations.each do |relation|
       relation.order(:wrapt_sku).each do |skuable|
-        skuable.generate_wrapt_sku
-        skuable.save validate: false
+        skuable.generate_wrapt_sku!
       end
     end
   end

@@ -17,6 +17,10 @@ class GiftProductsController < ApplicationController
   def create
     @gift_product = @gift.gift_products.new gift_product_params
     if @gift_product.save
+      # generate the wrapt sku if this is the first product
+      if @gift.gift_products.first == @gift_product
+        @gift.generate_wrapt_sku!
+      end
       redirect_to gift_products_path(@gift, context_params)
     else
       render :index
@@ -26,6 +30,9 @@ class GiftProductsController < ApplicationController
   def destroy
     @gift_product = @gift.gift_products.find params[:id]
     @gift_product.destroy
+    if @gift.gift_products.empty?
+      @gift.generate_wrapt_sku!
+    end
     redirect_to gift_products_path(@gift, context_params)
   end
 

@@ -52,9 +52,11 @@
               %td
                 - if gift.primary_gift_image&.image?
                   = image_tag gift.primary_gift_image.image_url(:small)
-              %td
-                = link_to gift.name, gift
+              %td= link_to gift.name, gift
+              %td= gift.wrapt_sku
 
+    %p
+      %b Images:
     - @product.product_images.each do |product_image|
       %p
         = image_tag product_image.image_url(:small)

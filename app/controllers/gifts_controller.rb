@@ -9,7 +9,7 @@ class GiftsController < ApplicationController
   end
 
   def new
-    @gift = Gift.new date_available: Date.today
+    @gift = Gift.new date_available: Date.today, product_category: Gift.default_product_category
   end
 
   def edit

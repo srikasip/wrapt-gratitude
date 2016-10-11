@@ -64,7 +64,7 @@ class Gift < ApplicationRecord
     segments = []
     segments << "G"
 
-    vendor_sku = "XX"
+    vendor_sku = vendor_product&.vendor&.wrapt_sku_code.presence || "XX"
     segments << vendor_sku
 
     category_sku = product_category&.wrapt_sku_code.presence || "XXX"
@@ -88,9 +88,22 @@ class Gift < ApplicationRecord
     self.wrapt_sku = "#{sku_prefix}-#{next_sku_unique_id}"
   end
 
+  def generate_wrapt_sku! **save_opts
+    generate_wrapt_sku
+    save({validate: false}.merge save_opts)
+  end
+
   private def sku_needs_updating?
     product_category_id_changed? ||
     product_subcategory_id_changed?
+  end
+
+  def vendor_product
+    products.first
+  end
+
+  def self.default_product_category
+    ProductCategory.where(wrapt_sku_code: 'GFT').first_or_create!(name: 'Gift')
   end
 
 end

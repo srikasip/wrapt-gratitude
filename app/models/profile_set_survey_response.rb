@@ -1,7 +1,7 @@
 class ProfileSetSurveyResponse < ApplicationRecord
   belongs_to :profile_set
 
-  has_many :question_responses, inverse_of: :survey_response, class_name: 'SurveyQuestionResponse', dependent: :destroy
+  has_many :question_responses, -> {order :id}, inverse_of: :survey_response, class_name: 'SurveyQuestionResponse', dependent: :destroy
   has_many :evaluation_recommendations, dependent: :destroy
 
 
