@@ -9,10 +9,8 @@
 .row
   .col-sm-12
     %table.table
-      %thead
-        %tr
-          %th Name
-
       %tbody
         - @surveys.each do |survey|
-          %td= link_to survey.title, survey
+          %tr
+            %td
+              = link_to survey.title, survey

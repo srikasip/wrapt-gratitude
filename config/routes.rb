@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       resource :option_ordering, only: :create, controller: 'survey_question_option_orderings'
     end
     resource :question_ordering, only: :create, controller: 'survey_question_orderings'
+    resource :copying, only: :create, controller: 'survey_copyings'
   end
 
   resources :training_sets do
