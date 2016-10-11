@@ -43,5 +43,6 @@
   :javascript
     new App.Admin.ImageUploadForm($('[data-image-upload-form]')[0])
     new App.SortableList($('[data-sortable-list]')[0], {placeholder: 'col-sm-3'});
-    new App.Admin.ProductImageProcessingSubscription(#{@product.id})
+    // turning this off because gift images aren't supported yet and we don't want them to look broken
+    //new App.Admin.ProductImageProcessingSubscription(#{@product.id})
 
