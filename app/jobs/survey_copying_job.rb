@@ -2,19 +2,14 @@ class SurveyCopyingJob < ApplicationJob
 
   attr_reader :source_survey, :target_survey
 
-  def perform source_survey
+  def perform source_survey, target_survey
     @source_survey = source_survey
-    @target_survey = Survey.new
+    @target_survey = target_survey
     @question_mapping = {}
-
-    @target_survey.title = "Copy of #{source_survey.title}"
-    if @target_survey.save
-      copy_questions!
-      copy_question_options!
-      return true
-    else
-      return false
-    end
+    copy_questions!
+    copy_question_options!
+  ensure
+    @target_survey.update! copy_in_progress: false
   end
 
   private def copy_questions!

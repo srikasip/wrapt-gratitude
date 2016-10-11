@@ -2,14 +2,11 @@ class SurveyCopyingsController < ApplicationController
   before_filter :find_survey
 
   def create
-    copying = SurveyCopyingJob.new
-    if copying.perform @survey
-      flash[:notice] = 'Survey copied successfully.'
-      redirect_to copying.target_survey
-    else
-      flash[:alert] = 'Sorry, there was a problem copying the survey'
-      redirect_to [:edit, @survey]
-    end
+    target_survey = Survey.new title: "Copy of #{@survey.title}", copy_in_progress: true
+    target_survey.save!
+    SurveyCopyingJob.perform_later @survey, target_survey
+    flash[:notice] = "We've begun copying that quiz.  It will be ready shortly."
+    redirect_to surveys_path
   end
 
   private def find_survey
