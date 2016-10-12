@@ -8,11 +8,11 @@
 
 .row
   .col-sm-12
-    = form_for @product_search, url: products_path, html: {method: 'GET', class: 'form-inline'} do |form|
+    = form_for @product_search, url: products_path, html: {method: 'GET', class: 'form-inline', data: {behavior: 'form-loads-subcategories'}} do |form|
       .form-group
         = form.search_field :keyword, placeholder: 'Title or SKU', class: 'form-control', style: 'min-width: 300px;'
-        = form.collection_select :product_category_id, ProductCategory.categories, :id, :name, {prompt: 'Category'}, class: 'form-control'
-        = form.collection_select :product_subcategory_id, ProductCategory.subcategories, :id, :name, {prompt: 'Subcategory'}, class: 'form-control'
+        = form.collection_select :product_category_id, ProductCategory.categories, :id, :name, {prompt: 'Category'}, class: 'form-control', data: {behavior: 'product-category-input'}
+        = form.collection_select :product_subcategory_id, ProductCategory.subcategories.where(parent_id: @product_search.product_category_id), :id, :name, {prompt: 'Sub-category'}, class: 'form-control', data: {behavior: 'product-subcategory-input'}
         %button.btn.btn-primary
           %i.glyphicon.glyphicon-search
           Search
@@ -55,5 +55,8 @@
               = link_to 'Delete', product_path(product, context_params), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
 
     %p=paginate @products
+
+:javascript
+  new App.Admin.ProductSubcategoryLoader({prompt: 'Sub-category'})
 
 
