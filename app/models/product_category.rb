@@ -5,7 +5,8 @@ class ProductCategory < ApplicationRecord
   has_many :gifts_as_subcategory, foreign_key: :product_subcategory_id, class_name: 'Gift'
 
   acts_as_nested_set
-  scope :top_level, -> { where depth: 0 }
+  scope :categories, -> { where depth: 0 }
+  scope :categories, -> { where depth: 0 }
   scope :subcategories, -> { where depth: 1 }
 
   validates :wrapt_sku_code, presence: true, format: {with: /\A[A-Z]{3}\z/, message: 'must be 3 uppercase letters'}, uniqueness: true
@@ -18,7 +19,7 @@ class ProductCategory < ApplicationRecord
   # with sub categories following their parent
   def self.all_for_product_form
     [].tap do |result|
-      top_level.order(:id).preload(:children).each do |category|
+      categories.order(:id).preload(:children).each do |category|
         result << category
         category.children.each do |subcategory|
           result << subcategory
@@ -35,7 +36,7 @@ class ProductCategory < ApplicationRecord
     end
   end
 
-  def top_level?
+  def categories?
     depth == 0
   end
 
@@ -44,7 +45,7 @@ class ProductCategory < ApplicationRecord
   end
 
   private def regenerate_dependent_skus!
-    if top_level?
+    if categories?
       relations = [products, gifts]  
     else
       relations = [products_as_subcategory, gifts_as_subcategory]

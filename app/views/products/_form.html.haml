@@ -25,7 +25,7 @@
         = f.input :vendor_sku, label: 'Vendor SKU'
 
     %h3 Category
-    = f.association :product_category, as: :select, collection: ProductCategory.top_level, input_html: {data: {behavior: 'product-category-input'}}
+    = f.association :product_category, as: :select, collection: ProductCategory.categories, input_html: {data: {behavior: 'product-category-input'}}
     = f.association :product_subcategory, as: :select, collection: (@product.product_category&.children || []), input_html: {data: {behavior: 'product-subcategory-input'}}
 
     .row

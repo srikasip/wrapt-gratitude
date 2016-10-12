@@ -3,7 +3,7 @@
 
   .form-inputs
     = f.input :name
-    = f.association :parent, collection: ProductCategory.top_level
+    = f.association :parent, collection: ProductCategory.categories
     = f.input :wrapt_sku_code, label: 'SKU Code (3 uppercase letters)'
 
   .form-actions
