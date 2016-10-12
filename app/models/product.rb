@@ -17,11 +17,6 @@ class Product < ApplicationRecord
   before_save :set_dependent_skus_need_regeneration, if: :vendor_id_changed?
   after_save :regenerate_dependent_skus!, if: :dependent_skus_need_regeneration
 
-  def self.keyword_search query
-    where("LOWER(title) LIKE ?", "%#{query.downcase}%")
-      .or(Product.where("wrapt_sku LIKE ?", "%#{query}%"))
-  end
-
   def self.search search_params
     self.all.merge(ProductSearch.new(search_params).to_scope)        
   end

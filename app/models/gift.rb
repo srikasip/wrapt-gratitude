@@ -20,6 +20,10 @@ class Gift < ApplicationRecord
   DEFAULT_DATE_AVAILABLE = Date.new(1900, 1, 1)
   DEFAULT_DATE_DISCONTINUED = Date.new(2999, 12, 31)
 
+  def self.search search_params
+    self.all.merge(GiftSearch.new(search_params).to_scope)        
+  end
+
   def available?
     date_available <= Date.today && date_discontinued >= Date.today
   end

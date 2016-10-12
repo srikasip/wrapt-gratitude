@@ -56,7 +56,8 @@
 
     %p=paginate @products
 
-:javascript
-  new App.Admin.ProductSubcategoryLoader({prompt: 'Sub-category'})
+- content_for :page_js do
+  :javascript
+    new App.Admin.ProductSubcategoryLoader({prompt: 'Sub-category'})
 
 
