@@ -9,8 +9,7 @@ class ProductsController < ApplicationController
       .preload(:product_category, :product_subcategory)
       .search(product_search_params)
       .page(params[:page])
-      .per(2)
-      # .per(50)
+      .per(50)
   end
 
   # GET /products/1
