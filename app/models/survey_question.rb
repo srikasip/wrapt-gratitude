@@ -16,6 +16,9 @@ class SurveyQuestion < ApplicationRecord
 
   before_create :set_initial_sort_order
 
+  attr_accessor :conditional_display
+  after_initialize :set_conditional_display
+
   def type_label
     raise "Abstract Method"
   end
@@ -38,5 +41,10 @@ class SurveyQuestion < ApplicationRecord
     end
     return result
   end
+
+  private def set_conditional_display
+    self.conditional_display = conditional_question_id?
+  end
+  
 
 end

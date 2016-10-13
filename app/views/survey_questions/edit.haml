@@ -11,6 +11,8 @@
         = form.input :prompt
         = form.input :code, hint: '(required for importing)'
         = render form_fields_partial(@survey_question), form: form
+        = form.input :conditional_display, as: :boolean, label: 'Display this question conditionally', input_html: {data: {behavior: 'toggle-conditional-question-fields'}}
+        %p(data-behavior="conditional-question-fields" style="display: none;") FORM FOR CONDITIONAL QUESTIONS GOES HERE
 
       .form-actions
         = form.submit 'Save', class: 'btn btn-primary'
@@ -21,3 +23,7 @@
     %h3= @survey_question.prompt
 
     = render preview_partial(@survey_question)
+
+- content_for :page_js do
+  :javascript
+    new App.Admin.ConditionalQuestionFields()
