@@ -20,6 +20,8 @@ set :repo_url, 'git@github.com:greenriver/wrapt-gratitude.git'
 # set :log_level, :debug
 
 # Default value for :pty is false
+# Note There is a known bug that prevents sidekiq from starting when pty is true on Capistrano 3.
+# see https://github.com/seuros/capistrano-sidekiq
 # set :pty, true
 
 # Default value for :linked_files is []

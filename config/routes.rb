@@ -56,8 +56,9 @@ Rails.application.routes.draw do
 
   resource :private_access_session, only: [:new, :create, :destroy]
 
-  if Rails.env.development?
-    resource 'console', only: :show
+  require 'sidekiq/web'
+  constraints lambda {|request| SidekiqDashboardAuthentication.authenticated? request} do
+    mount Sidekiq::Web => '/sidekiq'
   end
 
   root to: 'home_pages#show' 
