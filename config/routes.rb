@@ -30,6 +30,9 @@ Rails.application.routes.draw do
         resource :image, only: [:edit, :update, :destroy], controller: 'survey_question_option_images'
       end
       resource :option_ordering, only: :create, controller: 'survey_question_option_orderings'
+
+      # note: index route only exists for dynamic url generation
+      resources :conditional_question_options, only: [:index, :show]
     end
     resource :question_ordering, only: :create, controller: 'survey_question_orderings'
     resource :copying, only: :create, controller: 'survey_copyings'

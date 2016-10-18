@@ -65,7 +65,10 @@ class SurveyQuestionsController < ApplicationController
         :include_other_option,
         :multiple_option_responses,
         :use_response_as_name,
-        :code
+        :code,
+        :conditional_display,
+        :conditional_question_id,
+        conditional_question_option_option_ids: []
       )
   end
 

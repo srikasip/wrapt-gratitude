@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161013152515) do
+ActiveRecord::Schema.define(version: 20161017140814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "conditional_question_options", force: :cascade do |t|
+    t.integer  "survey_question_id"
+    t.integer  "survey_question_option_id"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["survey_question_id"], name: "index_conditional_question_options_on_survey_question_id", using: :btree
+    t.index ["survey_question_option_id"], name: "index_conditional_question_options_on_survey_question_option_id", using: :btree
+  end
 
   create_table "evaluation_recommendations", force: :cascade do |t|
     t.float    "score",                          default: 0.0, null: false
@@ -258,6 +267,8 @@ ActiveRecord::Schema.define(version: 20161013152515) do
     t.index ["wrapt_sku_code"], name: "index_vendors_on_wrapt_sku_code", using: :btree
   end
 
+  add_foreign_key "conditional_question_options", "survey_question_options"
+  add_foreign_key "conditional_question_options", "survey_questions"
   add_foreign_key "evaluation_recommendations", "gifts"
   add_foreign_key "evaluation_recommendations", "profile_set_survey_responses"
   add_foreign_key "evaluation_recommendations", "training_set_evaluations"
