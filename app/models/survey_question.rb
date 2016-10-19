@@ -11,6 +11,10 @@ class SurveyQuestion < ApplicationRecord
   belongs_to :conditional_question, class_name: 'SurveyQuestion', required: false
   has_many :conditional_question_options, inverse_of: :survey_question, dependent: :destroy
 
+  # done this way so we don't replace if there's a validation error
+  attr_accessor :conditional_question_option_option_ids
+  after_save :replace_conditional_question_options, if: :conditional_question_option_option_ids
+
   TYPES = {
     'SurveyQuestions::MultipleChoice' => 'Multiple Choice',
     'SurveyQuestions::Range' => 'Slider',
@@ -53,12 +57,15 @@ class SurveyQuestion < ApplicationRecord
     @conditional_display = value
     unless value
       conditional_question = nil
-      conditional_question_options = []
+      conditional_question_option_option_ids = []
     end
   end
 
-  def conditional_question_option_option_ids= ids
-    # TODO tear down conditional question options and rebuild them from the passed ids
+  private def replace_conditional_question_options
+    conditional_question_options.delete_all
+    conditional_question_option_option_ids.each do |option_id|
+      conditional_question_options.create survey_question_option_id: option_id
+    end
   end
   
 

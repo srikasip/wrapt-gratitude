@@ -2,11 +2,15 @@ class SurveyQuestionsController < ApplicationController
   before_action :set_survey
   before_action :set_survey_question, only: [:show, :edit, :update, :destroy, :preview]
 
+  helper ConditionalQuestionOptionsHelper
+
   def new
     @survey_question = @survey.questions.new
   end
 
   def edit
+    @conditional_question = @survey_question.conditional_question
+    @conditional_question_options = @survey_question.conditional_question_options
     if @survey_question.is_a? SurveyQuestions::MultipleChoice
       @survey_question_option = SurveyQuestionOption.new
       @options = @survey_question.options.standard
@@ -28,6 +32,8 @@ class SurveyQuestionsController < ApplicationController
     if @survey_question.update(update_params)
       redirect_to edit_survey_question_path(@survey, @survey_question), notice: 'The question was successfully updated.'
     else
+      @conditional_question = @survey_question.conditional_question
+      @conditional_question_options = @survey_question.conditional_question_options
       render :edit
     end
   end

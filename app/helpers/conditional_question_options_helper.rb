@@ -7,7 +7,7 @@ module ConditionalQuestionOptionsHelper
   end
 
   def option_input_name option
-    "survey_question[conditional_question_option_option_ids][]"
+    "#{@survey_question.model_name.param_key}[conditional_question_option_option_ids][]"
   end
 
 end

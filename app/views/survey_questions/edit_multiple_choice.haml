@@ -5,12 +5,18 @@
       Edit Multiple-Choice Question
     = simple_form_for @survey_question, url: survey_question_path(@survey, @survey_question) do |form|
 
+      %h3 Question Details
       .form-inputs.pt4
         = form.input :prompt
         = form.input :code, hint: '(required for importing)'
+        = form.input :conditional_display, as: :boolean, label: 'Display this question conditionally', input_html: {data: {behavior: 'toggle-conditional-question-fields'}}
+        %div(data-behavior="conditional-question-fields" style="display: none;")
+          = form.association :conditional_question, label: 'Show this question if the answer to:', prompt: 'Select question', collection: @survey.multiple_choice_questions.where.not(id: @survey_question.id), label_method: 'prompt', input_html: {data: {behavior: 'conditional-question-id-input'}}
+          %div{data: {behavior: "conditional-question-options-container", conditional_question_options_url_base: "/surveys/#{@survey.id}/questions/#{@survey_question.id}/conditional_question_options"}}
+            = render 'conditional_question_options/show', conditional_question: @survey_question.conditional_question
 
       .form-actions.pb4
-        = form.submit '1. Save Prompt and Code', class: 'btn btn-primary'
+        = form.submit '1. Save Question Details', class: 'btn btn-primary'
 
     %h3 Choices
     %ol.pl5.edit-question-list.question-list{data: {option_list: true, sortable_list: true, sortable_list_href: survey_question_option_ordering_path(@survey, @survey_question)}, class: option_list_classes}
@@ -40,3 +46,4 @@
   :javascript
     new App.Admin.SurveyQuestionBuilder.Controller($('[data-survey-question-builder]')[0]);
     new App.SortableList($('[data-sortable-list]')[0])
+    new App.Admin.ConditionalQuestionFields()
