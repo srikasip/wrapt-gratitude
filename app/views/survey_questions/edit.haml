@@ -7,7 +7,7 @@
       Question
     = simple_form_for @survey_question, url: survey_question_path(@survey, @survey_question) do |form|
 
-      .form-inputs
+      .form-inputs.mb4
         = form.input :prompt
         = form.input :code, hint: '(required for importing)'
         = render form_fields_partial(@survey_question), form: form
