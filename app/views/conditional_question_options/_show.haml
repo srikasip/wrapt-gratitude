@@ -1,5 +1,6 @@
-%label Is:
-- conditional_question&.options&.each do |option|
-  .admin--conditional-question-option-wrapper
-    %input{type: 'checkbox', checked: ('checked' if option_input_checked?(option)), name: option_input_name(option), value: option.id }
-      = option.text
+- if conditional_question
+  %label Is:
+  - conditional_question.options.each do |option|
+    .admin--conditional-question-option-wrapper
+      %input{type: 'checkbox', checked: ('checked' if option_input_checked?(option)), name: option_input_name(option), value: option.id }
+        = option.text
