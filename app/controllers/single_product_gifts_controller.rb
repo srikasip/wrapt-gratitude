@@ -9,10 +9,13 @@ class SingleProductGiftsController < ApplicationController
       product_subcategory_id: @product.product_subcategory_id,
       date_available: Date.today,
       products: [@product]
-    #TODO handle gift not saving (say because of missing categories)
-    @gift.save!
-    flash[:notice] = "Successfully created a gift from #{@product.title}"
-    redirect_to @gift
+    if @gift.save
+      flash[:notice] = "Successfully created a gift from #{@product.title}"
+      redirect_to @gift
+    else
+      flash[:alert] = "Sorry, we could not create a gift for the following reasons: #{@gift.errors.full_messages.join(", ")}"
+      redirect_to @product
+    end
   end
 
 end

@@ -22,4 +22,12 @@ class GiftImage < ApplicationRecord
     DirectUploadedImageProcessingJob.perform_later(self, key)
   end
 
+  def image_owner
+    gift
+  end
+
+  def processing_channel_class
+    GiftImageProcessingChannel
+  end
+
 end

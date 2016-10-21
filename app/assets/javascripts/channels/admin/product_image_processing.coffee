@@ -12,5 +12,5 @@ class App.Admin.ProductImageProcessingSubscription
 
       received: (data) ->
         console.log data
-        product_image_id = data.product_image_id
+        product_image_id = data.image_record_id
         $("[data-product-image-id=#{product_image_id}]").html data.html
