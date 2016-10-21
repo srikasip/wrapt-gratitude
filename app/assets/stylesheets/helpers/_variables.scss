@@ -625,7 +625,7 @@ $popover-arrow-outer-fallback-color:  darken($popover-fallback-border-color, 20%
 //##
 
 //** Default label background color
-$label-default-bg:            $gray-light !default;
+$label-default-bg:            $green-001 !default;
 //** Primary label background color
 $label-primary-bg:            $brand-primary !default;
 //** Success label background color
@@ -638,9 +638,9 @@ $label-warning-bg:            $brand-warning !default;
 $label-danger-bg:             $brand-danger !default;
 
 //** Default label text color
-$label-color:                 #fff !default;
+$label-color:                 $text-color !default;
 //** Default text color of a linked label
-$label-link-hover-color:      #fff !default;
+$label-link-hover-color:      $text-color !default;
 
 
 //== Modals

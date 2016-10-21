@@ -6,7 +6,7 @@
   .col-sm-12
     = link_to 'Add a Gift', new_gift_path, class: 'btn btn-primary'
 
-.row
+.row.admin__search
   .col-sm-12
     = form_for @gift_search, url: gifts_path, html: {method: 'GET', class: 'form-inline', data: {behavior: 'form-loads-subcategories'}} do |form|
       .form-group
@@ -16,7 +16,7 @@
         %button.btn.btn-primary
           %i.glyphicon.glyphicon-search
           Search
-        = link_to 'Show All', gifts_path, class: 'btn btn-default'
+        = link_to 'Clear Search (Show All)', gifts_path, class: 'btn btn-default'
 
 .row
   .col-sm-12

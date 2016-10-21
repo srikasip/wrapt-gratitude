@@ -49,3 +49,7 @@
 .admin-index-table--item-title {
   margin-top: 0;
 }
+.admin-card-list__card {
+  @extend .shadowed-box__01;
+  padding: 18px 12px;
+}
