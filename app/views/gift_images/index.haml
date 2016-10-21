@@ -24,10 +24,8 @@
       .col-sm-3.admin__image-col{data: {sortable_item: true, sortable_item_id: gift_image.id}}
         .admin__image-cell{class: ('primary' if gift_image.primary?)}
           .admin__image-cell-inner
-            - if gift_image.image_processed?
-              = image_tag gift_image.image_url(:small)
-            - else
-              = image_tag 'ajax-loader.gif'
+            %div{data: {gift_image_id: gift_image.id}}
+              = render gift_image
             .admin__image-actions.left
               %span.btn.btn-xs.btn-default.admin__image-hover-link
                 %i.glyphicon.glyphicon-move
@@ -46,4 +44,5 @@
   :javascript
     new App.Admin.ImageUploadForm($('[data-image-upload-form]')[0])
     new App.SortableList($('[data-sortable-list]')[0], {placeholder: 'col-sm-3'});
+    new App.Admin.GiftImageProcessingSubscription(#{@gift.id})
 

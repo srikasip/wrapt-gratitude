@@ -4,17 +4,17 @@ class DirectUploadedImageProcessingJob < ApplicationJob
 
   queue_as :default
 
-  def perform image_owner, key
-    image_owner.key = key
-    image_owner.remote_image_url = image_owner.image.direct_fog_url(with_path: true)
-    image_owner.image_processed = true
-    image_owner.save!
+  def perform image_record, key
+    image_record.key = key
+    image_record.remote_image_url = image_record.image.direct_fog_url(with_path: true)
+    image_record.image_processed = true
+    image_record.save!
     # TODO make type agnostic
-    ActionCable.server.broadcast "product_image_processing_#{image_owner.product.id}", html: render_product_image(image_owner), product_image_id: image_owner.id
+    image_record.processing_channel_class.broadcast_to image_record.image_owner, html: render_product_image(image_record), image_record_id: image_record.id
   end
 
-  private def render_product_image image_owner
-    ApplicationController.renderer.render partial: 'product_images/product_image', locals: {product_image: image_owner}
+  private def render_product_image image_record
+    ApplicationController.renderer.render image_record
   end
   
 

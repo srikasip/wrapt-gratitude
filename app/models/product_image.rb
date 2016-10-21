@@ -22,4 +22,12 @@ class ProductImage < ApplicationRecord
     DirectUploadedImageProcessingJob.perform_later(self, key)
   end
 
+  def image_owner
+    product
+  end
+
+  def processing_channel_class
+    ProductImageProcessingChannel
+  end
+
 end

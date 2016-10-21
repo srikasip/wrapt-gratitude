@@ -1,8 +1,8 @@
 # Be sure to restart your server when you modify this file. Action Cable runs in a loop that does not support auto reloading.
-class ProductImageProcessingChannel < ApplicationCable::Channel
+class GiftImageProcessingChannel < ApplicationCable::Channel
   def subscribed
-    product = Product.find params[:product_id]
-    stream_for product
+    gift = Gift.find params[:gift_id]
+    stream_for gift
   end
 
   def unsubscribed
