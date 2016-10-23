@@ -50,7 +50,8 @@
             %td.text-right= number_to_currency product.vendor_retail_price
             %td.text-right= number_with_delimiter product.units_available
             %td.admin-index-table--buttons-cell
-              = link_to 'View', product, class: 'btn btn-default btn-xs'
+              = link_to 'View (w/option to create gift)', product, class: 'btn btn-default btn-xs mb2'
+              %br
               = link_to 'Edit', edit_product_path(product), class: 'btn btn-default btn-xs'
               = link_to 'Delete', product_path(product, context_params), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
 
