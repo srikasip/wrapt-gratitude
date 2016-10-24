@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
 
   namespace :profile_traits, except: :show do
-    resources :topics
+    resources :topics do
+      resources :facets, except: :show
+    end
   end
+
   resources :vendors
   get 'home_pages/show'
   devise_for :users

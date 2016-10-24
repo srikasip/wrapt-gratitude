@@ -20,4 +20,5 @@
             %td= profile_traits_topic.name
             %td
               = link_to 'Edit', edit_profile_traits_topic_path(profile_traits_topic), class: 'btn btn-default btn-xs'
+              = link_to 'Facets', profile_traits_topic_facets_path(profile_traits_topic), class: 'btn btn-default btn-xs'
               = link_to 'Delete', profile_traits_topic, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
