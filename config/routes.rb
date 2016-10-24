@@ -2,7 +2,9 @@ Rails.application.routes.draw do
 
   namespace :profile_traits, except: :show do
     resources :topics do
-      resources :facets, except: :show
+      resources :facets, except: :show do
+        resources :tags, except: :show
+      end
     end
   end
 
