@@ -8,7 +8,8 @@ class SingleProductGiftsController < ApplicationController
       product_category_id: @product.product_category_id,
       product_subcategory_id: @product.product_subcategory_id,
       date_available: Date.today,
-      products: [@product]
+      products: [@product],
+      source_product: @product
     if @gift.save
       flash[:notice] = "Successfully created a gift from #{@product.title}"
       redirect_to @gift

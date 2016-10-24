@@ -9,6 +9,8 @@ class Gift < ApplicationRecord
   has_many :gift_images, -> {order :sort_order}, inverse_of: :gift, dependent: :destroy
   has_one :primary_gift_image, -> {where primary: true}, class_name: 'GiftImage'
 
+  belongs_to :source_product, class_name: 'Product', required: false
+
   belongs_to :product_category, required: true
   belongs_to :product_subcategory, required: true, class_name: 'ProductCategory'
 
