@@ -1,6 +1,7 @@
 class ProfileTraits::FacetsController < ApplicationController
   before_action :set_topic
   before_action :set_profile_traits_facet, only: [:edit, :update, :destroy]
+  helper ProfileTraitsHelper
 
   def index
     @profile_traits_facets = @topic.facets.all

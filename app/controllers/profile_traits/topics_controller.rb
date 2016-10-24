@@ -1,5 +1,7 @@
 class ProfileTraits::TopicsController < ApplicationController
   before_action :set_profile_traits_topic, only: [:edit, :update, :destroy]
+  helper ProfileTraitsHelper
+
 
   def index
     @profile_traits_topics = ProfileTraits::Topic.all

@@ -2,6 +2,7 @@ class ProfileTraits::TagsController < ApplicationController
   before_action :set_topic
   before_action :set_facet
   before_action :set_tag, only: [:edit, :update, :destroy]
+  helper ProfileTraitsHelper
 
   def index
     @tags = @facet.tags.all
