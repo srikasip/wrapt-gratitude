@@ -1,0 +1,9 @@
+.row
+  .col-sm-12
+    %h1
+      Viewing Profile_traits_topic
+      = link_to 'Edit', edit_profile_traits_topic_path(@profile_traits_topic), class: 'btn btn-default btn-xs'
+
+%p
+  %b Name:
+  = @profile_traits_topic.name
