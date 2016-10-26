@@ -10,6 +10,7 @@
         %li{class: ("active" if active_top_nav_section == 'product_categories')}= link_to "Product Categories", product_categories_path
         %li{class: ("active" if active_top_nav_section == 'surveys')}= link_to "Quizzes", surveys_path
         %li.divider-vertical
+        %li{class: ("active" if active_top_nav_section == 'profile_traits')}= link_to "Profile Traits", profile_traits_topics_path
         %li{class: ("active" if active_top_nav_section == 'profile_sets')}= link_to "Response Sets", profile_sets_path
         %li{class: ("active" if active_top_nav_section == 'training_sets')}= link_to "Training Sets", training_sets_path
         %li.divider-vertical

@@ -1,0 +1,10 @@
+.row
+  .col-sm-12
+    %h1 New Tag
+
+.row
+  .col-sm-8
+    = render 'form', url: profile_traits_topic_facet_tags_path(@topic, @facet)
+
+    .links__view-back
+      = link_to 'Back', profile_traits_topic_facet_tags_path(@topic, @facet)

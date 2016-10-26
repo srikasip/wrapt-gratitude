@@ -1,0 +1,24 @@
+.row.admin__intro
+  .col-sm-12
+    %h1 Facets
+
+.row.admin__actions
+  .col-sm-12
+    = link_to link_to 'Add a Facet', new_profile_traits_topic_facet_path(@topic), class: 'btn btn-primary'
+
+.row
+  .col-sm-12
+    %table.table
+      %thead
+        %tr
+          %th Name
+          %th
+
+      %tbody
+        - @profile_traits_facets.each do |profile_traits_facet|
+          %tr
+            %td= profile_traits_facet.name
+            %td
+              = link_to 'Edit', edit_profile_traits_topic_facet_path(@topic, profile_traits_facet), class: 'btn btn-default btn-xs'
+              = link_to 'Tags', profile_traits_topic_facet_tags_path(@topic, profile_traits_facet), class: 'btn btn-default btn-xs'
+              = link_to 'Delete', profile_traits_topic_facet_path(@topic, profile_traits_facet), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
