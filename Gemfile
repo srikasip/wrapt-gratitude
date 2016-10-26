@@ -25,7 +25,7 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
+gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -42,7 +42,7 @@ gem 'mini_magick'
 gem 'awesome_nested_set'
 gem 'devise'
 gem 'kaminari'
-gem 'delayed_job_active_record'
+gem 'sidekiq'
 
 # For reading an excel file
 gem 'roo'
@@ -56,7 +56,6 @@ group :development, :test do
 end
 
 group :production do
-  gem 'daemons'
 end
 
 group :development do
@@ -67,7 +66,7 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'pry-rails'
-  gem 'capistrano3-delayed-job', '~> 1.0'
+  gem 'capistrano-sidekiq'
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
   gem 'capistrano-passenger'

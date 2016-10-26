@@ -7,10 +7,11 @@
       Question
     = simple_form_for @survey_question, url: survey_question_path(@survey, @survey_question) do |form|
 
-      .form-inputs
+      .form-inputs.mb4
         = form.input :prompt
         = form.input :code, hint: '(required for importing)'
         = render form_fields_partial(@survey_question), form: form
+        = render 'conditional_display_fields', form: form
 
       .form-actions
         = form.submit 'Save', class: 'btn btn-primary'
@@ -21,3 +22,7 @@
     %h3= @survey_question.prompt
 
     = render preview_partial(@survey_question)
+
+- content_for :page_js do
+  :javascript
+    new App.Admin.ConditionalQuestionFields()

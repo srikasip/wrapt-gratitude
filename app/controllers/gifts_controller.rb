@@ -2,7 +2,12 @@ class GiftsController < ApplicationController
   before_action :set_gift, only: [:show, :edit, :update, :destroy]
 
   def index
-    @gifts = Gift.all
+    @gift_search = GiftSearch.new(gift_search_params)
+    @gifts = Gift
+      .preload(:product_category, :product_subcategory)
+      .search(gift_search_params)
+      .page(params[:page])
+      .per(50)
   end
 
   def show
@@ -34,7 +39,7 @@ class GiftsController < ApplicationController
 
   def destroy
     @gift.destroy
-    redirect_to gifts_url, notice: 'Gift was successfully deleted.'
+    redirect_to gifts_url(context_params), notice: 'Gift was successfully deleted.'
   end
 
   
@@ -56,4 +61,16 @@ class GiftsController < ApplicationController
       :product_subcategory_id
       )
   end
+
+  def gift_search_params
+    params_base = params[:gift_search] || ActionController::Parameters.new
+    params_base.permit(:keyword, :product_category_id, :product_subcategory_id)
+  end
+  helper_method :gift_search_params
+
+  def context_params
+    params.permit(:page).merge(gift_search: gift_search_params)
+  end
+  helper_method :context_params
+
 end

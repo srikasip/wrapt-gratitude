@@ -10,24 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161007174120) do
+ActiveRecord::Schema.define(version: 20161024134919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",   default: 0, null: false
-    t.integer  "attempts",   default: 0, null: false
-    t.text     "handler",                null: false
-    t.text     "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  create_table "conditional_question_options", force: :cascade do |t|
+    t.integer  "survey_question_id"
+    t.integer  "survey_question_option_id"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["survey_question_id"], name: "index_conditional_question_options_on_survey_question_id", using: :btree
+    t.index ["survey_question_option_id"], name: "index_conditional_question_options_on_survey_question_option_id", using: :btree
   end
 
   create_table "evaluation_recommendations", force: :cascade do |t|
@@ -91,6 +85,7 @@ ActiveRecord::Schema.define(version: 20161007174120) do
     t.boolean  "calculate_price_from_products",                          default: true,         null: false
     t.integer  "product_category_id"
     t.integer  "product_subcategory_id"
+    t.integer  "source_product_id"
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
     t.index ["wrapt_sku"], name: "index_gifts_on_wrapt_sku", using: :btree
   end
@@ -208,11 +203,13 @@ ActiveRecord::Schema.define(version: 20161007174120) do
     t.boolean  "include_other_option",      default: false, null: false
     t.string   "code"
     t.boolean  "use_response_as_name",      default: false, null: false
+    t.integer  "conditional_question_id"
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
   end
 
   create_table "surveys", force: :cascade do |t|
-    t.string "title"
+    t.string  "title"
+    t.boolean "copy_in_progress", default: false, null: false
   end
 
   create_table "training_set_evaluations", force: :cascade do |t|
@@ -271,6 +268,8 @@ ActiveRecord::Schema.define(version: 20161007174120) do
     t.index ["wrapt_sku_code"], name: "index_vendors_on_wrapt_sku_code", using: :btree
   end
 
+  add_foreign_key "conditional_question_options", "survey_question_options"
+  add_foreign_key "conditional_question_options", "survey_questions"
   add_foreign_key "evaluation_recommendations", "gifts"
   add_foreign_key "evaluation_recommendations", "profile_set_survey_responses"
   add_foreign_key "evaluation_recommendations", "training_set_evaluations"

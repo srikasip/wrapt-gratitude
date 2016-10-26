@@ -9,10 +9,14 @@
 .row
   .col-sm-12
     %table.table
-      %thead
-        %tr
-          %th Name
-
       %tbody
         - @surveys.each do |survey|
-          %td= link_to survey.title, survey
+          %tr
+            %td
+              = render survey
+
+- content_for :page_js do
+  :javascript
+    if ($('[data-behavior~=survey-copy-in-progress]').length > 0) {
+      new App.Admin.SurveyCopyingsChannel()
+    }

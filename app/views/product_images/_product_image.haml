@@ -1,0 +1,5 @@
+- if product_image.image_processed?
+  = image_tag product_image.image_url(:small)
+- else
+  .admin__image-loading-wrapper
+    = image_tag 'ajax-loader.gif', class: 'loading-spinner'

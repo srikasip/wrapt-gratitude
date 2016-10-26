@@ -5,9 +5,7 @@ class GiftProductsController < ApplicationController
     @available_products = Product
       .where.not(id: @gift.gift_products.select(:product_id))
     if params[:q].present?
-      @available_products = @available_products
-        .where("LOWER(title) LIKE ?", "%#{params[:q].downcase}%")
-        .or(Product.where("wrapt_sku LIKE ?", "%#{params[:q]}%"))
+      @available_products = @available_products.search(params.permit(:q))
     end
     @available_products = @available_products
       .page(params[:page])

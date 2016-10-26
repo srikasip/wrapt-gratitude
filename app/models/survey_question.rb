@@ -8,6 +8,13 @@ class SurveyQuestion < ApplicationRecord
 
   has_many :survey_question_responses, dependent: :destroy
 
+  belongs_to :conditional_question, class_name: 'SurveyQuestion', required: false
+  has_many :conditional_question_options, inverse_of: :survey_question, dependent: :destroy
+
+  # done this way so we don't replace if there's a validation error
+  attr_accessor :conditional_question_option_option_ids
+  after_save :replace_conditional_question_options, if: :conditional_question_option_option_ids
+
   TYPES = {
     'SurveyQuestions::MultipleChoice' => 'Multiple Choice',
     'SurveyQuestions::Range' => 'Slider',
@@ -15,6 +22,9 @@ class SurveyQuestion < ApplicationRecord
   }
 
   before_create :set_initial_sort_order
+
+  attr_accessor :conditional_display
+  after_initialize :set_conditional_display
 
   def type_label
     raise "Abstract Method"
@@ -38,5 +48,25 @@ class SurveyQuestion < ApplicationRecord
     end
     return result
   end
+
+  private def set_conditional_display
+    self.conditional_display = conditional_question_id?
+  end
+
+  def conditional_display= value
+    @conditional_display = value
+    unless value
+      conditional_question = nil
+      conditional_question_option_option_ids = []
+    end
+  end
+
+  private def replace_conditional_question_options
+    conditional_question_options.delete_all
+    conditional_question_option_option_ids.each do |option_id|
+      conditional_question_options.create survey_question_option_id: option_id
+    end
+  end
+  
 
 end

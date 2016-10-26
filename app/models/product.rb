@@ -17,6 +17,10 @@ class Product < ApplicationRecord
   before_save :set_dependent_skus_need_regeneration, if: :vendor_id_changed?
   after_save :regenerate_dependent_skus!, if: :dependent_skus_need_regeneration
 
+  def self.search search_params
+    self.all.merge(ProductSearch.new(search_params).to_scope)        
+  end
+
   private def sku_prefix
     segments = []
     segments << "P"

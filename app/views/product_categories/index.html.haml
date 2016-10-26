@@ -7,17 +7,18 @@
     = link_to 'Add New Product Category', new_product_category_path, class: 'btn btn-primary'
 
 .row
-  .col-sm-12
-    %ul.admin-index-list
+  .admin-card-list
+    .col-sm-6
       - @product_categories.order(:name).each do |product_category|
-        %li
-          = "#{product_category.name} (#{product_category.wrapt_sku_code})"
-          = link_to 'Edit', edit_product_category_path(product_category), class: 'btn btn-default btn-xs'
-          = link_to 'Delete', product_category_path(product_category), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'
+        .admin-card-list__card.mb4
+          %h4.admin-index-table--item-title
+            = "#{product_category.name} (#{product_category.wrapt_sku_code})"
+            = link_to 'Edit', edit_product_category_path(product_category), class: 'btn btn-default btn-xs ml4'
+            = link_to 'Delete', product_category_path(product_category), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'
           - if product_category.children.any?
             %ul.admin-index-list
               - product_category.children.order(:name).each do |subcategory|
                 %li
                   = "#{subcategory.name} (#{subcategory.wrapt_sku_code})"
-                  = link_to 'Edit', edit_product_category_path(subcategory), class: 'btn btn-default btn-xs'
+                  = link_to 'Edit', edit_product_category_path(subcategory), class: 'btn btn-default btn-xs ml4'
                   = link_to 'Delete', product_category_path(subcategory), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger btn-xs'

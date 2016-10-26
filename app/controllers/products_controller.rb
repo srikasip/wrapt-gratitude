@@ -4,7 +4,12 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
-    @products = Product.page(params[:page]).per(50)
+    @product_search = ProductSearch.new(product_search_params)
+    @products = Product
+      .preload(:product_category, :product_subcategory)
+      .search(product_search_params)
+      .page(params[:page])
+      .per(50)
   end
 
   # GET /products/1
@@ -27,7 +32,7 @@ class ProductsController < ApplicationController
     @product = Product.new(product_params)
 
     if @product.save
-      redirect_to product_images_path(@product), notice: 'Product was successfully created.'
+      redirect_to product_images_path(@product), notice: "Created #{@product.title}.  Now add some images."
     else
       render :new
     end
@@ -36,14 +41,11 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
-    respond_to do |format|
-      if @product.update(product_params)
-        format.html { redirect_to @product, notice: 'Product was successfully updated.' }
-        format.json { render :show, status: :ok, location: @product }
-      else
-        format.html { render :edit }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
-      end
+    if @product.update(product_params)
+      redirect_to @product, notice: 'Product was successfully updated.'
+      render :show, status: :ok, location: @product
+    else
+      render :edit
     end
   end
 
@@ -51,10 +53,7 @@ class ProductsController < ApplicationController
   # DELETE /products/1.json
   def destroy
     @product.destroy
-    respond_to do |format|
-      format.html { redirect_to products_url, notice: 'Product was successfully deleted.' }
-      format.json { head :no_content }
-    end
+    redirect_to products_url(context_params), notice: 'Product was successfully deleted.'
   end
 
   private
@@ -84,4 +83,15 @@ class ProductsController < ApplicationController
         :product_subcategory_id
       )
     end
+
+    def product_search_params
+      params_base = params[:product_search] || ActionController::Parameters.new
+      params_base.permit(:keyword, :product_category_id, :product_subcategory_id)
+    end
+    helper_method :product_search_params
+
+    def context_params
+      params.permit(:page).merge(product_search: product_search_params)
+    end
+    helper_method :context_params
 end

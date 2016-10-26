@@ -1,2 +1,2 @@
-web: rails server -p 3000
-worker: rake jobs:work
+web: bin/rails server -p 3000
+worker: bundle exec sidekiq

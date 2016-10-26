@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       member { post 'make_primary' }
     end
     resource :image_ordering, only: :create, controller: 'product_image_orderings'
+    resource :single_product_gift, only: :create
   end
   resources :gifts do
     resources :products, only: [:index, :create, :destroy], controller: 'gift_products'
@@ -29,8 +30,12 @@ Rails.application.routes.draw do
         resource :image, only: [:edit, :update, :destroy], controller: 'survey_question_option_images'
       end
       resource :option_ordering, only: :create, controller: 'survey_question_option_orderings'
+
+      # note: index route only exists for dynamic url generation
+      resources :conditional_question_options, only: [:index, :show]
     end
     resource :question_ordering, only: :create, controller: 'survey_question_orderings'
+    resource :copying, only: :create, controller: 'survey_copyings'
   end
 
   resources :training_sets do
@@ -53,6 +58,11 @@ Rails.application.routes.draw do
   end
 
   resource :private_access_session, only: [:new, :create, :destroy]
+
+  require 'sidekiq/web'
+  constraints lambda {|request| SidekiqDashboardAuthentication.authenticated? request} do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   root to: 'home_pages#show' 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

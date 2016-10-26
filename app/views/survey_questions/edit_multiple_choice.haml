@@ -10,7 +10,7 @@
         = form.input :code, hint: '(required for importing)'
 
       .form-actions.pb4
-        = form.submit 'Save Prompt and Code', class: 'btn btn-primary'
+        = form.submit '1. Save Prompt and Code', class: 'btn btn-primary'
 
     %h3 Choices
     %ol.pl5.edit-question-list.question-list{data: {option_list: true, sortable_list: true, sortable_list_href: survey_question_option_ordering_path(@survey, @survey_question)}, class: option_list_classes}
@@ -24,14 +24,15 @@
 
     
     = simple_form_for @survey_question, url: survey_question_path(@survey, @survey_question) do |form|
-      .mb5
-        %h3 Additional Options
-        .form-inputs
-          = form.input :include_other_option, as: :boolean, label: "Offer option 'Other' with text box"
-          = form.input :multiple_option_responses, as: :boolean, label: 'Allow multiple selections'
+
+      %h3 Additional Options
+      .form-inputs.mb4
+        = form.input :include_other_option, as: :boolean, label: "Offer option 'Other' with text box"
+        = form.input :multiple_option_responses, as: :boolean, label: 'Allow multiple selections'
+        = render 'conditional_display_fields', form: form
 
       .form-actions
-        = form.submit 'Save Options', class: 'btn btn-primary'
+        = form.submit '2. Save Options', class: 'btn btn-primary'
 
   .col-sm-6
     = render 'preview'
@@ -40,3 +41,4 @@
   :javascript
     new App.Admin.SurveyQuestionBuilder.Controller($('[data-survey-question-builder]')[0]);
     new App.SortableList($('[data-sortable-list]')[0])
+    new App.Admin.ConditionalQuestionFields()

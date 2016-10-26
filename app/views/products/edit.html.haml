@@ -1,5 +1,7 @@
 .row
   .col-sm-12
+    .pull-right.mt3
+      = link_to 'Review to Create Gift from Product', @product, class: 'btn btn-primary'
     %h1 Edit Product
 
 .row
@@ -13,6 +15,6 @@
     = render 'form'
 
     .links__view-back
-      = link_to 'Show', @product
+      = link_to 'View', @product
       \|
       = link_to 'Back', products_path

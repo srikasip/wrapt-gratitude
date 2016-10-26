@@ -30,6 +30,35 @@
       %b Date discontinued:
       = @gift.display_date_discontinued
 
-    - @gift.gift_images.each do |gift_image|
+    %h3 Products
+    - if @gift.products.none?
       %p
-        = image_tag gift_image.image_url(:small)
+        No products yet.
+        = link_to 'Add some', gift_products_path(@gift)
+    - else
+      %table.table
+        %thead
+          %tr
+            %th
+            %th Title
+            %th SKU
+            %th Price
+        %tbody
+          - @gift.products.each do |product|
+            %tr
+              %td
+                - if product.primary_product_image&.image?
+                  = image_tag product.primary_product_image.image_url(:small), class: "admin-index-table--image"
+              %td= link_to product.title, product
+              %td= product.wrapt_sku
+              %td= product.price
+
+    %h3 Images
+    - if @gift.gift_images.none?
+      %p
+        No images yet.
+        = link_to "Add some", gift_images_path(@gift)
+    - else      
+      - @gift.gift_images.each do |gift_image|
+        %p
+          = image_tag gift_image.image_url(:small)

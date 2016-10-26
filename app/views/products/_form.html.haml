@@ -11,13 +11,13 @@
       .col-xs-3
         = f.input :price, wrapper: :vertical_input_group do
           .input-group-addon $
-          = f.input_field :price, class: 'form-control'
+          = f.input_field :price, class: 'form-control', value: number_with_precision(f.object.price, precision: 2)
         = f.input :vendor_retail_price, label: 'Vendor Retail Price', wrapper: :vertical_input_group do
           .input-group-addon $
-          = f.input_field :vendor_retail_price, class: 'form-control'
+          = f.input_field :vendor_retail_price, class: 'form-control', value: number_with_precision(f.object.vendor_retail_price, precision: 2)
         = f.input :wrapt_cost, label: 'Wrapt Cost', wrapper: :vertical_input_group do
           .input-group-addon $
-          = f.input_field :wrapt_cost, class: 'form-control'
+          = f.input_field :wrapt_cost, class: 'form-control', value: number_with_precision(f.object.wrapt_cost, precision: 2)
         = f.input :units_available,label: 'Units Available'
     .row
       .col-xs-4
@@ -25,7 +25,7 @@
         = f.input :vendor_sku, label: 'Vendor SKU'
 
     %h3 Category
-    = f.association :product_category, as: :select, collection: ProductCategory.top_level, input_html: {data: {behavior: 'product-category-input'}}
+    = f.association :product_category, as: :select, collection: ProductCategory.categories, input_html: {data: {behavior: 'product-category-input'}}
     = f.association :product_subcategory, as: :select, collection: (@product.product_category&.children || []), input_html: {data: {behavior: 'product-subcategory-input'}}
 
     .row

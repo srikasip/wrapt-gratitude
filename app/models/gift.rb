@@ -9,6 +9,8 @@ class Gift < ApplicationRecord
   has_many :gift_images, -> {order :sort_order}, inverse_of: :gift, dependent: :destroy
   has_one :primary_gift_image, -> {where primary: true}, class_name: 'GiftImage'
 
+  belongs_to :source_product, class_name: 'Product', required: false
+
   belongs_to :product_category, required: true
   belongs_to :product_subcategory, required: true, class_name: 'ProductCategory'
 
@@ -19,6 +21,10 @@ class Gift < ApplicationRecord
   # and nullable for display purposes
   DEFAULT_DATE_AVAILABLE = Date.new(1900, 1, 1)
   DEFAULT_DATE_DISCONTINUED = Date.new(2999, 12, 31)
+
+  def self.search search_params
+    self.all.merge(GiftSearch.new(search_params).to_scope)        
+  end
 
   def available?
     date_available <= Date.today && date_discontinued >= Date.today

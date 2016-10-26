@@ -4,7 +4,7 @@ class ProductCategoriesController < ApplicationController
   # GET /product_categories
   # GET /product_categories.json
   def index
-    @product_categories = ProductCategory.top_level.preload(:children)
+    @product_categories = ProductCategory.categories.preload(:children)
   end
 
   # GET /product_categories/new

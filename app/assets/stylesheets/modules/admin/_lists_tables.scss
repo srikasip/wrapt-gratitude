@@ -39,3 +39,17 @@
 .admin-index-table--image {
   max-height: 100px;
 }
+.admin-index-table--buttons-cell {
+  min-width: 170px;
+  text-align: center;
+}
+.admin-index-table--sku-cell {
+  min-width: 160px;
+}
+.admin-index-table--item-title {
+  margin-top: 0;
+}
+.admin-card-list__card {
+  @extend .shadowed-box__01;
+  padding: 18px 12px;
+}

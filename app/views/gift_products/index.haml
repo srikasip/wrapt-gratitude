@@ -21,6 +21,7 @@
         %thead
           %th
           %th Title
+          %th SKU
           %th Units Available 
           %th
         %tbody
@@ -30,20 +31,21 @@
               %td.admin__gift-available-products
                 - if product.primary_product_image.present?
                   = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image'
-              %td= product.title
+              %td= link_to product.title, product
+              %td= product.wrapt_sku
               %td= number_with_delimiter product.units_available
               %td= link_to 'Remove', gift_product_path(@gift, gift_product, context_params), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'btn btn-xs btn-danger'
 
   .col-sm-6
     %h3 Add Products to this Gift
-    %form.form-inline(method="GET")
-      .form-group
-        %input{type: 'hidden', name: 'page', value: params[:page]}
-        %input.form-control{type: 'search', name: 'q', value: params[:q], placeholder: 'Title or SKU', style: 'min-width: 300px;'}
-        %button.btn.btn-primary
-          %i.glyphicon.glyphicon-search
-          Search
-        = link_to 'Show All', gift_products_path(@gift, context_params.merge(q: nil)), class: 'btn btn-default'
+    .admin__search
+      %form.form-inline(method="GET")
+        .form-group
+          %input.form-control{type: 'search', name: 'q', value: params[:q], placeholder: 'Title or SKU', style: 'min-width: 300px;'}
+          %button.btn.btn-primary
+            %i.glyphicon.glyphicon-search
+            Search
+          = link_to 'Show All', gift_products_path(@gift), class: 'btn btn-default'
 
     - if @available_products.empty?
       %p(style="margin-top: 10px;")
@@ -53,7 +55,7 @@
         %thead
           %th
           %th Title
-          %th Wrapt SKU
+          %th SKU
           %th Units Available 
           %th
         %tbody
@@ -62,7 +64,7 @@
               %td.admin-index-table--image-cell
                 - if product.primary_product_image.present?
                   = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image'
-              %td= product.title
+              %td= link_to product.title, product
               %td= product.wrapt_sku
               %td= number_with_delimiter product.units_available
               %td= link_to 'Add', gift_products_path(@gift, context_params.merge(gift_product: {product_id: product.id})), method: 'post', class: 'btn btn-xs btn-primary'
