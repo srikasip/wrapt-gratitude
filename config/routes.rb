@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :trait_training_sets, except: :show
   namespace :profile_traits, except: :show do
     resources :topics do
       resources :facets, except: :show do

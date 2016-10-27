@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161026181950) do
+ActiveRecord::Schema.define(version: 20161027144329) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -260,6 +260,14 @@ ActiveRecord::Schema.define(version: 20161026181950) do
     t.index ["survey_id"], name: "index_training_sets_on_survey_id", using: :btree
   end
 
+  create_table "trait_training_sets", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "survey_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["survey_id"], name: "index_trait_training_sets_on_survey_id", using: :btree
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
@@ -316,4 +324,5 @@ ActiveRecord::Schema.define(version: 20161026181950) do
   add_foreign_key "survey_question_responses", "survey_questions"
   add_foreign_key "training_set_evaluations", "training_sets"
   add_foreign_key "training_set_response_impacts", "gift_question_impacts"
+  add_foreign_key "trait_training_sets", "surveys"
 end
