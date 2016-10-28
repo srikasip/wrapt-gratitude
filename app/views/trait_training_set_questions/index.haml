@@ -1,0 +1,24 @@
+.row.admin__intro
+  .col-sm-12
+    %h1 Trait Training Set Questions
+
+.row.admin__actions
+  .col-sm-12
+    = link_to 'Add a Profile Trait Training Set', new_trait_training_set_path, class: 'btn btn-primary'
+
+.row
+  .col-sm-12
+    %table.table
+      %thead
+        %tr
+          %th Question
+          %th Profile Trait Facet
+          %th
+      %tbody
+        - @trait_training_set_questions.joins(:question).order('survey_questions.position').each do |trait_training_set_question|
+          %tr
+            %td= trait_training_set_question.question&.prompt
+            %td= trait_training_set_question.facet&.name
+            %td
+              = link_to 'Edit', edit_trait_training_set_question_path(@trait_training_set, trait_training_set_question), class: 'btn btn-default btn-xs'
+              = link_to 'Delete', trait_training_set_question_path(@trait_training_set, trait_training_set_question), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'

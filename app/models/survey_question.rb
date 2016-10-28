@@ -10,6 +10,7 @@ class SurveyQuestion < ApplicationRecord
 
   belongs_to :conditional_question, class_name: 'SurveyQuestion', required: false
   has_many :conditional_question_options, inverse_of: :survey_question, dependent: :destroy
+  has_many :trait_training_set_questions, inverse_of: :question, dependent: :destroy
 
   # done this way so we don't replace if there's a validation error
   attr_accessor :conditional_question_option_option_ids
