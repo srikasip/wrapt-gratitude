@@ -6,6 +6,7 @@ class SurveyQuestionOption < ApplicationRecord
   has_many :training_set_response_impacts, dependent: :destroy
   has_many :survey_question_response_options, dependent: :destroy
   has_many :conditional_question_options, dependent: :destroy
+  has_many :trait_response_options, dependent: :destroy
 
   before_create :set_initial_sort_order
 
