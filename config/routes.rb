@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
 
   resources :trait_training_sets, except: :show do
-    resources :questions, except: :show, controller: 'trait_training_set_questions'
+    resources :questions, except: :show, controller: 'trait_training_set_questions' do
+      resources :response_impacts, only: :index, controller: 'trait_training_set_response_impacts'
+    end
   end
   namespace :profile_traits, except: :show do
     resources :topics do

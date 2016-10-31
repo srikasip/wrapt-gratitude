@@ -6,6 +6,7 @@ class TraitTrainingSet < ApplicationRecord
 
 
   def refresh_questions!
+    # TODO exclude text questions
     survey.questions.each do |question|
       trait_training_set_questions.where(question_id: question.id).first_or_create 
     end

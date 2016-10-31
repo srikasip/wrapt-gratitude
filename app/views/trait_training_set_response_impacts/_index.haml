@@ -1,0 +1,7 @@
+-# TODO dispatch to multiple choice or slider
+- @trait_training_set_question.question.options.each do |option|
+  %div
+  %h4= option.text
+  -# TODO provide selector from the facet
+  -# if the facet is the same as what's in the database, then show the value
+  -# if it's different then add a delete[hidden] for the old response impact and a new blank response impact

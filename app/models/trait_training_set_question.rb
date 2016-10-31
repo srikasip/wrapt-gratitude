@@ -5,4 +5,6 @@ class TraitTrainingSetQuestion < ApplicationRecord
 
   has_many :trait_response_impacts, dependent: :destroy
 
+  accepts_nested_attributes_for :trait_response_impacts
+
 end

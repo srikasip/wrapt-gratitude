@@ -1,0 +1,17 @@
+.row
+  .col-sm-12
+    %h1 Edit Profile Trait Training Set Question
+
+.row
+  .col-sm-8
+    = simple_form_for @trait_training_set_question, url: trait_training_set_question_path(@trait_training_set, @trait_training_set_question) do |form|
+
+      .form-inputs
+        = form.association :facet
+
+        %h3 Response Impacts
+
+        = render 'trait_training_set_response_impacts/index', locals: {facet: @trait_training_set_question.facet}
+
+      .form-actions
+      = form.submit 'Save', class: 'btn btn-primary'
