@@ -1,0 +1,22 @@
+- question = @trait_training_set_question.question
+
+- if facet
+  %h3 Response Impacts
+  %p
+    %label= question.min_label
+  - (-3..3).each_with_index do |position, i|
+    %p
+      %input{type: 'hidden', name: "trait_training_set_question[trait_response_impacts_attributes][#{i}][range_position]", value: position}
+      %select{name: "trait_training_set_question[trait_response_impacts_attributes][#{i}][profile_traits_tag_id]"}
+        %option
+        - facet.tags.each do |tag|
+          %option{value: tag.id, selected: tag_selected_for_range_position?(tag, position) }= tag.name_with_position
+  %p
+    %label= question.max_label
+
+  - if facet != @trait_training_set_question.facet
+    - @trait_training_set_question.trait_response_impacts.each_with_index do |impact, i|
+      -# generate an index that doesn't collide with the new selections above
+      - index = (i+1) * -1
+      %input{type: 'hidden', name: "trait_training_set_question[trait_response_impacts_attributes][#{index}][id]", value: impact.id}
+      %input{type: 'hidden', name: "trait_training_set_question[trait_response_impacts_attributes][#{index}][_destroy]", value: 1}

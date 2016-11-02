@@ -33,7 +33,7 @@ class TraitTrainingSetQuestionsController < ApplicationController
   private def trait_training_set_question_params
     params.require(:trait_training_set_question).permit(
       :facet_id,
-      trait_response_impacts_attributes: [:id, :_destroy, :survey_question_option_id, :profile_traits_tag_id]
+      trait_response_impacts_attributes: [:id, :_destroy, :survey_question_option_id, :profile_traits_tag_id, :range_position]
     )
   end
   
