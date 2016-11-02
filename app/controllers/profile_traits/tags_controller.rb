@@ -52,6 +52,6 @@ class ProfileTraits::TagsController < ApplicationController
     end
 
     def tag_params
-      params.require(:profile_traits_tag).permit(:facet_id, :name)
+      params.require(:profile_traits_tag).permit(:name, :position)
     end
 end

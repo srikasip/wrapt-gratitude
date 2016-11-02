@@ -3,7 +3,7 @@ class ProfileTraits::Tag < ApplicationRecord
 
   has_many :trait_response_impacts, dependent: :destroy
 
-  validates :position, numericality: {greater_than_or_equal_to: -3, less_than_or_equal_to: 3}
+  validates :position, inclusion: {in: (-3..3), message: "must be between -3 and 3"}
 
   def name_with_position
     "#{name} (#{position})"
