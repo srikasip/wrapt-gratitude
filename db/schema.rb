@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161028171056) do
+ActiveRecord::Schema.define(version: 20161102145233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -266,6 +266,8 @@ ActiveRecord::Schema.define(version: 20161028171056) do
     t.integer  "range_position"
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
+    t.integer  "profile_traits_tag_id"
+    t.index ["profile_traits_tag_id"], name: "index_trait_response_impacts_on_profile_traits_tag_id", using: :btree
     t.index ["survey_question_option_id"], name: "index_trait_response_impacts_on_survey_question_option_id", using: :btree
     t.index ["trait_training_set_question_id"], name: "index_trait_response_impacts_on_trait_training_set_question_id", using: :btree
   end
@@ -345,6 +347,7 @@ ActiveRecord::Schema.define(version: 20161028171056) do
   add_foreign_key "survey_question_responses", "survey_questions"
   add_foreign_key "training_set_evaluations", "training_sets"
   add_foreign_key "training_set_response_impacts", "gift_question_impacts"
+  add_foreign_key "trait_response_impacts", "profile_traits_tags"
   add_foreign_key "trait_response_impacts", "survey_question_options"
   add_foreign_key "trait_response_impacts", "trait_training_set_questions"
   add_foreign_key "trait_training_set_questions", "survey_questions", column: "question_id"

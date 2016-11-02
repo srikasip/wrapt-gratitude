@@ -2,6 +2,8 @@ class TraitTrainingSetQuestionsController < ApplicationController
   before_action :set_trait_training_set
   before_action :set_trait_training_set_question, except: :index
 
+  helper TraitTrainingSetResponseImpactsHelper
+
   def index
     @trait_training_set.refresh_questions!
     @trait_training_set_questions = @trait_training_set.trait_training_set_questions    
@@ -30,7 +32,8 @@ class TraitTrainingSetQuestionsController < ApplicationController
 
   private def trait_training_set_question_params
     params.require(:trait_training_set_question).permit(
-      :facet_id   
+      :facet_id,
+      trait_response_impacts_attributes: [:id, :_destroy, :survey_question_option_id, :profile_traits_tag_id]
     )
   end
   

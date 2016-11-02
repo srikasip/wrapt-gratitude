@@ -4,14 +4,17 @@
 
 .row
   .col-sm-8
-    = simple_form_for @trait_training_set_question, url: trait_training_set_question_path(@trait_training_set, @trait_training_set_question) do |form|
+    = simple_form_for @trait_training_set_question, url: trait_training_set_question_path(@trait_training_set, @trait_training_set_question), html: {data: {behavior: 'loads-trait-response-impact-fields'}} do |form|
 
       .form-inputs
-        = form.association :facet
+        = form.association :facet, input_html: {data: {behavior: 'facet-select'}}
 
-        %h3 Response Impacts
-
-        = render 'trait_training_set_response_impacts/index', locals: {facet: @trait_training_set_question.facet}
+        %div{data: {behavior: "trait-response-impact-fields-container", trait_response_impact_fields_url: trait_training_set_question_response_impacts_path(@trait_training_set, @trait_training_set_question)}}
+          = render 'trait_training_set_response_impacts/index', facet: @trait_training_set_question.facet
 
       .form-actions
       = form.submit 'Save', class: 'btn btn-primary'
+
+- content_for :page_js do
+  :javascript
+    new App.Admin.TraitResponseImpactFieldsLoader($('[data-behavior~=loads-trait-response-impact-fields]')[0])
