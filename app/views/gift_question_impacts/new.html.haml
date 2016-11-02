@@ -8,7 +8,7 @@
 
       .form-inputs
         = f.association :gift
-        = f.association :survey_question, label: 'Question', label_method: :prompt, collection: @training_set.survey.questions.where.not(type: 'SurveyQuestions::Text')
+        = f.association :survey_question, label: 'Question', label_method: :prompt, collection: @training_set.survey.questions.not_text
 
       .form-actions
         = f.button :submit, "Save"

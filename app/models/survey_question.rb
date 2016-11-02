@@ -12,6 +12,8 @@ class SurveyQuestion < ApplicationRecord
   has_many :conditional_question_options, inverse_of: :survey_question, dependent: :destroy
   has_many :trait_training_set_questions, inverse_of: :question, dependent: :destroy
 
+  scope :not_text, -> {where.not(type: 'SurveyQuestions::Text')}
+
   # done this way so we don't replace if there's a validation error
   attr_accessor :conditional_question_option_option_ids
   after_save :replace_conditional_question_options, if: :conditional_question_option_option_ids
