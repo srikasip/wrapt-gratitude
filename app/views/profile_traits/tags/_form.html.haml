@@ -2,8 +2,10 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :name
-    = f.input :position, label: 'Scale (between -3 and 3)'
+    .row
+      .col-xs-4
+        = f.input :name
+        = f.input :position, label: 'Scale (between -3 and 3)'
 
   .form-actions
     = f.button :submit

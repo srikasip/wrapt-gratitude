@@ -1,5 +1,6 @@
 class TraitTrainingSetsController < ApplicationController
   before_action :set_trait_training_set, only: [:show, :edit, :update, :destroy]
+  helper TraitTrainingSetsSectionHelper
 
   def index
     @trait_training_sets = TraitTrainingSet.all

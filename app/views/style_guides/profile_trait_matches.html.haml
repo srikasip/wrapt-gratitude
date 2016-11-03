@@ -1,0 +1,13 @@
+%h1 Profile Trait Matches for Another Survey
+
+%h2 Rafe's Response
+- ProfileTraits::Topic.all.each do |topic|
+  %h3= topic.name
+  - topic.facets.each do |facet|
+    %h4= facet.name
+    %ul
+      - facet.tags.each_with_index do |tag, i|
+        %li
+          = tag.name_with_position 
+          matched #{5-i} times
+

@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'style_guides/profile_trait_matches'
+
+  get 'style_guides/profile_trait_matches' => ''
+
   resources :trait_training_sets, except: :show do
     resources :questions, except: :show, controller: 'trait_training_set_questions' do
       resources :response_impacts, only: :index, controller: 'trait_training_set_response_impacts'

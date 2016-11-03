@@ -3,6 +3,7 @@ class TraitTrainingSetQuestionsController < ApplicationController
   before_action :set_trait_training_set_question, except: :index
 
   helper TraitTrainingSetResponseImpactsHelper
+  helper TraitTrainingSetsSectionHelper
 
   def index
     @trait_training_set.refresh_questions!
