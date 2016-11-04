@@ -15,7 +15,7 @@
           %th
 
       %tbody
-        - @tags.each do |tag|
+        - @tags.order(:position).each do |tag|
           %tr
             %td= tag.name_with_position
             %td

@@ -1,9 +1,11 @@
-%h1 Profile Trait Matches for #{@survey_response.name}
+%h1
+  Profile Trait Matches for #{@survey_response.name}
+  = link_to "View Response", edit_profile_set_survey_response_path(@survey_response.profile_set, @survey_response), class: 'btn btn-default btn-xs'
 
 - if @evaluation.matching_in_progress?
   %p
     = image_tag 'ajax-loader.gif'
-    We're still generating matches for this survey response.  Please wait a moment.
+    We're generating matches for this survey response.  Please wait a moment.
   - content_for :page_js do
     :javascript
       setTimeout(function() {window.location.reload(true)}, 5000)

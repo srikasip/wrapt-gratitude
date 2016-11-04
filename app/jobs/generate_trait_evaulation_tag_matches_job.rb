@@ -8,6 +8,7 @@ class GenerateTraitEvaulationTagMatchesJob < ApplicationJob
     @evaluation = survey_response_trait_evaluation
     @trait_training_set = evaluation.trait_training_set
     @survey_response = evaluation.response
+    @evaluation.matched_tag_id_counts = {}
 
     # match tags
     trait_training_set.trait_training_set_questions.each do |trait_training_set_question|
@@ -58,7 +59,7 @@ class GenerateTraitEvaulationTagMatchesJob < ApplicationJob
     if trait_training_set_question
       return trait_training_set_question
         .trait_response_impacts
-        .detect {|response_impact| (question_reponse.range_response * 3).round == response_impact.range_position}
+        .detect {|response_impact| (question_response.range_response * 3).round == response_impact.range_position}
         &.profile_traits_tag_id
     end
   end
