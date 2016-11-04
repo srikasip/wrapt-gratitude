@@ -1,17 +1,25 @@
 %h1 Profile Trait Matches for #{@survey_response.name}
 
-- ProfileTraits::Topic.all.each do |topic|
-  %h3= topic.name
-  - topic.facets.each do |facet|
-    %h4= facet.name
-    - matched_tags = @evaluation.matched_tags.to_a.select {|tag| tag.facet_id == facet.id}
-    - if matched_tags.none?
-      %p No matches
-    - else
-      %ul
-      - matched_tags.each do |tag|
-        %li
-          = tag.name_with_position
-          matched
-          = pluralize @evaluation.matched_tag_ids[tag.id.to_s], "time"
+- if @evaluation.matching_in_progress?
+  %p
+    = image_tag 'ajax-loader.gif'
+    We're still generating matches for this survey response.  Please wait a moment.
+  - content_for :page_js do
+    :javascript
+      setTimeout(function() {window.location.reload(true)}, 5000)
+- else
+  - ProfileTraits::Topic.all.each do |topic|
+    %h3= topic.name
+    - topic.facets.each do |facet|
+      %h4= facet.name
+      - matched_tags = @evaluation.matched_tags.to_a.select {|tag| tag.facet_id == facet.id}
+      - if matched_tags.none?
+        %p No matches
+      - else
+        %ul
+        - matched_tags.each do |tag|
+          %li
+            = tag.name_with_position
+            matched
+            = pluralize @evaluation.matched_tag_id_counts[tag.id.to_s], "time"
 

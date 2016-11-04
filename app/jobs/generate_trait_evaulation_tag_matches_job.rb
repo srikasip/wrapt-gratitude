@@ -8,7 +8,6 @@ class GenerateTraitEvaulationTagMatchesJob < ApplicationJob
     @evaluation = survey_response_trait_evaluation
     @trait_training_set = evaluation.trait_training_set
     @survey_response = evaluation.response
-    evaluation.matched_tag_ids = {}
 
     # match tags
     trait_training_set.trait_training_set_questions.each do |trait_training_set_question|
@@ -25,14 +24,15 @@ class GenerateTraitEvaulationTagMatchesJob < ApplicationJob
         end
 
         if tag_id
-          evaluation.matched_tag_ids[tag_id] ||= 0
-          evaluation.matched_tag_ids[tag_id] += 1
+          evaluation.matched_tag_id_counts[tag_id] ||= 0
+          evaluation.matched_tag_id_counts[tag_id] += 1
         end
       end
     end
 
     # save
     evaluation.updated_at = Time.now
+    evaluation.matching_in_progress = false
     evaluation.save
 
   end

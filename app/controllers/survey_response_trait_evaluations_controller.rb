@@ -1,6 +1,8 @@
 class SurveyResponseTraitEvaluationsController < ApplicationController
   before_action :set_trait_training_set
 
+  helper TraitTrainingSetsSectionHelper
+
   def index
     @profile_sets = @trait_training_set.survey.profile_sets
   end
@@ -11,6 +13,7 @@ class SurveyResponseTraitEvaluationsController < ApplicationController
     matches_need_refresh = @evaluation.new_record? || @evaluation.stale?
     @evaluation.save if @evaluation.new_record?
     if matches_need_refresh
+      @evaluation.update_attribute :matching_in_progress, true
       GenerateTraitEvaulationTagMatchesJob.perform_later(@evaluation)
     end
   end

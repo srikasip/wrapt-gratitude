@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161103164942) do
+ActiveRecord::Schema.define(version: 20161104151357) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -234,10 +234,11 @@ ActiveRecord::Schema.define(version: 20161103164942) do
   create_table "survey_response_trait_evaluations", force: :cascade do |t|
     t.integer  "response_id"
     t.integer  "trait_training_set_id"
-    t.hstore   "matched_tag_ids"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
-    t.index ["matched_tag_ids"], name: "index_survey_response_trait_evaluations_on_matched_tag_ids", using: :gin
+    t.hstore   "matched_tag_id_counts", default: {}
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.boolean  "matching_in_progress",  default: false, null: false
+    t.index ["matched_tag_id_counts"], name: "index_trait_evaluations_on_matched_tag_id_counts", using: :gin
     t.index ["response_id"], name: "index_survey_response_trait_evaluations_on_response_id", using: :btree
     t.index ["trait_training_set_id"], name: "index_response_trait_evals_on_trait_training_set", using: :btree
   end

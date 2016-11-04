@@ -1,0 +1,8 @@
+.row.breadcrumbs
+  .col-sm-12
+    = link_to "Profile Trait Training Sets", trait_training_sets_path
+    &raquo;
+    = @trait_training_set.name
+    - unless params[:action] == 'index'
+      &raquo;
+      = link_to "Profile Trait Matches", trait_training_set_evaluations_path(@trait_training_set)
