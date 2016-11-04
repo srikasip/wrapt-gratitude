@@ -1,4 +1,4 @@
-class GenerateTraitEvaulationTagMatchesJob < ApplicationJob
+class GenerateTraitEvaluationTagMatchesJob < ApplicationJob
   queue_as :default
 
   attr_accessor :trait_training_set, :survey_response, :evaluation

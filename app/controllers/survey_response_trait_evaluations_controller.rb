@@ -14,7 +14,7 @@ class SurveyResponseTraitEvaluationsController < ApplicationController
     @evaluation.save if @evaluation.new_record?
     if matches_need_refresh
       @evaluation.update_attribute :matching_in_progress, true
-      GenerateTraitEvaulationTagMatchesJob.perform_later(@evaluation)
+      GenerateTraitEvaluationTagMatchesJob.perform_later(@evaluation)
     end
   end
 
