@@ -3,7 +3,7 @@ class TraitTrainingSet < ApplicationRecord
   belongs_to :survey
 
   has_many :trait_training_set_questions, dependent: :destroy, inverse_of: :trait_training_set
-
+  has_many :evaluations, dependent: :destroy, class_name: 'SurveyResponseTraitEvaluation'
 
   def refresh_questions!
     # TODO exclude text questions

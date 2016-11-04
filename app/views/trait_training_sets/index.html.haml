@@ -13,7 +13,6 @@
         %tr
           %th Name
           %th Survey
-          %th View Trait Matches
           %th
 
       %tbody
@@ -22,11 +21,7 @@
             %td= trait_training_set.name
             %td= trait_training_set.survey.title
             %td
-              %select
-                - trait_training_set.survey.profile_sets.each do |profile_set|
-                  %option
-                  %option= profile_set.name
-            %td
               = link_to 'Details', edit_trait_training_set_path(trait_training_set), class: 'btn btn-default btn-xs'
               = link_to 'Questions', trait_training_set_questions_path(trait_training_set), class: 'btn btn-default btn-xs'
+              = link_to "Trait Matches", trait_training_set_evaluations_path(trait_training_set), class: 'btn btn-default btn-xs'
               = link_to 'Delete', trait_training_set, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'

@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161102145233) do
+ActiveRecord::Schema.define(version: 20161103164942) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "conditional_question_options", force: :cascade do |t|
     t.integer  "survey_question_id"
@@ -228,6 +229,17 @@ ActiveRecord::Schema.define(version: 20161102145233) do
     t.boolean  "use_response_as_name",      default: false, null: false
     t.integer  "conditional_question_id"
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
+  end
+
+  create_table "survey_response_trait_evaluations", force: :cascade do |t|
+    t.integer  "response_id"
+    t.integer  "trait_training_set_id"
+    t.hstore   "matched_tag_ids"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.index ["matched_tag_ids"], name: "index_survey_response_trait_evaluations_on_matched_tag_ids", using: :gin
+    t.index ["response_id"], name: "index_survey_response_trait_evaluations_on_response_id", using: :btree
+    t.index ["trait_training_set_id"], name: "index_response_trait_evals_on_trait_training_set", using: :btree
   end
 
   create_table "surveys", force: :cascade do |t|

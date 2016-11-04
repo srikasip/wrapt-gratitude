@@ -1,0 +1,17 @@
+%h1 Profile Trait Matches for #{@survey_response.name}
+
+- ProfileTraits::Topic.all.each do |topic|
+  %h3= topic.name
+  - topic.facets.each do |facet|
+    %h4= facet.name
+    - matched_tags = @evaluation.matched_tags.to_a.select {|tag| tag.facet_id == facet.id}
+    - if matched_tags.none?
+      %p No matches
+    - else
+      %ul
+      - matched_tags.each do |tag|
+        %li
+          = tag.name_with_position
+          matched
+          = pluralize @evaluation.matched_tag_ids[tag.id.to_s], "time"
+

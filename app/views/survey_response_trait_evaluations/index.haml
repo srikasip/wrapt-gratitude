@@ -1,0 +1,15 @@
+.row.admin__intro
+  .col-sm-12
+    %h1 View Recommended Profile Traits for #{@trait_training_set.name}
+
+.row
+  .col-sm-6
+    %table.table
+
+      %tbody
+        - @profile_sets.preload(:survey_responses).each do |profile_set|
+          %tr
+            %th= profile_set.name
+            - profile_set.survey_responses.each do |survey_response|
+              %tr
+                %td= link_to survey_response.name, trait_training_set_evaluation_path(@trait_training_set, survey_response)
