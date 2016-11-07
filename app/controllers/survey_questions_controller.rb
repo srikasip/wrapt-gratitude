@@ -62,7 +62,7 @@ class SurveyQuestionsController < ApplicationController
   end
 
   def update_params
-    params.require(@survey_question.model_name.param_key).permit(
+    result = params.require(@survey_question.model_name.param_key).permit(
         :prompt,
         :min_label,
         :max_label,
@@ -76,6 +76,11 @@ class SurveyQuestionsController < ApplicationController
         :conditional_question_id,
         conditional_question_option_option_ids: []
       )
+    if result[:conditional_display] == "0"
+      result[:conditional_question_id] = nil
+      result[:conditional_question_option_option_ids] = []
+    end
+    return result
   end
 
 end

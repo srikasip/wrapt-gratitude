@@ -46,22 +46,23 @@ class SurveyQuestion < ApplicationRecord
     result = prompt
     if name_question = survey.name_question
       if name_response = survey_response.question_responses.where(survey_question: name_question).first&.text_response.presence
-        result = prompt.gsub '<name>', name_response
+        result = prompt.gsub /<name>/i, name_response
       end
     end
     return result
   end
 
   private def set_conditional_display
-    self.conditional_display = conditional_question_id?
+    @conditional_display = conditional_question_id?
   end
 
   def conditional_display= value
     @conditional_display = value
-    unless value
-      conditional_question = nil
-      conditional_question_option_option_ids = []
+    if !value || value == "0"
+      self.conditional_question = nil
+      self.conditional_question_option_option_ids = []
     end
+    return value
   end
 
   private def replace_conditional_question_options
