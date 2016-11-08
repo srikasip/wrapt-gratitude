@@ -44,8 +44,9 @@ gem 'devise'
 gem 'kaminari'
 gem 'sidekiq'
 
-# For reading an excel file
+# For reading/writing files
 gem 'roo'
+gem 'write_xlsx'
 
 # Javascript
 gem 'sprockets-es6'
