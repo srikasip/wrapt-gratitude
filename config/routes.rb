@@ -73,6 +73,7 @@ Rails.application.routes.draw do
   resources :profile_sets do
     resources :survey_responses, controller: 'profile_set_survey_responses', except: [:index, :show]
     resources :imports, controller: 'profile_sets/imports', only: [:new, :create]
+    resource :exports, only: :create, controller: 'profile_set_exports'
   end
 
   resource :private_access_session, only: [:new, :create, :destroy]

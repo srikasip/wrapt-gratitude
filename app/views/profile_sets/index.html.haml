@@ -29,6 +29,7 @@
             %td= profile_set.name
             %td
               = link_to 'View', profile_set_path(profile_set), class: 'btn btn-xs btn-default'
+              = link_to 'Export', profile_set_exports_path(profile_set), method: :post, class: 'btn btn-xs btn-default'
               = link_to 'Delete', profile_set, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'
 
 
