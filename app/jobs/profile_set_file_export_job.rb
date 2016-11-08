@@ -13,6 +13,7 @@ class ProfileSetFileExportJob < ApplicationJob
 
     write_headers!
     write_response_rows!
+    set_column_widths!
 
     workbook.close
   end
@@ -38,7 +39,7 @@ class ProfileSetFileExportJob < ApplicationJob
   private def write_headers!
     headers.each_with_index do |header, i|
       worksheet.write 0, i, header
-    end    
+    end  
   end
 
   private def write_response_rows!
@@ -47,7 +48,7 @@ class ProfileSetFileExportJob < ApplicationJob
       survey_response.question_responses.each do |question_response|
         worksheet.write row, 0, survey_response.name
         worksheet.write row, 1, question_response.survey_question.code
-        worksheet.write row, 2, question_response.text_response
+        worksheet.write row, 2, question_response.text_response, text_wrap_format
         worksheet.write row, 3, question_response.range_response
 
         question_response.survey_question.options.each_with_index do |option, i|
@@ -64,6 +65,21 @@ class ProfileSetFileExportJob < ApplicationJob
     end
   end
   
+  private def text_wrap_format
+    if !@_text_wrap_format
+      @_text_wrap_format = workbook.add_format
+      @_text_wrap_format.set_text_wrap 
+    end
+    @_text_wrap_format
+  end
+
+  private def set_column_widths!
+    worksheet.set_column 0, 0, 25
+    worksheet.set_column 1, 1, 15
+    worksheet.set_column 2, 2, 25
+    worksheet.set_column 3, 3, 15
+  end
   
+      
   
 end
