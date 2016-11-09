@@ -46,6 +46,4 @@ namespace :deploy do
     end
   end
 
-set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
-
 end

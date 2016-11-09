@@ -43,7 +43,6 @@ gem 'awesome_nested_set'
 gem 'devise'
 gem 'kaminari'
 gem 'sidekiq'
-gem 'whenever', :require => false
 
 # For reading/writing files
 gem 'roo'
