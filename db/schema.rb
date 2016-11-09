@@ -45,7 +45,6 @@ ActiveRecord::Schema.define(version: 20161104151357) do
     t.boolean  "primary",         default: false, null: false
     t.integer  "sort_order",      default: 0,     null: false
     t.boolean  "image_processed", default: false, null: false
-    t.string   "type"
     t.index ["gift_id"], name: "index_gift_images_on_gift_id", using: :btree
     t.index ["primary"], name: "index_gift_images_on_primary", using: :btree
   end
