@@ -9,9 +9,11 @@ class ProfileTraits::FacetsController < ApplicationController
 
   def new
     @profile_traits_facet = @topic.facets.new
+    @profile_traits_facet.initialize_tags
   end
 
   def edit
+    @profile_traits_facet.initialize_tags
   end
 
   def create
@@ -47,6 +49,9 @@ class ProfileTraits::FacetsController < ApplicationController
     end
 
     def profile_traits_facet_params
-      params.require(:profile_traits_facet).permit(:topic_id, :name)
+      params.require(:profile_traits_facet).permit(
+        :name,
+        tags_attributes: [:id, :name, :position]
+      )
     end
 end

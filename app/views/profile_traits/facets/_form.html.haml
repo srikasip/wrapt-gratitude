@@ -5,6 +5,18 @@
     .row
       .col-xs-4
         = f.input :name
+    .row
+      .col-xs-6
+        %h3 Tags
+        %table.table
+          %tbody
+            = f.simple_fields_for :tags do |tag_fields|
+              %tr
+                %td(style="height: 34px; line-height: 34px; text-align: right;")
+                  = tag_fields.object.position
+                  = tag_fields.hidden_field :position
+                %td
+                  = tag_fields.text_field :name, class: 'form-control'
 
   .form-actions
     = f.button :submit
