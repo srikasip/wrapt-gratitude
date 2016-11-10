@@ -3,7 +3,7 @@
     %h2.heading__has-icon
       %i{class: @survey_question.system_type_label}
       Edit 
-      = @survey_question.system_type_label.titlecase
+      = @survey_question.type_label
       Question
     = simple_form_for @survey_question, url: survey_question_path(@survey, @survey_question) do |form|
 

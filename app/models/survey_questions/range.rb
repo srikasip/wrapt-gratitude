@@ -6,6 +6,10 @@ module SurveyQuestions
     def type_label
       "Slider"
     end
+
+    def system_type_label
+      "range"
+    end
     
 
   end
