@@ -1,14 +1,11 @@
 Rails.application.routes.draw do
 
-  get 'style_guides/profile_trait_matches'
-
-  get 'style_guides/profile_trait_matches' => ''
-
   resources :trait_training_sets, except: :show do
     resources :questions, except: :show, controller: 'trait_training_set_questions' do
       resources :response_impacts, only: :index, controller: 'trait_training_set_response_impacts'
     end
     resources :evaluations, only: [:index, :show], controller: 'survey_response_trait_evaluations'
+    resources :match_exports, only: :show, controller: 'trait_training_set_exports'
   end
   namespace :profile_traits, except: :show do
     resources :topics do
@@ -71,7 +68,7 @@ Rails.application.routes.draw do
   resources :profile_sets do
     resources :survey_responses, controller: 'profile_set_survey_responses', except: [:index, :show]
     resources :imports, controller: 'profile_sets/imports', only: [:new, :create]
-    resource :exports, only: :create, controller: 'profile_set_exports'
+    resource :exports, only: :create, controller: 'profile_set_exports'    
   end
 
   resource :private_access_session, only: [:new, :create, :destroy]
