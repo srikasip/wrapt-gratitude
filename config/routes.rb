@@ -5,7 +5,7 @@ Rails.application.routes.draw do
       resources :response_impacts, only: :index, controller: 'trait_training_set_response_impacts'
     end
     resources :evaluations, only: [:index, :show], controller: 'survey_response_trait_evaluations'
-    resources :match_exports, only: :show, controller: 'trait_training_set_exports'
+    resources :match_exports, only: :show, controller: 'trait_training_set_match_exports'
   end
   namespace :profile_traits, except: :show do
     resources :topics do
