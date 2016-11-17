@@ -1,0 +1,12 @@
+.row
+  .col-sm-12
+    %h1 Edit Section
+
+.row
+  .col-sm-8
+    = render 'form', url: survey_section_path(@survey, @survey_section)
+
+    .links__view-back
+      = link_to 'Show', @survey_section
+      \|
+      = link_to 'Back', survey_sections_path

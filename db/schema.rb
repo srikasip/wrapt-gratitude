@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161104151357) do
+ActiveRecord::Schema.define(version: 20161117154859) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -243,6 +243,15 @@ ActiveRecord::Schema.define(version: 20161104151357) do
     t.index ["trait_training_set_id"], name: "index_response_trait_evals_on_trait_training_set", using: :btree
   end
 
+  create_table "survey_sections", force: :cascade do |t|
+    t.integer  "survey_id"
+    t.string   "name"
+    t.integer  "sort_order", default: 0, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.index ["survey_id"], name: "index_survey_sections_on_survey_id", using: :btree
+  end
+
   create_table "surveys", force: :cascade do |t|
     t.string  "title"
     t.boolean "copy_in_progress", default: false, null: false
@@ -358,6 +367,7 @@ ActiveRecord::Schema.define(version: 20161104151357) do
   add_foreign_key "survey_question_response_options", "survey_question_responses"
   add_foreign_key "survey_question_responses", "profile_set_survey_responses"
   add_foreign_key "survey_question_responses", "survey_questions"
+  add_foreign_key "survey_sections", "surveys"
   add_foreign_key "training_set_evaluations", "training_sets"
   add_foreign_key "training_set_response_impacts", "gift_question_impacts"
   add_foreign_key "trait_response_impacts", "profile_traits_tags"

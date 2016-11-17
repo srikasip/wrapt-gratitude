@@ -49,6 +49,7 @@ Rails.application.routes.draw do
     end
     resource :question_ordering, only: :create, controller: 'survey_question_orderings'
     resource :copying, only: :create, controller: 'survey_copyings'
+    resources :sections, except: :show, controller: 'survey_sections'
   end
 
   resources :training_sets do

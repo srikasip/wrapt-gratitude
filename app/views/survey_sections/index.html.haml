@@ -1,0 +1,25 @@
+.row.admin__intro
+  .col-sm-12
+    %h1 Sections
+
+.row.admin__actions
+  .col-sm-12
+    = link_to 'Add a Section', new_survey_section_path, class: 'btn btn-primary'
+
+.row
+  .col-sm-12
+    %table.table
+      %thead
+        %tr
+          %th Name
+          %th Sort order
+          %th
+
+      %tbody
+        - @survey_sections.each do |survey_section|
+          %tr
+            %td= survey_section.name
+            %td= survey_section.sort_order
+            %td
+              = link_to 'Edit', edit_survey_section_path(@survey, survey_section), class: 'btn btn-default btn-xs'
+              = link_to 'Delete', survey_section_path(@survey, survey_section), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
