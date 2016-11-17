@@ -1,13 +1,8 @@
-class ProductImageOrderingsController < ApplicationController
+class ProductImageOrderingsController < SortableListOrderingsController
 
-  def create
-    @product = Product.find params[:product_id]
-    ProductImageOrdering.new(create_params.merge(product: @product)).save
-    head :ok
-  end
-   
-  def create_params
-    params.permit(ordering: [])
+  def sortables
+    product = Product.find params[:product_id]
+    return product.product_images
   end
 
 end

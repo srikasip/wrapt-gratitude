@@ -1,14 +1,33 @@
 .admin-index-list li {
   margin-top: 18px;
 }
-.question-list__item {
+.question-list__item,
+.section-list__item {
   position: relative;
 }
-.question-list__item .glyphicon-move {
+
+.section-list__item {
+  list-style-type: none;
+}
+
+.question-list__item .glyphicon-move
+ {
   position: absolute;
   left: -40px;
   top: 2px;
 }
+
+.section-list {
+  padding-left: 20px;
+}
+
+.section-list__item .glyphicon-move {
+  position: absolute;
+  left: -20px;
+  top: 2px;
+}
+
+
 .edit-question-list {
   list-style: lower-alpha;
 }
@@ -25,7 +44,8 @@
 .question-list__icon.multiple_choice {
   background-size: 25px;
 }
-.question-list__edit-links {
+.question-list__edit-links,
+.section-list__edit-links {
   margin-left: 24px;
   display: inline-block;
 }
