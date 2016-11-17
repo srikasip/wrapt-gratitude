@@ -58,7 +58,7 @@ class SurveyQuestionsController < ApplicationController
   end
 
   def create_params
-    params.require(:survey_question).permit(:prompt, :type)
+    params.require(:survey_question).permit(:prompt, :type, :survey_section_id)
   end
 
   def update_params
@@ -74,6 +74,7 @@ class SurveyQuestionsController < ApplicationController
         :code,
         :conditional_display,
         :conditional_question_id,
+        :survey_section_id,
         conditional_question_option_option_ids: []
       )
     if result[:conditional_display] == "0"

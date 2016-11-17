@@ -10,7 +10,9 @@ class SurveyQuestion < ApplicationRecord
 
   belongs_to :conditional_question, class_name: 'SurveyQuestion', required: false
   has_many :conditional_question_options, inverse_of: :survey_question, dependent: :destroy
-  has_many :trait_training_set_questions, inverse_of: :question, dependent: :destroy
+  has_many :trait_training_set_questions, inverse_of: :question, dependent: :destroy, foreign_key: :question_id
+
+  belongs_to :survey_section, inverse_of: :questions
 
   scope :not_text, -> {where.not(type: 'SurveyQuestions::Text')}
 

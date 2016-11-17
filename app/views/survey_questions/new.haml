@@ -8,6 +8,7 @@
       .form-inputs
         = f.input :prompt
         = f.input :type, as: :select, collection: SurveyQuestion::TYPES, include_blank: false, label_method: :last, value_method: :first, label: "Question Type"
+        = f.association :survey_section, as: :select, collection: @survey.sections, include_blank: false, label: 'Section'
 
       .form-actions
         = f.button :submit, 'Save'

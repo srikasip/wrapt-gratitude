@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161117154859) do
+ActiveRecord::Schema.define(version: 20161117194621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -228,7 +228,9 @@ ActiveRecord::Schema.define(version: 20161117154859) do
     t.string   "code"
     t.boolean  "use_response_as_name",      default: false, null: false
     t.integer  "conditional_question_id"
+    t.integer  "survey_section_id"
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
+    t.index ["survey_section_id"], name: "index_survey_questions_on_survey_section_id", using: :btree
   end
 
   create_table "survey_response_trait_evaluations", force: :cascade do |t|
