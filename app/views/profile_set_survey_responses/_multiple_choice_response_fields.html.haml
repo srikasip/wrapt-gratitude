@@ -7,9 +7,10 @@
     %input{:name => "profile_set_survey_response[question_responses_attributes][#{question_response_fields.index}][survey_question_option_ids][]", :type => "hidden", :value => ""}
   - question.options.standard.each do |option|
     %span{class: (question.multiple_option_responses? ? 'checkbox' : 'radio')}
-      %label{:for => "profile_set_survey_response_question_responses_attributes_#{question_response_fields.index}_survey_question_option_id_#{option.id}[]"}
+      - input_id = "profile_set_survey_response_question_responses_attributes_#{question_response_fields.index}_survey_question_option_id_#{option.id}"
+      %label{:for => input_id}
         - if question.multiple_option_responses?
-          = check_box_tag "profile_set_survey_response[question_responses_attributes][#{question_response_fields.index}][survey_question_option_ids][]", option.id, (option.id.in? question_response.survey_question_option_ids), data: {behavior: 'survey_question_option_input'}
+          = check_box_tag "profile_set_survey_response[question_responses_attributes][#{question_response_fields.index}][survey_question_option_ids]", option.id, (option.id.in? question_response.survey_question_option_ids), data: {behavior: 'survey_question_option_input'}, id: input_id
         - else
           = question_response_fields.radio_button :survey_question_option_id, option.id, data: {behavior: 'survey_question_option_input'}
         = option.text
@@ -21,7 +22,7 @@
     - option = question.other_option
     - index = question.options.standard.length
     %span{class: (question.multiple_option_responses? ? 'checkbox' : 'radio')}
-      %label{:for => "profile_set_survey_response_question_responses_attributes_#{question_response_fields.index}_survey_question_option_id_#{option.id}[]"}
+      %label{:for => "profile_set_survey_response_question_responses_attributes_#{question_response_fields.index}_survey_question_option_id_#{option.id}"}
         - if question.multiple_option_responses?
           = check_box_tag "profile_set_survey_response[question_responses_attributes][#{question_response_fields.index}][survey_question_option_ids][]", option.id, (option.id.in? question_response.survey_question_option_ids)
         - else
