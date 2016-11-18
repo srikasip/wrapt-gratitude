@@ -12,17 +12,28 @@
 
 .row
   .col-sm-12
-    %ol.question-list{data: {sortable_list: true, sortable_list_href: survey_question_ordering_path(@survey)}}
-      - @survey.questions.preload(:options).each_with_index do |question, i|
-        %li.mb4.question-list__item{data: {sortable_item: true, sortable_item_id: question.id}}
-          %i.glyphicon.glyphicon-move
-          %i.question-list__icon{class: question.system_type_label}
-          = question.prompt
-          .question-list__edit-links
-            = link_to "Edit", edit_survey_question_path(@survey, question), class: 'btn btn-default btn-xs'
-            = link_to 'Delete', survey_question_path(@survey, question), method: :delete, confirm: "This will delete '#{question.prompt}'", class: 'btn btn-danger btn-xs'
+    %div{data: {behavior: 'sectioned-sortable-question-list'}}
+      - @survey.sections.preload(questions: :options).each do |section|
+        %div{data: {question_list_section: true}}
+          %h3= section.name
+          %p{data: {empty_section_placeholder_text: true}}
+            %em No questions in this section
+          %table.table
+            %tbody
+              %tr.question-list__empty-section-drop-target{data: {sortable_item: true, empty_section_drop_target: true}}
+                %td
+              - section.questions.each do |question|
+                = render 'survey_question', question: question
+      %h3
+        Uncategorized
+      %table.table{data: {question_list_section: true}}
+        %tbody
+          - @survey.questions.where(survey_section: nil).preload(:options).each do |question|
+            = render 'survey_question', question: question
 
 
 - content_for :page_js do
   :javascript
-    new App.SortableList($('[data-sortable-list]')[0]);
+    new App.SectionedSortableQuestionList($('[data-behavior~=sectioned-sortable-question-list]')[0]);  
+
+    
