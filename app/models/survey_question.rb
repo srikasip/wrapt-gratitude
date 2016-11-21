@@ -40,7 +40,7 @@ class SurveyQuestion < ApplicationRecord
   end
 
   private def set_initial_sort_order
-    next_sort_order = ( survey&.questions.maximum(:sort_order) || 0 ) + 1
+    next_sort_order = ( section_or_uncategorized&.questions.maximum(:sort_order) || 0 ) + 1
     self.sort_order = next_sort_order
   end
 
@@ -72,6 +72,10 @@ class SurveyQuestion < ApplicationRecord
     conditional_question_option_option_ids.each do |option_id|
       conditional_question_options.create survey_question_option_id: option_id
     end
+  end
+
+  def section_or_uncategorized
+    survey_section || survey&.uncategorized_section
   end
   
 

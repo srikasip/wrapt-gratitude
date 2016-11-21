@@ -10,4 +10,8 @@ class NullSurveySection
   def id
     nil
   end
+
+  def name
+    "Uncategorized"
+  end
 end
