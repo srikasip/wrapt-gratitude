@@ -13,4 +13,12 @@ class Survey < ApplicationRecord
 
   has_many :sections, -> {order 'sort_order ASC'}, class_name: 'SurveySection', inverse_of: :survey, dependent: :destroy
 
+  def sections_with_uncategorized
+    sections.to_a.push uncategorized_section
+  end
+
+  def uncategorized_section
+    @_uncategorized_section ||= NullSurveySection.new(survey: self)
+  end
+
 end

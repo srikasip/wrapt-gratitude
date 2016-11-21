@@ -12,9 +12,9 @@
 
 .row
   .col-sm-12
-    %div{data: {behavior: 'sectioned-sortable-question-list'}}
+    %div{data: {behavior: 'sectioned-sortable-question-list', sectioned_sortable_question_list_href: survey_sectioned_question_ordering_path(@survey, format: :json)}}
       - @survey.sections.preload(questions: :options).each do |section|
-        %div{data: {question_list_section: true}}
+        %div{data: {question_list_section: true, section_id: section.id}}
           %h3= section.name
           %p{data: {empty_section_placeholder_text: true}}
             %em No questions in this section

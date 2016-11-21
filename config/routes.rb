@@ -47,7 +47,7 @@ Rails.application.routes.draw do
       # note: index route only exists for dynamic url generation
       resources :conditional_question_options, only: [:index, :show]
     end
-    resource :question_ordering, only: :create, controller: 'survey_question_orderings'
+    resource :sectioned_question_ordering, only: :create, controller: 'survey_sectioned_question_orderings'
     resource :copying, only: :create, controller: 'survey_copyings'
     resources :sections, except: :show, controller: 'survey_sections'
     resource :section_ordering, only: :create, controller: 'survey_section_orderings'

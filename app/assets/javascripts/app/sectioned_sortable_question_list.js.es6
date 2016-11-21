@@ -8,21 +8,45 @@ window.App.SectionedSortableQuestionList = class SectionedSortableQuestionList {
     });
     this.refreshEmptySectionPlaceholderVisibility();
     this.handleSortStop();
-    // this.updateServerOnSortStop();
   }
 
-  updateServerOnSortStop() {
+  handleSortStop() {
     $(this.element).on('sortstop', evt => {
-      const url = this.element.getAttribute('data-sortable-list-href');
-      $.post(url, this.orderingData, () => {$(this.element).trigger('ajax:success')});
+      this.refreshEmptySectionPlaceholderVisibility();
+      this.updateServer();
     })
   }
 
-  get orderingData() {
-    var result = {ordering: []};
-    $(this.element).children('[data-sortable-item]').each( (_i, question_element) => {
-      const id = question_element.getAttribute('data-sortable-item-id');
-      result.ordering.push(id);
+  updateServer() {
+    const url = this.element.getAttribute('data-sectioned-sortable-question-list-href');
+    window.sectionData = this.sectionData;
+    $.ajax({
+       type : "POST",
+       url :  url,
+       dataType: 'json',
+       data : JSON.stringify(this.sectionData),
+       contentType: 'application/json',
+       success: () => {$(this.element).trigger('ajax:success')}
+    });
+  }
+
+  get sectionData() {
+    var result = {sections: []}
+    this.$sections.each( (_i, section_element) => {
+      var thisSectionData = {}
+      const section_id = ( section_element.getAttribute('data-section-id') || "" )
+      thisSectionData.id = section_id
+      thisSectionData.question_ordering = this.getQuestionOrderingFromSectionElement(section_element)
+      result.sections.push(thisSectionData);
+    });
+    return result;
+  }
+
+  getQuestionOrderingFromSectionElement(section_element) {
+    var result = [];
+    $(section_element).find('[data-sortable-question]').each( (_i, question_element) => {
+      const id = question_element.getAttribute('data-sortable-question-id');
+      result.push(id);
     } )
     return result;
   }
@@ -39,12 +63,6 @@ window.App.SectionedSortableQuestionList = class SectionedSortableQuestionList {
         $placeholderText.hide();
         $placeholderDropTarget.hide();
       }
-    })
-  }
-
-  handleSortStop() {
-    $(this.element).on('sortstop', evt => {
-      this.refreshEmptySectionPlaceholderVisibility()
     })
   }
 
