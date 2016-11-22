@@ -14,4 +14,8 @@ class NullSurveySection
   def name
     "Uncategorized"
   end
+
+  def sort_order
+    99999
+  end
 end

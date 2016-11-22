@@ -1,7 +1,13 @@
 class ProfileSetSurveyResponse < ApplicationRecord
   belongs_to :profile_set
 
-  has_many :question_responses, -> {joins(survey_question: :survey_section).order('survey_sections.sort_order ASC, survey_questions.sort_order ASC')}, inverse_of: :survey_response, class_name: 'SurveyQuestionResponse', dependent: :destroy
+  has_many :question_responses,
+    # -> {
+    #   joins(survey_question: :survey_section)
+    #   .where('survey_questions.survey_section_id IS NOT NULL')
+    #   .order('survey_sections.sort_order ASC, survey_questions.sort_order ASC')
+    # },
+    inverse_of: :survey_response, class_name: 'SurveyQuestionResponse', dependent: :destroy
   has_many :evaluation_recommendations, dependent: :destroy
 
 
@@ -13,6 +19,18 @@ class ProfileSetSurveyResponse < ApplicationRecord
     profile_set.survey.questions.each do |question|
       question_responses.new survey_question: question
     end
+  end
+
+  def question_responses_for_form
+    question_responses
+      .preload(survey_question: [:survey_section, :options])
+      .to_a
+      .sort_by do |response|
+        [
+          response.survey_question.section_or_uncategorized.sort_order,
+          response.survey_question.sort_order
+        ] 
+      end
   end
 
 end

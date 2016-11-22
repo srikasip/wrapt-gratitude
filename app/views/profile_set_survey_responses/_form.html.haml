@@ -7,7 +7,7 @@
     
     - section = nil
     - section_was = nil
-    = f.simple_fields_for :question_responses do |question_response_fields|
+    = f.simple_fields_for :question_responses, @profile_set_survey_response.question_responses_for_form do |question_response_fields|
       :ruby
         question = question_response_fields.object.survey_question
         section = question.section_or_uncategorized
