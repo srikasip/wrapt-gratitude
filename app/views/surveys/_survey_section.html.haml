@@ -1,0 +1,10 @@
+%div{data: {question_list_section: true, section_id: section.id}}
+  %h3= section.name
+  %p{data: {empty_section_placeholder_text: true}}
+    %em No questions in this section.  It won't show up in the survey.
+  %table.table
+    %tbody
+      %tr.question-list__empty-section-drop-target{data: {sortable_item: true, empty_section_drop_target: true}}
+        %td
+      - section.questions.each do |question|
+        = render 'survey_question', question: question

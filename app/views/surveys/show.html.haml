@@ -13,23 +13,9 @@
 .row
   .col-sm-12
     %div{data: {behavior: 'sectioned-sortable-question-list', sectioned_sortable_question_list_href: survey_sectioned_question_ordering_path(@survey, format: :json)}}
-      - @survey.sections.preload(questions: :options).each do |section|
-        %div{data: {question_list_section: true, section_id: section.id}}
-          %h3= section.name
-          %p{data: {empty_section_placeholder_text: true}}
-            %em No questions in this section
-          %table.table
-            %tbody
-              %tr.question-list__empty-section-drop-target{data: {sortable_item: true, empty_section_drop_target: true}}
-                %td
-              - section.questions.each do |question|
-                = render 'survey_question', question: question
-      %h3
-        Uncategorized
-      %table.table{data: {question_list_section: true}}
-        %tbody
-          - @survey.questions.where(survey_section: nil).preload(:options).each do |question|
-            = render 'survey_question', question: question
+      - @survey.sections.preload(:questions).each do |section|
+        = render 'survey_section', section: section
+      = render 'survey_section', section: @survey.uncategorized_section
 
 
 - content_for :page_js do
