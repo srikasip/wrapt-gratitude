@@ -19,9 +19,5 @@ module GiftImages
       GiftImageProcessingChannel
     end
 
-    def to_partial_path
-      'gift_images/gift_images_uploaded'
-    end
-
   end
 end

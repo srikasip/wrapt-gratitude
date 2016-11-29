@@ -1,6 +1,5 @@
 class GiftImage < ApplicationRecord
   belongs_to :gift
-  
 
   before_create :make_primary_if_only_gift_image
   before_create :set_initial_sort_order
@@ -16,6 +15,9 @@ class GiftImage < ApplicationRecord
     self.sort_order = next_sort_order
   end
 
+  def to_partial_path
+    'gift_images/gift_image'
+  end
 
 
 end
