@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161117194621) do
+ActiveRecord::Schema.define(version: 20161129163512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,14 +40,16 @@ ActiveRecord::Schema.define(version: 20161117194621) do
   create_table "gift_images", force: :cascade do |t|
     t.integer  "gift_id"
     t.string   "image"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.boolean  "primary",         default: false, null: false
-    t.integer  "sort_order",      default: 0,     null: false
-    t.boolean  "image_processed", default: false, null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.boolean  "primary",          default: false, null: false
+    t.integer  "sort_order",       default: 0,     null: false
+    t.boolean  "image_processed",  default: false, null: false
+    t.integer  "product_image_id"
     t.string   "type"
     t.index ["gift_id"], name: "index_gift_images_on_gift_id", using: :btree
     t.index ["primary"], name: "index_gift_images_on_primary", using: :btree
+    t.index ["product_image_id"], name: "index_gift_images_on_product_image_id", using: :btree
   end
 
   create_table "gift_products", force: :cascade do |t|
@@ -352,6 +354,7 @@ ActiveRecord::Schema.define(version: 20161117194621) do
   add_foreign_key "evaluation_recommendations", "profile_set_survey_responses"
   add_foreign_key "evaluation_recommendations", "training_set_evaluations"
   add_foreign_key "gift_images", "gifts"
+  add_foreign_key "gift_images", "product_images"
   add_foreign_key "gift_products", "gifts"
   add_foreign_key "gift_products", "products"
   add_foreign_key "gift_question_impacts", "gifts"

@@ -1,11 +1,9 @@
 class GiftImage < ApplicationRecord
   belongs_to :gift
-  mount_uploader :image, ProductImageUploader
+  
 
   before_create :make_primary_if_only_gift_image
   before_create :set_initial_sort_order
-
-  after_save :enqueue_processing, if: :key, unless: :image_processed?
 
   private def make_primary_if_only_gift_image
     if gift.gift_images.length <= 1
@@ -18,16 +16,6 @@ class GiftImage < ApplicationRecord
     self.sort_order = next_sort_order
   end
 
-  private def enqueue_processing
-    DirectUploadedImageProcessingJob.perform_later(self, key)
-  end
 
-  def image_owner
-    gift
-  end
-
-  def processing_channel_class
-    GiftImageProcessingChannel
-  end
 
 end
