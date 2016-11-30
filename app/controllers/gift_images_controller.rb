@@ -1,10 +1,16 @@
 class GiftImagesController < ApplicationController
+  # Note that new and create handle the creation of GiftImages::Uploaded
+  # for adding images from product see GiftImagesFromProductsController
+
   before_action :set_gift
 
   def index
     @gift_image = @gift.uploaded_gift_images.new
     @uploader = @gift_image.image
     @uploader.success_action_redirect = new_gift_image_url(@gift)
+    @available_product_images = ProductImage
+      .where(product_id: @gift.gift_products.select(:product_id))
+      .where.not(id: @gift.gift_images_from_products.select(:product_image_id))
   end
 
   def new
@@ -22,7 +28,7 @@ class GiftImagesController < ApplicationController
   end
 
   def destroy
-    @gift_image = @gift.uploaded_gift_images.find params[:id]
+    @gift_image = @gift.gift_images.find params[:id]
     @gift_image.destroy
     redirect_to gift_images_path(@gift)
   end
