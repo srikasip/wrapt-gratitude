@@ -6,7 +6,7 @@ class GiftProduct < ApplicationRecord
   after_create :create_gift_images_from_products
 
   # Removing a product from a gift removes its images
-  after_destroy :destroy_gift_images_from_products
+  before_destroy :destroy_gift_images_from_products
 
   private def create_gift_images_from_products
     product.gifts.each do |gift|
