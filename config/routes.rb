@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       member { post 'make_primary' }
     end
     resource :image_ordering, only: :create, controller: 'gift_image_orderings'
+    resources :images_from_products, only: :create, controller: 'gift_images_from_products'
   end
   resources :surveys do
     resources :questions, except: :index, controller: 'survey_questions' do
