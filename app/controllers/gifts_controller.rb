@@ -23,7 +23,7 @@ class GiftsController < ApplicationController
   def create
     @gift = Gift.new(gift_params)
     if @gift.save
-      redirect_to gift_products_path(@gift), notice: 'Gift was successfully created.  Now add some products.'
+      redirect_to gift_products_path(@gift), notice: "#{@gift.title} has been created.  Now add some products."
     else
       render :new
     end
@@ -31,7 +31,7 @@ class GiftsController < ApplicationController
 
   def update
     if @gift.update(gift_params)
-      redirect_to @gift, notice: 'Gift was successfully updated.'
+      redirect_to @gift, notice: "#{@gift.title} has been updated."
     else
       render :edit
     end
@@ -39,7 +39,7 @@ class GiftsController < ApplicationController
 
   def destroy
     @gift.destroy
-    redirect_to gifts_url(context_params), notice: 'Gift was successfully deleted.'
+    redirect_to gifts_url(context_params), notice: "#{@gift.title} has been deleted."
   end
 
   
