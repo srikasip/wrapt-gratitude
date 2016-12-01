@@ -53,7 +53,7 @@
               - if product.single_product_gift.present?
                 = link_to product.single_product_gift.title, product.single_product_gift
               - else
-                = link_to 'Create Single-Product Gift', new_product_single_product_gift_path(product), class: 'btn btn-default btn-xs', data: {loads_in_pjax_modal: true}
+                = link_to 'Create Single-Product Gift', new_product_single_product_gift_path(product, context_params), class: 'btn btn-default btn-xs', data: {loads_in_pjax_modal: true}
             %td.admin-index-table--buttons-cell
               = link_to 'View', product, class: 'btn btn-default btn-xs'
               = link_to 'Edit', edit_product_path(product), class: 'btn btn-default btn-xs'

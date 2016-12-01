@@ -1,12 +1,15 @@
 class SingleProductGiftsController < ApplicationController
   include PjaxModalController
 
+  helper ProductsIndexContextHelper
+  include ProductsIndexContextHelper
+
   before_action :set_product
 
   def new
     if @product.single_product_gift.present?
       flash[:alert] = 'Sorry that product already has a single product gift.'
-      redirect_to products_path #TODO preserve page + search
+      redirect_to products_path(context_params) #TODO preserve page + search
     else
       @gift = @product.build_single_product_gift product_category: Gift.default_product_category
     end
@@ -16,7 +19,7 @@ class SingleProductGiftsController < ApplicationController
     @gift = Gift.new gift_attributes_from_product.merge(gift_params)
     if @gift.save
       flash[:notice] = "Successfully created a gift from #{@product.title}"
-      redirect_to products_path #TODO preserve page + search
+      redirect_to products_path(context_params) #TODO preserve page + search
     else
       flash[:alert] = "Sorry, we could not create a single-product gift.  Please correct the errors below"
       render :new
