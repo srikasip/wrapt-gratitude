@@ -25,7 +25,7 @@ Rails.application.routes.draw do
       member { post 'make_primary' }
     end
     resource :image_ordering, only: :create, controller: 'product_image_orderings'
-    resource :single_product_gift, only: :create
+    resource :single_product_gift, only: [:new, :create]
   end
   resources :gifts do
     resources :products, only: [:index, :create, :destroy], controller: 'gift_products'

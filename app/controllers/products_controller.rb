@@ -1,6 +1,9 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
 
+  helper ProductsIndexContextHelper
+  include ProductsIndexContextHelper
+
   # GET /products
   # GET /products.json
   def index
@@ -9,7 +12,8 @@ class ProductsController < ApplicationController
       .preload(:product_category, :product_subcategory)
       .search(product_search_params)
       .page(params[:page])
-      .per(50)
+      .per(1)
+      # .per(50)
   end
 
   # GET /products/1
@@ -84,14 +88,5 @@ class ProductsController < ApplicationController
       )
     end
 
-    def product_search_params
-      params_base = params[:product_search] || ActionController::Parameters.new
-      params_base.permit(:keyword, :product_category_id, :product_subcategory_id)
-    end
-    helper_method :product_search_params
 
-    def context_params
-      params.permit(:page).merge(product_search: product_search_params)
-    end
-    helper_method :context_params
 end

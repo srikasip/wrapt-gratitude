@@ -22,20 +22,20 @@ class window.PjaxModal
     @_registerClose()
 
   _registerLoadingIndicator: ->
-    $(document).on 'pjax:send', =>
+    $('body').on 'pjax:send', =>
       @loading.show()
-    $(document).on 'pjax:complete', =>
+    $('body').on 'pjax:complete', =>
       @loading.hide()
 
   _registerLinks: ->
-    $(document).pjax @linkTriggers.selector, @container.selector, timeout: false, push: false
-    $(document).on 'click', @linkTriggers.selector, (e) =>
+    $('body').pjax @linkTriggers.selector, @container.selector, timeout: false, push: false
+    $('body').on 'click', @linkTriggers.selector, (e) =>
       @body.hide()
       @footer.hide()
       @open()
 
   _registerForms: ->
-    $(document).on 'submit', @formTriggers.selector, (evt) =>
+    $('body').on 'submit', @formTriggers.selector, (evt) =>
       @open()
       $.pjax.submit evt, @container.selector, timeout: false, push: false
 

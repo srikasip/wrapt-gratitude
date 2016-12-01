@@ -27,14 +27,13 @@
           %th Title
           %th Categories
           %th Wrapt SKU
-          %th.text-right Wrapt Cost
-          %th.text-right Vendor Retail Price
-          %th.text-right Units Available
+          %th Gifts
+          %th.text-right Single-Product Gift
           %th
 
 
       %tbody
-        - @products.preload(:primary_product_image).each do |product|
+        - @products.preload(:primary_product_image, :gifts, :single_product_gift).each do |product|
           %tr
             %td.admin-index-table--image-cell
               - if product.primary_product_image.present?
@@ -46,12 +45,17 @@
               - if product.product_subcategory.present?
                 %span.label.label-default= product.product_subcategory&.name
             %td.admin-index-table--sku-cell= product.wrapt_sku
-            %td.text-right= number_to_currency product.wrapt_cost
-            %td.text-right= number_to_currency product.vendor_retail_price
-            %td.text-right= number_with_delimiter product.units_available
+            %td
+              %ul(style="padding-left: 20px;")
+                - product.gifts.each_with_index do |gift, i|
+                  %li= link_to gift.title, gift
+            %td.text-right
+              - if product.single_product_gift.present?
+                = link_to product.single_product_gift.title, product.single_product_gift
+              - else
+                = link_to 'Create Single-Product Gift', new_product_single_product_gift_path(product, context_params), class: 'btn btn-default btn-xs', data: {loads_in_pjax_modal: true}
             %td.admin-index-table--buttons-cell
-              = link_to 'View (w/option to create gift)', product, class: 'btn btn-default btn-xs mb2'
-              %br
+              = link_to 'View', product, class: 'btn btn-default btn-xs'
               = link_to 'Edit', edit_product_path(product), class: 'btn btn-default btn-xs'
               = link_to 'Delete', product_path(product, context_params), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
 

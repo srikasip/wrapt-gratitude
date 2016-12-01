@@ -6,7 +6,9 @@ App.init = function(){
   $('[data-provide="slider"]').bootstrapSlider();
   // TODO fix tooltips
   // $('[data-toggle="tooltip"]').tooltip()
-  (new window.PjaxModal).listen()
 }
 
 $(document).on( "turbolinks:load pjax:success", ( () => App.init()) )
+
+//can't be part of App.init because it causes double submissions
+$(document).on( "turbolinks:load", ( () => (new window.PjaxModal).listen()))
