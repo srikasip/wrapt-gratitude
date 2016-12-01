@@ -13,6 +13,8 @@ class Product < ApplicationRecord
 
   before_save :generate_wrapt_sku, if: :sku_needs_updating?
 
+  has_one :single_product_gift, class_name: 'Gift', foreign_key: :source_product_id, inverse_of: :source_product, dependent: :destroy
+
   attr_accessor :dependent_skus_need_regeneration
   before_save :set_dependent_skus_need_regeneration, if: :vendor_id_changed?
   after_save :regenerate_dependent_skus!, if: :dependent_skus_need_regeneration
