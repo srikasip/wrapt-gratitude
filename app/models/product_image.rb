@@ -1,5 +1,5 @@
 class ProductImage < ApplicationRecord
-  belongs_to :product
+  belongs_to :product, inverse_of: :product_images
   mount_uploader :image, ProductImageUploader
 
   before_create :make_primary_if_only_product_image
@@ -17,7 +17,7 @@ class ProductImage < ApplicationRecord
 
 
   private def make_primary_if_only_product_image
-    if product.product_images.length <= 1
+    if product.product_images.none?{|product_image| product_image != self }
       self.primary = true
     end
   end

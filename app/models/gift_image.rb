@@ -1,11 +1,13 @@
 class GiftImage < ApplicationRecord
-  belongs_to :gift
+  belongs_to :gift, inverse_of: :gift_images
 
   before_create :make_primary_if_only_gift_image
   before_create :set_initial_sort_order
 
   private def make_primary_if_only_gift_image
-    if gift.gift_images.length <= 1
+    # gift.gift_images may or may not contain the current gift image
+    # depending on how it was created
+    if gift.gift_images.none?{|gift_image| gift_image != self }
       self.primary = true
     end
   end

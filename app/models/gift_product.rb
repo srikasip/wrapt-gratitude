@@ -10,7 +10,10 @@ class GiftProduct < ApplicationRecord
 
   def create_gift_images_from_products
     product.gifts.each do |gift|
-      product.product_images.each do |product_image|
+      if product.primary_product_image
+        gift.gift_images_from_products.create product_image: product.primary_product_image, primary: true
+      end
+      product.product_images.where.not(primary: true).each do |product_image|
         gift.gift_images_from_products.create product_image: product_image
       end
     end
