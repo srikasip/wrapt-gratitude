@@ -47,7 +47,6 @@ class ProductsController < ApplicationController
   def update
     if @product.update(product_params)
       redirect_to @product, notice: 'Product was successfully updated.'
-      render :show, status: :ok, location: @product
     else
       render :edit
     end
