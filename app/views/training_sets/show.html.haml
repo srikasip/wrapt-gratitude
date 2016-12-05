@@ -10,6 +10,7 @@
 
     %h3 Gift-Questions
 
+    = link_to "Export Impacts", training_set_export_path(@training_set), class: 'btn btn-primary'
     = link_to "Import Impacts", new_training_set_import_path(@training_set), class: 'btn btn-primary'
 
     %table.table(style="table-layout: fixed;")

@@ -4,7 +4,7 @@ class TrainingSetsController < ApplicationController
   # GET /training_sets
   # GET /training_sets.json
   def index
-    @training_sets = TrainingSet.all
+    @training_sets = TrainingSet.order(:id).all
   end
 
   # GET /training_sets/1
