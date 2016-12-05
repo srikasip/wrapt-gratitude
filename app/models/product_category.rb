@@ -10,7 +10,8 @@ class ProductCategory < ApplicationRecord
   scope :subcategories, -> { where depth: 1 }
 
   validates :wrapt_sku_code, presence: true, format: {with: /\A[A-Z]{3}\z/, message: 'must be 3 uppercase letters'}, uniqueness: true
-  
+  before_validation :upcase_wrapt_sku_code
+
   attr_accessor :skus_need_regeneration
   before_save :set_skus_need_regeneration, if: :wrapt_sku_code_changed?
   after_save :regenerate_dependent_skus!, if: :skus_need_regeneration
@@ -57,5 +58,12 @@ class ProductCategory < ApplicationRecord
       end
     end
   end
+
+  private def upcase_wrapt_sku_code
+    if wrapt_sku_code.present?
+      self.wrapt_sku_code = wrapt_sku_code.upcase
+    end
+  end
+  
 
 end
