@@ -65,6 +65,7 @@ Rails.application.routes.draw do
       end
     end
     resources :imports, controller: 'training_sets/imports', only: [:new, :create]
+    resource :export, only: :show, controller: 'training_set_exports'
   end
 
 
