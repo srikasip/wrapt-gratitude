@@ -1,0 +1,43 @@
+namespace :rails do
+  desc "tail rails logs" 
+  task :tail_logs do
+    on roles(:app) do
+      execute "tail -f #{shared_path}/log/#{fetch(:rails_env)}.log"
+    end
+  end
+
+  desc "Open the rails console on primary app server"
+  task :console do
+    on roles(:app), primary: true do
+      # within "#{fetch(:deploy_to)}/current" do
+        rails_env = fetch(:stage)
+        execute_interactively "bin/rails console #{rails_env}"
+      end
+    # end
+  end
+
+  desc "Open the rails dbconsole on primary db server"
+  task :dbconsole do
+    on roles(:db), primary: true do
+      rails_env = fetch(:stage)
+      execute_interactively "#{current_path}/bin/rails dbconsole #{rails_env}"
+    end
+  end
+
+  def execute_interactively(command)
+    user = fetch(:user)
+    port = fetch(:port) || 22
+    cmd = "ssh"
+    if user
+      cmd << " -l #{user}"
+    end
+    cmd << " #{host} -p #{port} -t 'cd #{fetch(:deploy_to)}/current && /usr/local/rvm/bin/rvm `cat .ruby-version` do #{bundle_cmd} #{command}'"
+    info "Connecting to #{host} with command"
+    info cmd
+    exec cmd
+  end
+
+  def bundle_cmd
+    "bundle exec"
+  end
+end
