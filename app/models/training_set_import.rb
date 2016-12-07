@@ -2,10 +2,15 @@ class TrainingSetImport < Import
 
   importable_name :training_set, ExcelImportRecordsFileUploader
 
+  def initialize attrs = {}
+    super
+    @question_scope = training_set.survey.questions
+  end
+
   def preload!
     sheet.cache_columns_scan!(:gift_sku, :question_code)
     preload_one!(Gift, :gift_sku, :wrapt_sku)
-    preload_one!(SurveyQuestion, :question_code, :code)
+    preload_one!(@question_scope, :question_code, :code)
     preload_question_impacts!
   end
 
@@ -18,7 +23,7 @@ class TrainingSetImport < Import
   end
 
   def row_record(row)
-    question = @preloads[SurveyQuestion][row.question_code]
+    question = @preloads[@question_scope][row.question_code]
     gift = @preloads[Gift][row.gift_sku]
 
     question_impact =
@@ -45,7 +50,7 @@ class TrainingSetImport < Import
     @preloads[GiftQuestionImpact] ||=
       GiftQuestionImpact.
         where(
-          survey_question: @preloads[SurveyQuestion].values,
+          survey_question: @preloads[@question_scope].values,
           gift: @preloads[Gift].values
         ).
         index_by do |record|
