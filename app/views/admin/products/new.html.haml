@@ -6,7 +6,7 @@
 .row
   .col-sm-12
     %ul.nav.nav-tabs
-      %li(role="presentation" class="active")= link_to 'Details', new_product_path
+      %li(role="presentation" class="active")= link_to 'Details', new_admin_product_path
       %li(role="presentation" class="disabled")= link_to 'Images', '#', disabled: true
 
 .row
@@ -14,4 +14,4 @@
     = render 'form'
 
     .links__view-back
-      = link_to 'Back', products_path
+      = link_to 'Back', admin_products_path

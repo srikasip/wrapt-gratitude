@@ -18,7 +18,8 @@ class TrainingSetImport < Import
   end
 
   def row_record(row)
-    question = @preloads[SurveyQuestion][row.question_code]
+    question = training_set.survey.survey_questions.detect{|q| q.code == row.question_code}
+    # question = @preloads[SurveyQuestion][row.question_code]
     gift = @preloads[Gift][row.gift_sku]
 
     question_impact =
