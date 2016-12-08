@@ -16,7 +16,7 @@ module Admin
     def update
       if @gift_question_impact.update(gift_question_impact_params)
         flash[:notice] = 'Gift-Question was successfully updated.'
-        redirect_to training_set_evaluation_path(@training_set)
+        redirect_to admin_training_set_evaluation_path(@training_set)
       else
         render :edit
       end

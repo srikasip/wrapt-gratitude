@@ -23,7 +23,7 @@ module Admin
       @survey_question = @survey.questions.new(create_params)
       
       if @survey_question.save
-        redirect_to edit_survey_question_path(@survey, @survey_question), notice: 'The question was successfully created.'
+        redirect_to edit_admin_survey_question_path(@survey, @survey_question), notice: 'The question was successfully created.'
       else
         render :new
       end
@@ -31,7 +31,7 @@ module Admin
 
     def update
       if @survey_question.update(update_params)
-        redirect_to edit_survey_question_path(@survey, @survey_question), notice: 'The question was successfully updated.'
+        redirect_to edit_admin_survey_question_path(@survey, @survey_question), notice: 'The question was successfully updated.'
       else
         @conditional_question = @survey_question.conditional_question
         @conditional_question_options = @survey_question.conditional_question_options
@@ -41,7 +41,7 @@ module Admin
 
     def destroy
       @survey_question.destroy
-      redirect_to survey_url(@survey), notice: 'The question was successfully deleted.'
+      redirect_to admin_survey_url(@survey), notice: 'The question was successfully deleted.'
     end
 
     # ajax member action for multi-choice edit

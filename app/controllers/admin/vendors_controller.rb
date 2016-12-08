@@ -20,7 +20,7 @@ module Admin
       @vendor = Vendor.new(vendor_params)
 
       if @vendor.save
-        redirect_to @vendor, notice: 'Vendor was successfully created.'
+        redirect_to [:admin, @vendor], notice: 'Vendor was successfully created.'
       else
         render :new
       end
@@ -28,7 +28,7 @@ module Admin
 
     def update
       if @vendor.update(vendor_params)
-        redirect_to @vendor, notice: 'Vendor was successfully updated.'
+        redirect_to [:admin, @vendor], notice: 'Vendor was successfully updated.'
       else
         render :edit
       end
@@ -36,7 +36,7 @@ module Admin
 
     def destroy
       @vendor.destroy
-      redirect_to vendors_url, notice: 'Vendor was successfully destroyed.'
+      redirect_to admin_vendors_url, notice: 'Vendor was successfully destroyed.'
     end
 
     private

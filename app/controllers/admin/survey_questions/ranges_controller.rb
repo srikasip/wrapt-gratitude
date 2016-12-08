@@ -15,7 +15,7 @@ module Admin
         @survey_question = @survey.range_questions.new(survey_params)
         
         if @survey_question.save
-          redirect_to survey_path(@survey), notice: 'Quiz Question was successfully created.'
+          redirect_to admin_survey_path(@survey), notice: 'Quiz Question was successfully created.'
         else
           render :new
         end
@@ -23,7 +23,7 @@ module Admin
 
       def update    
         if @survey_question.update(survey_params)
-          redirect_to survey_path(@survey), notice: 'Quiz Question was successfully updated.'
+          redirect_to admin_survey_path(@survey), notice: 'Quiz Question was successfully updated.'
         else
           render :edit
         end
@@ -31,7 +31,7 @@ module Admin
 
       def destroy
         @survey_question.destroy
-        redirect_to surveys_url, notice: 'Quiz Question was successfully deleted.'
+        redirect_to admin_surveys_url, notice: 'Quiz Question was successfully deleted.'
       end
 
       private

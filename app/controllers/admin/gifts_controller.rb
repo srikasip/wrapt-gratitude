@@ -24,7 +24,7 @@ module Admin
     def create
       @gift = Gift.new(gift_params)
       if @gift.save
-        redirect_to gift_products_path(@gift), notice: "#{@gift.title} has been created.  Now add some products."
+        redirect_to admin_gift_products_path(@gift), notice: "#{@gift.title} has been created.  Now add some products."
       else
         render :new
       end
@@ -32,7 +32,7 @@ module Admin
 
     def update
       if @gift.update(gift_params)
-        redirect_to @gift, notice: "#{@gift.title} has been updated."
+        redirect_to [:admin, @gift], notice: "#{@gift.title} has been updated."
       else
         render :edit
       end
@@ -40,7 +40,7 @@ module Admin
 
     def destroy
       @gift.destroy
-      redirect_to gifts_url(context_params), notice: "#{@gift.title} has been deleted."
+      redirect_to admin_gifts_url(context_params), notice: "#{@gift.title} has been deleted."
     end
 
     

@@ -17,7 +17,7 @@ module Admin
     def update
       if @trait_training_set_question.update trait_training_set_question_params
         flash[:notice] = "Response Impacts were successfuly updated"
-        redirect_to trait_training_set_questions_path(@trait_training_set)
+        redirect_to admin_trait_training_set_questions_path(@trait_training_set)
       else
         flash[:error] = "Please correct the errors below."
         render :edit

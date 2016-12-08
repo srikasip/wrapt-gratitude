@@ -7,7 +7,7 @@ module Admin
       target_survey.save!
       SurveyCopyingJob.perform_later @survey, target_survey
       flash[:notice] = "We've begun copying that quiz.  It will be ready shortly."
-      redirect_to surveys_path
+      redirect_to admin_surveys_path
     end
 
     private def find_survey

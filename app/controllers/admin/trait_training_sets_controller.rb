@@ -18,7 +18,7 @@ module Admin
       @trait_training_set = TraitTrainingSet.new(trait_training_set_params)
 
       if @trait_training_set.save
-        redirect_to trait_training_set_questions_path(@trait_training_set), notice: 'Profile Trait Training Set was successfully created.'
+        redirect_to admin_trait_training_set_questions_path(@trait_training_set), notice: 'Profile Trait Training Set was successfully created.'
       else
         render :new
       end
@@ -26,7 +26,7 @@ module Admin
 
     def update
       if @trait_training_set.update(trait_training_set_params)
-        redirect_to @trait_training_set, notice: 'Profile Trait Training Set was successfully updated.'
+        redirect_to [:admin, @trait_training_set], notice: 'Profile Trait Training Set was successfully updated.'
       else
         render :edit
       end
@@ -34,7 +34,7 @@ module Admin
 
     def destroy
       @trait_training_set.destroy
-      redirect_to trait_training_sets_url, notice: 'Profile Trait Training Set was successfully deleted.'
+      redirect_to admin_trait_training_sets_url, notice: 'Profile Trait Training Set was successfully deleted.'
     end
 
     private

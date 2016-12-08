@@ -16,7 +16,7 @@ module Admin
 
       if @gift_question_impact.save
         @gift_question_impact.create_response_impacts
-        redirect_to edit_training_set_gift_question_impact_path(@training_set, @gift_question_impact), notice: 'Gift-Question was successfully created.'
+        redirect_to edit_admin_training_set_gift_question_impact_path(@training_set, @gift_question_impact), notice: 'Gift-Question was successfully created.'
       else
         render :new
       end
@@ -24,7 +24,7 @@ module Admin
 
     def update
       if @gift_question_impact.update(gift_question_impact_params)
-        redirect_to @training_set, notice: 'Gift-Question was successfully updated.'
+        redirect_to [:admin, @training_set], notice: 'Gift-Question was successfully updated.'
       else
         render :edit
       end
@@ -32,7 +32,7 @@ module Admin
 
     def destroy
       @gift_question_impact.destroy
-      redirect_to @training_set, notice: 'Gift-Question was successfully destroyed.'
+      redirect_to [:admin, @training_set], notice: 'Gift-Question was successfully destroyed.'
     end
 
     private

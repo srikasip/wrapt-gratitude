@@ -9,7 +9,7 @@ module Admin
       else
         flash[:alert] = "Sorry, we could not add that image for some reason.  Please file a bug report."
       end
-      redirect_to gift_images_path(@gift, anchor: 'available_product_images')
+      redirect_to admin_gift_images_path(@gift, anchor: 'available_product_images')
     end
 
     def gift_image_params

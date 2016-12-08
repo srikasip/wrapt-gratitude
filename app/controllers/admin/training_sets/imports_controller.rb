@@ -12,7 +12,7 @@ module Admin
         @training_set_import = TrainingSetImport.new(permitted_params.merge({training_set: @training_set}))
         begin
           if @training_set_import.save_records
-            redirect_to @training_set, notice: 'You imported impacts into a training set.'
+            redirect_to [:admin, @training_set], notice: 'You imported impacts into a training set.'
           else
             render :new
           end

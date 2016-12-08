@@ -12,7 +12,7 @@ module Admin
         @profile_set_import = ProfileSetImport.new(permitted_params.merge({profile_set: @profile_set}))
         begin
           if @profile_set_import.save_records
-            redirect_to @profile_set, notice: 'You imported survey responses into a profile set.'
+            redirect_to [:admin, @profile_set], notice: 'You imported survey responses into a profile set.'
           else
             render :new
           end

@@ -22,7 +22,7 @@ module Admin
       @survey_question_option = @survey_question.options.new(survey_question_option_params)
       
       if @survey_question_option.save
-        redirect_to survey_multiple_choice_question_path(@survey, @survey_question), notice: 'Changes Saved.'
+        redirect_to admin_survey_multiple_choice_question_path(@survey, @survey_question), notice: 'Changes Saved.'
       else
         render :new
       end
@@ -30,7 +30,7 @@ module Admin
 
     def update    
       if @survey_question_option.update(survey_question_option_params)
-        redirect_to survey_multiple_choice_question_path(@survey, @survey_question), notice: 'Changes Saved.'
+        redirect_to admin_survey_multiple_choice_question_path(@survey, @survey_question), notice: 'Changes Saved.'
       else
         render :edit
       end
@@ -38,7 +38,7 @@ module Admin
 
     def destroy
       @survey_question_option.destroy
-       redirect_to survey_multiple_choice_question_path(@survey, @survey_question), notice: 'Option Deleted.'
+       redirect_to admin_survey_multiple_choice_question_path(@survey, @survey_question), notice: 'Option Deleted.'
     end
 
     private

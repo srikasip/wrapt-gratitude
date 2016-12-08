@@ -22,7 +22,7 @@ module Admin
 
       respond_to do |format|
         if @profile_set.save
-          format.html { redirect_to @profile_set, notice: 'Training set was successfully created.' }
+          format.html { redirect_to [:admin, @profile_set], notice: 'Training set was successfully created.' }
           format.json { render :show, status: :created, location: @profile_set }
         else
           format.html { render :new }
@@ -34,7 +34,7 @@ module Admin
     def update
       respond_to do |format|
         if @profile_set.update(profile_set_params)
-          format.html { redirect_to @profile_set, notice: 'Training set was successfully updated.' }
+          format.html { redirect_to [:admin, @profile_set], notice: 'Training set was successfully updated.' }
           format.json { render :show, status: :ok, location: @profile_set }
         else
           format.html { render :edit }
@@ -46,7 +46,7 @@ module Admin
     def destroy
       @profile_set.destroy
       respond_to do |format|
-        format.html { redirect_to profile_sets_url, notice: 'Training set was successfully destroyed.' }
+        format.html { redirect_to admin_profile_sets_url, notice: 'Training set was successfully destroyed.' }
         format.json { head :no_content }
       end
     end

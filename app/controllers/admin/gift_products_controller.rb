@@ -20,7 +20,7 @@ module Admin
         if @gift.gift_products.first == @gift_product
           @gift.generate_wrapt_sku!
         end
-        redirect_to gift_products_path(@gift, context_params)
+        redirect_to admin_gift_products_path(@gift, context_params)
       else
         render :index
       end
@@ -32,7 +32,7 @@ module Admin
       if @gift.gift_products.empty?
         @gift.generate_wrapt_sku!
       end
-      redirect_to gift_products_path(@gift, context_params)
+      redirect_to admin_gift_products_path(@gift, context_params)
     end
 
     def context_params

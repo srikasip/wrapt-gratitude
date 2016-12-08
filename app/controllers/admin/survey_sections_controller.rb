@@ -20,7 +20,7 @@ module Admin
       @survey_section = @survey.sections.new(survey_section_params)
 
       if @survey_section.save
-        redirect_to survey_sections_path(@survey), notice: 'New Survey Section created.'
+        redirect_to admin_survey_sections_path(@survey), notice: 'New Survey Section created.'
       else
         render :new
       end
@@ -28,7 +28,7 @@ module Admin
 
     def update
       if @survey_section.update(survey_section_params)
-        redirect_to survey_sections_path(@survey), notice: 'Survey Section updated.'
+        redirect_to admin_survey_sections_path(@survey), notice: 'Survey Section updated.'
       else
         render :edit
       end
@@ -36,7 +36,7 @@ module Admin
 
     def destroy
       @survey_section.destroy
-      redirect_to survey_sections_url, notice: 'Survey Section deleted.'
+      redirect_to admin_survey_sections_url, notice: 'Survey Section deleted.'
     end
 
     private

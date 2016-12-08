@@ -15,7 +15,7 @@ module Admin
       @profile_set_survey_response = @profile_set.survey_responses.new(profile_set_survey_response_params)
 
       if @profile_set_survey_response.save
-        redirect_to @profile_set, notice: 'Quiz Response was successfully created.'
+        redirect_to [:admin, @profile_set], notice: 'Quiz Response was successfully created.'
       else
         render :new
       end
@@ -23,7 +23,7 @@ module Admin
 
     def update
       if @profile_set_survey_response.update(profile_set_survey_response_params)
-        redirect_to @profile_set, notice: 'Quiz Response was successfully updated.'
+        redirect_to [:admin, @profile_set], notice: 'Quiz Response was successfully updated.'
       else
         render :edit
       end
@@ -31,7 +31,7 @@ module Admin
 
     def destroy
       @profile_set_survey_response.destroy
-      redirect_to @profile_set, notice: 'Quiz Response was successfully deleted.'
+      redirect_to [:admin, @profile_set], notice: 'Quiz Response was successfully deleted.'
     end
 
     private
