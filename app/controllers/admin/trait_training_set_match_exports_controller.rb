@@ -1,5 +1,5 @@
 module Admin
-  class TraitTrainingSetMatchExportsController < ApplicationController
+  class TraitTrainingSetMatchExportsController < BaseController
     
     def show
       @trait_training_set = TraitTrainingSet.find params[:trait_training_set_id]

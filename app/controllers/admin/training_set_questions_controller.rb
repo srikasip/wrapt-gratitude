@@ -1,6 +1,6 @@
 
 module Admin
-  class TrainingSetQuestionsController < ApplicationController
+  class TrainingSetQuestionsController < BaseController
     # Ajax controller that drives the question display on TrainingSets#index
     # for Product-Question Crud see ProductQuestionImpactsController
 

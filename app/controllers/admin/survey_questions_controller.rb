@@ -1,5 +1,5 @@
 module Admin
-  class SurveyQuestionsController < ApplicationController
+  class SurveyQuestionsController < BaseController
     before_action :set_survey
     before_action :set_survey_question, only: [:show, :edit, :update, :destroy, :preview]
 

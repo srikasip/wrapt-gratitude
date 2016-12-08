@@ -1,5 +1,5 @@
 module Admin
-  class GiftImagesFromProductsController < ApplicationController
+  class GiftImagesFromProductsController < BaseController
 
     def create
       @gift = Gift.find params[:gift_id]

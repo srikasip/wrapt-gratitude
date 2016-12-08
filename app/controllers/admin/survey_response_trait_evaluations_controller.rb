@@ -1,5 +1,5 @@
 module Admin
-  class SurveyResponseTraitEvaluationsController < ApplicationController
+  class SurveyResponseTraitEvaluationsController < BaseController
     before_action :set_trait_training_set
 
     helper TraitTrainingSetsSectionHelper

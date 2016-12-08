@@ -1,5 +1,5 @@
 module Admin
-  class ProductCategoriesController < ApplicationController
+  class ProductCategoriesController < BaseController
     before_action :set_product_category, only: [:show, :edit, :update, :destroy]
 
     # GET /product_categories

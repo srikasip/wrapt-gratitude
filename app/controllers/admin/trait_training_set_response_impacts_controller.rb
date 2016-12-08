@@ -1,5 +1,5 @@
 module Admin
-  class TraitTrainingSetResponseImpactsController < ApplicationController
+  class TraitTrainingSetResponseImpactsController < BaseController
     # Ajax controller for loading the reseponse impact fields for TraitTrainingSetQuestions#show
 
     def index

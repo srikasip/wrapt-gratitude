@@ -1,5 +1,5 @@
 module Admin
-  class ProfileSetsController < ApplicationController
+  class ProfileSetsController < BaseController
     before_action :set_profile_set, only: [:show, :edit, :update, :destroy]
 
     def index

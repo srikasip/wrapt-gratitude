@@ -1,5 +1,5 @@
 module Admin
-  class TrainingSetEvaluationsController < ApplicationController
+  class TrainingSetEvaluationsController < BaseController
 
     def show
       set_training_set

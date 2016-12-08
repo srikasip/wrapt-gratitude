@@ -1,5 +1,5 @@
 module Admin
-  class SurveySectionsController < ApplicationController
+  class SurveySectionsController < BaseController
     before_action :set_survey
     before_action :set_survey_section, only: [:edit, :update, :destroy]
 

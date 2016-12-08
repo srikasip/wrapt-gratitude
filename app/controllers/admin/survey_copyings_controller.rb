@@ -1,5 +1,5 @@
 module Admin
-  class SurveyCopyingsController < ApplicationController
+  class SurveyCopyingsController < BaseController
     before_filter :find_survey
 
     def create

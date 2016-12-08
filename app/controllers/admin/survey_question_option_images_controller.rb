@@ -1,5 +1,5 @@
 module Admin
-  class SurveyQuestionOptionImagesController < ApplicationController
+  class SurveyQuestionOptionImagesController < BaseController
     # Ajax controller to control the survey builder
     before_action :set_survey
     before_action :set_survey_question

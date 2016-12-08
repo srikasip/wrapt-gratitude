@@ -1,5 +1,5 @@
 module Admin
-  class TrainingSetExportsController < ApplicationController
+  class TrainingSetExportsController < BaseController
     
     def show
       @training_set = TrainingSet.find params[:training_set_id]

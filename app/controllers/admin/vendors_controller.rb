@@ -1,5 +1,5 @@
 module Admin
-  class VendorsController < ApplicationController
+  class VendorsController < BaseController
     before_action :set_vendor, only: [:show, :edit, :update, :destroy]
 
     def index

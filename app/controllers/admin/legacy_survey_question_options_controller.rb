@@ -1,5 +1,5 @@
 module Admin
-  class LegacySurveyQuestionOptionsController < ApplicationController
+  class LegacySurveyQuestionOptionsController < BaseController
     before_action :set_survey
     before_action :set_survey_question
     before_action :set_survey_question_option, only: [:edit, :update, :destroy]

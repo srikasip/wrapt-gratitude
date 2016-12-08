@@ -1,5 +1,5 @@
 module Admin
-  class ConditionalQuestionOptionsController < ApplicationController
+  class ConditionalQuestionOptionsController < BaseController
     # Ajax controller to drive selecting conditional question options on SurveyQuestions#edit
 
     def show

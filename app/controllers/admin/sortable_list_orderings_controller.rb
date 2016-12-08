@@ -1,5 +1,5 @@
 module Admin
-  class SortableListOrderingsController < ApplicationController
+  class SortableListOrderingsController < BaseController
     # Abstract controller for receiving updates from drag-and-drop sortable lists
     # expects params[:ordering] to be an array of ids of the desired order
     # Designed to work with the SortableListOrdering model

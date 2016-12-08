@@ -1,6 +1,6 @@
 module Admin
   module ProfileSets
-    class ImportsController < ApplicationController
+    class ImportsController < BaseController
 
       before_action :set_profile_set, only: [:new, :create]
 

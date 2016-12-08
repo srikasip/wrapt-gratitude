@@ -1,5 +1,5 @@
 module Admin
-  class EvaluationRecommendationsController < ApplicationController
+  class EvaluationRecommendationsController < BaseController
 
     include PjaxModalController
 

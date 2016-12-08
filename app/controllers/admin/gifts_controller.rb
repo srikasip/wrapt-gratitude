@@ -1,5 +1,5 @@
 module Admin
-  class GiftsController < ApplicationController
+  class GiftsController < BaseController
     before_action :set_gift, only: [:show, :edit, :update, :destroy]
 
     def index

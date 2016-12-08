@@ -1,5 +1,5 @@
 module Admin
-  class ProductSubcategoriesController < ApplicationController
+  class ProductSubcategoriesController < BaseController
     # Ajax controller for sending option tags to the gift and product forms
 
     def show

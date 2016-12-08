@@ -1,6 +1,6 @@
 module Admin
   module TrainingSets
-    class ImportsController < ApplicationController
+    class ImportsController < BaseController
 
       before_action :set_training_set, only: [:new, :create]
 

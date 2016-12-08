@@ -1,5 +1,5 @@
 module Admin
-  class SurveySectionedQuestionOrderingsController < ApplicationController
+  class SurveySectionedQuestionOrderingsController < BaseController
 
     respond_to :json
 

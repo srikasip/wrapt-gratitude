@@ -1,5 +1,5 @@
 module Admin
-  class ProfileTraits::TopicsController < ApplicationController
+  class ProfileTraits::TopicsController < BaseController
     before_action :set_profile_traits_topic, only: [:edit, :update, :destroy]
     helper ProfileTraitsHelper
 

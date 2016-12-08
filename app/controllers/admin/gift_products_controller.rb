@@ -1,5 +1,5 @@
 module Admin
-  class GiftProductsController < ApplicationController
+  class GiftProductsController < BaseController
     before_action :set_gift
 
     def index

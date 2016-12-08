@@ -1,5 +1,5 @@
 module Admin
-  class SingleProductGiftsController < ApplicationController
+  class SingleProductGiftsController < BaseController
     include PjaxModalController
 
     helper ProductsIndexContextHelper

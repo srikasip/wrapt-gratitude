@@ -1,7 +1,7 @@
 require 'fileutils'
 
 module Admin
-  class ProfileSetExportsController < ApplicationController
+  class ProfileSetExportsController < BaseController
     before_action :set_profile_set
 
     def create

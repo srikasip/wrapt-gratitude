@@ -1,5 +1,5 @@
 module Admin
-  class TraitTrainingSetQuestionsController < ApplicationController
+  class TraitTrainingSetQuestionsController < BaseController
     before_action :set_trait_training_set
     before_action :set_trait_training_set_question, except: :index
 

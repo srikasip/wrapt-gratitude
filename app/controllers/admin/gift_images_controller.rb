@@ -1,5 +1,5 @@
 module Admin
-  class GiftImagesController < ApplicationController
+  class GiftImagesController < BaseController
     # Note that new and create handle the creation of GiftImages::Uploaded
     # for adding images from product see GiftImagesFromProductsController
 

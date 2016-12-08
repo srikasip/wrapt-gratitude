@@ -1,5 +1,5 @@
 module Admin
-  class ProductsController < ApplicationController
+  class ProductsController < BaseController
     before_action :set_product, only: [:show, :edit, :update, :destroy]
 
     helper ProductsIndexContextHelper

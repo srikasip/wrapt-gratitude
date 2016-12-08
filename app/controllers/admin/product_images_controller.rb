@@ -1,5 +1,5 @@
 module Admin
-  class ProductImagesController < ApplicationController
+  class ProductImagesController < BaseController
     before_action :set_product
 
     def index

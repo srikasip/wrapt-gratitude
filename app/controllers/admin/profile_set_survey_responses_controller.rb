@@ -1,5 +1,5 @@
 module Admin
-  class ProfileSetSurveyResponsesController < ApplicationController
+  class ProfileSetSurveyResponsesController < BaseController
     before_action :set_profile_set
     before_action :set_profile_set_survey_response, only: [:show, :edit, :update, :destroy]
 

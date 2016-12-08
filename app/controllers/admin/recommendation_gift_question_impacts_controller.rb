@@ -1,5 +1,5 @@
 module Admin
-  class RecommendationGiftQuestionImpactsController < ApplicationController
+  class RecommendationGiftQuestionImpactsController < BaseController
     # Ajax controller for driving quick adjustments to the product questions from
     # a recommendation details view.
     # For the standard CRUD controller for a ProductQuestion, see ProductQuestionImpactsController

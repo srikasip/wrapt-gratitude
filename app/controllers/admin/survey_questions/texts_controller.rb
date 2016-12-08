@@ -1,6 +1,6 @@
 module Admin
   module SurveyQuestions
-    class TextsController < ApplicationController
+    class TextsController < BaseController
       before_action :set_survey
       before_action :set_survey_question, only: [:show, :edit, :update, :destroy]
 

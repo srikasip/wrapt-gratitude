@@ -1,5 +1,5 @@
 module Admin
-  class GiftQuestionImpactsController < ApplicationController
+  class GiftQuestionImpactsController < BaseController
     before_action :set_training_set
     before_action :set_gift_question_impact, only: [:show, :edit, :update, :destroy]
 

@@ -1,6 +1,6 @@
 module Admin
   module SurveyQuestions
-    class RangesController < ApplicationController
+    class RangesController < BaseController
       before_action :set_survey
       before_action :set_survey_question, only: [:show, :edit, :update, :destroy]
 

@@ -1,5 +1,5 @@
 module Admin
-  class TrainingSetsController < ApplicationController
+  class TrainingSetsController < BaseController
     before_action :set_training_set, only: [:show, :edit, :update, :destroy]
 
     # GET /training_sets
