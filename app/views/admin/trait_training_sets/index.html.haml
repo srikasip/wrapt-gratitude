@@ -1,0 +1,27 @@
+.row.admin__intro
+  .col-sm-12
+    %h1 Profile Trait Training Sets
+
+.row.admin__actions
+  .col-sm-12
+    = link_to 'Add a Profile Trait Training Set', new_admin_trait_training_set_path, class: 'btn btn-primary'
+
+.row
+  .col-sm-12
+    %table.table
+      %thead
+        %tr
+          %th Name
+          %th Survey
+          %th
+
+      %tbody
+        - @trait_training_sets.each do |trait_training_set|
+          %tr
+            %td= trait_training_set.name
+            %td= trait_training_set.survey.title
+            %td
+              = link_to 'Details', edit_admin_trait_training_set_path(trait_training_set), class: 'btn btn-default btn-xs'
+              = link_to 'Questions', admin_trait_training_set_questions_path(trait_training_set), class: 'btn btn-default btn-xs'
+              = link_to "Trait Matches", admin_trait_training_set_evaluations_path(trait_training_set), class: 'btn btn-default btn-xs'
+              = link_to 'Delete', [:admin, trait_training_set], :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'

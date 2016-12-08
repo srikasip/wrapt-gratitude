@@ -1,0 +1,4 @@
+%div{data: {question_preview: true, question_preview_href: preview_admin_survey_question_path(@survey, @survey_question)}}
+  %h2.mb4 Preview
+  %h4= @survey_question.prompt
+  = render preview_partial(@survey_question)

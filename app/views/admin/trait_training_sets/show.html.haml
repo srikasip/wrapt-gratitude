@@ -1,0 +1,12 @@
+.row
+  .col-sm-12
+    %h1
+      Viewing Trait_training_set
+      = link_to 'Edit', edit_admin_trait_training_set_path(@trait_training_set), class: 'btn btn-default btn-xs'
+
+%p
+  %b Name:
+  = @trait_training_set.name
+%p
+  %b Survey:
+  = @trait_training_set.survey

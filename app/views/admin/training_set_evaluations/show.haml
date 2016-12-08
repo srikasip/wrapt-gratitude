@@ -1,0 +1,24 @@
+.row
+  .col-sm-12
+    %h1= @training_set_evaluation.training_set.name
+
+    - if @training_set_evaluation.stale? || @recommendations_by_survey_response_id.empty?
+      %p
+        = image_tag 'ajax-loader.gif'
+        We're still generating recommendations for this training set.  Please wait a moment.
+      :javascript
+        setTimeout(function() { window.location.reload() }, 5000)
+
+    - else
+      - @training_set_evaluation.profile_sets.preload(:survey_responses).each do |profile_set|
+        %h3
+          Profile Set:
+          = profile_set.name
+        - profile_set.survey_responses.each do |response|
+          %h4= response.name
+          %ul.admin-index-list        
+            - @recommendations_by_survey_response_id[response.id].sort_by(&:score).reverse.each do |recommendation|
+              %li
+                = "#{recommendation.gift.title} (#{recommendation.score.round(2)})"
+                = link_to 'Breakdown', admin_training_set_evaluation_recommendation_path(@training_set, recommendation), data: {loads_in_pjax_modal: true}, class: 'btn btn-default btn-xs'
+        

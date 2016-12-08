@@ -1,0 +1,29 @@
+= simple_form_for @gift_question_impact, url: admin_training_set_evaluation_recommendation_gift_question_impact_path(@training_set, @recommendation, @gift_question_impact), html: {class: 'form edit_gift_question_impact', data: {submits_to_pjax_modal: true}} do |f|
+  = f.error_notification
+
+  .form-inputs
+    = render 'gift_question_details'
+
+    .form-group
+      %h3 Overall Question Importance
+      
+      .slider-with-labels.clearfix
+        %span.slider-label.slider-label__min Low
+        = f.input :question_impact, label: false, wrapper: false, input_html: { data: {provide: 'slider', slider_min: -1, slider_max: 1, slider_step: '.01', slider_tooltip: 'hide', slider_value: (f.object.question_impact), slider_selection: 'none' }}
+        %span.slider-label.slider-label__max High
+
+
+    %h4 Which side of the response has a positive impact on gift recommendation?
+    .row
+      .col-sm-2
+        %label(for="gift_question_impact_range_impact_direct_correlation_false")= f.object.survey_question.min_label
+      .col-sm-8.admin__impact-correlation-line-wrapper
+        = f.radio_button :range_impact_direct_correlation, false
+        %span.admin__impact-correlation-range-line
+        = f.radio_button :range_impact_direct_correlation, true
+      .col-sm-2
+        %label(for="gift_question_impact_range_impact_direct_correlation_true")= f.object.survey_question.max_label
+
+  .form-actions
+    = f.submit "Save", class: 'btn btn-primary'
+    = link_to 'Cancel', admin_training_set_evaluation_recommendation_path(@training_set, @recommendation), class: 'btn btn-default', data: {loads_in_pjax_modal: true}

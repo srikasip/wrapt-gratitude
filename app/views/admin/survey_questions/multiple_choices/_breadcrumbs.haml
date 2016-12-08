@@ -1,0 +1,4 @@
+- unless params[:action] == 'index'
+  .row.breadcrumbs
+    .col-sm-12
+      = link_to "&laquo; #{@survey.title}".html_safe, admin_survey_path(@survey)

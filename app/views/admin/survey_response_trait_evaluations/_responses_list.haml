@@ -1,0 +1,10 @@
+%table.table
+  %tbody
+    - @profile_sets.preload(:survey_responses).each do |profile_set|
+      %tr
+        %th
+          = profile_set.name
+          = link_to "Export", admin_trait_training_set_match_export_path(@trait_training_set, profile_set), class: 'btn btn-xs btn-default'
+        - profile_set.survey_responses.each do |survey_response|
+          %tr
+            %td= link_to survey_response.name, admin_trait_training_set_evaluation_path(@trait_training_set, survey_response)

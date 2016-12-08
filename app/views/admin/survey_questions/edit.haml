@@ -1,0 +1,29 @@
+.row
+  .col-sm-6.shadowed-box__01.form-panel__left
+    %h2.heading__has-icon
+      %i{class: @survey_question.system_type_label}
+      Edit 
+      = @survey_question.type_label
+      Question
+    = simple_form_for @survey_question, url: admin_survey_question_path(@survey, @survey_question) do |form|
+
+      .form-inputs.mb4
+        = form.input :prompt
+        = form.input :code, hint: '(required for importing)'
+        = form.association :survey_section, as: :select, collection: @survey.sections, include_blank: false, label: 'Section'
+        = render form_fields_partial(@survey_question), form: form
+        = render 'conditional_display_fields', form: form
+
+      .form-actions
+        = form.submit 'Save', class: 'btn btn-primary'
+
+  .col-sm-6.preview
+    %h2 Preview
+
+    %h3= @survey_question.prompt
+
+    = render preview_partial(@survey_question)
+
+- content_for :page_js do
+  :javascript
+    new App.Admin.ConditionalQuestionFields()

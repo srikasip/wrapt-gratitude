@@ -1,0 +1,75 @@
+.row
+  .col-sm-12
+    %h1 Edit Gift
+
+.row
+  .col-sm-8
+    %ul.nav.nav-tabs
+      %li(role="presentation")= link_to 'Details', edit_admin_gift_path(@gift)
+      %li(role="presentation")= link_to 'Products', admin_gift_products_path(@gift)
+      %li(role="presentation" class="active")= link_to 'Images', admin_gift_images_path(@gift)
+
+.row
+  .col-sm-12
+    = direct_upload_form_for @uploader, html: {class: 'form form-inline admin__image-upload-form', data: {image_upload_form: true}} do |form|
+      %span.btn.btn-default(data-image-upload-trigger)
+        %i.glyphicon.glyphicon-plus
+        %span Upload New Image
+      = form.file_field :image, data: {image_upload_input: true, url: admin_gift_images_path(@gift)}
+
+.row
+  .col-sm-12
+    %h3(style="margin-left: 20px") Images for this Gift
+    - if @gift.gift_images.none?
+      %p(style="margin-left: 20px")
+        %em No Images yet.  Add some!
+
+- if @gift.gift_images.any?
+  .row.admin__images-grid{data: {sortable_list: true, sortable_list_href: admin_gift_image_ordering_path(@gift)}}
+    - @gift.gift_images.each do |gift_image|
+      - if gift_image.image? #don't include @gift_image here
+        .col-sm-3.admin__image-col{data: {sortable_item: true, sortable_item_id: gift_image.id}}
+          .admin__image-cell{class: ('primary' if gift_image.primary?)}
+            .admin__image-cell-inner
+              %div{data: {gift_image_id: gift_image.id}}
+                = render gift_image
+              .admin__image-actions.left
+                %span.btn.btn-xs.btn-default.admin__image-hover-link
+                  %i.glyphicon.glyphicon-move
+              .admin__image-actions.right
+                = link_to admin_gift_image_path(@gift, gift_image), method: :delete, data: {confirm: 'Are you sure?'}, class: 'admin__image-hover-link btn btn-xs btn-default' do
+                  %i.glyphicon.glyphicon-trash
+                - if gift_image.primary?
+                  %span.btn.btn-primary.btn-xs.admin__is-primary-gift-image-badge{data: {toggle: 'tooltip', placement: 'top'}, title: 'This is the primary image for this gift'}
+                    %i.glyphicon.glyphicon-ok
+                - else
+                  = link_to make_primary_admin_gift_image_path(@gift, gift_image), class: ' admin__image-hover-link btn btn-xs btn-default', data: {method: :post, toggle: 'tooltip', placement: 'top'}, title: 'Make this the primary image for this gift' do
+                    %i.glyphicon.glyphicon-ok
+
+- if @available_product_images.any?
+  .row#available_product_images
+    .col-sm-12
+      %h3(style="margin-left: 20px") Add Images from Products in this Gift
+      %p(style="margin-left: 20px")
+        %em These images won't show unless added to the section above
+
+  .row.admin__images-grid
+    - @available_product_images.each do |product_image|
+      .col-sm-3.admin__image-col
+        .admin__image-cell
+          .admin__image-cell-inner
+            - if product_image.image_processed?
+              = image_tag product_image.image_url(:small)
+            - else
+              .admin__image-loading-wrapper
+                = image_tag 'ajax-loader.gif'
+            .admin__image-actions.right
+              = link_to admin_gift_images_from_products_path(@gift, product_image_id: product_image.id), method: :post, class: 'admin__image-hover-link btn btn-xs btn-default' do
+                %i.glyphicon.glyphicon-plus
+
+- content_for :page_js do
+  :javascript
+    new App.Admin.ImageUploadForm($('[data-image-upload-form]')[0])
+    new App.SortableList($('[data-sortable-list]')[0], {placeholder: 'col-sm-3'});
+    new App.Admin.GiftImageProcessingSubscription(#{@gift.id})
+

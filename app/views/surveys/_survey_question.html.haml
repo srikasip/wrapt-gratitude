@@ -1,8 +1,0 @@
-%tr.mb4.question-list__item{data: {sortable_question: true, sortable_question_id: question.id}}
-  %td
-    %i.glyphicon.glyphicon-move
-    %i.question-list__icon{class: question.system_type_label}
-    = question.prompt
-    .question-list__edit-links
-      = link_to "Edit", edit_survey_question_path(@survey, question), class: 'btn btn-default btn-xs'
-      = link_to 'Delete', survey_question_path(@survey, question), method: :delete, confirm: "This will delete '#{question.prompt}'", class: 'btn btn-danger btn-xs'

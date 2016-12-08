@@ -1,0 +1,30 @@
+.row.admin__intro
+  .col-sm-12
+    %h1
+      = @survey.title
+      = link_to "Edit Title", edit_admin_survey_path(@survey), class: 'btn btn-default btn-sm'
+
+.row.admin__actions
+  .col-sm-12
+    = link_to "Add New Question", new_admin_survey_question_path(@survey), class: 'btn btn-primary'
+    = link_to "Edit Sections", admin_survey_sections_path(@survey), class: 'btn btn-primary'
+    = link_to 'Create a Copy of this Survey', admin_survey_copying_path(@survey), class: 'btn btn-primary', data: {method: 'post'}
+
+.row
+  .col-sm-12
+    %ol.question-list{data: {sortable_list: true, sortable_list_href: admin_survey_question_ordering_path(@survey)}}
+      %h3.question-list__section-header Uncategorized
+      - @survey.questions.where(survey_section: nil).preload(:options).each do |question|
+        = render 'survey_question', question: question
+      - @survey.sections.preload(questions: :options).each do |section|
+        %h3.question-list__section-header= section.name
+        - if section.questions.none?
+          %span.question-list__no-questions No questions in this section
+        - else
+          - section.questions.each do |question|
+            = render 'survey_question', question: question
+
+
+- content_for :page_js do
+  :javascript
+    new App.SortableList($('[data-sortable-list]')[0]);

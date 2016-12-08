@@ -1,0 +1,5 @@
+= direct_upload_form_for @uploader, url: admin_product_images_path(@product), html: {class: 'form form-inline admin__image-upload-form', data: {image_upload_form: true}} do |form|
+  %span.btn.btn-default(data-image-upload-trigger)
+    %i.glyphicon.glyphicon-plus
+    %span Upload New Image
+  = form.file_field :image, data: {image_upload_input: true, url: admin_product_images_path(@product)}

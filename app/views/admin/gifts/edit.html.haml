@@ -1,0 +1,13 @@
+.row
+  .col-sm-12
+    %h1
+      Edit Gift:
+      = @gift.title
+
+.row
+  .col-sm-12
+    %ul.nav.nav-tabs
+      %li(role="presentation" class="active")= link_to 'Details', edit_admin_gift_path(@gift)
+      %li(role="presentation")= link_to 'Products', admin_gift_products_path(@gift)
+      %li(role="presentation")= link_to 'Images', admin_gift_images_path(@gift)
+    = render 'form'
