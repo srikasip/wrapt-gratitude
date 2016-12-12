@@ -2,7 +2,7 @@ class GenerateEvaluationRecommendationsJob < ApplicationJob
   queue_as :default
 
   def perform training_set_evaluation
-    training_set_evaluation.update_attribute recommendations_in_progress, true
+    training_set_evaluation.update_attribute :recommendations_in_progress, true
     training_set_evaluation.recommendations.destroy_all
 
     training_set_evaluation.profile_sets.preload(:survey_responses).each do |profile_set|
@@ -12,6 +12,6 @@ class GenerateEvaluationRecommendationsJob < ApplicationJob
     end
 
     training_set_evaluation.touch
-    training_set_evaluation.update_attribute recommendations_in_progress, false
+    training_set_evaluation.update_attribute :recommendations_in_progress, false
   end
 end
