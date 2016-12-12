@@ -2,12 +2,15 @@
   .col-sm-12
     %h1= @training_set_evaluation.training_set.name
 
-    - if @training_set_evaluation.stale? || @recommendations_by_survey_response_id.empty?
+    - if @training_set_evaluation.stale?
       %p
         = image_tag 'ajax-loader.gif'
         We're still generating recommendations for this training set.  Please wait a moment.
       :javascript
         setTimeout(function() { window.location.reload() }, 5000)
+
+    - elsif @recommendations_by_survey_response_id.empty?
+      %p Sorry, no recommendations were found for this training set.
 
     - else
       - @training_set_evaluation.profile_sets.preload(:survey_responses).each do |profile_set|
