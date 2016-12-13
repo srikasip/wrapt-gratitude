@@ -4,6 +4,10 @@
       = @profile_set.name
       = link_to 'Edit Title', edit_admin_profile_set_path(@profile_set), class: 'btn btn-default btn-xs'
 
+    %p
+      %b Quiz:
+      = @profile_set&.survey.title
+
     %h3 Quiz Responses
     %p
       = link_to 'Add a New Survey Response', new_admin_profile_set_survey_response_path(@profile_set), class: 'btn btn-primary'

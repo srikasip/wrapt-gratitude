@@ -5,7 +5,6 @@ module Admin
 
     def new
       @profile_set_survey_response = @profile_set.survey_responses.new
-      @profile_set_survey_response.build_question_responses
     end
 
     def edit
@@ -15,11 +14,11 @@ module Admin
       @profile_set_survey_response = @profile_set.survey_responses.new(profile_set_survey_response_params)
 
       if @profile_set_survey_response.save
-        redirect_to [:admin, @profile_set], notice: 'Quiz Response was successfully created.'
-      else
-        render :new
+        redirect_to edit_admin_profile_set_survey_response_path(@profile_set, @profile_set_survey_response), notice: 'Quiz Response was successfully created.  Now Answer the Questions.'
+        else
+          render :new
+        end
       end
-    end
 
     def update
       if @profile_set_survey_response.update(profile_set_survey_response_params)

@@ -8,12 +8,13 @@ module EvaluationRecommendationsHelper
   end
 
   def displayable_response_weight product_question, question_response
+    # logger.debug "displaying response weight for product_question #{product_question.id} and question response #{question_response.id}"
     case question_response&.survey_question
     when SurveyQuestions::MultipleChoice
       impact = product_question.response_impacts.detect do |response_impact|
         response_impact.survey_question_option_id == question_response.survey_question_option_id
       end
-      impact.impact
+      impact&.impact
     when SurveyQuestions::Range then "1"
     end
   end

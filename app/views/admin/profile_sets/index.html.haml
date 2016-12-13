@@ -21,12 +21,14 @@
       %thead
         %tr
           %th Name
+          %th Quiz
           %th
 
       %tbody
-        - @profile_sets.each do |profile_set|
+        - @profile_sets.preload(:survey).each do |profile_set|
           %tr
             %td= profile_set.name
+            %td= profile_set.survey.title
             %td
               = link_to 'View', admin_profile_set_path(profile_set), class: 'btn btn-xs btn-default'
               = link_to 'Export', admin_profile_set_exports_path(profile_set), method: :post, class: 'btn btn-xs btn-default'
