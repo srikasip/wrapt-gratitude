@@ -18,7 +18,7 @@ class GiftImage < ApplicationRecord
   end
 
   def to_partial_path
-    'gift_images/gift_image'
+    'admin/gift_images/gift_image'
   end
 
 

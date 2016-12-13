@@ -5,7 +5,7 @@
       Edit 
       = @survey_question.type_label
       Question
-    = simple_form_for @survey_question, url: admin_survey_question_path(@survey, @survey_question) do |form|
+    = simple_form_for  [:admin, @survey_question], url: admin_survey_question_path(@survey, @survey_question) do |form|
 
       .form-inputs.mb4
         = form.input :prompt

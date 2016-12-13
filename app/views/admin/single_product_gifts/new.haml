@@ -1,6 +1,6 @@
 %h2 Creating a Gift from #{@product.title}
 
-= simple_form_for @gift, url: admin_product_single_product_gift_path(@product, context_params), html: {data: {submits_to_pjax_modal: true}} do |form|
+= simple_form_for  [:admin, @gift], url: admin_product_single_product_gift_path(@product, context_params), html: {data: {submits_to_pjax_modal: true}} do |form|
 
   .form-inputs
     = form.association :product_category, disabled: true

@@ -8,7 +8,7 @@
 
 .row.admin__search
   .col-sm-12
-    = form_for @product_search, url: admin_products_path, html: {method: 'GET', class: 'form-inline', data: {behavior: 'form-loads-subcategories'}} do |form|
+    = form_for  [:admin, @product_search], url: admin_products_path, html: {method: 'GET', class: 'form-inline', data: {behavior: 'form-loads-subcategories'}} do |form|
       .form-group
         = form.search_field :keyword, placeholder: 'Title or SKU', class: 'form-control', style: 'min-width: 300px;'
         = form.collection_select :product_category_id, ProductCategory.categories, :id, :name, {prompt: 'Category'}, class: 'form-control', data: {behavior: 'product-category-input'}

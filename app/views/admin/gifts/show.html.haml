@@ -50,7 +50,7 @@
               %td
                 - if product.primary_product_image&.image?
                   = image_tag product.primary_product_image.image_url(:small), class: "admin-index-table--image"
-              %td= link_to product.title, product
+              %td= link_to product.title, admin_product_path(product)
               %td= product.wrapt_sku
               %td= product.price
 

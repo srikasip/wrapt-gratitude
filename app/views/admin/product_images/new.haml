@@ -1,6 +1,6 @@
 %p
   Redirecting...
-= form_for @product_image, url: admin_product_images_path(@product), html: {class: 'form form-inline admin__image-upload-form', data: {auto_submit_form: true}} do |form|
+= form_for  [:admin, @product_image], url: admin_product_images_path(@product), html: {class: 'form form-inline admin__image-upload-form', data: {auto_submit_form: true}} do |form|
   = form.hidden_field :key
 
 :javascript

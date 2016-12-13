@@ -2,7 +2,7 @@
   .col-sm-6
     %h1 New Question
 
-    = simple_form_for @survey_question, url: admin_survey_questions_path(@survey) do |f|
+    = simple_form_for  [:admin, @survey_question], url: admin_survey_questions_path(@survey) do |f|
       = f.error_notification
 
       .form-inputs

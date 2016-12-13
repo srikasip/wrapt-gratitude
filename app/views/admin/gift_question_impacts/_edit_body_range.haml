@@ -1,4 +1,4 @@
-= simple_form_for @gift_question_impact, url: admin_training_set_gift_question_impact_path(@training_set, @gift_question_impact), html: {class: 'form edit_gift_question_impact'} do |f|
+= simple_form_for  [:admin, @gift_question_impact], url: admin_training_set_gift_question_impact_path(@training_set, @gift_question_impact), html: {class: 'form edit_gift_question_impact'} do |f|
   = f.error_notification
 
   .form-inputs

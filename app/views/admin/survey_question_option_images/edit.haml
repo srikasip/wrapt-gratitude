@@ -1,4 +1,4 @@
-= simple_form_for @survey_question_option, url: admin_survey_question_option_image_path(@survey, @survey_question, @survey_question_option), remote: true, html: {data: {type: 'html', edit_option_image_form: true}} do |form|
+= simple_form_for  [:admin, @survey_question_option], url: admin_survey_question_option_image_path(@survey, @survey_question, @survey_question_option), remote: true, html: {data: {type: 'html', edit_option_image_form: true}} do |form|
   
   %p= @survey_question_option.text
 

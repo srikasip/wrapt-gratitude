@@ -1,5 +1,5 @@
 = render 'imports/processing_import_modal'
-= simple_form_for @profile_set_import do |f|
+= simple_form_for  [:admin, @profile_set_import] do |f|
   %p 
     Here you can upload an Excel spreadsheet containing responses to questions.
     For the format, see the description below the import button.

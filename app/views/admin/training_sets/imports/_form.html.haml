@@ -1,5 +1,5 @@
 = render 'imports/processing_import_modal'
-= simple_form_for @training_set_import do |f|
+= simple_form_for  [:admin, @training_set_import] do |f|
   %p
     Here you can upload an Excel spreadsheet containing impacts for questions
     and individual responses. For the format, see the description below the

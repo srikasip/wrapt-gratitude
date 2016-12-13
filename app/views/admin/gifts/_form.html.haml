@@ -1,4 +1,4 @@
-= simple_form_for(@gift, html: {data: {behavior: 'form-loads-subcategories'}}) do |f|
+= simple_form_for( [:admin, @gift], html: {data: {behavior: 'form-loads-subcategories'}}) do |f|
   = f.error_notification
 
   .form-inputs

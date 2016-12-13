@@ -1,4 +1,4 @@
-= simple_form_for(@profile_set_survey_response, url: url, html: {data: {behavior: 'conditional-question-display-form'}}) do |f|
+= simple_form_for( [:admin, @profile_set_survey_response], url: url, html: {data: {behavior: 'conditional-question-display-form'}}) do |f|
   = f.error_notification
 
   .form-inputs

@@ -1,4 +1,4 @@
-= simple_form_for @gift_question_impact, url: admin_training_set_evaluation_recommendation_gift_question_impact_path(@training_set, @recommendation, @gift_question_impact), html: {class: 'form edit_gift_question_impact', data: {submits_to_pjax_modal: true}} do |f|
+= simple_form_for  [:admin, @gift_question_impact], url: admin_training_set_evaluation_recommendation_gift_question_impact_path(@training_set, @recommendation, @gift_question_impact), html: {class: 'form edit_gift_question_impact', data: {submits_to_pjax_modal: true}} do |f|
   = f.error_notification
 
   .form-inputs
