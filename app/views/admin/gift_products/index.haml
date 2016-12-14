@@ -1,0 +1,72 @@
+.row
+  .col-sm-12
+    %h1
+      Edit Gift:
+      = @gift.title
+
+.row
+  .col-sm-8
+    %ul.nav.nav-tabs
+      %li(role="presentation")= link_to 'Details', edit_admin_gift_path(@gift)
+      %li(role="presentation" class="active")= link_to 'Products', admin_gift_products_path(@gift)
+      %li(role="presentation")= link_to 'Images', admin_gift_images_path(@gift)
+
+.row
+  .col-sm-6.shadowed-box__01
+    %h3 Products in this Gift
+    - if @gift.gift_products.empty?
+      %i None yet, add some below!
+    - else
+      %table.table
+        %thead
+          %th
+          %th Title
+          %th SKU
+          %th Units Available 
+          %th
+        %tbody
+          - @gift.gift_products.preload(product: :primary_product_image).each do |gift_product|
+            - product = gift_product.product
+            %tr
+              %td.admin__gift-available-products
+                - if product.primary_product_image.present?
+                  = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image'
+              %td= link_to product.title, admin_product_path(product)
+              %td= product.wrapt_sku
+              %td= number_with_delimiter product.units_available
+              %td= link_to 'Remove', admin_gift_product_path(@gift, gift_product, context_params), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'btn btn-xs btn-danger'
+
+  .col-sm-6
+    %h3 Add Products to this Gift
+    .admin__search
+      %form.form-inline(method="GET")
+        .form-group
+          %input.form-control{type: 'search', name: 'q', value: params[:q], placeholder: 'Title or SKU', style: 'min-width: 300px;'}
+          %button.btn.btn-primary
+            %i.glyphicon.glyphicon-search
+            Search
+          = link_to 'Show All', admin_gift_products_path(@gift), class: 'btn btn-default'
+
+    - if @available_products.empty?
+      %p(style="margin-top: 10px;")
+        %i None found
+    - else
+      %table.table.admin__gift-available-products
+        %thead
+          %th
+          %th Title
+          %th SKU
+          %th Units Available 
+          %th
+        %tbody
+          - @available_products.each do |product|
+            %tr
+              %td.admin-index-table--image-cell
+                - if product.primary_product_image.present?
+                  = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image'
+              %td= link_to product.title, admin_product_path(product)
+              %td= product.wrapt_sku
+              %td= number_with_delimiter product.units_available
+              %td= link_to 'Add', admin_gift_products_path(@gift, context_params.merge(gift_product: {product_id: product.id})), method: 'post', class: 'btn btn-xs btn-primary'
+
+    = paginate @available_products

@@ -1,9 +1,0 @@
-= simple_form_for(@training_set) do |f|
-  = f.error_notification
-
-  .form-inputs
-    = f.input :name
-    = f.association :survey, label: 'Quiz', disabled: !@training_set.new_record?
-
-  .form-actions
-    = f.button :submit, 'Save'

@@ -1,0 +1,47 @@
+%h1 Recommendation Breakdown for #{@recommendation.gift.title}
+
+%p
+  %b Survey Response:
+  = @recommendation.survey_response.name
+
+%p
+  %b Overall Score:
+  = @recommendation.score.round(2)
+
+- @recommendation.training_set.gift_question_impacts.where(gift_id: @recommendation.gift_id).preload(:survey_question, :gift).each do |gift_question_impact|
+  - question_response = @recommendation.survey_response.question_responses.preload(:survey_question_options).detect{|question_response| question_response.survey_question_id == gift_question_impact.survey_question_id}
+  - intermediate_products = @engine.calculate_question_rank_intermediate_products(gift_question_impact.gift, gift_question_impact.survey_question)
+
+  .well
+    %p
+      %b Question:
+      = gift_question_impact.survey_question.prompt
+    %p
+      %b Response:
+      = displayable_response(question_response)
+    %p
+      %b Contribution to Overall Score
+      = intermediate_products[:final_question_rank].round(2)
+    %p
+      = link_to "Show Details", "#", class: 'btn btn-xs btn-primary', data: {question_rank_details_toggle: true, question_id: gift_question_impact.survey_question_id}
+      = link_to "Adjust Question Impact", edit_admin_training_set_evaluation_recommendation_gift_question_impact_path(@training_set, @recommendation, gift_question_impact), class: 'btn btn-xs btn-primary', data: {loads_in_pjax_modal: true}
+
+    %table.table.question-rank-details-table{style: 'display: none;', data: {question_rank_details: true, question_id: gift_question_impact.survey_question_id}}
+      %thead
+        %tr
+          %th Question Weight
+          %th Response Weight
+          %th Initial Question Rank
+          %th Apply Negative Penalty
+          %th Apply Question Weight (Final Rank)
+      %tbody
+        %tr
+          %td= gift_question_impact.question_impact.round(2)
+          %td= displayable_response_weight(gift_question_impact, question_response)
+          %td= intermediate_products[:initial_question_rank].round(2)
+          %td= intermediate_products[:negative_rank_penalty_applied].round(2)
+          %td= intermediate_products[:final_question_rank].round(2)
+
+- content_for :page_js do
+  :javascript
+    $("[data-question-rank-details-toggle]").each(function(_i, element) {new App.Admin.QuestionRankDetailsToggle(element)})

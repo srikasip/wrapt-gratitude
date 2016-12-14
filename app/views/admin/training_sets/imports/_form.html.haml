@@ -1,0 +1,53 @@
+= render 'imports/processing_import_modal'
+= simple_form_for  [:admin, @training_set_import] do |f|
+  %p
+    Here you can upload an Excel spreadsheet containing impacts for questions
+    and individual responses. For the format, see the description below the
+    import button.
+
+  %p
+    Start with
+    #{link_to 'this template', '/training_sets/imports/Wrapt Training Set Import Template.xlsx'}.
+
+  - if @missing_resources_exception
+    .alert.alert-danger.alert-dismissable
+      There was a problem with your upload. The following
+      #{@missing_resources_exception.resource_name.pluralize} could not be found:
+      #{@missing_resources_exception.values.join(', ')}
+
+  .form-inputs= f.input :records_file, label: 'Impacts File', as: :file
+  = render 'imports/row_errors', importable: @training_set_import
+
+  .form-actions= f.submit 'Import', class: 'btn btn-primary'
+
+  %h3 Format
+  %p Each row is an impact for a single question, and for each choice in a multiple choice question.
+
+  %ol
+    %li Gift SKU - The same as the Wrapt SKU given when you add a gift.
+
+    %li
+      Question Code - The code given when creating the question. This is used to
+      match the impact(s) to the right question.
+
+    %li
+      Question Impact - The overall impact of the answer to this question on the
+      gift, from -1 to 1. This is somewhat like a multiplier for what is given in the following
+      columns. -1 indicates that impacts go against the recommendation of the gift,
+      0 means they have no effect, and 1 means they have the highest impact in favor
+      of the recommendation.
+
+    %li
+      Slider Impact Direction - If the impact pertains to a slider question, this
+      indicates which direction of the slider corresponds to the appropriateness
+      of the gift, either -1 or 1. 1 indicates that responses toward the right
+      work towards the recommendation of the gift, and responses toward the left
+      work against the recommendation. -1 indicates that responses toward the left
+      work towards the recommendation, and responses toward the right work against.
+      For non-slider question types, leave this field blank.
+
+    %li
+      Choice 1 Impact, 2, ..., 9, 10 - If the row is for a multiple choice question,
+      the "choice" columns specify the impact of a specific choice, from -1 to 1. E.g.
+      if a -1 is given here and a given quiz has this choice selected, it works against
+      the recommendation of the gift. For other question types, leave these fields blank.

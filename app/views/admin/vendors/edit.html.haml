@@ -1,0 +1,12 @@
+.row
+  .col-sm-12
+    %h1 Edit Vendor
+
+.row
+  .col-sm-8
+    = render 'form'
+
+    .links__view-back
+      = link_to 'Show', [:admin, @vendor]
+      \|
+      = link_to 'Back', admin_vendors_path

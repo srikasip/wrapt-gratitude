@@ -44,7 +44,7 @@ class SurveyCopyingJob < ApplicationJob
   end
   
   private def render_survey survey
-    ApplicationController.renderer.render partial: 'surveys/survey', locals: {survey: survey}
+    ApplicationController.renderer.render partial: 'admin/surveys/survey', locals: {survey: survey}
   end
       
   

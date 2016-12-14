@@ -1,0 +1,26 @@
+.row.admin__intro
+  .col-sm-12
+    %h1 Vendors
+
+.row.admin__actions
+  .col-sm-12
+    = link_to link_to 'Add a Vendor', new_admin_vendor_path, class: 'btn btn-primary'
+
+.row
+  .col-md-12
+    %table.table
+      %thead
+        %tr
+          %th Name
+          %th
+
+      %tbody
+        - @vendors.each do |vendor|
+          %tr
+            %td= vendor.name
+            %td
+              = link_to 'View', admin_vendor_path(vendor), class: 'btn btn-default btn-xs'
+              = link_to 'Edit', edit_admin_vendor_path(vendor), class: 'btn btn-default btn-xs'
+              = link_to 'Delete', [:admin, vendor], :method => :delete, :data => { :confirm => "This will also delete #{pluralize vendor.products.count, "product"} associated with the vendor.  Are you sure you want to do this?" }, class: 'btn btn-danger btn-xs'
+
+    = paginate @vendors

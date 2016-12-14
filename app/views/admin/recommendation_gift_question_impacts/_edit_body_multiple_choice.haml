@@ -1,0 +1,30 @@
+= simple_form_for  [:admin, @gift_question_impact], url: admin_training_set_evaluation_recommendation_gift_question_impact_path(@training_set, @recommendation, @gift_question_impact), html: {class: 'form edit_gift_question_impact', data: {submits_to_pjax_modal: true}} do |f|
+  = f.error_notification
+
+  .form-inputs
+    = render 'gift_question_details'
+
+    .form-group
+      %h3 Overall Question Importance
+     
+      .slider-with-labels.clearfix
+        %span.slider-label.slider-label__min Low
+        = f.input :question_impact, label: false, wrapper: false, input_html: { data: {provide: 'slider', slider_min: -1, slider_max: 1, slider_step: '.01', slider_tooltip: 'hide', slider_value: (f.object.question_impact), slider_selection: 'none' }}
+        %span.slider-label.slider-label__max High
+    
+    %h3 Response Impacts
+    %table.table
+      = f.simple_fields_for :response_impacts do |response_impact_fields|
+        %tr
+          %td= response_impact_fields.object.survey_question_option.text
+          %td
+            %span.slider-label.slider-label__min
+              \-
+            = response_impact_fields.input :impact, label: false, wrapper: false, input_html: { data: {provide: 'slider', slider_min: -1, slider_max: 1, slider_step: '.01', slider_tooltip: 'hide', slider_value: (response_impact_fields.object.impact), slider_selection: 'none' }}
+            %span.slider-label.slider-label__max
+              +
+
+  .form-actions
+    = f.button :submit, "Save", class: 'btn btn-primary'
+    = link_to 'Cancel', admin_training_set_evaluation_recommendation_path(@training_set, @recommendation), class: 'btn btn-default', data: {loads_in_pjax_modal: true}
+

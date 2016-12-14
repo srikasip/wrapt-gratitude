@@ -1,9 +1,0 @@
-= simple_form_for(@profile_set) do |f|
-  = f.error_notification
-
-  .form-inputs
-    = f.input :name
-    = f.association :survey, label: 'Quiz', disabled: !@profile_set.new_record?
-
-  .form-actions
-    = f.button :submit, 'Save'

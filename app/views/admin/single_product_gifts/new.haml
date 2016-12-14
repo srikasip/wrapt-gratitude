@@ -1,0 +1,11 @@
+%h2 Creating a Gift from #{@product.title}
+
+= simple_form_for  [:admin, @gift], url: admin_product_single_product_gift_path(@product, context_params), html: {data: {submits_to_pjax_modal: true}} do |form|
+
+  .form-inputs
+    = form.association :product_category, disabled: true
+    = form.association :product_subcategory, collection: Gift.default_product_category.children
+
+  .form-actions.pull-right
+    %a.btn.btn-default(pjax-modal-close) Cancel
+    = form.submit 'Save', class: 'btn btn-primary'

@@ -1,0 +1,14 @@
+.row
+  .col-sm-6
+    %h1 New Question
+
+    = simple_form_for  [:admin, @survey_question], url: admin_survey_questions_path(@survey) do |f|
+      = f.error_notification
+
+      .form-inputs
+        = f.input :prompt
+        = f.input :type, as: :select, collection: SurveyQuestion::TYPES, include_blank: false, label_method: :last, value_method: :first, label: "Question Type"
+        = f.association :survey_section, as: :select, collection: @survey.sections, include_blank: false, label: 'Section'
+
+      .form-actions
+        = f.button :submit, 'Save'

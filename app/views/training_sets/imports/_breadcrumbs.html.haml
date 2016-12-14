@@ -1,7 +1,0 @@
-- if params[:action] != 'index'
-  .row.breadcrumbs
-    .col-sm-12
-      = link_to "Training Sets".html_safe, training_sets_path
-      - if params[:action] == 'new'
-        &raquo;
-        = link_to "#{@training_set.name}".html_safe, @training_set

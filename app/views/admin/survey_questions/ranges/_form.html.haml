@@ -1,0 +1,12 @@
+= simple_form_for  [:admin, @survey_question], url: url do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :prompt
+    = f.input :code, hint: '(required for importing)'
+    = f.input :min_label, label: "Left Label"
+    = f.input :max_label, label: "Right Label"
+    = f.input :mid_label, label: "Center Label (optional)"
+
+  .form-actions
+    = f.button :submit, 'Save'

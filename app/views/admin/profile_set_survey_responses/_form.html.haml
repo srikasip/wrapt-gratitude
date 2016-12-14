@@ -1,0 +1,29 @@
+= simple_form_for( [:admin, @profile_set_survey_response], url: url, html: {data: {behavior: 'conditional-question-display-form'}}) do |f|
+  = f.error_notification
+
+  .form-inputs
+    .admin-quiz-question.mb5
+      = f.input :name, label: 'Name for this response'
+    
+    - section = nil
+    - section_was = nil
+    = f.simple_fields_for :question_responses, @profile_set_survey_response.question_responses_for_form do |question_response_fields|
+      :ruby
+        question = question_response_fields.object.survey_question
+        section = question.section_or_uncategorized
+      - if section != section_was
+        %h3= section.name
+      - section_was = section
+
+      .admin-quiz-question.mb5{data: {behavior: 'survey_question', question_id: question.id, conditional_display: ('true' if question.conditional_display), conditional_question_id: question.conditional_question_id, conditional_question_option_ids: question.conditional_question_options.map(&:survey_question_option_id).to_json}}
+        %h4.admin-quiz-question__label #{question_response_fields.index + 1}. #{question_response_fields.object.survey_question.prompt_with_name(@profile_set_survey_response)}
+        = question_response_fields.input :survey_question_id, as: :hidden
+        = render question_response_fields_partial(question_response_fields.object), question_response_fields: question_response_fields
+
+
+  .form-actions
+    = f.button :submit, "Save", class: 'btn btn-primary'
+
+- content_for :page_js do
+  :javascript
+    new App.Admin.ConditionalQuestionDisplay.Controller()

@@ -1,0 +1,20 @@
+.row
+  .col-sm-12
+    .pull-right.mt3
+      = link_to 'Review to Create Gift from Product', [:admin, @product], class: 'btn btn-primary'
+    %h1 Edit Product
+
+.row
+  .col-sm-12
+    %ul.nav.nav-tabs
+      %li(role="presentation" class="active")= link_to 'Details', edit_admin_product_path(@product)
+      %li(role="presentation")= link_to 'Images', admin_product_images_path(@product)
+
+.row
+  .col-sm-8
+    = render 'form'
+
+    .links__view-back
+      = link_to 'View', [:admin, @product]
+      \|
+      = link_to 'Back', admin_products_path

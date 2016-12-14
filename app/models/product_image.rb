@@ -44,6 +44,10 @@ class ProductImage < ApplicationRecord
       gift.gift_images_from_products.create product_image: self
     end
   end
+
+  def to_partial_path
+    'admin/product_images/product_image'
+  end
   
 
 end

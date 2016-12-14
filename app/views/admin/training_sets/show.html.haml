@@ -1,0 +1,44 @@
+.row
+  .col-sm-12
+    %h1
+      = @training_set.name
+      = link_to 'Edit Title', edit_admin_training_set_path(@training_set), class: 'btn btn-default'
+
+    %p
+      %b Quiz:
+      = @training_set.survey&.title
+
+    %h3 Gift-Questions
+
+    = link_to "Export Impacts", admin_training_set_export_path(@training_set), class: 'btn btn-primary'
+    = link_to "Import Impacts", new_admin_training_set_import_path(@training_set), class: 'btn btn-primary'
+
+    %table.table(style="table-layout: fixed;")
+      %thead
+        %tr
+          %th Gift
+          %th
+          %th
+      %tbody
+        - @gifts.each do |gift|
+          %tr{data: {gift_row: gift.id}}
+            %td= link_to gift.title, admin_gift_path(gift)
+            %td
+              = link_to "Add Question", new_admin_training_set_gift_question_impact_path(@training_set, gift_id: gift.id), class: 'btn btn-success', class: 'btn btn-success btn-xs'
+              - if gift.id.in? @gift_question_impact_gift_ids
+                = link_to admin_training_set_gift_questions_path(@training_set, gift), class: 'btn btn-primary btn-xs', data: {view_questions_btn: gift.id} do
+                  View Questions
+                  %span.caret
+                = link_to '#', class: 'btn btn-primary btn-xs', style: 'display: none;', data: {hide_questions_btn: gift.id} do
+                  Hide Questions
+                  %span.dropup
+                    %span.caret
+            %td
+
+
+    = paginate @gifts
+
+- content_for :page_js do
+  :javascript
+    $('[data-view-questions-btn]').each(function(_i, element) { new App.Admin.GiftQuestionListLoader(element)} );
+    

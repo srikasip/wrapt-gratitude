@@ -18,4 +18,8 @@ class NullSurveySection
   def sort_order
     99999
   end
+
+  def == other
+    other.is_a? NullSurveySection
+  end
 end

@@ -1,0 +1,9 @@
+= simple_form_for( [:admin, @trait_training_set]) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name
+    = f.association :survey, disabled: @trait_training_set.persisted?
+
+  .form-actions
+    = f.button :submit, "Save"

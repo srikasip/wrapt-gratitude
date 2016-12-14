@@ -1,6 +1,0 @@
-- if survey.copy_in_progress?
-  %span{data: {behavior: 'survey-copy-in-progress', survey_id: survey.id}}
-    = survey.title
-    = image_tag 'ajax-loader.gif'
-- else
-  = link_to survey.title, survey

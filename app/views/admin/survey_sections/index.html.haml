@@ -1,0 +1,26 @@
+.row.admin__intro
+  .col-sm-12
+    %h1 Sections
+
+.row.admin__actions
+  .col-sm-12
+    = link_to 'Add a Section', new_admin_survey_section_path, class: 'btn btn-primary'
+
+
+.row
+  .col-sm-6
+    %table.table{data: {sortable_list: true, sortable_list_href: admin_survey_section_ordering_path(@survey)}}
+      %tbody
+        - @survey_sections.each_with_index do |survey_section, i|
+          %tr{data: {sortable_item: true, sortable_item_id: survey_section.id}}
+            %td
+              %i.glyphicon.glyphicon-move
+              = survey_section.name
+            %td
+              = link_to 'Edit', edit_admin_survey_section_path(@survey, survey_section), class: 'btn btn-default btn-xs'
+              = link_to 'Delete', admin_survey_section_path(@survey, survey_section), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+
+
+- content_for :page_js do
+  :javascript
+    new App.SortableList($('[data-sortable-list]')[0]);

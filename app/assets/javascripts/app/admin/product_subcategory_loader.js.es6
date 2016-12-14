@@ -12,7 +12,7 @@ App.Admin.ProductSubcategoryLoader = class ProductSubcategoryLoader {
     $(this.productCategoryInput).on('change', evt => {
       const productCategoryId = $(this.productCategoryInput).val()
       if (productCategoryId) {
-        $(this.productSubCategoryInput).load(`/product_categories/${productCategoryId}/subcategories?prompt=${this.prompt}`)
+        $(this.productSubCategoryInput).load(`/admin/product_categories/${productCategoryId}/subcategories?prompt=${this.prompt}`)
       }
     })
   }

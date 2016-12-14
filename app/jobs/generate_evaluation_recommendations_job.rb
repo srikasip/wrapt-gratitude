@@ -11,5 +11,6 @@ class GenerateEvaluationRecommendationsJob < ApplicationJob
     end
 
     training_set_evaluation.touch
+    training_set_evaluation.update_attribute :recommendations_in_progress, false
   end
 end

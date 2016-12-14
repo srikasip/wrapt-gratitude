@@ -1,0 +1,4 @@
+- unless params[:action] == 'index'
+  .row.breadcrumbs
+    .col-sm-12
+      = link_to "&laquo; #{@profile_set.name}".html_safe, [:admin, @profile_set]

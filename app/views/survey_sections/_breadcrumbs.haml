@@ -1,8 +1,0 @@
-.row.breadcrumbs
-  .col-sm-12
-    = link_to "Quizzes", surveys_path
-    &raquo;
-    = link_to @survey.title, @survey
-    - unless params[:action] == 'index'
-      &raquo;
-      = link_to "Sections", survey_sections_path(@survey)

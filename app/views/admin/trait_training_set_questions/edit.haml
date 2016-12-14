@@ -1,0 +1,22 @@
+.row
+  .col-sm-12
+    %h2.heading__has-icon
+      %i{class: @trait_training_set_question.question.system_type_label}
+      = @trait_training_set_question.question.prompt
+
+.row
+  .col-sm-8
+    = simple_form_for  [:admin, @trait_training_set_question], url: admin_trait_training_set_question_path(@trait_training_set, @trait_training_set_question), html: {data: {behavior: 'loads-trait-response-impact-fields'}} do |form|
+
+      .form-inputs
+        = form.association :facet, input_html: {data: {behavior: 'facet-select'}}
+
+        %div{data: {behavior: "trait-response-impact-fields-container", trait_response_impact_fields_url: admin_trait_training_set_question_response_impacts_path(@trait_training_set, @trait_training_set_question)}}
+          = render 'admin/trait_training_set_response_impacts/index', facet: @trait_training_set_question.facet
+
+      .form-actions
+      = form.submit 'Save', class: 'btn btn-primary'
+
+- content_for :page_js do
+  :javascript
+    new App.Admin.TraitResponseImpactFieldsLoader($('[data-behavior~=loads-trait-response-impact-fields]')[0])

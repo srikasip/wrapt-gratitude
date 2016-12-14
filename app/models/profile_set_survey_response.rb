@@ -15,6 +15,7 @@ class ProfileSetSurveyResponse < ApplicationRecord
 
   delegate :survey, :survey_id, to: :profile_set
 
+  before_create :build_question_responses
   def build_question_responses
     profile_set.survey.questions.each do |question|
       question_responses.new survey_question: question
