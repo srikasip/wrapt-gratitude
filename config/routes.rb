@@ -82,6 +82,15 @@ end
 
   resource :private_access_session, only: [:new, :create, :destroy]
 
+  unless Rails.env.production?
+    resource :style_guide, only: :none do
+      member do
+        # Add style guide routes here and to app/controllers/style_guides_controller.rb
+        get 'example'
+      end
+    end
+  end
+
   require 'sidekiq/web'
   constraints lambda {|request| SidekiqDashboardAuthentication.authenticated? request} do
     mount Sidekiq::Web => '/sidekiq'

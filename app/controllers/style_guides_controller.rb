@@ -1,4 +1,7 @@
 class StyleGuidesController < ApplicationController
-  def profile_trait_matches
+
+  # Just a stub route for copying
+  def example
   end
+
 end
