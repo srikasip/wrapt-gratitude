@@ -12,7 +12,7 @@
         = form.association :facet, input_html: {data: {behavior: 'facet-select'}}
 
         %div{data: {behavior: "trait-response-impact-fields-container", trait_response_impact_fields_url: admin_trait_training_set_question_response_impacts_path(@trait_training_set, @trait_training_set_question)}}
-          = render 'trait_training_set_response_impacts/index', facet: @trait_training_set_question.facet
+          = render 'admin/trait_training_set_response_impacts/index', facet: @trait_training_set_question.facet
 
       .form-actions
       = form.submit 'Save', class: 'btn btn-primary'

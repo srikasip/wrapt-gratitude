@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   namespace :admin do
 
     resources :trait_training_sets, except: :show do
-      resources :questions, except: :show, controller: 'trait_training_set_questions' do
+      resources :questions, except: [:show, :destroy], controller: 'trait_training_set_questions' do
         resources :response_impacts, only: :index, controller: 'trait_training_set_response_impacts'
       end
       resources :evaluations, only: [:index, :show], controller: 'survey_response_trait_evaluations'

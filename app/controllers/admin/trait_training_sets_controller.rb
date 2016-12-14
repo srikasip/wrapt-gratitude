@@ -26,7 +26,7 @@ module Admin
 
     def update
       if @trait_training_set.update(trait_training_set_params)
-        redirect_to [:admin, @trait_training_set], notice: 'Profile Trait Training Set was successfully updated.'
+        redirect_to admin_trait_training_sets_path, notice: 'Profile Trait Training Set was successfully updated.'
       else
         render :edit
       end

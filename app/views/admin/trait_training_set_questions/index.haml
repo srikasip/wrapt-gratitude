@@ -23,5 +23,4 @@
               = trait_training_set_question.question&.prompt
             %td= trait_training_set_question.facet&.name
             %td
-              = link_to 'Response Impacts', edit_admin_trait_training_set_question_path(@trait_training_set, trait_training_set_question), class: 'btn btn-default btn-xs'
-              = link_to 'Delete', admin_trait_training_set_question_path(@trait_training_set, trait_training_set_question), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+              = link_to 'Adjust Response Impacts', edit_admin_trait_training_set_question_path(@trait_training_set, trait_training_set_question), class: 'btn btn-default btn-xs'

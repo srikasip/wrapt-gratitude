@@ -18,7 +18,7 @@ window.App.SortableList = class SortableList {
 
   get orderingData() {
     var result = {ordering: []};
-    $(this.element).children('[data-sortable-item]').each( (_i, question_element) => {
+    $(this.element).find('[data-sortable-item]').each( (_i, question_element) => {
       const id = question_element.getAttribute('data-sortable-item-id');
       result.ordering.push(id);
     } )

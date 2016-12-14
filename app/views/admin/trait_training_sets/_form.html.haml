@@ -3,7 +3,7 @@
 
   .form-inputs
     = f.input :name
-    = f.association :survey
+    = f.association :survey, disabled: @trait_training_set.persisted?
 
   .form-actions
     = f.button :submit, "Save"

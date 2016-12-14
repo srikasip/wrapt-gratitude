@@ -9,14 +9,14 @@ module Admin
     helper ::Admin::SurveyQuestionsHelper
 
     def show
-      render 'survey_questions/_option_row', locals: {option: @survey_question_option}
+      render 'admin/survey_questions/_option_row', locals: {option: @survey_question_option}
     end
 
     def create
       @survey_question_option = @survey_question.options.new(survey_question_option_params)
       
       if @survey_question_option.save
-        render 'survey_questions/_option_row', locals: {option: @survey_question_option}
+        render 'admin/survey_questions/_option_row', locals: {option: @survey_question_option}
       else
         head :bad_request
       end
@@ -27,7 +27,7 @@ module Admin
 
     def update    
       if @survey_question_option.update(survey_question_option_params)
-        render 'survey_questions/_option_row', locals: {option: @survey_question_option}
+        render 'admin/survey_questions/_option_row', locals: {option: @survey_question_option}
       else
         head :bad_request
       end

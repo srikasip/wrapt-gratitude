@@ -22,7 +22,7 @@
       %tbody
         - @gifts.each do |gift|
           %tr{data: {gift_row: gift.id}}
-            %td= link_to gift.title, gift
+            %td= link_to gift.title, admin_gift_path(gift)
             %td
               = link_to "Add Question", new_admin_training_set_gift_question_impact_path(@training_set, gift_id: gift.id), class: 'btn btn-success', class: 'btn btn-success btn-xs'
               - if gift.id.in? @gift_question_impact_gift_ids

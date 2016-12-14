@@ -13,7 +13,7 @@ module Admin
 
     def update    
       if @survey_question_option.update(survey_question_option_params)
-        render 'survey_questions/_option_row', locals: {option: @survey_question_option}
+        render 'admin/survey_questions/_option_row', locals: {option: @survey_question_option}
       else
         head :bad_request
       end
@@ -22,7 +22,7 @@ module Admin
     def destroy
       @survey_question_option.remove_image!
       @survey_question_option.save!
-      render 'survey_questions/_option_row', locals: {option: @survey_question_option}
+      render 'admin/survey_questions/_option_row', locals: {option: @survey_question_option}
     end
 
     private
