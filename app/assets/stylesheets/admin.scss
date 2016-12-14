@@ -1,0 +1,19 @@
+/*
+  Top level manifest/imports for the admin section
+
+ *
+ *= require_self
+ *= require bootstrap-slider
+ */
+
+@import "bootstrap-sprockets";
+@import 'bootstrap-custom';
+// @import "helpers/variables"; included in bootstrap_custom
+@import "helpers/mixins";
+@import "helpers/margins_padding";
+@import "modules/admin/admin";
+
+
+.main.container {
+  min-height: 70vh;
+}

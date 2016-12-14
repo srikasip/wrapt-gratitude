@@ -21,7 +21,8 @@
 //= require jquery.ui.widget
 //= require jquery.iframe-transport
 //= require jquery.fileupload
+//= require cable
 
 // Application Code
 //= require app/init
-//= require_tree .
+//= require_tree ./app

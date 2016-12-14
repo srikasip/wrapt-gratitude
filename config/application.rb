@@ -21,5 +21,7 @@ module WraptGratitude
 
     config.action_controller.include_all_helpers = false
 
+    Rails.application.config.assets.precompile += ['admin.js', 'admin.css']
+
   end
 end
