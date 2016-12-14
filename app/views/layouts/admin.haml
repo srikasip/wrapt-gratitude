@@ -9,13 +9,13 @@
     = javascript_include_tag 'admin', 'data-turbolinks-track': 'reload'
   %body
     - if show_top_nav?
-      = render 'layouts/top_nav'
+      = render 'layouts/admin/top_nav'
     
 
 
          
     .container.main
-      = render 'layouts/alerts'
+      = render 'layouts/admin/alerts'
       = render 'breadcrumbs'
       = yield
 

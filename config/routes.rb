@@ -76,6 +76,8 @@ Rails.application.routes.draw do
       resource :exports, only: :create, controller: 'profile_set_exports'    
     end
 
+    root to: 'home#show'
+
 end
 
   resource :private_access_session, only: [:new, :create, :destroy]
@@ -88,6 +90,6 @@ end
   # Serve websocket cable requests in-process
   mount ActionCable.server => '/cable'
 
-  root to: 'home_pages#show' 
+  root to: 'home#show' 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
