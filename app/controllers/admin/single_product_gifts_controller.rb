@@ -2,7 +2,7 @@ module Admin
   class SingleProductGiftsController < BaseController
     include PjaxModalController
 
-    helper ProductsIndexContextHelper
+    helper ::Admin::ProductsIndexContextHelper
     include ProductsIndexContextHelper
 
     before_action :set_product

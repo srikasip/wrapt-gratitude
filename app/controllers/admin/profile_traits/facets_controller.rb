@@ -2,7 +2,7 @@ module Admin
   class ProfileTraits::FacetsController < BaseController
     before_action :set_topic
     before_action :set_profile_traits_facet, only: [:edit, :update, :destroy]
-    helper ProfileTraitsHelper
+    helper ::Admin::ProfileTraitsHelper
 
     def index
       @profile_traits_facets = @topic.facets.all
@@ -42,7 +42,7 @@ module Admin
 
     private
       def set_topic
-        @topic = ProfileTraits::Topic.find params[:topic_id]
+        @topic = ::ProfileTraits::Topic.find params[:topic_id]
       end
 
       def set_profile_traits_facet

@@ -1,22 +1,22 @@
 module Admin
   class ProfileTraits::TopicsController < BaseController
     before_action :set_profile_traits_topic, only: [:edit, :update, :destroy]
-    helper ProfileTraitsHelper
+    helper ::Admin::ProfileTraitsHelper
 
 
     def index
-      @profile_traits_topics = ProfileTraits::Topic.all
+      @profile_traits_topics = ::ProfileTraits::Topic.all
     end
 
     def new
-      @profile_traits_topic = ProfileTraits::Topic.new
+      @profile_traits_topic = ::ProfileTraits::Topic.new
     end
 
     def edit
     end
 
     def create
-      @profile_traits_topic = ProfileTraits::Topic.new(profile_traits_topic_params)
+      @profile_traits_topic = ::ProfileTraits::Topic.new(profile_traits_topic_params)
 
       if @profile_traits_topic.save
         redirect_to admin_profile_traits_topics_path, notice: 'Topic was successfully created.'
@@ -40,7 +40,7 @@ module Admin
 
     private
       def set_profile_traits_topic
-        @profile_traits_topic = ProfileTraits::Topic.find(params[:id])
+        @profile_traits_topic = ::ProfileTraits::Topic.find(params[:id])
       end
 
       def profile_traits_topic_params

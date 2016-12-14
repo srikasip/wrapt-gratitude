@@ -1,7 +1,7 @@
 module Admin
   class TraitTrainingSetsController < BaseController
     before_action :set_trait_training_set, only: [:show, :edit, :update, :destroy]
-    helper TraitTrainingSetsSectionHelper
+    helper ::Admin::TraitTrainingSetsSectionHelper
 
     def index
       @trait_training_sets = TraitTrainingSet.all

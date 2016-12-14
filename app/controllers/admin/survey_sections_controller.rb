@@ -3,7 +3,7 @@ module Admin
     before_action :set_survey
     before_action :set_survey_section, only: [:edit, :update, :destroy]
 
-    helper SurveyAdminSectionHelper
+    helper ::Admin::SurveyAdminSectionHelper
 
     def index
       @survey_sections = @survey.sections.all

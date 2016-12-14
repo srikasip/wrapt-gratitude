@@ -8,7 +8,7 @@ module Admin
     before_action :set_gift_question_impact
 
     include PjaxModalController
-    helper GiftQuestionImpactsHelper
+    helper ::Admin::GiftQuestionImpactsHelper
 
     def edit
     end

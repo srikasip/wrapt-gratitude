@@ -3,7 +3,7 @@ module Admin
     before_action :set_survey
     before_action :set_survey_question, only: [:show, :edit, :update, :destroy, :preview]
 
-    helper ConditionalQuestionOptionsHelper
+    helper ::Admin::ConditionalQuestionOptionsHelper
 
     def new
       @survey_question = @survey.questions.new

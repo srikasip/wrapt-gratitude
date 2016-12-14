@@ -2,7 +2,7 @@ module Admin
   class SurveyResponseTraitEvaluationsController < BaseController
     before_action :set_trait_training_set
 
-    helper TraitTrainingSetsSectionHelper
+    helper ::Admin::TraitTrainingSetsSectionHelper
 
     def index
       @profile_sets = @trait_training_set.survey.profile_sets

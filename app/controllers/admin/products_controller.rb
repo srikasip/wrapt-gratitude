@@ -2,7 +2,7 @@ module Admin
   class ProductsController < BaseController
     before_action :set_product, only: [:show, :edit, :update, :destroy]
 
-    helper ProductsIndexContextHelper
+    helper ::Admin::ProductsIndexContextHelper
     include ProductsIndexContextHelper
 
     # GET /products

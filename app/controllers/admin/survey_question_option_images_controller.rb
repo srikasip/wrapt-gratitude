@@ -6,7 +6,7 @@ module Admin
     before_action :set_survey_question_option
     layout 'xhr'
 
-    helper SurveyQuestionsHelper
+    helper ::Admin::SurveyQuestionsHelper
 
     def edit
     end

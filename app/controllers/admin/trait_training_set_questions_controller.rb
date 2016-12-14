@@ -3,8 +3,8 @@ module Admin
     before_action :set_trait_training_set
     before_action :set_trait_training_set_question, except: :index
 
-    helper TraitTrainingSetResponseImpactsHelper
-    helper TraitTrainingSetsSectionHelper
+    helper ::Admin::TraitTrainingSetResponseImpactsHelper
+    helper ::Admin::TraitTrainingSetsSectionHelper
 
     def index
       @trait_training_set.refresh_questions!
