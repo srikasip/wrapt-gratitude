@@ -80,8 +80,6 @@ Rails.application.routes.draw do
 
 end
 
-  resource :private_access_session, only: [:new, :create, :destroy]
-
   unless Rails.env.production?
     resource :style_guide, only: :none do
       member do
