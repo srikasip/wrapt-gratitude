@@ -1,6 +1,6 @@
 class SurveySection < ApplicationRecord
   belongs_to :survey, required: true, inverse_of: :sections
-  has_many :questions, class_name: 'SurveyQuestion', inverse_of: :survey_section, dependent: :nullify
+  has_many :questions, -> {order :sort_order}, class_name: 'SurveyQuestion', inverse_of: :survey_section, dependent: :nullify
 
   before_create :set_initial_sort_order
 
