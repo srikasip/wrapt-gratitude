@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   devise_for :users
   namespace :admin do
 
+    resources :users, except: :show
+
     resources :trait_training_sets, except: :show do
       resources :questions, except: [:show, :destroy], controller: 'trait_training_set_questions' do
         resources :response_impacts, only: :index, controller: 'trait_training_set_response_impacts'
