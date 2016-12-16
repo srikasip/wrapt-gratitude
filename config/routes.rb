@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   namespace :admin do
 
     resources :trait_training_sets, except: :show do
@@ -16,7 +17,6 @@ Rails.application.routes.draw do
 
     resources :vendors
     get 'home_pages/show'
-    devise_for :users
     
     resources :product_categories, except: :show do
       resource :subcategories, controller: 'product_subcategories', only: :show
