@@ -40,7 +40,7 @@ gem 'carrierwave_direct'
 gem "fog-aws"
 gem 'mini_magick'
 gem 'awesome_nested_set'
-gem 'devise'
+gem 'sorcery'
 gem 'kaminari'
 gem 'sidekiq'
 
