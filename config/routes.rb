@@ -86,7 +86,7 @@ end
     resource :style_guide, only: :none do
       member do
         # Add style guide routes here and to app/controllers/style_guides_controller.rb
-        get 'example'
+        get 'main'
       end
     end
   end

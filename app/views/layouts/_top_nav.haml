@@ -1,12 +1,13 @@
-%nav.navbar.navbar-inverse.navbar-static-top
-  .container
-    .navbar-header
-    .collapse.navbar-collapse
-      %ul.nav.navbar-nav
-        %li{class: ("active" if active_top_nav_section == 'home_pages')}= link_to "Wrapt", root_path
-      %ul.nav.navbar-nav.pull-right
-        -# TODO only show link to admin if current user is one
-        %li= link_to "Admin", admin_root_path
-        %li= link_to "Log Out", '#', method: :delete
+.container
+  .row
+    .col-xs-12
+      %nav.navbar.navbar-default.navbar-static-top
+        .navbar-header
+          .navbar-brand.wrapt-logo{class: ("active" if active_top_nav_section == 'home_pages')}= link_to "Wrapt", root_path
+        
+        %ul.nav.navbar-nav.navbar-right
+          -# TODO only show link to admin if current user is one
+          %li= link_to "Admin", admin_root_path
+          %li= link_to "Log Out", '#', method: :delete
         
 

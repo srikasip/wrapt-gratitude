@@ -1,0 +1,22 @@
+TODO
+- list images
+- margin cadence
+- p bottom-margin before ol
+- flash message
+- peg footer to page bottom
+
+
+
+DONE
+- mobile transition notes
+- full-width containers
+
+major margin/padding scale
+minor margins
+
+80px (above form field submit button)
+68px (header bottom margin)
+60px (e.g. modal header height, modal padding, footer padding bottom. also large button height, submit button margin bottom (unless in modal where this is taken care of by modal padding))
+45px (form inputs margin-bottom, footer padding top, secondary nav margin-bottom)
+28px (p margin-bottom)
+10px (label bottom)

@@ -1,0 +1,51 @@
+// Zero out heading margin tops. BS sets margin-top on headings. This can mess with the margin cadence as often elements where we'd expect margins to collapse have an intervening dom node.
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin-top: 0;
+}
+h1 {
+  margin-bottom: 60px;
+}
+h1.page-title {
+  font-size: rem(36);
+  margin-bottom: 52px;
+}
+.byline {
+  @include akkurat-mono;
+  font-weight: normal;
+  margin-bottom: 56px;
+}
+h4 {
+  @include akkurat-bold;
+  font-weight: bold;
+  font-size: rem(20);
+  margin-bottom: 34px;
+}
+h4.mono {
+  @include akkurat-mono;
+  font-weight: normal;
+}
+h5 {
+  @include akkurat-bold;
+  font-weight: bold;
+}
+p {
+  margin-bottom: 28px;
+}
+.lead {
+  font-size: rem(20);
+  line-height: 1.6; 
+  margin-bottom: 32px;
+}
+p.small {
+  font-size: rem(14);
+  line-height: 1.857142857;
+  margin-bottom: 26px;
+}
+b,
+strong {
+  @include akkurat-bold;
+}

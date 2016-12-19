@@ -1,0 +1,50 @@
+.navbar-nav {
+  @include akkurat-mono;
+}
+.navbar-brand a {
+  background: image-url('icons/logo.svg') no-repeat;
+  display: block;
+  text-indent: -9999px;
+  width: 82px;
+  height: 37px;
+  background-size: 82px 37px;
+}
+.nav li {
+  margin-bottom: 0;
+}
+.nav a {
+  cursor: pointer;
+}
+.navbar--secondary {
+  text-align: center;
+  font-size: rem(18);
+  margin-bottom: 45px;
+}
+.navbar--secondary .navbar-nav {
+  float: none;
+  display: inline-block;
+}
+.navbar--secondary .navbar-nav {
+  @include wrapt-border(2px, 0, 2px, 0);
+}
+.navbar--secondary li a {
+  color: $gray-010;
+  padding: 24px 34px;
+  margin: 0 16px;
+  line-height: 1;
+}
+.navbar--secondary li:first-child a {
+  margin-left: 0;
+}
+.navbar--secondary li:last-child a {
+  margin-right: 0;
+}
+.navbar--secondary li a:hover,
+.navbar--secondary li a:focus {
+  color: $blue-002;
+  @include wrapt-border(0, 0, 4px, 0);
+}
+.navbar--secondary li.active a {
+  color: $blue-002;
+  @include wrapt-border(0, 0, 4px, 0)
+}

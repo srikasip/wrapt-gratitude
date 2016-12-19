@@ -1,0 +1,292 @@
+.container
+  .row
+    .col-xs-12
+      %h1.text-center
+        Style Guide
+        %code
+          Heading 1.page-title.text-center
+
+      .navbar--secondary
+        .navbar-nav
+          %ul.nav.nav-pills
+            %li.active 
+              %a{href: '#typography'} Type
+            %li
+              %a{href: '#colors'} Colors
+            %li
+              %a{href: '#grid'} Grid/Spacing Cadence
+            %li
+              %a{href: '#buttons'} Buttons
+            %li
+              %a{href: '#forms'} Forms
+            %li
+              %a{href: '#modals'} Modals
+
+.container
+  .row#typography
+    .col-xs-10.col-xs-offset-1
+      %h2
+        Typography
+        %code
+          Heading 2
+      %h3
+        The Wrapt story, explained.
+        %code
+          Heading 3
+      %h4.byline
+        by MJ Viederman
+        %code
+          byline
+      %p.lead
+        Wrapt uses online retailers and brick-and-mortar specialty stores to not only find “the perfect gift,” but link friends to friends and families to families, in interactions that are more meaningful than the transactions themselves.
+        %code
+          p.lead 
+      %p
+        Whether you're shopping for a birthday, an anniversary, or something just to say “I'm thinking of you,” Wrapt is more about people than purchases; more about love than luxury—creating communities bound by shared experiences and celebration.
+        %code
+          p
+      %h4
+        More About Wrapt
+        %code
+          Heading 4
+      %p.small
+        Wrapt uses online retailers and brick-and-mortar specialty stores to not only find “the perfect gift,” but link friends to friends and families to families, in interactions that are more meaningful than the transactions themselves.
+        %code
+          p.small
+      %p
+        Whether you're shopping for a birthday, an anniversary, or something just to say “I'm thinking of you,” Wrapt is more about people than purchases; more about love than luxury—creating communities bound by shared experiences and celebration.
+      %h5
+        List &#8212; Unordered
+        %code
+          Heading 5
+      %ul
+        %li More about people than purchases
+        %li More about love than luxury
+        %li 
+          Creating communities bound by shared experiences and celebration.
+          %ul
+            %li More about people than purchases
+            %li More about love than luxury
+            %li Creating communities bound by shared experiences and celebration
+      %h5
+        List &#8212; Ordered
+      %ol
+        %li More about people than purchases
+        %li More about love than luxury
+        %li 
+          Creating communities bound by shared experiences and celebration.
+          %ul
+            %li More about people than purchases
+            %li More about love than luxury
+            %li Creating communities bound by shared experiences and celebration
+.container
+  .row#colors.mb3
+    .col-xs-10.col-xs-offset-1
+      %h2 Colors
+      %p Variables for the site are set in /app/assets/stylesheets/helpers/variables &#8212 This is a copy of the bootstrap custom variables and serves that function as well as being the place for non-bootstrap variables.
+      %h5 Grays
+    .col-xs-2.col-xs-offset-1
+      .pb2
+        .div.bg-gray-001.placeholder-block
+        $gray-001
+        %br
+        \#f4f6f6 lightest
+    .col-xs-2
+      .pb2
+        .div.bg-gray-002.placeholder-block
+        $gray-002
+        %br
+        \#e9ecec
+    .col-xs-2
+      .pb2
+        .div.bg-gray-003.placeholder-block
+        $gray-003
+        %br
+        \#95989f
+    .col-xs-2
+      .pb2
+        .div.bg-gray-005.placeholder-block
+        $gray-005
+        %br
+        \#808184 help text
+    .col-xs-2
+      .pb2
+        .div.bg-gray-007.placeholder-block
+        $gray-007
+        %br
+        \#6d6e70
+    .col-xs-2.col-xs-offset-1
+      .pb2
+        .div.bg-gray-008.placeholder-block
+        $gray-008
+        %br
+        \#4d4c4d primary text
+    .col-xs-2
+      .pb2
+        .div.bg-gray-010.placeholder-block
+        $gray-010
+        %br
+        \#1b1c1c
+    .col-xs-2
+      .pb2
+        .div.bg-black.placeholder-block
+        $black
+  .row.mb3
+    .col-xs-10.col-xs-offset-1
+      %h5 Primary: Blues
+    .col-xs-2.col-xs-offset-1
+      .div.bg-blue-001.placeholder-block
+      $blue-001
+      %br
+      #91A7CE lightest, logo border
+    .col-xs-2
+      .div.bg-blue-002.placeholder-block
+      $blue-002
+      %br
+      #7191c1
+    .col-xs-2
+      .div.bg-blue-003.placeholder-block
+      $blue-003
+      %br
+      #165097
+    .col-xs-2
+      .div.bg-blue-004.placeholder-block
+      $blue-004
+      %br
+      #90a5cd
+  .row.mb3
+    .col-xs-10.col-xs-offset-1
+      %h5 Secondary Colors
+    .col-xs-2.col-xs-offset-1
+      .div.bg-tan-001.placeholder-block
+      $tan-001
+      %br
+      #f1dfd1
+    .col-xs-2
+      .div.bg-tan-002.placeholder-block
+      $tan-002
+      %br
+      #c5aa80
+    .col-xs-2
+      .div.bg-orange-001.placeholder-block
+      $orange-001
+      %br
+      #f79a6f
+    .col-xs-2
+      .div.bg-green-001.placeholder-block
+      $green-001
+      %br
+      #bfe79e
+  .row.mb3
+    .col-xs-10.col-xs-offset-1
+      %h5 Action
+    .col-xs-2.col-xs-offset-1
+      .div.bg-green-002.placeholder-block
+      $green-002
+      %br
+      #29b473
+    .col-xs-2
+      .div.bg-red-001.placeholder-block
+      $red-001
+      %br
+      #eb6767
+.container
+  .row#grid
+    .col-xs-10.col-xs-offset-1
+      %h2 Grid &amp; Spacing Cadence
+      %h3 Responsive is Disabled for MVP 1a and 1b
+      %p Responsive sites adjust their layout based on the screen size. Non-responsive sites display zoomed out on small screens so that you see the whole width of the page: you scroll or pinch to zoom in on areas of the site.
+      %p For MVP 1a and 1b (and possibly even for beta), responsive is disabled on the site. The container is set to a fixed width of 1140px. In /app/assets/stylesheets/modules/grid, we use the Bootstrap disabled-responsive recommendations.
+      %p 
+        %strong
+          Use .col-xs-* for all columns. 
+        (In Boostrap, that translates to "at all sizes, xs and higher, display x columns.")
+      %h4 Eventual Conversion to Responsive
+      %p In preparation for adding screen-size-specific design (e.g. font-sizing and margin cadence variations, mobile navigation)
+      %ol
+        %li Remove inclusion of this file in /app/assets/stylesheets/modules/modules
+        %li 
+          Add .nav-collapse to nav element
+        %li Add .col-sm-* and .col-md-* as needed
+.wrapper--full-bleed__bg-01.mb3
+  %code
+    wrapper--full-bleed__bg-01   
+  .container
+    .row
+      .col-xs-10.col-xs-offset-1
+        %h3 Full-Bleed Backgrounds
+        %p
+          Some areas of the app get a full-width background. We don't ever want to nest bootstrap containers. So this is accomplished with a wrapper around the given container. 
+        %p
+          This also means application layout can't impose overall containers. (The downside is we have to remember to use containers at the next level down.)
+.container
+  .row
+    .col-xs-10.col-xs-offset-1
+      %h3 Spacing Cadence
+      %p In general, margin-bottom is applied to elements. Avoid margin-top as much as possible to avoid unpredictable combined margins. (While browser behavior is to collapse margins that abut, some elements in the site get intervening DOM nodes that prevent this useful collapse.)
+      %p We have margin/padding classes in /app/assets/stylesheets/helpers/margins_padding. Available classes target each of: All, Horizontal, Vertical, Top, Right, Bottom, and Left. (See partial for more info.)
+      %p Benefits of using these classes (e.g. on a row or div):
+      %ul
+        %li Reduce number of scss media query statements on elements when site is made responsive. (We would add declarations for varied screen sizes on the margin/padding classes). 
+        %li Reduce number of block/element variations for spacing adjustments based on context
+      %p
+        Nevertheless, some blocks and elements may have margin/padding applied in their scss. These should use the spacing scale sizes whenever possible. 
+      .bg-gray-002.mb0.pa0
+        Spacing Scale: 0 (applied to margin-bottom and padding-all)
+        %code
+          mb0.pa0
+      .bg-gray-002.mv1.pa1
+        Spacing Scale: 1 (10px) (applied to margin-vertical and padding-all)
+        %code
+          mv1.pa1
+        %br
+        e.g. label bottom        
+      .bg-gray-002.mb2.pa2
+        Spacing Scale: 2 (28px) (applied to margin-bottom and padding-all)
+        %code
+          mb2.pa2
+        %br
+        e.g. p margin-bottom
+      .bg-gray-002.mb3.pa3
+        Spacing Scale: 3 (45px) 
+        %code
+          mb3.pa3
+        %br
+        e.g. form inputs margin-bottom, footer padding top, secondary nav margin-bottom
+      .bg-gray-002.mb4.pa4
+        Spacing Scale: 4 (60px) 
+        %code
+          mb4.pa4
+        %br
+        e.g. modal header height, modal padding, footer padding bottom. also large button height, submit button margin bottom (unless in modal where this is taken care of by modal padding)
+      .bg-gray-002.mb5.pa5
+        Spacing Scale: 5 (68px) 
+        %code
+          mb5.pa5
+        %br
+        e.g. header bottom margin
+      .bg-gray-002.mb6.pa6
+        Spacing Scale: 6 (80px) 
+        %code
+          mb6.pa6
+        %br
+        e.g. above form field submit button
+
+
+
+.container
+  .row#buttons.mb3
+    .col-xs-10.col-xs-offset-1
+      %h2 Buttons
+
+  .row#forms.mb3
+    .col-xs-10.col-xs-offset-1
+      %h2 Forms
+      %p.help-block
+        Help text
+        %code
+          .help-block
+
+  .row#modals.mb3
+    .col-xs-10.col-xs-offset-1
+      %h2 Modals

@@ -1,0 +1,14 @@
+body .slider-track {
+  background-color: $gray-003;
+  background-image: none;
+}
+
+body .slider-handle {
+  background-color: $gray-008 !important;
+  background-image: none;
+}
+
+.slider.slider-horizontal {
+  margin-left: 14px;
+  margin-right: 14px;
+}

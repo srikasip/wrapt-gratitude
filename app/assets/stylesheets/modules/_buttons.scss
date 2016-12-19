@@ -1,0 +1,13 @@
+.btn {
+  line-height: 1;
+}
+.btn:hover, 
+.btn:focus, 
+.btn.focus {
+  @include shadowed-box__01-hover;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: $blue-001;
+  border-color: $blue-001;
+}

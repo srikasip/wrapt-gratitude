@@ -1,0 +1,10 @@
+ul,
+ol {
+  margin-bottom: 28px;
+}
+li {
+  margin-bottom: 6px;
+}
+li:last-child ul {
+  margin-top: 8px;
+}

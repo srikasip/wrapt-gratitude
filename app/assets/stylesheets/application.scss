@@ -14,13 +14,14 @@
  *= require bootstrap-slider
  */
 
+// @import "modules/fonts"; // TODO uncomment when have fonts
 @import "bootstrap-sprockets";
 @import 'bootstrap-custom';
 // @import "helpers/variables"; included in bootstrap_custom
 @import "helpers/mixins";
+@import "helpers/helper_classes";
 @import "helpers/margins_padding";
+@import "modules/modules";
 
 
-.main.container {
-  min-height: 70vh;
-}
+

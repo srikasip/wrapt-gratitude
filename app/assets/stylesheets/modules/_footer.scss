@@ -1,0 +1,20 @@
+footer ul {
+  list-style: none;
+  display: block;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 0;
+}
+footer li {
+  display: inline-block;
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 0;
+  line-height: 1;
+}
+footer li:after {
+  content: '\00a0|';
+}
+footer li:last-child:after {
+  content: '';
+}
