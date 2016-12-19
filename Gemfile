@@ -74,6 +74,7 @@ group :development do
   gem 'capistrano-rvm'
   gem 'seed_dump'
   gem 'foreman'
+  gem 'letter_opener'
 end
 
 group :test do

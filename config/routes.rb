@@ -1,4 +1,29 @@
 Rails.application.routes.draw do
+
+  resource :user_session, only: [:new, :create, :destroy]
+  resources :password_reset_requests, only: [:new, :create]
+  resources :password_resets, only: [:show, :update]
+
+  unless Rails.env.production?
+    resource :style_guide, only: :none do
+      member do
+        # Add style guide routes here and to app/controllers/style_guides_controller.rb
+        get 'example'
+      end
+    end
+  end
+
+  require 'sidekiq/web'
+  constraints lambda {|request| SidekiqDashboardAuthentication.authenticated? request} do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
+  # Serve websocket cable requests in-process
+  mount ActionCable.server => '/cable'
+
+  root to: 'home#show' 
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
   namespace :admin do
 
     resources :users, except: :show
@@ -81,23 +106,5 @@ Rails.application.routes.draw do
 
 end
 
-  unless Rails.env.production?
-    resource :style_guide, only: :none do
-      member do
-        # Add style guide routes here and to app/controllers/style_guides_controller.rb
-        get 'example'
-      end
-    end
-  end
 
-  require 'sidekiq/web'
-  constraints lambda {|request| SidekiqDashboardAuthentication.authenticated? request} do
-    mount Sidekiq::Web => '/sidekiq'
-  end
-
-  # Serve websocket cable requests in-process
-  mount ActionCable.server => '/cable'
-
-  root to: 'home#show' 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

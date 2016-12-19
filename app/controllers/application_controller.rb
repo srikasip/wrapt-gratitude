@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  before_action :require_login!, if: :login_required?
+  before_action :require_login, if: :login_required?
 
   if Rails.env.production?
     before_filter :_basic_auth
@@ -13,14 +13,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def require_login!
-    unless current_user
-      redirect_to new_user_session_path
-    end
-  end
-
+  # TODO redefine in subclasses as needed
   def login_required?
-    !devise_controller?
+    true
   end
 
 end
