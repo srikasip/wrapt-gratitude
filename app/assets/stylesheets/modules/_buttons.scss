@@ -1,13 +1,88 @@
 .btn {
   line-height: 1;
+  border: 2px solid $blue-001;
+  min-width: 112px;
 }
 .btn:hover, 
 .btn:focus, 
 .btn.focus {
   @include shadowed-box__01-hover;
 }
-.btn-primary:hover,
-.btn-primary:focus {
-  background-color: $blue-001;
+.btn:focus, 
+.btn.focus, 
+.btn:active:focus, 
+.btn:active.focus, 
+.btn.active:focus, 
+.btn.active.focus {
+  outline: none;
+  box-shadow: none;
+}
+.btn:active,
+.btn.active {
+  box-shadow: none;
+}
+.btn-default:hover,
+.btn-default:focus {
+  background-color: #fff;
   border-color: $blue-001;
+}
+.btn-default:active:hover, 
+.btn-default:active:focus, 
+.btn-default:active.focus, 
+.btn-default.active:hover, 
+.btn-default.active:focus, 
+.btn-default.active.focus {
+  background-color: $gray-001;
+  border-color: $blue-001;
+}
+
+.btn-primary:active:hover, 
+.btn-primary:active:focus, 
+.btn-primary:active.focus, 
+.btn-primary.active:hover, 
+.btn-primary.active:focus, 
+.btn-primary.active.focus {
+  background-color: $blue-004;
+  border-color: $blue-004;
+}
+.btn-primary:active,
+.btn-primary.active {
+  background-color: $blue-004;
+  border-color: $blue-004;
+  box-shadow: none;
+}
+.btn.disabled:hover,
+.btn.disabled:focus {
+  box-shadow: none;
+}
+.btn-dark,
+.btn-dark:hover,
+.btn-dark:focus {
+  background-color: $gray-010;
+  border-color: $gray-010;
+  color: #fff;
+}
+.btn-dark:active:hover, 
+.btn-dark:active:focus, 
+.btn-dark:active.focus, 
+.btn-dark.active:hover, 
+.btn-dark.active:focus, 
+.btn-dark.active.focus {
+  background-color: $gray-008;
+  border-color: $gray-008;
+  color: #fff;
+}
+.btn-full-width {
+  width: 100%;
+}
+.btn-lg {
+  min-width: 136px;
+}
+.btn-sm {
+  min-width: 90px;
+}
+.btn-xs, 
+.btn-group-xs > .btn {
+  font-size: 10px;
+  min-width: 60px;
 }
