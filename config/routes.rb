@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resource :user_session, only: [:new, :create, :destroy]
   resources :password_reset_requests, only: [:new, :create]
   resources :password_resets, only: [:show, :update]
+  # These have an ID because signup requires user activation token
+  resources :sign_ups, only: [:show, :update]
 
   unless Rails.env.production?
     resource :style_guide, only: :none do

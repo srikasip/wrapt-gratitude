@@ -14,7 +14,7 @@
           %th Name
           %th Email
           %th Access
-          %th Confirmation Status
+          %th Account Status
           %th
 
       %tbody
@@ -23,7 +23,7 @@
             %td= user.full_name
             %td= user.email
             %td= user.admin? ? 'Admin' : 'Regular'
-            %td= user.confirmed? ? 'Confirmed' : 'Unconfirmed'
+            %td= user.active? ? 'Active' : 'Pending Confirmation'
             %td
               = link_to 'Edit', edit_admin_user_path(user), class: 'btn btn-default btn-xs'
               = link_to 'Delete', [:admin, user], :method => :delete, :data => { :confirm => "Are you sure you want to delete this account?" }, class: 'btn btn-danger btn-xs'
