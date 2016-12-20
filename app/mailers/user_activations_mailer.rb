@@ -4,7 +4,7 @@ class UserActivationsMailer < ApplicationMailer
     @user = user
     @activation_url = sign_up_url(user.activation_token)
 
-    mail to: user.email, subject: "You're invitation to try WRAPT"
+    mail to: user.email, subject: "Your invitation to try WRAPT"
   end
 
   def activation_success_email user

@@ -29,7 +29,11 @@ Rails.application.routes.draw do
   namespace :admin do
     root to: 'home#show', as: 'root' # admin home
 
-    resources :users, except: :show
+    resources :users, except: :show do
+      member do
+        post :resend_invitation
+      end
+    end
 
     resources :trait_training_sets, except: :show do
       resources :questions, except: [:show, :destroy], controller: 'trait_training_set_questions' do
