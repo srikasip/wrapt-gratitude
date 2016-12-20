@@ -1,8 +1,12 @@
 module SidekiqDashboardAuthentication
   
   def self.authenticated? request
-    encoded_cookie = request.cookie_jar['private_access_granted']
-    return encoded_cookie && Base64.decode64(encoded_cookie) == "true"
+    if Rails.env.development?
+      return true
+    else
+      # TODO admin authentication
+      return false
+    end
   end
 
 end

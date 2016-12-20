@@ -1,0 +1,31 @@
+.row.admin__intro
+  .col-sm-12
+    %h1 Users
+
+.row.admin__actions
+  .col-sm-12
+    = link_to link_to 'Add a User', new_admin_user_path, class: 'btn btn-primary'
+
+.row
+  .col-md-12
+    %table.table
+      %thead
+        %tr
+          %th Name
+          %th Email
+          %th Access
+          %th Confirmation Status
+          %th
+
+      %tbody
+        - @users.each do |user|
+          %tr
+            %td= user.full_name
+            %td= user.email
+            %td= user.admin? ? 'Admin' : 'Regular'
+            %td= user.confirmed? ? 'Confirmed' : 'Unconfirmed'
+            %td
+              = link_to 'Edit', edit_admin_user_path(user), class: 'btn btn-default btn-xs'
+              = link_to 'Delete', [:admin, user], :method => :delete, :data => { :confirm => "Are you sure you want to delete this account?" }, class: 'btn btn-danger btn-xs'
+
+    = paginate @users

@@ -40,7 +40,7 @@ gem 'carrierwave_direct'
 gem "fog-aws"
 gem 'mini_magick'
 gem 'awesome_nested_set'
-gem 'devise'
+gem 'sorcery'
 gem 'kaminari'
 gem 'sidekiq'
 
@@ -74,6 +74,7 @@ group :development do
   gem 'capistrano-rvm'
   gem 'seed_dump'
   gem 'foreman'
+  gem 'letter_opener'
 end
 
 group :test do

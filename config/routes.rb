@@ -1,5 +1,33 @@
 Rails.application.routes.draw do
+
+  resource :user_session, only: [:new, :create, :destroy]
+  resources :password_reset_requests, only: [:new, :create]
+  resources :password_resets, only: [:show, :update]
+
+  unless Rails.env.production?
+    resource :style_guide, only: :none do
+      member do
+        # Add style guide routes here and to app/controllers/style_guides_controller.rb
+        get 'main'
+      end
+    end
+  end
+
+  require 'sidekiq/web'
+  constraints lambda {|request| SidekiqDashboardAuthentication.authenticated? request} do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
+  # Serve websocket cable requests in-process
+  mount ActionCable.server => '/cable'
+
+  root to: 'home#show' 
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
   namespace :admin do
+    root to: 'home#show', as: 'root' # admin home
+
+    resources :users, except: :show
 
     resources :trait_training_sets, except: :show do
       resources :questions, except: [:show, :destroy], controller: 'trait_training_set_questions' do
@@ -15,8 +43,6 @@ Rails.application.routes.draw do
     end
 
     resources :vendors
-    get 'home_pages/show'
-    devise_for :users
     
     resources :product_categories, except: :show do
       resource :subcategories, controller: 'product_subcategories', only: :show
@@ -76,29 +102,6 @@ Rails.application.routes.draw do
       resource :exports, only: :create, controller: 'profile_set_exports'    
     end
 
-    root to: 'home#show'
-
 end
 
-  resource :private_access_session, only: [:new, :create, :destroy]
-
-  unless Rails.env.production?
-    resource :style_guide, only: :none do
-      member do
-        # Add style guide routes here and to app/controllers/style_guides_controller.rb
-        get 'main'
-      end
-    end
-  end
-
-  require 'sidekiq/web'
-  constraints lambda {|request| SidekiqDashboardAuthentication.authenticated? request} do
-    mount Sidekiq::Web => '/sidekiq'
-  end
-
-  # Serve websocket cable requests in-process
-  mount ActionCable.server => '/cable'
-
-  root to: 'home#show' 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -4,8 +4,9 @@ module ApplicationHelper
     controller_name
   end
 
+  # override in specific helpers as needed
   def show_top_nav?
-    !controller.devise_controller?
+    true
   end
 
 end

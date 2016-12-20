@@ -1,9 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  
-  before_action :require_private_access_session!
-
+  before_action :require_login, if: :login_required?
 
   if Rails.env.production?
     before_filter :_basic_auth
@@ -15,12 +13,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-
-
-  def require_private_access_session!
-    unless session[:private_access_granted]
-      redirect_to new_private_access_session_path
-    end
+  # TODO redefine in subclasses as needed
+  def login_required?
+    true
   end
 
 end
