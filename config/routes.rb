@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   namespace :admin do
+    root to: 'home#show', as: 'root' # admin home
 
     resources :users, except: :show
 
@@ -42,7 +43,6 @@ Rails.application.routes.draw do
     end
 
     resources :vendors
-    get 'home_pages/show'
     
     resources :product_categories, except: :show do
       resource :subcategories, controller: 'product_subcategories', only: :show
@@ -101,8 +101,6 @@ Rails.application.routes.draw do
       resources :imports, controller: 'profile_sets/imports', only: [:new, :create]
       resource :exports, only: :create, controller: 'profile_set_exports'    
     end
-
-    root to: 'home#show'
 
 end
 
