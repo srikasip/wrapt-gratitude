@@ -398,6 +398,22 @@
     .col-xs-8.col-xs-offset-2
       %h4 Invite Melissa
       %form{"accept-charset" => "UTF-8", :action => "http://simple-form-bootstrap.plataformatec.com.br/examples/create_basic", :enctype => "multipart/form-data", :method => "post", :novalidate => "novalidate", :autocomplete => "off"}
+      .row
+        .col-xs-6
+          .form-group.first-name.required
+            %label.required.control-label{:for => "user_first_name"}
+              %abbr{:title => "required"} *
+              First Name
+            %input#user_first_name.string.email.required.form-control{:name => "user_first_name", :type => "text", :placeholder => "Your first name"}
+        .col-xs-6
+          .form-group.last-name.required
+            %label.required.control-label{:for => "user_last_name"}
+            %abbr{:title => "required"} *
+            Last Name
+          
+            %input#user_last_name.string.email.required.form-control{:name => "user_last_name", :type => "text", :placeholder => "Your last name"}
+        
+
       .form-group.email.required.user_basic_email.error
         %label.email.required.control-label{:for => "user_basic_email"}
           %abbr{:title => "required"} *
@@ -412,10 +428,11 @@
           Password
         %span.help-block.help-block--hint Some hint text about this form field
         .input-wrapper
-          %input#user_basic_password.password.required.form-control{:name => "user_basic[password]", :placeholder => "Password", :type => "password"}
+          %input#user_basic_password#js-pw-input-for-show-hide.password.required.form-control{:name => "user_basic[password]", :type => "password"}
           .input-wrapper--show-hide
-            %i.glyphicon.glyphicon-eye-open
+            %i.fa.fa-eye
             Show
+            -# Added placeholder js file in assets--would like to get guidance and then implement
         
         
       

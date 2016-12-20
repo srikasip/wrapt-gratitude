@@ -43,6 +43,7 @@ gem 'awesome_nested_set'
 gem 'devise'
 gem 'kaminari'
 gem 'sidekiq'
+gem 'font-awesome-sass'
 
 # For reading/writing files
 gem 'roo'
