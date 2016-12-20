@@ -1,0 +1,18 @@
+.container
+  .row
+    .col-md-4
+      %h1 Create Your Wrapt Account
+
+      = simple_form_for @user, url: sign_up_path(@user.activation_token) do |form|
+        .form-inputs
+          = form.input :first_name
+          = form.input :last_name
+          = form.input :email, label: 'Email Address'
+          = form.input :password
+      
+        .form-actions
+          = form.submit 'Create Account', class: 'btn btn-primary'
+
+      %p
+        Already have an Account?
+        = link_to "Sign In", new_user_session_path

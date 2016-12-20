@@ -1,6 +1,6 @@
 module Admin
   class UsersController < BaseController
-    before_filter :find_user, only: [:edit, :update, :destroy]
+    before_filter :find_user, only: [:edit, :update, :destroy, :resend_invitation]
   
     def index
       @users = User
@@ -16,11 +16,12 @@ module Admin
 
     def create
       @user = User.new user_params
+      @user.setup_activation
       if @user.save
-        flash[:notice] = "Created an account for #{@user.full_name}."
+        UserActivationsMailer.activation_needed_email(@user).deliver_later
+        flash[:notice] = "Sent an account invitation to #{@user.full_name}."
         redirect_to admin_users_path
       else
-        raise @user.errors.inspect
         flash[:alert] = "Please correct the errors below."
         render :new
       end
@@ -43,6 +44,13 @@ module Admin
       @user.destroy
       flash[:notice] = "Deleted account for #{@user.full_name}."
       redirect_to admin_users_path
+    end
+
+    def resend_invitation
+      @user.setup_activation
+      @user.save validate: false
+      UserActivationsMailer.activation_needed_email(@user).deliver_later
+      flash[:notice] = "Sent an account invitation to #{@user.full_name}."
     end
     
   

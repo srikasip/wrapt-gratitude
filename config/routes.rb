@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resource :user_session, only: [:new, :create, :destroy]
   resources :password_reset_requests, only: [:new, :create]
   resources :password_resets, only: [:show, :update]
+  # These have an ID because signup requires user activation token
+  resources :sign_ups, only: [:show, :update]
 
   unless Rails.env.production?
     resource :style_guide, only: :none do
@@ -27,7 +29,11 @@ Rails.application.routes.draw do
   namespace :admin do
     root to: 'home#show', as: 'root' # admin home
 
-    resources :users, except: :show
+    resources :users, except: :show do
+      member do
+        post :resend_invitation
+      end
+    end
 
     resources :trait_training_sets, except: :show do
       resources :questions, except: [:show, :destroy], controller: 'trait_training_set_questions' do
