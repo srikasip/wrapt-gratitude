@@ -1,7 +1,38 @@
+label {
+  color: $gray-008;
+  font-weight: normal;
+  line-height: 1.1;
+  margin-bottom: 0;
+}
 .help-block {
   @include akkurat-mono;
   font-size: rem(13);
   line-height: 1.538461538;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   color: $gray-008;
+}
+.form-control {
+  margin-top: 10px;
+  padding: 14px 12px;
+}
+.error label,
+.error .form-control,
+.help-block--error {
+  border-color: $red-001;
+  color: $red-001;
+}
+.input-wrapper {
+  position: relative;
+}
+.input-wrapper--show-hide {
+  display: block;
+  @include vertical-align(absolute);
+  right: 10px;
+  color: $gray-003;
+  @include akkurat-mono;
+  font-size: rem(18);
+  line-height: 1;
+}
+.input-wrapper--show-hide .glyphicon {
+  top: 3px;
 }
