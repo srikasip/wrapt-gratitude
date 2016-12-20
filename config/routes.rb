@@ -23,6 +23,8 @@ Rails.application.routes.draw do
   # Serve websocket cable requests in-process
   mount ActionCable.server => '/cable'
 
+  resource :my_account, only: [:show, :edit, :update]
+
   root to: 'home#show' 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
