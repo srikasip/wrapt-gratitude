@@ -9,10 +9,11 @@ label {
   font-size: rem(13);
   line-height: 1.538461538;
   margin-bottom: 0;
+  margin-top: 0;
   color: $gray-008;
 }
 .form-control {
-  margin-top: 10px;
+  margin-top: 4px;
   padding: 14px 12px;
 }
 .error label,
@@ -29,10 +30,14 @@ label {
   @include vertical-align(absolute);
   right: 10px;
   color: $gray-003;
-  @include akkurat-mono;
-  font-size: rem(18);
+  text-transform: uppercase;
+  font-size: rem(14);
   line-height: 1;
 }
+.input-wrapper--show-hide:hover {
+  pointer: cursor;
+}
 .input-wrapper--show-hide .fa {
-  margin-right: -5px;
+  margin-right: 3px;
+  font-size: rem(16);
 }

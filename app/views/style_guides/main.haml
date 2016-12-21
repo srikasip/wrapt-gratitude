@@ -422,18 +422,13 @@
         %input#user_basic_email.string.email.required.form-control{:name => "user_basic[email]", :type => "email", :value => "me@work"}
         %span.help-block.help-block--error This does not appear to be a valid email address
         
-      .form-group.password.required.user_basic_password
-        %label.password.required.control-label{:for => "user_basic_password"}
+      .form-group.required.user_password
+        %label.password.required.control-label{:for => "user_password"}
           %abbr{:title => "required"} *
           Password
         %span.help-block.help-block--hint Some hint text about this form field
-        .input-wrapper
-          %input#user_basic_password#js-pw-input-for-show-hide.password.required.form-control{:name => "user_basic[password]", :type => "password"}
-          .input-wrapper--show-hide
-            %i.fa.fa-eye
-            Show
-            -# Added placeholder js file in assets--would like to get guidance and then implement
         
+        %input#user_password.password.required.form-control{:name => "user_basic[password]", :type => "password"}
         
       
       .form-group.boolean.optional.user_basic_active
@@ -473,3 +468,26 @@
   .row#modals.mb3
     .col-xs-10.col-xs-offset-1
       %h2 Modals
+
+- content_for :page_js do
+  :javascript
+    $(document).ready(function() {
+      // toggle show / hide password
+      $( "input[type='password']" ).wrap( "<div class='input-wrapper'></div>" );
+      $( "input[type='password']" ).attr( 'id', 'js-pw-input-for-show-hide');
+      $( "input[type='password']" ).after( "<div class='input-wrapper--show-hide' id='js-toggle-show-hide'><i class='fa fa-eye'></i><span>Show</span></div>" );
+
+      $('#js-toggle-show-hide').click(function() {
+        if ($('#js-pw-input-for-show-hide').attr('type') === 'password') {
+          $('#js-pw-input-for-show-hide').attr('type', 'text');
+          $(this).children('i').addClass('fa-eye-slash');
+          $(this).children('i').removeClass('fa-eye');
+          $(this).children('span').text( "Hide" );
+        } else {
+          $('#js-pw-input-for-show-hide').attr('type', 'password');
+          $(this).children('i').addClass('fa-eye');
+          $(this).children('i').removeClass('fa-eye-slash');
+          $(this).children('span').text( "Show" );
+        }
+      });
+    });
