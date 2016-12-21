@@ -36,6 +36,7 @@ Rails.application.routes.draw do
         post :resend_invitation
       end
     end
+    resources :user_imports, only: [:new, :create]
 
     resources :trait_training_sets, except: :show do
       resources :questions, except: [:show, :destroy], controller: 'trait_training_set_questions' do

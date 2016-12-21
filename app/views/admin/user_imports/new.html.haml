@@ -1,0 +1,26 @@
+.row
+  .col-sm-12
+    %h1 Invite Multiple Users
+
+    = render 'imports/processing_import_modal'
+    = simple_form_for [:admin, @user_import] do |f|
+      %p
+        Here you can upload an Excel spreadsheet containing a list of users to invite.
+
+      %p
+        Start with
+        #{link_to 'this template', '/users/imports/Wrapt User Import Template.xlsx'}.
+
+      .form-inputs= f.input :records_file, label: 'Excel Spreadsheet', as: :file
+      - if @user_import&.row_errors&.any?
+        .form-group.has-error
+          %span.help-block
+            %ul
+              - @user_import.row_errors.each do |row_number, errors|
+                %li
+                  Row #{row_number}
+                  %ul
+                    - errors.each do |attribute, message|
+                      %li #{attribute}: #{message}
+
+      .form-actions= f.submit 'Import', class: 'btn btn-primary'
