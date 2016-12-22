@@ -7,7 +7,7 @@ module Admin
       @users = User
         .all
         .search(user_search_params)
-        .order(:id)
+        .order(:last_name, :first_name)
         .page(params[:page])
         .per(50)
     end
@@ -45,7 +45,7 @@ module Admin
     def destroy
       @user.destroy
       flash[:notice] = "Deleted account for #{@user.full_name}."
-      redirect_to admin_users_path
+      redirect_to admin_users_path(context_params)
     end
 
     def resend_invitation
@@ -53,6 +53,7 @@ module Admin
       @user.save validate: false
       UserActivationsMailer.activation_needed_email(@user).deliver_later
       flash[:notice] = "Sent an account invitation to #{@user.full_name}."
+      redirect_to admin_users_path(context_params)
     end
     
   
@@ -74,6 +75,12 @@ module Admin
       params_base = params[:user_search] || ActionController::Parameters.new
       params_base.permit(:keyword)
     end
+    helper_method :user_search_params
+
+    private def context_params
+      params.permit(:page).merge(user_search: user_search_params)
+    end
+    helper_method :context_params
 
   end
 end
