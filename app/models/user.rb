@@ -11,4 +11,8 @@ class User < ApplicationRecord
     activation_state == "active"
   end
 
+  def self.search search_params
+    self.all.merge(UserSearch.new(search_params).to_scope)        
+  end
+
 end

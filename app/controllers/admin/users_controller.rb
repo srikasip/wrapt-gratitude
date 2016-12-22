@@ -3,8 +3,10 @@ module Admin
     before_filter :find_user, only: [:edit, :update, :destroy, :resend_invitation]
   
     def index
+      @user_search = UserSearch.new(user_search_params)
       @users = User
         .all
+        .search(user_search_params)
         .order(:id)
         .page(params[:page])
         .per(50)
@@ -67,5 +69,11 @@ module Admin
     private def find_user
       @user = User.find(params[:id]) if params[:id]
     end
+
+    private def user_search_params
+      params_base = params[:user_search] || ActionController::Parameters.new
+      params_base.permit(:keyword)
+    end
+
   end
 end

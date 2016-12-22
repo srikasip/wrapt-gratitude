@@ -7,6 +7,16 @@
     = link_to 'Invite One User', new_admin_user_path, class: 'btn btn-primary'
     = link_to 'Import Multiple Users', new_admin_user_import_path, class: 'btn btn-primary'
 
+.row.admin__search
+  .col-sm-12
+    = form_for  [:admin, @user_search], url: admin_users_path, html: { method: 'GET', class: 'form-inline' } do |form|
+      .form-group
+        = form.search_field :keyword, placeholder: 'Name or email', class: 'form-control', style: 'min-width: 300px;'
+        %button.btn.btn-primary
+          %i.glyphicon.glyphicon-search
+          Search
+        = link_to 'Clear Search (Show All)', admin_users_path, class: 'btn btn-default'
+
 .row
   .col-md-12
     %table.table
