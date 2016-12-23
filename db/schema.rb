@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161220164347) do
+ActiveRecord::Schema.define(version: 20161223172334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,15 @@ ActiveRecord::Schema.define(version: 20161220164347) do
     t.index ["gift_id"], name: "index_gift_question_impacts_on_gift_id", using: :btree
     t.index ["survey_question_id"], name: "index_gift_question_impacts_on_survey_question_id", using: :btree
     t.index ["training_set_id"], name: "index_gift_question_impacts_on_training_set_id", using: :btree
+  end
+
+  create_table "gift_recommendations", force: :cascade do |t|
+    t.integer  "survey_response_id"
+    t.integer  "gift_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.index ["gift_id"], name: "index_gift_recommendations_on_gift_id", using: :btree
+    t.index ["survey_response_id"], name: "index_gift_recommendations_on_survey_response_id", using: :btree
   end
 
   create_table "gifts", force: :cascade do |t|
@@ -247,6 +256,13 @@ ActiveRecord::Schema.define(version: 20161220164347) do
     t.index ["trait_training_set_id"], name: "index_response_trait_evals_on_trait_training_set", using: :btree
   end
 
+  create_table "survey_responses", force: :cascade do |t|
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_survey_responses_on_user_id", using: :btree
+  end
+
   create_table "survey_sections", force: :cascade do |t|
     t.integer  "survey_id"
     t.string   "name"
@@ -366,6 +382,8 @@ ActiveRecord::Schema.define(version: 20161220164347) do
   add_foreign_key "gift_question_impacts", "gifts"
   add_foreign_key "gift_question_impacts", "survey_questions"
   add_foreign_key "gift_question_impacts", "training_sets"
+  add_foreign_key "gift_recommendations", "gifts"
+  add_foreign_key "gift_recommendations", "survey_responses"
   add_foreign_key "gifts", "product_categories"
   add_foreign_key "product_images", "products"
   add_foreign_key "products", "product_categories"
@@ -378,6 +396,7 @@ ActiveRecord::Schema.define(version: 20161220164347) do
   add_foreign_key "survey_question_response_options", "survey_question_responses"
   add_foreign_key "survey_question_responses", "profile_set_survey_responses"
   add_foreign_key "survey_question_responses", "survey_questions"
+  add_foreign_key "survey_responses", "users"
   add_foreign_key "survey_sections", "surveys"
   add_foreign_key "training_set_evaluations", "training_sets"
   add_foreign_key "training_set_response_impacts", "gift_question_impacts"

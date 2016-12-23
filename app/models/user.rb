@@ -3,6 +3,8 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true
 
+  has_many :survey_responses, dependent: :destroy
+
   def full_name
     [first_name, last_name].compact.join " "
   end
