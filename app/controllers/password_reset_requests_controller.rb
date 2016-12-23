@@ -1,6 +1,8 @@
 class PasswordResetRequestsController < ApplicationController
   # Drives the page for requesting a password reset
 
+  include PjaxModalController
+
   def new
     @password_reset_request = PasswordResetRequest.new
   end
