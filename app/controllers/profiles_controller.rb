@@ -1,17 +1,16 @@
-class SurveyResponsesController < ApplicationController
+class ProfilesController < ApplicationController
 
   prepend_before_action :login_via_invitation_code
 
   def new
-    @survey_response = SurveyResponse.new
+    @profile = current_user.owned_profiles.new
   end
 
   def create
-    @survey_respose = SurveyResponse.new survey_response_params
-    @survey_response.profile = current_user.owned_profiles.new
-    if @survey_response.save
+    @profile = current_user.owned_profiles.new profile_params
+    if @profile.save
       # TODO go somewhere for real
-      flash.notice = 'Survey Response created'
+      flash.notice = 'Profile created'
       redirect_to root_path
     else
       render :new
@@ -24,5 +23,13 @@ class SurveyResponsesController < ApplicationController
       auto_login(user) if user
     end
   end
-  
+
+  private def profile_params
+    result = {}
+    if params[:commit].in? Profile::RELATIONSHIPS
+      result[:relationship] = params[:commit]
+    end
+    result
+  end
+
 end

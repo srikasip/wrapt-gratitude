@@ -1,0 +1,18 @@
+.container
+  .row
+    .col-xs-12
+
+      %h1 We use the science of gifting and gratitude to help you say, 'I get you.'
+      %p Wrapt is a fun and easy way to discover the perfect gifts she will love, based on who she actually is, all year long
+
+      %h3 Who do you need gift ideas for?
+      = simple_form_for @profile do |form|
+        = form.submit 'Wife', class: 'btn btn-default'
+        = form.submit 'Girlfriend', class: 'btn btn-default'
+        = form.submit 'Mother', class: 'btn btn-default'
+        = form.submit 'Daughter', class: 'btn btn-default'
+        = form.submit 'Friend', class: 'btn btn-default'
+        = form.submit 'Sister', class: 'btn btn-default'
+        = form.submit 'Colleague', class: 'btn btn-default'
+        = form.submit 'Partner', class: 'btn btn-default'
+        = form.submit 'Other', class: 'btn btn-default'

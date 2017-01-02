@@ -2,7 +2,7 @@ class UserActivationsMailer < ApplicationMailer
 
   def activation_needed_email user
     @user = user
-    @activation_url = new_invitation_survey_response_url(user.activation_token)
+    @activation_url = new_invitation_profile_url(user.activation_token)
 
     mail to: user.email, subject: "Your invitation to try WRAPT"
   end
