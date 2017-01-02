@@ -1,5 +1,19 @@
 Rails.application.routes.draw do
 
+  ##########################
+  # Survey responses
+  # for MVP1A they can be accessed via notification link or logged in user
+  ##########################
+  concern :can_respond_to_survey do
+    resources :survey_responses, only: [:new, :create]
+  end
+  concerns :can_respond_to_survey
+  resources :invitations, only: :none, concerns: :can_respond_to_survey
+  #####################################################
+
+  ##################################
+  # User Authentication
+  ##################################
   resource :user_session, only: [:new, :create, :destroy]
   resources :password_reset_requests, only: [:new, :create]
   resources :password_resets, only: [:show, :update]
