@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161223172334) do
+ActiveRecord::Schema.define(version: 20170102195658) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,12 +75,12 @@ ActiveRecord::Schema.define(version: 20161223172334) do
   end
 
   create_table "gift_recommendations", force: :cascade do |t|
-    t.integer  "survey_response_id"
     t.integer  "gift_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "profile_id"
     t.index ["gift_id"], name: "index_gift_recommendations_on_gift_id", using: :btree
-    t.index ["survey_response_id"], name: "index_gift_recommendations_on_survey_response_id", using: :btree
+    t.index ["profile_id"], name: "index_gift_recommendations_on_profile_id", using: :btree
   end
 
   create_table "gifts", force: :cascade do |t|
@@ -186,6 +186,14 @@ ActiveRecord::Schema.define(version: 20161223172334) do
 
   create_table "profile_traits_topics", force: :cascade do |t|
     t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "profiles", force: :cascade do |t|
+    t.string   "email"
+    t.string   "name"
+    t.integer  "owner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -383,7 +391,7 @@ ActiveRecord::Schema.define(version: 20161223172334) do
   add_foreign_key "gift_question_impacts", "survey_questions"
   add_foreign_key "gift_question_impacts", "training_sets"
   add_foreign_key "gift_recommendations", "gifts"
-  add_foreign_key "gift_recommendations", "survey_responses"
+  add_foreign_key "gift_recommendations", "profiles"
   add_foreign_key "gifts", "product_categories"
   add_foreign_key "product_images", "products"
   add_foreign_key "products", "product_categories"
@@ -392,6 +400,7 @@ ActiveRecord::Schema.define(version: 20161223172334) do
   add_foreign_key "profile_sets", "surveys"
   add_foreign_key "profile_traits_facets", "profile_traits_topics", column: "topic_id"
   add_foreign_key "profile_traits_tags", "profile_traits_facets", column: "facet_id"
+  add_foreign_key "profiles", "users", column: "owner_id"
   add_foreign_key "survey_question_response_options", "survey_question_options"
   add_foreign_key "survey_question_response_options", "survey_question_responses"
   add_foreign_key "survey_question_responses", "profile_set_survey_responses"
