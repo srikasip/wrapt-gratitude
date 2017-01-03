@@ -10,6 +10,7 @@ class Survey < ApplicationRecord
 
   has_many :profile_sets, inverse_of: :survey, dependent: :destroy
   has_many :training_sets, inverse_of: :survey, dependent: :destroy
+  has_many :survey_responses, inverse_of: :survey, dependent: :destroy
 
   has_many :sections, -> {order 'sort_order ASC'}, class_name: 'SurveySection', inverse_of: :survey, dependent: :destroy
 

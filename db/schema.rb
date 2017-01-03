@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170103153123) do
+ActiveRecord::Schema.define(version: 20170103180856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -220,16 +220,17 @@ ActiveRecord::Schema.define(version: 20170103153123) do
   end
 
   create_table "survey_question_responses", force: :cascade do |t|
-    t.integer  "profile_set_survey_response_id", null: false
-    t.integer  "survey_question_id",             null: false
+    t.integer  "survey_response_id",   null: false
+    t.integer  "survey_question_id",   null: false
     t.text     "text_response"
     t.float    "range_response"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.string   "name"
     t.text     "other_option_text"
-    t.index ["profile_set_survey_response_id"], name: "index_question_response_on_survey_response_id", using: :btree
+    t.string   "survey_response_type", null: false
     t.index ["survey_question_id"], name: "index_survey_question_responses_on_survey_question_id", using: :btree
+    t.index ["survey_response_id"], name: "index_question_response_on_survey_response_id", using: :btree
   end
 
   create_table "survey_questions", force: :cascade do |t|
@@ -269,7 +270,9 @@ ActiveRecord::Schema.define(version: 20170103153123) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "profile_id"
+    t.integer  "survey_id"
     t.index ["profile_id"], name: "index_survey_responses_on_profile_id", using: :btree
+    t.index ["survey_id"], name: "index_survey_responses_on_survey_id", using: :btree
   end
 
   create_table "survey_sections", force: :cascade do |t|
@@ -407,9 +410,10 @@ ActiveRecord::Schema.define(version: 20170103153123) do
   add_foreign_key "profiles", "users", column: "owner_id"
   add_foreign_key "survey_question_response_options", "survey_question_options"
   add_foreign_key "survey_question_response_options", "survey_question_responses"
-  add_foreign_key "survey_question_responses", "profile_set_survey_responses"
+  add_foreign_key "survey_question_responses", "profile_set_survey_responses", column: "survey_response_id"
   add_foreign_key "survey_question_responses", "survey_questions"
   add_foreign_key "survey_responses", "profiles"
+  add_foreign_key "survey_responses", "surveys"
   add_foreign_key "survey_sections", "surveys"
   add_foreign_key "training_set_evaluations", "training_sets"
   add_foreign_key "training_set_response_impacts", "gift_question_impacts"
