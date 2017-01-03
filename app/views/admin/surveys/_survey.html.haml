@@ -4,3 +4,5 @@
     = image_tag 'ajax-loader.gif'
 - else
   = link_to survey.title, admin_survey_path(survey)
+- if survey.published?
+  %span.label.label-default Published

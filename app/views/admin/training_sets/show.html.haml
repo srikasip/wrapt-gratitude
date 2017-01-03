@@ -2,7 +2,11 @@
   .col-sm-12
     %h1
       = @training_set.name
+      - if @training_set.published?
+        %small
+          %span.label.label-default Published
       = link_to 'Edit Title', edit_admin_training_set_path(@training_set), class: 'btn btn-default'
+
 
     %p
       %b Quiz:

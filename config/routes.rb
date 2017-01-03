@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  root to: 'home#show' 
+
   ##########################
   # Survey responses
   # for MVP1A they can be accessed via notification link or logged in user
@@ -20,28 +22,12 @@ Rails.application.routes.draw do
   # These have an ID because signup requires user activation token
   resources :sign_ups, only: [:show, :update]
 
-  unless Rails.env.production?
-    resource :style_guide, only: :none do
-      member do
-        # Add style guide routes here and to app/controllers/style_guides_controller.rb
-        get 'main'
-      end
-    end
-  end
-
-  require 'sidekiq/web'
-  constraints lambda {|request| SidekiqDashboardAuthentication.authenticated? request} do
-    mount Sidekiq::Web => '/sidekiq'
-  end
-
-  # Serve websocket cable requests in-process
-  mount ActionCable.server => '/cable'
 
   resource :my_account, only: [:show, :edit, :update]
 
-  root to: 'home#show' 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
+  ###################################
+  ### Admin
+  ###################################
   namespace :admin do
     root to: 'home#show', as: 'root' # admin home
 
@@ -102,6 +88,7 @@ Rails.application.routes.draw do
       resource :copying, only: :create, controller: 'survey_copyings'
       resources :sections, except: :show, controller: 'survey_sections'
       resource :section_ordering, only: :create, controller: 'survey_section_orderings'
+      resource :publishing, only: [:new, :create], controller: 'survey_publishings'
     end
 
     resources :training_sets do
@@ -125,6 +112,26 @@ Rails.application.routes.draw do
       resource :exports, only: :create, controller: 'profile_set_exports'    
     end
 
-end
+  end
+
+  ####################
+  ## Misc
+  ####################
+  unless Rails.env.production?
+    resource :style_guide, only: :none do
+      member do
+        # Add style guide routes here and to app/controllers/style_guides_controller.rb
+        get 'main'
+      end
+    end
+  end
+
+  require 'sidekiq/web'
+  constraints lambda {|request| SidekiqDashboardAuthentication.authenticated? request} do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
+  # Serve websocket cable requests in-process
+  mount ActionCable.server => '/cable'
 
 end
