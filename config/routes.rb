@@ -6,11 +6,14 @@ Rails.application.routes.draw do
   # Survey responses
   # for MVP1A they can be accessed via notification link or logged in user
   ##########################
-  concern :can_create_profile do
+  resources :profiles, only: [:new, :create] do
+    resources :surveys, only: :show, controller: 'survey_responses' do
+      resources :questions, only: [:show, :update], controller: 'survey_question_responses'
+    end
+  end
+  resources :invitations, only: :none do
     resources :profiles, only: [:new, :create]
   end
-  concerns :can_create_profile
-  resources :invitations, only: :none, concerns: :can_create_profile
   #####################################################
 
   ##################################
@@ -19,10 +22,14 @@ Rails.application.routes.draw do
   resource :user_session, only: [:new, :create, :destroy]
   resources :password_reset_requests, only: [:new, :create]
   resources :password_resets, only: [:show, :update]
+
   # These have an ID because signup requires user activation token
+  # these will move to the quiz completion in release 8
   resources :sign_ups, only: [:show, :update]
 
-
+  ###################################
+  # My Account Area
+  ###################################
   resource :my_account, only: [:show, :edit, :update]
 
   ###################################

@@ -5,6 +5,7 @@ class SurveyResponse < ApplicationRecord
   has_many :question_responses,
     inverse_of: :survey_response,
     class_name: 'SurveyQuestionResponse',
+    as: :survey_response,
     dependent: :destroy
 
   before_create :build_question_responses
