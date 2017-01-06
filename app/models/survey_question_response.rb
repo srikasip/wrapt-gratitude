@@ -16,4 +16,18 @@ class SurveyQuestionResponse < ApplicationRecord
     self.survey_question_option_ids = [value]
   end
 
+  def next_response
+    this_index = survey_response.ordered_question_responses.to_a.index {|response| response.id == id}
+    if this_index
+      survey_response.ordered_question_responses[this_index + 1]
+    end
+  end
+
+  def previous_response
+    this_index = survey_response.ordered_question_responses.to_a.index {|response| response.id == id}
+    if this_index&.> 0
+      survey_response.ordered_question_responses[this_index - 1]
+    end
+  end
+
 end

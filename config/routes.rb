@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :profiles, only: [:new, :create] do
     resources :surveys, only: :show, controller: 'survey_responses' do
       resources :questions, only: [:show, :update], controller: 'survey_question_responses'
+      resource :completion, only: [:show, :create], controller: 'survey_response_completions'
     end
   end
   resources :invitations, only: :none do

@@ -1,2 +1,25 @@
-%h1 SurveyQuestionResponses#show
-%p Find me in app/views/survey_question_responses/show.html.haml
+.container
+  .row
+    .col-xs-12
+      %h1 TODO optional section introduction feedback.
+      %p TODO optional section introduction subtext
+
+      %p TODO Question N of N
+      %p TODO overall question progress bar
+
+
+      - if @question_response.previous_response
+        = link_to 'Previous Question', profile_survey_question_path(@profile, @survey_response, @question_response.previous_response)
+
+      %h3= @question_response.survey_question.prompt
+
+      %p TODO question answering interface goes here
+      
+      - if @question_response.next_response
+        %p= link_to 'Next Question', profile_survey_question_path(@profile, @survey_response, @question_response.next_response)
+      - else
+        %p= link_to 'Complete Survey', profile_survey_completion_path(@profile, @survey_response)
+
+      %p TODO Section Progress Bar
+
+

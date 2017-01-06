@@ -15,4 +15,15 @@ class SurveyResponse < ApplicationRecord
     end
   end
 
+  # Get a list of question resonses in the order they appear in the survey
+  def ordered_question_responses
+    result = []
+    survey.sections.includes(:questions).each do |section|
+      section.questions.each do |question|
+        result << question_responses.detect {|question_response| question_response.survey_question_id == question.id}
+      end
+    end
+    return result.compact
+  end
+
 end
