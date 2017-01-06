@@ -1,4 +1,6 @@
 class PasswordResetsController < ApplicationController
+
+  include PjaxModalController
   
   def show
     @password_reset = PasswordReset.new token: params[:id]

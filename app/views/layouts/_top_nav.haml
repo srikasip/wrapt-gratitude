@@ -13,4 +13,4 @@
           - if current_user
             %li= link_to "Sign Out", user_session_path, method: :delete
           - else
-            %li= link_to 'Sign In', new_user_session_path
+            %li= link_to 'Sign In', new_user_session_path, data: {loads_in_pjax_modal: true}

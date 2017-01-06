@@ -6,12 +6,11 @@ Rails.application.routes.draw do
   # These have an ID because signup requires user activation token
   resources :sign_ups, only: [:show, :update]
 
-  unless Rails.env.production?
-    resource :style_guide, only: :none do
-      member do
-        # Add style guide routes here and to app/controllers/style_guides_controller.rb
-        get 'main'
-      end
+
+  resource :style_guide, only: :none do
+    member do
+      # Add style guide routes here and to app/controllers/style_guides_controller.rb
+      get 'main'
     end
   end
 
