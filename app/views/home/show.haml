@@ -6,3 +6,8 @@
 
       %p
         =link_to 'Style Guide', main_style_guide_path
+
+- if params[:password_reset_token]
+  - content_for :page_js do
+    :javascript
+      new App.PjaxModalLoader(#{password_reset_path(params[:password_reset_token]).to_json})

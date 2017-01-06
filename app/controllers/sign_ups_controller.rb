@@ -36,7 +36,7 @@ class SignUpsController < ApplicationController
   end
   
 
-  private def login_required
+  private def login_required?
     false
   end
 
