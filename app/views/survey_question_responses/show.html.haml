@@ -1,8 +1,9 @@
 .container
   .row
     .col-xs-12
-      %h1 TODO optional section introduction feedback.
-      %p TODO optional section introduction subtext
+      - if @question_response.survey_question.first_in_section?
+        %h1= @question_response.survey_question.survey_section.introduction_heading
+        %p= @question_response.survey_question.survey_section.introduction_text
 
       %p TODO Question N of N
       %p TODO overall question progress bar
