@@ -9,6 +9,7 @@ class SurveyQuestionResponsesController < ApplicationController
   def update
     @question_response = @survey_response.question_responses.find params[:id]
     if @question_response.update question_response_params
+      @question_response.update_attribute :answered_at, Time.now
       if @question_response.next_response.present?
         redirect_to profile_survey_question_path(@profile, @survey_response, @question_response.next_response)
       else

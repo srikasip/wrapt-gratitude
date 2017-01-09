@@ -12,9 +12,7 @@ Rails.application.routes.draw do
       resource :completion, only: [:show, :create], controller: 'survey_response_completions'
     end
   end
-  resources :invitations, only: :none do
-    resources :profiles, only: [:new, :create]
-  end
+  resources :invitations, only: :show
   #####################################################
 
   ##################################

@@ -26,4 +26,8 @@ class SurveyResponse < ApplicationRecord
     return result.compact
   end
 
+  def last_answered_response
+    ordered_question_responses.select{|response| response.answered_at.present?}.last || ordered_question_responses.first
+  end
+
 end
