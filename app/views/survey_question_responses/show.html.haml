@@ -14,12 +14,11 @@
 
       %h3= @question_response.survey_question.prompt
 
-      %p TODO question answering interface goes here
-      
-      - if @question_response.next_response
-        %p= link_to 'Next Question', profile_survey_question_path(@profile, @survey_response, @question_response.next_response)
-      - else
-        %p= link_to 'Complete Survey', profile_survey_completion_path(@profile, @survey_response)
+      = simple_form_for @question_response, url: profile_survey_question_path(@profile, @survey_response, @question_response) do |form|
+
+        = render response_fields_partial, form: form
+
+        = form.submit question_response_next_button_text, class: 'btn btn-primary'
 
       %p TODO Section Progress Bar
 
