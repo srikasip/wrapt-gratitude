@@ -25,6 +25,13 @@ module SurveyQuestionResponsesHelper
     end
   end
 
+  def option_input_data_behavior option
+    if option.is_a?(SurveyQuestionOtherOption)
+      'option-id-input other-option'
+    else
+      'option-id-input'
+    end
+  end
 
 
 end
