@@ -14,11 +14,12 @@
 
         %h3= @question_response.survey_question.prompt
 
-        = simple_form_for @question_response, url: profile_survey_question_path(@profile, @survey_response, @question_response) do |form|
+        = simple_form_for @question_response, url: profile_survey_question_path(@profile, @survey_response, @question_response), html: {data: {behavior: 'question-response-form'}} do |form|
 
           = render response_fields_partial, form: form
 
-          = form.submit question_response_next_button_text, class: 'btn btn-primary'
+          = form.submit question_response_next_button_text, class: 'btn btn-primary', data: {behavior: 'next-question-button'}
+
 
       %p TODO Section Progress Bar
 
