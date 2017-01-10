@@ -4,21 +4,21 @@
       - if @question_response.survey_question.first_in_section?
         %h1= @question_response.survey_question.survey_section.introduction_heading
         %p= @question_response.survey_question.survey_section.introduction_text
+      .sqr__container.pa3
+        %p TODO Question N of N
+        %p TODO overall question progress bar
 
-      %p TODO Question N of N
-      %p TODO overall question progress bar
 
+        - if @question_response.previous_response
+          = link_to 'Previous Question', profile_survey_question_path(@profile, @survey_response, @question_response.previous_response)
 
-      - if @question_response.previous_response
-        = link_to 'Previous Question', profile_survey_question_path(@profile, @survey_response, @question_response.previous_response)
+        %h3= @question_response.survey_question.prompt
 
-      %h3= @question_response.survey_question.prompt
+        = simple_form_for @question_response, url: profile_survey_question_path(@profile, @survey_response, @question_response) do |form|
 
-      = simple_form_for @question_response, url: profile_survey_question_path(@profile, @survey_response, @question_response) do |form|
+          = render response_fields_partial, form: form
 
-        = render response_fields_partial, form: form
-
-        = form.submit question_response_next_button_text, class: 'btn btn-primary'
+          = form.submit question_response_next_button_text, class: 'btn btn-primary'
 
       %p TODO Section Progress Bar
 
