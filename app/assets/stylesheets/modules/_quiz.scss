@@ -4,3 +4,7 @@
 .question_response__multiple_choice_button.selected {
   background-color: #F0E4B6;
 }
+
+[data-behavior~=hidden-option-id-inputs] {
+  display: none;
+}

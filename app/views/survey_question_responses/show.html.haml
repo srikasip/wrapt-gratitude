@@ -18,7 +18,7 @@
 
         = render response_fields_partial, form: form
 
-        = form.submit question_response_next_button_text, class: 'btn btn-primary'
+        = form.submit question_response_next_button_text, class: 'btn btn-primary', data: {behavior: 'next-question-button'}
 
       %p TODO Section Progress Bar
 

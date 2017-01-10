@@ -1,10 +1,11 @@
-App.MultipleChoiceSingleSelector = class MultipleChoiceSingleSelector {
+App.MultipleChoiceChooseOneForm = class MultipleChoiceChooseOneForm {
   constructor() {
     this.form_element = $('[data-behavior~=question-response-form]')[0];
     this.hidden_input_element = $(this.form_element).find('[data-behavior~=option-id-input-field]')[0];
     this.button_selector = $(this.form_element).find('[data-behavior~=option-button]')
     this.handleButtonClick();
     this.highlightSelectedButton();
+    this.setNextButtonInitialVisibility();
   }
 
   handleButtonClick() {
@@ -27,6 +28,17 @@ App.MultipleChoiceSingleSelector = class MultipleChoiceSingleSelector {
       console.log(`[data-option-id=${selected_option_id}]`);
       this.button_selector.filter(`[data-option-id=${selected_option_id}]`).addClass('selected');
     }
+  }
+
+  setNextButtonInitialVisibility() {
+    const nextButton = $('[data-behavior~=next-question-button]')[0]
+    const selected_option_id = this.hidden_input_element.getAttribute('value')
+    if (selected_option_id) {
+      $(nextButton).show();
+    } else {
+      $(nextButton).hide();
+    }
+
   }
 
 
