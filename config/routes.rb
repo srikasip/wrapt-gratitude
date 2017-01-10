@@ -14,6 +14,12 @@ Rails.application.routes.draw do
   resources :invitations, only: :none do
     resources :profiles, only: [:new, :create]
   end
+
+  resources :profiles, only: :none do
+    resources :gift_recommendations do
+      resource :gift_dislike, only: [:create]
+    end
+  end
   #####################################################
 
   ##################################
