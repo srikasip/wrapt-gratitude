@@ -10,7 +10,9 @@ module SurveyQuestionResponsesHelper
   end
 
   def multiple_choice_fields_partial
-    if @question_response.survey_question.multiple_option_responses
+    if @question_response.survey_question.yes_no_display?
+      'yes_no_fields'
+    elsif @question_response.survey_question.multiple_option_responses
       'multiple_choice_choose_many_fields'
     else
       'multiple_choice_choose_one_fields'
@@ -33,6 +35,14 @@ module SurveyQuestionResponsesHelper
     current_question_number = current_survey_question_number(question_response)
     total_questions = survey_questions.size
     "No #{current_question_number} of #{total_questions}"
+  end
+
+  def option_input_data_behavior option
+    if option.is_a?(SurveyQuestionOtherOption)
+      'option-id-input other-option'
+    else
+      'option-id-input'
+    end
   end
 
   def survey_questions_progress_bar(survey_response, survey_questions)

@@ -4,8 +4,13 @@ App.MultipleChoiceChooseManyForm = class MultipleChoiceChooseManyForm {
     this.hidden_inputs_selector = $(this.form_element).find('[data-behavior~=option-id-input]');
     this.buttons_selector = $(this.form_element).find('[data-behavior~=option-button]')
     this.handleButtonClick();
+    this.updateDisplay();
+  }
+
+  updateDisplay() {
     this.highlightSelectedButtons();
     this.setNextButtonVisibility();
+    this.setOtherTextVisibility();
   }
 
   handleButtonClick() {
@@ -15,8 +20,7 @@ App.MultipleChoiceChooseManyForm = class MultipleChoiceChooseManyForm {
       const option_id = clicked_button.getAttribute('data-option-id');
       const hidden_input_selector = this.hidden_inputs_selector.filter(`[value=${option_id}]`)
       hidden_input_selector.prop('checked', !hidden_input_selector.prop('checked'))
-      this.highlightSelectedButtons();
-      this.setNextButtonVisibility();
+      this.updateDisplay();
     })
   }
 
@@ -30,16 +34,25 @@ App.MultipleChoiceChooseManyForm = class MultipleChoiceChooseManyForm {
   }
 
   setNextButtonVisibility() {
-    const nextButton = $('[data-behavior~=next-question-button]')[0]
+    const nextButton = $(this.form_element).find('[data-behavior~=next-question-button]')[0]
     const selected_option_inputs_selector = this.hidden_inputs_selector.filter(':checked')
-    console.log(selected_option_inputs_selector.length)
-    console.log(this.hidden_inputs_selector)
     if (selected_option_inputs_selector.length > 0) {
       $(nextButton).show();
     } else {
       $(nextButton).hide();
     }
+  }
 
+  setOtherTextVisibility() {
+    const otherTextWrapperSelector = $(this.form_element).find('[data-behavior~=other-text-input-wrapper]')
+
+    const selectedOtherOptionInput = $(this.hidden_inputs_selector).filter('[data-behavior~=other-option]:checked')
+    if (selectedOtherOptionInput.length > 0) {
+      otherTextWrapperSelector.show()
+    } else {
+      otherTextWrapperSelector.hide()
+      otherTextWrapperSelector.find('[data-behavior~=other-text-input]').val('')
+    }
   }
 
 
