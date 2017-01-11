@@ -10,7 +10,9 @@ module SurveyQuestionResponsesHelper
   end
 
   def multiple_choice_fields_partial
-    if @question_response.survey_question.multiple_option_responses
+    if @question_response.survey_question.yes_no_display?
+      'yes_no_fields'
+    elsif @question_response.survey_question.multiple_option_responses
       'multiple_choice_choose_many_fields'
     else
       'multiple_choice_choose_one_fields'
