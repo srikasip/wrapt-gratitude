@@ -1,4 +1,8 @@
-%p TODO Slider
-
 -# replace me with real form fields-- just in there to get it working with stubs
 = form.input :id, as: 'hidden'
+
+- question = @question_response.survey_question
+- min_label = question.min_label
+- mid_label = question.min_label
+- max_label = question.max_label
+= form.input :range_response, as: :wrapt_range, label: label, input_html: {min: '1', max: '10', step: '1', min_label: min_label, max_label: max_label, mid_label: mid_label}

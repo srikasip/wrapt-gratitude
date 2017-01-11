@@ -4,6 +4,8 @@ class SurveyQuestionResponsesController < ApplicationController
 
   def show
     @question_response = @survey_response.question_responses.find params[:id]
+    @survey_response = @question_response.survey_response
+    @survey_questions = @survey_response.survey.questions
   end
 
   def update
