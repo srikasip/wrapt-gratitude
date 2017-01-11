@@ -94,7 +94,7 @@ Rails.application.routes.draw do
         resources :questions, only: :index, controller: 'training_set_questions'
       end
       resources :gift_question_impacts, controller: 'gift_question_impacts', except: [:index, :show]
-      resource :evaluation, only: :show, controller: 'training_set_evaluations' do
+      resource :evaluation, only: [:show, :destroy], controller: 'training_set_evaluations' do
         resources :recommendations, only: :show, controller: 'evaluation_recommendations' do
           resources :gift_question_impacts, only: [:edit, :update], controller: 'recommendation_gift_question_impacts'
         end
