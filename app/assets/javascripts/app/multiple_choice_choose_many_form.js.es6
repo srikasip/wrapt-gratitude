@@ -21,6 +21,7 @@ App.MultipleChoiceChooseManyForm = class MultipleChoiceChooseManyForm {
       const hidden_input_selector = this.hidden_inputs_selector.filter(`[value=${option_id}]`)
       hidden_input_selector.prop('checked', !hidden_input_selector.prop('checked'))
       this.updateDisplay();
+      this.showOptionExplanation(option_id);
     })
   }
 
@@ -53,6 +54,16 @@ App.MultipleChoiceChooseManyForm = class MultipleChoiceChooseManyForm {
       otherTextWrapperSelector.hide()
       otherTextWrapperSelector.find('[data-behavior~=other-text-input]').val('')
     }
+  }
+
+  showOptionExplanation(option_id) {
+    const explanation_selector = $(this.form_element).find('[data-behavior~=option-explantion]')
+    explanation_selector.hide('normal');
+    const selected_option_input_selector = this.hidden_inputs_selector.filter(`[value=${option_id}]:checked`)
+    if (selected_option_input_selector.length > 0) {
+     explanation_selector.filter(`[data-option-id=${option_id}]`).show('normal')     
+    }
+ 
   }
 
 

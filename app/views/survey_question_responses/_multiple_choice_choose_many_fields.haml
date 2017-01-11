@@ -11,6 +11,9 @@
 
 = form.input :other_option_text, as: :string, label: false, wrapper_html: { data: {behavior: 'other-text-input-wrapper'} }, input_html: {data: {behavior: 'other-text-input'}}
 
+- @question_response.survey_question.options.each do |option|
+  - if option.explanation.present?
+    %p{data: {behavior: 'option-explantion', option_id: option.id}}= option.explanation
 
 - content_for :page_js do
   - if @question_response.survey_question.multiple_option_responses
