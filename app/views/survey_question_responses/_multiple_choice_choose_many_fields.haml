@@ -1,13 +1,14 @@
 %div{data: {behavior: 'hidden-option-id-inputs'}}
   = form.association :survey_question_options, as: :check_boxes, collection: @question_response.survey_question.options.standard, label_method: :text, input_html: {data: {behavior: 'option-id-input'}}
-  = form.association :survey_question_options, as: :check_boxes, collection: [@question_response.survey_question.other_option], label_method: :text, input_html: {data: {behavior: 'option-id-input other-option'}}
+  - if @question_response.survey_question.other_option
+    = form.association :survey_question_options, as: :check_boxes, collection: [@question_response.survey_question.other_option], label_method: :text, input_html: {data: {behavior: 'option-id-input other-option'}}
 
-
-%p Select All That Apply
+%label= label
+.small Select All That Apply
 - @question_response.survey_question.options.in_groups_of(5, false).each do |option_row|
   .row.option-row
     - option_row.each do |option|
-      = link_to option.text, '#', class: 'btn btn-lg btn-default question_response__multiple_choice_button', data: {behavior: 'option-button', option_id: option.id}
+      = link_to option.text, '#', class: 'btn btn-default question_response__multiple_choice_button', data: {behavior: 'option-button', option_id: option.id}
 
 = form.input :other_option_text, as: :string, label: false, wrapper_html: { data: {behavior: 'other-text-input-wrapper'} }, input_html: {data: {behavior: 'other-text-input'}}
 

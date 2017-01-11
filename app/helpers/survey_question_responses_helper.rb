@@ -33,7 +33,7 @@ module SurveyQuestionResponsesHelper
 
   def question_number_of_total(question_response, survey_questions)
     current_question_number = current_survey_question_number(question_response)
-    total_questions = survey_questions.size
+    total_questions = survey_questions.where.not(survey_section: nil).size
     "No #{current_question_number} of #{total_questions}"
   end
 
@@ -46,7 +46,9 @@ module SurveyQuestionResponsesHelper
   end
 
   def survey_questions_progress_bar(survey_response, survey_questions)
-    total_questions = survey_questions.size
+    #TODO ask about the total number
+      # only those questions with a section id or all questions
+    total_questions = survey_questions.where.not(survey_section: nil).size
     answered_questions = survey_response.question_responses.where.not(answered_at: nil).size
     progress = answered_questions == 0 ? 0 : 100/(total_questions.to_f/answered_questions.to_f)
     content_tag :div, class: 'sqr-progress-bar' do

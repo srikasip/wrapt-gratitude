@@ -1,9 +1,10 @@
 = form.input :survey_question_option_id, as: :hidden, input_html: {data: {behavior: 'option-id-input-field'}}
 
+%label= label
 - @question_response.survey_question.options.in_groups_of(5, false).each do |option_row|
   .row.option-row
     - option_row.each do |option|
-      = link_to option.text, '#', class: 'btn btn-lg btn-default question_response__multiple_choice_button', data: {behavior: 'option-button', option_id: option.id}
+      = link_to option.text, '#', class: 'btn btn-default question_response__multiple_choice_button', data: {behavior: 'option-button', option_id: option.id}
 
 - content_for :page_js do
   :javascript
