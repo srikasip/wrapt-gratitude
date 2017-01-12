@@ -11,7 +11,6 @@ class ProfilesController < ApplicationController
     if @profile.save
       # TODO go somewhere for real
       survey_response = @profile.survey_responses.create survey: Survey.published.first
-      flash.notice = 'Profile created'
       redirect_to profile_survey_question_path(@profile, survey_response, survey_response.ordered_question_responses.first)
     else
       render :new

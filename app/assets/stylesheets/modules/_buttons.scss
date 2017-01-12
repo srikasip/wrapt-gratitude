@@ -3,11 +3,6 @@
   border: 2px solid $blue-001;
   min-width: 112px;
 }
-.btn:hover, 
-.btn:focus, 
-.btn.focus {
-  @include shadowed-box__01-hover;
-}
 .btn:focus, 
 .btn.focus, 
 .btn:active:focus, 
@@ -85,4 +80,8 @@
 .btn-group-xs > .btn {
   font-size: 10px;
   min-width: 60px;
+}
+.landing-question .btn {
+  @extend .mb1;
+  @extend .mh1;
 }

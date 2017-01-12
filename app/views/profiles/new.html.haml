@@ -1,18 +1,21 @@
 .container
   .row
-    .col-xs-12
+    .col-xs-10.col-xs-offset-1
 
-      %h1 We use the science of gifting and gratitude to help you say, 'I get you.'
-      %p Wrapt is a fun and easy way to discover the perfect gifts she will love, based on who she actually is, all year long
+      %h1.text-center We use the science of gifting and gratitude to help you say, 'I get you.'
+      %p.lead.tan-002.ph2.text-center Wrapt is a fun and easy way to discover the perfect gifts she will love, based on who she actually is, all year long
 
-      %h3 Who do you need gift ideas for?
-      = simple_form_for @profile do |form|
-        = form.submit 'Wife', class: 'btn btn-default'
-        = form.submit 'Girlfriend', class: 'btn btn-default'
-        = form.submit 'Mother', class: 'btn btn-default'
-        = form.submit 'Daughter', class: 'btn btn-default'
-        = form.submit 'Friend', class: 'btn btn-default'
-        = form.submit 'Sister', class: 'btn btn-default'
-        = form.submit 'Colleague', class: 'btn btn-default'
-        = form.submit 'Partner', class: 'btn btn-default'
-        = form.submit 'Other', class: 'btn btn-default'
+      %h3.text-center.mb2.mt3 Who do you need gift ideas for?
+  .row
+    .col-xs-8.col-xs-offset-2
+      .landing-question
+        = simple_form_for @profile do |form|
+          = form.submit 'Wife', class: 'btn btn-default'
+          = form.submit 'Girlfriend', class: 'btn btn-default'
+          = form.submit 'Mother', class: 'btn btn-default'
+          = form.submit 'Daughter', class: 'btn btn-default'
+          = form.submit 'Friend', class: 'btn btn-default'
+          = form.submit 'Sister', class: 'btn btn-default'
+          = form.submit 'Colleague', class: 'btn btn-default'
+          = form.submit 'Partner', class: 'btn btn-default'
+          = form.submit 'Other', class: 'btn btn-default'
