@@ -10,16 +10,17 @@
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
     -# responsive is disabled so use .col-xs-* everywhere for bs columns
-    - if show_top_nav?
-      = render 'layouts/top_nav'
+    .wrapper--full-bleed__bg-03.pb6
+      - if show_top_nav?
+        = render 'layouts/top_nav'
     
 
 
          
-    -#.container.container--main
-    = render 'layouts/alerts'
-    = render 'breadcrumbs'
-    = yield
+        -# .container.container--main
+        = render 'layouts/alerts'
+        = render 'breadcrumbs'
+        = yield
 
     %footer.footer
       = render 'layouts/footer'

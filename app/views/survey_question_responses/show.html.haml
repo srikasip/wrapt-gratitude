@@ -3,9 +3,9 @@
     .col-xs-12
       .sqr-container
         - if @question_response.survey_question.first_in_section?
-          .sqr-container__header.pa3
-            %h1= @question_response.survey_question.survey_section.introduction_heading
-            %p= @question_response.survey_question.survey_section.introduction_text
+          .sqr-container__header.pb3
+            %h1.text-center= @question_response.survey_question.survey_section.introduction_heading
+            %p.tan-002= @question_response.survey_question.survey_section.introduction_text
       
         .sqr-question__container.pa3
           .sqr-progress

@@ -1,5 +1,10 @@
-.navbar-nav {
-  @include akkurat-mono;
+.navbar-nav li {
+  font-size: rem(12);
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+.navbar-static-top {
+  border-width: 0;
 }
 .navbar-brand a {
   background: image-url('icons/logo.svg') no-repeat;
