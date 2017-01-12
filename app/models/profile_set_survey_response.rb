@@ -2,12 +2,10 @@ class ProfileSetSurveyResponse < ApplicationRecord
   belongs_to :profile_set
 
   has_many :question_responses,
-    # -> {
-    #   joins(survey_question: :survey_section)
-    #   .where('survey_questions.survey_section_id IS NOT NULL')
-    #   .order('survey_sections.sort_order ASC, survey_questions.sort_order ASC')
-    # },
-    inverse_of: :survey_response, class_name: 'SurveyQuestionResponse', dependent: :destroy
+    inverse_of: :survey_response,
+    class_name: 'SurveyQuestionResponse',
+    as: :survey_response,
+    dependent: :destroy
   has_many :evaluation_recommendations, dependent: :destroy
 
 

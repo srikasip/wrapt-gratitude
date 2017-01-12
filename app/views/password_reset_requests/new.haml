@@ -1,0 +1,15 @@
+.container
+  .row
+    .col-md-4
+      %h1 Lost Password?
+
+      %p Enter your email address below and we will send you instructions for resetting your password.
+
+      = simple_form_for @password_reset_request, html: {data: {submits_to_pjax_modal: true}} do |form|
+        .form-inputs
+          = form.input :email, label: 'Email Address'
+
+        .form-actions
+          = form.submit 'Submit', class: 'btn btn-primary'
+        
+        %p= link_to 'Return to Sign in', new_user_session_path

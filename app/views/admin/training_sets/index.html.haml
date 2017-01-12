@@ -32,7 +32,10 @@
       %tbody
         - @training_sets.preload(:survey).each do |training_set|
           %tr
-            %td= training_set.name
+            %td
+              = training_set.name
+              - if training_set.published?
+                %span.label.label-default Published
             %td= training_set.survey&.title
             %td
               = link_to 'View', admin_training_set_path(training_set), class: 'btn btn-xs btn-default'

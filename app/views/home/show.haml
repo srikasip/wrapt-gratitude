@@ -5,4 +5,12 @@
       %p.lead We'll add more content soon :)
 
       %p
-        =link_to 'Style Guide', main_style_guide_path
+        = link_to 'Style Guide', main_style_guide_path
+      - if current_user
+        %p
+          = link_to 'Start a New Quiz', new_profile_path
+
+- if params[:password_reset_token]
+  - content_for :page_js do
+    :javascript
+      new App.PjaxModalLoader(#{password_reset_path(params[:password_reset_token]).to_json})

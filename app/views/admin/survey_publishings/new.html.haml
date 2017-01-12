@@ -1,0 +1,8 @@
+= simple_form_for @survey_publishing, url: admin_survey_publishing_path(@survey), html: {data: {submits_to_pjax_modal: true}} do |form|
+  %p Please select a Training Set to use with this survey
+  .form-inputs
+    = form.input :survey_id, as: :hidden
+    = form.input :training_set_id, as: :select, collection: @survey.training_sets
+
+  .form-actions
+    = form.submit 'Publish', class: 'btn btn-primary'

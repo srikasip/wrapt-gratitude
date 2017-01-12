@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161212180259) do
+ActiveRecord::Schema.define(version: 20170111180116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,14 @@ ActiveRecord::Schema.define(version: 20161212180259) do
     t.index ["gift_id"], name: "index_evaluation_recommendations_on_gift_id", using: :btree
     t.index ["profile_set_survey_response_id"], name: "eval_rec_survey_response", using: :btree
     t.index ["training_set_evaluation_id"], name: "index_evaluation_recommendations_on_training_set_evaluation_id", using: :btree
+  end
+
+  create_table "gift_dislikes", force: :cascade do |t|
+    t.integer "profile_id"
+    t.integer "gift_id"
+    t.integer "reason"
+    t.index ["gift_id"], name: "index_gift_dislikes_on_gift_id", using: :btree
+    t.index ["profile_id"], name: "index_gift_dislikes_on_profile_id", using: :btree
   end
 
   create_table "gift_images", force: :cascade do |t|
@@ -72,6 +80,15 @@ ActiveRecord::Schema.define(version: 20161212180259) do
     t.index ["gift_id"], name: "index_gift_question_impacts_on_gift_id", using: :btree
     t.index ["survey_question_id"], name: "index_gift_question_impacts_on_survey_question_id", using: :btree
     t.index ["training_set_id"], name: "index_gift_question_impacts_on_training_set_id", using: :btree
+  end
+
+  create_table "gift_recommendations", force: :cascade do |t|
+    t.integer  "gift_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "profile_id"
+    t.index ["gift_id"], name: "index_gift_recommendations_on_gift_id", using: :btree
+    t.index ["profile_id"], name: "index_gift_recommendations_on_profile_id", using: :btree
   end
 
   create_table "gifts", force: :cascade do |t|
@@ -181,6 +198,15 @@ ActiveRecord::Schema.define(version: 20161212180259) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "profiles", force: :cascade do |t|
+    t.string   "email"
+    t.string   "name"
+    t.integer  "owner_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "relationship"
+  end
+
   create_table "survey_question_options", force: :cascade do |t|
     t.integer  "survey_question_id",             null: false
     t.text     "text"
@@ -202,16 +228,18 @@ ActiveRecord::Schema.define(version: 20161212180259) do
   end
 
   create_table "survey_question_responses", force: :cascade do |t|
-    t.integer  "profile_set_survey_response_id", null: false
-    t.integer  "survey_question_id",             null: false
+    t.integer  "survey_response_id",   null: false
+    t.integer  "survey_question_id",   null: false
     t.text     "text_response"
     t.float    "range_response"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.string   "name"
     t.text     "other_option_text"
-    t.index ["profile_set_survey_response_id"], name: "index_question_response_on_survey_response_id", using: :btree
+    t.string   "survey_response_type", null: false
+    t.datetime "answered_at"
     t.index ["survey_question_id"], name: "index_survey_question_responses_on_survey_question_id", using: :btree
+    t.index ["survey_response_id"], name: "index_question_response_on_survey_response_id", using: :btree
   end
 
   create_table "survey_questions", force: :cascade do |t|
@@ -231,6 +259,7 @@ ActiveRecord::Schema.define(version: 20161212180259) do
     t.boolean  "use_response_as_name",      default: false, null: false
     t.integer  "conditional_question_id"
     t.integer  "survey_section_id"
+    t.boolean  "yes_no_display",            default: false, null: false
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
     t.index ["survey_section_id"], name: "index_survey_questions_on_survey_section_id", using: :btree
   end
@@ -247,18 +276,31 @@ ActiveRecord::Schema.define(version: 20161212180259) do
     t.index ["trait_training_set_id"], name: "index_response_trait_evals_on_trait_training_set", using: :btree
   end
 
+  create_table "survey_responses", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "profile_id"
+    t.integer  "survey_id"
+    t.index ["profile_id"], name: "index_survey_responses_on_profile_id", using: :btree
+    t.index ["survey_id"], name: "index_survey_responses_on_survey_id", using: :btree
+  end
+
   create_table "survey_sections", force: :cascade do |t|
     t.integer  "survey_id"
     t.string   "name"
-    t.integer  "sort_order", default: 0, null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "sort_order",           default: 0, null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.text     "introduction_heading"
+    t.text     "introduction_text"
     t.index ["survey_id"], name: "index_survey_sections_on_survey_id", using: :btree
   end
 
   create_table "surveys", force: :cascade do |t|
     t.string  "title"
     t.boolean "copy_in_progress", default: false, null: false
+    t.boolean "active"
+    t.boolean "published"
   end
 
   create_table "training_set_evaluations", force: :cascade do |t|
@@ -284,6 +326,7 @@ ActiveRecord::Schema.define(version: 20161212180259) do
     t.integer  "survey_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean  "published"
     t.index ["survey_id"], name: "index_training_sets_on_survey_id", using: :btree
   end
 
@@ -319,21 +362,26 @@ ActiveRecord::Schema.define(version: 20161212180259) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "",    null: false
-    t.string   "encrypted_password",     default: "",    null: false
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email",                                           null: false
+    t.string   "crypted_password"
+    t.string   "salt"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "remember_me_token"
+    t.datetime "remember_me_token_expires_at"
     t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,     null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.inet     "current_sign_in_ip"
-    t.inet     "last_sign_in_ip"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
-    t.boolean  "admin",                  default: false, null: false
+    t.datetime "reset_password_token_expires_at"
+    t.datetime "reset_password_email_sent_at"
+    t.boolean  "admin",                           default: false, null: false
+    t.string   "activation_state"
+    t.string   "activation_token"
+    t.datetime "activation_token_expires_at"
+    t.index ["activation_token"], name: "index_users_on_activation_token", using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+    t.index ["remember_me_token"], name: "index_users_on_remember_me_token", using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
   end
 
   create_table "vendors", force: :cascade do |t|
@@ -354,6 +402,8 @@ ActiveRecord::Schema.define(version: 20161212180259) do
   add_foreign_key "evaluation_recommendations", "gifts"
   add_foreign_key "evaluation_recommendations", "profile_set_survey_responses"
   add_foreign_key "evaluation_recommendations", "training_set_evaluations"
+  add_foreign_key "gift_dislikes", "gifts"
+  add_foreign_key "gift_dislikes", "profiles"
   add_foreign_key "gift_images", "gifts"
   add_foreign_key "gift_images", "product_images"
   add_foreign_key "gift_products", "gifts"
@@ -361,6 +411,8 @@ ActiveRecord::Schema.define(version: 20161212180259) do
   add_foreign_key "gift_question_impacts", "gifts"
   add_foreign_key "gift_question_impacts", "survey_questions"
   add_foreign_key "gift_question_impacts", "training_sets"
+  add_foreign_key "gift_recommendations", "gifts"
+  add_foreign_key "gift_recommendations", "profiles"
   add_foreign_key "gifts", "product_categories"
   add_foreign_key "product_images", "products"
   add_foreign_key "products", "product_categories"
@@ -369,10 +421,12 @@ ActiveRecord::Schema.define(version: 20161212180259) do
   add_foreign_key "profile_sets", "surveys"
   add_foreign_key "profile_traits_facets", "profile_traits_topics", column: "topic_id"
   add_foreign_key "profile_traits_tags", "profile_traits_facets", column: "facet_id"
+  add_foreign_key "profiles", "users", column: "owner_id"
   add_foreign_key "survey_question_response_options", "survey_question_options"
   add_foreign_key "survey_question_response_options", "survey_question_responses"
-  add_foreign_key "survey_question_responses", "profile_set_survey_responses"
   add_foreign_key "survey_question_responses", "survey_questions"
+  add_foreign_key "survey_responses", "profiles"
+  add_foreign_key "survey_responses", "surveys"
   add_foreign_key "survey_sections", "surveys"
   add_foreign_key "training_set_evaluations", "training_sets"
   add_foreign_key "training_set_response_impacts", "gift_question_impacts"

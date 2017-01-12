@@ -1,5 +1,48 @@
 Rails.application.routes.draw do
+
+  root to: 'home#show' 
+
+  ##########################
+  # Survey responses
+  # for MVP1A they can be accessed via notification link or logged in user
+  ##########################
+  resources :profiles, only: [:new, :create] do
+    resources :surveys, only: :show, controller: 'survey_responses' do
+      resources :questions, only: [:show, :update], controller: 'survey_question_responses'
+      resource :completion, only: [:show, :create], controller: 'survey_response_completions'
+    end
+  end
+  resources :invitations, only: :show
+  #####################################################
+
+  ##################################
+  # User Authentication
+  ##################################
+  resource :user_session, only: [:new, :create, :destroy]
+  resources :password_reset_requests, only: [:new, :create]
+  resources :password_resets, only: [:show, :update]
+
+  # These have an ID because signup requires user activation token
+  # these will move to the quiz completion in release 8
+  resources :sign_ups, only: [:show, :update]
+
+  ###################################
+  # My Account Area
+  ###################################
+  resource :my_account, only: [:show, :edit, :update]
+
+  ###################################
+  ### Admin
+  ###################################
   namespace :admin do
+    root to: 'home#show', as: 'root' # admin home
+
+    resources :users, except: :show do
+      member do
+        post :resend_invitation
+      end
+    end
+    resources :user_imports, only: [:new, :create]
 
     resources :trait_training_sets, except: :show do
       resources :questions, except: [:show, :destroy], controller: 'trait_training_set_questions' do
@@ -15,8 +58,6 @@ Rails.application.routes.draw do
     end
 
     resources :vendors
-    get 'home_pages/show'
-    devise_for :users
     
     resources :product_categories, except: :show do
       resource :subcategories, controller: 'product_subcategories', only: :show
@@ -53,6 +94,7 @@ Rails.application.routes.draw do
       resource :copying, only: :create, controller: 'survey_copyings'
       resources :sections, except: :show, controller: 'survey_sections'
       resource :section_ordering, only: :create, controller: 'survey_section_orderings'
+      resource :publishing, only: [:new, :create], controller: 'survey_publishings'
     end
 
     resources :training_sets do
@@ -76,12 +118,11 @@ Rails.application.routes.draw do
       resource :exports, only: :create, controller: 'profile_set_exports'    
     end
 
-    root to: 'home#show'
+  end
 
-end
-
-  resource :private_access_session, only: [:new, :create, :destroy]
-
+  ####################
+  ## Misc
+  ####################
   unless Rails.env.production?
     resource :style_guide, only: :none do
       member do
@@ -99,6 +140,4 @@ end
   # Serve websocket cable requests in-process
   mount ActionCable.server => '/cable'
 
-  root to: 'home#show' 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

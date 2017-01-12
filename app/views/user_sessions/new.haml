@@ -1,0 +1,21 @@
+.container
+  .row
+    .col-md-4
+
+      %h1 Please Sign In.
+      
+      = simple_form_for @user_session, url: user_session_path, html: { data: {submits_to_pjax_modal: true} } do |form|
+        = hidden_field_tag :return_to, request.referrer
+        .form-inputs
+          = form.input :email
+          = form.input :password
+          .pull-right
+            = link_to "Lost Password?", new_password_reset_request_path, data: {loads_in_pjax_modal: true}
+          .pull-left
+            = form.input :remember, label: 'Keep me signed in.', as: :boolean
+          .clearfix
+         
+
+        .form-actions
+          = form.submit 'Sign In', class: 'btn btn-primary'
+

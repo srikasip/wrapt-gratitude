@@ -5,6 +5,7 @@ class Gift < ApplicationRecord
 
   has_many :gift_question_impacts, dependent: :destroy
   has_many :evaluation_recommendations, dependent: :destroy
+  has_many :survey_responses, dependent: :destroy
 
   has_many :gift_images, -> {order :sort_order}, inverse_of: :gift, dependent: :destroy
   has_many :uploaded_gift_images, class_name: 'GiftImages::Uploaded'

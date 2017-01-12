@@ -49,7 +49,11 @@ module Admin
       end
 
       def survey_section_params
-        params.require(:survey_section).permit(:name, :sort_order)
+        params.require(:survey_section).permit(:name,
+          :sort_order,
+          :introduction_heading,
+          :introduction_text
+        )
       end
   end
 end
