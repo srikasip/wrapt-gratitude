@@ -27,12 +27,27 @@ module SurveyQuestionResponsesHelper
     end
   end
 
-  def current_survey_question_number(question_response)
-    question_response.survey_question.sort_order
+  def current_survey_question_number(question_response, survey_questions)
+    survey_question = question_response.survey_question
+    current_section = survey_question.survey_section
+    section_questions = survey_questions.
+      where.not(survey_section_id: nil).
+      group_by(&:survey_section).
+      sort.to_h
+    total = 0
+    number = 0
+    section_questions.each do |section, questions|
+      if section.id == current_section.id
+        number = total + survey_question.sort_order
+      else
+        total += questions.size
+      end
+    end
+    number
   end
 
   def question_number_of_total(question_response, survey_questions)
-    current_question_number = current_survey_question_number(question_response)
+    current_question_number = current_survey_question_number(question_response, survey_questions)
     total_questions = survey_questions.where.not(survey_section: nil).size
     "No #{current_question_number} of #{total_questions}"
   end
@@ -42,17 +57,6 @@ module SurveyQuestionResponsesHelper
       'option-id-input other-option'
     else
       'option-id-input'
-    end
-  end
-
-  def survey_questions_progress_bar(survey_response, survey_questions)
-    #TODO ask about the total number
-      # only those questions with a section id or all questions
-    total_questions = survey_questions.where.not(survey_section: nil).size
-    answered_questions = survey_response.question_responses.where.not(answered_at: nil).size
-    progress = answered_questions == 0 ? 0 : 100/(total_questions.to_f/answered_questions.to_f)
-    content_tag :div, class: 'sqr-progress-bar' do
-      content_tag :div, '', class: 'sqr-progress-bar__progress', style: "width: #{progress}%;"
     end
   end
 
