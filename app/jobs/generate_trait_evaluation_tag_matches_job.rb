@@ -16,9 +16,9 @@ class GenerateTraitEvaluationTagMatchesJob < ApplicationJob
       question_response = survey_response.question_responses.where(survey_question_id: question.id).first
       if question_response
         case question
-        when SurveyQuestions::MultipleChoice
+        when ::SurveyQuestions::MultipleChoice
           tag_id = get_matched_tag_id_for_multiple_choice_question(question_response)
-        when SurveyQuestions::Range
+        when ::SurveyQuestions::Range
           tag_id = get_matched_tag_id_for_range_question(question_response)
         else
           tag_id = nil

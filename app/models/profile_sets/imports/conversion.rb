@@ -7,7 +7,7 @@ module ProfileSets
       end
 
       def range_response(question)
-        if question.is_a? SurveyQuestions::Range
+        if question.is_a? ::SurveyQuestions::Range
           @row.slider_response
         end
       end
@@ -15,7 +15,7 @@ module ProfileSets
       def survey_question_response_options(question)
         responses = []
 
-        if question.is_a? SurveyQuestions::MultipleChoice
+        if question.is_a? ::SurveyQuestions::MultipleChoice
           options = question.options.order(:sort_order).to_a
           i = 0
 

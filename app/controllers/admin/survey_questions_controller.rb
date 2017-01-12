@@ -12,7 +12,7 @@ module Admin
     def edit
       @conditional_question = @survey_question.conditional_question
       @conditional_question_options = @survey_question.conditional_question_options
-      if @survey_question.is_a? SurveyQuestions::MultipleChoice
+      if @survey_question.is_a? ::SurveyQuestions::MultipleChoice
         @survey_question_option = SurveyQuestionOption.new
         @options = @survey_question.options.standard
         render :edit_multiple_choice
