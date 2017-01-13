@@ -22,10 +22,6 @@ Rails.application.routes.draw do
   resources :password_reset_requests, only: [:new, :create]
   resources :password_resets, only: [:show, :update]
 
-  # These have an ID because signup requires user activation token
-  # these will move to the quiz completion in release 8
-  resources :sign_ups, only: [:show, :update]
-
   ###################################
   # My Account Area
   ###################################
