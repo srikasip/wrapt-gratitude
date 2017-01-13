@@ -1,4 +1,8 @@
-= form.input :survey_question_option_id, as: :hidden, input_html: {data: {behavior: 'option-id-input-field'}}
+%div{data: {behavior: 'hidden-option-id-inputs'}}
+  = form.association :survey_question_options, as: :check_boxes, collection: @question_response.survey_question.options.standard, label_method: :text, input_html: {data: {behavior: 'option-id-input'}}
+  - if @question_response.survey_question.other_option
+    = form.association :survey_question_options, as: :check_boxes, collection: [@question_response.survey_question.other_option], label_method: :text, input_html: {data: {behavior: 'option-id-input other-option'}}
+
 %label= label
 - @question_response.survey_question.options.in_groups_of(5, false).each do |option_row|
   .row.option-row
@@ -7,4 +11,6 @@
 
 - content_for :page_js do
   :javascript
-    new App.MultipleChoiceChooseOneForm()
+      new App.MultipleChoiceForm({
+        multipleOptionResponses: #{@question_response.survey_question.use_multiple_response_form?.to_json}
+      })
