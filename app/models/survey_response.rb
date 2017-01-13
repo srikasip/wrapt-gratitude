@@ -44,4 +44,14 @@ class SurveyResponse < ApplicationRecord
     ordered_question_responses.select{|response| response.answered_at.present?}.last || ordered_question_responses.first
   end
 
+  def giftee_name
+    if name_question = survey.name_question
+      return question_responses
+        .where(survey_question: name_question)
+        .first
+        &.text_response
+        .presence
+    end
+  end
+
 end
