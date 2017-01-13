@@ -1,23 +1,35 @@
 .container
   .row
     .col-xs-12
+      .pa3.text-center
+        %h1 Great Job! We’ve got all the information we need to make gift recommendations for TODO Gift recipient's name
+        %p.tan-002 A few more things to get squared away before we reveal the gifts
 
-      %h1 Great Job! We’ve got all the information we need to make gift recommendations for TODO Gift recipient's name
-      %p A few more things to get squared away before we reveal the gifts
-
-      %h4 Invite TODO GIFT RECIPIENT NAME
-      %p In our Beta Stage we are testing several aspects of our offering. One key piece is presenting you with the most accurate recommendations possible. In order to do that, we’d like to ask her to review the gift recommendations and rate some of the items in our catalog.
 
       = simple_form_for @survey_response_completion, url: profile_survey_completion_path(@profile, @survey_response) do |form|
-        = form.input :profile_email, label: 'Email Address'
+        .floating-container.pa3
+          %h4 Invite TODO GIFT RECIPIENT NAME
+          %p In our Beta Stage we are testing several aspects of our offering. One key piece is presenting you with the most accurate recommendations possible. In order to do that, we’d like to ask her to review the gift recommendations and rate some of the items in our catalog.
+          .row
+            .col-xs-6
+              = form.input :profile_email, label: 'Email Address'
+            .col-xs-6
+              .wrapt-highlight-text.small.pr3.pl3.text-center{style: 'margin-top: 32px; height: 50px;'}
+                We take privacy seriously, we'll never sell or abuse your email address.
+        .pa3
+          - unless current_user.active?
+            %h4 Create Your Account
+            .row
+              .col-xs-6
+                = form.input :user_first_name, label: 'First Name'
+              .col-xs-6
+                = form.input :user_last_name, label: 'Last Name'
+            .row
+              .col-xs-6
+                = form.input :user_email, label: 'Email Address'
+              .col-xs-6
+                = form.input :user_password, label: 'Password', value: ''
 
-        - unless current_user.active?
-          %h4 Create Your Account
-          = form.input :user_first_name, label: 'First Name'
-          = form.input :user_last_name, label: 'Last Name'
-          = form.input :user_email, label: 'Email Address'
-          = form.input :user_password, label: 'Password', value: ''
-
-        = form.submit 'View Gift recommendations', class: 'btn btn-primary'     
+          = form.submit 'View Gift recommendations', class: 'btn btn-primary btn-full-width'     
 
 

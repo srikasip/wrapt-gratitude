@@ -7,7 +7,7 @@
             %h1.text-center= @question_response.survey_question.survey_section.introduction_heading
             %p.tan-002= @question_response.survey_question.survey_section.introduction_text
       
-        .sqr-question__container.pa3
+        .sqr-question__container.floating-container.pa3
           .sqr-progress
             .small
               = question_number_of_total(@question_response, @survey_response)
