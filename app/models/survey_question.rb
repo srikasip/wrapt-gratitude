@@ -14,16 +14,16 @@ class SurveyQuestion < ApplicationRecord
 
   belongs_to :survey_section, inverse_of: :questions
 
-  scope :not_text, -> {where.not(type: 'SurveyQuestions::Text')}
+  scope :not_text, -> {where.not(type: '::SurveyQuestions::Text')}
 
   # done this way so we don't replace if there's a validation error
   attr_accessor :conditional_question_option_option_ids
   after_save :replace_conditional_question_options, if: :conditional_question_option_option_ids
 
   TYPES = {
-    'SurveyQuestions::MultipleChoice' => 'Multiple Choice',
-    'SurveyQuestions::Range' => 'Slider',
-    'SurveyQuestions::Text' => 'Free Text'
+    '::SurveyQuestions::MultipleChoice' => 'Multiple Choice',
+    '::SurveyQuestions::Range' => 'Slider',
+    '::SurveyQuestions::Text' => 'Free Text'
   }
 
   before_create :set_initial_sort_order

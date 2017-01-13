@@ -11,14 +11,14 @@ module TrainingSets
       end
 
       def range_impact_direct_correlation(question)
-        if question.is_a?(SurveyQuestions::Range)
+        if question.is_a?(::SurveyQuestions::Range)
           !@row.slider_impact_direction.present? || @row.slider_impact_direction == 1
         end
       end
 
       def response_impacts(question)
         impacts = []
-        if question.is_a? SurveyQuestions::MultipleChoice
+        if question.is_a? ::SurveyQuestions::MultipleChoice
           options = question.options.order(:sort_order).to_a
           i = 0
 

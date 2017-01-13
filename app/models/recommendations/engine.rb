@@ -56,8 +56,8 @@ module Recommendations
       gift_question = gift_question_impacts_by_gift_and_question[gift][question]
       if question_response && gift_question
         calculator_class = case question
-        when SurveyQuestions::MultipleChoice then Recommendations::QuestionRankCalculators::MultipleChoice
-        when SurveyQuestions::Range then Recommendations::QuestionRankCalculators::Range
+        when ::SurveyQuestions::MultipleChoice then Recommendations::QuestionRankCalculators::MultipleChoice
+        when ::SurveyQuestions::Range then Recommendations::QuestionRankCalculators::Range
         end
         result = calculator_class.new(gift_question, question_response).question_rank
       end
