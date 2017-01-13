@@ -8,4 +8,14 @@ class SurveySection < ApplicationRecord
     next_sort_order = ( survey&.sections.maximum(:sort_order) || 0 ) + 1
     self.sort_order = next_sort_order
   end
+
+  def introduction_heading_with_profile_relationship profile
+    introduction_heading&.gsub /<relationship>/i, profile.relationship
+  end
+
+  def introduction_text_with_profile_relationship profile
+    introduction_text&.gsub /<relationship>/i, profile.relationship
+  end
+
+
 end

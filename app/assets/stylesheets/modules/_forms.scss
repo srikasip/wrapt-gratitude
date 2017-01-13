@@ -195,3 +195,12 @@ label {
   position: absolute;
   right: 0px;
 }
+
+
+// These come out white without these styles
+.has-error .control-label {
+  color: $gray-008;
+}
+.has-error .help-block {
+  color: $red-001;
+}

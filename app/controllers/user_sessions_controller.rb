@@ -12,7 +12,7 @@ class UserSessionsController < ApplicationController
     if login(@user_session.email, @user_session.password, @user_session.remember)
       redirect_to params[:return_to] || root_path
     else
-      flash.alert = 'Email and password don\'t match'
+      @user_session.errors.add :password, 'Sorry, that password isn\'t correct'
       render :new
     end
   end

@@ -4,8 +4,8 @@
       .sqr-container
         - if @question_response.survey_question.first_in_section?
           .sqr-container__header.pb3
-            %h1.text-center= @question_response.survey_question.survey_section.introduction_heading
-            %p.tan-002= @question_response.survey_question.survey_section.introduction_text
+            %h1.text-center= @question_response.survey_question.survey_section.introduction_heading_with_profile_relationship(@profile)
+            %p.tan-002= @question_response.survey_question.survey_section.introduction_text_with_profile_relationship(@profile)
       
         .sqr-question__container.floating-container
           .sqr-progress
@@ -20,7 +20,7 @@
 
           = simple_form_for @question_response, url: profile_survey_question_path(@profile, @survey_response, @question_response), html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
 
-            = render response_fields_partial, form: form, label: @question_response.survey_question.prompt
+            = render response_fields_partial, form: form, label: @question_response.survey_question.prompt_with_name(@survey_response)
             .sqr-submit__container.pr3.text-right
               = form.submit question_response_next_button_text, class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}
 
