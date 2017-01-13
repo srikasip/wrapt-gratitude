@@ -27,14 +27,11 @@ module SurveyQuestionResponsesHelper
     end
   end
 
-  def current_survey_question_number(question_response)
-    question_response.survey_question.sort_order
-  end
-
-  def question_number_of_total(question_response, survey_questions)
-    current_question_number = current_survey_question_number(question_response)
-    total_questions = survey_questions.where.not(survey_section: nil).size
-    "No #{current_question_number} of #{total_questions}"
+  def question_number_of_total(question_response, survey_response)
+    questions = survey_response.
+      question_responses_grouped_by_section.
+      values.flatten
+    "No #{questions.index(question_response) + 1} of #{questions.size}"
   end
 
   def option_input_data_behavior option
@@ -45,19 +42,48 @@ module SurveyQuestionResponsesHelper
     end
   end
 
-  def survey_questions_progress_bar(survey_response, survey_questions)
-    #TODO ask about the total number
-      # only those questions with a section id or all questions
-    total_questions = survey_questions.where.not(survey_section: nil).size
-    answered_questions = survey_response.question_responses.where.not(answered_at: nil).size
-    progress = answered_questions == 0 ? 0 : 100/(total_questions.to_f/answered_questions.to_f)
-    content_tag :div, class: 'sqr-progress-bar' do
-      content_tag :div, '', class: 'sqr-progress-bar__progress', style: "width: #{progress}%;"
+  def survey_sections_progress_bar(survey_response)
+    content_tag :div, class: 'sqr-section-progress-bar' do
+      concat content_tag :div, survey_section_icon, class: 'sqr-section-icon__container'
+      concat content_tag :div, survey_sections(survey_response, :progress), class: 'sqr-section-progress__container clearfix'
+      concat content_tag :div, survey_sections(survey_response, :labels), class: 'sqr-section-label__container clearfix'
     end
   end
 
-  def survey_sections_progress_bar
-    "TODO: Section Progress Bar"
+  def survey_section_icon
+    content_tag :div, class: 'sqr-section-icon__outer' do
+      concat content_tag :div, embedded_svg('icon-wrapt-heart', class: 'sqr-section-icon'), class: 'sqr-section-icon__inner'
+    end
+  end
+
+  def survey_sections(survey_response, display)
+    section_question_responses = survey_response.question_responses_grouped_by_section
+    section_groups = section_question_responses.keys.in_groups(2, false)
+    render "survey_section", section_groups: survey_section_data(section_question_responses), display: display
+  end
+
+  def survey_section_data(section_question_responses)
+    section_groups = section_question_responses.keys.in_groups(2, false)
+    section_groups_data = []
+    section_groups.each_with_index do |section_group, index|
+      group_data = []
+      section_group.each do |section|
+        section_width = 100/section_group.size
+        questions = section_question_responses[section]
+        answered_questions_size = questions.
+          select{|question_response| !question_response.answered_at.nil? }.
+          size
+        progress_width = answered_questions_size > 0 ? 100/(questions.size/answered_questions_size.to_f) : 0
+        section_data = {
+          section_name: section.name,
+          section_width: section_width, 
+          progress_width: progress_width,
+        }
+        group_data << section_data
+      end
+      section_groups_data << group_data
+    end
+    section_groups_data
   end
 
 end
