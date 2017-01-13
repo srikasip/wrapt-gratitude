@@ -10,7 +10,6 @@ class UserSessionsController < ApplicationController
   def create
     @user_session = UserSession.new user_session_params.merge(controller: self)
     if login(@user_session.email, @user_session.password, @user_session.remember)
-      flash.notice = 'You are now signed in.'
       redirect_to params[:return_to] || root_path
     else
       flash.alert = 'Email and password don\'t match'
@@ -20,7 +19,6 @@ class UserSessionsController < ApplicationController
 
   def destroy
     logout
-    flash.notice = 'You are now signed out.'
     redirect_to root_path
   end
 
