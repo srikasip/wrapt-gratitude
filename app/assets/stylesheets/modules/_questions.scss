@@ -70,8 +70,10 @@
 }
 
 .sqr-section-progress-bar {
-  margin-bottom: 40px;
   position: relative;
+  width: 80%;
+  margin: 0px auto;
+  margin-bottom: 40px;
 }
 
 .sqr-section-icon__container {
@@ -89,18 +91,23 @@
   height: 100%;
   border-radius: 50%;
   background-color: #FFFFFF;
-  text-align: center;
-  padding: 10%;
+  padding: 8%;
   border: 1px solid $gray-003;
+  display: table;
 }
 
 .sqr-section-icon__inner {
-  display: inline-block;
-  width: 100%;
-  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
   border-radius: 50%;
-  background-color: $blue-001;
+  background-color: rgba(209,217,232,0.10);
   border: 1px solid $gray-003;
+}
+
+.sqr-section-icon {
+  width: 20px;
+  height: 20px;
 }
 
 .sqr-section-progress__container {
@@ -114,6 +121,7 @@
 .sqr-sections__right {
   width: 50%;
   float: left;
+  padding: 2px 4px;
 }
 
 .sqr-sections__right {
@@ -121,8 +129,7 @@
 }
 
 .sqr-section {
-  height: 6px;
-  padding: 2px 4px;
+  height: 2px;
   float: left;
 }
 
@@ -132,7 +139,7 @@
 
 .sqr-section__progress {
   height: 100%;
-  background-color: red;
+  background-color: #F0E4B6;
 }
 
 

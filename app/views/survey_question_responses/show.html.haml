@@ -9,7 +9,8 @@
       
         .sqr-question__container.pa3
           .sqr-progress
-            .small= question_number_of_total(@question_response, @survey_questions)
+            .small
+              = question_number_of_total(@question_response, @survey_response)
 
           - if @question_response.previous_response
             = link_to profile_survey_question_path(@profile, @survey_response, @question_response.previous_response), class: 'sqr-previous__link' do
@@ -23,33 +24,8 @@
             .sqr-submit__container.pr3.text-right
               = form.submit question_response_next_button_text, class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}
 
-
-        %p= survey_sections_progress_bar
-        - answered_questions = @survey_response.question_responses.where.not(answered_at: nil).map(&:survey_question_id)
-        - answered_question_responses_by_section = @survey_questions.where.not(survey_section_id: nil).where(id: answered_questions).group_by(&:survey_section).sort.to_h
-        - survey_sections = @survey_response.survey.sections
-        .sqr-section-progress-bar
-          .sqr-section-icon__container
-            .sqr-section-icon__outer
-              .sqr-section-icon__inner
-          .sqr-section-progress__container.clearfix
-            -# answered_question_responses_by_section.keys.in_groups(2, false).each_with_index do |section_group, index|
-            - survey_sections.in_groups(2, false).each_with_index do |section_group, index|
-              %div{class: index == 0 ? 'sqr-sections__left' : 'sqr-sections__right'}
-                - section_group.each do |section|
-                  - width = 100/section_group.size
-                  .sqr-section{style: "width: #{width}%"}
-                    - answered_size = answered_question_responses_by_section[section].try(:size) || 0
-                    - width = answered_size > 0 ? 100/(section.questions.size/answered_size) : 0
-                    .sqr-section__progress{style: "width: #{width}%"}
-          .sqr-section-label__container.clearfix
-            -# answered_question_responses_by_section.keys.in_groups(2, false).each_with_index do |section_group, index|
-            - survey_sections.in_groups(2, false).each_with_index do |section_group, index|
-              %div{class: index == 0 ? 'sqr-sections__left' : 'sqr-sections__right'}
-                - section_group.each do |section|
-                  - width = 100/section_group.size
-                  .sqr-section__label.small{style: "width: #{width}%"}
-                    = section.name
+        = survey_sections_progress_bar(@survey_response)
+        
 
 
 
