@@ -71,7 +71,7 @@ module SurveyQuestionResponsesHelper
         section_width = 100/section_group.size
         questions = section_question_responses[section]
         answered_questions_size = questions.
-          select{|question_response| !question_response.answered_at.nil? }.
+          select{|question_response| !question_response&.answered_at.nil? }.
           size
         progress_width = answered_questions_size > 0 ? 100/(questions.size/answered_questions_size.to_f) : 0
         section_data = {
