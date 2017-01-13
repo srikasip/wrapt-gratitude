@@ -26,6 +26,20 @@ class SurveyResponse < ApplicationRecord
     return result.compact
   end
 
+  def question_responses_grouped_by_section
+    results = {}
+    survey.sections.includes(:questions).each do |section|
+      questions = section.questions
+      if questions.present?
+        results[section] = []
+        questions.each do |question|
+          results[section] << question_responses.detect {|question_response| question_response.survey_question_id == question.id}
+        end
+      end
+    end
+    return results
+  end
+
   def last_answered_response
     ordered_question_responses.select{|response| response.answered_at.present?}.last || ordered_question_responses.first
   end

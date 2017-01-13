@@ -9,3 +9,20 @@
 .svg-icon-heart {
   width: 1.1669921875em;
 }
+.navbar-static-top--icon-circle {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke-width: 20px;
+  stroke: $blue-001;
+}
+a:hover .navbar-static-top--icon-circle,
+a:active .navbar-static-top--icon-circle {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  fill: $blue-001;
+  stroke-width: 20px;
+  stroke: $blue-001;
+}

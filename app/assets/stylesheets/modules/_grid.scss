@@ -3,6 +3,20 @@
 .wrapper--full-bleed__bg-01 {
   background-color: $gray-001;
 }
+.wrapper--full-bleed__bg-02 {
+  background-color: #fff;
+}
+.wrapper--full-bleed__bg-03 {
+  background: rgba(209,217,232,0.10);
+  border: 1px solid #E2E2E2;
+}
+
+.floating-container {
+  background-color: #FFFFFF;
+  -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.1);
+}
 
 // When it's time to make the site responsive:
 // 1. Remove inclusion of this file in /app/assets/stylesheets/modules/modules

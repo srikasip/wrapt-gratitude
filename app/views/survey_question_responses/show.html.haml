@@ -1,25 +1,34 @@
 .container
   .row
     .col-xs-12
-      - if @question_response.survey_question.first_in_section?
-        %h1= @question_response.survey_question.survey_section.introduction_heading
-        %p= @question_response.survey_question.survey_section.introduction_text
+      .sqr-container
+        - if @question_response.survey_question.first_in_section?
+          .sqr-container__header.pb3
+            %h1.text-center= @question_response.survey_question.survey_section.introduction_heading
+            %p.tan-002= @question_response.survey_question.survey_section.introduction_text
+      
+        .sqr-question__container.floating-container.pa3
+          .sqr-progress
+            .small
+              = question_number_of_total(@question_response, @survey_response)
 
-      %p TODO Question N of N
-      %p TODO overall question progress bar
+          - if @question_response.previous_response
+            = link_to profile_survey_question_path(@profile, @survey_response, @question_response.previous_response), class: 'sqr-previous__link' do
+              .sqr-previous__icon
+                %span.glyphicon.glyphicon-menu-left
+              .sqr-previous__sudo-link
+
+          = simple_form_for @question_response, url: profile_survey_question_path(@profile, @survey_response, @question_response), html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
+
+            = render response_fields_partial, form: form, label: @question_response.survey_question.prompt
+            .sqr-submit__container.pr3.text-right
+              = form.submit question_response_next_button_text, class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}
+
+        = survey_sections_progress_bar(@survey_response)
+        
 
 
-      - if @question_response.previous_response
-        = link_to 'Previous Question', profile_survey_question_path(@profile, @survey_response, @question_response.previous_response)
 
-      %h3= @question_response.survey_question.prompt
 
-      = simple_form_for @question_response, url: profile_survey_question_path(@profile, @survey_response, @question_response), html: {data: {behavior: 'question-response-form'}} do |form|
-
-        = render response_fields_partial, form: form
-
-        = form.submit question_response_next_button_text, class: 'btn btn-primary', data: {behavior: 'next-question-button'}
-
-      %p TODO Section Progress Bar
 
 
