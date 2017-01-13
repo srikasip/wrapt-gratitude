@@ -8,7 +8,7 @@ class SurveyQuestionResponse < ApplicationRecord
   has_many :survey_question_response_options, inverse_of: :survey_question_response, dependent: :destroy
   has_many :survey_question_options, through: :survey_question_response_options
 
-  validates :text_response, presence: true, if: "survey_question.type == 'SurveyQuestions::Text'"
+  validates :text_response, presence: true, if: "survey_question.type == 'SurveyQuestions::Text'", on: :update
 
   def survey_question_option_id
     survey_question_option_ids.first
