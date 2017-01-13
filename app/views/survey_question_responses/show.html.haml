@@ -7,9 +7,9 @@
             %h1.text-center= @question_response.survey_question.survey_section.introduction_heading_with_profile_relationship(@profile)
             %p.tan-002= @question_response.survey_question.survey_section.introduction_text_with_profile_relationship(@profile)
       
-        .sqr-question__container.floating-container.pa3
+        .sqr-question__container.floating-container
           .sqr-progress
-            .small
+            .sqr-progress__small
               = question_number_of_total(@question_response, @survey_response)
 
           - if @question_response.previous_response

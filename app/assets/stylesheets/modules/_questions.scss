@@ -10,10 +10,11 @@
 .sqr-question__container {
   margin-bottom: 100px;
   position: relative;
+  padding: 40px;
 }
 
 .sqr-progress {
-  border-bottom: 6px solid $blue-001;
+  border-bottom: 4px solid $blue-001;
   width: 120px;
 }
 
@@ -55,6 +56,8 @@
 .sqr-form label {
   margin-top: 10px;
   margin-bottom: 40px;
+  font-size: rem(20);
+  color: $gray-010;
 }
 
 .sqr-submit__container {
@@ -75,8 +78,8 @@
 }
 
 .sqr-section-icon__container {
-  width: 100px;
-  height: 100px;
+  width: 111px;
+  height: 111px;
   position: absolute;
   top: 0px;
   left: 50%;
@@ -90,7 +93,7 @@
   border-radius: 50%;
   background-color: #FFFFFF;
   padding: 8%;
-  border: 1px solid $gray-003;
+  border: 1px solid $gray-005;
   display: table;
 }
 
@@ -100,19 +103,14 @@
   text-align: center;
   border-radius: 50%;
   background-color: rgba(209,217,232,0.10);
-  border: 1px solid $gray-003;
-}
-
-.sqr-section-icon {
-  width: 20px;
-  height: 20px;
+  border: 1px solid $gray-005;
 }
 
 .sqr-section-progress__container {
   border-radius: 5px;
-  border: 1px solid $gray-002;
+  border: 1px solid $gray-005;
   background-color: #FFFFFF;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .sqr-sections__left,
