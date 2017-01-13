@@ -4,8 +4,8 @@
       .sqr-container
         - if @question_response.survey_question.first_in_section?
           .sqr-container__header.pb3
-            %h1.text-center= @question_response.survey_question.survey_section.introduction_heading
-            %p.tan-002= @question_response.survey_question.survey_section.introduction_text
+            %h1.text-center= @question_response.survey_question.survey_section.introduction_heading_with_profile_relationship(@profile)
+            %p.tan-002= @question_response.survey_question.survey_section.introduction_text_with_profile_relationship(@profile)
       
         .sqr-question__container.floating-container.pa3
           .sqr-progress
