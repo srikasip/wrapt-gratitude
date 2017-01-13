@@ -6,9 +6,6 @@
   stroke: currentColor;
   fill: currentColor;
 }
-.svg-icon-heart {
-  width: 1.1669921875em;
-}
 .navbar-static-top--icon-circle {
   display: inline-block;
   width: 12px;
@@ -25,4 +22,12 @@ a:active .navbar-static-top--icon-circle {
   fill: $blue-001;
   stroke-width: 20px;
   stroke: $blue-001;
+}
+.sqr-section-icon--heart {
+  margin-top: 8px;
+  stroke: $tan-002;
+  stroke-width: 2px;
+  fill: none;
+  width: 33px;
+  height: 28px;
 }

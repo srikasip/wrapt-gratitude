@@ -87,3 +87,18 @@ a:active {
   background-color: rgba(196, 210, 233, .2);
   color: $blue-001;
 }
+.sqr-progress__small {
+  font-size: rem(12);
+  line-height: 1;
+  margin-bottom: 10px;
+  color: $gray-006;
+  letter-spacing: 1.07px;
+}
+.sqr-section__label .small,
+.small.wrapt-range__label {
+  font-size: rem(12);
+  line-height: 1;
+  letter-spacing: 1.07px;
+  color: $gray-010;
+  margin-bottom: 0;
+}
