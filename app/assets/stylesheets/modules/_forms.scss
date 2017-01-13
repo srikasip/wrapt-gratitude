@@ -18,6 +18,7 @@ label {
 }
 .error label,
 .error .form-control,
+.has-error .form-control,
 .help-block--error {
   border-color: $red-001;
   color: $red-001;
