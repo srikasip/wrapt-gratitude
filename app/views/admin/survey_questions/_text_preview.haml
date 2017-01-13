@@ -2,4 +2,4 @@
   .form-inputs
     .form-group
       .controls
-        = text_area_tag :response, "", class: 'form-control'
+        = text_field_tag :response, "", class: 'form-control', placeholder: @survey_question.placeholder_text
