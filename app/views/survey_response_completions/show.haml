@@ -30,6 +30,11 @@
               .col-xs-6
                 = form.input :user_password, label: 'Password', value: ''
 
-          = form.submit 'View Gift recommendations', class: 'btn btn-primary btn-full-width'     
+          = form.submit 'View Gift recommendations', class: 'btn btn-primary btn-full-width'
+
+
+= content_for :page_js do
+  :javascript
+    new App.PasswordRevealer() 
 
 
