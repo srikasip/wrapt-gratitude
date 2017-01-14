@@ -10,6 +10,7 @@
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
     = render 'layouts/favicons'
   %body
+    -# svg include needs to be first thing in body tag
     = svg 'symbol-defs'
     -# responsive is disabled so use .col-xs-* everywhere for bs columns
     .wrapper--full-bleed__bg-03.pb6

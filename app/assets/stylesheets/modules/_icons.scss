@@ -6,7 +6,7 @@
   stroke: currentColor;
   fill: currentColor;
 }
-.navbar-static-top--icon-circle {
+.navbar-static-top__icon-circle {
   display: inline-block;
   width: 12px;
   height: 12px;
@@ -14,8 +14,8 @@
   stroke-width: 20px;
   stroke: $blue-001;
 }
-a:hover .navbar-static-top--icon-circle,
-a:active .navbar-static-top--icon-circle {
+a:hover .navbar-static-top__icon-circle,
+a:active .navbar-static-top__icon-circle {
   display: inline-block;
   width: 12px;
   height: 12px;
@@ -23,11 +23,17 @@ a:active .navbar-static-top--icon-circle {
   stroke-width: 20px;
   stroke: $blue-001;
 }
-.sqr-section-icon--heart {
+.sqr-section-icon__heart {
   margin-top: 8px;
   stroke: $tan-002;
   stroke-width: 2px;
   fill: none;
   width: 33px;
   height: 28px;
+}
+#wrapt-logo .cls-1 {
+  fill: $blue-001;
+}
+.navbar-brand__icon-wrapt-logo {
+  height: 40px;
 }
