@@ -92,8 +92,8 @@
   font-size: 11px;
   min-width: 80px;
 }
-.landing-question .btn.btn-multiple-choice-option {
-  @extend .mb1;
+.landing-question .btn.btn-multiple-choice-option,
+.landing-question .btn.btn-multiple-choice-option:nth-child(5) {
   margin-right: 10px;
   padding-left: 18px;
   padding-right: 18px;
@@ -108,6 +108,11 @@
   min-width: 158px;
   padding-left: 10px;
   padding-right: 10px;
+  margin-right: 5px;
+  margin-bottom: 16px;
+}
+.btn.btn-multiple-choice-option:last-child {
+  margin-right: 0;
 }
 .btn.btn-multiple-choice-option,
 .btn.btn-yes-no {

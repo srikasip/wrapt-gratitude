@@ -36,6 +36,7 @@ a:active .navbar-static-top__icon-circle {
 }
 .navbar-brand__icon-wrapt-logo {
   height: 40px;
+  width: 90px;
 }
 .btn__icon-caret-right {
   width: 14px;
@@ -43,4 +44,9 @@ a:active .navbar-static-top__icon-circle {
   vertical-align: middle;
   margin-left: 28px;
   margin-top: -2px;
+}
+.sqr-previous__icon--caret-left {
+  width: 14px;
+  height: 14px;
+  fill: $blue-005;
 }

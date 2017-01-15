@@ -1,5 +1,5 @@
 .sqr-container {
-  width: 80%;
+  width: 945px;
   margin: 0 auto;
 }
 
@@ -27,6 +27,7 @@
   margin-top: -50px;
   margin-left: -40px;
   display: table;
+  // has transition in transitions_animations
 }
 
 .sqr-previous__icon {
@@ -34,23 +35,26 @@
   vertical-align: middle;
   text-align: center;
 }
-
 .sqr-previous__sudo-link {
   position: absolute;
   width: 100px;
   height: 100%;
   border-radius: 50%;
-  background-color: rgba($blue-001, 0.1);
+  background-color: rgba($blue-005, 0.1);
   z-index: -1;
   top: 0px;
   left: 0px;
 }
-
 .sqr-previous__link:hover {
   width: 50px;
   margin-left: -50px;
   background-color: transparent;
-  height: 105px;
+  height: 118px;
+  margin-top: -59px;
+}
+.sqr-previous__link:hover .sqr-previous__sudo-link {
+  background-color: rgba($blue-005, 0.25);
+  width: 118px;
 }
 
 .sqr-form label {

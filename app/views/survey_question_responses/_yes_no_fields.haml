@@ -2,8 +2,9 @@
 %label= label
 - @question_response.survey_question.options.in_groups_of(5, false).each do |option_row|
   .row.option-row
-    - option_row.each do |option|
-      = link_to option.text, '#', class: 'btn btn-default btn-yes-no', data: {behavior: 'option-button', option_id: option.id}
+    .col-xs-12
+      - option_row.each do |option|
+        = link_to option.text, '#', class: 'btn btn-default btn-yes-no', data: {behavior: 'option-button', option_id: option.id}
 
 - content_for :page_js do
   :javascript
