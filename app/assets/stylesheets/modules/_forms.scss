@@ -5,6 +5,16 @@ label {
   margin-bottom: 0;
 }
 .help-block,
+.lost-password-container {
+  font-size: rem(14);
+  line-height: 1.1;
+  margin-bottom: 0;
+  margin-top: 10px;
+  letter-spacing: 1;
+}
+.lost-password-container {
+  margin-top: -28px;
+}
 .hint {
   font-size: rem(12);
   line-height: 1.1;
@@ -29,6 +39,9 @@ label {
 .help-block--error {
   border-color: $red-001;
   color: $red-001;
+}
+.form-group.user_session_remember {
+  margin-bottom: 10px;
 }
 .input-wrapper {
   position: relative;
