@@ -1,14 +1,13 @@
 .container
   .row
     .col-xs-10.col-xs-offset-1
-      %h2 Welcome to the Public Site.  
-      %p.lead We'll add more content soon :)
-
-      %p
-        = link_to 'Style Guide', main_style_guide_path
+      %h2 Welcome.  
+      %p.lead This will eventually be the Wrapt landing page. 
+      %p For now, it is only viewable for people who have the general access information.
       - if current_user
+        %p In MVP1a, when we invite people for testing, they will be taken to a special landing page.
         %p
-          = link_to 'Start a New Quiz', new_profile_path
+          = link_to 'Tester Landing Page: Start a New Quiz', new_profile_path
 
 - if params[:password_reset_token]
   - content_for :page_js do

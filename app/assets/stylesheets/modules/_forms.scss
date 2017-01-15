@@ -4,13 +4,17 @@ label {
   line-height: 1.1;
   margin-bottom: 0;
 }
-.help-block {
-  @include akkurat-mono;
-  font-size: rem(13);
-  line-height: 1.538461538;
+.help-block,
+.hint {
+  font-size: rem(12);
+  line-height: 1.1;
   margin-bottom: 0;
   margin-top: 0;
-  color: $gray-008;
+  color: $gray-006;
+  letter-spacing: 1.07px;
+}
+.hint {
+  margin-bottom: 10px;
 }
 .form-control {
   margin-top: 4px;
