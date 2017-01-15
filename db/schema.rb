@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170111181547) do
+ActiveRecord::Schema.define(version: 20170113163420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -261,6 +261,7 @@ ActiveRecord::Schema.define(version: 20170111181547) do
     t.integer  "conditional_question_id"
     t.integer  "survey_section_id"
     t.boolean  "yes_no_display",            default: false, null: false
+    t.text     "placeholder_text"
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
     t.index ["survey_section_id"], name: "index_survey_questions_on_survey_section_id", using: :btree
   end

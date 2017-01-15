@@ -20,4 +20,6 @@
 - content_for :page_js do
   - if @question_response.survey_question.multiple_option_responses
     :javascript
-      new App.MultipleChoiceChooseManyForm()
+      new App.MultipleChoiceForm({
+        multipleOptionResponses: #{@question_response.survey_question.use_multiple_response_form?.to_json}
+      })

@@ -77,6 +77,7 @@ module Admin
           :conditional_question_id,
           :survey_section_id,
           :yes_no_display,
+          :placeholder_text,
           conditional_question_option_option_ids: []
         )
       if result[:conditional_display] == "0"

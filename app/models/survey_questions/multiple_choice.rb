@@ -17,6 +17,10 @@ module SurveyQuestions
         end
       end
     end
+
+    def use_multiple_response_form?
+      multiple_option_responses && !yes_no_display
+    end
     
 
   end
