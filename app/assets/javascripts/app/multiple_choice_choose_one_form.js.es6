@@ -32,11 +32,14 @@ App.MultipleChoiceChooseOneForm = class MultipleChoiceChooseOneForm {
 
   setNextButtonInitialVisibility() {
     const nextButton = $('[data-behavior~=next-question-button]')[0]
+    const nextHint = $('#js-next-question-hint-text')
     const selected_option_id = this.hidden_input_element.getAttribute('value')
     if (selected_option_id) {
       $(nextButton).show();
+      $(nextHint).show();
     } else {
       $(nextButton).hide();
+      $(nextHint).hide();
     }
 
   }

@@ -24,6 +24,8 @@
             .sqr-submit__container.pr3.text-right 
               %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}
                 = question_response_next_button_text.html_safe
+              .sqr-submit__keyboard-hint#js-next-question-hint-text
+                Or Hit Enter to Continue
 
         = survey_sections_progress_bar(@survey_response)
         

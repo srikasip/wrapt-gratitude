@@ -56,10 +56,8 @@
           p.small
       %p
         Whether you're shopping for a birthday, an anniversary, or something just to say “I'm thinking of you,” Wrapt is more about people than purchases; more about love than luxury—creating communities bound by shared experiences and celebration.
-      %h5
+      %h4
         List &#8212; Unordered
-        %code
-          Heading 5
       %ul
         %li More about people than purchases
         %li More about love than luxury
@@ -69,7 +67,7 @@
             %li More about people than purchases
             %li More about love than luxury
             %li Creating communities bound by shared experiences and celebration
-      %h5
+      %h4
         List &#8212; Ordered
       %ol
         %li More about people than purchases
@@ -80,6 +78,12 @@
             %li More about people than purchases
             %li More about love than luxury
             %li Creating communities bound by shared experiences and celebration
+      %h5
+        Special Purpose Heading
+        %code
+          Heading 5
+      %p
+        Heading 5 has a large margin-bottom. So far we do not have examples of where this is used.
       .well.col-xs-8.col-xs-offset-2
         .row
           .col-xs-6
@@ -90,48 +94,35 @@
             %p
               h1 
               %br
-              44px/54px (1.75), mb: 60px 
+              40px/49 (1.23), mb: 16px 
               %br
-              light
-            %p 
-              h1.page-title
-              %br
-              36px/46px (1.28), mb: 52px
-              %br
-              light
+              light, letter-spacing 1px
             %p 
               h2
               %br
-              33px/44px (1.33), mb: 14px
+              32px/39 (1.23), mb: 24px
               %br
-              light
+              light, letter-spacing 1px
             %p 
               h3
               %br
-              28px/30px (1.07), mb: 14px
+              28px/30 (1.07), mb: 24px
               %br
-              light
+              light, letter-spacing 1px
           .col-xs-6
             %p 
               h4
               %br
-              18px/26px (1.44), mb: 34px 
+              24px/26.4 (1.1), mb: 16px 
               %br
-              bold
-          
-            %p 
-              h4.mono
-              %br
-              18px/26px (1.44), mb: 34px 
-              %br
-              mono
+              light
           
             %p 
               h5
               %br
-              14px/17px (1.21), mb: 14px 
+              18px/19.8 (1.1), mb: 32px 
               %br
-              bold
+              regular, uppercase
             %p 
               p
               %br
@@ -367,9 +358,9 @@
         %br
         %code .btn-default
       .ma1.pull-left
-        .btn.btn-dark Dark
+        .btn.btn-secondary Secondary
         %br
-        %code .btn-dark
+        %code .btn-secondary
       .ma1.pull-left
         %input{type:"submit", class: "btn disabled", value: "Disabled"}
         %br
@@ -377,10 +368,6 @@
   .row.mb1
     .col-xs-10.col-xs-offset-1
       %h5 Button Sizes
-      .ma1.pull-left
-        .btn.btn-lg.btn-default Large
-        %br
-        %code .btn.btn-lg
       .ma1.pull-left
         .btn.btn-default Default
         %br
@@ -405,7 +392,7 @@
       %h2 Forms
       %p Forms are usually presented in 8 columns, with a full-width submit button.
       .mh3
-        %h1.page-title.text-center
+        %h1.text-center
           Great Job! We’ve got all the information we need to make gift recommendations for Melissa
     .col-xs-8.col-xs-offset-2
       %h4 Invite Melissa
