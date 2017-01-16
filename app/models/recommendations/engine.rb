@@ -10,25 +10,39 @@ module Recommendations
     attr_reader :training_set, :response
 
     NEGATIVE_RANK_PENALTY = 2
-    QUESTION_WEIGHT_BASE = 4
+    QUESTION_WEIGHT_BASE = 10
 
-    def initialize training_set, response
+    def initialize training_set
       @training_set = training_set
-      @response = response
-      if training_set.survey_id != response.survey_id
+    end
+    
+    def response=(new_response)
+      @response = new_response
+      if training_set.survey_id != @response.survey_id
         raise SurveyMismatchError
       end
+      @_question_responses_by_question = nil
+      @response
     end
 
     def generate_recommendations!
+      recommendations = []
       gifts.each do |gift|
         gift_rank = 0
         questions_by_gift[gift].each do |question|
           gift_rank += calculate_question_rank(gift, question)
         end
-        # TODO accomodate front-end responses
-        EvaluationRecommendation.create survey_response: response, gift: gift, training_set_evaluation: training_set.evaluation, score: gift_rank
+        if gift_rank > 0.0
+          # TODO accomodate front-end responses
+          recommendations << EvaluationRecommendation.new(survey_response: response, gift: gift, training_set_evaluation: training_set.evaluation, score: gift_rank)
+        end        
       end
+      recommendations.sort!{|a, b| b <=> a}
+      recommendations = recommendations.take(10)
+      
+      recommendations.map(&:save)
+      
+      recommendations
     end
 
     def calculate_question_rank gift, question
@@ -65,19 +79,20 @@ module Recommendations
     end
 
     private def gifts
-      Gift.where id: training_set.gift_question_impacts.select(:gift_id)
+      @_gifts ||= Gift.where id: training_set.gift_question_impacts.select(:gift_id)
     end
 
     private def questions_by_gift
-      training_set.gift_question_impacts.preload(:gift, :survey_question).to_a.reduce(Hash.new()) do |result, gift_question|
-        result[gift_question.gift] ||= []
-        result[gift_question.gift] << gift_question.survey_question
-        result
+      @_questions_by_gift ||= {}.tap do |result|
+        training_set.gift_question_impacts.preload(:gift, :survey_question).each do |gift_question|
+          result[gift_question.gift] ||= []
+          result[gift_question.gift] << gift_question.survey_question
+        end
       end
     end
     
     def gift_question_impacts_by_gift_and_question
-      @gift_question_impacts_by_gift_and_question ||= {}.tap do |result|
+      @_gift_question_impacts_by_gift_and_question ||= {}.tap do |result|
         training_set.gift_question_impacts.preload(:gift, :survey_question, :response_impacts).each do |gift_question|
           gift = gift_question.gift
           question = gift_question.survey_question

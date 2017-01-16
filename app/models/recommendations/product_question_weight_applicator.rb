@@ -10,7 +10,7 @@ module Recommendations
     end
 
     def modified_rank
-      question_rank * (4 ** question_weight)
+      question_rank * (10 ** question_weight)
     end
 
   end

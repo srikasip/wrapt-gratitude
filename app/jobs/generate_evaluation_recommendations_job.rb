@@ -3,10 +3,13 @@ class GenerateEvaluationRecommendationsJob < ApplicationJob
 
   def perform training_set_evaluation
     training_set_evaluation.recommendations.destroy_all
+    
+    engine = Recommendations::Engine.new(training_set_evaluation.training_set)
 
     training_set_evaluation.profile_sets.preload(:survey_responses).each do |profile_set|
       profile_set.survey_responses.each do |response|
-        Recommendations::Engine.new(training_set_evaluation.training_set, response).generate_recommendations!
+        engine.response = response
+        engine.generate_recommendations!
       end
     end
 
