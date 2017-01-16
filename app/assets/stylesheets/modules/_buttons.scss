@@ -1,7 +1,6 @@
 .btn {
   line-height: 1;
-  border: 2px solid $blue-001;
-  min-width: 112px;
+  min-width: 180px;
 }
 .btn:focus, 
 .btn.focus, 
@@ -18,53 +17,65 @@
 }
 .btn-default:hover,
 .btn-default:focus {
-  background-color: #fff;
-  border-color: $blue-001;
+  background-color: $gray-011;
+  border-color: $blue-006;
 }
+.btn-default:active,
 .btn-default:active:hover, 
 .btn-default:active:focus, 
 .btn-default:active.focus, 
 .btn-default.active:hover, 
 .btn-default.active:focus, 
 .btn-default.active.focus {
-  background-color: $gray-001;
-  border-color: $blue-001;
+  background-color: $blue-007;
+  border-color: $blue-006;
 }
-
 .btn-primary:active:hover, 
 .btn-primary:active:focus, 
 .btn-primary:active.focus, 
 .btn-primary.active:hover, 
 .btn-primary.active:focus, 
 .btn-primary.active.focus {
-  background-color: $blue-004;
-  border-color: $blue-004;
+  background-color: $blue-008;
+  border-color: $blue-008;
 }
+.btn-primary:focus,
 .btn-primary:active,
 .btn-primary.active {
-  background-color: $blue-004;
-  border-color: $blue-004;
+  background-color: $blue-008;
+  border-color: $blue-008;
   box-shadow: none;
+}
+.btn.disabled {
+  background-color: $gray-003;
+  border-color: $gray-003;
 }
 .btn.disabled:hover,
 .btn.disabled:focus {
   box-shadow: none;
 }
-.btn-dark,
-.btn-dark:hover,
-.btn-dark:focus {
-  background-color: $gray-010;
-  border-color: $gray-010;
-  color: #fff;
+.btn-secondary {
+  background-color: $orange-001;
+  border-color: $orange-001;
 }
-.btn-dark:active:hover, 
-.btn-dark:active:focus, 
-.btn-dark:active.focus, 
-.btn-dark.active:hover, 
-.btn-dark.active:focus, 
-.btn-dark.active.focus {
-  background-color: $gray-008;
-  border-color: $gray-008;
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background-color: tint($orange-001, 20);
+  border-color: tint($orange-001, 20);
+}
+.btn-secondary.active,
+.btn-secondary.active {
+  background-color: $orange-002;
+  border-color: $orange-002;
+}
+.btn-secondary:active:hover, 
+.btn-secondary:active:focus, 
+.btn-secondary:active.focus, 
+.btn-secondary.active:hover, 
+.btn-secondary.active:focus, 
+.btn-secondary.active.focus {
+  background-color: $orange-002;
+  border-color: $orange-002;
   color: #fff;
 }
 .btn-full-width {
@@ -78,10 +89,59 @@
 }
 .btn-xs, 
 .btn-group-xs > .btn {
-  font-size: 10px;
-  min-width: 60px;
+  font-size: 11px;
+  min-width: 80px;
 }
-.landing-question .btn {
-  @extend .mb1;
-  @extend .mh1;
+.landing-question .btn.btn-multiple-choice-option,
+.landing-question .btn.btn-multiple-choice-option:nth-child(5) {
+  margin-right: 10px;
+  padding-left: 18px;
+  padding-right: 18px;
+  min-width: initial;
+}
+.btn.btn-yes-no {
+  width: 90px;
+  min-width: initial;
+  padding-left: 0;
+  padding-right: 0;
+  display: block;
+  float: left;
+}
+.btn.btn-yes-no:last-child {
+  border-left: none;
+}
+.btn.btn-multiple-choice-option {
+  min-width: 158px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-right: 15px;
+  margin-bottom: 16px;
+}
+.btn.btn-multiple-choice-option:last-child {
+  margin-right: 0;
+}
+.btn.btn-multiple-choice-option,
+.btn.btn-yes-no {
+  background-color: #fff;
+  border: 1px solid $gray-005;
+}
+.btn.btn-multiple-choice-option:hover,
+.btn.btn-yes-no:hover,
+.btn.btn-multiple-choice-option.selected:hover, 
+.btn.btn-yes-no.selected:hover {
+  background-color: rgba(242, 226, 170, .60);
+}
+.btn.btn-multiple-choice-option.selected,
+.btn.btn-yes-no.selected {
+  background-color: rgba(242, 226, 170, .70);
+}
+.sqr-submit__btn {
+  width: 162px;
+  min-width: initial;
+  text-transform: uppercase;
+  @include akkurat-bold;
+  font-size: rem(14);
+  letter-spacing: 2.1px;
+  padding-left: initial;
+  padding-right: initial;
 }

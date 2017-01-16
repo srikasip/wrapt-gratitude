@@ -10,11 +10,11 @@ class SurveySection < ApplicationRecord
   end
 
   def introduction_heading_with_profile_relationship profile
-    introduction_heading&.gsub /<relationship>/i, profile.relationship
+    introduction_heading&.gsub /<relationship>/i, profile.relationship.downcase
   end
 
   def introduction_text_with_profile_relationship profile
-    introduction_text&.gsub /<relationship>/i, profile.relationship
+    introduction_text&.gsub /<relationship>/i, profile.relationship.downcase
   end
 
 

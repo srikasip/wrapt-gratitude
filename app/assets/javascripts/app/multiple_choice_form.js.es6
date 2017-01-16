@@ -53,10 +53,13 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
   setNextButtonVisibility() {
     const nextButton = $(this.form_element).find('[data-behavior~=next-question-button]')[0]
     const selected_option_inputs_selector = this.hidden_inputs_selector.filter(':checked')
+    const nextHint = $('#js-next-question-hint-text')
     if (selected_option_inputs_selector.length > 0) {
       $(nextButton).show();
+      $(nextHint).show();
     } else {
       $(nextButton).hide();
+      $(nextHint).hide();
     }
   }
 
