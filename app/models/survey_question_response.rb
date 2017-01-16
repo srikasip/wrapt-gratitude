@@ -19,32 +19,17 @@ class SurveyQuestionResponse < ApplicationRecord
   end
 
   def next_response
-    # step = 1
     last_question_index = survey_response.ordered_question_responses.to_a.size - 1
     this_index = survey_response.ordered_question_responses.to_a.index {|response| response.id == id}
     if this_index
-      # next_question = survey_response.ordered_question_responses[this_index + step]
-      # if next_question.present?
-      #   while !next_question.conditions_met?
-      #     step += 1
-      #     if this_index + step > last_question_index
-      #       next_question = nil
-      #       break
-      #     else
-      #       next_question = survey_response.ordered_question_responses[this_index + step]
-      #     end
-      #   end
-      # end
-      next_question = find_next_or_prev_with_conditions_met(:next, this_index, last_question_index)
+      find_next_or_prev_with_conditions_met(:next, this_index, last_question_index)
     end
-    next_question
   end
 
   def previous_response
     this_index = survey_response.ordered_question_responses.to_a.index {|response| response.id == id}
     if this_index&.> 0
-      # survey_response.ordered_question_responses[this_index - 1]
-      prev_question = find_next_or_prev_with_conditions_met(:prev, this_index, 0)
+      find_next_or_prev_with_conditions_met(:prev, this_index, 0)
     end
   end
 
@@ -82,8 +67,10 @@ class SurveyQuestionResponse < ApplicationRecord
           first
         if conditional_question_response.present?
           conditional_question_response_option_ids = conditional_question_response.survey_question_response_options.map(&:survey_question_option_id)
-          required_response_option_ids = survey_question.conditional_question_options.map(&:survey_question_option_id)
-          met = (conditional_question_response_option_ids & required_response_option_ids).size == required_response_option_ids.size
+          if conditional_question_response_option_ids.present?
+            required_response_option_ids = survey_question.conditional_question_options.map(&:survey_question_option_id)
+            met = (conditional_question_response_option_ids & required_response_option_ids).size == required_response_option_ids.size
+          end
         end
       end
     end

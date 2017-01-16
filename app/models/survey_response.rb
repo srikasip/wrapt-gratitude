@@ -26,6 +26,8 @@ class SurveyResponse < ApplicationRecord
     return result.compact
   end
 
+  # hash of questions grouped by section
+  # conditional questions included if conditions are met
   def question_responses_grouped_by_section
     results = {}
     survey.sections.includes(:questions).each do |section|
@@ -33,7 +35,10 @@ class SurveyResponse < ApplicationRecord
       if questions.present?
         results[section] = []
         questions.each do |question|
-          results[section] << question_responses.detect {|question_response| question_response.survey_question_id == question.id}
+          question_response = question_responses.where(survey_question_id: question.id).first
+          if question_response.present? && question_response.conditions_met?
+            results[section] << question_response
+          end
         end
       end
     end
