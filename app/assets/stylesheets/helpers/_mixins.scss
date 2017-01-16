@@ -73,3 +73,12 @@
   }
   @return ($pxval / $base) * 1rem;
 }
+// bourbon.io
+/// Mixes a color with white.
+/// @param {Color} $color
+/// @param {Number (Percentage)} $percent
+///   The amount of white to be mixed in.
+
+@function tint($color, $percent) {
+  @return mix(#fff, $color, $percent);
+}

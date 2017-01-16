@@ -3,7 +3,8 @@
     .navbar-header
     .collapse.navbar-collapse
       %ul.nav.navbar-nav
-        %li{class: ("active" if active_top_nav_section == 'home_pages')}= link_to "Wrapt", root_path
+        %li{class: ("active" if active_top_nav_section == 'home_pages')}
+          = link_to "Wrapt Home", root_path
         %li.divider-vertical
         %li{class: ("active" if active_top_nav_section == 'gifts')}= link_to "Gifts", admin_gifts_path
         %li{class: ("active" if active_top_nav_section == 'products')}= link_to "Products", admin_products_path
@@ -16,13 +17,6 @@
         %li{class: ("active" if active_top_nav_section == 'training_sets')}= link_to "Gift Training Sets", admin_training_sets_path
         %li{class: ("active" if active_top_nav_section == 'trait_training_sets')}= link_to "Profile Trait Training Sets", admin_trait_training_sets_path
         %li.divider-vertical
-        %li{class: ("active" if active_top_nav_section == 'users')}= link_to "Users", admin_users_path
-      %ul.nav.navbar-nav.pull-right
-        - if current_user&.admin?
-          %li= link_to "Admin", admin_root_path
-        - if current_user
-          %li= link_to "Sign Out", user_session_path, method: :delete
-        - else
-          %li= link_to 'Sign In', new_user_session_path
+        %li{class: ("active" if active_top_nav_section == 'users')}= link_to "Manage Users", admin_users_path
         
 

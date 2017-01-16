@@ -1,4 +1,4 @@
-%li.edit-question-list__item.question-list__item.mb4{data: {option_row: true, sortable_item: true, sortable_item_id: option.id}, class: option_item_classes(option)}
+%li.edit-question-list__item.question-list__item.mb1{data: {option_row: true, sortable_item: true, sortable_item_id: option.id}, class: option_item_classes(option)}
   %i.glyphicon.glyphicon-move
   = option.text
   = link_to edit_admin_survey_question_option_path(@survey, @survey_question, option), data: {remote: true, edit_option_link: option.id} do

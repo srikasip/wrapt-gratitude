@@ -13,16 +13,19 @@
               = question_number_of_total(@question_response, @survey_response)
 
           - if @question_response.previous_response
-            = link_to profile_survey_question_path(@profile, @survey_response, @question_response.previous_response), class: 'sqr-previous__link' do
+            = link_to with_invitation_scope(profile_survey_question_path(@profile, @survey_response, @question_response.previous_response)), class: 'sqr-previous__link' do
               .sqr-previous__icon
-                %span.glyphicon.glyphicon-menu-left
+                =embedded_svg('icon-caret-left', class: "sqr-previous__icon--caret-left")
               .sqr-previous__sudo-link
 
-          = simple_form_for @question_response, url: profile_survey_question_path(@profile, @survey_response, @question_response), html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
+          = simple_form_for @question_response, url: with_invitation_scope(profile_survey_question_path(@profile, @survey_response, @question_response)), html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
 
             = render response_fields_partial, form: form, label: @question_response.survey_question.prompt_with_name(@survey_response)
-            .sqr-submit__container.pr3.text-right
-              = form.submit question_response_next_button_text, class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}
+            .sqr-submit__container.text-right#js-sqr-submit__container
+              %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}
+                = question_response_next_button_text.html_safe
+              .sqr-submit__keyboard-hint#js-next-question-hint-text
+                Or Hit Enter to Continue
 
         = survey_sections_progress_bar(@survey_response)
         

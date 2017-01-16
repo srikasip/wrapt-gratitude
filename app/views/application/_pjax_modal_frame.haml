@@ -3,7 +3,7 @@
     .modal-content(data-pjax-modal-container)
       .modal-header
         %button.close.pull-right(aria-label="Close" pjax-modal-close type="button")
-          %span.icon-cross(aria-hidden="true")
+          =embedded_svg('icon-close', class: 'modal__icon-close')
         %h4.modal-title(data-pjax-modal-title)
       .modal-body.clearfix
         %div(data-pjax-modal-loading)

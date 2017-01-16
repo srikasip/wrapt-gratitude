@@ -1,8 +1,9 @@
-App.MultipleChoiceChooseManyForm = class MultipleChoiceChooseManyForm {
-  constructor() {
+App.MultipleChoiceForm = class MultipleChoiceForm {
+  constructor(options = {}) {
     this.form_element = $('[data-behavior~=question-response-form]')[0];
     this.hidden_inputs_selector = $(this.form_element).find('[data-behavior~=option-id-input]');
     this.buttons_selector = $(this.form_element).find('[data-behavior~=option-button]')
+    this.multipleOptionResponses = options.multipleOptionResponses;
     this.handleButtonClick();
     this.updateDisplay();
   }
@@ -18,11 +19,26 @@ App.MultipleChoiceChooseManyForm = class MultipleChoiceChooseManyForm {
       evt.preventDefault();
       const clicked_button = evt.currentTarget
       const option_id = clicked_button.getAttribute('data-option-id');
-      const hidden_input_selector = this.hidden_inputs_selector.filter(`[value=${option_id}]`)
-      hidden_input_selector.prop('checked', !hidden_input_selector.prop('checked'))
+      this.toggleOption(option_id);
+      if (!this.multipleOptionResponses) {
+        this.unselectOtherOptionsIfOptionSelected(option_id)
+      }
       this.updateDisplay();
       this.showOptionExplanation(option_id);
     })
+  }
+
+  toggleOption(option_id) {
+    const hidden_input_selector = this.hidden_inputs_selector.filter(`[value=${option_id}]`)
+    hidden_input_selector.prop('checked', !hidden_input_selector.prop('checked'))
+  }
+
+  unselectOtherOptionsIfOptionSelected(option_id) {
+    const option_input_selector = this.hidden_inputs_selector.filter(`[value=${option_id}]`)
+    if (option_input_selector.is(':checked')) {
+      this.hidden_inputs_selector.prop('checked', false)
+      option_input_selector.prop('checked', true)
+    }
   }
 
   highlightSelectedButtons() {
@@ -37,10 +53,13 @@ App.MultipleChoiceChooseManyForm = class MultipleChoiceChooseManyForm {
   setNextButtonVisibility() {
     const nextButton = $(this.form_element).find('[data-behavior~=next-question-button]')[0]
     const selected_option_inputs_selector = this.hidden_inputs_selector.filter(':checked')
+    const nextHint = $('#js-next-question-hint-text')
     if (selected_option_inputs_selector.length > 0) {
       $(nextButton).show();
+      $(nextHint).show();
     } else {
       $(nextButton).hide();
+      $(nextHint).hide();
     }
   }
 

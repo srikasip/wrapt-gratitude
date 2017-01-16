@@ -12,16 +12,14 @@ module SurveyQuestionResponsesHelper
   def multiple_choice_fields_partial
     if @question_response.survey_question.yes_no_display?
       'yes_no_fields'
-    elsif @question_response.survey_question.multiple_option_responses
-      'multiple_choice_choose_many_fields'
     else
-      'multiple_choice_choose_one_fields'
+      'multiple_choice_fields'
     end
   end
 
   def question_response_next_button_text
     if @question_response.next_response
-      'Next'
+      "Next <svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
     else
       'Complete Quiz'
     end
@@ -52,7 +50,7 @@ module SurveyQuestionResponsesHelper
 
   def survey_section_icon
     content_tag :div, class: 'sqr-section-icon__outer' do
-      concat content_tag :div, embedded_svg('icon-wrapt-heart', class: 'sqr-section-icon sqr-section-icon--heart'), class: 'sqr-section-icon__inner'
+      concat content_tag :div, embedded_svg('icon-wrapt-heart', class: 'sqr-section-icon sqr-section-icon__heart'), class: 'sqr-section-icon__inner'
     end
   end
 

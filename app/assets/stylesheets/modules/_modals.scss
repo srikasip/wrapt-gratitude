@@ -1,0 +1,26 @@
+.modal-content {
+  @include shadowed-box__05;
+  border: 0;
+}
+.modal-backdrop.in {
+  opacity: .3;
+}
+.modal-header {
+  border-bottom: 0;
+}
+.modal h1 {
+  text-transform: uppercase;
+  font-size: rem(18);
+  text-align: center;
+  @include akkurat-bold;
+}
+.modal p.lead {
+  font-size: rem(16);
+  text-align: center;
+}
+.modal .center-block {
+  width: 75%;
+}
+.modal .alert {
+  width: 90%;
+}
