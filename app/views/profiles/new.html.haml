@@ -9,7 +9,7 @@
   .row
     .col-xs-8.col-xs-offset-2
       .landing-question
-        = simple_form_for @profile do |form|
+        = simple_form_for @profile, url: with_invitation_scope(profiles_path) do |form|
           = form.submit 'Wife', class: 'btn btn-multiple-choice-option'
           = form.submit 'Girlfriend', class: 'btn btn-multiple-choice-option'
           = form.submit 'Mother', class: 'btn btn-multiple-choice-option'

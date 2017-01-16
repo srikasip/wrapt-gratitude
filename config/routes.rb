@@ -6,13 +6,16 @@ Rails.application.routes.draw do
   # Survey responses
   # for MVP1A they can be accessed via notification link or logged in user
   ##########################
-  resources :profiles, only: [:new, :create] do
-    resources :surveys, only: :show, controller: 'survey_responses' do
-      resources :questions, only: [:show, :update], controller: 'survey_question_responses'
-      resource :completion, only: [:show, :create], controller: 'survey_response_completions'
+  concern :profile_builder do
+    resources :profiles, only: [:new, :create] do
+      resources :surveys, only: :show, controller: 'survey_responses' do
+        resources :questions, only: [:show, :update], controller: 'survey_question_responses'
+        resource :completion, only: [:show, :create], controller: 'survey_response_completions'
+      end
     end
   end
-  resources :invitations, only: :show
+  concerns :profile_builder
+  resources :invitations, only: :show, concerns: :profile_builder
   #####################################################
 
   ##################################
