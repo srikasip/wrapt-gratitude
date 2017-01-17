@@ -3,8 +3,8 @@ module Admin
 
     def fields_partial_for_question_type
       case @trait_training_set_question.question
-      when SurveyQuestions::MultipleChoice then 'admin/trait_training_set_response_impacts/multiple_choice_fields'
-      when SurveyQuestions::Range then 'admin/trait_training_set_response_impacts/range_fields'
+      when ::SurveyQuestions::MultipleChoice then 'admin/trait_training_set_response_impacts/multiple_choice_fields'
+      when ::SurveyQuestions::Range then 'admin/trait_training_set_response_impacts/range_fields'
       end
     end
 

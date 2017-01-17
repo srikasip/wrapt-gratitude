@@ -8,6 +8,8 @@
     %link{href: '//fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans:400,600|Raleway:400,600', rel: 'stylesheet', type: 'text/css'}
     = javascript_include_tag 'admin', 'data-turbolinks-track': 'reload'
   %body
+    -# svg include needs to be first thing in body tag
+    = svg 'symbol-defs'
     - if show_top_nav?
       = render 'layouts/admin/top_nav'
     
@@ -22,7 +24,7 @@
     %footer
       .container-fluid
         .row(style="text-align: center;")
-          = link_to image_tag('icons/logo-full-size.png', height: 150), root_path
+          =embedded_svg('wrapt-logo', class: "footer__icon-wrapt-logo")
 
     = render 'pjax_modal_frame'
     = yield :page_js

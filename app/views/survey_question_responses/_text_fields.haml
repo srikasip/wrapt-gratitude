@@ -1,0 +1,5 @@
+= form.input :text_response, as: :string, label: label, placeholder: @question_response.survey_question.placeholder_text, input_html: {data: {behavior: 'text-response'}}
+
+- content_for :page_js do
+  :javascript
+    new App.TextResponseForm()

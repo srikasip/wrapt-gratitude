@@ -1,0 +1,5 @@
+- question = @question_response.survey_question
+- min_label = question.min_label
+- max_label = question.max_label
+
+= form.input :range_response, as: :wrapt_range, label: label, input_html: {min: '-1', max: '1', step: '0.01', data: {behavior: 'range-response'}}, labels: {min_label: min_label, max_label: max_label}

@@ -1,13 +1,19 @@
-.navbar-nav {
-  @include akkurat-mono;
+.navbar-nav li {
+  font-size: rem(12);
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
 }
-.navbar-brand a {
-  background: image-url('icons/logo.svg') no-repeat;
-  display: block;
+.navbar-static-top {
+  border-width: 0;
+}
+.navbar-brand span {
+  display: inline-block;
   text-indent: -9999px;
-  width: 82px;
-  height: 37px;
-  background-size: 82px 37px;
+}
+.navbar-brand a:hover,
+.navbar-brand a:active {
+  text-decoration: none;
+  background-color: transparent;
 }
 .nav li {
   margin-bottom: 0;

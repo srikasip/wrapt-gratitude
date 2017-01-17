@@ -1,0 +1,11 @@
+- section_groups.each_with_index do |sg, index|
+  - container_class = index == 0 ? 'sqr-sections__left' : 'sqr-sections__right'
+  %div{class: container_class}
+    - sg.each do |section|
+      - section_class = display == :labels ? 'sqr-section__label' : 'sqr-section'
+      %div{class: section_class, style: "width: #{section[:section_width]}%"}
+        - if display == :progress
+          .sqr-section__progress{style: "width: #{section[:progress_width]}%"}
+        - else
+          .small= section[:section_name]
+

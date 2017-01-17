@@ -6,6 +6,54 @@
   stroke: currentColor;
   fill: currentColor;
 }
-.svg-icon-heart {
-  width: 1.1669921875em;
+.navbar-static-top__icon-circle {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke-width: 20px;
+  stroke: $blue-001;
 }
+a:hover .navbar-static-top__icon-circle,
+a:active .navbar-static-top__icon-circle {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  fill: $blue-001;
+  stroke-width: 20px;
+  stroke: $blue-001;
+}
+.sqr-section-icon__heart {
+  margin-top: 8px;
+  stroke: $tan-002;
+  stroke-width: 2px;
+  fill: none;
+  width: 33px;
+  height: 28px;
+}
+#wrapt-logo .cls-1 {
+  fill: $blue-001;
+}
+.navbar-brand__icon-wrapt-logo {
+  height: 40px;
+  width: 90px;
+}
+.btn__icon-caret-right {
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+  margin-left: 28px;
+  margin-top: -2px;
+}
+.sqr-previous__icon--caret-left {
+  width: 14px;
+  height: 14px;
+  fill: $blue-005;
+}
+.modal__icon-close {
+  width: 22px;
+  height: 22px;
+}
+// #icon-close .st0 {
+//   fill: $gray-010;
+// }

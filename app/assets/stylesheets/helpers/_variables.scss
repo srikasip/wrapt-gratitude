@@ -5,29 +5,37 @@ $bootstrap-sass-asset-helper: false !default;
 
 
 //== Colors
-$gray-001: rgb(244, 246, 246); // #f4f6f6 lightest
-$gray-002: rgb(233, 236, 236); // #e9ecec
-$gray-003: rgb(149, 152, 159); // #95989f
-$gray-005: rgb(128, 129, 132); // #808184 help text
-$gray-007: rgb(109, 110, 112); // #6d6e70
+$gray-001: rgb(248, 249, 251); // #F8F9FB
+$gray-002: rgb(244, 246, 246); // #f4f6f6 lightest
+$gray-003: rgb(236, 236, 236); // #E9ECEC
+$gray-004: rgb(226, 226, 226); // #E2E2E2 border gray
+$gray-005: rgb(196, 196, 196); // #C4C4C4
+$gray-006: rgb(149, 152, 159); // #95989f help text
+$gray-007: rgb(118, 118, 118); // #767676
 $gray-008: rgb(77, 76, 77); // #4d4c4d
-$gray-010: rgb(27, 28, 28); // #1b1c1c
+$gray-010: rgb(51, 51, 51); // #333
+$gray-011: rgb(250, 251, 252); // #FAFBFC
 $black: #000;
 
-$blue-001: rgb(145, 167, 206); // #91A7CE lightest, logo border (used for 90a5cd)
+$blue-001: rgb(145, 166, 205); // #91A6CD lightest, logo border (used for 90a5cd)
 $blue-002: rgb(113, 145, 193); // #7191c1
-$blue-003: rgb(22, 80, 151); // #165097
-$blue-004: rgb(163, 190, 229); // #a3bee5
+$blue-003: rgb(52, 87, 139); // #34578B
+$blue-004: rgb(171, 186, 213); // #ABBAD5
+$blue-005: rgb(170, 186, 213); // #AABAD5
+$blue-006: rgb(178, 193, 221); // #B2C1DD
+$blue-007: rgb(237, 242, 248); // #EDF2F8
+$blue-008: rgb(142, 160, 194); // #8EA1C2
 
-$tan-001: rgb(241, 223, 209); // #f1dfd1
-$tan-002: rgb(197, 170, 128); // #c5aa80
+$tan-001: rgb(242, 221, 209); // #F2DDD1
+$tan-002: rgb(196, 170, 127); // #C4AA7F
 
-$orange-001: rgb(247, 154, 111); // #f79a6f
+$orange-001: rgb(247, 153, 112); // #F79970
+$orange-002: rgb(241, 134, 88); // #F28658
 
-$green-001: rgb(191, 231, 158); // #bfe79e
-$green-002: rgb(41, 180, 115); // #29b473
+$green-001: rgb(191, 232, 158); // #BFE89E
+$green-002: rgb(41, 180, 115); // #29B473
 
-$red-001: rgb(235, 103, 103); // #eb6767
+$red-001: rgb(235, 103, 103); // #EB6767
 
 // Z-index scale
 $zIndex-1:   100;
@@ -78,7 +86,7 @@ $link-color:            $blue-001 !default;
 //** Link hover color set via `darken()` function.
 $link-hover-color:      $blue-003 !default;
 //** Link hover decoration.
-$link-hover-decoration: none !default;
+$link-hover-decoration: underline !default;
 
 
 //== Typography
@@ -134,17 +142,17 @@ $icon-font-svg-id:        "glyphicons_halflingsregular" !default;
 //
 //## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
 
-$padding-base-vertical:     14px !default;
-$padding-base-horizontal:   28px !default;
+$padding-base-vertical:     19px !default;
+$padding-base-horizontal:   48px !default;
 
 $padding-large-vertical:    18px !default;
 $padding-large-horizontal:  32px !default;
 
-$padding-small-vertical:    8px !default;
-$padding-small-horizontal:  18px !default;
+$padding-small-vertical:    16px !default;
+$padding-small-horizontal:  48px !default;
 
-$padding-xs-vertical:       6px !default;
-$padding-xs-horizontal:     10px !default;
+$padding-xs-vertical:       5px !default;
+$padding-xs-horizontal:     14px !default;
 
 $line-height-large:         1.3333333 !default; // extra decimals for Win 8.1 Chrome
 $line-height-small:         1.5 !default;
@@ -191,13 +199,13 @@ $table-border-color:            #ddd !default;
 
 $btn-font-weight:                normal !default;
 
-$btn-default-color:              $gray-008 !default;
-$btn-default-bg:                 #fff !default;
-$btn-default-border:             $blue-001 !default;
+$btn-default-color:              $gray-010 !default;
+$btn-default-bg:                 transparent !default;
+$btn-default-border:             $blue-004 !default;
 
-$btn-primary-color:              $black !default;
-$btn-primary-bg:                 $blue-001 !default;
-$btn-primary-border:             $blue-001 !default;
+$btn-primary-color:              $gray-010 !default;
+$btn-primary-bg:                 $blue-004 !default;
+$btn-primary-border:             $blue-004 !default;
 
 $btn-success-color:              #fff !default;
 $btn-success-bg:                 $brand-success !default;
@@ -215,7 +223,7 @@ $btn-danger-color:               #fff !default;
 $btn-danger-bg:                  $brand-danger !default;
 $btn-danger-border:              darken($btn-danger-bg, 5%) !default;
 
-$btn-link-disabled-color:        $gray-light !default;
+$btn-link-disabled-color:        $gray !default;
 
 // Allows for customizing button radius independently from global border radius
 $btn-border-radius-base:         $border-radius-base !default;
@@ -233,7 +241,7 @@ $input-bg:                       #fff !default;
 $input-bg-disabled:              $gray-lighter !default;
 
 //** Text color for `<input>`s
-$input-color:                    $black !default;
+$input-color:                    $gray-010 !default;
 //** `<input>` border color
 $input-border:                   $gray-005 !default;
 
@@ -247,10 +255,10 @@ $input-border-radius-large:      $border-radius-large !default;
 $input-border-radius-small:      $border-radius-small !default;
 
 //** Border color for inputs on focus
-$input-border-focus:             $black !default;
+$input-border-focus:             $gray-005 !default;
 
 //** Placeholder text color
-$input-color-placeholder:        $blue-001 !default;
+$input-color-placeholder:        $gray-005 !default;
 
 //** Default `.form-control` height
 $input-height-base:              50px !default;
@@ -407,12 +415,12 @@ $container-lg:                 $container-large-desktop !default;
 $navbar-height:                    104px !default;
 $navbar-margin-bottom:             60px !default;
 $navbar-border-radius:             $border-radius-base !default;
-$navbar-padding-horizontal:        floor(($grid-gutter-width / 2)) !default;
+$navbar-padding-horizontal:        10px !default;
 $navbar-padding-vertical:          38px !default;
 $navbar-collapse-max-height:       340px !default;
 
 $navbar-default-color:             $gray-008 !default;
-$navbar-default-bg:                #fff !default;
+$navbar-default-bg:                transparent !default;
 $navbar-default-border:            $blue-001 !default;
 
 // Navbar links
@@ -486,7 +494,7 @@ $nav-tabs-justified-active-link-border-color:     $body-bg !default;
 
 //== Pills
 $nav-pills-border-radius:                   $border-radius-base !default;
-$nav-pills-active-link-hover-bg:            $component-active-bg !default;
+$nav-pills-active-link-hover-bg:            transparent !default;
 $nav-pills-active-link-hover-color:         $component-active-color !default;
 
 
@@ -543,13 +551,13 @@ $jumbotron-heading-font-size:    ceil(($font-size-base * 4.5)) !default;
 //
 //## Define colors for form feedback states and, by default, alerts.
 
-$state-success-text:             $green-001 !default;
-$state-success-bg:               $green-002 !default;
-$state-success-border:           darken(adjust-hue($state-success-bg, -10), 5%) !default;
+$state-success-text:             $gray-010 !default;
+$state-success-bg:               $blue-001 !default;
+$state-success-border:           $state-success-bg !default;
 
-$state-info-text:                $blue-003 !default;
+$state-info-text:                $gray-010 !default;
 $state-info-bg:                  $blue-001 !default;
-$state-info-border:              darken(adjust-hue($state-info-bg, -10), 7%) !default;
+$state-info-border:              $state-info-bg !default;
 
 $state-warning-text:             $tan-002 !default;
 $state-warning-bg:               $tan-001 !default;

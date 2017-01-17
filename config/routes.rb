@@ -6,20 +6,24 @@ Rails.application.routes.draw do
   # Survey responses
   # for MVP1A they can be accessed via notification link or logged in user
   ##########################
-  resources :profiles, only: [:new, :create] do
-    resources :surveys, only: :show, controller: 'survey_responses' do
-      resources :questions, only: [:show, :update], controller: 'survey_question_responses'
+  concern :profile_builder do
+    resources :profiles, only: [:new, :create] do
+      resources :surveys, only: :show, controller: 'survey_responses' do
+        resources :questions, only: [:show, :update], controller: 'survey_question_responses'
+        resource :completion, only: [:show, :create], controller: 'survey_response_completions'
+      end
     end
   end
-  resources :invitations, only: :none do
-    resources :profiles, only: [:new, :create]
-  end
+
+  concerns :profile_builder
+  resources :invitations, only: :show, concerns: :profile_builder
 
   resources :profiles, only: :none do
     resources :gift_recommendations do
       resource :gift_dislike, only: [:create]
     end
   end
+
   #####################################################
 
   ##################################
@@ -28,10 +32,6 @@ Rails.application.routes.draw do
   resource :user_session, only: [:new, :create, :destroy]
   resources :password_reset_requests, only: [:new, :create]
   resources :password_resets, only: [:show, :update]
-
-  # These have an ID because signup requires user activation token
-  # these will move to the quiz completion in release 8
-  resources :sign_ups, only: [:show, :update]
 
   ###################################
   # My Account Area
@@ -109,7 +109,7 @@ Rails.application.routes.draw do
         resources :questions, only: :index, controller: 'training_set_questions'
       end
       resources :gift_question_impacts, controller: 'gift_question_impacts', except: [:index, :show]
-      resource :evaluation, only: :show, controller: 'training_set_evaluations' do
+      resource :evaluation, only: [:show, :destroy], controller: 'training_set_evaluations' do
         resources :recommendations, only: :show, controller: 'evaluation_recommendations' do
           resources :gift_question_impacts, only: [:edit, :update], controller: 'recommendation_gift_question_impacts'
         end

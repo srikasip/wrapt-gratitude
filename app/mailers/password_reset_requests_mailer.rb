@@ -7,7 +7,7 @@ class PasswordResetRequestsMailer < ApplicationMailer
   #
   def reset_password_email(user)
     @user = user
-    @reset_password_url = password_reset_url(user.reset_password_token)
+    @reset_password_url = root_url(password_reset_token: user.reset_password_token)
     mail(:to => user.email,
          :subject => "Reset your Wrapt password")
   end

@@ -18,7 +18,7 @@ SimpleForm.setup do |config|
     b.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
   end
 
-  config.wrappers :vertical_form_hint_first, tag: 'div', class: 'form-group', error_class: 'error' do |b|
+  config.wrappers :vertical_form_hint_first, tag: 'div', class: 'form-group', error_class: 'has-error' do |b|
     b.use :html5
     b.use :placeholder
     b.optional :maxlength
@@ -28,9 +28,9 @@ SimpleForm.setup do |config|
     b.use :label, class: 'control-label'
 
     b.wrapper tag: 'div', class: 'controls' do |ba|
-      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
-      ba.use :error, wrap_with: { tag: 'span', class: 'help-inline' }
+      ba.use :hint,  wrap_with: { tag: 'span', class: 'help-block help-block--hint' }
       ba.use :input, class: 'form-control'
+      ba.use :error, wrap_with: { tag: 'span', class: 'help-block help-block--error' }
     end
   end
 

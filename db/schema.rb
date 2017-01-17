@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170110074946) do
+
+ActiveRecord::Schema.define(version: 20170113163420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -215,6 +216,7 @@ ActiveRecord::Schema.define(version: 20170110074946) do
     t.datetime "updated_at",                     null: false
     t.integer  "sort_order",         default: 0, null: false
     t.string   "type"
+    t.text     "explanation"
     t.index ["survey_question_id"], name: "index_survey_question_options_on_survey_question_id", using: :btree
   end
 
@@ -237,6 +239,7 @@ ActiveRecord::Schema.define(version: 20170110074946) do
     t.string   "name"
     t.text     "other_option_text"
     t.string   "survey_response_type", null: false
+    t.datetime "answered_at"
     t.index ["survey_question_id"], name: "index_survey_question_responses_on_survey_question_id", using: :btree
     t.index ["survey_response_id"], name: "index_question_response_on_survey_response_id", using: :btree
   end
@@ -258,6 +261,8 @@ ActiveRecord::Schema.define(version: 20170110074946) do
     t.boolean  "use_response_as_name",      default: false, null: false
     t.integer  "conditional_question_id"
     t.integer  "survey_section_id"
+    t.boolean  "yes_no_display",            default: false, null: false
+    t.text     "placeholder_text"
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
     t.index ["survey_section_id"], name: "index_survey_questions_on_survey_section_id", using: :btree
   end
@@ -286,9 +291,11 @@ ActiveRecord::Schema.define(version: 20170110074946) do
   create_table "survey_sections", force: :cascade do |t|
     t.integer  "survey_id"
     t.string   "name"
-    t.integer  "sort_order", default: 0, null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "sort_order",           default: 0, null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.text     "introduction_heading"
+    t.text     "introduction_text"
     t.index ["survey_id"], name: "index_survey_sections_on_survey_id", using: :btree
   end
 

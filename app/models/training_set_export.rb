@@ -80,7 +80,7 @@ class TrainingSetExport
   end
 
   private def slider_impact_direction_value impact
-    if impact.survey_question.is_a? SurveyQuestions::Range
+    if impact.survey_question.is_a? ::SurveyQuestions::Range
       if impact.range_impact_direct_correlation?
         1
       else

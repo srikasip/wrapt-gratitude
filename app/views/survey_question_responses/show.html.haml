@@ -1,2 +1,42 @@
-%h1 SurveyQuestionResponses#show
-%p Find me in app/views/survey_question_responses/show.html.haml
+.container
+  .row
+    .col-xs-12
+      .sqr-container
+        - if @question_response.survey_question.first_in_section?
+          .sqr-container__header.pb3
+            %h1.text-center= @question_response.survey_question.survey_section.introduction_heading_with_profile_relationship(@profile)
+            %p.tan-002= @question_response.survey_question.survey_section.introduction_text_with_profile_relationship(@profile)
+      
+        .sqr-question__container.floating-container
+          .sqr-progress
+            .sqr-progress__small
+              = question_number_of_total(@question_response, @survey_response)
+
+          - if @question_response.previous_response
+
+            = link_to with_invitation_scope(profile_survey_question_path(@profile, @survey_response, @question_response.previous_response)), class: 'sqr-previous__link', data: {behavior: 'prev-question-button'} do
+              .sqr-previous__icon
+                =embedded_svg('icon-caret-left', class: "sqr-previous__icon--caret-left")
+              .sqr-previous__sudo-link
+
+          = simple_form_for @question_response, url: with_invitation_scope(profile_survey_question_path(@profile, @survey_response, @question_response)), html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
+
+            = render response_fields_partial, form: form, label: @question_response.survey_question.prompt_with_name(@survey_response)
+            .sqr-submit__container.text-right#js-sqr-submit__container
+              %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}
+                = question_response_next_button_text.html_safe
+            -#
+              -# multi select questions hitting enter doesn't work
+              -# removing per @jstrothman
+              .sqr-submit__keyboard-hint#js-next-question-hint-text
+                Or Hit Enter to Continue
+
+        = survey_sections_progress_bar(@survey_response)
+        
+- content_for :page_js do
+  :javascript
+    new App.PrevButtonBehavior()
+
+
+
+

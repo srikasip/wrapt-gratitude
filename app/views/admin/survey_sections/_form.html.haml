@@ -3,6 +3,9 @@
 
   .form-inputs
     = f.input :name
+    = f.input :introduction_heading, hint: "The special tag '<relationship>' will be replaced with the giftee's relationship (e.g. 'Wife')"
+    = f.input :introduction_text, hint: "The special tag '<relationship>' will be replaced with the giftee's relationship (e.g. 'Wife')"
+
 
   .form-actions
     = f.button :submit, "Save"

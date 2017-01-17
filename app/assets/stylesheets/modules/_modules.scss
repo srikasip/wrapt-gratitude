@@ -1,5 +1,6 @@
 // fonts gets included in app.scss so it's available for variables/mixins
 @import "grid";
+@import "transitions_animations";
 @import "typography"; 
 @import "buttons";
 @import "nav";
@@ -9,4 +10,7 @@
 @import "tables";
 @import "footer";
 @import "carousel";
+@import "modals";
+@import "questions";
 @import "style-guide";
+@import "quiz";

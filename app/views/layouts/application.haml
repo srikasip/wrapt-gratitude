@@ -8,20 +8,24 @@
     = action_cable_meta_tag
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = render 'layouts/favicons'
   %body
+    -# svg include needs to be first thing in body tag
+    = svg 'symbol-defs'
     -# responsive is disabled so use .col-xs-* everywhere for bs columns
-    - if show_top_nav?
-      = render 'layouts/top_nav'
+    .wrapper--full-bleed__bg-03.pb6
+      - if show_top_nav?
+        = render 'layouts/top_nav'
     
 
 
          
-    -#.container.container--main
-    = render 'layouts/alerts'
-    = render 'breadcrumbs'
-    = yield
+        -# .container.container--main
+        = render 'layouts/alerts'
+        = render 'breadcrumbs'
+        = yield
 
-    %footer
+    %footer.footer
       = render 'layouts/footer'
 
     = render 'pjax_modal_frame'

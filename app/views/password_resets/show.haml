@@ -4,7 +4,7 @@
       %h1 Reset Your Password
       %p Enter your new password below
 
-      = simple_form_for @password_reset do |form|
+      = simple_form_for @password_reset, html: {data: {submits_to_pjax_modal: true}} do |form|
         .form-inputs
           = form.input :password
 

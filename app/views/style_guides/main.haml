@@ -25,6 +25,7 @@
 .container
   .row#typography
     .col-xs-10.col-xs-offset-1
+      
       %h2
         Typography
         %code
@@ -55,10 +56,8 @@
           p.small
       %p
         Whether you're shopping for a birthday, an anniversary, or something just to say “I'm thinking of you,” Wrapt is more about people than purchases; more about love than luxury—creating communities bound by shared experiences and celebration.
-      %h5
+      %h4
         List &#8212; Unordered
-        %code
-          Heading 5
       %ul
         %li More about people than purchases
         %li More about love than luxury
@@ -68,7 +67,7 @@
             %li More about people than purchases
             %li More about love than luxury
             %li Creating communities bound by shared experiences and celebration
-      %h5
+      %h4
         List &#8212; Ordered
       %ol
         %li More about people than purchases
@@ -79,6 +78,63 @@
             %li More about people than purchases
             %li More about love than luxury
             %li Creating communities bound by shared experiences and celebration
+      %h5
+        Special Purpose Heading
+        %code
+          Heading 5
+      %p
+        Heading 5 has a large margin-bottom. So far we do not have examples of where this is used.
+      .well.col-xs-8.col-xs-offset-2
+        .row
+          .col-xs-6
+            %p 
+              html font size: 
+              %br
+              10px (for rem purposes)
+            %p
+              h1 
+              %br
+              40px/49 (1.23), mb: 16px 
+              %br
+              light, letter-spacing 1px
+            %p 
+              h2
+              %br
+              32px/39 (1.23), mb: 24px
+              %br
+              light, letter-spacing 1px
+            %p 
+              h3
+              %br
+              28px/30 (1.07), mb: 24px
+              %br
+              light, letter-spacing 1px
+          .col-xs-6
+            %p 
+              h4
+              %br
+              24px/26.4 (1.1), mb: 16px 
+              %br
+              light
+          
+            %p 
+              h5
+              %br
+              18px/19.8 (1.1), mb: 32px 
+              %br
+              regular, uppercase
+            %p 
+              p
+              %br
+              16px/28px (1.75), mb: 28px
+            %p 
+              p.lead 
+              %br
+              20px/32px (1.6), mb: 32px
+            %p
+              p.small
+              %br
+              14px/26px (1.86), mb: 26px
 .container
   .row#colors.mb3
     .col-xs-10.col-xs-offset-1
@@ -90,32 +146,44 @@
         .div.bg-gray-001.placeholder-block
         $gray-001
         %br
-        \#f4f6f6 lightest
+        \#F8F9FB
     .col-xs-2
       .pb2
         .div.bg-gray-002.placeholder-block
         $gray-002
         %br
-        \#e9ecec
+        \#f4f6f6
     .col-xs-2
       .pb2
         .div.bg-gray-003.placeholder-block
         $gray-003
         %br
-        \#95989f
+        \#E9ECEC
+    .col-xs-2
+      .pb2
+        .div.bg-gray-004.placeholder-block
+        $gray-004
+        %br
+        \#E2E2E2 border gray
     .col-xs-2
       .pb2
         .div.bg-gray-005.placeholder-block
         $gray-005
         %br
-        \#808184 help text
+        \#C4C4C4
+    .col-xs-2.col-xs-offset-1
+      .pb2
+        .div.bg-gray-006.placeholder-block
+        $gray-006
+        %br
+        \#95989f help text
     .col-xs-2
       .pb2
         .div.bg-gray-007.placeholder-block
         $gray-007
         %br
-        \#6d6e70
-    .col-xs-2.col-xs-offset-1
+        \#767676
+    .col-xs-2
       .pb2
         .div.bg-gray-008.placeholder-block
         $gray-008
@@ -126,7 +194,7 @@
         .div.bg-gray-010.placeholder-block
         $gray-010
         %br
-        \#1b1c1c
+        \#333
     .col-xs-2
       .pb2
         .div.bg-black.placeholder-block
@@ -138,7 +206,7 @@
       .div.bg-blue-001.placeholder-block
       $blue-001
       %br
-      #91A7CE lightest, logo border
+      #91A7CE logo border
     .col-xs-2
       .div.bg-blue-002.placeholder-block
       $blue-002
@@ -290,9 +358,9 @@
         %br
         %code .btn-default
       .ma1.pull-left
-        .btn.btn-dark Dark
+        .btn.btn-secondary Secondary
         %br
-        %code .btn-dark
+        %code .btn-secondary
       .ma1.pull-left
         %input{type:"submit", class: "btn disabled", value: "Disabled"}
         %br
@@ -300,10 +368,6 @@
   .row.mb1
     .col-xs-10.col-xs-offset-1
       %h5 Button Sizes
-      .ma1.pull-left
-        .btn.btn-lg.btn-default Large
-        %br
-        %code .btn.btn-lg
       .ma1.pull-left
         .btn.btn-default Default
         %br
@@ -323,14 +387,106 @@
         %br
         %code .btn.btn-full-width
 
-  .row#forms.mb3
+  .row#forms.mb4
     .col-xs-10.col-xs-offset-1
       %h2 Forms
-      %p.help-block
-        Help text
-        %code
-          .help-block
+      %p Forms are usually presented in 8 columns, with a full-width submit button.
+      .mh3
+        %h1.text-center
+          Great Job! We’ve got all the information we need to make gift recommendations for Melissa
+    .col-xs-8.col-xs-offset-2
+      %h4 Invite Melissa
+      %form{"accept-charset" => "UTF-8", :action => "http://simple-form-bootstrap.plataformatec.com.br/examples/create_basic", :enctype => "multipart/form-data", :method => "post", :novalidate => "novalidate", :autocomplete => "off"}
+      .row
+        .col-xs-6
+          .form-group.first-name.required
+            %label.required.control-label{:for => "user_first_name"}
+              %abbr{:title => "required"} *
+              First Name
+            %input#user_first_name.string.email.required.form-control{:name => "user_first_name", :type => "text", :placeholder => "Your first name"}
+        .col-xs-6
+          .form-group.last-name.required
+            %label.required.control-label{:for => "user_last_name"}
+            %abbr{:title => "required"} *
+            Last Name
+          
+            %input#user_last_name.string.email.required.form-control{:name => "user_last_name", :type => "text", :placeholder => "Your last name"}
+        
+
+      .form-group.email.required.user_basic_email.error
+        %label.email.required.control-label{:for => "user_basic_email"}
+          %abbr{:title => "required"} *
+          Email
+        %span.help-block.help-block--hint Some hint text about this form field
+        %input#user_basic_email.string.email.required.form-control{:name => "user_basic[email]", :type => "email", :value => "me@work"}
+        %span.help-block.help-block--error This does not appear to be a valid email address
+        
+      .form-group.required.user_password
+        %label.password.required.control-label{:for => "user_password"}
+          %abbr{:title => "required"} *
+          Password
+        %span.help-block.help-block--hint Some hint text about this form field
+        
+        %input#user_password.password.required.form-control{:name => "user_basic[password]", :type => "password"}
+        
+      
+      .form-group.boolean.optional.user_basic_active
+        %span.help-block.help-block--hint Some hint text about this form field
+        .checkbox
+          %input{:name => "user_basic[active]", :type => "hidden", :value => "0"}/
+          %label.boolean.optional{:for => "user_basic_active"}
+            %input#user_basic_active.boolean.optional{:name => "user_basic[active]", :type => "checkbox", :value => "1"}
+            Active
+        
+      .form-group.check_boxes.optional.user_basic_choices
+        %label.check_boxes.optional.control-label Choices
+        %span.checkbox
+          %label{:for => "user_basic_choices_option_one_is_this_and_thatbe_sure_to_include_why_its_great"}
+            %input#user_basic_choices_option_one_is_this_and_thatbe_sure_to_include_why_its_great.check_boxes.optional{:name => "user_basic[choices][]", :type => "checkbox", :value => "Option one is this and that—be sure to include why it's great"}
+            Option one is this and that—be sure to include why it's great
+        %span.checkbox
+          %label{:for => "user_basic_choices_option_two_can_be_something_else_and_selecting_it_will_deselect_option_one"}
+            %input#user_basic_choices_option_two_can_be_something_else_and_selecting_it_will_deselect_option_one.check_boxes.optional{:name => "user_basic[choices][]", :type => "checkbox", :value => "Option two can be something else and selecting it will deselect option one"}
+            Option two can be something else and selecting it will deselect option one
+        %input{:name => "user_basic[choices][]", :type => "hidden", :value => ""}
+      
+      .form-group.radio_buttons.optional.user_basic_sex
+        %label.radio_buttons.optional.control-label Gender
+        %span.help-block.help-block--hint  Some hint text about this form field
+        %span.radio
+          %label{:for => "user_basic_sex_male"}
+            %input#user_basic_sex_male.radio_buttons.optional{:name => "user_basic[sex]", :type => "radio", :value => "Male"}
+            Male
+        %span.radio
+          %label{:for => "user_basic_sex_female"}
+            %input#user_basic_sex_female.radio_buttons.optional{:name => "user_basic[sex]", :type => "radio", :value => "Female"}
+            Female
+        
+      %input.btn.btn-primary.btn-full-width{:name => "commit", :type => "submit", :value => "Create User"}
 
   .row#modals.mb3
     .col-xs-10.col-xs-offset-1
       %h2 Modals
+
+- content_for :page_js do
+  :javascript
+    $(document).ready(function() {
+      // toggle show / hide password
+      $( "input[type='password']" ).wrap( "<div class='input-wrapper'></div>" );
+      $( "input[type='password']" ).attr( 'id', 'js-pw-input-for-show-hide');
+      $( "input[type='password']" ).after( "<div class='input-wrapper--show-hide' id='js-toggle-show-hide'><i class='fa fa-eye'></i><span>Show</span></div>" );
+
+      $('#js-toggle-show-hide').click(function() {
+        if ($('#js-pw-input-for-show-hide').attr('type') === 'password') {
+          $('#js-pw-input-for-show-hide').attr('type', 'text');
+          $(this).children('i').addClass('fa-eye-slash');
+          $(this).children('i').removeClass('fa-eye');
+          $(this).children('span').text( "Hide" );
+        } else {
+          $('#js-pw-input-for-show-hide').attr('type', 'password');
+          $(this).children('i').addClass('fa-eye');
+          $(this).children('i').removeClass('fa-eye-slash');
+          $(this).children('span').text( "Show" );
+        }
+      });
+    });
