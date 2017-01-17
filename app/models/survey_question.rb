@@ -13,6 +13,7 @@ class SurveyQuestion < ApplicationRecord
   has_many :trait_training_set_questions, inverse_of: :question, dependent: :destroy, foreign_key: :question_id
 
   belongs_to :survey_section, inverse_of: :questions
+  validate :survey_id_matches_survey_section_survey_id
 
   scope :not_text, -> {where.not(type: '::SurveyQuestions::Text')}
 
@@ -77,6 +78,13 @@ class SurveyQuestion < ApplicationRecord
   def section_or_uncategorized
     survey_section || survey&.uncategorized_section
   end
+
+  private def survey_id_matches_survey_section_survey_id
+    if survey_section && survey_id != survey_section.survey_id
+      errors.add :survey_section, 'Must be from this question\'s survey'
+    end
+  end
+  
   
 
 end
