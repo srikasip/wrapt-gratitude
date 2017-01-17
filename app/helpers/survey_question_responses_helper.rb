@@ -84,4 +84,8 @@ module SurveyQuestionResponsesHelper
     section_groups_data
   end
 
+  def other_optional_text_init_style(question_response)
+    style = question_response.survey_question_response_options.map{|option| option.survey_question_option.type == 'SurveyQuestionOtherOption'}.any? ? 'display:block;' : 'display:none;'
+  end
+
 end

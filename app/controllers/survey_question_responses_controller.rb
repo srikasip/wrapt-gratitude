@@ -12,10 +12,14 @@ class SurveyQuestionResponsesController < ApplicationController
     @question_response = @survey_response.question_responses.find params[:id]
     if @question_response.update question_response_params
       @question_response.update_attribute :answered_at, Time.now
-      if @question_response.next_response.present?
-        redirect_to profile_survey_question_path(@profile, @survey_response, @question_response.next_response)
+      if request.xhr?
+        render :json => {question_response: @question_response}
       else
-        redirect_to profile_survey_completion_path(@profile, @survey_response)
+        if @question_response.next_response.present?
+          redirect_to profile_survey_question_path(@profile, @survey_response, @question_response.next_response)
+        else
+          redirect_to profile_survey_completion_path(@profile, @survey_response)
+        end
       end
     else
       render :show

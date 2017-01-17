@@ -5,13 +5,16 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
     this.buttons_selector = $(this.form_element).find('[data-behavior~=option-button]')
     this.multipleOptionResponses = options.multipleOptionResponses;
     this.handleButtonClick();
-    this.updateDisplay();
+    this.updateDisplay(true);
   }
 
-  updateDisplay() {
+  updateDisplay(init = false) {
     this.highlightSelectedButtons();
     this.setNextButtonVisibility();
-    this.setOtherTextVisibility();
+    if(!init) {
+      this.setOtherTextVisibility();
+    }
+    
   }
 
   handleButtonClick() {
@@ -55,32 +58,35 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
     const selected_option_inputs_selector = this.hidden_inputs_selector.filter(':checked')
     const nextHint = $('#js-next-question-hint-text')
     if (selected_option_inputs_selector.length > 0) {
-      $(nextButton).show();
+      var disabled = false;
       $(nextHint).show();
     } else {
-      $(nextButton).hide();
+      var disabled = true;
       $(nextHint).hide();
     }
+    $(nextButton).prop('disabled', disabled);
+    
   }
 
   setOtherTextVisibility() {
+    console.log('set other text visibility called');
     const otherTextWrapperSelector = $(this.form_element).find('[data-behavior~=other-text-input-wrapper]')
-
     const selectedOtherOptionInput = $(this.hidden_inputs_selector).filter('[data-behavior~=other-option]:checked')
     if (selectedOtherOptionInput.length > 0) {
-      otherTextWrapperSelector.show()
+      otherTextWrapperSelector.slideDown();
     } else {
-      otherTextWrapperSelector.hide()
+      otherTextWrapperSelector.slideUp();
       otherTextWrapperSelector.find('[data-behavior~=other-text-input]').val('')
     }
   }
 
   showOptionExplanation(option_id) {
     const explanation_selector = $(this.form_element).find('[data-behavior~=option-explantion]')
-    explanation_selector.hide('normal');
+    explanation_selector.hide('slow');
     const selected_option_input_selector = this.hidden_inputs_selector.filter(`[value=${option_id}]:checked`)
     if (selected_option_input_selector.length > 0) {
-     explanation_selector.filter(`[data-option-id=${option_id}]`).show('normal')     
+     // explanation_selector.filter(`[data-option-id=${option_id}]`).show('normal')     
+      explanation_selector.filter(`[data-option-id=${option_id}]`).show('slow'); 
     }
  
   }

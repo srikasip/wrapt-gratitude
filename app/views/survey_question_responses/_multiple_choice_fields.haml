@@ -12,11 +12,12 @@
       - option_row.each do |option|
         = link_to option.text, '#', class: 'btn btn-default btn-multiple-choice-option', data: {behavior: 'option-button', option_id: option.id}
 
-= form.input :other_option_text, as: :string, label: false, wrapper_html: { data: {behavior: 'other-text-input-wrapper'} }, input_html: {data: {behavior: 'other-text-input'}}
+= form.input :other_option_text, as: :string, label: false, wrapper_html: { data: {behavior: 'other-text-input-wrapper'}, style: other_optional_text_init_style(@question_response)}, input_html: {data: {behavior: 'other-text-input'}}
 
-- @question_response.survey_question.options.each do |option|
-  - if option.explanation.present?
-    %p.sqr-option-explanation{data: {behavior: 'option-explantion', option_id: option.id}}= option.explanation
+.sqr-option-explanations.pa1
+  - @question_response.survey_question.options.each do |option|
+    - if option.explanation.present?
+      .sqr-option-explanation{data: {behavior: 'option-explantion', option_id: option.id}}= option.explanation
 
 - content_for :page_js do
   :javascript
