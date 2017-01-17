@@ -1,4 +1,6 @@
 class SurveyResponseCompletionsController < ApplicationController
+  include RequiresLoginOrInvitation
+
   before_action :set_profile
   before_action :set_survey_response
 

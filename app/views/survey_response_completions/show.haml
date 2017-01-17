@@ -6,7 +6,7 @@
         %p.tan-002 A few more things to get squared away before we reveal the gifts
 
 
-      = simple_form_for @survey_response_completion, url: profile_survey_completion_path(@profile, @survey_response) do |form|
+      = simple_form_for @survey_response_completion, url: with_invitation_scope(profile_survey_completion_path(@profile, @survey_response)) do |form|
         .floating-container.floating-container__invite
           %h4 Invite #{@survey_response.giftee_name}!
           %p In our Beta Stage we are testing several aspects of our offering. One key piece is presenting you with the most accurate recommendations possible. In order to do that, we’d like to ask her to review the gift recommendations and rate some of the items in our catalog.

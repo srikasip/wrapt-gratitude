@@ -1,4 +1,6 @@
 class SurveyQuestionResponsesController < ApplicationController
+  include RequiresLoginOrInvitation
+
   before_action :set_profile
   before_action :set_survey_response
 
@@ -16,9 +18,9 @@ class SurveyQuestionResponsesController < ApplicationController
         render :json => {question_response: @question_response}
       else
         if @question_response.next_response.present?
-          redirect_to profile_survey_question_path(@profile, @survey_response, @question_response.next_response)
+          redirect_to with_invitation_scope(profile_survey_question_path(@profile, @survey_response, @question_response.next_response))
         else
-          redirect_to profile_survey_completion_path(@profile, @survey_response)
+          redirect_to with_invitation_scope(profile_survey_completion_path(@profile, @survey_response))
         end
       end
     else

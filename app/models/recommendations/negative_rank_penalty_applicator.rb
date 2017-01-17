@@ -9,7 +9,7 @@ module Recommendations
 
     def modified_rank
       if question_rank < 0
-        question_rank * 2
+        question_rank * Recommendations::Engine::NEGATIVE_RANK_PENALTY
       else
         question_rank
       end

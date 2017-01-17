@@ -31,6 +31,10 @@
             - if @recommendations_by_survey_response_id[response.id]
               - @recommendations_by_survey_response_id[response.id].sort_by(&:score).reverse.each do |recommendation|
                 %li
-                  = "#{recommendation.gift.title} (#{recommendation.score.round(2)})"
-                  = link_to 'Breakdown', admin_training_set_evaluation_recommendation_path(@training_set, recommendation), data: {loads_in_pjax_modal: true}, class: 'btn btn-default btn-xs'
+                  = "#{recommendation.gift.title}"
+                  - if recommendation.score > 0.0
+                    = "(#{recommendation.score.round(2)})"
+                    = link_to 'Breakdown', admin_training_set_evaluation_recommendation_path(@training_set, recommendation), data: {loads_in_pjax_modal: true}, class: 'btn btn-default btn-xs'
+                  - else
+                    (random)
           
