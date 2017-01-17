@@ -13,6 +13,8 @@ label {
   letter-spacing: 1;
 }
 .lost-password-container {
+  // match password input width
+  width: 435px;
   margin-top: -28px;
 }
 .hint {
@@ -46,17 +48,25 @@ label {
 .input-wrapper {
   position: relative;
 }
+
+.input-wrapper  #js-pw-input-for-show-hide {
+  display: inline-block;
+  width: 435px;
+}
+
 .input-wrapper--show-hide {
-  display: block;
+  width: 63px;
+  display: inline-block;
   @include vertical-align(absolute);
-  right: 10px;
+  right: 0px;
   color: $gray-005;
   text-transform: uppercase;
   font-size: rem(14);
   line-height: 1;
 }
+
 .input-wrapper--show-hide:hover {
-  pointer: cursor;
+  cursor: pointer;
 }
 .input-wrapper--show-hide .fa {
   margin-right: 3px;
