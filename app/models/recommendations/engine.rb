@@ -7,50 +7,62 @@ module Recommendations
     # exclude text questions
     # tests
 
-    attr_reader :training_set, :response
+    attr_reader :training_set, :response, :recommendations
 
     NEGATIVE_RANK_PENALTY = 2
     QUESTION_WEIGHT_BASE = 10
+    MIN_NUMBER_OF_RECOMMENDATIONS = 8
 
-    def initialize training_set
+    def initialize(training_set, response = nil)
       @training_set = training_set
+      self.response = response
     end
     
     def response=(new_response)
       @response = new_response
-      if training_set.survey_id != @response.survey_id
+      if @response.present? && (training_set.survey_id != @response.survey_id)
         raise SurveyMismatchError
       end
-      @_question_responses_by_question = nil
+      clear_recommendations
       @response
     end
-
-    def generate_recommendations!
-      recommendations = []
-      gifts.each do |gift|
-        gift_rank = 0
-        questions_by_gift[gift].each do |question|
-          gift_rank += calculate_question_rank(gift, question)
-        end
-        if gift_rank > 0.0
-          # TODO accomodate front-end responses
-          recommendations << EvaluationRecommendation.new(survey_response: response, gift: gift, training_set_evaluation: training_set.evaluation, score: gift_rank)
-        end        
-      end
-      recommendations.sort!{|a, b| b <=> a}
-      recommendations = recommendations.take(10)
-      
-      recommendations.map(&:save)
-      
-      recommendations
+    
+    def destroy_recommendations!
+      EvaluationRecommendation.where(
+        survey_response: response,
+        training_set_evaluation:
+        training_set.evaluation).delete_all
     end
 
-    def calculate_question_rank gift, question
-      gift_question = gift_question_impacts_by_gift_and_question[gift][question]
+    def generate_recommendations
+      @recommendations = []
+      
+      generate_candidate_recommendations
+      remove_similar_recommendations
+      @recommendations = @recommendations.take(MIN_NUMBER_OF_RECOMMENDATIONS)
+      
+      # are we short?
+      if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
+        generate_random_recommendations(2 * (MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length))
+        remove_similar_recommendations
+        
+        # are we still short?
+        if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
+          generate_random_recommendations(MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length)
+        end
+      end
+      
+      @recommendations
+    end
 
-      result = initial_question_rank(gift, question)
-      result = Recommendations::NegativeRankPenaltyApplicator.new(result).modified_rank
-      result = Recommendations::ProductQuestionWeightApplicator.new(result, gift_question&.question_impact).modified_rank
+    def clear_recommendations
+      @recommendations = []
+      @_question_responses_by_question = nil
+      true
+    end
+    
+    def create_recommendations!
+      @recommendations.map(&:save)
     end
 
     # TODO this is used by EvaluationRecommendations#show and could be moved closer to there
@@ -63,8 +75,67 @@ module Recommendations
       result[:final_question_rank] = result[:question_weight_applied]
       result
     end
+    
+    protected
+    
+    def generate_random_recommendations(count)
+      gift_pool = random_gifts - @recommendations.map(&:gift)
+      added = []
+      gift_pool.sample(count).each do |gift|
+        added << add_recommendation(gift, 0.0)
+      end
+      added
+    end
+      
+    def add_recommendation(gift, score = 0.0)
+      recommendation = EvaluationRecommendation.new(
+        survey_response: response,
+        gift: gift,
+        training_set_evaluation: training_set.evaluation,
+        score: score)
+      
+      @recommendations << recommendation
+      
+      recommendation
+    end
+    
+    def generate_candidate_recommendations
+      gifts.each do |gift|
+        gift_rank = 0
+        questions_by_gift[gift].each do |question|
+          gift_rank += calculate_question_rank(gift, question)
+        end
+        if gift_rank > 0.0
+          add_recommendation(gift, gift_rank)
+        end
+      end
+      @recommendations.sort!{|a, b| b.score <=> a.score}
+      
+      @recommendations
+    end
+    
+    def remove_similar_recommendations
+      used_categories = []
+      @recommendations.reject! do |recommendation|
+        categories = categories_by_gifts[recommendation.gift]
+        if (used_categories & categories).any?
+          true # don't use it
+        else
+          used_categories += categories
+          false
+        end
+      end
+    end
 
-    private def initial_question_rank gift, question
+    def calculate_question_rank gift, question
+      gift_question = gift_question_impacts_by_gift_and_question[gift][question]
+
+      result = initial_question_rank(gift, question)
+      result = Recommendations::NegativeRankPenaltyApplicator.new(result).modified_rank
+      result = Recommendations::ProductQuestionWeightApplicator.new(result, gift_question&.question_impact).modified_rank
+    end
+
+    def initial_question_rank gift, question
       result = 0
       question_response = question_responses_by_question[question]
       gift_question = gift_question_impacts_by_gift_and_question[gift][question]
@@ -78,11 +149,23 @@ module Recommendations
       result
     end
 
-    private def gifts
-      @_gifts ||= Gift.where id: training_set.gift_question_impacts.select(:gift_id)
+    def gifts
+      @_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).where(id: training_set.gift_question_impacts.select(:gift_id))
     end
 
-    private def questions_by_gift
+    def random_gifts
+      @_random_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).order('RANDOM()').limit(50)
+    end
+
+    def categories_by_gifts
+      @_categories_by_gift ||= {}.tap do |result|
+        gifts.each do |gift|
+          result[gift] = gift.products.map(&:product_subcategory)
+        end
+      end
+    end
+
+    def questions_by_gift
       @_questions_by_gift ||= {}.tap do |result|
         training_set.gift_question_impacts.preload(:gift, :survey_question).each do |gift_question|
           result[gift_question.gift] ||= []
@@ -102,7 +185,7 @@ module Recommendations
       end
     end
 
-    private def question_responses_by_question
+    def question_responses_by_question
       @_question_responses_by_question ||= {}.tap do |result|
         response.question_responses.preload(:survey_question).each do |question_response|
           result[question_response.survey_question] = question_response
