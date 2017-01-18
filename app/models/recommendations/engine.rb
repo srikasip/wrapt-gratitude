@@ -9,7 +9,7 @@ module Recommendations
 
     attr_reader :training_set, :response, :recommendations
 
-    NEGATIVE_RANK_PENALTY = 2
+    NEGATIVE_RANK_PENALTY = 1
     QUESTION_WEIGHT_BASE = 10
     MIN_NUMBER_OF_RECOMMENDATIONS = 8
 

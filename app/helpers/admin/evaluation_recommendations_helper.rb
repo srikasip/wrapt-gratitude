@@ -16,7 +16,7 @@ module Admin
           response_impact.survey_question_option_id == question_response.survey_question_option_id
         end
         impact&.impact
-      when ::SurveyQuestions::Range then "1"
+      when ::SurveyQuestions::Range then question_response.range_response
       end
     end
 
