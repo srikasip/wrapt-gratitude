@@ -1,0 +1,28 @@
+- gift = locals[:gift]
+- gr = locals[:gift_recommendation]
+.gr-carousel__gift.clearfix
+  - if gr.disliked?
+    .gr-carousel__gift-dislike.pa2
+      %h2 Thanks for the feedback!
+      %p.small VHS flexitarian lo-fi, skateboard before they sold out green juice wayfarers organic 3 wolf moon church-key authentic slow-carb jianbing. 
+  .gr-carousel__gift-image
+    - gift_images = load_gift_image_carouse_images(gift.gift_images)
+    = carousel(slides: gift_images, unique_carousel_name: 'gr-image-carousel', slide_content_singular: 'image', container:'.gr-carousel')
+  .gr-carousel__gift-content.pa1
+    %h3= gift.name
+    .gr-carousel__gift-details.pr1
+      %p.small= gift.description
+      %h5 Included in gift (modify)
+      -# PLACEHOLDER
+      %ul
+        %li.small 8 oz gourmet salt blend; Himalayan pink, Alder smoked, Red Hawaiian, Molokai black and French Sea salt
+        %li Ceramic salt well made in Peru
+    .gr-carousel__gift-actions.pa1
+      = link_to "I don't like this recommendation", "##{dislike_options_content_id(gift)}", class: 'dislike-options__link pb1'
+      -# PLACEHOLDER
+      %div
+        .gr-carousel__price
+          $130.00
+        .gr-carousel__quantity.text-right
+          %input{type: 'number', value: 1, style: 'width: 40px;'}
+          = link_to 'Add to gift basket', '#', class: 'btn btn-dark'

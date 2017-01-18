@@ -14,8 +14,16 @@ Rails.application.routes.draw do
       end
     end
   end
+
   concerns :profile_builder
   resources :invitations, only: :show, concerns: :profile_builder
+
+  resources :profiles, only: :none do
+    resources :gift_recommendations do
+      resource :gift_dislike, only: [:create]
+    end
+  end
+
   #####################################################
 
   ##################################

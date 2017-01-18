@@ -1,0 +1,207 @@
+:coffeescript
+  # include carousel_helper in controller
+
+  class Carousel
+    constructor: (@carousel) ->
+      @slides_container = '.' + $(@carousel).data('slides-container')
+      @slide_container = '.' + $(@carousel).data('slide-container')
+      @nav_selector = '.' + $(@carousel).data('nav')
+      @indicator_container = '.' + $(@carousel).data('indicator-container')
+      
+      @_load_slides()
+
+    _load_slides: ->
+      @container = $(@carousel).find(@slides_container)
+      @slides = $(@carousel).find(@slide_container)
+      @max = @slides.length
+
+      @_set_height()
+      @_init_slides()
+
+      @_load_nav()
+      @_init_nav()
+
+    _init_slides: ->
+      @slides.each (i, slide) =>
+        if i == 0
+          $(slide).addClass('active')
+        $(slide).css('position', 'absolute')
+        $(slide).css('top', '0px')
+        $(slide).css('bottom', '0px')
+        $(slide).css('left', '0px')
+        unless $(slide).hasClass('active')
+          $(slide).addClass('hidden')
+      @_init()
+
+    _load_nav: ->
+      @nav_next = $(@carousel).find(@nav_selector + '.next')
+      @nav_prev = $(@carousel).find(@nav_selector + '.prev')
+      @indicators = $(@carousel).find(@indicator_container)
+      $(@indicators.first()).addClass('active')
+
+    _init_nav: ->
+      @clickable = true
+      @_nav_click_handler(@nav_next, 'slideOutLeft', 'slideInLeft')
+      @_nav_click_handler(@nav_prev, 'slideOutRight', 'slideInRight')
+      @_indicator_click_handler()
+
+    _load_active: ->
+      @active = $(@carousel).find(@slide_container + ".active")
+
+    _load_next: ->
+      @_load_active()
+      active_position = $(@active).data('position')
+      next_position = parseInt(active_position, 10) + 1
+      if next_position > @max
+        @next = $(@carousel).find(@slide_container + "[data-position='1']")
+      else
+        @next = $(@carousel).find(@slide_container + "[data-position='" + next_position + "']")
+
+    _load_prev: ->
+      @_load_active()
+      active_position = $(@active).data('position')
+      prev_position = parseInt(active_position, 10) - 1
+      if prev_position < 1
+        @next = $(@carousel).find(@slide_container + "[data-position='" + @max + "']")
+      else
+        @next = $(@carousel).find(@slide_container + "[data-position='" + prev_position + "']") 
+
+    _nav_click_handler: (element, directionClassOut, directionClassIn) ->
+      $(element).click (e) =>
+        e.preventDefault()
+        if @clickable
+          @clickable = false
+          if $(element).hasClass('next')
+            @_load_next()
+          else
+            @_load_prev()
+          @_slide(directionClassOut, directionClassIn)
+
+    _indicator_click_handler: ->
+      @indicators.each (i, indicator) =>
+        $(indicator).click (e) =>
+          e.preventDefault()
+          if @clickable
+            @_load_active()
+            indicator_position = parseInt($(indicator).data('position'), 10)
+            active_position = parseInt($(@active).data('position'), 10) 
+            unless indicator_position == active_position
+              @clickable = false
+              @next = $(@carousel).find(@slide_container + "[data-position='" + indicator_position + "']")
+              if indicator_position > active_position
+                directionClassOut = 'slideOutLeft'
+                directionClassIn = 'slideInLeft'
+              else
+                directionClassOut = 'slideOutRight'
+                directionClassIn = 'slideInRight'
+              @_slide(directionClassOut, directionClassIn)
+
+    _update_indicators: ->
+      @indicators.each (i, indicator) =>
+        $(indicator).removeClass('active')
+      active_position = $(@next).data('position')
+      $(@carousel).find(@indicator_container + '[data-position="' + active_position + '"]').addClass('active')
+
+    _slide_out: (directionClass) ->
+      $(@active).addClass(directionClass)
+      $(@active).one 'webkitAnimationEnd oanimationend msAnimationEnd animationend', (e) =>
+        @_after_slide_out(directionClass)
+
+    _after_slide_out: (classToRemove) ->
+      $(@active).addClass('hidden')
+      $(@active).removeClass('active')
+      $(@active).removeClass(classToRemove)
+
+    _slide_in: (directionClass) ->
+      $(@next).addClass(directionClass)
+      $(@next).addClass('active')
+      $(@next).removeClass('hidden')
+      $(@next).one 'webkitAnimationEnd oanimationend msAnimationEnd animationend', (e) =>
+        @_after_slide_in(directionClass)
+
+    _after_slide_in: (classToRemove) ->
+      $(@next).removeClass(classToRemove)
+      @clickable = true
+      @_update_indicators()
+
+
+  class ImageCarousel extends Carousel
+
+    _init: ->
+      # class specific init
+
+    _set_height: ->
+      containerSelector = $(@carousel).data('container')
+      containerHeight = $(containerSelector).height()
+      $(@carousel).css('height', containerHeight)
+
+    _slide: (directionClassOut, directionClassIn) ->
+      @_slide_out(directionClassOut)
+      @_slide_in(directionClassIn)
+
+  class ItemCarousel extends Carousel
+
+    _init: ->
+      @_view_dislike_options_click_handler()
+      @_close_dislike_options_click_handler()  
+
+    _set_height: ->
+      @carouselHeight = 0
+      @slides.each (i, item) =>
+        if $(item).height() > @carouselHeight
+          @carouselHeight = $(item).height()
+      $(@carousel).css('height', @carouselHeight + 'px')
+      $(@container).css('height', @carouselHeight + 'px')
+
+    _slide: (directionClassOut, directionClassIn) ->
+      @_load_active_dislike_content
+      if $(@dislike_content).hasClass('fixed')
+        $(@dislike_content).slideToggle 'slow', =>
+          $(@dislike_content).removeClass('fixed')
+          @_slide_out(directionClassOut)
+          @_slide_in(directionClassIn)
+      else
+        @_slide_out(directionClassOut)
+        @_slide_in(directionClassIn)
+
+    # Extras for item carousel
+
+    _load_active_dislike_link: ->
+      @_load_active()
+      @dislike_link = $(@active).find('.dislike-options__link')
+
+    _load_active_dislike_content: ->
+      unless @active?
+        @_load_active()
+      id = $(@active).find('.dislike-options__link').attr('href')
+      @dislike_content = $(id)
+
+    _view_dislike_options_click_handler: ->
+      $(@carousel).find('.dislike-options__link').each (i, link) =>
+        $(link).click (e) =>
+          e.preventDefault()
+          if @clickable
+            offset = $(link).offset()
+            @_load_active_dislike_content()
+            @dislike_content.addClass('fixed')
+            @dislike_content.css('left', offset.left + 'px')
+            @dislike_content.css('top', offset.top + 'px')
+            @dislike_content.slideToggle()
+
+    _close_dislike_options_click_handler: ->
+      $('.dislike-options__close').each (i, close) =>
+        $(close).click (e) =>
+          e.preventDefault()
+          if @clickable
+            id = $(close).attr('href')
+            content = $(id)
+            content.slideToggle 'slow', =>
+              content.removeClass('fixed')
+
+
+    
+  $('.gr-carousel').each (i, carousel) ->
+    new ItemCarousel(carousel)
+
+  $('.gr-image-carousel').each (i, carousel) ->
+    new ImageCarousel(carousel)
