@@ -20,7 +20,7 @@ Rails.application.routes.draw do
 
   resources :profiles, only: :none do
     resources :gift_recommendations do
-      resource :gift_dislike, only: [:create]
+      resource :gift_dislike, only: [:create, :destroy]
     end
   end
 

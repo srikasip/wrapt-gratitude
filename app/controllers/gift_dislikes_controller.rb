@@ -4,12 +4,24 @@ class GiftDislikesController < ApplicationController
   before_action :load_recommendation
 
   def create
-    # TODO make this ajax
     @gift_dislike = GiftDislike.new(dislike_gift_params)
     @gift_dislike.profile = @profile
     @gift_dislike.gift = @gift
-    @gift_dislike.save
-    redirect_to profile_gift_recommendations_path(@profile)
+    respond_to do |format|
+      if @gift_dislike.save && @gift_recommendation.present?
+        format.js {render layout: false}
+      else
+        format.html { redirect_to profile_gift_recommendations_path(@profile) }
+      end
+    end
+  end
+
+  def destroy
+    @gift_dislike = GiftDislike.where(profile: @profile, gift: @gift)
+    @gift_dislike.destroy_all
+    respond_to do |format|
+      format.js {render layout: false}
+    end
   end
 
   private

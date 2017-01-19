@@ -3,34 +3,15 @@
     = "#{@profile.name}'s Gift Recommendations"
   %p.small.text-center
     ="See a gift you like but not sure it's right for the occasion? Like it. Find a gift you want to 'send' to #{@profile.name}? Add it to you figt basket & 'send' it. Sending a gift in beta simpy sends an email to your giftee nootifying them of the gift you have selected, explaining why they recieved the email."
-  - gifts = load_gift_recommendation_carousel_gifts(@gift_recommendations)
-  = carousel(slides: gifts, unique_carousel_name: 'gr-carousel', slide_content_singular: 'gift') 
-  - @gift_recommendations.each do |gr|
-    - id = "gr-dislike__#{gr.gift.id}"
-    .dislike-options__content{id: id}
-      .dislike-options__title.pa1
-        I don't like this recommendation
-        = link_to "##{id}", class: 'dislike-options__close' do
-          %span.glyphicon.glyphicon-remove.pull-right
-      .dislike-options__options.pa1.j-gift-dislike__container
-        - gr.dislike_options.each do |option|
-          .option
-            = link_to option[:text], option[:href], data: option[:data], class: 'j-gift-dislike__send'
-        = simple_form_for @gift_dislikes[gr.id], url: profile_gift_recommendation_gift_dislike_path(@profile, gr) do |f|
-          = f.input :reason, as: :hidden, input_html: {class: 'j-gift-dislike__input'}
+  - gifts = load_gift_recommendation_carousel_data(@gift_recommendations)
+  = carousel(carousel: gifts, unique_carousel_name: 'gr-carousel', slide_content_singular: 'gift')
 
 - content_for :page_js do
   = render '/application/carousel_js'
   :javascript
     $(document).ready(function() {
-      // TODO change this to ajax
-      $('.j-gift-dislike__send').click(function(e) {
-        e.preventDefault()
-        var container = $(this).parents('.j-gift-dislike__container');
-        var value = $(this).data('value');
-        var form = container.find('form');
-        var input = form.find('.j-gift-dislike__input');
-        input.val(value);
+      $('[data-behavior=dislike-reason]').change(function() {
+        var form = $(this).parents('[data-behavior=dislike-form]');
         form.submit();
       });
     });

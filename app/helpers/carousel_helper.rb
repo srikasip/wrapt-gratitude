@@ -1,24 +1,26 @@
 module CarouselHelper
 
-  def carousel(slides: [], unique_carousel_name:, slide_content_singular:, container: " ")
+  def carousel(carousel: {}, unique_carousel_name:, slide_content_singular:, container: " ")
+    slides = carousel[:slides]
+    nav_partial = carousel[:nav_partial]
     if slides.present?
-      data = load_carousel_data(unique_carousel_name, slide_content_singular, container)
-      content_tag :div, class: "wrapt-carousel #{data[:carousel]}", data: data do
-        concat carousel_nav(direction: :prev, nav: data[:nav])
-        concat carousel_slide_container(slides: slides, slides_container: data[:slides_container], slide_container: data[:slide_container])
-        concat carousel_nav(direction: :next, nav: data[:nav])
-        concat carousel_indicators(slides: slides, indicators: data[:indicators_container], indicator: data[:indicator_container])
+      classes = load_carousel_classes(unique_carousel_name, slide_content_singular, container)
+      content_tag :div, class: "wrapt-carousel #{classes[:carousel]}", data: classes do
+        concat carousel_nav(nav_container_class: classes[:nav_container], nav_class: classes[:nav], nav_partial: nav_partial)
+        concat carousel_slide_container(slides: slides, slides_container: classes[:slides_container], slide_container: classes[:slide_container])
+        concat carousel_indicators(slides: slides, indicators: classes[:indicators_container], indicator: classes[:indicator_container])
       end
     end
   end
 
-  def load_carousel_data(unique_carousel_name, slide_content_singular, container)
+  def load_carousel_classes(unique_carousel_name, slide_content_singular, container)
     {
       carousel: unique_carousel_name,
       slides_container: "#{unique_carousel_name}__#{slide_content_singular.pluralize(2)}",
       slide_container: "#{unique_carousel_name}__#{slide_content_singular}-container",
       indicators_container: "#{unique_carousel_name}__indicators",
       indicator_container: "#{unique_carousel_name}__indicator",
+      nav_container: "#{unique_carousel_name}__nav-container",
       nav: "#{unique_carousel_name}__nav",
       container: container
     }
@@ -39,25 +41,11 @@ module CarouselHelper
     end
   end
 
-  def carousel_nav(direction: direction, nav: nav)
-    directions = {prev: 'glyphicon-menu-left', next: 'glyphicon-menu-right'}
-    link_to '#', class: "wrapt-carousel__nav #{nav} #{direction.to_s}" do
-      concat carousel_nav_icon_wrapper(directions[direction])
-    end
+  def carousel_nav(nav_container_class: nav_container_class, nav_class: nav_class, nav_partial: nav_partial)
+    css_classes = {css_classes: {container: nav_container_class, link: "wrapt-carousel__nav #{nav_class}"}}
+    render nav_partial, locals: css_classes
   end
-
-  def carousel_nav_icon_wrapper(direction_class)
-    content_tag :div, class: "wrapt-carousel-nav__icon-wrapper" do
-      concat carousel_nav_icon(direction_class)
-    end
-  end
-
-  def carousel_nav_icon(direction_class)
-    content_tag :div, class: "wrapt-carousel-nav__icon" do
-      concat content_tag :span, '', class: "glyphicon #{direction_class}"
-    end
-  end
-
+  
   def carousel_slide_container(slides: slides, slides_container: '', slide_container: '')
     content_tag :div, class: "wrapt-carousel__slides #{slides_container}" do
       slides.each_with_index do |slide, index|
@@ -68,10 +56,6 @@ module CarouselHelper
 
   def slide_content(slide: slide, index: index, slide_container: '')
     render slide[:slide_partial], locals: slide[:slide_locals]
-  end
-
-  def dislike_options_content_id(gift)
-    "gr-dislike__#{gift.id}"
   end
 
 end

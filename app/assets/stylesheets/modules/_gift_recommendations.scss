@@ -1,0 +1,260 @@
+// gift recommendation carousel specific styles
+
+.gr-carousel {
+  margin-bottom: 100px;
+}
+
+.gr-carousel__gifts {
+  @include floating-container;
+  width: 945px;
+  margin: 0px auto;
+}
+
+.gr-carousel__nav-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
+
+$gr-carousel-nav__width: 82.5px;
+.gr-carousel__nav {
+  position: absolute;
+  top: 50%;
+  width: 40px;
+  height: 100px;
+  margin-top: -50px;
+  display: table;
+}
+
+.gr-carousel__nav.prev {
+  margin-left: $gr-carousel-nav__width - 40;
+}
+
+.gr-carousel__nav.next {
+  margin-right: $gr-carousel-nav__width - 40;
+}
+
+.gr-carousel__nav-inner {
+  position: absolute;
+  width: 100px;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba($blue-005, 0.1);
+}
+
+.gr-carousel__nav-icon {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.gr-carousel__nav.prev {
+  left: 0px;
+  .gr-carousel__nav-inner {
+   top: 0px;
+   left: 0px;
+  }
+}
+
+.gr-carousel__nav.next {
+  right: 0px;
+  .gr-carousel__nav-inner {
+    top: 0px;
+    right: 0px;
+  }
+}
+
+.gr-carousel__nav:hover {
+  background-color: transparent;
+  width: 50px;
+  height: 118px;
+  margin-top: -59px;
+  .gr-carousel__nav-inner {
+    background-color: rgba($blue-005, 0.25);
+    width: 118px;
+  }
+}
+
+.gr-carousel__nav.prev:hover {
+  margin-left: $gr-carousel-nav__width - 50;
+}
+
+.gr-carousel__nav.next:hover {
+  margin-right: $gr-carousel-nav__width - 50;
+}
+
+.gr-carousel__indicators {
+  position: static;
+  margin-top: 60px;
+}
+
+.gr-carousel__indicator {
+  border-radius: 0px;
+  border: none;
+  width: auto;
+  height: auto;
+}
+
+.gr-carousel__indicator.active {
+  border: 2px solid red;
+}
+
+// gift recommendations carousel gift
+
+.gr-carousel__gift {
+  height: 100%;
+  margin: 0px;
+}
+
+.gr-carousel__gift-image,
+.gr-carousel__gift-content {
+  height: 100%;
+  float: left;
+  position: relative;
+}
+
+.gr-carousel__gift-image {
+  width: 45%;
+}
+
+.gr-carousel__gift-content {
+  width: 55%;
+}
+
+.gr-carousel__dislike a {
+  background-color: rgba($blue-005, 0.1);
+  padding: 0px 6px;
+  display: inline-block;
+}
+
+.gr-carousel__dislike a:hover,
+.gr-carousel__dislike a:focus,
+.gr-carousel__dislike a:active {
+  background-color: rgba($blue-005, 0.25);
+}
+
+.gr-carousel__dislike a.disliked {
+  background-color: rgba($orange-001, 0.1);
+  color: $orange-001;
+  .small {
+    display: inline-block;
+    margin-bottom: 0px;
+  }
+}
+
+.gr-carousel__dislike .dropdown-menu {
+  background-color: $blue-005;
+  width: 200px;
+  margin-top: 10px;
+  li {
+    margin-bottom: 0px;
+  }
+}
+
+.gr-carousel__dislike .dropdown-menu:after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: 5px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid $blue-005;
+}
+
+
+.gr-dislike__form {
+  .form-group {
+    margin-bottom: 0px;
+  }
+  input {
+    display: none;
+  }
+  .radio label {
+    padding: 0px;
+  }
+  .radio {
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+}
+
+.gr-carousel__gift-details {
+  margin-bottom: 140px;
+}
+
+.gr-carousel__gift-actions {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+}
+
+.gr-carousel__price,
+.gr-carousel__quantity {
+  width: 50%;
+  float: left;
+}
+
+.gr-carousel__price {
+  line-height: 56px;
+  margin-bottom: 0px;
+}
+
+// gift image carousel specific styles
+
+.gr-image-carousel__images {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.gr-image-carousel__image-container {
+  height: 100%;
+}
+
+.gr-image-carousel__image {
+  width: 100%;
+  height: 100%;
+  white-space: normal;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  position: relative;
+}
+
+.gr-image-carousel__image-text {
+  display: inline-block;
+  width: 300px;
+  color: #FFFFFF;
+}
+
+.gr-image-carousel__nav-links {
+  display: inline-block;
+  margin-left: 15px;
+}
+
+.gr-image-carousel__nav-container {
+  z-index: 10;
+  width: 400px;
+  position: absolute;
+  bottom: 40px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.gr-image-carousel__nav.prev {
+  padding-right: 10px;
+}
+
+.gr-image-carousel__nav.next {
+  padding-left: 10px;
+}

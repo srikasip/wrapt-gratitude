@@ -1,0 +1,2 @@
+var id = '<%= escape_javascript(@gift_recommendation.id.to_s) %>';
+$('[data-gift-recommendation-id=' + id + ']').html("<%= escape_javascript(render '/gift_recommendations/gift_dislike', gift_recommendation: @gift_recommendation, profile: @profile) %>")

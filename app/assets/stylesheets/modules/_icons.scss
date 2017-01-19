@@ -45,7 +45,9 @@ a:active .navbar-static-top__icon-circle {
   margin-left: 28px;
   margin-top: -2px;
 }
-.sqr-previous__icon--caret-left {
+.sqr-previous__icon--caret-left,
+.gr-carousel__nav--caret-left,
+.gr-carousel__nav--caret-right {
   width: 14px;
   height: 14px;
   fill: $blue-005;
