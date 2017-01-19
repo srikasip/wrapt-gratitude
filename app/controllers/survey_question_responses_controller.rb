@@ -4,6 +4,10 @@ class SurveyQuestionResponsesController < ApplicationController
   before_action :set_profile
   before_action :set_survey_response
 
+  def login_required?
+    false
+  end
+
   def show
     @question_response = @survey_response.question_responses.find params[:id]
     @survey_response = @question_response.survey_response

@@ -2,6 +2,10 @@ class ProfilesController < ApplicationController
 
   include RequiresLoginOrInvitation
 
+  def login_required?
+    false
+  end
+
   def new
     @profile = current_user.owned_profiles.new
   end
