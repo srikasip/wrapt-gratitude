@@ -11,7 +11,7 @@ module Recommendations
 
     NEGATIVE_RANK_PENALTY = 1
     QUESTION_WEIGHT_BASE = 10
-    MIN_NUMBER_OF_RECOMMENDATIONS = 8
+    MIN_NUMBER_OF_RECOMMENDATIONS = 10
 
     def initialize(training_set, response = nil)
       @training_set = training_set
@@ -39,7 +39,9 @@ module Recommendations
       
       generate_candidate_recommendations
       remove_similar_recommendations
-      @recommendations = @recommendations.take(MIN_NUMBER_OF_RECOMMENDATIONS)
+      
+      # take 80% of the recommended ones and leave 20% for random
+      @recommendations = @recommendations.take((0.8 * MIN_NUMBER_OF_RECOMMENDATIONS).round)
       
       # are we short?
       if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
@@ -49,6 +51,8 @@ module Recommendations
         # are we still short?
         if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
           generate_random_recommendations(MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length)
+        elsif @recommendations.length > MIN_NUMBER_OF_RECOMMENDATIONS
+          @recommendations = @recommendations.take(MIN_NUMBER_OF_RECOMMENDATIONS)
         end
       end
       
@@ -100,6 +104,7 @@ module Recommendations
     end
     
     def generate_candidate_recommendations
+      max_rank = 0.0
       gifts.each do |gift|
         gift_rank = 0
         questions_by_gift[gift].each do |question|
@@ -107,8 +112,11 @@ module Recommendations
         end
         if gift_rank > 0.0
           add_recommendation(gift, gift_rank)
+          max_rank = gift_rank if gift_rank > max_rank
         end
       end
+      # reject the bottom quartile
+      @recommendations.reject!{|r| r.score < 0.25 * max_rank}
       @recommendations.sort!{|a, b| b.score <=> a.score}
       
       @recommendations
