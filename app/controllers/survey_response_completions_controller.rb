@@ -15,8 +15,7 @@ class SurveyResponseCompletionsController < ApplicationController
     if @survey_response_completion.save
       # TODO email the recipient
       # TODO mark survey completed for tracking purposes
-      flash.notice = 'Gift Recommendations Coming in Release 9'
-      redirect_to root_path
+      redirect_to profile_gift_recommendations_path(@profile)
     else
       flash.alert = 'Oops! Looks like we need a bit more info.'
       render :show
