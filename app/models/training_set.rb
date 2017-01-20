@@ -5,6 +5,8 @@ class TrainingSet < ApplicationRecord
 
   has_one :evaluation, class_name: 'TrainingSetEvaluation', dependent: :destroy, inverse_of: :training_set
 
+  scope :published, -> { where published: true}
+
   def publish!
     TrainingSet.update_all published: false
     self.published = true

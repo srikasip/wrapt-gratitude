@@ -7,7 +7,11 @@ module Recommendations
     # exclude text questions
     # tests
 
-    attr_reader :training_set, :response, :recommendations
+    attr_reader :training_set, :response, :recommendations, :response_adapter
+
+    delegate :add_recommendation,
+      :destroy_recommendations!,
+      to: :response_adapter
 
     NEGATIVE_RANK_PENALTY = 2
     QUESTION_WEIGHT_BASE = 10
@@ -20,19 +24,27 @@ module Recommendations
     
     def response=(new_response)
       @response = new_response
+      set_response_adapter
       if @response.present? && (training_set.survey_id != @response.survey_id)
         raise SurveyMismatchError
       end
+
       clear_recommendations
       @response
     end
-    
-    def destroy_recommendations!
-      EvaluationRecommendation.where(
-        survey_response: response,
-        training_set_evaluation:
-        training_set.evaluation).delete_all
+
+    private def set_response_adapter
+      if @response.present?
+        case @response
+        when ProfileSetSurveyResponse then @response_adapter = Recommendations::ProfileSetSurveyResponseAdapter.new(self)
+        when SurveyResponse then @response_adapter = Recommendations::SurveyResponseAdapter.new(self)
+        else raise UnsupportedSurveyResponseError
+        end
+      end      
     end
+    
+
+
 
     def generate_recommendations
       @recommendations = []
@@ -85,18 +97,6 @@ module Recommendations
         added << add_recommendation(gift, 0.0)
       end
       added
-    end
-      
-    def add_recommendation(gift, score = 0.0)
-      recommendation = EvaluationRecommendation.new(
-        survey_response: response,
-        gift: gift,
-        training_set_evaluation: training_set.evaluation,
-        score: score)
-      
-      @recommendations << recommendation
-      
-      recommendation
     end
     
     def generate_candidate_recommendations
@@ -158,7 +158,7 @@ module Recommendations
     end
 
     def categories_by_gifts
-      @_categories_by_gift ||= {}.tap do |result|
+      @_categories_by_gift ||= Hash.new([]).tap do |result|
         gifts.each do |gift|
           result[gift] = gift.products.map(&:product_subcategory)
         end
@@ -194,6 +194,7 @@ module Recommendations
     end
     
     class SurveyMismatchError; end
+    class UnsupportedSurveyResponseError < StandardError; end
 
   end
 end
