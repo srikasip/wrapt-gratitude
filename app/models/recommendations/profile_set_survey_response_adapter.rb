@@ -7,7 +7,7 @@ module Recommendations
 
     delegate :response,
       :training_set,
-      :recommendations
+      :recommendations,
       to: :engine
 
     def initialize(engine)

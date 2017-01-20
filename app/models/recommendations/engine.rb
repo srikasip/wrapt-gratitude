@@ -10,6 +10,7 @@ module Recommendations
     attr_reader :training_set, :response, :recommendations, :response_adapter
 
     delegate :add_recommendation,
+      :destroy_recommendations!,
       to: :response_adapter
 
     NEGATIVE_RANK_PENALTY = 2
@@ -157,7 +158,7 @@ module Recommendations
     end
 
     def categories_by_gifts
-      @_categories_by_gift ||= {}.tap do |result|
+      @_categories_by_gift ||= Hash.new([]).tap do |result|
         gifts.each do |gift|
           result[gift] = gift.products.map(&:product_subcategory)
         end

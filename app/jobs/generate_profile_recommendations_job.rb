@@ -1,9 +1,9 @@
 class GenerateProfileRecommendationsJob < ApplicationJob
   queue_as :default
 
-  def perform(profile)
+  def perform(profile, training_set)
     profile.update_attribute :recommendations_in_progress, true
-    engine = Recommendations::Engine.new(training_set_evaluation.training_set)
+    engine = Recommendations::Engine.new(training_set)
     profile.survey_responses.each do |response|
       engine.response = response
       engine.generate_recommendations

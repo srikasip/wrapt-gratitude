@@ -6,7 +6,7 @@ class SurveyResponseCompletionsController < ApplicationController
 
   def show
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
-    GenerateProfileRecommendationsJob.perform_later @profile
+    GenerateProfileRecommendationsJob.perform_later @profile, TrainingSet.published.first
   end
 
   def create
