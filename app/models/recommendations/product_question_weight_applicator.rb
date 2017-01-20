@@ -10,7 +10,9 @@ module Recommendations
     end
 
     def modified_rank
-      question_rank * (Recommendations::Engine::QUESTION_WEIGHT_BASE ** question_weight)
+      exponent = question_weight.abs
+      sign = question_weight.abs < 0 ? -1.0 : 1.0
+      question_rank * sign * (Recommendations::Engine::QUESTION_WEIGHT_BASE ** exponent)
     end
 
   end

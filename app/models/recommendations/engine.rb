@@ -9,7 +9,7 @@ module Recommendations
 
     attr_reader :training_set, :response, :recommendations
 
-    NEGATIVE_RANK_PENALTY = 1
+    NEGATIVE_RANK_PENALTY = 4
     QUESTION_WEIGHT_BASE = 10
     MIN_NUMBER_OF_RECOMMENDATIONS = 10
 
@@ -105,7 +105,7 @@ module Recommendations
     
     def generate_candidate_recommendations
       max_rank = 0.0
-      gifts.each do |gift|
+      training_set_gifts.each do |gift|
         gift_rank = 0
         questions_by_gift[gift].each do |question|
           gift_rank += calculate_question_rank(gift, question)
@@ -156,13 +156,17 @@ module Recommendations
       end
       result
     end
-
+    
     def gifts
-      @_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).where(id: training_set.gift_question_impacts.select(:gift_id))
+      training_set_gifts + random_gifts
+    end
+
+    def training_set_gifts
+      @_training_set_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).where(id: training_set.gift_question_impacts.select(:gift_id)).to_a
     end
 
     def random_gifts
-      @_random_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).order('RANDOM()').limit(50)
+      @_random_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).order('RANDOM()').limit(50).to_a
     end
 
     def categories_by_gifts
