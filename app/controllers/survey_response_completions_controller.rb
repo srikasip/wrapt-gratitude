@@ -6,7 +6,6 @@ class SurveyResponseCompletionsController < ApplicationController
 
   def show
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
-    GenerateProfileRecommendationsJob.perform_later @profile, TrainingSet.published.first
   end
 
   def create
@@ -14,7 +13,8 @@ class SurveyResponseCompletionsController < ApplicationController
     @survey_response_completion.assign_attributes survey_response_completion_params
     if @survey_response_completion.save
       # TODO email the recipient
-      # TODO mark survey completed for tracking purposes
+      @survey_response.update_attribute :completed_at, Time.now
+      GenerateProfileRecommendationsJob.new.perform @profile, TrainingSet.published.first
       redirect_to profile_gift_recommendations_path(@profile)
     else
       flash.alert = 'Oops! Looks like we need a bit more info.'
