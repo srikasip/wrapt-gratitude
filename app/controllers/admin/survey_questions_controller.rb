@@ -72,6 +72,7 @@ module Admin
           :include_other_option,
           :multiple_option_responses,
           :use_response_as_name,
+          :use_response_as_relationship,
           :code,
           :conditional_display,
           :conditional_question_id,

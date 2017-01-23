@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170113163420) do
+ActiveRecord::Schema.define(version: 20170123153016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,9 +84,10 @@ ActiveRecord::Schema.define(version: 20170113163420) do
 
   create_table "gift_recommendations", force: :cascade do |t|
     t.integer  "gift_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.integer  "profile_id"
+    t.float    "score",      default: 0.0, null: false
     t.index ["gift_id"], name: "index_gift_recommendations_on_gift_id", using: :btree
     t.index ["profile_id"], name: "index_gift_recommendations_on_profile_id", using: :btree
   end
@@ -202,9 +203,11 @@ ActiveRecord::Schema.define(version: 20170113163420) do
     t.string   "email"
     t.string   "name"
     t.integer  "owner_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
     t.string   "relationship"
+    t.boolean  "recommendations_in_progress",  default: false, null: false
+    t.datetime "recommendations_generated_at"
   end
 
   create_table "survey_question_options", force: :cascade do |t|
@@ -244,24 +247,25 @@ ActiveRecord::Schema.define(version: 20170113163420) do
   end
 
   create_table "survey_questions", force: :cascade do |t|
-    t.integer  "survey_id",                                 null: false
+    t.integer  "survey_id",                                    null: false
     t.text     "prompt"
     t.integer  "position"
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
     t.string   "type"
     t.string   "min_label"
     t.string   "max_label"
     t.string   "mid_label"
-    t.integer  "sort_order",                default: 0,     null: false
-    t.boolean  "multiple_option_responses", default: false, null: false
-    t.boolean  "include_other_option",      default: false, null: false
+    t.integer  "sort_order",                   default: 0,     null: false
+    t.boolean  "multiple_option_responses",    default: false, null: false
+    t.boolean  "include_other_option",         default: false, null: false
     t.string   "code"
-    t.boolean  "use_response_as_name",      default: false, null: false
+    t.boolean  "use_response_as_name",         default: false, null: false
     t.integer  "conditional_question_id"
     t.integer  "survey_section_id"
-    t.boolean  "yes_no_display",            default: false, null: false
+    t.boolean  "yes_no_display",               default: false, null: false
     t.text     "placeholder_text"
+    t.boolean  "use_response_as_relationship", default: false, null: false
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
     t.index ["survey_section_id"], name: "index_survey_questions_on_survey_section_id", using: :btree
   end
@@ -279,10 +283,11 @@ ActiveRecord::Schema.define(version: 20170113163420) do
   end
 
   create_table "survey_responses", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.integer  "profile_id"
     t.integer  "survey_id"
+    t.datetime "completed_at"
     t.index ["profile_id"], name: "index_survey_responses_on_profile_id", using: :btree
     t.index ["survey_id"], name: "index_survey_responses_on_survey_id", using: :btree
   end
