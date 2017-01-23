@@ -9,8 +9,8 @@ module Recommendations
 
     attr_reader :training_set, :response, :recommendations
 
-    NEGATIVE_RANK_PENALTY = 2
-    QUESTION_WEIGHT_BASE = 10
+    NEGATIVE_RANK_PENALTY = 5.0
+    QUESTION_WEIGHT_BASE = 100.0
     MIN_NUMBER_OF_RECOMMENDATIONS = 10
 
     def initialize(training_set, response = nil)
