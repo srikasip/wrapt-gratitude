@@ -10,6 +10,8 @@ class SurveyQuestionResponse < ApplicationRecord
 
   validates :text_response, presence: true, if: "survey_question.type == 'SurveyQuestions::Text'", on: :update
 
+  after_save :update_profile_relationship
+
   def survey_question_option_id
     survey_question_option_ids.first
   end
@@ -75,6 +77,15 @@ class SurveyQuestionResponse < ApplicationRecord
       end
     end
     met
+  end
+
+  private def update_profile_relationship
+    if survey_question.use_response_as_relationship &&
+      survey_response.respond_to?(:profile) &&
+      relationship = survey_question_options.first&.text
+      then
+      survey_response.profile.update_attribute :relationship, relationship
+    end
   end
 
 end

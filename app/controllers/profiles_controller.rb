@@ -1,6 +1,7 @@
 class ProfilesController < ApplicationController
 
   include RequiresLoginOrInvitation
+  helper SurveyQuestionResponsesHelper
 
   def login_required?
     false
@@ -8,14 +9,17 @@ class ProfilesController < ApplicationController
 
   def new
     @profile = current_user.owned_profiles.new
+    survey = Survey.published.first
+    first_question = survey.sections.first.questions.first
+    @question_response = SurveyQuestionResponse.new survey_question: first_question
   end
 
   def create
-    @profile = current_user.owned_profiles.new profile_params
+    @profile = current_user.owned_profiles.new
     if @profile.save
-      # TODO go somewhere for real
-      survey_response = @profile.survey_responses.create survey: Survey.published.first
-      redirect_to with_invitation_scope(profile_survey_question_path(@profile, survey_response, survey_response.ordered_question_responses.first))
+      @survey_response = @profile.survey_responses.create survey: Survey.published.first
+      @survey_response.ordered_question_responses.first.update question_response_params
+      redirect_to with_invitation_scope(profile_survey_question_path(@profile, @survey_response, @survey_response.ordered_question_responses.first.next_response))
     else
       render :new
     end
@@ -28,12 +32,19 @@ class ProfilesController < ApplicationController
     end
   end
 
-  private def profile_params
-    result = {}
-    if params[:commit].in? Profile::RELATIONSHIPS
-      result[:relationship] = params[:commit]
-    end
-    result
+  private def question_response_params
+    params.require(:survey_question_response).permit(
+      :text_response,
+      :range_response,
+      :other_option_text,
+      :survey_question_id,
+      :survey_question_option_id,
+      survey_question_option_ids: []
+    )
   end
+  
+
+  
+  
 
 end

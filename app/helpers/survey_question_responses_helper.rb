@@ -3,17 +3,17 @@ module SurveyQuestionResponsesHelper
   def response_fields_partial
     case @question_response.survey_question
     when SurveyQuestions::MultipleChoice then multiple_choice_fields_partial
-    when SurveyQuestions::Text then 'text_fields'
-    when SurveyQuestions::Range then 'range_fields'
+    when SurveyQuestions::Text then 'survey_question_responses/text_fields'
+    when SurveyQuestions::Range then 'survey_question_responses/range_fields'
     #TODO yes/no
     end
   end
 
   def multiple_choice_fields_partial
     if @question_response.survey_question.yes_no_display?
-      'yes_no_fields'
+      'survey_question_responses/yes_no_fields'
     else
-      'multiple_choice_fields'
+      'survey_question_responses/multiple_choice_fields'
     end
   end
 
