@@ -11,8 +11,9 @@ module Recommendations
 
     def modified_rank
       exponent = question_weight.abs
-      sign = question_weight.abs < 0 ? -1.0 : 1.0
-      question_rank * sign * (Recommendations::Engine::QUESTION_WEIGHT_BASE ** exponent)
+      # ignore the sign of the question weight it should not change
+      # the direction of ranking. That direction is set by the response weights.
+      question_rank * (Recommendations::Engine::QUESTION_WEIGHT_BASE ** exponent)
     end
 
   end
