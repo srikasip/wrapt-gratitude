@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     resources :gift_recommendations do
       resource :gift_dislike, only: [:create, :destroy]
     end
+    resources :gift_selections, only: [:create, :destroy]
   end
 
   #####################################################

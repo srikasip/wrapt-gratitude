@@ -1,4 +1,5 @@
 .gift-basket-overlay {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -15,9 +16,10 @@
   height: 100%;
   width: 33%;
   z-index: 1001;
+  background-color: white;
   display: flex;
   flex-direction: column;
-  background-color: white;
+  display: none;
 }
 
 .gift-basket--header {

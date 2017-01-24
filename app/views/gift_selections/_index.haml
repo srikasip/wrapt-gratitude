@@ -1,0 +1,6 @@
+%h3 Gift Basket
+%p #{profile.gift_selections.count} Gifts In Basket
+- profile.gift_selections.preload(gift: :gift_images).each do |gift_selection|
+  .gift-basket--gift
+    = gift_selection.gift.title
+    = link_to 'X', profile_gift_selection_path(profile, gift_selection), data: {remote: true, behavior: 'remove-gift-from-basket', method: :delete}

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170120164952) do
+ActiveRecord::Schema.define(version: 20170124183417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,15 @@ ActiveRecord::Schema.define(version: 20170120164952) do
     t.float    "score",      default: 0.0, null: false
     t.index ["gift_id"], name: "index_gift_recommendations_on_gift_id", using: :btree
     t.index ["profile_id"], name: "index_gift_recommendations_on_profile_id", using: :btree
+  end
+
+  create_table "gift_selections", force: :cascade do |t|
+    t.integer  "profile_id"
+    t.integer  "gift_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gift_id"], name: "index_gift_selections_on_gift_id", using: :btree
+    t.index ["profile_id"], name: "index_gift_selections_on_profile_id", using: :btree
   end
 
   create_table "gifts", force: :cascade do |t|
@@ -247,24 +256,25 @@ ActiveRecord::Schema.define(version: 20170120164952) do
   end
 
   create_table "survey_questions", force: :cascade do |t|
-    t.integer  "survey_id",                                 null: false
+    t.integer  "survey_id",                                    null: false
     t.text     "prompt"
     t.integer  "position"
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
     t.string   "type"
     t.string   "min_label"
     t.string   "max_label"
     t.string   "mid_label"
-    t.integer  "sort_order",                default: 0,     null: false
-    t.boolean  "multiple_option_responses", default: false, null: false
-    t.boolean  "include_other_option",      default: false, null: false
+    t.integer  "sort_order",                   default: 0,     null: false
+    t.boolean  "multiple_option_responses",    default: false, null: false
+    t.boolean  "include_other_option",         default: false, null: false
     t.string   "code"
-    t.boolean  "use_response_as_name",      default: false, null: false
+    t.boolean  "use_response_as_name",         default: false, null: false
     t.integer  "conditional_question_id"
     t.integer  "survey_section_id"
-    t.boolean  "yes_no_display",            default: false, null: false
+    t.boolean  "yes_no_display",               default: false, null: false
     t.text     "placeholder_text"
+    t.boolean  "use_response_as_relationship", default: false, null: false
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
     t.index ["survey_section_id"], name: "index_survey_questions_on_survey_section_id", using: :btree
   end
@@ -419,6 +429,8 @@ ActiveRecord::Schema.define(version: 20170120164952) do
   add_foreign_key "gift_question_impacts", "training_sets"
   add_foreign_key "gift_recommendations", "gifts"
   add_foreign_key "gift_recommendations", "profiles"
+  add_foreign_key "gift_selections", "gifts"
+  add_foreign_key "gift_selections", "profiles"
   add_foreign_key "gifts", "product_categories"
   add_foreign_key "product_images", "products"
   add_foreign_key "products", "product_categories"
