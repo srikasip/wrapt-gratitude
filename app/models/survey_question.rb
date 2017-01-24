@@ -45,15 +45,35 @@ class SurveyQuestion < ApplicationRecord
     self.sort_order = next_sort_order
   end
 
-  def prompt_with_name survey_response
+  def prompt_with_substitutions survey_response
     result = prompt
+    result = substitute_name result, survey_response
+    result = substitute_relationship result, survey_response
+    return result
+  end
+
+  private def substitute_name string, survey_response
+    result = string
     if name_question = survey.name_question
       if name_response = survey_response.question_responses.where(survey_question: name_question).first&.text_response.presence
-        result = prompt.gsub /<name>/i, name_response
+        result = result.gsub /<name>/i, name_response
       end
     end
     return result
   end
+
+  private def substitute_relationship string, survey_response
+    result = string
+    if relationship_question = survey.relationship_question
+      if relationship_response = survey_response.question_responses.where(survey_question: relationship_question).first&.survey_question_options&.first&.text&.downcase.presence
+        result = result.gsub /<relationship>/i, relationship_response
+      end
+    end
+    return result
+  end
+
+
+  
 
   private def set_conditional_display
     @conditional_display = conditional_question_id?
@@ -70,6 +90,10 @@ class SurveyQuestion < ApplicationRecord
 
   def first_in_section?
     survey_section.questions.first == self    
+  end
+
+  def second_in_section?
+    survey_section.questions.second == self
   end
 
   private def replace_conditional_question_options

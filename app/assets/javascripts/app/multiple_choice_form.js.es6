@@ -6,11 +6,18 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
     this.multipleOptionResponses = options.multipleOptionResponses;
     this.handleButtonClick();
     this.updateDisplay(true);
+    this.submitting = false;
   }
 
   updateDisplay(init = false) {
     this.highlightSelectedButtons();
-    this.setNextButtonVisibility();
+    
+    if (this.multipleOptionResponses) {
+      this.setNextButtonVisibilityMultipleOptionResponses()
+    } else {
+      this.setNextButtonVisibilitySingleOptionResponses(init)
+    }
+
     if(!init) {
       this.setOtherTextVisibility();
     }
@@ -42,6 +49,12 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
       this.hidden_inputs_selector.prop('checked', false)
       option_input_selector.prop('checked', true)
     }
+    // submit the form if something was selected and it's not an other button
+    const selectedOtherOptionInput = $(this.hidden_inputs_selector).filter('[data-behavior~=other-option]:checked')
+    if (selectedOtherOptionInput.length == 0 && option_input_selector.is(':checked')) {
+      this.submitting = true;
+      this.form_element.submit()
+    }
   }
 
   highlightSelectedButtons() {
@@ -53,7 +66,7 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
     })
   }
 
-  setNextButtonVisibility() {
+  setNextButtonVisibilityMultipleOptionResponses() {
     const nextButton = $(this.form_element).find('[data-behavior~=next-question-button]')[0]
     const selected_option_inputs_selector = this.hidden_inputs_selector.filter(':checked')
     const nextHint = $('#js-next-question-hint-text')
@@ -66,6 +79,28 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
     }
     $(nextButton).prop('disabled', disabled);
     
+  }
+
+  setNextButtonVisibilitySingleOptionResponses(init) {
+    const nextButton = $(this.form_element).find('[data-behavior~=next-question-button]')[0]
+    const selected_option_inputs_selector = this.hidden_inputs_selector.filter(':checked')
+    if (init && selected_option_inputs_selector.length > 0) {
+      // returning to the question via the previous button
+      $(nextButton).show();
+    } else if(!init && !this.submitting) {
+      // they've returned to the question via the previous button
+      // and they've unselected their previously selected option
+      $(nextButton).show();
+      if (selected_option_inputs_selector.length > 0) {
+        $(nextButton).prop('disabled', false);
+      } else {
+       $(nextButton).prop('disabled', true);       
+      }
+ 
+    } else if(init) {
+      // they're coming into the question and nothing was previously selected
+      $(nextButton).hide();
+    }
   }
 
   setOtherTextVisibility() {
