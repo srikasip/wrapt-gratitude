@@ -24,4 +24,8 @@ module GiftRecommendationsHelper
     {nav_partial: 'gift_image_nav', slides: images}
   end
 
+  def show_gift_basket_in_top_nav?
+    true
+  end
+
 end

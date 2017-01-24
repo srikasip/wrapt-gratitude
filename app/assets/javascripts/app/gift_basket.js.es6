@@ -12,7 +12,7 @@ App.GiftBasket = class GiftBasket {
   }
 
   handleOpenLinks() {
-    $(this.container).find('[data-behavior~=open-gift-basket]').on('click', (evt) => {
+    $('[data-behavior~=open-gift-basket]').on('click', (evt) => {
       evt.preventDefault();
       this.open()
     })

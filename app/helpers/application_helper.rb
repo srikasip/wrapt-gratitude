@@ -9,6 +9,10 @@ module ApplicationHelper
     true
   end
 
+  def show_gift_basket_in_top_nav?
+    false
+  end
+
   # path to svg files so we can include them like a partial
   # http://cobwwweb.com/render-inline-svg-rails-middleman#sthash.0TA73Fi9.dpuf
   def svg(name) 
