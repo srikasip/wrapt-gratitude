@@ -8,6 +8,8 @@ class SurveyResponse < ApplicationRecord
     as: :survey_response,
     dependent: :destroy
 
+  scope :completed, -> { where.not(completed_at: nil) }
+
   before_create :build_question_responses
   def build_question_responses
     survey.questions.each do |question|

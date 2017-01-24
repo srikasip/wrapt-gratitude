@@ -1,0 +1,18 @@
+.gift-basket-overlay{data: {behavior: 'gift-basket-overlay'}}
+
+.gift-basket{data: {behavior: 'gift-basket'}}
+  .gift-basket--header
+    = link_to "< Back to Shopping", '#', data: {behavior: 'close-gift-basket'}
+  .gift-basket--main
+    %div{data: {behavior: 'gift-basket-gifts'}}
+      %h3 Gift Basket
+      SHOW GIFTS HERE!
+  .gift-basket--footer
+    %h4
+      Subtotal
+      %span.pull-right -
+    %p In our beta testing phase we are not fulfilling gift selections but we are asking that you send a notifcation to your Giftee telling them what you selected so we can inquire about effectiveness of our recommendations
+
+    = link_to 'SEND GIFT SELECTION NOTIFICATION', '#', class: 'btn btn-primary btn-sm btn-full-width'
+
+    %p You will be able to preview the email before you send it. 
