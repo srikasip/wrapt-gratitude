@@ -88,4 +88,12 @@ module SurveyQuestionResponsesHelper
     style = question_response.survey_question_response_options.map{|option| option.survey_question_option.type == 'SurveyQuestionOtherOption'}.any? ? 'display:block;' : 'display:none;'
   end
 
+  def display_section_intro_text?
+    if @question_response.survey_question.survey_section.first_in_survey?
+      @question_response.survey_question.second_in_section?
+    else
+      @question_response.survey_question.first_in_section?
+    end
+  end
+
 end

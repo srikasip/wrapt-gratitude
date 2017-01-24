@@ -92,6 +92,10 @@ class SurveyQuestion < ApplicationRecord
     survey_section.questions.first == self    
   end
 
+  def second_in_section?
+    survey_section.questions.second == self
+  end
+
   private def replace_conditional_question_options
     conditional_question_options.delete_all
     conditional_question_option_option_ids.each do |option_id|
