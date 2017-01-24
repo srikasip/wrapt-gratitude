@@ -16,6 +16,7 @@ class SurveyQuestionResponsesController < ApplicationController
 
   def update
     @question_response = @survey_response.question_responses.find params[:id]
+    @question_response.run_front_end_validations = true
     if @question_response.update question_response_params
       @question_response.update_attribute :answered_at, Time.now
       if request.xhr?
