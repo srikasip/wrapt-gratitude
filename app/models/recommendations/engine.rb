@@ -7,7 +7,7 @@ module Recommendations
     # exclude text questions
     # tests
 
-    attr_reader :training_set, :response, :recommendations
+    attr_reader :training_set, :response, :recommendations, :question_ranks
 
     NEGATIVE_RANK_PENALTY = 5.0
     QUESTION_WEIGHT_BASE = 100.0
@@ -16,6 +16,8 @@ module Recommendations
     def initialize(training_set, response = nil)
       @training_set = training_set
       self.response = response
+      @recommendations = []
+      @question_ranks = []
     end
     
     def response=(new_response)
@@ -35,7 +37,7 @@ module Recommendations
     end
 
     def generate_recommendations
-      @recommendations = []
+      clear_recommendations
       
       generate_candidate_recommendations
       remove_similar_recommendations
@@ -61,6 +63,7 @@ module Recommendations
 
     def clear_recommendations
       @recommendations = []
+      @question_ranks = []
       @_question_responses_by_question = nil
       true
     end
@@ -78,6 +81,12 @@ module Recommendations
       result[:question_weight_applied] = Recommendations::ProductQuestionWeightApplicator.new(result[:negative_rank_penalty_applied], gift_question&.question_impact).modified_rank
       result[:final_question_rank] = result[:question_weight_applied]
       result
+    end
+    
+    def recommendation_question_ranks(recommendation)
+      results = question_ranks.select{|qr| qr.gift == recommendation.gift}
+      results.sort!{|a, b| b.score <=> a.score}
+      results
     end
     
     protected
@@ -141,6 +150,10 @@ module Recommendations
       result = initial_question_rank(gift, question)
       result = Recommendations::NegativeRankPenaltyApplicator.new(result).modified_rank
       result = Recommendations::ProductQuestionWeightApplicator.new(result, gift_question&.question_impact).modified_rank
+      
+      add_question_rank(gift, question, result)
+      
+      result
     end
 
     def initial_question_rank gift, question
@@ -155,6 +168,18 @@ module Recommendations
         result = calculator_class.new(gift_question, question_response).question_rank
       end
       result
+    end
+    
+    def add_question_rank(gift, question, score)
+      response = question_responses_by_question[question]
+      impact = gift_question_impacts_by_gift_and_question[gift][question]
+      if response.present? && impact.present? && score != 0.0
+        question_rank = Recommendations::QuestionRank.new(response, impact, score)
+        question_ranks << question_rank
+        question_rank
+      else
+        nil
+      end
     end
     
     def gifts
@@ -199,7 +224,7 @@ module Recommendations
 
     def question_responses_by_question
       @_question_responses_by_question ||= {}.tap do |result|
-        response.question_responses.preload(:survey_question).each do |question_response|
+        response.question_responses.preload(:survey_question, :survey_question_options).each do |question_response|
           result[question_response.survey_question] = question_response
         end
       end  

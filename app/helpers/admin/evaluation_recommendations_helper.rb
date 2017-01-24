@@ -4,7 +4,7 @@ module Admin
     def displayable_response question_response
       case question_response&.survey_question
       when ::SurveyQuestions::MultipleChoice then question_response.survey_question_options.map(&:text).join(", ")
-      when ::SurveyQuestions::Range then question_response.range_response
+      when ::SurveyQuestions::Range then number_with_precision(question_response.range_response, precision: 2)
       end    
     end
 
