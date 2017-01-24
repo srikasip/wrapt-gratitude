@@ -1,0 +1,8 @@
+- css_classes = locals[:css_classes]
+%div.clearfix.pa1{class: css_classes[:container]}
+  .gr-image-carousel__image-text
+  .gr-image-carousel__nav-links.clearfix
+    = link_to '#', class: 'wrapt-carousel__nav gr-image-carousel__nav prev' do
+      =embedded_svg('icon-caret-left', class: "gr-carousel__nav--caret-left")
+    = link_to '#', class: 'wrapt-carousel__nav gr-image-carousel__nav next' do
+      =embedded_svg('icon-caret-right', class: "gr-carousel__nav--caret-right")

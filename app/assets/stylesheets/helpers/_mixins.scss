@@ -35,6 +35,13 @@
   font-family: "AkkuratBold", sans-serif;
 }
 
+@mixin floating-container() {
+  background-color: #FFFFFF;
+  -webkit-box-shadow: 0 6px 16px 0 rgba(0,0,0,0.05);
+  -moz-box-shadow: 0 6px 16px 0 rgba(0,0,0,0.05);
+  box-shadow: 0 6px 16px 0 rgba(0,0,0,0.05);
+}
+
 @mixin vertical-align($position: relative) {
   position: $position;
   top: 50%;

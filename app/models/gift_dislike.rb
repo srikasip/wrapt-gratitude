@@ -3,15 +3,16 @@ class GiftDislike < ApplicationRecord
   belongs_to :gift
   belongs_to :profile
 
-  enum reason: [:giftee_similar_item, :giftee_dislike, :too_expensive, :owner_dislike, :no_reason]
+  enum reason: {giftee_similar_item: 0, giftee_dislike: 1, too_expensive: 2, owner_dislike: 3, no_reason: 4}
 
   def display_reason(key)
-    {
-      giftee_similar_item: "#{profile.name} already has something like this",
-      giftee_dislike: "#{profile.name} doesn't like gifts like this",
-      too_expensive: "It's too expensive",
-      owner_dislike: "I don't like it",
+    labels = {
+      giftee_similar_item: "Already has this",
+      giftee_dislike: "Wouldn't like it",
+      too_expensive: "Too expensive",
+      owner_dislike: "Just don't like it",
       no_reason: 'None of these'
     }
+    labels[key.to_sym]
   end
 end

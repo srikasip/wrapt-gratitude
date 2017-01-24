@@ -12,10 +12,11 @@
 }
 
 .floating-container {
-  background-color: #FFF;
-  -webkit-box-shadow: 0 6px 16px 0 rgba(0,0,0,0.05);
-  -moz-box-shadow: 0 6px 16px 0 rgba(0,0,0,0.05);
-  box-shadow: 0 6px 16px 0 rgba(0,0,0,0.05);
+  @include floating-container()
+  // background-color: #FFF;
+  // -webkit-box-shadow: 0 6px 16px 0 rgba(0,0,0,0.05);
+  // -moz-box-shadow: 0 6px 16px 0 rgba(0,0,0,0.05);
+  // box-shadow: 0 6px 16px 0 rgba(0,0,0,0.05);
 }
 .floating-container__invite {
   padding: 64px 98px 24px;
