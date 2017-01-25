@@ -10,6 +10,7 @@ class GiftRecommendationsController < ApplicationController
     @gift_recommendations.each do |gr|
       @gift_dislikes[gr.id] = GiftDislike.new({gift: gr.gift})
     end
+    current_user.update_attribute :last_viewed_profile_id, @profile.id
   end
 
   def show

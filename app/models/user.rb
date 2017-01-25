@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   has_many :survey_responses, dependent: :destroy
   has_many :owned_profiles, class_name: 'Profile', foreign_key: :owner_id, dependent: :destroy
+  belongs_to :last_viewed_profile, class_name: 'Profile'
 
   def full_name
     [first_name, last_name].compact.join " "
