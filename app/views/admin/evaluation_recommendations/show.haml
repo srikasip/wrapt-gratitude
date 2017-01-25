@@ -1,5 +1,8 @@
 %h4 Recommendation Breakdown
-%p #{@recommendation.gift.title} (#{number_with_precision(@recommendation.score, precision: 2)})
+%p
+  #{@recommendation.gift.title} (#{number_with_precision(@recommendation.score, precision: 2)})
+  %br
+  #{@recommendation.survey_response.name}
 
 %table.table.table-striped
   %thead
@@ -18,13 +21,14 @@
         %td
           = question_rank.question.prompt
           %strong (#{displayable_response(question_rank.response)})
-          %span.text-muted
-            [
+          %div.text-muted
+            %i impact
+            = "="
             - if question_rank.score < 0.0
-              #{-1 * Recommendations::Engine::NEGATIVE_RANK_PENALTY}
+              #{Recommendations::Engine::NEGATIVE_RANK_PENALTY}
               &times;
             #{Recommendations::Engine::QUESTION_WEIGHT_BASE}
-            %sup #{number_with_precision(question_rank.impact.question_impact, precision: 2)}
+            %sup #{number_with_precision(question_rank.impact.question_impact.abs, precision: 2)}
             - response_weights = []
             - if question_rank.question.is_a?(SurveyQuestions::MultipleChoice)
               :ruby
@@ -36,7 +40,8 @@
                   end
                 end
             - elsif question_rank.question.is_a?(SurveyQuestions::Range)
-              - response_weights << question_rank.response.range_response
+              - modifier = question_rank.impact.range_impact_direct_correlation? ? 1 : -1
+              - response_weights << modifier * question_rank.response.range_response
               
             - if response_weights.any?
               &times; 
@@ -45,4 +50,3 @@
               #{response_weights.map{|w| number_with_precision(w, precision: 2)}.join(' + ')}
               - if response_weights.many?
                 )
-            ]
