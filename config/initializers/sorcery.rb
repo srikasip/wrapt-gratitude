@@ -455,6 +455,8 @@ Rails.application.config.sorcery.configure do |config|
     # Default: `:uid`
     #
     # user.provider_uid_attribute_name =
+
+    config.after_login << :set_signed_authentication_cookie
   end
 
   # This line must come after the 'user config' block.
