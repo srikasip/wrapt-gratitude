@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170125181525) do
+ActiveRecord::Schema.define(version: 20170125190531) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 20170125181525) do
     t.integer  "product_category_id"
     t.integer  "product_subcategory_id"
     t.integer  "source_product_id"
+    t.boolean  "featured",                                               default: false,        null: false
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
     t.index ["wrapt_sku"], name: "index_gifts_on_wrapt_sku", using: :btree
   end

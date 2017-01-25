@@ -59,7 +59,8 @@ module Admin
         :calculate_cost_from_products,
         :calculate_price_from_products,
         :product_category_id,
-        :product_subcategory_id
+        :product_subcategory_id,
+        :featured
         )
     end
 
