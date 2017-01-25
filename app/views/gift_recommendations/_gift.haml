@@ -10,13 +10,12 @@
     %h3= gift.name
     .gr-carousel__gift-details
       %p= gift.description
-      %p.small INCLUDED IN GIFT
-      -# PLACEHOLDER
-      %ul
-        %li.small 8 oz gourmet salt blend; Himalayan pink, Alder smoked, Red Hawaiian, Molokai black and French Sea salt
-        %li.small Ceramic salt well made in Peru
+      - unless gift.single_product_gift?
+        %p.small INCLUDED IN GIFT
+        %ul
+          - gift.products.each do |product|
+            %li.small= product.description || product.title
     .gr-carousel__gift-actions.pa2
-      -# PLACEHOLDER
       %div
         = form_for GiftSelection.new(gift: gift, profile: @profile), url: profile_gift_selections_path(@profile), html: {data: {remote: true}} do |form|
           = form.hidden_field :gift_id

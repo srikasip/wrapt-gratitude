@@ -1,12 +1,12 @@
 module GiftRecommendationsHelper
 
   def load_gift_recommendation_carousel_data(gift_recommendations)
-    gifts = gift_recommendations.map do |gr|
+    gifts = gift_recommendations.preload(gift: [:gift_images, :primary_gift_image, :products]).map do |gr|
       {
         slide_partial: 'gift',
         slide_locals: {gift: gr.gift, gift_recommendation: gr},
         thumbnail_partial: 'thumbnail',
-        thumbnail_locals: {image: (gr.gift.gift_images.where(primary: true).first || gr.gift.gift_images.first)},
+        thumbnail_locals: {image: (gr.gift.primary_gift_image || gr.gift.gift_images.first)},
       }
     end
     {nav_partial: 'gift_nav', slides: gifts}

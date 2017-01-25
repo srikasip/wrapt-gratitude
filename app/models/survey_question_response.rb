@@ -15,6 +15,7 @@ class SurveyQuestionResponse < ApplicationRecord
     on: :update
 
   after_save :update_profile_relationship
+  after_save :update_profile_name
 
   def survey_question_option_id
     survey_question_option_ids.first
@@ -89,6 +90,15 @@ class SurveyQuestionResponse < ApplicationRecord
       relationship = survey_question_options.first&.text
       then
       survey_response.profile.update_attribute :relationship, relationship
+    end
+  end
+
+  private def update_profile_name
+    if survey_question.use_response_as_name &&
+      survey_response.respond_to?(:profile) &&
+      name = text_response
+      then
+      survey_response.profile.update_attribute :name, name
     end
   end
 

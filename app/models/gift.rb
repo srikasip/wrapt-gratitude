@@ -117,4 +117,8 @@ class Gift < ApplicationRecord
     ProductCategory.where(wrapt_sku_code: 'GFT').first_or_create!(name: 'Gift')
   end
 
+  def single_product_gift?
+    source_product_id.present?
+  end
+
 end
