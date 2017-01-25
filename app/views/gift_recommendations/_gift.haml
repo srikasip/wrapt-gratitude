@@ -17,9 +17,10 @@
             %li.small= product.description || product.title
     .gr-carousel__gift-actions.pa2
       %div
-        = form_for GiftSelection.new(gift: gift, profile: @profile), url: profile_gift_selections_path(@profile), html: {data: {remote: true}} do |form|
+        - gift_selection = GiftSelection.new(gift: gift, profile: @profile)
+        = form_for gift_selection, url: profile_gift_selections_path(@profile), html: {data: {remote: true}} do |form|
           = form.hidden_field :gift_id
           %h3.gr-carousel__price
             = number_to_currency gift.selling_price
-          .gr-carousel__quantity.text-right
-            = form.submit 'ADD TO BASKET', class: 'btn btn-primary'
+          .gr-carousel__quantity.text-right{data: {behavior: 'add-to-gift-basket-wrapper', gift_id: gift.id}}
+            = render 'add_to_basket_button', gift_selection: gift_selection, profile: @profile

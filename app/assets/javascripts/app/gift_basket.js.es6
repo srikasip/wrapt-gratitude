@@ -50,7 +50,8 @@ App.GiftBasket = class GiftBasket {
         disconnected: () => {},
         received: (data) => {
           $(this.gift_list).html(data.gift_selections_html);
-          $(this.count_badge).html(this._giftBasketCount(data.count));
+          $(this.count_badge).html(this._giftBasketCount(data.gift_basket_count));
+          $(`[data-behavior~=add-to-gift-basket-wrapper][data-gift-id=${data.updated_gift_id}]`).html(data.add_button_html)
       }
     });
   }

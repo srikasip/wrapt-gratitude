@@ -3,4 +3,6 @@ class GiftSelection < ApplicationRecord
 
   belongs_to :profile
   belongs_to :gift
+
+  validates :gift_id, uniqueness: {scope: :profile_id}
 end

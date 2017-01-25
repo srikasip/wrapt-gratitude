@@ -3,15 +3,16 @@ class GiftSelectionsController < ApplicationController
 
   def create
     @gift_selection = @profile.gift_selections.new gift_selection_params
-    @gift_selection.save!
-    GiftSelectionsChannel.broadcast_to @profile, gift_selections_html: render_gift_selections, count: @profile.gift_selections.count
+    if @gift_selection.save
+      broadcast_updated_gift_selections
+    end
     head :ok
   end
 
   def destroy
     @gift_selection = @profile.gift_selections.find params[:id]
     @gift_selection.destroy
-    GiftSelectionsChannel.broadcast_to @profile, gift_selections_html: render_gift_selections, count: @profile.gift_selections.count
+    broadcast_updated_gift_selections
     head :ok
   end
 
@@ -25,9 +26,22 @@ class GiftSelectionsController < ApplicationController
     @profile = current_user.owned_profiles.find params[:profile_id]
   end
 
+  private def broadcast_updated_gift_selections
+    GiftSelectionsChannel.broadcast_to @profile,
+      gift_selections_html: render_gift_selections,
+      gift_basket_count: @profile.gift_selections.count,
+      updated_gift_id: @gift_selection.gift_id,
+      add_button_html: render_add_button_html
+  end
+  
+
   private def render_gift_selections
     ApplicationController.renderer.render 'gift_selections/_index', locals: {profile: @profile}, layout: false
   end
+
   
+  private def render_add_button_html
+    ApplicationController.renderer.render 'gift_recommendations/_add_to_basket_button', locals: {gift_selection: @gift_selection, profile: @profile}, layout: false
+  end
 
 end
