@@ -22,31 +22,4 @@
           = question_rank.question.prompt
           %strong (#{displayable_response(question_rank.response)})
           %div.text-muted
-            %i impact
-            = "="
-            - if question_rank.score < 0.0
-              #{Recommendations::Engine::NEGATIVE_RANK_PENALTY}
-              &times;
-            #{Recommendations::Engine::QUESTION_WEIGHT_BASE}
-            %sup #{number_with_precision(question_rank.impact.question_impact.abs, precision: 2)}
-            - response_weights = []
-            - if question_rank.question.is_a?(SurveyQuestions::MultipleChoice)
-              :ruby
-                question_rank.response.survey_question_options.each do |option|
-                  question_rank.impact.response_impacts.each do |impact|
-                    if impact.survey_question_option_id == option.id
-                      response_weights << impact.impact
-                    end
-                  end
-                end
-            - elsif question_rank.question.is_a?(SurveyQuestions::Range)
-              - modifier = question_rank.impact.range_impact_direct_correlation? ? 1 : -1
-              - response_weights << modifier * question_rank.response.range_response
-              
-            - if response_weights.any?
-              &times; 
-              - if response_weights.many?
-                (
-              #{response_weights.map{|w| number_with_precision(w, precision: 2)}.join(' + ')}
-              - if response_weights.many?
-                )
+            = render 'impact_equation', question_rank: question_rank
