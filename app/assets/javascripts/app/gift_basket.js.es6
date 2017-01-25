@@ -4,9 +4,9 @@ App.GiftBasket = class GiftBasket {
     this.overlay = $('[data-behavior~=gift-basket-overlay]')[0];
     this.profile_id = this.container.getAttribute('data-profile-id')
     this.gift_list = $(this.container).find('[data-behavior~=gift-basket-gifts]')[0]
+    this.count_badge = $('[data-behavior~=gift-basket-count]')[0]
     this.handleOpenLinks();
     this.handleCloseLinks();
-    this.handleRemoveLinks();
     this.subscribeToGiftSelectionsChannel()
     App.giftBasketInstance = this;
   }
@@ -21,7 +21,12 @@ App.GiftBasket = class GiftBasket {
   handleCloseLinks() {
     $(this.container).find('[data-behavior~=close-gift-basket]').on('click', (evt) => {
       evt.preventDefault();
-      this.close()
+      this.close();
+    })
+
+    $(this.overlay).on('click', (evt) => {
+      evt.preventDefault();
+      this.close();
     })
   }
 
@@ -45,9 +50,17 @@ App.GiftBasket = class GiftBasket {
         disconnected: () => {},
         received: (data) => {
           $(this.gift_list).html(data.gift_selections_html);
-          // TODO update Badge count
+          $(this.count_badge).html(this._giftBasketCount(data.count));
       }
     });
+  }
+
+  _giftBasketCount(count) {
+    if (count > 0) {
+      return `(${count})`
+    } else {
+      return ""
+    }
   }
 
 

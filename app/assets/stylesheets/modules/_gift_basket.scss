@@ -43,3 +43,11 @@
   padding: 40px 25px;
   color: white;
 }
+
+.gift-basket--remove-gift-link {
+  display: none;
+}
+
+.gift-basket--gift:hover .gift-basket--remove-gift-link {
+  display: inline-block;
+}

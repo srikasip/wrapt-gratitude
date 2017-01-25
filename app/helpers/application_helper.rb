@@ -13,6 +13,14 @@ module ApplicationHelper
     false
   end
 
+  def gift_basket_count
+    if @profile && @profile.gift_selections.count > 0
+      "(#{@profile.gift_selections.count})"
+    else
+      ""
+    end
+  end
+
   # path to svg files so we can include them like a partial
   # http://cobwwweb.com/render-inline-svg-rails-middleman#sthash.0TA73Fi9.dpuf
   def svg(name) 

@@ -1,6 +1,19 @@
 %h3 Gift Basket
-%p #{profile.gift_selections.count} Gifts In Basket
-- profile.gift_selections.preload(gift: :gift_images).each do |gift_selection|
-  .gift-basket--gift
-    = gift_selection.gift.title
-    = link_to 'X', profile_gift_selection_path(profile, gift_selection), data: {remote: true, behavior: 'remove-gift-from-basket', method: :delete}
+- selections = profile.gift_selections.preload(gift: :primary_gift_image)
+- if selections.length == 0
+  %p Your Gift Basket is Empty
+- else
+  - selections.each do |gift_selection|
+    - gift = gift_selection.gift
+    .gift-basket--gift
+      - if gift.primary_gift_image.present?
+        %span.gift-basket--gift-image
+          = image_tag gift.primary_gift_image.image_url(:small)
+      %span.gift-basket--gift-title
+        = gift.title
+      %span.gift-basket--gift-description
+        = gift.description
+      %span.gift-basket--gift-price
+        = number_to_currency gift.selling_price
+      %span.gift-basket--remove-gift-link
+        = link_to 'X', profile_gift_selection_path(profile, gift_selection), data: {remote: true, behavior: 'remove-gift-from-basket', method: :delete}
