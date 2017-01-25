@@ -4,6 +4,10 @@ class SurveyResponseCompletionsController < ApplicationController
   before_action :set_profile
   before_action :set_survey_response
 
+  def login_required?
+    false
+  end
+
   def show
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
   end

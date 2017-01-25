@@ -7,19 +7,21 @@ module Recommendations
     # exclude text questions
     # tests
 
-    attr_reader :training_set, :response, :recommendations, :response_adapter
+    attr_reader :training_set, :response, :recommendations, :response_adapter, :question_ranks
 
     delegate :add_recommendation,
       :destroy_recommendations!,
       to: :response_adapter
 
-    NEGATIVE_RANK_PENALTY = 2
-    QUESTION_WEIGHT_BASE = 10
-    MIN_NUMBER_OF_RECOMMENDATIONS = 8
+    NEGATIVE_RANK_PENALTY = 5.0
+    QUESTION_WEIGHT_BASE = 100.0
+    MIN_NUMBER_OF_RECOMMENDATIONS = 10
 
     def initialize(training_set, response = nil)
       @training_set = training_set
       self.response = response
+      @recommendations = []
+      @question_ranks = []
     end
     
     def response=(new_response)
@@ -47,11 +49,13 @@ module Recommendations
 
 
     def generate_recommendations
-      @recommendations = []
+      clear_recommendations
       
       generate_candidate_recommendations
       remove_similar_recommendations
-      @recommendations = @recommendations.take(MIN_NUMBER_OF_RECOMMENDATIONS)
+      
+      # take 80% of the recommended ones and leave 20% for random
+      @recommendations = @recommendations.take((0.8 * MIN_NUMBER_OF_RECOMMENDATIONS).round)
       
       # are we short?
       if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
@@ -61,6 +65,8 @@ module Recommendations
         # are we still short?
         if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
           generate_random_recommendations(MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length)
+        elsif @recommendations.length > MIN_NUMBER_OF_RECOMMENDATIONS
+          @recommendations = @recommendations.take(MIN_NUMBER_OF_RECOMMENDATIONS)
         end
       end
       
@@ -69,6 +75,7 @@ module Recommendations
 
     def clear_recommendations
       @recommendations = []
+      @question_ranks = []
       @_question_responses_by_question = nil
       true
     end
@@ -88,6 +95,12 @@ module Recommendations
       result
     end
     
+    def recommendation_question_ranks(recommendation)
+      results = question_ranks.select{|qr| qr.gift == recommendation.gift}
+      results.sort!{|a, b| b.score <=> a.score}
+      results
+    end
+    
     protected
     
     def generate_random_recommendations(count)
@@ -100,15 +113,19 @@ module Recommendations
     end
     
     def generate_candidate_recommendations
-      gifts.each do |gift|
+      max_rank = 0.0
+      training_set_gifts.each do |gift|
         gift_rank = 0
         questions_by_gift[gift].each do |question|
           gift_rank += calculate_question_rank(gift, question)
         end
         if gift_rank > 0.0
           add_recommendation(gift, gift_rank)
+          max_rank = gift_rank if gift_rank > max_rank
         end
       end
+      # reject the bottom quartile
+      @recommendations.reject!{|r| r.score < 0.25 * max_rank}
       @recommendations.sort!{|a, b| b.score <=> a.score}
       
       @recommendations
@@ -133,6 +150,10 @@ module Recommendations
       result = initial_question_rank(gift, question)
       result = Recommendations::NegativeRankPenaltyApplicator.new(result).modified_rank
       result = Recommendations::ProductQuestionWeightApplicator.new(result, gift_question&.question_impact).modified_rank
+      
+      add_question_rank(gift, question, result)
+      
+      result
     end
 
     def initial_question_rank gift, question
@@ -148,13 +169,29 @@ module Recommendations
       end
       result
     end
-
+    
+    def add_question_rank(gift, question, score)
+      response = question_responses_by_question[question]
+      impact = gift_question_impacts_by_gift_and_question[gift][question]
+      if response.present? && impact.present? && score != 0.0
+        question_rank = Recommendations::QuestionRank.new(response, impact, score)
+        question_ranks << question_rank
+        question_rank
+      else
+        nil
+      end
+    end
+    
     def gifts
-      @_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).where(id: training_set.gift_question_impacts.select(:gift_id))
+      training_set_gifts + random_gifts
+    end
+
+    def training_set_gifts
+      @_training_set_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).where(id: training_set.gift_question_impacts.select(:gift_id)).to_a
     end
 
     def random_gifts
-      @_random_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).order('RANDOM()').limit(50)
+      @_random_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).order('RANDOM()').limit(50).to_a
     end
 
     def categories_by_gifts
@@ -187,7 +224,7 @@ module Recommendations
 
     def question_responses_by_question
       @_question_responses_by_question ||= {}.tap do |result|
-        response.question_responses.preload(:survey_question).each do |question_response|
+        response.question_responses.preload(:survey_question, :survey_question_options).each do |question_response|
           result[question_response.survey_question] = question_response
         end
       end  

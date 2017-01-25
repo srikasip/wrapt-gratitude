@@ -15,10 +15,10 @@ module Admin
 
       if @profile_set_survey_response.save
         redirect_to edit_admin_profile_set_survey_response_path(@profile_set, @profile_set_survey_response), notice: 'Quiz Response was successfully created.  Now Answer the Questions.'
-        else
-          render :new
-        end
+      else        
+        render :new
       end
+    end
 
     def update
       if @profile_set_survey_response.update(profile_set_survey_response_params)
