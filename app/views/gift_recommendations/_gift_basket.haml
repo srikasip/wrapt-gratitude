@@ -1,22 +1,22 @@
 .gift-basket-overlay{data: {behavior: 'gift-basket-overlay'}}
 
 .gift-basket{data: {behavior: 'gift-basket-container', profile_id: @profile.id}}
-  -# .gift-basket--rows
-  .gift-basket--header
-    = link_to "< Back to Shopping", '#', data: {behavior: 'close-gift-basket'}
-  .gift-basket--main
-    %div{data: {behavior: 'gift-basket-gifts'}}
-      = render 'gift_selections/index', profile: @profile
+  .gift-basket--inner-wrap
+    .gift-basket--header
+      = link_to "< Back to Shopping", '#', data: {behavior: 'close-gift-basket'}
+    .gift-basket--main
+      %div{data: {behavior: 'gift-basket-gifts'}}
+        = render 'gift_selections/index', profile: @profile
 
-  .gift-basket--footer
-    %h4
-      Subtotal
-      %span.pull-right -
-    %p In our beta testing phase we are not fulfilling gift selections but we are asking that you send a notifcation to your Giftee telling them what you selected so we can inquire about effectiveness of our recommendations
+    .gift-basket--footer
+      %h4
+        Subtotal
+        %span.pull-right -
+      %p In our beta testing phase we are not fulfilling gift selections but we are asking that you send a notifcation to your Giftee telling them what you selected so we can inquire about effectiveness of our recommendations
 
-    = link_to 'SEND GIFT SELECTION NOTIFICATION', '#', class: 'btn btn-primary btn-sm btn-full-width'
+      = link_to 'SEND GIFT SELECTION NOTIFICATION', '#', class: 'btn btn-primary btn-sm btn-full-width'
 
-    %p You will be able to preview the email before you send it.
+      %p You will be able to preview the email before you send it.
 
 - content_for :page_js do
   :javascript

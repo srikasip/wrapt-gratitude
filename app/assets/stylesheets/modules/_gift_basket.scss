@@ -17,9 +17,15 @@
   width: 33%;
   z-index: 1001;
   background-color: white;
+  display: none;
+}
+
+.gift-basket--inner-wrap {
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  display: none;
+  justify-content: flex-end;
 }
 
 .gift-basket--header {
@@ -32,7 +38,7 @@
 }
 
 .gift-basket--main {
-  flex-grow: 20;
+  flex-grow: 200;
   overflow: scroll;
   padding: 40px 25px;
 }
