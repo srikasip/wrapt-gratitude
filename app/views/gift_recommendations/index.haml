@@ -12,6 +12,11 @@
     $(document).ready(function() {
       $('[data-behavior=dislike-reason]').change(function() {
         var form = $(this).parents('[data-behavior=dislike-form]');
+        
+        // advance the form after 2 seconds
+        window.setTimeout(function() {
+          $('.gr-carousel__nav.next').click()  
+        }, 1000)
         form.submit();
       });
     });
