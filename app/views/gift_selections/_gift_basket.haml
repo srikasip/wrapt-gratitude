@@ -1,12 +1,12 @@
 .gift-basket-overlay{data: {behavior: 'gift-basket-overlay'}}
 
-.gift-basket{data: {behavior: 'gift-basket-container', profile_id: @profile.id}}
+.gift-basket{data: {behavior: 'gift-basket-container', profile_id: profile.id}}
   .gift-basket--inner-wrap
     .gift-basket--header
       = link_to "< Back to Shopping", '#', data: {behavior: 'close-gift-basket'}
     .gift-basket--main
       %div{data: {behavior: 'gift-basket-gifts'}}
-        = render 'gift_selections/index', profile: @profile
+        = render 'gift_selections/index', profile: profile
 
     .gift-basket--footer
       %h4

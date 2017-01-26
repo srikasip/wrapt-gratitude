@@ -9,16 +9,21 @@ module ApplicationHelper
     true
   end
 
-  def show_gift_basket_in_top_nav?
-    false
+  def gift_basket_profile
+    @profile || current_user&.mvp_profile
   end
 
   def gift_basket_count
-    if @profile && @profile.gift_selections.count > 0
-      "(#{@profile.gift_selections.count})"
+    count = gift_basket_profile&.gift_selections&.count
+    if count && count > 0
+      "(#{count})"
     else
       ""
     end
+  end
+
+  def enable_gift_basket?
+    gift_basket_profile.present?
   end
 
   # path to svg files so we can include them like a partial

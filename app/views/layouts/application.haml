@@ -29,4 +29,6 @@
       = render 'layouts/footer'
 
     = render 'pjax_modal_frame'
+    - if enable_gift_basket?
+      = render 'gift_selections/gift_basket', profile: gift_basket_profile
     = yield :page_js

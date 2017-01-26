@@ -19,4 +19,9 @@ class User < ApplicationRecord
     self.all.merge(UserSearch.new(search_params).to_scope)        
   end
 
+  # MVP1a has users using a single profile
+  def mvp_profile
+    owned_profiles.last
+  end
+
 end

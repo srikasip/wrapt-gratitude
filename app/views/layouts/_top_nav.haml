@@ -24,7 +24,7 @@
               =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
               Science of Gifting
           %li
-            - if show_gift_basket_in_top_nav?
+            - if enable_gift_basket?
               = link_to '#', data: {behavior: 'open-gift-basket'} do
                 =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
                 Gift Basket
