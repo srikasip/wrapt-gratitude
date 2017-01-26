@@ -121,4 +121,8 @@ class Gift < ApplicationRecord
     source_product_id.present?
   end
 
+  def primary_gift_image_with_fallback
+    primary_gift_image || gift_images.first
+  end
+
 end

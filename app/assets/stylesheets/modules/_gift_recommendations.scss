@@ -90,6 +90,7 @@ $gr-carousel-nav__width: 82.5px;
 .gr-carousel__indicators {
   position: static;
   margin-top: 60px;
+  text-align: center;
 }
 
 .gr-carousel__indicator {
@@ -99,8 +100,27 @@ $gr-carousel-nav__width: 82.5px;
   height: auto;
 }
 
-.gr-carousel__indicator.active {
-  border: 2px solid red;
+.gr__indicator-inactive-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(111,111,111,0.8);
+}
+
+.gr-carousel__indicator.active .gr__indicator-inactive-overlay {
+  display: none;
+}
+
+.gr__indicator-thumbnail {
+  display: inline-block;
+  width: 136px;
+  height: 112px;
+  background-color: blue;
+  text-align: center;
+  margin: 30px;
+  position: relative;
 }
 
 // gift recommendations carousel gift
@@ -258,3 +278,4 @@ $gr-carousel-nav__width: 82.5px;
 .gr-image-carousel__nav.next {
   padding-left: 10px;
 }
+
