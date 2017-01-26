@@ -1,5 +1,7 @@
 class GiftRecommendationsController < ApplicationController
 
+  GIFT_RECOMMENDATION_LIMIT = 10
+
   helper CarouselHelper
 
   before_action :load_profile
@@ -38,7 +40,7 @@ class GiftRecommendationsController < ApplicationController
   end
 
   def load_recommendations
-    @gift_recommendations = @profile.gift_recommendations
+    @gift_recommendations = @profile.gift_recommendations.limit(GIFT_RECOMMENDATION_LIMIT)
   end
 
 end
