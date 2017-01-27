@@ -28,7 +28,7 @@
               = link_to '#', data: {behavior: 'open-gift-basket'} do
                 =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
                 Gift Basket
-                %span(data-behavior="gift-basket-count")
+                %span.gift-basket-count(data-behavior="gift-basket-count")
                   = gift_basket_count
                   
           - if current_user

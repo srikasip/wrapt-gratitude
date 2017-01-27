@@ -2,6 +2,8 @@
   font-size: rem(12);
   letter-spacing: 1.8px;
   text-transform: uppercase;
+  @include akkurat-bold;
+  color: $gray-008;
 }
 .navbar-static-top {
   border-width: 0;
@@ -53,4 +55,14 @@
 .navbar--secondary li.active a {
   color: $blue-002;
   @include wrapt-border(0, 0, 4px, 0)
+}
+.gift-basket-count {
+  background-color: $blue-004;
+  padding: 5px 8px;
+  margin-left: 4px;
+}
+.navbar-default .navbar-nav > li > a:hover .gift-basket-count,
+.navbar-default .navbar-nav > li > a:focus .gift-basket-count,
+.navbar-default .navbar-nav > li > a:active .gift-basket-count {
+  color: $gray-008;
 }
