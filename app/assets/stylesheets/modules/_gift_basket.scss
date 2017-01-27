@@ -35,6 +35,13 @@
 
 .gift-basket--header a {
   color: $gray-010;
+  font-size: rem(14);
+  letter-spacing: rem(2);
+}
+
+.gift-basket--header a:hover {
+  background: transparent;
+  text-decoration: none;
 }
 
 .gift-basket--main {
@@ -107,4 +114,15 @@
 .gift-basket__icon-remove {
   width: 12px;
   height: 12px;
+}
+
+// Footer Business
+.gift-basket--footer p {
+  font-size: rem(12);
+  line-height: 20px;
+}
+
+.gift-basket--checkout-button {
+  margin: 40px 0;
+  letter-spacing: rem(2);
 }
