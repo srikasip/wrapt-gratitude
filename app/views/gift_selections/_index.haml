@@ -5,15 +5,16 @@
 - else
   - selections.each do |gift_selection|
     - gift = gift_selection.gift
-    .gift-basket--gift
-      - if gift.primary_gift_image.present?
-        %span.gift-basket--gift-image
-          = image_tag gift.primary_gift_image.image_url(:small)
-      %span.gift-basket--gift-title
-        = gift.title
-      %span.gift-basket--gift-description
-        = gift.description
-      %span.gift-basket--gift-price
-        = number_to_currency gift.selling_price
-      %span.gift-basket--remove-gift-link
-        = link_to 'X', profile_gift_selection_path(profile, gift_selection), data: {remote: true, behavior: 'remove-gift-from-basket', method: :delete}
+    .gift-basket--gift.clearfix
+      .gift-basket--gift-image
+        = image_tag gift.primary_gift_image_with_fallback.image_url(:small)
+      .gift-basket--gift-text
+        .gift-basket--gift-title
+          = gift.title
+        .gift-basket--gift-description
+          = gift.description
+        .gift-basket--gift-price
+          = number_to_currency gift.selling_price
+        .gift-basket--remove-gift-link
+          = link_to profile_gift_selection_path(profile, gift_selection), data: {remote: true, behavior: 'remove-gift-from-basket', method: :delete} do
+            = embedded_svg('icon-close', class: 'gift-basket__icon-remove')
