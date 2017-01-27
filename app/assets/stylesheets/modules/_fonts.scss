@@ -1,33 +1,27 @@
-// placeholder -- waiting on webfonts from workhorse
 @font-face {
-  font-family: 'Akkurat';
-  src: url(font-path('webfont.eot')); /* IE9 Compat Modes */
-  src: url(font-path('webfont.eot?#iefix')) format('embedded-opentype'), /* IE6-IE8 */
-       url(font-path('webfont.woff2')) format('woff2'), /* Super Modern Browsers */
-       url(font-path('webfont.woff')) format('woff'), /* Pretty Modern Browsers */
-       url(font-path('webfont.ttf'))  format('truetype'), /* Safari, Android, iOS */
+    font-family: "Akkurat-Regular";
+    src:url(font-path('lineto-akkurat-regular.eot'));
+    src:url(font-path('lineto-akkurat-regular.eot?#iefix')) format("embedded-opentype"),
+        url(font-path('lineto-akkurat-regular.woff2')) format("woff2"),
+        url(font-path('lineto-akkurat-regular.woff')) format("woff");
+    font-weight: normal;
+    font-style: normal;
 }
 @font-face {
-  font-family: 'AkkuratRegularLight';
-  src: url(font-path('webfont.eot')); /* IE9 Compat Modes */
-  src: url(font-path('webfont.eot?#iefix')) format('embedded-opentype'), /* IE6-IE8 */
-       url(font-path('webfont.woff2')) format('woff2'), /* Super Modern Browsers */
-       url(font-path('webfont.woff')) format('woff'), /* Pretty Modern Browsers */
-       url(font-path('webfont.ttf'))  format('truetype'), /* Safari, Android, iOS */
+    font-family: "Akkurat-Light";
+    src:url(font-path('lineto-akkurat-light.eot'));
+    src:url(font-path('lineto-akkurat-light.eot?#iefix')) format("embedded-opentype"),
+        url(font-path('lineto-akkurat-light.woff2')) format("woff2"),
+        url(font-path('lineto-akkurat-light.woff')) format("woff");
+    font-weight: normal;
+    font-style: normal;
 }
 @font-face {
-  font-family: 'AkkuratMono';
-  src: url(font-path('webfont.eot')); /* IE9 Compat Modes */
-  src: url(font-path('webfont.eot?#iefix')) format('embedded-opentype'), /* IE6-IE8 */
-       url(font-path('webfont.woff2')) format('woff2'), /* Super Modern Browsers */
-       url(font-path('webfont.woff')) format('woff'), /* Pretty Modern Browsers */
-       url(font-path('Akkurat-Mono.ttf'))  format('truetype'), /* Safari, Android, iOS */
-}
-@font-face {
-  font-family: 'AkkuratBold';
-  src: url(font-path('webfont.eot')); /* IE9 Compat Modes */
-  src: url(font-path('webfont.eot?#iefix')) format('embedded-opentype'), /* IE6-IE8 */
-       url(font-path('webfont.woff2')) format('woff2'), /* Super Modern Browsers */
-       url(font-path('webfont.woff')) format('woff'), /* Pretty Modern Browsers */
-       url(font-path('webfont.ttf'))  format('truetype'), /* Safari, Android, iOS */
+    font-family: "Akkurat-Bold";
+    src:url(font-path('lineto-akkurat-bold.eot'));
+    src:url(font-path('lineto-akkurat-bold.eot?#iefix')) format("embedded-opentype"),
+        url(font-path('lineto-akkurat-bold.woff2')) format("woff2"),
+        url(font-path('lineto-akkurat-bold.woff')) format("woff");
+    font-weight: normal;
+    font-style: normal;
 }

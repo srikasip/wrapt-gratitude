@@ -146,14 +146,6 @@ $gr-carousel-nav__width: 82.5px;
   width: 55%;
 }
 
-.gr-carousel__dislike a {
-  background-color: $blue-010;
-  padding: 12px 12px 3px;
-  display: inline-block;
-}
-.gr-carousel__dislike a.disliked {
-  padding: 7px 12px 0px;
-}
 .gr-carousel__dislike .btn-group.open .dropdown-toggle {
   box-shadow: none;
 }
@@ -164,21 +156,26 @@ $gr-carousel-nav__width: 82.5px;
 .gift_dislike_reason .radio label {
   min-height: 24px;
 }
-
+.gr-carousel__dislike a {
+  background-color: $blue-010;
+  padding: 12px 12px 3px;
+  display: inline-block;
+}
 .gr-carousel__dislike a:hover,
 .gr-carousel__dislike a:focus,
 .gr-carousel__dislike a:active {
   background-color: rgba($blue-005, 0.25);
 }
-
 a.disliked {
   background-color: $orange-003;
   color: $orange-001;
+  padding: 7px 12px 0px;
 }
 a.disliked:hover,
 a.disliked:active,
 a.disliked:focus {
   text-decoration: none;
+  background-color: darken($orange-003, 5);
 }
 .gr-carousel__dislike .small-02 {
   display: inline-block;

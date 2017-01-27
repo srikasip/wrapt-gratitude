@@ -23,16 +23,13 @@
 }
 
 @mixin akkurat-regular {
-  font-family: "Akkurat", sans-serif;
+  font-family: "Akkurat-Regular", sans-serif;
 }
 @mixin akkurat-light {
-  font-family: "AkkuratRegularLight", sans-serif;
-}
-@mixin akkurat-mono {
-  font-family: "AkkuratMono", monospace;
+  font-family: "Akkurat-Light", sans-serif;
 }
 @mixin akkurat-bold {
-  font-family: "AkkuratBold", sans-serif;
+  font-family: "Akkurat-Bold", sans-serif;
 }
 
 @mixin floating-container() {
