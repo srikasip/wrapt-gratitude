@@ -95,10 +95,10 @@ $link-hover-decoration: underline !default;
 //== Typography
 //
 //## Font, line-height, and color for body text, headings, and more.
-$font-family-sans-serif:  'Akkurat', sans-serif !default;
-$font-family-serif:       'Akkurat', serif !default;
+$font-family-sans-serif:  'Akkurat-Regular', sans-serif !default;
+$font-family-serif:       'Akkurat-Regular', serif !default;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
-$font-family-monospace:   'AkkuratMono', Consolas, "Courier New", monospace !default;
+$font-family-monospace:   Consolas, "Courier New", monospace !default;
 $font-family-base:        $font-family-sans-serif !default;
 
 $em-base:                 10px !default; // font-size of html, set in bs scaffolding
@@ -119,7 +119,7 @@ $line-height-base:        1.75 !default; // 28/16
 $line-height-computed:    floor(($font-size-base * $line-height-base)) !default; // ~20px
 
 //** By default, this inherits from the `<body>`.
-$headings-font-family:    'AkkuratLight', sans-serif !default;
+$headings-font-family:    'Akkurat-Light', sans-serif !default;
 $headings-font-weight:    light !default;
 $headings-line-height:    1.227272727 !default;
 $headings-color:          inherit !default;
