@@ -16,7 +16,7 @@ module ApplicationHelper
   def gift_basket_count
     count = gift_basket_profile&.gift_selections&.count
     if count && count > 0
-      "(#{count})"
+      "#{count}"
     else
       ""
     end
