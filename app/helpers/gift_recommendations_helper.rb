@@ -16,7 +16,7 @@ module GiftRecommendationsHelper
     images = gift_images.map do |gift_image|
       {
         slide_partial: 'gift_image',
-        slide_locals: {image_url: gift_image.image_url(:large), image_text: "Image text #{gift_image.id}"},
+        slide_locals: {image_url: gift_image.image_url(:large)},
         thumbnail_partial: 'gift_image_thumbnail',
         thumbnail_locals: {}
       }

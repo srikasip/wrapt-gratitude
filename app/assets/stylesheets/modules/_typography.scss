@@ -8,6 +8,7 @@ h5 {
 }
 h1 {
   font-size: rem(40);
+  font-weight: 500;
   margin-bottom: 16px;
   letter-spacing: 1px;
   line-height: 1.227272727;
@@ -23,6 +24,10 @@ h3 {
   line-height: 1.071428571;
   margin-bottom: 24px;
   letter-spacing: 1px;
+}
+h3.carousel__gift-name {
+  @include akkurat-light;
+  margin-bottom: 13px;
 }
 .byline {
   @include akkurat-mono;
@@ -55,6 +60,10 @@ p {
   font-size: rem(14);
   line-height: 1.714285714;
   margin-bottom: 16px;
+}
+.small-02 {
+  font-size: rem(10);
+  letter-spacing: .89px;
 }
 .help {
   font-size: rem(12);
@@ -111,4 +120,22 @@ a:active {
   font-size: rem(12);
   text-align: center;
   color: $gray-006;
+}
+.gift-inclusion-heading {
+  font-size: rem(12);
+  letter-spacing: 1.07;
+  line-height: 1;
+  color: $gray-007;
+  margin-bottom: 8px;
+}
+.gift-description {
+  font-size: rem(14);
+  line-height: 1.714285714;
+  margin-bottom: 20px;
+}
+.gift-item {
+  font-size: rem(12);
+  color: $gray-007;
+  line-height: 1.666666667;
+  margin-bottom: 0;
 }

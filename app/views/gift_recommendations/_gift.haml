@@ -4,17 +4,17 @@
   .gr-carousel__gift-image
     - gift_images = load_gift_image_carousel_data(gift.gift_images)
     = carousel(carousel: gift_images, unique_carousel_name: 'gr-image-carousel', slide_content_singular: 'image', container:'.gr-carousel')
-  .gr-carousel__gift-content.pa2
+  .gr-carousel__gift-content.pb2.pl2.pt1.pr1
     .gr-carousel__dislike.text-right.pb1{data: {gift_recommendation_id: gr.id}}
       = render 'gift_dislike', gift_recommendation: gr, profile: @profile
-    %h3= gift.name
+    %h3.carousel__gift-name= gift.name
     .gr-carousel__gift-details
-      %p= gift.description
+      %p.gift-description= gift.description
       - unless gift.single_product_gift?
-        %p.small INCLUDED IN GIFT
+        %h5.gift-inclusion-heading Included In Gift
         %ul
           - gift.products.each do |product|
-            %li.small= product.description || product.title
+            %li.gift-item= product.description || product.title
     .gr-carousel__gift-actions.pa2
       %div
         - gift_selection = GiftSelection.new(gift: gift, profile: @profile)

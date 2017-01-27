@@ -1,10 +1,12 @@
 .container
   .row
     .col-xs-12
-      %h2.text-center
+      %h1.text-center
         = "#{@profile.name}'s Gift Recommendations"
-      %p.small.text-center
-        ="See a gift you like but not sure it's right for the occasion? Like it. Find a gift you want to 'send' to #{@profile.name}? Add it to you figt basket & 'send' it. Sending a gift in beta simpy sends an email to your giftee nootifying them of the gift you have selected, explaining why they recieved the email."
+      %p.lead.tan-002.ph2.text-center
+        ="Wrapt found these 5 items uniquely suited to #{@profile.name} based on her personality, passions & purpose."
+  .row.wrapt-carousel--wrapper
+    .col-xs-12
       - gifts = load_gift_recommendation_carousel_data(@gift_recommendations)
       = carousel(carousel: gifts, unique_carousel_name: 'gr-carousel', slide_content_singular: 'gift')
 
