@@ -146,9 +146,22 @@ $gr-carousel-nav__width: 82.5px;
 }
 
 .gr-carousel__dislike a {
-  background-color: rgba($blue-005, 0.1);
-  padding: 0px 6px;
+  background-color: $blue-010;
+  padding: 12px 12px 3px;
   display: inline-block;
+}
+.gr-carousel__dislike a.disliked {
+  padding: 7px 12px 0px;
+}
+.gr-carousel__dislike .btn-group.open .dropdown-toggle {
+  box-shadow: none;
+}
+.gift_dislike_reason {
+  letter-spacing: 1.38px;
+  font-size: 11px;
+}
+.gift_dislike_reason .radio label {
+  min-height: 24px;
 }
 
 .gr-carousel__dislike a:hover,
@@ -157,22 +170,31 @@ $gr-carousel-nav__width: 82.5px;
   background-color: rgba($blue-005, 0.25);
 }
 
-.gr-carousel__dislike a.disliked {
-  background-color: rgba($orange-001, 0.1);
+a.disliked {
+  background-color: $orange-003;
   color: $orange-001;
-  .small {
-    display: inline-block;
-    margin-bottom: 0px;
-  }
+}
+a.disliked:hover,
+a.disliked:active,
+a.disliked:focus {
+  text-decoration: none;
+}
+.gr-carousel__dislike .small-02 {
+  display: inline-block;
+  vertical-align: top;
+  padding-top: 3px;
 }
 
 .gr-carousel__dislike .dropdown-menu {
   background-color: $blue-005;
   width: 200px;
   margin-top: 10px;
-  li {
-    margin-bottom: 0px;
-  }
+  background-clip: inherit;
+  border: 0;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.10);
+}
+.gr-carousel__dislike li {
+  margin-bottom: 0;
 }
 
 .gr-carousel__dislike .dropdown-menu:after {
@@ -189,23 +211,29 @@ $gr-carousel-nav__width: 82.5px;
 
 
 .gr-dislike__form {
-  .form-group {
-    margin-bottom: 0px;
-  }
-  input {
-    display: none;
-  }
-  .radio label {
-    padding: 0px;
-  }
-  .radio {
-    margin-top: 0px;
-    margin-bottom: 0px;
-  }
+  padding: 10px 0 0 15px;
+}
+.gr-dislike__form .form-group {
+  margin-bottom: 0px;
+}
+.gr-dislike__forminput {
+  display: none;
+}
+.gr-dislike__form .radio label {
+  padding: 0px;
+}
+.gr-dislike__form input[type="radio"] {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  visibility: hidden;
 }
 
 .gr-carousel__gift-details {
-  margin-bottom: 140px;
+  min-height: 228px;
+  max-height: 228px;
+  overflow: scroll;
+  width: 430px;
+  padding-right: 10px;
 }
 
 .gr-carousel__gift-actions {
@@ -217,8 +245,14 @@ $gr-carousel-nav__width: 82.5px;
 
 .gr-carousel__price,
 .gr-carousel__quantity {
-  width: 50%;
-  float: left;
+  position: absolute;
+  bottom: 40px;
+}
+.gr-carousel__quantity {
+  right: 30px;
+}
+.gr-carousel__price {
+  left: 28px;
 }
 
 .gr-carousel__price {
@@ -268,14 +302,22 @@ $gr-carousel-nav__width: 82.5px;
   width: 400px;
   position: absolute;
   bottom: 40px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(51, 51, 51, 0.8);
+  height: 56px;
 }
-
+.gr-image-carousel__nav {
+  height: 56px;
+  width: 56px;
+  padding-top: 13px;
+  padding-left: 24px;
+  display: inline-block;
+}
+.gr-image-carousel__nav:hover,
+.gr-image-carousel__nav:active,
+.gr-image-carousel__nav:focus {
+  background-color: $gray-010;
+}
 .gr-image-carousel__nav.prev {
-  padding-right: 10px;
-}
-
-.gr-image-carousel__nav.next {
-  padding-left: 10px;
+  margin-right: -4px;
 }
 

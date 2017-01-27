@@ -52,9 +52,34 @@ a:active .navbar-static-top__icon-circle {
   height: 14px;
   fill: $blue-005;
 }
+.gr-carousel__image-nav--caret-left,
+.gr-carousel__image-nav--caret-right {
+  fill: lighten($gray-006, 10);
+  width: 10px;
+  height: 10px;
+}
 .modal__icon-close {
   width: 22px;
   height: 22px;
+}
+use.icon-dislike-use .path1,
+use.icon-dislike-use .path2 {
+  stroke: $blue-009;
+  stroke-weight: 1px;
+}
+.recommendation__icon-dislike,
+.recommendation__icon-disliked {
+  width: 19px;
+  height: 18px;
+}
+use.icon-disliked-use .path1,
+use.icon-disliked-use .path2 {
+  stroke: $orange-001;
+}
+svg.recommendation__icon-disliked path,
+svg.recommendation__icon-disliked path {
+  stroke: inherit;
+  stroke-weight: inherit;
 }
 // #icon-close .st0 {
 //   fill: $gray-010;

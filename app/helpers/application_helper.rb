@@ -37,7 +37,7 @@ module ApplicationHelper
   # embed an svg from a sprite (pick the symbol to use and give it a class)
   # should generate svg tag with classes passed surrounding a use tag with xlink:href att value of symbol_name
   def embedded_svg(symbol_name, options = {})
-    content_tag(:svg, content_tag(:use, "", 'xlink:href' => "\##{symbol_name}"), :class => options[:class])
+    content_tag(:svg, content_tag(:use, "", 'xlink:href' => "\##{symbol_name}", :class => options[:xlink_class]), :class => options[:class])
   end
 
 
