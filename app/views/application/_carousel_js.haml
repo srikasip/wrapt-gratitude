@@ -163,6 +163,14 @@
       $(@carousel).css('height', @carouselHeight + 'px')
       $(@container).css('height', @carouselHeight + 'px')
 
+      # Also set the wrapper height so the thumbnail nav
+      # gets pushed down below the footer
+      wrapperHeight = 0
+      wrapperHeight += @carouselHeight
+      wrapperHeight += (parseInt($('.gr-carousel__indicators').height()) || 0)
+      wrapperHeight += (parseInt($('.gr-carousel__indicators').css('margin-top')) || 0)
+      $('.wrapt-carousel--wrapper').css('height', wrapperHeight)
+
 
 
     

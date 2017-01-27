@@ -1,9 +1,5 @@
 // gift recommendation carousel specific styles
 
-.gr-carousel {
-  margin-bottom: 100px;
-}
-
 .gr-carousel__gifts {
   @include floating-container;
   width: 945px;
