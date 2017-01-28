@@ -310,8 +310,8 @@ a.disliked:focus {
   display: inline-block;
 }
 .gr-image-carousel__nav:hover,
-.gr-image-carousel__nav:active,
-.gr-image-carousel__nav:focus {
+.gr-image-carousel__nav:focus,
+.gr-image-carousel__nav:active {
   background-color: $gray-010;
 }
 .gr-image-carousel__nav.prev {
