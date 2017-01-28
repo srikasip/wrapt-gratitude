@@ -27,6 +27,7 @@ $blue-007: rgb(237, 242, 248); // #EDF2F8
 $blue-008: rgb(142, 160, 194); // #8EA1C2
 $blue-009: rgb(125, 150, 188); // #7D96BC
 $blue-010: rgb(247, 248, 251); // #F7F8FB
+$blue-011: rgb(196, 210, 233); // $C5D2EA
 
 $tan-001: rgb(242, 221, 209); // #F2DDD1
 $tan-002: rgb(196, 170, 127); // #C4AA7F
@@ -39,20 +40,6 @@ $green-001: rgb(191, 232, 158); // #BFE89E
 $green-002: rgb(41, 180, 115); // #29B473
 
 $red-001: rgb(235, 103, 103); // #EB6767
-
-// Z-index scale
-$zIndex-1:   100;
-$zIndex-2:   200;
-$zIndex-3:   300;
-$zIndex-4:   400;
-$zIndex-5:   500;
-$zIndex-6:   600;
-$zIndex-7:   700;
-$zIndex-8:   800;
-$zIndex-9:   900;
-$zIndex-10: 1000;
-
-
 
 
 
@@ -326,6 +313,22 @@ $dropdown-caret-color:           #000 !default;
 // of components dependent on the z-axis and are designed to all work together.
 //
 // Note: These variables are not generated into the Customizer.
+
+// Z-index scale
+$zIndex-1:   1000;
+$zIndex-2:   1200;
+$zIndex-3:   1300;
+$zIndex-4:   1400;
+$zIndex-5:   1500;
+$zIndex-6:   1600;
+$zIndex-7:   1700;
+$zIndex-8:   1800;
+$zIndex-9:   1900;
+$zIndex-10: 2000;
+
+$zIndex-3--gift-basket-overlay: $zIndex-3;
+$zIndex-4--gift-basket:         $zIndex-4;
+
 
 $zindex-navbar:            1000 !default;
 $zindex-dropdown:          1000 !default;

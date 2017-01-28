@@ -1,20 +1,21 @@
-%h3 Gift Basket
+%h3.gift-basket-gifts__heading Gift Basket
 - selections = profile.gift_selections.preload(gift: :primary_gift_image)
 - if selections.length == 0
   %p Your Gift Basket is Empty
 - else
   - selections.each do |gift_selection|
     - gift = gift_selection.gift
-    .gift-basket--gift.clearfix
-      .gift-basket--gift-image
-        = image_tag gift.primary_gift_image_with_fallback.image_url(:small)
-      .gift-basket--gift-text
-        .gift-basket--gift-title
+    .gift-basket__gift.clearfix
+      .gift-basket__gift__left.pull-left
+        .gift-basket__gift-image
+          = image_tag gift.primary_gift_image_with_fallback.image_url(:small)
+      .gift-basket__gift__right
+        .gift-basket__gift-title.small
           = gift.title
-        .gift-basket--gift-description
+        .gift-basket__gift-description.help
           = gift.description
-        .gift-basket--gift-price
-          = number_to_currency gift.selling_price
-        .gift-basket--remove-gift-link
-          = link_to profile_gift_selection_path(profile, gift_selection), data: {remote: true, behavior: 'remove-gift-from-basket', method: :delete} do
-            = embedded_svg('icon-close', class: 'gift-basket__icon-remove')
+        .gift-basket__price-count
+          %span.gift-basket__gift-price.small
+            = number_to_currency gift.selling_price
+      = link_to profile_gift_selection_path(profile, gift_selection), data: {remote: true, behavior: 'remove-gift-from-basket', method: :delete}, class: 'gift-basket__remove-gift-link' do
+        =embedded_svg('icon-close', class: 'remove-gift-link__icon-close')
