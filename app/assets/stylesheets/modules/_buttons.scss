@@ -23,8 +23,11 @@
 .btn-default:focus {
   background-color: $gray-011;
   border-color: $blue-006;
+  letter-spacing: 2px;
 }
-
+.btn-primary {
+  letter-spacing: 2px;
+}
 // I feel that the following selectors need to be added below
 // waiting for @jstrothman to get approval from MD
 // .btn.btn-multiple-choice-option:active,
