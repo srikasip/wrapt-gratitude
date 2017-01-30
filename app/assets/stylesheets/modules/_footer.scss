@@ -6,6 +6,9 @@ html {
 body {
   margin-bottom: 120px;
 }
+body.modal-body {
+  margin-bottom: 0;
+}
 // .footer {
 //   position: absolute;
 //   bottom: 0;

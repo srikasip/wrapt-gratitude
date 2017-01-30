@@ -1,0 +1,5 @@
+%iframe{src: admin_gift_preview_path(@gift), style: 'height: 640px; width: 100%; border: none;'}
+
+- content_for :page_js do
+  :javascript
+    $('.modal-dialog').css('width', '90%');

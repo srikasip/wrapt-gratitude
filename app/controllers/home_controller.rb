@@ -9,6 +9,5 @@ class HomeController < ApplicationController
   private def login_required?
     false
   end
-  
 
 end

@@ -85,6 +85,8 @@ Rails.application.routes.draw do
       end
       resource :image_ordering, only: :create, controller: 'gift_image_orderings'
       resources :images_from_products, only: :create, controller: 'gift_images_from_products'
+      resource :preview, only: :show, controller: 'gift_previews'
+      resource :preview_modal, only: :show, controller: 'gift_preview_modals'
     end
     resources :surveys do
       resources :questions, except: :index, controller: 'survey_questions' do

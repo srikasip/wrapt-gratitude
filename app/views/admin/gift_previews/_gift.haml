@@ -1,0 +1,14 @@
+- gift = locals[:gift]
+.gr-carousel__gift.clearfix
+  .gr-carousel__gift-image
+    - gift_images = load_gift_image_carousel_data(gift.gift_images)
+    = carousel(carousel: gift_images, unique_carousel_name: 'gr-image-carousel', slide_content_singular: 'image', container:'.gr-carousel')
+  .gr-carousel__gift-content.pb2.pl2.pt1.pr1
+    %h3.carousel__gift-name= gift.name
+    .gr-carousel__gift-details
+      %p.gift-description= gift.description
+      - unless gift.single_product_gift?
+        %h5.gift-inclusion-heading Included In Gift
+        %ul
+          - gift.products.each do |product|
+            %li.gift-item= product.description || product.title

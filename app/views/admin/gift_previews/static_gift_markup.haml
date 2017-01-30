@@ -1,0 +1,31 @@
+      .wrapt-carousel.gr-carousel
+        .wrapt-carousel__slides.gr-carousel__gifts
+          .wrapt-carousel__slide.gr-carousel__gift-container.active{"data-position" => "1", :style => "position: absolute; top: 0px; bottom: 0px; left: 0px;"}
+            .gr-carousel__gift.clearfix
+              .gr-carousel__gift-image
+                .wrapt-carousel.gr-image-carousel{"data-carousel" => "gr-image-carousel", "data-container" => ".gr-carousel", "data-indicator-container" => "gr-image-carousel__indicator", "data-indicators-container" => "gr-image-carousel__indicators", "data-nav" => "gr-image-carousel__nav", "data-nav-container" => "gr-image-carousel__nav-container", "data-slide-container" => "gr-image-carousel__image-container", "data-slides-container" => "gr-image-carousel__images"}
+                  .clearfix.gr-image-carousel__nav-container
+                    .gr-image-carousel__nav-links.clearfix.pull-right
+                      %a.wrapt-carousel__nav.gr-image-carousel__nav.prev{:href => "#"}
+                        %svg.gr-carousel__image-nav--caret-left
+                          %use{"xlink:href" => "#icon-caret-left", "xmlns:xlink" => "http://www.w3.org/1999/xlink"}
+                      %a.wrapt-carousel__nav.gr-image-carousel__nav.next{:href => "#"}
+                        %svg.gr-carousel__image-nav--caret-right
+                          %use{"xlink:href" => "#icon-caret-right", "xmlns:xlink" => "http://www.w3.org/1999/xlink"}
+                  .wrapt-carousel__slides.gr-image-carousel__images
+                    - @gift.gift_images.each do |gift_image|
+                      .wrapt-carousel__slide.gr-image-carousel__image-container{"data-position" => "1", :style => "position: absolute; top: 0px; bottom: 0px; left: 0px;"}
+                        .gr-image-carousel__image{:style => "background-image: url(#{gift_image.image_url(:large)})"}
+                  .wrapt-carousel__indicators.gr-image-carousel__indicators
+                    - (1..@gift.gift_images.length).each do |i|
+                      %a.wrapt-carousel__indicator.gr-image-carousel__indicator{"data-position" => i, :href => "#"}
+                        .indicator
+
+                %h3.carousel__gift-name= @gift.title
+                .gr-carousel__gift-details
+                  %p.gift-description= @gift.description
+                  - unless @gift.single_product_gift?
+                    %h5.gift-inclusion-heading Included In Gift
+                    %ul
+                      - @gift.products.each do |product|
+                        %li.gift-item= product.description.presence || product.title

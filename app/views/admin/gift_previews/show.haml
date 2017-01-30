@@ -1,0 +1,21 @@
+.container
+
+  .row.wrapt-carousel--wrapper
+    .col-xs-12
+      - gifts = load_gift_carousel_data
+      = carousel(carousel: gifts, unique_carousel_name: 'gr-carousel', slide_content_singular: 'gift')
+
+- content_for :page_js do
+  = render '/application/carousel_js'
+  :javascript
+    $(document).ready(function() {
+      $('[data-behavior=dislike-reason]').change(function() {
+        var form = $(this).parents('[data-behavior=dislike-form]');
+        
+        // advance the form after 1 second
+        window.setTimeout(function() {
+          $('.gr-carousel__nav.next').click()  
+        }, 1000)
+        form.submit();
+      });
+    });

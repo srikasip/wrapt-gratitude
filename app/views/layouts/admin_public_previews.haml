@@ -1,0 +1,25 @@
+-# a layout for rendering modal previews with public content in modals
+-# via the admin interface
+-# see GiftPreviews#show and GiftPreviewModals#show
+!!!
+%html
+  %head
+    %title Wrapt
+    %meta{name: "viewport", content: "width=device-width"}
+    %meta{content: "IE=edge", "http-equiv": "X-UA-Compatible"}
+    = csrf_meta_tags
+    = action_cable_meta_tag
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = render 'layouts/favicons'
+  %body.modal-body
+    -# svg include needs to be first thing in body tag
+    = svg 'symbol-defs'
+    -# responsive is disabled so use .col-xs-* everywhere for bs columns
+    .wrapper     
+      -# .container.container--main
+      = render 'layouts/alerts'
+      = render 'breadcrumbs'
+      = yield
+
+    = yield :page_js
