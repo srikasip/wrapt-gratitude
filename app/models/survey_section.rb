@@ -17,5 +17,9 @@ class SurveySection < ApplicationRecord
     introduction_text&.gsub /<relationship>/i, profile.relationship.downcase
   end
 
+  def first_in_survey?
+    survey.sections.first == self
+  end
+
 
 end

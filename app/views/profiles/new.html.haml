@@ -5,17 +5,9 @@
       %h1.text-center We use the science of gifting and gratitude to help you say, 'I get you.'
       %p.lead.tan-002.ph2.text-center Wrapt is a fun and easy way to discover the perfect gifts she will love, based on who she actually is, all year long
 
-      %h3.text-center.mb2.mt3 Who do you need gift ideas for?
+      %h3.text-center.mb2.mt3= @question_response.survey_question.prompt
   .row
     .col-xs-8.col-xs-offset-2
       .landing-question
-        = simple_form_for @profile, url: with_invitation_scope(profiles_path) do |form|
-          = form.submit 'Wife', class: 'btn btn-multiple-choice-option'
-          = form.submit 'Girlfriend', class: 'btn btn-multiple-choice-option'
-          = form.submit 'Mother', class: 'btn btn-multiple-choice-option'
-          = form.submit 'Daughter', class: 'btn btn-multiple-choice-option'
-          = form.submit 'Friend', class: 'btn btn-multiple-choice-option'
-          = form.submit 'Sister', class: 'btn btn-multiple-choice-option'
-          = form.submit 'Colleague', class: 'btn btn-multiple-choice-option'
-          = form.submit 'Partner', class: 'btn btn-multiple-choice-option'
-          = form.submit 'Other', class: 'btn btn-multiple-choice-option'
+        = simple_form_for @question_response, url: with_invitation_scope(profiles_path), html: {data: {behavior: 'question-response-form' }} do |form|
+          = render response_fields_partial, form: form, label: nil
