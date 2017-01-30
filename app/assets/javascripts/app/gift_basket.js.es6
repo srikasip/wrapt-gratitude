@@ -58,7 +58,7 @@ App.GiftBasket = class GiftBasket {
 
   _giftBasketCount(count) {
     if (count > 0) {
-      return `(${count})`
+      return `${count}`
     } else {
       return ""
     }
