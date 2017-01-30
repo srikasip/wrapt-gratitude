@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       resource :gift_dislike, only: [:create, :destroy]
     end
     resources :gift_selections, only: [:create, :destroy]
+    resource :checkout, only: :create, controller: 'profile_checkouts'
   end
 
   #####################################################
