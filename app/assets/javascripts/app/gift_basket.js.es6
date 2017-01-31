@@ -51,6 +51,7 @@ App.GiftBasket = class GiftBasket {
         received: (data) => {
           $(this.gift_list).html(data.gift_selections_html);
           $(this.count_badge).html(this._giftBasketCount(data.gift_basket_count));
+          this.updateGiftBasketCountEmptyIndicator(data.gift_basket_count);
           $(`[data-behavior~=add-to-gift-basket-wrapper][data-gift-id=${data.updated_gift_id}]`).html(data.add_button_html)
       }
     });
@@ -61,6 +62,14 @@ App.GiftBasket = class GiftBasket {
       return `${count}`
     } else {
       return ""
+    }
+  }
+
+  updateGiftBasketCountEmptyIndicator(count) {
+    if (count > 0) {
+      $(this.count_badge).removeClass('empty')
+    } else {
+      $(this.count_badge).addClass('empty')
     }
   }
 

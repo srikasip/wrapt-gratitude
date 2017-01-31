@@ -60,6 +60,9 @@
   background-color: $blue-004;
   padding: 5px 8px;
   margin-left: 4px;
+  &.empty {
+    display: none;
+  }
 }
 .navbar-default .navbar-nav > li > a:hover .gift-basket-count,
 .navbar-default .navbar-nav > li > a:focus .gift-basket-count,

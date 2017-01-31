@@ -22,6 +22,11 @@ module ApplicationHelper
     end
   end
 
+  def gift_basket_empty?
+    count = gift_basket_profile&.gift_selections&.count
+    count.blank? || count == 0
+  end
+
   def enable_gift_basket?
     gift_basket_profile.present?
   end
