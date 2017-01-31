@@ -21,5 +21,17 @@ class GiftImage < ApplicationRecord
     'admin/gift_images/gift_image'
   end
 
+  def orientation
+    if width && height
+      if width > height
+        'landscape'
+      elsif height > width
+        'portrait'
+      else
+        'square'
+      end
+    end
+  end
+
 
 end
