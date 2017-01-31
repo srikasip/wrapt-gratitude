@@ -9,6 +9,8 @@ module GiftImages
       :image?,
       :image_url,
       :image_processed?,
+      :width,
+      :height,
       to: :product_image
 
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170125190531) do
+ActiveRecord::Schema.define(version: 20170131171333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,8 @@ ActiveRecord::Schema.define(version: 20170125190531) do
     t.boolean  "image_processed",  default: false, null: false
     t.integer  "product_image_id"
     t.string   "type"
+    t.integer  "width",            default: 0,     null: false
+    t.integer  "height",           default: 0,     null: false
     t.index ["gift_id"], name: "index_gift_images_on_gift_id", using: :btree
     t.index ["primary"], name: "index_gift_images_on_primary", using: :btree
     t.index ["product_image_id"], name: "index_gift_images_on_product_image_id", using: :btree
@@ -145,6 +147,8 @@ ActiveRecord::Schema.define(version: 20170125190531) do
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.boolean  "image_processed", default: false, null: false
+    t.integer  "width",           default: 0,     null: false
+    t.integer  "height",          default: 0,     null: false
     t.index ["primary"], name: "index_product_images_on_primary", using: :btree
     t.index ["product_id"], name: "index_product_images_on_product_id", using: :btree
   end
