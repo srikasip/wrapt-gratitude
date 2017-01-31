@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170123153016) do
+ActiveRecord::Schema.define(version: 20170131171333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,8 @@ ActiveRecord::Schema.define(version: 20170123153016) do
     t.boolean  "image_processed",  default: false, null: false
     t.integer  "product_image_id"
     t.string   "type"
+    t.integer  "width",            default: 0,     null: false
+    t.integer  "height",           default: 0,     null: false
     t.index ["gift_id"], name: "index_gift_images_on_gift_id", using: :btree
     t.index ["primary"], name: "index_gift_images_on_primary", using: :btree
     t.index ["product_image_id"], name: "index_gift_images_on_product_image_id", using: :btree
@@ -92,6 +94,15 @@ ActiveRecord::Schema.define(version: 20170123153016) do
     t.index ["profile_id"], name: "index_gift_recommendations_on_profile_id", using: :btree
   end
 
+  create_table "gift_selections", force: :cascade do |t|
+    t.integer  "profile_id"
+    t.integer  "gift_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gift_id"], name: "index_gift_selections_on_gift_id", using: :btree
+    t.index ["profile_id"], name: "index_gift_selections_on_profile_id", using: :btree
+  end
+
   create_table "gifts", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
@@ -107,6 +118,7 @@ ActiveRecord::Schema.define(version: 20170123153016) do
     t.integer  "product_category_id"
     t.integer  "product_subcategory_id"
     t.integer  "source_product_id"
+    t.boolean  "featured",                                               default: false,        null: false
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
     t.index ["wrapt_sku"], name: "index_gifts_on_wrapt_sku", using: :btree
   end
@@ -135,6 +147,8 @@ ActiveRecord::Schema.define(version: 20170123153016) do
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.boolean  "image_processed", default: false, null: false
+    t.integer  "width",           default: 0,     null: false
+    t.integer  "height",          default: 0,     null: false
     t.index ["primary"], name: "index_product_images_on_primary", using: :btree
     t.index ["product_id"], name: "index_product_images_on_product_id", using: :btree
   end
@@ -385,6 +399,7 @@ ActiveRecord::Schema.define(version: 20170123153016) do
     t.string   "activation_state"
     t.string   "activation_token"
     t.datetime "activation_token_expires_at"
+    t.integer  "last_viewed_profile_id"
     t.index ["activation_token"], name: "index_users_on_activation_token", using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["remember_me_token"], name: "index_users_on_remember_me_token", using: :btree
@@ -420,6 +435,8 @@ ActiveRecord::Schema.define(version: 20170123153016) do
   add_foreign_key "gift_question_impacts", "training_sets"
   add_foreign_key "gift_recommendations", "gifts"
   add_foreign_key "gift_recommendations", "profiles"
+  add_foreign_key "gift_selections", "gifts"
+  add_foreign_key "gift_selections", "profiles"
   add_foreign_key "gifts", "product_categories"
   add_foreign_key "product_images", "products"
   add_foreign_key "products", "product_categories"
