@@ -125,4 +125,12 @@ class Gift < ApplicationRecord
     primary_gift_image || gift_images.first
   end
 
+  def duplicate_single_product_gift
+    if source_product_id.blank? && gift_products.size == 1
+      gift_products.first.product.single_product_gift
+    else
+      nil
+    end
+  end
+
 end

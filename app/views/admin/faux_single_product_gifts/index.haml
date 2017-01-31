@@ -1,0 +1,34 @@
+.row.admin__intro
+  .col-sm-12
+    %h1 Unintended Single Product Gifts
+    %p The gifts listed here have only a single product, but are not correctly linked as single product gifts
+
+.row
+  .col-sm-12
+    %table.table
+      %thead
+        %tr
+          %th
+          %th Title & Description
+          %th Categories
+          %th Wrapt SKU
+          %th
+
+      %tbody
+        - @gifts.each do |gift|
+          %tr
+            %td.admin-index-table--image-cell
+              - if gift.primary_gift_image.present?
+                = link_to admin_gift_path(gift) do
+                  = image_tag gift.primary_gift_image.image_url(:small), class: 'admin-index-table--image'
+            %td
+              %h4.admin-index-table--item-title= link_to gift.title, admin_gift_path(gift)
+              .admin-index-table--item-description= gift.description
+            %td= gift.wrapt_sku
+            %td.admin-index-table--buttons-cell(style="line-height: 24px; text-align: left;")
+            %td
+              - if gift.duplicate_single_product_gift.present?
+                A single product gift already exists:
+                = link_to gift.duplicate_single_product_gift.title, admin_gift_path(gift.duplicate_single_product_gift)
+              - else
+                = link_to 'Convert to Single Product Gift', admin_faux_single_product_gift_path(gift), class: 'btn btn-primary', method: :put

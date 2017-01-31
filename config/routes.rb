@@ -88,6 +88,7 @@ Rails.application.routes.draw do
       resource :preview, only: :show, controller: 'gift_previews'
       resource :preview_modal, only: :show, controller: 'gift_preview_modals'
     end
+    resources :faux_single_product_gifts, only: [:index, :update]
     resources :surveys do
       resources :questions, except: :index, controller: 'survey_questions' do
         member do
