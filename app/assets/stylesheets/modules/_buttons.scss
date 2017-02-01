@@ -28,12 +28,6 @@
 .btn-primary {
   letter-spacing: 2px;
 }
-// I feel that the following selectors need to be added below
-// waiting for @jstrothman to get approval from MD
-// .btn.btn-multiple-choice-option:active,
-// .btn.btn-yes-no:active,
-// .btn.btn-multiple-choice-option:focus,
-// .btn.btn-yes-no:focus
 
 .btn-default:active,
 .btn-default:active:hover, 
@@ -142,9 +136,14 @@
 }
 .btn.btn-multiple-choice-option:hover,
 .btn.btn-yes-no:hover,
+.btn.btn-multiple-choice-option:active,
+.btn.btn-yes-no:active,
+.btn.btn-multiple-choice-option:focus,
+.btn.btn-yes-no:focus,
 .btn.btn-multiple-choice-option.selected:hover, 
 .btn.btn-yes-no.selected:hover {
   background-color: rgba(242, 226, 170, .60);
+  letter-spacing: 0;
 }
 .btn.btn-multiple-choice-option.selected,
 .btn.btn-yes-no.selected {
