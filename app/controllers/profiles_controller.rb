@@ -25,6 +25,7 @@ class ProfilesController < ApplicationController
     end
   end
 
+  # TODO - dead method no longer used?
   private def login_via_invitation_code
     if params[:invitation_id] && !current_user
       user = User.load_from_activation_token params[:invitation_id]
