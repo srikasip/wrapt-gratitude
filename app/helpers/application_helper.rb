@@ -28,7 +28,7 @@ module ApplicationHelper
   end
 
   def enable_gift_basket?
-    gift_basket_profile.present?
+    gift_basket_profile && !gift_basket_profile.new_record?
   end
 
   # path to svg files so we can include them like a partial
