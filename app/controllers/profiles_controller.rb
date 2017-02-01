@@ -18,7 +18,7 @@ class ProfilesController < ApplicationController
     @profile = current_user.owned_profiles.new
     if @profile.save
       @survey_response = @profile.survey_responses.create survey: Survey.published.first
-      @survey_response.ordered_question_responses.first.update question_response_params
+      @survey_response.ordered_question_responses.first.update question_response_params.merge(answered_at: Time.now)
       redirect_to with_invitation_scope(profile_survey_question_path(@profile, @survey_response, @survey_response.ordered_question_responses.first.next_response))
     else
       render :new
