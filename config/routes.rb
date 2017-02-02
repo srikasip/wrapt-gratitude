@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   get 'terms-of-service', to: 'static_pages#terms_of_service', as: :terms_of_service
   get 'privacy-policy', to: 'static_pages#privacy_policy', as: :privacy_policy
 
+  resources :invitation_requests, only: :create
+
   ##########################
   # Survey responses
   # for MVP1A they can be accessed via notification link or logged in user

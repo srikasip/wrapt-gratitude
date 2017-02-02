@@ -8,6 +8,19 @@
         %p In MVP1a, when we invite people for testing, they will be taken to a special landing page.
         %p
           = link_to 'Tester Landing Page: Start a New Quiz', new_profile_path
+      - else
+        = simple_form_for @invitation_request do |form|
+          %h2 Launching Soon!
+          %p Enter Your Email Address below to be notified when you too can start giving better gifts based on her unique personality, passions, and purpose.
+
+          .form-inputs
+            = form.input :email
+        
+          .form-actions
+            = form.submit 'Submit', class: 'btn btn-primary'
+
+
+
 
 - if params[:password_reset_token]
   - content_for :page_js do
