@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
-  root to: 'home#show' 
+  root to: 'home#show'
+  get 'science-of-gifting', to: 'static_pages#science_of_gifting', as: :science_of_gifting
+  get 'terms-of-service', to: 'static_pages#terms_of_service', as: :terms_of_service
+  get 'privacy-policy', to: 'static_pages#privacy_policy', as: :privacy_policy
 
   ##########################
   # Survey responses

@@ -37,3 +37,11 @@ footer li:after {
 footer li:last-child:after {
   content: '';
 }
+footer li a {
+  color: $gray-006;
+  cursor: pointer;
+  &:hover {
+    // color: $gray-006;
+    text-decoration: none;
+  }
+}
