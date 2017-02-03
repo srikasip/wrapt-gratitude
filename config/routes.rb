@@ -57,6 +57,7 @@ Rails.application.routes.draw do
       end
     end
     resources :user_imports, only: [:new, :create]
+    resources :invitation_requests, only: [:index, :update, :destroy]
 
     resources :trait_training_sets, except: :show do
       resources :questions, except: [:show, :destroy], controller: 'trait_training_set_questions' do

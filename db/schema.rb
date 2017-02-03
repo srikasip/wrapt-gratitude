@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170202201459) do
+ActiveRecord::Schema.define(version: 20170203185334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -125,8 +125,11 @@ ActiveRecord::Schema.define(version: 20170202201459) do
 
   create_table "invitation_requests", force: :cascade do |t|
     t.string   "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "invited_user_id"
+    t.datetime "invited_at"
+    t.index ["invited_user_id"], name: "index_invitation_requests_on_invited_user_id", using: :btree
   end
 
   create_table "product_categories", force: :cascade do |t|
