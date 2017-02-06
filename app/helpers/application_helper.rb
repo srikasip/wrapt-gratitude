@@ -46,7 +46,7 @@ module ApplicationHelper
   end
 
   def body_classes
-    "#{controller_name} #{params[:action]}"
+    [controller_name, params[:action]]
   end
 
 

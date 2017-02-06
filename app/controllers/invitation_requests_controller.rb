@@ -1,5 +1,7 @@
 class InvitationRequestsController < ApplicationController
 
+  helper HeroBackgroundHelper
+
   def create
     @invitation_request = InvitationRequest.new invitation_request_params
     if @invitation_request.save

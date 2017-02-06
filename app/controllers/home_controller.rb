@@ -1,5 +1,7 @@
 class HomeController < ApplicationController
 
+  helper HeroBackgroundHelper
+
   def show
     if current_user && current_user.last_viewed_profile.present? && !current_user.admin?
       redirect_to profile_gift_recommendations_path(current_user.last_viewed_profile) and return
