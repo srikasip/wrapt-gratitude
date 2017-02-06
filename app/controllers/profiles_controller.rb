@@ -2,6 +2,7 @@ class ProfilesController < ApplicationController
 
   include RequiresLoginOrInvitation
   helper SurveyQuestionResponsesHelper
+  helper HeroBackgroundHelper
 
   def login_required?
     false
