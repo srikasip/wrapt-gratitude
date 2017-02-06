@@ -9,7 +9,7 @@
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
     = render 'layouts/favicons'
-  %body
+  %body{class: body_classes}
     -# svg include needs to be first thing in body tag
     = svg 'symbol-defs'
     -# responsive is disabled so use .col-xs-* everywhere for bs columns

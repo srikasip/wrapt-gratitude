@@ -1,0 +1,35 @@
+// Styles for Welcoming pages with the full-bleed hero images
+// e.g. Home Page and Quiz Landing page
+
+body.home .wrapper--full-bleed__bg-03{
+  background-image: image-url('hero-image');
+  background-size: 100vw;
+  background-repeat: no-repeat;
+}
+
+.hero-overlay {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 26px 120px 40px 36px;
+  color: white;
+  width: 60%;
+}
+
+.hero-overlay p {
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: 0.83px;
+}
+
+.hero-overrun {
+  margin-top: 100px;
+  background-color: white;
+  padding: 40px;
+}
+
+.invitation_request_email label {
+  letter-spacing: 1px;
+}
+
+.invitation_request_email input {
+  border-color: $gray-005;
+}
