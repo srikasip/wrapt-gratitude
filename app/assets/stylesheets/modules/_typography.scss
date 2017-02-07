@@ -136,3 +136,8 @@ a:active {
   line-height: 1.666666667;
   margin-bottom: 0;
 }
+
+.light {
+  @include akkurat-light();
+  font-weight: normal;
+}
