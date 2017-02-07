@@ -15,7 +15,7 @@ module Recommendations
 
     NEGATIVE_RANK_PENALTY = 5.0
     QUESTION_WEIGHT_BASE = 100.0
-    MIN_NUMBER_OF_RECOMMENDATIONS = 10
+    MIN_NUMBER_OF_RECOMMENDATIONS = 15
 
     def initialize(training_set, response = nil)
       @training_set = training_set
@@ -83,17 +83,6 @@ module Recommendations
     def create_recommendations!
       @recommendations.map(&:save)
     end
-
-    # TODO this is used by EvaluationRecommendations#show and could be moved closer to there
-    def calculate_question_rank_intermediate_products gift, question
-      gift_question = gift_question_impacts_by_gift_and_question[gift][question]
-      result = {}
-      result[:initial_question_rank] = initial_question_rank(gift, question)
-      result[:negative_rank_penalty_applied] = Recommendations::NegativeRankPenaltyApplicator.new(result[:initial_question_rank]).modified_rank
-      result[:question_weight_applied] = Recommendations::ProductQuestionWeightApplicator.new(result[:negative_rank_penalty_applied], gift_question&.question_impact).modified_rank
-      result[:final_question_rank] = result[:question_weight_applied]
-      result
-    end
     
     def recommendation_question_ranks(recommendation)
       results = question_ranks.select{|qr| qr.gift == recommendation.gift}
@@ -104,10 +93,17 @@ module Recommendations
     protected
     
     def generate_random_recommendations(count)
-      gift_pool = random_gifts - @recommendations.map(&:gift)
       added = []
+      gift_pool = featured_random_gifts - @recommendations.map(&:gift)
       gift_pool.sample(count).each do |gift|
-        added << add_recommendation(gift, 0.0)
+        added << add_recommendation(gift, 0.01)
+      end
+      needed = count - added.length
+      if needed > 0
+        gift_pool = non_featured_random_gifts - @recommendations.map(&:gift)
+        gift_pool.sample(count).each do |gift|
+          added << add_recommendation(gift, 0.0)
+        end
       end
       added
     end
@@ -119,7 +115,7 @@ module Recommendations
         questions_by_gift[gift].each do |question|
           gift_rank += calculate_question_rank(gift, question)
         end
-        if gift_rank > 0.0
+        if gift_rank > 0.01
           add_recommendation(gift, gift_rank)
           max_rank = gift_rank if gift_rank > max_rank
         end
@@ -132,15 +128,17 @@ module Recommendations
     end
     
     def remove_similar_recommendations
-      used_categories = []
+      # no more than 25% of the gifts can be from the same category
+      category_limit = (0.25 * MIN_NUMBER_OF_RECOMMENDATIONS).round
+      used_category_counts = {}
       @recommendations.reject! do |recommendation|
-        categories = categories_by_gifts[recommendation.gift]
-        if (used_categories & categories).any?
-          true # don't use it
-        else
-          used_categories += categories
-          false
+        max_category_count = 0
+        categories_by_gifts[recommendation.gift].each do |category|
+          category_count = used_category_counts.fetch(category, 0.0) + 1
+          max_category_count = category_count if category_count > max_category_count
+          used_category_counts[category] = category_count
         end
+        max_category_count > category_limit
       end
     end
 
@@ -183,15 +181,19 @@ module Recommendations
     end
     
     def gifts
-      training_set_gifts + random_gifts
+      training_set_gifts + featured_random_gifts + non_featured_random_gifts
     end
 
     def training_set_gifts
       @_training_set_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).where(id: training_set.gift_question_impacts.select(:gift_id)).to_a
     end
 
-    def random_gifts
-      @_random_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).order('RANDOM()').limit(50).to_a
+    def featured_random_gifts
+      @_featured_random_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).where(featured: true).order('RANDOM()').limit(50).to_a
+    end
+    
+    def non_featured_random_gifts
+      @_non_featured_random_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).where(featured: false).order('RANDOM()').limit(50).to_a
     end
 
     def categories_by_gifts
