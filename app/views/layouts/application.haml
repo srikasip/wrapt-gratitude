@@ -16,14 +16,11 @@
     .wrapper--full-bleed__bg-03.pb6
       - if show_top_nav?
         = render 'layouts/top_nav'
-    
-
-
-         
         -# .container.container--main
         = render 'layouts/alerts'
         = render 'breadcrumbs'
         = yield
+    = yield :after_wrapper
 
     %footer.footer
       = render 'layouts/footer'

@@ -50,6 +50,9 @@ body.hero-bg .wrapper--full-bleed__bg-03{
   text-align: center;
   padding-bottom: 40px;
   border-bottom: solid 2px $gray-004;
+  &.border-dark {
+    border-color: rgba(77, 76, 77, 0.2)  
+  }
 }
 
 .new-quiz__about-step {
@@ -78,4 +81,53 @@ body.hero-bg .wrapper--full-bleed__bg-03{
 }
 .new-quiz__about-step.step-3 {
   background-image: image-url('about-step-3.png')
+}
+
+.new-quiz__after-wrapper {
+  padding-bottom: 104px;
+}
+
+.new-quiz__gift-examples {
+
+}
+
+.new-quiz__gift-example {
+  @include akkurat-light;
+  float: left;
+  width: 31%;
+  margin-right: 3%;
+  &:last-child { margin-right: 0;}
+  background-color: white;
+  position: relative;
+}
+
+.new-quiz__gift-example-image {
+  max-height: 250px;
+}
+
+.new-quiz__gift-example-image img {
+  width: 100%;
+}
+
+.new-quiz__gift-example-badge {
+  position: absolute;
+  top: 154px;
+  left: 24px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: $orange-002;
+  text-align: center;
+}
+
+.new-quiz__gift-example-badge svg {
+  @include vertical-align();
+}
+
+.new-quiz__gift-example-text {
+  padding: 50px 24px 42px 24px;
+}
+
+.new-quiz__gift-example h4 {
+  font-weight: normal;
 }

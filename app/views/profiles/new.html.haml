@@ -32,3 +32,39 @@
         .new-quiz__about-step.step-3.left
           %h4 Wrapt & Delivered
           %p She receives a gift she loves, wrapt and delivered, and you will gain a 'gift whisperer' with all of her occasions.
+
+- content_for :after_wrapper do
+  .new-quiz__after-wrapper.bg-blue-004
+    .container
+      .row
+        .col-xs-10.col-xs-offset-1
+          .new-quiz__about-intro-wrapper
+            .new-quiz__about-intro-content.border-dark
+              %h3 Our Own Collection
+              %p Our collection includes Artisanal items, Experiences you can do together, or Funds that will fulfill a bucket list dream of hers that you can fund with family and friends.
+          .new-quiz__gift-examples
+            .new-quiz__gift-example
+              .new-quiz__gift-example-image
+                = image_tag 'gift-example__gift.jpg'
+              .new-quiz__gift-example-badge
+                = svg 'single-heart'
+              .new-quiz__gift-example-text
+                %h4 Artisan Items
+                %p ethically sourced, curated by wrapt and made in the US or from global artisan enterprises
+            .new-quiz__gift-example
+              .new-quiz__gift-example-image
+                = image_tag 'gift-example__experience.jpg'
+              .new-quiz__gift-example-badge
+                = svg 'hearts-two'
+              .new-quiz__gift-example-text
+                %h4 Experience it Together
+                %p for you both to share - we’ll help you pull it off!
+            .new-quiz__gift-example
+              .new-quiz__gift-example-image
+                = image_tag 'gift-example__fund.jpg'
+              .new-quiz__gift-example-badge
+                = svg 'hearts-three'
+              .new-quiz__gift-example-text
+                %h4 Fund it with Others
+                %p from family and friends, that will make her bucket list items come true
+          .clearfix
