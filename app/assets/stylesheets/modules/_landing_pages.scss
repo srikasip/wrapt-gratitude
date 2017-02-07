@@ -88,14 +88,15 @@ body.hero-bg .wrapper--full-bleed__bg-03{
 }
 
 .new-quiz__gift-examples {
-
+  @include flexbox();
+  overflow: hidden;
 }
 
 .new-quiz__gift-example {
   @include akkurat-light;
-  float: left;
-  width: 31%;
-  margin-right: 3%;
+  @include flex(1);
+  width: 32%;
+  margin-right: 2%;
   &:last-child { margin-right: 0;}
   background-color: white;
   position: relative;
