@@ -46,6 +46,8 @@
                 %span.label.label-default= gift.product_category&.name
               - if gift.product_subcategory.present?
                 %span.label.label-default= gift.product_subcategory&.name
+              - if gift.featured?
+                %span.label.label-default featured
             %td= gift.wrapt_sku
             %td.text-right= number_to_currency gift.selling_price
             %td.text-right= gift.availability_string
