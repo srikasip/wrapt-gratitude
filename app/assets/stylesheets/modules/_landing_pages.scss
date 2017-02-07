@@ -37,3 +37,45 @@ body.hero-bg .wrapper--full-bleed__bg-03{
 .hero-overrun .btn.btn-multiple-choice-option {
   min-width: 148px;
 }
+
+.new-quiz__about-intro-wrapper {
+  margin-top: 72px;
+  margin-bottom: 54px;
+  width: 100%;
+}
+
+.new-quiz__about-intro-content {
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
+  padding-bottom: 40px;
+  border-bottom: solid 2px $gray-004;
+}
+
+.new-quiz__about-step {
+  margin-bottom: 18px;
+  padding-top: 100px;
+  background-repeat: no-repeat;
+}
+
+.new-quiz__about-step.left {
+  text-align: left;
+  background-position: top left;
+  padding-left: 108px;
+}
+
+.new-quiz__about-step.right {
+  text-align: right;
+  background-position: top right;
+  padding-right: 108px;
+}
+
+.new-quiz__about-step.step-1 {
+  background-image: image-url('about-step-1.png')
+}
+.new-quiz__about-step.step-2 {
+  background-image: image-url('about-step-2.png')
+}
+.new-quiz__about-step.step-3 {
+  background-image: image-url('about-step-3.png')
+}
