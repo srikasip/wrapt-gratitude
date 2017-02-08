@@ -19,8 +19,7 @@
 .btn.active {
   box-shadow: none;
 }
-.btn-default:hover,
-.btn-default:focus {
+.btn-default:hover {
   background-color: $gray-011;
   border-color: $blue-006;
   letter-spacing: 2px;
@@ -31,24 +30,19 @@
 
 .btn-default:active,
 .btn-default:active:hover, 
-.btn-default:active:focus, 
 .btn-default:active.focus, 
-.btn-default.active:hover, 
-.btn-default.active:focus, 
+.btn-default.active:hover,  
 .btn-default.active.focus {
   background-color: $blue-007;
   border-color: $blue-006;
 }
 .btn-primary:active:hover, 
-.btn-primary:active:focus, 
 .btn-primary:active.focus, 
-.btn-primary.active:hover, 
-.btn-primary.active:focus, 
+.btn-primary.active:hover,  
 .btn-primary.active.focus {
   background-color: $blue-008;
   border-color: $blue-008;
 }
-.btn-primary:focus,
 .btn-primary:active,
 .btn-primary.active {
   background-color: $blue-008;
@@ -67,8 +61,7 @@
   background-color: $orange-001;
   border-color: $orange-001;
 }
-.btn-secondary:hover,
-.btn-secondary:focus {
+.btn-secondary:hover {
   background-color: tint($orange-001, 20);
   border-color: tint($orange-001, 20);
 }
@@ -78,10 +71,8 @@
   border-color: $orange-002;
 }
 .btn-secondary:active:hover, 
-.btn-secondary:active:focus, 
 .btn-secondary:active.focus, 
 .btn-secondary.active:hover, 
-.btn-secondary.active:focus, 
 .btn-secondary.active.focus {
   background-color: $orange-002;
   border-color: $orange-002;
@@ -138,8 +129,6 @@
 .btn.btn-yes-no:hover,
 .btn.btn-multiple-choice-option:active,
 .btn.btn-yes-no:active,
-.btn.btn-multiple-choice-option:focus,
-.btn.btn-yes-no:focus,
 .btn.btn-multiple-choice-option.selected:hover, 
 .btn.btn-yes-no.selected:hover {
   background-color: rgba(242, 226, 170, .60);
