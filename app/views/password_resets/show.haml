@@ -1,14 +1,20 @@
-.container
-  .row
-    .col-sm-4
-      %h1 Reset Your Password
-      %p Enter your new password below
+.row
+  .col-xs-12
+    %h1 Reset Your Password
 
-      = simple_form_for @password_reset, html: {data: {submits_to_pjax_modal: true}} do |form|
-        .form-inputs
-          = form.input :password
+    = simple_form_for @password_reset, html: {data: {submits_to_pjax_modal: true}} do |form|
+      .form-inputs
+        = form.input :password, required: false, label: 'Enter your new password'
 
-        .form-actions
-          = form.submit 'Reset Password', class: 'btn btn-primary'
-        
+      .text-right.lost-password-container
         %p= link_to 'Return to Sign In'
+      .clearfix
+
+      .form-actions
+        = form.submit 'Reset Password', class: 'btn btn-primary'
+      
+      
+
+= content_for :page_js do
+  :javascript
+    new App.PasswordRevealer()
