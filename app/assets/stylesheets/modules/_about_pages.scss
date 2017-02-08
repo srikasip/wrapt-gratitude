@@ -7,16 +7,24 @@
   text-align: center;
   padding-bottom: 33px;
   border-bottom: solid 2px $tan-001;
+  @include akkurat-light();
+  font-weight: normal;
 }
 
 .about-page__tagline {
   width: 100%;
   margin: 40px auto 100px auto;
   text-align: center;
+  @include akkurat-light();
 }
 
 .about-page__subsection {
   margin-bottom: 126px;
+  @include akkurat-light();
+}
+
+.about-page__subsection h4 {
+  font-weight: normal;
 }
 
 .about-page__subsection.with-image {
