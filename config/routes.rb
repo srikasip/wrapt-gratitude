@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   get 'terms-of-service', to: 'static_pages#terms_of_service', as: :terms_of_service
   get 'privacy-policy', to: 'static_pages#privacy_policy', as: :privacy_policy
 
+  resources :invitation_requests, only: :create
+
   ##########################
   # Survey responses
   # for MVP1A they can be accessed via notification link or logged in user
@@ -55,6 +57,7 @@ Rails.application.routes.draw do
       end
     end
     resources :user_imports, only: [:new, :create]
+    resources :invitation_requests, only: [:index, :update, :destroy]
 
     resources :trait_training_sets, except: :show do
       resources :questions, except: [:show, :destroy], controller: 'trait_training_set_questions' do

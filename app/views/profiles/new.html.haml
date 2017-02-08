@@ -1,13 +1,70 @@
 .container
   .row
     .col-xs-10.col-xs-offset-1
+      .hero-overlay
+        %h2.light
+          She’s one-of-a-kind…
+          %br
+          now her gifts can be as well
+        %p.light We use the science of gifting and gratitude to match her personality, passions and purpose, to gifts she will love, all year long.
 
-      %h1.text-center We use the science of gifting and gratitude to help you say, 'I get you.'
-      %p.lead.tan-002.ph2.text-center Wrapt is a fun and easy way to discover the perfect gifts she will love, based on who she actually is, all year long
+      .hero-overrun
+        .sqr-progress
+        = simple_form_for @question_response, url: with_invitation_scope(profiles_path), html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
+          = render response_fields_partial, form: form, label: @question_response.survey_question.prompt
+          .sqr-submit__container.text-right#js-sqr-submit__container
+            %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}
+              Start Quiz
+      .new-quiz__about
+        .new-quiz__about-intro-wrapper
+          .new-quiz__about-intro-content
+            %h2.light.mb1 How Wrapt Works
+            %p Wrapt is a fun and easy way to discover the perfect gifts she will love, based on who she actually is, all year long.
 
-      %h3.text-center.mb2.mt3= @question_response.survey_question.prompt
-  .row
-    .col-xs-8.col-xs-offset-2
-      .landing-question
-        = simple_form_for @question_response, url: with_invitation_scope(profiles_path), html: {data: {behavior: 'question-response-form' }} do |form|
-          = render response_fields_partial, form: form, label: nil
+        .new-quiz__about-step.step-1.left
+          %h4.light Tell Us About Her
+          %p Answer a few questions about her personality, passions and purpose.
+
+        .new-quiz__about-step.step-2.right
+          %h4.light We Suggests the Gifts She’ll Love
+          %p Based on your answers, we then match her with gifts from our curated collection.
+
+        .new-quiz__about-step.step-3.left
+          %h4.light Wrapt & Delivered
+          %p She receives a gift she loves, wrapt and delivered, and you will gain a 'gift whisperer' with all of her occasions.
+
+- content_for :after_wrapper do
+  .new-quiz__after-wrapper.bg-blue-004
+    .container
+      .row
+        .col-xs-12
+          .new-quiz__about-intro-wrapper
+            .new-quiz__about-intro-content.border-dark
+              %h2 Our Own Collection
+              %p Our collection includes Artisanal items, Experiences you can do together, and Funds that will fulfill a bucket list dream of hers that you can fund with family and friends.
+          .new-quiz__gift-examples
+            .new-quiz__gift-example
+              .new-quiz__gift-example-image
+                = image_tag 'gift-example__gift.jpg'
+              .new-quiz__gift-example-badge
+                = svg 'single-heart'
+              .new-quiz__gift-example-text
+                %h4.letter-spacing-01 Artisan Items
+                %p ethically sourced, curated by wrapt and made in the US or from global artisan enterprises
+            .new-quiz__gift-example
+              .new-quiz__gift-example-image
+                = image_tag 'gift-example__experience.jpg'
+              .new-quiz__gift-example-badge
+                = svg 'hearts-two'
+              .new-quiz__gift-example-text
+                %h4.letter-spacing-01 Experience it Together
+                %p for you both to share - we’ll help you pull it off!
+            .new-quiz__gift-example
+              .new-quiz__gift-example-image
+                = image_tag 'gift-example__fund.jpg'
+              .new-quiz__gift-example-badge
+                = svg 'hearts-three'
+              .new-quiz__gift-example-text
+                %h4.letter-spacing-01 Fund it with Others
+                %p from family and friends, that will make her bucket list items come true
+          .clearfix

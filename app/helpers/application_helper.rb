@@ -45,6 +45,10 @@ module ApplicationHelper
     content_tag(:svg, content_tag(:use, "", 'xlink:href' => "\##{symbol_name}", :class => options[:xlink_class]), :class => options[:class])
   end
 
+  def body_classes
+    [controller_name, params[:action]]
+  end
+
 
 
 end

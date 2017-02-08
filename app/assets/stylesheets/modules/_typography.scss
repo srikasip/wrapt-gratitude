@@ -68,6 +68,9 @@ p {
   margin-bottom: 8px;
   color: $gray-006;
 }
+.letter-spacing-01 {
+  letter-spacing: 1px;
+}
 b,
 strong {
   @include akkurat-bold;
@@ -135,4 +138,9 @@ a:active {
   color: $gray-007;
   line-height: 1.666666667;
   margin-bottom: 0;
+}
+
+.light {
+  @include akkurat-light();
+  font-weight: normal;
 }

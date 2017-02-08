@@ -1,0 +1,51 @@
+// CSS for about pages e.g. Science of Gifting
+// Terms of Service, etc.
+
+.about-page__header {
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+  padding-bottom: 33px;
+  border-bottom: solid 2px $tan-001;
+  @include akkurat-light();
+  font-weight: normal;
+}
+
+.about-page__tagline {
+  width: 100%;
+  margin: 40px auto 100px auto;
+  text-align: center;
+  @include akkurat-light();
+}
+
+.about-page__subsection {
+  margin-bottom: 126px;
+  @include akkurat-light();
+}
+
+.about-page__subsection h4 {
+  font-weight: normal;
+}
+
+.about-page__subsection.with-image {
+  @include flexbox();
+  align-items: center;
+}
+
+.about-page__subsection.with-image img {
+  @include flex(1);
+  width: 48%;
+}
+
+.about-page__subsection.with-image.image-left img {
+  margin-right: 3%;
+}
+
+.about-page__subsection.with-image.image-right img {
+  margin-left: 3%;
+}
+
+.about-page__subsection.with-image .about-page__subsection-text {
+  @include flex(1);
+  width: 48%;
+}

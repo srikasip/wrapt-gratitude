@@ -1,13 +1,27 @@
 .container
   .row
     .col-xs-10.col-xs-offset-1
-      %h2 Welcome.  
-      %p.lead This will eventually be the Wrapt landing page. 
-      %p For now, it is only viewable for people who have the general access information.
-      - if current_user
-        %p In MVP1a, when we invite people for testing, they will be taken to a special landing page.
-        %p
-          = link_to 'Tester Landing Page: Start a New Quiz', new_profile_path
+      .hero-overlay
+        %h2.light Launching Soon!
+        %p.light Enter your Email Address below to be notified when you too can start giving better gifts based on her unique personality, passions, and purpose.
+      
+      .hero-overrun
+        - if current_user&.admin?
+          %p In MVP1a, when we invite people for testing, they will be taken to a special landing page.
+          %p
+            = link_to 'Tester Landing Page: Start a New Quiz', new_profile_path
+        - else
+          .sqr-progress.sqr-progress--one-question-only
+          = simple_form_for @invitation_request, html: {class: 'sqr-form'} do |form|
+            .form-inputs
+              = form.input :email, label: 'What is your email address?', required: false
+          
+            .form-actions.pull-right
+              = form.submit 'Submit', class: 'btn btn-primary'
+            .clearfix
+
+
+
 
 - if params[:password_reset_token]
   - content_for :page_js do
