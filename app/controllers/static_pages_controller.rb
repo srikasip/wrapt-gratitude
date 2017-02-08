@@ -7,4 +7,8 @@ class StaticPagesController < ApplicationController
 
   def privacy_policy
   end
+
+  def login_required?
+    false
+  end
 end
