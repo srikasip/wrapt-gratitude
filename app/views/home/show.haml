@@ -11,7 +11,7 @@
           %p
             = link_to 'Tester Landing Page: Start a New Quiz', new_profile_path
         - else
-          .sqr-progress
+          .sqr-progress.sqr-progress--one-question-only
           = simple_form_for @invitation_request, html: {class: 'sqr-form'} do |form|
             .form-inputs
               = form.input :email, label: 'What is your email address?', required: false

@@ -10,7 +10,7 @@ body.hero-bg .wrapper--full-bleed__bg-03{
 .hero-overlay {
   background-color: rgba(0, 0, 0, 0.2);
   padding: 26px 120px 40px 36px;
-  color: white;
+  color: #fff;
   width: 60%;
 }
 
@@ -22,8 +22,9 @@ body.hero-bg .wrapper--full-bleed__bg-03{
 
 .hero-overrun {
   margin-top: 100px;
-  background-color: white;
+  background-color: #fff;
   padding: 40px;
+  box-shadow: 0 0 9px 2px rgba(0,0,0,0.05);
 }
 
 .invitation_request_email label {
@@ -37,10 +38,14 @@ body.hero-bg .wrapper--full-bleed__bg-03{
 .hero-overrun .btn.btn-multiple-choice-option {
   min-width: 148px;
 }
-
+.new-quiz__about h4 {
+  margin-bottom: 6px;
+}
+.new-quiz__about p {
+  color: $gray-007;
+}
 .new-quiz__about-intro-wrapper {
-  margin-top: 72px;
-  margin-bottom: 54px;
+  margin: 72px 0;
   width: 100%;
 }
 
@@ -50,9 +55,11 @@ body.hero-bg .wrapper--full-bleed__bg-03{
   text-align: center;
   padding-bottom: 40px;
   border-bottom: solid 2px $gray-004;
-  &.border-dark {
-    border-color: rgba(77, 76, 77, 0.2)  
-  }
+}
+.new-quiz__about-intro-content.border-dark {
+  border-color: rgba(77, 76, 77, 0.2);
+  width: 668px;
+  padding-bottom: 23px;
 }
 
 .new-quiz__about-step {
@@ -74,13 +81,14 @@ body.hero-bg .wrapper--full-bleed__bg-03{
 }
 
 .new-quiz__about-step.step-1 {
-  background-image: image-url('about-step-1.png')
+  background-image: image-url('about-step-1.png');
 }
 .new-quiz__about-step.step-2 {
-  background-image: image-url('about-step-2.png')
+  background-image: image-url('about-step-2.png');
 }
 .new-quiz__about-step.step-3 {
-  background-image: image-url('about-step-3.png')
+  background-image: image-url('about-step-3.png');
+  margin-bottom: 100px;
 }
 
 .new-quiz__after-wrapper {

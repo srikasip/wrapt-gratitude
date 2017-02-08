@@ -68,6 +68,9 @@ p {
   margin-bottom: 8px;
   color: $gray-006;
 }
+.letter-spacing-01 {
+  letter-spacing: 1px;
+}
 b,
 strong {
   @include akkurat-bold;

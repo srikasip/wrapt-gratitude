@@ -15,33 +15,33 @@
           .sqr-submit__container.text-right#js-sqr-submit__container
             %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}
               Start Quiz
-
+      .new-quiz__about
         .new-quiz__about-intro-wrapper
           .new-quiz__about-intro-content
-            %h3.light How Wrapt Works
-            %p.light Wrapt is a fun and easy way to discover the perfect gifts she will love, based on who she actually is, all year long.
+            %h2.light.mb1 How Wrapt Works
+            %p Wrapt is a fun and easy way to discover the perfect gifts she will love, based on who she actually is, all year long.
 
         .new-quiz__about-step.step-1.left
-          %h4.light Tell us About Her
-          %p.light Answer a few questions about her personality, passions and purpose.
+          %h4.light Tell Us About Her
+          %p Answer a few questions about her personality, passions and purpose.
 
         .new-quiz__about-step.step-2.right
           %h4.light We Suggests the Gifts She’ll Love
-          %p.light Based on your answers, we then match her with gifts from our curated collection.
+          %p Based on your answers, we then match her with gifts from our curated collection.
 
         .new-quiz__about-step.step-3.left
           %h4.light Wrapt & Delivered
-          %p.light She receives a gift she loves, wrapt and delivered, and you will gain a 'gift whisperer' with all of her occasions.
+          %p She receives a gift she loves, wrapt and delivered, and you will gain a 'gift whisperer' with all of her occasions.
 
 - content_for :after_wrapper do
   .new-quiz__after-wrapper.bg-blue-004
     .container
       .row
-        .col-xs-10.col-xs-offset-1
+        .col-xs-12
           .new-quiz__about-intro-wrapper
             .new-quiz__about-intro-content.border-dark
-              %h3 Our Own Collection
-              %p Our collection includes Artisanal items, Experiences you can do together, or Funds that will fulfill a bucket list dream of hers that you can fund with family and friends.
+              %h2 Our Own Collection
+              %p Our collection includes Artisanal items, Experiences you can do together, and Funds that will fulfill a bucket list dream of hers that you can fund with family and friends.
           .new-quiz__gift-examples
             .new-quiz__gift-example
               .new-quiz__gift-example-image
@@ -49,7 +49,7 @@
               .new-quiz__gift-example-badge
                 = svg 'single-heart'
               .new-quiz__gift-example-text
-                %h4 Artisan Items
+                %h4.letter-spacing-01 Artisan Items
                 %p ethically sourced, curated by wrapt and made in the US or from global artisan enterprises
             .new-quiz__gift-example
               .new-quiz__gift-example-image
@@ -57,7 +57,7 @@
               .new-quiz__gift-example-badge
                 = svg 'hearts-two'
               .new-quiz__gift-example-text
-                %h4 Experience it Together
+                %h4.letter-spacing-01 Experience it Together
                 %p for you both to share - we’ll help you pull it off!
             .new-quiz__gift-example
               .new-quiz__gift-example-image
@@ -65,6 +65,6 @@
               .new-quiz__gift-example-badge
                 = svg 'hearts-three'
               .new-quiz__gift-example-text
-                %h4 Fund it with Others
+                %h4.letter-spacing-01 Fund it with Others
                 %p from family and friends, that will make her bucket list items come true
           .clearfix
