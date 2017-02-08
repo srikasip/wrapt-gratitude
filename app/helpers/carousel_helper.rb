@@ -6,7 +6,9 @@ module CarouselHelper
     if slides.present?
       classes = load_carousel_classes(unique_carousel_name, slide_content_singular, container)
       content_tag :div, class: "wrapt-carousel #{classes[:carousel]}", data: classes do
-        concat carousel_nav(nav_container_class: classes[:nav_container], nav_class: classes[:nav], nav_partial: nav_partial)
+        unless slides.length == 1
+          concat carousel_nav(nav_container_class: classes[:nav_container], nav_class: classes[:nav], nav_partial: nav_partial)
+        end
         concat carousel_slide_container(slides: slides, slides_container: classes[:slides_container], slide_container: classes[:slide_container])
         concat carousel_indicators(slides: slides, indicators: classes[:indicators_container], indicator: classes[:indicator_container])
       end
