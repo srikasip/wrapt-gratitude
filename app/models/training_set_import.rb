@@ -50,6 +50,7 @@ class TrainingSetImport < Import
     @preloads[GiftQuestionImpact] ||=
       GiftQuestionImpact.
         where(
+          training_set: training_set,
           survey_question: @preloads[@question_scope].values,
           gift: @preloads[Gift].values
         ).
