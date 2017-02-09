@@ -59,6 +59,8 @@ Rails.application.routes.draw do
     resources :user_imports, only: [:new, :create]
     resources :invitation_requests, only: [:index, :update, :destroy]
 
+    resources :public_survey_exports, only: [:create]
+
     resources :trait_training_sets, except: :show do
       resources :questions, except: [:show, :destroy], controller: 'trait_training_set_questions' do
         resources :response_impacts, only: :index, controller: 'trait_training_set_response_impacts'
