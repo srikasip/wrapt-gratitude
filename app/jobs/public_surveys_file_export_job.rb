@@ -25,6 +25,7 @@ class PublicSurveysFileExportJob < ApplicationJob
       text_response
       slider_response
       choice_1
+      choice_2
       choice_3
       choice_4
       choice_5

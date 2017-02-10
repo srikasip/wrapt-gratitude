@@ -71,17 +71,14 @@ class Import
   def save_records
     if valid?
       preload!
-
       sheet.each do |row|
         record = row_record(row)
-
         if record_association_name
           importable.send(record_association_name) << record
         else
           record.save
         end
       end
-
       importable.save
     else
       false

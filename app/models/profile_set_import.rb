@@ -2,10 +2,16 @@ class ProfileSetImport < Import
 
   importable_name :profile_set, ExcelImportRecordsFileUploader
 
+  def initialize attrs = {}
+    super
+    @question_scope = profile_set.survey.questions
+    @survey_response_scope = profile_set.survey_responses
+  end
+
   def preload!
     sheet.cache_columns_scan!(:survey_response_name, :question_code)
-    preload_one!(ProfileSetSurveyResponse, :survey_response_name, :name, false)
-    preload_one!(SurveyQuestion, :question_code, :code, true)
+    preload_one!(@survey_response_scope, :survey_response_name, :name, false)
+    preload_one!(@question_scope, :question_code, :code, true)
     preload_question_responses!
   end
 
@@ -15,10 +21,12 @@ class ProfileSetImport < Import
 
   def row_record(row)
     survey_response =
-      @preloads[ProfileSetSurveyResponse][row.survey_response_name] ||=
+      @preloads[@survey_response_scope][row.survey_response_name] ||=
         profile_set.survey_responses.new(name: row.survey_response_name)
 
-    question = @preloads[SurveyQuestion][row.question_code]
+    survey_response.skip_build_question_responses_on_create = true
+
+    question = @preloads[@question_scope][row.question_code]
 
     question_response =
       @preloads[SurveyQuestionResponse][[survey_response.id, question.id]] ||
@@ -32,6 +40,7 @@ class ProfileSetImport < Import
     question_response.survey_question_response_options.destroy_all
     question_response.survey_question_response_options = conversion.survey_question_response_options(question)
 
+
     question_response
   end
 
@@ -43,11 +52,12 @@ class ProfileSetImport < Import
     @preloads[SurveyQuestionResponse] ||=
       SurveyQuestionResponse.
         where(
-          survey_response: @preloads[ProfileSetSurveyResponse].values,
-          survey_question: @preloads[SurveyQuestion].values
+          survey_response: @preloads[@survey_response_scope].values,
+          survey_response_type: 'ProfileSetSurveyResponse',
+          survey_question: @preloads[@question_scope].values
         ).
         index_by do |record|
-          [record.profile_set_survey_response_id, record.survey_question_id]
+          [record.survey_response_id, record.survey_question_id]
         end
   end
 end
