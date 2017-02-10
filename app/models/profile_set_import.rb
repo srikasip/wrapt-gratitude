@@ -47,7 +47,7 @@ class ProfileSetImport < Import
           survey_question: @preloads[SurveyQuestion].values
         ).
         index_by do |record|
-          [record.profile_set_survey_response_id, record.survey_question_id]
+          [record.survey_response_id, record.survey_question_id]
         end
   end
 end
