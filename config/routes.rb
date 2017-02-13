@@ -29,8 +29,9 @@ Rails.application.routes.draw do
     end
     resources :gift_selections, only: [:create, :destroy]
     resources :giftee_invitations, only: [:new, :create]
-    resource :recipient_review, only: :show, controller: 'profile_recipient_reviews'
   end
+
+  resources :profile_recipient_reviews, only: :show
 
   #####################################################
 
