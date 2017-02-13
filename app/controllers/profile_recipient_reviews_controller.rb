@@ -22,7 +22,7 @@ class ProfileRecipientReviewsController < ApplicationController
   end
 
   def load_profile_from_access_token
-    unless @profile = Profile.find_by_recipient_access_token params[:id]
+    unless @profile = Profile.find_by_recipient_access_token(params[:id])
       flash.alert = 'Sorry, that link is not valid.'
       redirect_to root_path
     end
