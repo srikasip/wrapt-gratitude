@@ -1,0 +1,26 @@
+- gift = locals[:gift]
+- gr = locals[:gift_recommendation]
+.gr-carousel__gift.clearfix
+  .gr-carousel__gift-image
+    - gift_images = load_gift_image_carousel_data(gift.gift_images)
+    = carousel(carousel: gift_images, unique_carousel_name: 'gr-image-carousel', slide_content_singular: 'image', container:'.gr-carousel')
+  .gr-carousel__gift-content.pb2.pl2.pt1.pr1
+    .gr-carousel__dislike.pull-right.text-right.pb1{data: {gift_recommendation_id: gr.id}}
+      = render 'gift_dislike', gift_recommendation: gr, profile: @profile
+    %h3.carousel__gift-name= gift.name
+    .gr-carousel__gift-details
+      %p.gift-description= gift.description
+      - unless gift.single_product_gift?
+        %h5.gift-inclusion-heading Included In Gift
+        %ul
+          - gift.products.each do |product|
+            %li.gift-item= product.description || product.title
+    .gr-carousel__gift-actions.pa2
+      %div
+        - gift_selection = GiftSelection.new(gift: gift, profile: @profile)
+        = form_for gift_selection, url: profile_gift_selections_path(@profile), html: {data: {remote: true}} do |form|
+          = form.hidden_field :gift_id
+          %h3.gr-carousel__price
+            = number_to_currency gift.selling_price
+          .gr-carousel__quantity.text-right{data: {behavior: 'add-to-gift-basket-wrapper', gift_id: gift.id}}
+            = render 'add_to_basket_button', gift_selection: gift_selection, profile: @profile
