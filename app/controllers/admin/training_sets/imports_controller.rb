@@ -10,10 +10,11 @@ module Admin
 
       def create
         @training_set_import = TrainingSetImport.new(@training_set, params[:import_file])
-        @training_set_import.open_file
-        TrainingSet.transaction do
-          @training_set_import.truncate_data
-          @training_set_import.insert_data
+        if @training_set_import.open_file
+          TrainingSet.transaction do
+            @training_set_import.truncate_data
+            @training_set_import.insert_data
+          end
         end
         if @training_set_import.errors.none?
           redirect_to [:admin, @training_set], notice: 'You imported impacts into a training set.'

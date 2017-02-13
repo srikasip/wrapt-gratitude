@@ -11,7 +11,18 @@ class TrainingSetImport
   end
   
   def open_file
-    @xls = Roo::Spreadsheet.open(file)
+    if file.present?
+      begin
+        @xls = Roo::Spreadsheet.open(file)
+      rescue Exception
+        log_error("Error reading import file")
+        return false
+      end
+    else
+      log_error("Import file required")
+      return false
+    end
+    true
   end
   
   def truncate_data
@@ -91,7 +102,11 @@ class TrainingSetImport
   end
   
   def log_error(message)
-    @errors << "#{@row_number}: #{message}"
+    if @row_number
+      @errors << "#{@row_number}: #{message}"
+    else
+      @errors << message
+    end
   end
 
 end
