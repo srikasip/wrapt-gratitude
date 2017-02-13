@@ -1,5 +1,5 @@
 = render 'imports/processing_import_modal'
-= simple_form_for  [:admin, @training_set_import] do |f|
+= form_tag admin_training_set_imports_path(@training_set), method: :post, multipart: true do
   %p
     Here you can upload an Excel spreadsheet containing impacts for questions
     and individual responses. For the format, see the description below the
@@ -9,17 +9,19 @@
     Start with
     #{link_to 'this template', '/training_sets/imports/Wrapt Training Set Import Template.xlsx'}.
 
-  - if @missing_resources_exception
+  .form-inputs
+    .form-group.required
+      %label.control-label.required Import File
+      = file_field_tag 'import_file'
+      
+  .form-actions= submit_tag 'Import', class: 'btn btn-primary'
+
+  - if @errors.present? && @errors.any?
     .alert.alert-danger.alert-dismissable
-      There was a problem with your upload. The following
-      #{@missing_resources_exception.resource_name.pluralize} could not be found:
-      #{@missing_resources_exception.values.join(', ')}
-
-  .form-inputs= f.input :records_file, label: 'Impacts File', as: :file
-  = render 'imports/row_errors', importable: @training_set_import
-
-  .form-actions= f.submit 'Import', class: 'btn btn-primary'
-
+      %strong Problems found in the upload file.
+      - @errors.each do |message|
+        %p= message
+        
   %h3 Format
   %p Each row is an impact for a single question, and for each choice in a multiple choice question.
 
