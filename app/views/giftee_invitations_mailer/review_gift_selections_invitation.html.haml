@@ -1,0 +1,14 @@
+%p= "Dear #{@profile.name},"
+
+%p
+  #{@profile.owner.first_name} was shopping for you on Wrapt and picked out some gifts for you.  We'd like to see how you like what they picked.
+
+%p
+  #{link_to 'Click here', profile_giftee_recommendations_review_url(@profile)} or use the following URL to see what they picked out.
+
+%p= link_to profile_giftee_recommendations_review_url(@profile), profile_giftee_recommendations_review_url(@profile)
+
+%p
+  Sincerely,
+  %br
+  The Wrapt Team

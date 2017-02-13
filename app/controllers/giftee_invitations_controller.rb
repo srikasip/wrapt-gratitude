@@ -8,14 +8,23 @@ class GifteeInvitationsController < ApplicationController
   end
 
   def create
-    flash.notice = 'Gift Selection Notification coming in a future Release'
-    redirect_to root_path
+    if @profile.update profile_params
+      GifteeInvitationsMailer.review_gift_selections_invitation(@profile).deliver_later
+      render :create
+    else
+      render :new
+    end
   end
 
   
   private def set_profile
     @profile = current_user.owned_profiles.find params[:profile_id]
   end
+
+  private def profile_params
+    params.require(:profile).permit(:email)
+  end
+  
   
   
 
