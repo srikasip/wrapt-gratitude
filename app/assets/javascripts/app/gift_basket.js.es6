@@ -8,6 +8,7 @@ App.GiftBasket = class GiftBasket {
     this.handleOpenLinks();
     this.handleCloseLinks();
     this.subscribeToGiftSelectionsChannel()
+    this.handleSubmitButtonClick();
     App.giftBasketInstance = this;
   }
 
@@ -71,6 +72,13 @@ App.GiftBasket = class GiftBasket {
     } else {
       $(this.count_badge).addClass('empty')
     }
+  }
+
+  handleSubmitButtonClick() {
+    $(this.container).find('[data-behavior~=gift-basket-submit]').on('click', (evt) => {
+      this.close();
+      return true;
+    })
   }
 
 
