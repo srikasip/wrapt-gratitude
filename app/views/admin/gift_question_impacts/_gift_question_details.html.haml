@@ -2,7 +2,11 @@
   %tbody
     %tr
       %td Gift
-      %td= @gift_question_impact.gift.title
+      %td
+        = @gift_question_impact.gift.title
+        (#{@gift_question_impact.gift.wrapt_sku})
     %tr
       %td Question
-      %td= @gift_question_impact.survey_question.prompt
+      %td
+        = @gift_question_impact.survey_question.prompt
+        (#{@gift_question_impact.survey_question.code})

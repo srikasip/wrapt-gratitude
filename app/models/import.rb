@@ -7,7 +7,6 @@ class Import
 
   validates_presence_of :records_file, message: 'You must choose a file.'
   validate :presence_of_headers
-  validate :validity_of_rows, if: 'records_file.present?'
 
   def self.importable_name(name = nil, uploader_class = nil)
     if name.present?
@@ -53,7 +52,6 @@ class Import
         if missing_lookups.any?
           exception = Imports::Exceptions::PreloadsNotFound.new(resource_class, missing_lookups)
           add_exception(exception)
-          raise exception
         end
       end
 

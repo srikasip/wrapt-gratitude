@@ -10,7 +10,7 @@ module SurveyQuestions
 
     private def create_or_destroy_other_option_if_flag_changed
       if include_other_option_changed?
-        if include_other_option?
+        if include_other_option? && other_option.blank?
           create_other_option!
         else
           other_option.destroy!
