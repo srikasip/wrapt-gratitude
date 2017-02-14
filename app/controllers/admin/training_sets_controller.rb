@@ -5,7 +5,7 @@ module Admin
     # GET /training_sets
     # GET /training_sets.json
     def index
-      @training_sets = TrainingSet.order(:id).all
+      @training_sets = TrainingSet.order(created_at: 'desc').all
     end
 
     # GET /training_sets/1

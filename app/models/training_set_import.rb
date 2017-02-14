@@ -78,23 +78,45 @@ class TrainingSetImport
     question_impact = training_set.gift_question_impacts.find_or_initialize_by(gift: gift, survey_question: question)
 
     question_impact.question_impact = [[column_value(3).to_f, 0.0].max, 1.0].min
-    question_impact.range_impact_direct_correlation = column_value(4).to_i >= 0
+    
+    if question_impact.survey_question.is_a?(SurveyQuestions::MultipleChoice)
+      create_multiple_choice_response_impacts(question_impact)
+    elsif question_impact.survey_question.is_a?(SurveyQuestions::Range)
+      question_impact.range_impact_direct_correlation = column_value(4).to_i >= 0
+    end
     
     question_impact.save
-    
-    create_response_impacts(question_impact)
-    
+      
     true
   end
   
-  def create_response_impacts(question_impact)
+  def create_multiple_choice_response_impacts(question_impact)
     question_impact.response_impacts.destroy_all
-    if question_impact.survey_question.is_a?(SurveyQuestions::MultipleChoice)
-      question_impact.survey_question.options.each_with_index do |option, n|
-        impact = [[column_value(5 + n).to_f, -1.0].max, 1.0].min
-        question_impact.response_impacts.create(survey_question_option: option, impact: impact)
+    
+    other_options = []
+    column_number = 5
+    
+    question = question_impact.survey_question
+    options = question.options.sort_by(&:sort_order)
+    
+    options.each do |option|
+      if option.is_a?(SurveyQuestionOtherOption)
+        other_options << option
+      else
+        impact = [[column_value(column_number).to_f, -1.0].max, 1.0].min
+        question_impact.response_impacts.build(survey_question_option: option, impact: impact)
+        column_number += 1
       end
     end
+    
+    # always assign the other option the last impact weight
+    impact = [[column_value(column_number).to_f, -1.0].max, 1.0].min
+    
+    other_options.each do |option|
+      question_impact.response_impacts.build(survey_question_option: option, impact: impact)
+    end
+    
+    question_impact.response_impacts
   end
   
   def column_value(column_number)
