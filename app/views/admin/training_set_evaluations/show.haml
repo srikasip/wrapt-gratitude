@@ -17,11 +17,13 @@
         details = $('#recommendation_details')
         response_id = link.data('response_id')
         response_name = link.text()
+        data_url = link.attr('href')
         alert_box = $("<div class='alert alert-info'></div>").
           append($('<span></span>').text("Generating recommendations for ")).
           append($('<strong></strong>').text("'\#{response_name}'"))
           
         details.empty().append(alert_box)
+        details.load(data_url)
         e.preventDefault()
         false
 
