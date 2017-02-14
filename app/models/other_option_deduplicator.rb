@@ -13,20 +13,10 @@ class OtherOptionDeduplicator
       option_to_keep = other_options.first
       other_options[1..-1].each do |option|
 
-        if training_set_merge_conflicts? option, option_to_keep
-          puts "CONFLICT: survey##{question.survey_id} / question##{question.id} / option##{option.id} => #{option_to_keep.id} / training_set_response_impacts"
-          next
-        end
+        merge_training_set_response_impacts option_to_keep, option
+        merge_trait_response_impacts option_to_keep, option
 
-        if trait_merge_conflicts? option, option_to_keep
-          puts "CONFLICT: survey##{question.survey_id} / question##{question.id} / option##{option.id} => #{option_to_keep.id} / trait_response_impacts"
-          next 
-        end
-
-        # TODO dedupe non-conflicting impacts
-        unless @test_mode 
-          option.training_set_response_impacts.update_all survey_question_option_id: option_to_keep.id
-          option.trait_response_impacts.update_all survey_question_option_id: option_to_keep.id
+        unless @test_mode
           option.survey_question_response_options.update_all survey_question_option_id: option_to_keep.id
           option.conditional_question_options.update_all survey_question_option_id: option_to_keep.id
 
@@ -42,24 +32,34 @@ class OtherOptionDeduplicator
     end
   end
 
-  private def training_set_merge_conflicts? option, other_option
-    option.training_set_response_impacts.each do |impact|
-      other_impacts = other_option.training_set_response_impacts.where(gift_question_impact_id: impact.gift_question_impact_id)
-      other_impacts.each do |other_impact|
-        return true if impact.impact != other_impact.impact
-      end      
-    end
-    return false
-  end
-  
-  private def trait_merge_conflicts? option, other_option
-    option.trait_response_impacts.each do |impact|
-      other_impacts = other_option.trait_response_impacts.where(trait_training_set_question_id: impact.trait_training_set_question_id)
-      other_impacts.each do |other_impact|
-        return true if impact.profile_traits_tag_id != other_impact.profile_traits_tag_id
+  private def merge_training_set_response_impacts target, source
+    # merges training_set_response_impacts from source into target
+    # in case of a collision, the target's impact is preserved
+    question = source.question
+    source.training_set_response_impacts.each do |impact|
+      if target.training_set_response_impacts.where(gift_question_impact_id: impact.gift_question_impact_id).exists?
+        puts "DELETED: survey##{question.survey_id} / question##{question.id} / option##{source.id} / training_set_response_impact##{impact.id}"
+        impact.destroy unless @test_mode
+      else
+        impact.update survey_question_option_id: target.id unless @test_mode
+        puts "COPITED: survey##{question.survey_id} / question##{question.id} / option##{option.id} => #{target.id} / training_set_response_impact##{impact.id}"
       end
     end
-    return false
+  end
+
+  private def merge_trait_response_impacts target, source
+    # merges trait_response_impacts from source into target
+    # in case of a collision, the target's impact is preserved
+    question = source.question
+    source.trait_response_impacts.each do |impact|
+      if target.trait_response_impacts.where(trait_training_set_question_id: impact.trait_training_set_question_id).exists?
+        puts "DELETED: survey##{question.survey_id} / question##{question.id} / option##{source.id} / trait_response_impact##{impact.id}"
+        impact.destroy unless @test_mode
+      else
+        puts "COPITED: survey##{question.survey_id} / question##{question.id} / option##{option.id} => #{target.id} / trait_response_impact##{impact.id}"
+        impact.update survey_question_option_id: target.id unless @test_mode
+      end
+    end
   end
 
 end
