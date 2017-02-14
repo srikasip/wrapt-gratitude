@@ -1,42 +1,60 @@
 .row
   .col-sm-12
-    %h1= @training_set_evaluation.training_set.name
-
-
-- unless @training_set_evaluation.recommendations_in_progress?
-  .row.admin__actions
-    .col-sm-12
-      = link_to 'Refresh Recommendations', admin_training_set_evaluation_path(@training_set), method: :delete, class: 'btn btn-primary'
+    %h1= @training_set.name
 
 .row
-  .col-sm-12
-    - if @training_set_evaluation.recommendations_in_progress?
-      %p
-        = image_tag 'ajax-loader.gif'
-        We're still generating recommendations for this training set.  Please wait a moment.
-      :javascript
-        setTimeout(function() { window.location.reload() }, 5000)
-
-    - elsif @recommendations_by_survey_response_id.empty?
-      %p Sorry, no recommendations were found for this training set
-
-    - else
-      - @training_set_evaluation.profile_sets.preload(:survey_responses).each do |profile_set|
-        %h3
-          Profile Set:
-          = profile_set.name
-        - profile_set.survey_responses.each do |response|
-          %h4= response.name
-          %ul.admin-index-list
-            - if @recommendations_by_survey_response_id[response.id]
-              - @recommendations_by_survey_response_id[response.id].sort_by(&:score).reverse.each do |recommendation|
-                %li
-                  = "#{recommendation.gift.title}"
-                  - if recommendation.score > 0.01
-                    = "(#{recommendation.score.round(2)})"
-                    = link_to 'Breakdown', admin_training_set_evaluation_recommendation_path(@training_set, recommendation), data: {loads_in_pjax_modal: true}, class: 'btn btn-default btn-xs'
-                  - elsif recommendation.gift.featured?
-                    (featured)
-                  - else
-                    (random)
+  .col-sm-4
+    = render 'response_set_nav'
+    
+  #recommendation_details.col-sm-8
+    %p Select a quiz response to view the associated recommendations
+  
+= content_for :page_js do
+  :coffeescript
+    $ -> 
+      $('.profile-set-nav-link').click (e) ->
+        link = $(@)
+        details = $('#recommendation_details')
+        response_id = link.data('response_id')
+        response_name = link.text()
+        alert_box = $("<div class='alert alert-info'></div>").
+          append($('<span></span>').text("Generating recommendations for ")).
+          append($('<strong></strong>').text("'\#{response_name}'"))
           
+        details.empty().append(alert_box)
+        e.preventDefault()
+        false
+
+  
+  
+- if false
+  - if @training_set_evaluation.recommendations_in_progress?
+    %p
+      = image_tag 'ajax-loader.gif'
+      We're still generating recommendations for this training set.  Please wait a moment.
+    :javascript
+      setTimeout(function() { window.location.reload() }, 5000)
+
+  - elsif @recommendations_by_survey_response_id.empty?
+    %p Sorry, no recommendations were found for this training set
+
+  - else
+    - @training_set_evaluation.profile_sets.preload(:survey_responses).each do |profile_set|
+      %h3
+        Profile Set:
+        = profile_set.name
+      - profile_set.survey_responses.each do |response|
+        %h4= response.name
+        %ul.admin-index-list
+          - if @recommendations_by_survey_response_id[response.id]
+            - @recommendations_by_survey_response_id[response.id].sort_by(&:score).reverse.each do |recommendation|
+              %li
+                = "#{recommendation.gift.title}"
+                - if recommendation.score > 0.01
+                  = "(#{recommendation.score.round(2)})"
+                  = link_to 'Breakdown', admin_training_set_evaluation_recommendation_path(@training_set, recommendation), data: {loads_in_pjax_modal: true}, class: 'btn btn-default btn-xs'
+                - elsif recommendation.gift.featured?
+                  (featured)
+                - else
+                  (random)
+        
