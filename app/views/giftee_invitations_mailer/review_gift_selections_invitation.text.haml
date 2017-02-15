@@ -1,13 +1,10 @@
 = "Dear #{@profile.name},"
 
+#{@profile.owner.first_name} was shopping for you on Wrapt and picked out some gifts for you.  We'd like to see how you like what they picked.
 
-= @profile.owner.first_name
-was shopping for you on Wrapt and picked out some gifts for you.  We'd like to see how you like what they picked.
+Please use the following URL to see what they picked out.
 
-= link_to 'Click here', profile_recipient_review_url(@profile)
-or use the following URL to see what they picked out.
-
-= link_to profile_recipient_review_url(@profile), profile_recipient_review_url(@profile)
+= profile_recipient_review_url(@profile.recipient_access_token)
 
 Sincerely,
 The Wrapt Team

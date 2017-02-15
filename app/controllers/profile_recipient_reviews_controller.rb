@@ -1,6 +1,5 @@
 class ProfileRecipientReviewsController < ApplicationController
 
-  # TODO authenticate with access token
   before_action :load_profile_from_access_token
 
   GIFT_RECOMMENDATION_LIMIT = 10
