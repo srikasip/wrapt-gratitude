@@ -2,6 +2,5 @@
   .row.breadcrumbs
     .col-sm-12
       = link_to "Response Sets".html_safe, admin_profile_sets_path
-      - if params[:action] == 'new'
-        &raquo;
-        = link_to "#{@profile_set.name}".html_safe, [:admin, @profile_set]
+      &raquo;
+      = link_to "#{@profile_set.name}".html_safe, [:admin, @profile_set]

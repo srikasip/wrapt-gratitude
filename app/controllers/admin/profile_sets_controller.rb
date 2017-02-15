@@ -3,7 +3,7 @@ module Admin
     before_action :set_profile_set, only: [:show, :edit, :update, :destroy]
 
     def index
-      @profile_sets = ProfileSet.all
+      @profile_sets = ProfileSet.order(created_at: 'desc')
     end
 
     def show
