@@ -1,6 +1,6 @@
 class ProfileRecipientReviewsController < ApplicationController
 
-  before_action :load_profile_from_access_token
+  include AuthenticatesWithRecipientAccessToken
 
   GIFT_RECOMMENDATION_LIMIT = 10
 
@@ -16,15 +16,9 @@ class ProfileRecipientReviewsController < ApplicationController
     end
   end
 
-  def login_required?
-    false
+  private def profile_id_param
+    params[:id]
   end
-
-  def load_profile_from_access_token
-    unless @profile = Profile.find_by_recipient_access_token(params[:id])
-      flash.alert = 'Sorry, that link is not valid.'
-      redirect_to root_path
-    end
-  end
+  
 
 end

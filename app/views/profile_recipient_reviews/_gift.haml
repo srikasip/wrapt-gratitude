@@ -6,6 +6,7 @@
     = carousel(carousel: gift_images, unique_carousel_name: 'gr-image-carousel', slide_content_singular: 'image', container:'.gr-carousel')
   .gr-carousel__gift-content.pb2.pl2.pt1.pr1
     .gr-carousel__dislike.pull-right.text-right.pb1{data: {gift_recommendation_id: gr.id}}
+      = render 'gift_like', gift: gift, profile: @profile
       = render 'gift_dislike', gift_recommendation: gr, profile: @profile
     %h3.carousel__gift-name= gift.name
     .gr-carousel__gift-details

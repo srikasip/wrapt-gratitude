@@ -1,0 +1,7 @@
+- if gift_like = existing_gift_like(gift, profile)
+  = link_to profile_recipient_gift_likes_path(profile, gift_like), method: :delete, remote: true, class: 'liked' do
+    = embedded_svg('icon-like', xlink_class: 'icon-liked-use', class: 'recommendation__icon-liked')
+    .small-02 You Liked This
+- else
+  = link_to profile_gift_selections_path(profile), method: :post, remote: true, data: {params: {recipient_gift_like: {gift_id: gift.id}}} do
+    = embedded_svg('icon-like', xlink_class: 'icon-liked-use', class: 'recommendation__icon-like')

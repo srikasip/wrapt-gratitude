@@ -4,6 +4,8 @@ class Profile < ApplicationRecord
   has_many :survey_responses, dependent: :destroy, inverse_of: :profile
   has_many :gift_selections, -> {order 'gift_selections.id'}, dependent: :destroy
 
+  has_many :recipient_gift_likes, inverse_of: :profile, dependent: :destroy
+
   before_create :generate_recipient_access_token
 
   def generate_recipient_access_token
