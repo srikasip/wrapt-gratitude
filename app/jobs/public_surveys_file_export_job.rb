@@ -45,9 +45,10 @@ class PublicSurveysFileExportJob < ApplicationJob
 
   private def write_response_rows!
     row = 1
-    survey_responses.preload(question_responses: [{survey_question: :options}, :survey_question_response_options]).each do |survey_response|
+    survey_responses.preload({profile: :owner}, question_responses: [{survey_question: :options}, :survey_question_response_options]).each do |survey_response|
       survey_response.question_responses.each do |question_response|
-        worksheet.write row, 0, survey_response.profile.email
+        survey_response_name = "#{survey_response.profile.owner.email} for #{survey_response.profile.email} on #{survey_response.created_at.strftime('%F')}"
+        worksheet.write row, 0, survey_response_name
         worksheet.write row, 1, question_response.survey_question.code
         worksheet.write row, 2, question_response.text_response, text_wrap_format
         worksheet.write row, 3, question_response.range_response
