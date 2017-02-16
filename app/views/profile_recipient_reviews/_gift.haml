@@ -5,10 +5,10 @@
     - gift_images = load_gift_image_carousel_data(gift.gift_images)
     = carousel(carousel: gift_images, unique_carousel_name: 'gr-image-carousel', slide_content_singular: 'image', container:'.gr-carousel')
   .gr-carousel__gift-content.pb2.pl2.pt1.pr1
-    .gr-carousel__dislike.pull-right.text-right.pb1{data: {gift_recommendation_id: gr.id}}
-      %div{data: {behavior: 'gift-like-wrapper'}}
+    .pull-right.text-right.pb1
+      .gr-carousel__like{data: {behavior: 'gift-like-wrapper'}}
         = render 'gift_like', gift: gift, profile: @profile
-      %div{data: {behavior: 'gift-dislike-wrapper'}}
+      .gr-carousel__dislike.gr-carousel__dislike{data: {behavior: 'gift-dislike-wrapper'}}
         = render 'gift_dislike', gift: gift, profile: @profile
     %h3.carousel__gift-name= gift.name
     .gr-carousel__gift-details

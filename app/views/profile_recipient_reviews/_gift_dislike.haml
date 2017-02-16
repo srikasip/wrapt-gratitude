@@ -8,4 +8,4 @@
       =embedded_svg('icon-dislike', xlink_class: 'icon-dislike-use', class: 'recommendation__icon-dislike')
     %ul.dropdown-menu.dropdown-menu-right.pa1
       - RecipientGiftDislike.reasons.keys.each do |reason_key|
-        %li= link_to dislike_reason_label(reason_key), profile_recipient_gift_dislikes_path(profile.recipient_access_token), method: :post, remote: true, data: {type: 'html', params: {recipient_gift_dislike: {gift_id: gift.id, reason: reason_key}}}
+        %li= link_to dislike_reason_label(reason_key), profile_recipient_gift_dislikes_path(profile.recipient_access_token), method: :post, remote: true, data: {type: 'html', params: {recipient_gift_dislike: {gift_id: gift.id, reason: reason_key}}}, class: 'gift_dislike_reason'
