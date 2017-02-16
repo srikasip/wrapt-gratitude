@@ -1,7 +1,7 @@
 - if gift_like = existing_gift_like(gift, profile)
-  = link_to profile_recipient_gift_likes_path(profile, gift_like), method: :delete, remote: true, class: 'liked' do
+  = link_to profile_recipient_gift_like_path(profile.recipient_access_token, gift_like), method: :delete, remote: true, data: {type: 'html'}, class: 'liked' do
     = embedded_svg('icon-like', xlink_class: 'icon-liked-use', class: 'recommendation__icon-liked')
     .small-02 You Liked This
 - else
-  = link_to profile_gift_selections_path(profile), method: :post, remote: true, data: {params: {recipient_gift_like: {gift_id: gift.id}}} do
+  = link_to profile_recipient_gift_likes_path(profile.recipient_access_token), method: :post, remote: true, data: {type: 'html', params: {recipient_gift_like: {gift_id: gift.id}}} do
     = embedded_svg('icon-like', xlink_class: 'icon-liked-use', class: 'recommendation__icon-like')
