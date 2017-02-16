@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170215173329) do
+ActiveRecord::Schema.define(version: 20170216184242) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -232,6 +232,16 @@ ActiveRecord::Schema.define(version: 20170215173329) do
     t.boolean  "recommendations_in_progress",  default: false, null: false
     t.datetime "recommendations_generated_at"
     t.string   "recipient_access_token"
+  end
+
+  create_table "recipient_gift_dislikes", force: :cascade do |t|
+    t.integer  "gift_id"
+    t.integer  "profile_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "reason"
+    t.index ["gift_id"], name: "index_recipient_gift_dislikes_on_gift_id", using: :btree
+    t.index ["profile_id"], name: "index_recipient_gift_dislikes_on_profile_id", using: :btree
   end
 
   create_table "recipient_gift_likes", force: :cascade do |t|
