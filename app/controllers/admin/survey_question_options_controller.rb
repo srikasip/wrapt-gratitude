@@ -52,7 +52,7 @@ module Admin
     end
 
     def survey_question_option_params
-      params.require(:survey_question_option).permit(:text, :explanation)
+      params.require(:survey_question_option).permit(:text, :explanation, :configuration_string)
     end
 
   end
