@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170217145326) do
+ActiveRecord::Schema.define(version: 20170217151144) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -252,6 +252,15 @@ ActiveRecord::Schema.define(version: 20170217145326) do
     t.datetime "updated_at", null: false
     t.index ["gift_id"], name: "index_recipient_gift_likes_on_gift_id", using: :btree
     t.index ["profile_id"], name: "index_recipient_gift_likes_on_profile_id", using: :btree
+  end
+
+  create_table "recipient_gift_selections", force: :cascade do |t|
+    t.integer  "profile_id"
+    t.integer  "gift_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gift_id"], name: "index_recipient_gift_selections_on_gift_id", using: :btree
+    t.index ["profile_id"], name: "index_recipient_gift_selections_on_profile_id", using: :btree
   end
 
   create_table "survey_question_options", force: :cascade do |t|
