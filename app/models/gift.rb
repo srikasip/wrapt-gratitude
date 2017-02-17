@@ -9,6 +9,7 @@ class Gift < ApplicationRecord
   # not sure why the association below exists?
   #has_many :survey_responses, dependent: :destroy
   has_many :gift_selections, dependent: :destroy
+  has_many :gift_dislikes, dependent: :destroy
 
   has_many :gift_images, -> {order :sort_order}, inverse_of: :gift, dependent: :destroy
   has_many :uploaded_gift_images, class_name: 'GiftImages::Uploaded'
