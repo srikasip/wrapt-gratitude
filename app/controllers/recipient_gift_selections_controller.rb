@@ -25,7 +25,7 @@ class RecipientGiftSelectionsController < ApplicationController
   private def broadcast_updated_gift_selections
     RecipientGiftSelectionsChannel.broadcast_to @profile,
       gift_selections_html: render_gift_selections,
-      gift_basket_count: @profile.gift_selections.count,
+      gift_basket_count: @profile.recipient_gift_selections.count,
       updated_gift_id: @recipient_gift_selection.gift_id,
       add_button_html: render_add_button_html
   end
