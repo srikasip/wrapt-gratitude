@@ -20,10 +20,10 @@
             %li.gift-item= product.description || product.title
     .gr-carousel__gift-actions.pa2
       %div
-        - gift_selection = GiftSelection.new(gift: gift, profile: @profile)
-        = form_for gift_selection, url: profile_gift_selections_path(@profile), html: {data: {remote: true}} do |form|
+        - recipient_gift_selection = RecipientGiftSelection.new(gift: gift, profile: @profile)
+        = form_for recipient_gift_selection, url: profile_recipient_gift_selections_path(@profile.recipient_access_token), html: {data: {remote: true}} do |form|
           = form.hidden_field :gift_id
           %h3.gr-carousel__price
             = number_to_currency gift.selling_price
           .gr-carousel__quantity.text-right{data: {behavior: 'add-to-gift-basket-wrapper', gift_id: gift.id}}
-            = render 'add_to_basket_button', gift_selection: gift_selection, profile: @profile
+            = render 'add_to_basket_button', recipient_gift_selection: recipient_gift_selection, profile: @profile

@@ -31,6 +31,11 @@ module ApplicationHelper
     gift_basket_profile && !gift_basket_profile.new_record?
   end
 
+  def render_gift_basket
+    # note this is overridden for the recipient reviews
+    render 'gift_selections/gift_basket', profile: gift_basket_profile
+  end
+
   # path to svg files so we can include them like a partial
   # http://cobwwweb.com/render-inline-svg-rails-middleman#sthash.0TA73Fi9.dpuf
   def svg(name) 

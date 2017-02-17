@@ -18,4 +18,30 @@ module ProfileRecipientReviewsHelper
     @_reason_labels[reason_key]
   end
 
+  def enable_gift_basket?
+    true    
+  end
+
+  def render_gift_basket
+    render 'recipient_gift_selections/gift_basket', profile: @profile
+  end
+
+  def gift_basket_profile
+    @profile
+  end
+
+  def gift_basket_count
+    count = gift_basket_profile&.recipient_gift_selections&.count
+    if count && count > 0
+      "#{count}"
+    else
+      ""
+    end
+  end
+
+  def gift_basket_empty?
+    count = gift_basket_profile&.recipient_gift_selections&.count
+    count.blank? || count == 0
+  end
+
 end
