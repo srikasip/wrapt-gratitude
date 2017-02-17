@@ -20,13 +20,13 @@ module Recommendations
       
       def description
         inclusion_description = if included_codes.any?
-          "include gifts with a category code of #{included_codes.to_sentence(last_word_connector: ' or ')}."
+          "include gifts with a category code of #{included_codes.to_sentence(last_word_connector: ' or ', two_words_connector: ' or ')}."
         else
           nil
         end
 
         exclusion_description = if excluded_codes.any?
-          "exclude gifts with a category code of #{excluded_codes.to_sentence(last_word_connector: ' or ')}"
+          "exclude gifts with a category code of #{excluded_codes.to_sentence(last_word_connector: ' or ', two_words_connector: ' or ')}"
         else
           nil
         end
