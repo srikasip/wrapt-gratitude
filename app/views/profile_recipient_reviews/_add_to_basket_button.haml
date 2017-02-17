@@ -1,0 +1,5 @@
+- @_selected_gift_ids ||= profile.gift_selections.pluck(:gift_id)
+- if gift_selection.gift_id.in? @_selected_gift_ids
+  = submit_tag 'ADDED TO CART', class: 'btn btn-primary btn-narrower', disabled: true
+- else
+  = submit_tag 'ADD TO CART', class: 'btn btn-primary btn-narrower'

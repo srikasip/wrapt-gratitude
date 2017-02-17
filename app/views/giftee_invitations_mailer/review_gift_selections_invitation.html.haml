@@ -4,9 +4,9 @@
   #{@profile.owner.first_name} was shopping for you on Wrapt and picked out some gifts for you.  We'd like to see how you like what they picked.
 
 %p
-  #{link_to 'Click here', profile_giftee_recommendations_review_url(@profile)} or use the following URL to see what they picked out.
+  #{link_to 'Click here', profile_recipient_review_url(@profile.recipient_access_token)} or use the following URL to see what they picked out.
 
-%p= link_to profile_giftee_recommendations_review_url(@profile), profile_giftee_recommendations_review_url(@profile)
+%p= link_to profile_recipient_review_url(@profile.recipient_access_token), profile_recipient_review_url(@profile.recipient_access_token)
 
 %p
   Sincerely,

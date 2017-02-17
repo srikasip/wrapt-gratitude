@@ -159,6 +159,11 @@ $gr-carousel-nav__width: 82.5px;
   width: 55%;
 }
 
+.gr-carousel__like,
+.gr-carousel__dislike {
+  display: inline-block;
+}
+
 .gr-carousel__dislike .btn-group.open .dropdown-toggle {
   box-shadow: none;
 }
@@ -169,16 +174,27 @@ $gr-carousel-nav__width: 82.5px;
 .gift_dislike_reason .radio label {
   min-height: 24px;
 }
-.gr-carousel__dislike a {
+.gr-carousel__dislike a, .gr-carousel__like a {
   background-color: $blue-010;
   padding: 12px 12px 3px;
   display: inline-block;
 }
 .gr-carousel__dislike a:hover,
 .gr-carousel__dislike a:focus,
-.gr-carousel__dislike a:active {
+.gr-carousel__dislike a:active,
+.gr-carousel__like a:hover,
+.gr-carousel__like a:focus,
+.gr-carousel__like a:active {
   background-color: rgba($blue-005, 0.25);
 }
+
+.gr-carousel__dislike a.gift_dislike_reason,
+.gr-carousel__dislike a.gift_dislike_reason:hover
+.gr-carousel__dislike a.gift_dislike_reason:focus,
+.gr-carousel__dislike a.gift_dislike_reason:active {
+  background-color: transparent;
+}
+
 a.disliked {
   background-color: $orange-003;
   color: $orange-001;
@@ -190,7 +206,17 @@ a.disliked:focus {
   text-decoration: none;
   background-color: darken($orange-003, 5);
 }
-.gr-carousel__dislike .small-02 {
+
+a.liked:hover,
+a.liked:active,
+a.liked:focus {
+  text-decoration: none;
+}
+
+
+
+.gr-carousel__dislike .small-02,
+.gr-carousel__like .small-02 {
   display: inline-block;
   vertical-align: top;
   padding-top: 3px;

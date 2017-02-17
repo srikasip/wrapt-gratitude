@@ -29,8 +29,11 @@ Rails.application.routes.draw do
     end
     resources :gift_selections, only: [:create, :destroy]
     resources :giftee_invitations, only: [:new, :create]
-    resource :giftee_recommendations_review, only: :show
+    resources :recipient_gift_likes, only: [:create, :destroy]
+    resources :recipient_gift_dislikes, only: [:create, :destroy]
   end
+
+  resources :profile_recipient_reviews, only: :show
 
   #####################################################
 

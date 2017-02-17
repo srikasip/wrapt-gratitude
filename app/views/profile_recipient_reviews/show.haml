@@ -1,0 +1,16 @@
+.container
+  .row
+    .col-xs-12
+      %h1.text-center
+        = "Welcome to Wrapt, #{@profile.name}!"
+      %p.lead.tan-002.ph2.text-center
+        As part of our beta we're inviting gift recipients to our site to gather feedback on gift recommendations we've given to #{@profile.owner.first_name} based on their responses to questions about you.  Those recommendations are listed below.  Please review each gift and tell us if you like it or dislike it.  If you would want it as a gift - add it to your gift basket.
+  .row.wrapt-carousel--wrapper
+    .col-xs-12
+      - gifts = load_gift_recommendation_carousel_data(@gift_recommendations)
+      = carousel(carousel: gifts, unique_carousel_name: 'gr-carousel', slide_content_singular: 'gift')
+
+- content_for :page_js do
+  = render '/application/carousel_js'
+  :javascript
+    new App.GiftLikeDislikeButtons();

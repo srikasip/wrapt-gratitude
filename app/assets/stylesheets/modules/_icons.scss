@@ -63,12 +63,17 @@ a:active .navbar-static-top__icon-circle {
   height: 22px;
 }
 use.icon-dislike-use .path1,
-use.icon-dislike-use .path2 {
+use.icon-dislike-use .path2,
+use.icon-like-use .path1,
+use.icon-like-use .path2 {
   stroke: $blue-009;
   stroke-weight: 1px;
 }
 .recommendation__icon-dislike,
-.recommendation__icon-disliked {
+.recommendation__icon-disliked,
+.recommendation__icon-like,
+.recommendation__icon-liked
+ {
   width: 19px;
   height: 18px;
 }
@@ -77,7 +82,9 @@ use.icon-disliked-use .path2 {
   stroke: $orange-001;
 }
 svg.recommendation__icon-disliked path,
-svg.recommendation__icon-disliked path {
+svg.recommendation__icon-disliked path,
+svg.recommendation__icon-liked path,
+svg.recommendation__icon-liked path {
   stroke: inherit;
   stroke-weight: inherit;
 }
