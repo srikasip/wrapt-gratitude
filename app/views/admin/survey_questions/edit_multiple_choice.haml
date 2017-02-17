@@ -32,6 +32,8 @@
         = form.input :multiple_option_responses, as: :boolean, label: 'Allow multiple selections'
         = form.input :yes_no_display, as: :boolean, label: 'Display as a Yes/No Question'
         = form.input :use_response_as_relationship, as: :boolean, label: 'The response to this question indicates the gift recipient\'s  relationship to the gift giver'
+        = form.input :price_filter, as: :boolean, label: 'Use the response to filter gifts based on price'
+        = form.input :category_filter, as: :boolean, label: 'Use the response to filter gifts based on category'
         = render 'conditional_display_fields', form: form
 
       .form-actions
