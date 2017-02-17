@@ -16,6 +16,9 @@ module Recommendations
     NEGATIVE_RANK_PENALTY = 5.0
     QUESTION_WEIGHT_BASE = 100.0
     MIN_NUMBER_OF_RECOMMENDATIONS = 15
+    RECOMMENDATION_SCORE_THRESHOLD = 5.0
+    RANDOM_SCORE = 0.0
+    FEATURED_SCORE = 0.1
 
     def initialize(training_set, response = nil)
       @training_set = training_set
@@ -45,9 +48,6 @@ module Recommendations
       end      
     end
     
-
-
-
     def generate_recommendations
       clear_recommendations
       
@@ -96,13 +96,13 @@ module Recommendations
       added = []
       gift_pool = featured_random_gifts - @recommendations.map(&:gift)
       gift_pool.sample(count).each do |gift|
-        added << add_recommendation(gift, 0.01)
+        added << add_recommendation(gift, FEATURED_SCORE)
       end
       needed = count - added.length
       if needed > 0
         gift_pool = non_featured_random_gifts - @recommendations.map(&:gift)
         gift_pool.sample(count).each do |gift|
-          added << add_recommendation(gift, 0.0)
+          added << add_recommendation(gift, RANDOM_SCORE)
         end
       end
       added
@@ -115,13 +115,12 @@ module Recommendations
         questions_by_gift[gift].each do |question|
           gift_rank += calculate_question_rank(gift, question)
         end
-        if gift_rank > 0.01
+        if gift_rank >= RECOMMENDATION_SCORE_THRESHOLD
           add_recommendation(gift, gift_rank)
           max_rank = gift_rank if gift_rank > max_rank
         end
       end
-      # reject the bottom quartile
-      @recommendations.reject!{|r| r.score < 0.25 * max_rank}
+      # reject based on threshold
       @recommendations.sort!{|a, b| b.score <=> a.score}
       
       @recommendations
