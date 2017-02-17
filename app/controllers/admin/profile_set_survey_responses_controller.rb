@@ -52,7 +52,7 @@ module Admin
             :other_option_text,
             :survey_question_id,
             :survey_question_option_id,
-            survey_question_option_ids: [],
+            survey_question_option_ids: []
           ]
         )
       end

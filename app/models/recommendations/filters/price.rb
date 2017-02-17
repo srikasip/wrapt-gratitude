@@ -1,6 +1,10 @@
 module Recommendations
   module Filters
     class Price < Base
+
+      def applied?
+        ranges.any?
+      end
       
       def ranges
         ret = []

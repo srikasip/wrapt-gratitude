@@ -106,6 +106,10 @@ module Recommendations
       end  
     end
     
+    def applied_filters
+      filters.select(&:applied?)
+    end
+    
     protected
     
     def create_filters

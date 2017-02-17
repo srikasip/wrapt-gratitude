@@ -39,7 +39,9 @@
               (featured)
             - else
               (random)
+            #{recommendation.gift.title}
+            [#{recommendation.gift.wrapt_sku}, #{number_to_currency(recommendation.gift.selling_price.to_f)}] 
 
-- if @engine.filters.any?
+- if @engine.applied_filters.any?
   %hr
   = render 'filters'

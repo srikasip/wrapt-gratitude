@@ -3,16 +3,17 @@
 %table.table.table-striped
   %thead
     %tr
-      %th Type
+      %th Type / Description
       %th Question / Response
-      %th Description
   %tbody
-    - @engine.filters.each do |filter|
+    - @engine.applied_filters.each do |filter|
       %tr
-        %td= filter.name
+        %td
+          %u= filter.name
+          %br
+          = filter.description
         %td
           = filter.question.prompt
           %strong (#{displayable_response(filter.question_response)})
-          [#{filter.question.code}]
-          
-        %td= filter.description
+          - if filter.question.code.present? 
+            [#{filter.question.code}]
