@@ -2,39 +2,32 @@ module Admin
   module ProfileSets
     class ImportsController < BaseController
 
-      before_action :set_profile_set, only: [:new, :create]
+      before_action :load_profile_set, only: [:new, :create]
 
       def new
-        @profile_set_import = ProfileSetImport.new(profile_set: @profile_set)
+        @errors = []
       end
 
       def create
-        @profile_set_import = ProfileSetImport.new(permitted_params.merge({profile_set: @profile_set}))
-        begin
-          if @profile_set_import.save_records
-            redirect_to [:admin, @profile_set], notice: 'You imported survey responses into a profile set.'
-          else
-            render :new
+        @profile_set_import = ProfileSetImport.new(@profile_set, params[:import_file])
+        if @profile_set_import.open_file
+          ProfileSet.transaction do
+            @profile_set_import.truncate_data
+            @profile_set_import.insert_data
           end
-        rescue ::Imports::Exceptions::PreloadsNotFound => exception
-          @missing_resources_exception = exception
+        end
+        if @profile_set_import.errors.none?
+          redirect_to [:admin, @profile_set], notice: 'All of your responses have been imported into the profile set.'
+        else
+          @errors = @profile_set_import.errors
           render :new
         end
       end
 
       private
 
-      def set_profile_set
+      def load_profile_set
         @profile_set = ProfileSet.find params[:profile_set_id]
-      end
-
-      def permitted_params
-        subparams = params.dig(:profile_set_import)
-        if subparams
-          subparams.permit(:records_file)
-        else
-          {}
-        end
       end
     end
   end

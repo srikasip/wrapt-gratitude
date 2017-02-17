@@ -38,18 +38,5 @@
 <path fill="none" opacity="0.696841" stroke="currentColor" stroke-width="1.6" stroke-miterlimit="4" stroke-linecap="round" stroke-linejoin="round" d="M5.513 10.22h-2.113c-0.66 0-1.2 0.54-1.2 1.2v17.179c0 0.66 0.54 1.2 1.2 1.2h2.113c0.66 0 1.2-0.54 1.2-1.2v-17.179c0-0.66-0.54-1.2-1.2-1.2z"></path>
 </symbol>
 
-
-
-<!-- <svg width="21px" height="20px" viewBox="48 6 21 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="ico-like" opacity="0.696841033" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(58.500000, 16.000000) scale(1, -1) translate(-58.500000, -16.000000) translate(49.000000, 7.000000)" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M11.021325,11.840325 L17.755575,11.840325 C18.355575,11.840325 18.847575,11.349075 18.847575,10.748325 L16.662825,1.467075 C16.662825,0.866325 16.171575,0.375075 15.570825,0.375075 L6.289575,0.375075 C5.689575,0.375075 5.197575,0.866325 5.197575,1.467075 L5.197575,10.748325 C5.197575,11.349075 5.688075,12.191325 6.381075,12.841575 L11.532075,17.388075 C11.798325,17.766825 12.326325,17.858325 12.705075,17.592075 C13.083825,17.325825 13.176075,16.798575 12.909825,16.419825 L10.794075,11.794575" id="Stroke-1" stroke="#7D96BC"></path>
-        <path d="M2.44575,12.6123 L1.125,12.6123 C0.7125,12.6123 0.375,12.2748 0.375,11.8623 L0.375,1.1253 C0.375,0.7128 0.7125,0.3753 1.125,0.3753 L2.44575,0.3753 C2.85825,0.3753 3.19575,0.7128 3.19575,1.1253 L3.19575,11.8623 C3.19575,12.2748 2.85825,12.6123 2.44575,12.6123 Z" id="Stroke-3" stroke="#7D96BC"></path>
-    </g>
-</svg>
--->
-
 </defs>
 </svg>
