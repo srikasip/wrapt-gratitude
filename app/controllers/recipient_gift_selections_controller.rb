@@ -4,21 +4,21 @@ class RecipientGiftSelectionsController < ApplicationController
   layout 'xhr'
 
   def create
-    @gift_selection = @profile.recipient_gift_selections.new recipient_gift_selection_params
-    if @gift_selection.save
+    @recipient_gift_selection = @profile.recipient_gift_selections.new recipient_gift_selection_params
+    if @recipient_gift_selection.save
       broadcast_updated_gift_selections
     end
     head :ok
   end
 
   def destroy
-    @gift_selection = @profile.recipient_gift_selections.find params[:id]
-    @gift_selection.destroy
+    @recipient_gift_selection = @profile.recipient_gift_selections.find params[:id]
+    @recipient_gift_selection.destroy
     broadcast_updated_gift_selections
     head :ok
   end
 
-  def recipient_gift_selection
+  def recipient_gift_selection_params
     params.require(:recipient_gift_selection).permit(:gift_id)
   end
 
@@ -26,7 +26,7 @@ class RecipientGiftSelectionsController < ApplicationController
     RecipientGiftSelectionsChannel.broadcast_to @profile,
       gift_selections_html: render_gift_selections,
       gift_basket_count: @profile.gift_selections.count,
-      updated_gift_id: @gift_selection.gift_id,
+      updated_gift_id: @recipient_gift_selection.gift_id,
       add_button_html: render_add_button_html
   end
   
@@ -37,7 +37,7 @@ class RecipientGiftSelectionsController < ApplicationController
 
   
   private def render_add_button_html
-    ApplicationController.renderer.render 'gift_recommendations/_add_to_basket_button', locals: {gift_selection: @gift_selection, profile: @profile}, layout: false
+    ApplicationController.renderer.render 'profile_recipient_reviews/_add_to_basket_button', locals: {recipient_gift_selection: @recipient_gift_selection, profile: @profile}, layout: false
   end
 
 end
