@@ -6,13 +6,14 @@
       %th{colspan: 2} Impact
       %th Question/Response
   %tbody
-    - @recommendations.each do |recommendation|
-      - if recommendation.score >= Recommendations::Engine.RECOMMENDATION_SCORE_THRESHOLD
+    - @recommendations.each_with_index do |recommendation, position|
+      - if recommendation.score >= Recommendations::Engine::RECOMMENDATION_SCORE_THRESHOLD
         %tr.success
           %th{colspan: 3}
-            #{recommendation.gift.title}
+            #{position + 1}.
             (#{number_with_precision(recommendation.score, precision: 2)})
-            [#{recommendation.gift.wrapt_sku}] 
+            #{recommendation.gift.title}
+            [#{recommendation.gift.wrapt_sku}, #{number_to_currency(recommendation.gift.selling_price.to_f)}] 
 
         - question_ranks = @engine.recommendation_question_ranks(recommendation)
         - question_ranks.sort{|a, b| b.score.abs <=> a.score.abs}.each do |question_rank|
@@ -38,4 +39,7 @@
               (featured)
             - else
               (random)
-            
+
+- if @engine.filters.any?
+  %hr
+  = render 'filters'

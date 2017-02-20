@@ -2,6 +2,7 @@
 
   = form.input :text, label: 'Display Text', as: :string, input_html: {class: 'input-sm'}
   = form.input :explanation, label: 'Expanatory Text (shown when selected)', class: 'input-sm'
+  = form.input :configuration_string, label: 'Configuration Settings (geeky stuff you need to ask about)', as: :string, input_html: {class: 'input-sm'}
   = form.submit "Save", class: 'btn btn-sm'
 
 - content_for :page_js do
