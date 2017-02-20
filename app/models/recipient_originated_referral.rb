@@ -4,7 +4,7 @@ class RecipientOriginatedReferral
 
   include ActiveModel::Model
 
-  attr_accessor :emails
+  attr_accessor :emails, :profile
 
   validates :emails, presence: true
 
@@ -13,8 +13,9 @@ class RecipientOriginatedReferral
       emails.split(/, */).each do |email|
         user = User.new
         user.email = email
-        user.setup_activation
+        user.recipient_referring_profile = profile
         user.source = :recipient_referral
+        user.setup_activation
         if user.save
           UserActivationsMailer.activation_needed_email(user).deliver_later
         end
