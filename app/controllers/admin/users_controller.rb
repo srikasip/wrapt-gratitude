@@ -74,7 +74,7 @@ module Admin
 
     private def user_search_params
       params_base = params[:user_search] || ActionController::Parameters.new
-      params_base.permit(:keyword)
+      params_base.permit(:keyword, :source, :beta_round)
     end
     helper_method :user_search_params
 
