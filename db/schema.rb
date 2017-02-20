@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170217151144) do
+ActiveRecord::Schema.define(version: 20170220190757) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -425,29 +425,8 @@ ActiveRecord::Schema.define(version: 20170217151144) do
     t.index ["survey_id"], name: "index_trait_training_sets_on_survey_id", using: :btree
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "email",                                           null: false
-    t.string   "crypted_password"
-    t.string   "salt"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "remember_me_token"
-    t.datetime "remember_me_token_expires_at"
-    t.string   "reset_password_token"
-    t.datetime "reset_password_token_expires_at"
-    t.datetime "reset_password_email_sent_at"
-    t.boolean  "admin",                           default: false, null: false
-    t.string   "activation_state"
-    t.string   "activation_token"
-    t.datetime "activation_token_expires_at"
-    t.integer  "last_viewed_profile_id"
-    t.index ["activation_token"], name: "index_users_on_activation_token", using: :btree
-    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
-    t.index ["remember_me_token"], name: "index_users_on_remember_me_token", using: :btree
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
-  end
+# Could not dump table "users" because of following StandardError
+#   Unknown type 'user_source' for column 'source'
 
   create_table "vendors", force: :cascade do |t|
     t.string   "name"

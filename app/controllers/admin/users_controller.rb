@@ -19,6 +19,7 @@ module Admin
     def create
       @user = User.new user_params
       @user.setup_activation
+      @user.source = :admin_invitation
       if @user.save
         UserActivationsMailer.activation_needed_email(@user).deliver_later
         flash[:notice] = "Sent an account invitation to #{@user.full_name}."

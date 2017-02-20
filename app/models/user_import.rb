@@ -24,6 +24,7 @@ class UserImport
         next unless row_values.any?(&:present?)
         user.first_name, user.last_name, user.email = row_values
         user.setup_activation
+        user.source = :admin_invitation
         if user.save
           UserActivationsMailer.activation_needed_email(user).deliver_later
           @users_created_count += 1
