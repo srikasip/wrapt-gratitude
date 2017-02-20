@@ -1,6 +1,10 @@
 module Recommendations
   module Filters
     class Price < Base
+
+      def applied?
+        ranges.any?
+      end
       
       def ranges
         ret = []
@@ -22,7 +26,7 @@ module Recommendations
       def description
         range_descriptions = ranges.map{|r| range_description(r['min_price'], r['max_price'])}
         range_descriptions.map!{|d| "(#{d})"} if range_descriptions.many?
-        "Include gifts where the price is: #{range_descriptions.join(' or ')}"
+        "Include gifts where the price is #{range_descriptions.join(' or ')}"
       end
       
       def range_description(min_price, max_price)

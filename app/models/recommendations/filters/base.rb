@@ -13,6 +13,10 @@ module Recommendations
         @question = question
       end
       
+      def applied?
+        false
+      end
+      
       def name
         "Filter"
       end
@@ -27,10 +31,12 @@ module Recommendations
       
       def self.create_filters(engine)
         filters = []
-        engine.survey.questions.each do |question|
+        engine.survey.questions.sort_by(&:sort_order).each do |question|
           if question.is_a?(SurveyQuestions::MultipleChoice)
             if question.price_filter?
               filters << Recommendations::Filters::Price.new(engine, question)
+            elsif question.category_filter?
+              filters << Recommendations::Filters::Category.new(engine, question)
             end
           end
         end
