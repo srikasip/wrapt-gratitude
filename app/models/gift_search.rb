@@ -1,7 +1,8 @@
 class GiftSearch
   include ActiveModel::Model
 
-  attr_accessor :keyword, :product_category_id, :product_subcategory_id
+  attr_accessor :keyword, :product_category_id, :product_subcategory_id,
+  :min_price, :max_price
   alias_attribute :q, :keyword
 
   def to_scope
@@ -9,6 +10,9 @@ class GiftSearch
     result = keyword_filter(result) if keyword.present?
     result = product_category_id_filter(result) if product_category_id.present?
     result = product_subcategory_id_filter(result) if product_subcategory_id.present?
+    result = min_price_filter(result) if min_price.present?
+    result = max_price_filter(result) if max_price.present?
+    result = result.order(selling_price: :asc)
     return result
   end
 
@@ -23,6 +27,16 @@ class GiftSearch
 
   private def product_subcategory_id_filter scope
     scope.where product_subcategory_id: product_subcategory_id
+  end
+  
+  private def min_price_filter scope
+    t = Gift.arel_table
+    scope.where t[:selling_price].gteq(min_price)
+  end
+  
+  private def max_price_filter scope
+    t = Gift.arel_table
+    scope.where t[:selling_price].lteq(max_price)
   end
 
 end

@@ -66,7 +66,7 @@ module Admin
 
     def gift_search_params
       params_base = params[:gift_search] || ActionController::Parameters.new
-      params_base.permit(:keyword, :product_category_id, :product_subcategory_id)
+      params_base.permit(:keyword, :product_category_id, :product_subcategory_id, :min_price, :max_price)
     end
     helper_method :gift_search_params
 
