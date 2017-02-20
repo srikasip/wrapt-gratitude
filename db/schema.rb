@@ -264,14 +264,15 @@ ActiveRecord::Schema.define(version: 20170217151144) do
   end
 
   create_table "survey_question_options", force: :cascade do |t|
-    t.integer  "survey_question_id",             null: false
+    t.integer  "survey_question_id",               null: false
     t.text     "text"
     t.string   "image"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.integer  "sort_order",         default: 0, null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "sort_order",           default: 0, null: false
     t.string   "type"
     t.text     "explanation"
+    t.string   "configuration_string"
     t.index ["survey_question_id"], name: "index_survey_question_options_on_survey_question_id", using: :btree
   end
 
@@ -320,6 +321,8 @@ ActiveRecord::Schema.define(version: 20170217151144) do
     t.text     "placeholder_text"
     t.boolean  "use_response_as_relationship", default: false, null: false
     t.text     "hint_text"
+    t.boolean  "price_filter",                 default: false
+    t.boolean  "category_filter",              default: false
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
     t.index ["survey_section_id"], name: "index_survey_questions_on_survey_section_id", using: :btree
   end

@@ -1,0 +1,18 @@
+%h4 Filters
+%p The following filters were applied to the recommendations based on the responses to the associated questions.
+%table.table.table-striped
+  %thead
+    %tr
+      %th Type
+      %th Question / Response
+      %th Description
+  %tbody
+    - @engine.filters.each do |filter|
+      %tr
+        %td= filter.name
+        %td
+          = filter.question.prompt
+          %strong (#{displayable_response(filter.question_response)})
+          [#{filter.question.code}]
+          
+        %td= filter.description

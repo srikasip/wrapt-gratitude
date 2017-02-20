@@ -7,11 +7,14 @@ module Recommendations
     # exclude text questions
     # tests
 
-    attr_reader :training_set, :response, :recommendations, :response_adapter, :question_ranks
+    attr_reader :training_set, :response, :recommendations, :response_adapter, :question_ranks,
+      :filters
 
     delegate :add_recommendation,
       :destroy_recommendations!,
       to: :response_adapter
+      
+    delegate :survey, to: :training_set
 
     NEGATIVE_RANK_PENALTY = 5.0
     QUESTION_WEIGHT_BASE = 100.0
@@ -23,8 +26,6 @@ module Recommendations
     def initialize(training_set, response = nil)
       @training_set = training_set
       self.response = response
-      @recommendations = []
-      @question_ranks = []
     end
     
     def response=(new_response)
@@ -35,6 +36,11 @@ module Recommendations
       end
 
       clear_recommendations
+      
+      @filters = []
+      
+      create_filters if response.present?
+      
       @response
     end
 
@@ -52,6 +58,7 @@ module Recommendations
       clear_recommendations
       
       generate_candidate_recommendations
+      apply_filters
       remove_similar_recommendations
       
       # take 80% of the recommended ones and leave 20% for random
@@ -59,7 +66,8 @@ module Recommendations
       
       # are we short?
       if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
-        generate_random_recommendations(2 * (MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length))
+        generate_random_recommendations(10 * (MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length))
+        apply_filters
         remove_similar_recommendations
         
         # are we still short?
@@ -89,8 +97,27 @@ module Recommendations
       results.sort!{|a, b| b.score <=> a.score}
       results
     end
+
+    def question_responses_by_question
+      @_question_responses_by_question ||= {}.tap do |result|
+        response.question_responses.preload(:survey_question, :survey_question_options).each do |question_response|
+          result[question_response.survey_question] = question_response
+        end
+      end  
+    end
     
     protected
+    
+    def create_filters
+      @filters = Recommendations::Filters::Base.create_filters(self)
+    end
+    
+    def apply_filters
+      filters.each do |filter|
+        @recommendations = filter.apply(@recommendations)
+      end
+      @recommendations
+    end
     
     def generate_random_recommendations(count)
       added = []
@@ -221,14 +248,6 @@ module Recommendations
           result[gift][question] = gift_question
         end
       end
-    end
-
-    def question_responses_by_question
-      @_question_responses_by_question ||= {}.tap do |result|
-        response.question_responses.preload(:survey_question, :survey_question_options).each do |question_response|
-          result[question_response.survey_question] = question_response
-        end
-      end  
     end
     
     class SurveyMismatchError; end
