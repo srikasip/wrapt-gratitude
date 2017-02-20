@@ -12,7 +12,7 @@ class GiftSearch
     result = product_subcategory_id_filter(result) if product_subcategory_id.present?
     result = min_price_filter(result) if min_price.present?
     result = max_price_filter(result) if max_price.present?
-    result = result.order(selling_price: :asc)
+    result = result.order("#{calculated_price_sql} asc")
     return result
   end
 
@@ -30,13 +30,24 @@ class GiftSearch
   end
   
   private def min_price_filter scope
-    t = Gift.arel_table
-    scope.where t[:selling_price].gteq(min_price)
+    scope.where("#{calculated_price_sql} >= ?", min_price)
   end
   
   private def max_price_filter scope
-    t = Gift.arel_table
-    scope.where t[:selling_price].lteq(max_price)
+    scope.where("#{calculated_price_sql} <= ?", max_price)
+  end
+  
+  private def calculated_price_sql
+    %{case when calculate_price_from_products then
+      (
+        select sum(products.price) from gift_products
+        join products on gift_products.product_id = products.id
+        where gift_products.gift_id = gifts.id
+      )
+      else
+        selling_price
+      end
+    }
   end
 
 end
