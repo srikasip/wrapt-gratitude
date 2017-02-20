@@ -1,0 +1,11 @@
+.row
+  .col-xs-12
+
+  %h1 Share with Friends &amp; Family
+
+  %p Tell your friends and family about Wrapt and the Science of Gifting
+
+  = simple_form_for @recipient_originated_referral, url: profile_recipient_originated_referrals_path(@profile.recipient_access_token), data: {submits_to_pjax_modal: true}, method: :post do |form|
+    = form.input :emails, label: 'Email Addresses', hint: 'Comma separated multiple addresses', required: false
+
+    = form.submit "Send Email", class: 'btn btn-primary btn-full-width'

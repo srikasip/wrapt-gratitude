@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     resources :recipient_gift_likes, only: [:create, :destroy]
     resources :recipient_gift_dislikes, only: [:create, :destroy]
     resources :recipient_gift_selections, only: [:create, :destroy]
+    resources :recipient_originated_referrals, only: [:new, :create]
   end
 
   resources :profile_recipient_reviews, only: :show

@@ -14,7 +14,7 @@
       %p.help.gift-basket__footer__text In our beta testing phase we are not fulfilling gift selections but we will be soon. Share our site with friend & family - the more users we have on Wrapt the better the gifting gets.
       
 
-      = link_to 'SHARE IT NOW', '#', class: 'btn btn-primary btn-full-width btn-gift-basket-submit', data: {loads_in_pjax_modal: true, behavior: 'gift-basket-submit'}
+      = link_to 'SHARE IT NOW', new_profile_recipient_originated_referral_path(profile.recipient_access_token), class: 'btn btn-primary btn-full-width btn-gift-basket-submit', data: {loads_in_pjax_modal: true, behavior: 'gift-basket-submit'}
 
       %p.help.gift-basket__footer__text.text-center You will be able to preview the email before you send it.
 
