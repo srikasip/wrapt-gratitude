@@ -11,6 +11,23 @@
         Start with
         #{link_to 'this template', '/users/imports/Wrapt User Import Template.xlsx'}.
 
+      %p
+        Column Definitions
+      %table.table.table-bordered
+        %tbody
+          %tr
+            %th first_name
+            %td The user's first name
+          %tr
+            %th last_name
+            %td The user's last name
+          %tr
+            %th email
+            %td The user's email
+          %tr
+            %th unmoderated_testing_platform
+            %td Whether the user will use the unmoderated testing platform.  Put an 'X' for true and leave blank for false.
+
       .form-inputs= f.input :records_file, label: 'Excel Spreadsheet', as: :file
       - if @user_import&.row_errors&.any?
         .form-group.has-error

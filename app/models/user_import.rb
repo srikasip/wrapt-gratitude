@@ -22,7 +22,8 @@ class UserImport
         user = User.new
         row_values = row.map {|cell| strip_tags cell.value.to_s}
         next unless row_values.any?(&:present?)
-        user.first_name, user.last_name, user.email = row_values
+        user.first_name, user.last_name, user.email, unmoderated_testing_platform = row_values
+        user.unmoderated_testing_platform = unmoderated_testing_platform.presence
         user.setup_activation
         user.source = :admin_invitation
         if user.save
