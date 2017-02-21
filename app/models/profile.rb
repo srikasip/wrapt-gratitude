@@ -4,6 +4,8 @@ class Profile < ApplicationRecord
   has_many :survey_responses, dependent: :destroy, inverse_of: :profile
   has_many :gift_selections, -> {order 'gift_selections.id'}, dependent: :destroy
 
+  has_many :gift_likes, inverse_of: :profile, dependent: :destroy
+  has_many :gift_dislikes, inverse_of: :profile, dependent: :destroy
   has_many :recipient_gift_likes, inverse_of: :profile, dependent: :destroy
   has_many :recipient_gift_dislikes, inverse_of: :profile, dependent: :destroy
   has_many :recipient_gift_selections, -> {order 'recipient_gift_selections.id'}, dependent: :destroy

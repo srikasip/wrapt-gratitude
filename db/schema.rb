@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170220202141) do
+ActiveRecord::Schema.define(version: 20170221192628) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,15 @@ ActiveRecord::Schema.define(version: 20170220202141) do
     t.index ["gift_id"], name: "index_gift_images_on_gift_id", using: :btree
     t.index ["primary"], name: "index_gift_images_on_primary", using: :btree
     t.index ["product_image_id"], name: "index_gift_images_on_product_image_id", using: :btree
+  end
+
+  create_table "gift_likes", force: :cascade do |t|
+    t.integer  "gift_id"
+    t.integer  "profile_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gift_id"], name: "index_gift_likes_on_gift_id", using: :btree
+    t.index ["profile_id"], name: "index_gift_likes_on_profile_id", using: :btree
   end
 
   create_table "gift_products", force: :cascade do |t|
@@ -450,6 +459,8 @@ ActiveRecord::Schema.define(version: 20170220202141) do
   add_foreign_key "gift_dislikes", "profiles"
   add_foreign_key "gift_images", "gifts"
   add_foreign_key "gift_images", "product_images"
+  add_foreign_key "gift_likes", "gifts"
+  add_foreign_key "gift_likes", "profiles"
   add_foreign_key "gift_products", "gifts"
   add_foreign_key "gift_products", "products"
   add_foreign_key "gift_question_impacts", "gifts"

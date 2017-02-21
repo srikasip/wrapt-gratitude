@@ -9,7 +9,7 @@ module ProfileRecipientReviewsHelper
   end
 
   def dislike_reason_label reason_key
-    @_reason_labels ||= {
+    @_reason_labels = {
       giftee_similar_item: "I already have this",
       giftee_dislike: "Just don't like it",
       too_expensive: "Too expensive",

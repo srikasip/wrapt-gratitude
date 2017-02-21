@@ -13,9 +13,4 @@
 - content_for :page_js do
   = render '/application/carousel_js'
   :javascript
-    $(document).ready(function() {
-      $('[data-behavior=dislike-reason]').change(function() {
-        var form = $(this).parents('[data-behavior=dislike-form]');
-        form.submit();
-      });
-    });
+    new App.GiftLikeDislikeButtons();

@@ -2,19 +2,6 @@ class Gift < ApplicationRecord
   has_many :gift_products, inverse_of: :gift, dependent: :destroy
   has_many :products, through: :gift_products
 
-
-  # Unused associations for cleaning up foreign keys before delete
-  has_many :gift_question_impacts, dependent: :destroy
-  has_many :evaluation_recommendations, dependent: :destroy
-  has_many :gift_recommendations, dependent: :destroy
-  # not sure why the association below exists?
-  #has_many :survey_responses, dependent: :destroy
-  has_many :gift_selections, dependent: :destroy
-  has_many :recipient_gift_likes, dependent: :destroy
-  has_many :recipient_gift_dislikes, dependent: :destroy
-  has_many :gift_dislikes, dependent: :destroy
-  # end unused foreign-key cleanup associations
-
   has_many :gift_images, -> {order :sort_order}, inverse_of: :gift, dependent: :destroy
   has_many :uploaded_gift_images, class_name: 'GiftImages::Uploaded'
   has_many :gift_images_from_products, class_name: 'GiftImages::FromProduct'
@@ -139,5 +126,25 @@ class Gift < ApplicationRecord
       nil
     end
   end
+
+  ################################################################################
+  # These associations are not used directly in this direction by the application
+  # they're only here to allow foreign keys to be cleaned up via dependent destroy
+  ################################################################################
+  
+  has_many :gift_question_impacts, dependent: :destroy
+  has_many :evaluation_recommendations, dependent: :destroy
+  has_many :gift_recommendations, dependent: :destroy
+  # not sure why the association below exists?
+  #has_many :survey_responses, dependent: :destroy
+  has_many :gift_selections, dependent: :destroy
+  has_many :recipient_gift_likes, dependent: :destroy
+  has_many :recipient_gift_dislikes, dependent: :destroy
+  has_many :gift_dislikes, dependent: :destroy
+  has_many :gift_likes, dependent: :destroy
+
+  ###########################
+  # end unused foreign-key cleanup associations
+  ###########################
 
 end
