@@ -6,7 +6,7 @@
   - selections.each do |gift_selection|
     - gift = gift_selection.gift
     .gift-basket__gift.clearfix
-      .gift-basket__gift__left.pull-left
+      .gift-basket__gift__left
         .gift-basket__gift-image
           = image_tag gift.primary_gift_image_with_fallback.image_url(:small)
       .gift-basket__gift__right

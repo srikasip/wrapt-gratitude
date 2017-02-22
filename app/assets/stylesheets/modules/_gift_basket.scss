@@ -78,17 +78,25 @@
 }
 .gift-basket__gift {
   position: relative;
-  padding: 8px;
+  padding: 0;
   background-color: #fff;
   margin-bottom: 16px;
+  display: table;
+  width: 100%;
 }
 .gift-basket__gift__right {
-  margin-left: 120px;
-  width: 300px;
+  width: 100%;
+  display: table-cell;
+  padding: 8px 10px 4px;
+}
+.gift-basket__gift__left {
+  display: table-cell;
+  vertical-align: middle;
+  width: 112px;
+  background-color: $gray-009;
 }
 .gift-basket__gift-image img {
   width: 112px;
-  margin-top: 4px;
 }
 .gift-basket__gift-title.small {
   margin-bottom: 0;
