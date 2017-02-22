@@ -15,6 +15,8 @@ class ProductCategory < ApplicationRecord
   attr_accessor :skus_need_regeneration
   before_save :set_skus_need_regeneration, if: :wrapt_sku_code_changed?
   after_save :regenerate_dependent_skus!, if: :skus_need_regeneration
+  
+  EXPERIENCE_GIFT_CODE = 'EXP'
 
   # returns an array of all product categories
   # with sub categories following their parent

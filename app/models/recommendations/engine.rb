@@ -18,8 +18,10 @@ module Recommendations
 
     NEGATIVE_RANK_PENALTY = 5.0
     QUESTION_WEIGHT_BASE = 100.0
-    MIN_NUMBER_OF_RECOMMENDATIONS = 15
+    MIN_NUMBER_OF_RECOMMENDATIONS = 12
     RECOMMENDATION_SCORE_THRESHOLD = 5.0
+    CATEGORY_LIMIT = 2
+    PERCENT_RANDOM = 20.0
     RANDOM_SCORE = 0.0
     FEATURED_SCORE = 0.1
 
@@ -61,8 +63,7 @@ module Recommendations
       apply_filters
       remove_similar_recommendations
       
-      # take 80% of the recommended ones and leave 20% for random
-      @recommendations = @recommendations.take((0.8 * MIN_NUMBER_OF_RECOMMENDATIONS).round)
+      @recommendations = @recommendations.take((((100.0 - PERCENT_RANDOM) / 100.0) * MIN_NUMBER_OF_RECOMMENDATIONS).round)
       
       # are we short?
       if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
@@ -77,6 +78,8 @@ module Recommendations
           @recommendations = @recommendations.take(MIN_NUMBER_OF_RECOMMENDATIONS)
         end
       end
+      
+      @recommendations.sort!{|a, b| b.score <=> a.score}
       
       @recommendations
     end
@@ -125,17 +128,29 @@ module Recommendations
     
     def generate_random_recommendations(count)
       added = []
-      gift_pool = featured_random_gifts - @recommendations.map(&:gift)
-      gift_pool.sample(count).each do |gift|
-        added << add_recommendation(gift, FEATURED_SCORE)
+
+      if added.length < count
+        gift_pool = experience_gifts - @recommendations.map(&:gift)
+        # force one experience gift into the random set
+        gift_pool.sample(1).each do |gift|
+          added << add_recommendation(gift, FEATURED_SCORE)
+        end
       end
-      needed = count - added.length
-      if needed > 0
+      
+      if added.length < count
+        gift_pool = featured_random_gifts - @recommendations.map(&:gift)
+        gift_pool.sample(count - added.length).each do |gift|
+          added << add_recommendation(gift, FEATURED_SCORE)
+        end
+      end
+      
+      if added.length < count
         gift_pool = non_featured_random_gifts - @recommendations.map(&:gift)
-        gift_pool.sample(count).each do |gift|
+        gift_pool.sample(count - added.length).each do |gift|
           added << add_recommendation(gift, RANDOM_SCORE)
         end
       end
+      
       added
     end
     
@@ -151,15 +166,13 @@ module Recommendations
           max_rank = gift_rank if gift_rank > max_rank
         end
       end
-      # reject based on threshold
+
       @recommendations.sort!{|a, b| b.score <=> a.score}
       
       @recommendations
     end
     
     def remove_similar_recommendations
-      # no more than 25% of the gifts can be from the same category
-      category_limit = (0.25 * MIN_NUMBER_OF_RECOMMENDATIONS).round
       used_category_counts = {}
       @recommendations.reject! do |recommendation|
         max_category_count = 0
@@ -168,7 +181,7 @@ module Recommendations
           max_category_count = category_count if category_count > max_category_count
           used_category_counts[category] = category_count
         end
-        max_category_count > category_limit
+        max_category_count > CATEGORY_LIMIT
       end
     end
 
@@ -211,7 +224,7 @@ module Recommendations
     end
     
     def gifts
-      training_set_gifts + featured_random_gifts + non_featured_random_gifts
+      training_set_gifts + featured_random_gifts + non_featured_random_gifts + experience_gifts
     end
 
     def training_set_gifts
@@ -225,11 +238,21 @@ module Recommendations
     def non_featured_random_gifts
       @_non_featured_random_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).where(featured: false).order('RANDOM()').limit(50).to_a
     end
+    
+    def experience_gifts
+      @_non_featured_random_gifts ||=
+        Gift.preload(:product_subcategory, products: [:product_subcategory]).
+        where(featured: true).
+        where(product_subcategory: ProductCategory.where(code: ProductCategory::EXPERIENCE_GIFT_CODE))
+        order('RANDOM()').limit(50).to_a
+    end
 
     def categories_by_gifts
       @_categories_by_gift ||= Hash.new([]).tap do |result|
         gifts.each do |gift|
-          result[gift] = gift.products.map(&:product_subcategory)
+          categories = gift.products.map(&:product_subcategory)
+          categories << gift.product_subcategory if gift.product_subcategory.code == ProductCategory::EXPERIENCE_GIFT_CODE
+          result[gift] = categories
         end
       end
     end
