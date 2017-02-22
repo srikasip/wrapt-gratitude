@@ -15,6 +15,7 @@
           = simple_form_for @invitation_request, html: {class: 'sqr-form'} do |form|
             .form-inputs
               = form.input :email, label: 'What is your email address?', required: false
+              = form.input :how_found, label: 'How did you hear about us?', as: :radio_buttons, collection: InvitationRequest::HOW_FOUNDS, label_method: :last, value_method: :first, wrapper_html: {class: 'labels-no-bottom-margin'}
           
             .form-actions.pull-right
               = form.submit 'Submit', class: 'btn btn-primary'

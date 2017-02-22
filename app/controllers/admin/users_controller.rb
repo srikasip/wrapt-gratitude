@@ -6,6 +6,7 @@ module Admin
       @user_search = UserSearch.new(user_search_params)
       @users = User
         .all
+        .preload(:invitation_request)
         .search(user_search_params)
         .order(:last_name, :first_name)
         .page(params[:page])
