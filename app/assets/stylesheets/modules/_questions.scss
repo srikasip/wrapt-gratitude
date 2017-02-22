@@ -70,6 +70,14 @@
   color: $gray-010;
 }
 
+.sqr-form .labels-no-bottom-margin label {
+  margin-bottom: 0;
+}
+
+.sqr-form input[type="radio"]  {
+  margin-top: 7px;
+}
+
 .sqr-option-explanations {
   position: absolute;
   left: 0px;

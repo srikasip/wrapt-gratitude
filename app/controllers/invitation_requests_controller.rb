@@ -13,7 +13,7 @@ class InvitationRequestsController < ApplicationController
   end
 
   private def invitation_request_params
-    params.require(:invitation_request).permit(:email)
+    params.require(:invitation_request).permit(:email, :how_found)
   end
   
 

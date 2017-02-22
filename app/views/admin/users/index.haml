@@ -31,6 +31,7 @@
           %th Account Status
           %th Invitation Expires
           %th Source
+          %th How Found
           %th Beta Round
           %th
 
@@ -43,6 +44,7 @@
             %td= user.active? ? 'Active' : 'Pending Confirmation'
             %td= user.activation_token_expires_at&.strftime("%-m/%-d/%Y")
             %td= user_sources[user.source]
+            %td= user.invitation_request_humanized_how_found
             %td= beta_rounds[user.beta_round]
             %td
               - unless user.active?
