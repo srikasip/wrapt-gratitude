@@ -136,9 +136,9 @@ $gr-carousel-nav__width: 82.5px;
 
 .gr-carousel__indicator img {
   width: 100%;
+  vertical-align: top;
 }
 .gr-carousel__indicator img.orientation-portrait {
-  top: 25%;
   -webkit-transform: translateY(-25%);
   -ms-transform: translateY(-25%);
   transform: translateY(-25%);
