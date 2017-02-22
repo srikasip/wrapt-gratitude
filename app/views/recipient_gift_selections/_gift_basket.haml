@@ -11,7 +11,11 @@
       %h4.gift-basket__footer__heading
         Thank You!
         %span.pull-right &#8212;
-      %p.help.gift-basket__footer__text In our beta testing phase we are not fulfilling gift selections but we will be soon. Share our site with friend & family - the more users we have on Wrapt the better the gifting gets.
+      %p.help.gift-basket__footer__text 
+        In our beta testing phase we are not fulfilling gift selections but we will be soon. Share our site with friend & family&#8212;the more users we have on Wrapt
+        %sup.trademark
+          &#8482;
+        the better the gifting gets.
       
 
       = link_to 'SHARE IT NOW', new_profile_recipient_originated_referral_path(profile.recipient_access_token), class: 'btn btn-primary btn-full-width btn-gift-basket-submit', data: {loads_in_pjax_modal: true, behavior: 'gift-basket-submit'}

@@ -1,7 +1,10 @@
 %p= "Dear #{@profile.name},"
 
 %p
-  #{@profile.owner.first_name} was shopping for you on Wrapt and picked out some gifts for you.  We'd like to see how you like what they picked.
+  #{@profile.owner.first_name} was shopping for you on Wrapt
+  %sup
+    &#8482;
+  and picked out some gifts for you.  We'd like to see how you like what they picked.
 
 %p
   #{link_to 'Click here', profile_recipient_review_url(@profile.recipient_access_token)} or use the following URL to see what they picked out.
@@ -11,4 +14,7 @@
 %p
   Sincerely,
   %br
-  The Wrapt Team
+  The Wrapt
+  %sup
+    &#8482;
+  Team
