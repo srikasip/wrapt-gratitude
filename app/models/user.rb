@@ -24,6 +24,8 @@ class User < ApplicationRecord
   has_many :owned_profiles, class_name: 'Profile', foreign_key: :owner_id, dependent: :destroy
   belongs_to :last_viewed_profile, class_name: 'Profile'
   belongs_to :recipient_referring_profile, class_name: 'Profile'
+  has_one :invitation_request, foreign_key: :invited_user_id
+
 
   ###########################
   ### Enums
@@ -39,6 +41,15 @@ class User < ApplicationRecord
     pre_release_testing: 'pre_release_testing',
     mvp1a: 'mvp1a'
   }
+
+  ###########################
+  ### Methods
+  ###########################
+  
+  delegate :how_found, :humanized_how_found,
+    to: :invitation_request,
+    prefix: true,
+    allow_nil: true
 
   def full_name
     [first_name, last_name].compact.join " "
