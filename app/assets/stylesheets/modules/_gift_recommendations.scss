@@ -161,7 +161,10 @@ $gr-carousel-nav__width: 82.5px;
 
 .gr-carousel__like,
 .gr-carousel__dislike {
-  display: inline-block;
+  float: left;
+}
+.gr-carousel__like {
+  margin-right: 5px;
 }
 
 .gr-carousel__dislike .btn-group.open .dropdown-toggle {
@@ -194,11 +197,10 @@ $gr-carousel-nav__width: 82.5px;
 .gr-carousel__dislike a.gift_dislike_reason:active {
   background-color: transparent;
 }
-
 a.disliked {
   background-color: $orange-003;
   color: $orange-001;
-  padding: 7px 12px 0px;
+  // padding: 7px 12px 0px;
 }
 a.disliked:hover,
 a.disliked:active,
