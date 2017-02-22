@@ -84,11 +84,11 @@
 }
 .gift-basket__gift__right {
   margin-left: 120px;
-  @include vertical-align(absolute);
   width: 300px;
 }
 .gift-basket__gift-image img {
   width: 112px;
+  margin-top: 4px;
 }
 .gift-basket__gift-title.small {
   margin-bottom: 0;
