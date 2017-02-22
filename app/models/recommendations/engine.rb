@@ -243,7 +243,7 @@ module Recommendations
       @_non_featured_random_gifts ||=
         Gift.preload(:product_subcategory, products: [:product_subcategory]).
         where(featured: true).
-        where(product_subcategory: ProductCategory.where(code: ProductCategory::EXPERIENCE_GIFT_CODE))
+        where(product_subcategory: ProductCategory.where(wrapt_sku_code: ProductCategory::EXPERIENCE_GIFT_CODE)).
         order('RANDOM()').limit(50).to_a
     end
 
@@ -251,7 +251,7 @@ module Recommendations
       @_categories_by_gift ||= Hash.new([]).tap do |result|
         gifts.each do |gift|
           categories = gift.products.map(&:product_subcategory)
-          categories << gift.product_subcategory if gift.product_subcategory.code == ProductCategory::EXPERIENCE_GIFT_CODE
+          categories << gift.product_subcategory if gift.product_subcategory.wrapt_sku_code == ProductCategory::EXPERIENCE_GIFT_CODE
           result[gift] = categories
         end
       end
