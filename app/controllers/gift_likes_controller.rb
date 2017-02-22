@@ -21,7 +21,7 @@ class GiftLikesController < ApplicationController
   end
 
   private def gift_like_params
-    params.require(:gift_like).permit(:gift_id)
+    params.require(:gift_like).permit(:gift_id, :reason)
   end
 
   private def load_profile

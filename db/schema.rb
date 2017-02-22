@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170221211612) do
+ActiveRecord::Schema.define(version: 20170222153845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20170221211612) do
     t.integer  "profile_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "reason"
     t.index ["gift_id"], name: "index_gift_likes_on_gift_id", using: :btree
     t.index ["profile_id"], name: "index_gift_likes_on_profile_id", using: :btree
   end
@@ -259,6 +260,7 @@ ActiveRecord::Schema.define(version: 20170221211612) do
     t.integer  "gift_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "reason"
     t.index ["gift_id"], name: "index_recipient_gift_likes_on_gift_id", using: :btree
     t.index ["profile_id"], name: "index_recipient_gift_likes_on_profile_id", using: :btree
   end

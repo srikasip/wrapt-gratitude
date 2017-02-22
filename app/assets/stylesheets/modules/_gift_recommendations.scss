@@ -1,4 +1,5 @@
 // gift recommendation carousel specific styles
+// also used on the recipient review page
 
 .gr-carousel__gifts {
   @include floating-container;
@@ -164,16 +165,16 @@ $gr-carousel-nav__width: 82.5px;
   display: inline-block;
 }
 
-.gr-carousel__dislike .btn-group.open .dropdown-toggle {
+.gr-carousel__dislike .btn-group.open .dropdown-toggle,
+.gr-carousel__like .btn-group.open .dropdown-toggle {
   box-shadow: none;
 }
-.gift_dislike_reason {
+.gift_dislike_reason,
+.gift_like_reason {
   letter-spacing: 1.38px;
   font-size: 11px;
 }
-.gift_dislike_reason .radio label {
-  min-height: 24px;
-}
+
 .gr-carousel__dislike a, .gr-carousel__like a {
   background-color: $blue-010;
   padding: 12px 12px 3px;
@@ -191,7 +192,11 @@ $gr-carousel-nav__width: 82.5px;
 .gr-carousel__dislike a.gift_dislike_reason,
 .gr-carousel__dislike a.gift_dislike_reason:hover
 .gr-carousel__dislike a.gift_dislike_reason:focus,
-.gr-carousel__dislike a.gift_dislike_reason:active {
+.gr-carousel__dislike a.gift_dislike_reason:active,
+.gr-carousel__like a.gift_like_reason,
+.gr-carousel__like a.gift_like_reason:hover,
+.gr-carousel__like a.gift_like_reason:focus,
+.gr-carousel__like a.gift_like_reason:active {
   background-color: transparent;
 }
 
@@ -222,7 +227,8 @@ a.liked:focus {
   padding-top: 3px;
 }
 
-.gr-carousel__dislike .dropdown-menu {
+.gr-carousel__dislike .dropdown-menu,
+.gr-carousel__like .dropdown-menu {
   background-color: $blue-005;
   width: 200px;
   margin-top: 10px;
@@ -230,11 +236,13 @@ a.liked:focus {
   border: 0;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.10);
 }
-.gr-carousel__dislike li {
+.gr-carousel__dislike li,
+.gr-carousel__like li {
   margin-bottom: 0;
 }
 
-.gr-carousel__dislike .dropdown-menu:after {
+.gr-carousel__dislike .dropdown-menu:after,
+.gr-carousel__like .dropdown-menu:after {
   content: '';
   position: absolute;
   top: -5px;
