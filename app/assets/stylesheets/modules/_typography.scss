@@ -35,6 +35,12 @@ h4 {
   letter-spacing: 0;
   margin-bottom: 16px;
 }
+.static_pages h4 {
+  margin-top: 36px;
+}
+.static_pages .citations h4 {
+  margin-top: 0;
+}
 h5 {
   text-transform: uppercase;
   font-size: rem(18);
@@ -143,4 +149,8 @@ a:active {
 .light {
   @include akkurat-light();
   font-weight: normal;
+}
+.citation {
+  font-size: rem(14);
+  margin-bottom: 6px;
 }
