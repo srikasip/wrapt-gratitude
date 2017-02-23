@@ -10,6 +10,6 @@ class UserActivationsMailer < ApplicationMailer
   def activation_success_email user
     @user = user
 
-    mail to: user.email, subject: "Thanks for signing up for WRAPT!"
+    mail to: user.email, subject: "Thank you for signing up for WRAPT!"
   end
 end
