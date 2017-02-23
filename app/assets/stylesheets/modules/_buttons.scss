@@ -22,10 +22,17 @@
 .btn-default:hover {
   background-color: $gray-011;
   border-color: $blue-006;
-  letter-spacing: 2px;
 }
 .btn-primary {
   letter-spacing: 2px;
+}
+.modal-content .btn-primary,
+.new-invite-request .btn-primary {
+  text-transform: uppercase;
+}
+.btn-primary:focus, 
+.btn-primary.focus {
+  border-color: darken($blue-004, 10%)
 }
 
 .btn-default:active,
@@ -56,6 +63,7 @@
 .btn.disabled:hover,
 .btn.disabled:focus {
   box-shadow: none;
+  border-color: $gray-003;
 }
 .btn-secondary {
   background-color: $orange-001;

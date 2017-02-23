@@ -129,12 +129,19 @@ $gr-carousel-nav__width: 82.5px;
   position: relative;
   overflow: hidden;
 }
+
 .gr-carousel__indicator:last-child .gr-carousel__thumbnail {
   margin-right: 0;
 }
 
 .gr-carousel__indicator img {
   width: 100%;
+  vertical-align: top;
+}
+.gr-carousel__indicator img.orientation-portrait {
+  -webkit-transform: translateY(-25%);
+  -ms-transform: translateY(-25%);
+  transform: translateY(-25%);
 }
 
 // gift recommendations carousel gift
@@ -268,9 +275,9 @@ a.liked:focus {
 }
 
 .gr-carousel__gift-details {
-  min-height: 228px;
-  max-height: 228px;
-  overflow: scroll;
+  // min-height: 228px;
+  // max-height: 228px;
+  // overflow: scroll;
   width: 430px;
   padding-right: 10px;
 }

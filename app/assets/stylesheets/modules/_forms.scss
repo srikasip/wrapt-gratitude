@@ -14,7 +14,7 @@ label {
 }
 .lost-password-container {
   // match password input width
-  width: 435px;
+  width: 575px;
   margin-top: -28px;
 }
 .hint {
@@ -55,7 +55,7 @@ label {
 
 .input-wrapper  #js-pw-input-for-show-hide {
   display: inline-block;
-  width: 435px;
+  width: 575px;
 }
 
 .input-wrapper--show-hide {
@@ -170,9 +170,9 @@ label {
   }
 
   input[type=range]:focus::-webkit-slider-runnable-track {
-    -webkit-box-shadow: 0px 0px 10px 0px rgba(196,170,127,0.5);
-    -moz-box-shadow: 0px 0px 10px 0px rgba(196,170,127,0.5);
-    box-shadow: 0px 0px 10px 0px rgba(196,170,127,0.5);
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(145, 166, 205,0.8);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(145, 166, 205,0.8);
+    box-shadow: 0px 0px 10px 0px rgba(145, 166, 205,0.8);
   }
 
   input[type=range]::-moz-range-track {
@@ -244,6 +244,17 @@ label {
 .wrapt-range__max-label {
   position: absolute;
   right: 0px;
+}
+.new-invite-request .radio {
+  margin-bottom: 0;
+}
+.new-invite-request .radio label{
+  font-size: rem(16);
+  line-height: 1;
+}
+.new-invite-request.sqr-form input[type="radio"], 
+.new-invite-request.sqr-form .radio-inline input[type="radio"] {
+  margin-top: 0;
 }
 
 
