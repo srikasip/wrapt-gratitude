@@ -1,17 +1,16 @@
-.row
-  .col-xs-12
-    %h1 Reset Your Password
 
-    = simple_form_for @password_reset, html: {data: {submits_to_pjax_modal: true}} do |form|
-      .form-inputs
-        = form.input :password, required: false, label: 'Enter your new password'
+%h1 Reset Your Password
 
-      .text-right.lost-password-container
-        %p= link_to 'Return to Sign In'
-      .clearfix
+= simple_form_for @password_reset, html: {data: {submits_to_pjax_modal: true}} do |form|
+  .form-inputs
+    = form.input :password, required: false, label: 'Enter your new password'
 
-      .form-actions
-        = form.submit 'Reset Password', class: 'btn btn-primary'
+  .text-right.lost-password-container
+    %p= link_to 'Return to Sign In'
+  .clearfix
+
+  .form-actions
+    = form.submit 'Reset Password', class: 'btn btn-primary btn-full-width'
       
       
 

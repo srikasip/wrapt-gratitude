@@ -1,13 +1,29 @@
-%h1 
-  WRAPT
-  %sup.trademark
-    &#8482;
+%body{style: "background-color: #fff; font-family: Helvetica, Arial, sans-serif;"}
+  %table{style: "background-color: #F2F5F9; max-width: 700px; margin: 0 auto;"}
+    %tr
+      %td{style: "padding: 40px;"}
+        %h1{style: "font-size: 32px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; text-align: center;"}
+          You're invited to try WRAPT
+          %sup.trademark
+            &#8482;
 
-%p 
-  You're invited to try WRAPT
-  =succeed ". " do
-    %sup.trademark
-      &#8482;
-    To sign up click here:
+        %p{style: "text-align: center; font-size: 16px; color: #C5AA80; font-weight: bold; line-height: 1.75;"}
+          Wrapt
+          %sup
+            &#8482;
+          is a new gift-giving site dedicated to better gifting with artisanal items, memorable experiences and funds for wish lists in life.
 
-%p= link_to @activation_url, @activation_url
+        %h3{style: "text-align: left; font-size: 18px; color: #444; font-weight: normal; line-height: 1.1;"}
+          How it Works
+
+        %ul{style: "text-align: left; font-size: 14px; color: #444; font-weight: normal; line-height: 1.75;"}
+          %li You answer a few questions about her personality, passions, and purpose.
+          %li Based on your answers, we then match her with gifts from our curated collection.
+          %li She receives a gift she loves, wrapt and delivered, and you will gain a 'gift whisperer' with all of her occasions.
+
+        %p{style: "text-align: center; font-size: 16px; color: #C5AA80; font-weight: bold; line-height: 1.75;"}
+          For now, we're just testing and not sending actual gifts.
+          %br
+          We'd love your help!
+
+        = link_to "Try WRAPT Now", @activation_url, style: "display: block; background-color: #ABBAD5; color: #333; text-transform: uppercase; font-size: 12px; letter-spacing: 1.4px; padding: 16px; text-align: center; text-decoration: none; line-height: 1;"

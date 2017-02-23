@@ -55,6 +55,10 @@ label {
 
 .input-wrapper  #js-pw-input-for-show-hide {
   display: inline-block;
+  width: 100%;
+}
+.modal-body .input-wrapper  #js-pw-input-for-show-hide {
+  display: inline-block;
   width: 575px;
 }
 
