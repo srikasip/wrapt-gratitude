@@ -16,7 +16,9 @@ class SurveyResponseCompletionsController < ApplicationController
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
     @survey_response_completion.assign_attributes survey_response_completion_params
     if @survey_response_completion.save
-      # TODO email the recipient
+      if authentication_from_invitation_only?
+        auto_login(current_user)
+      end
       @survey_response.update_attribute :completed_at, Time.now
       GenerateProfileRecommendationsJob.new.perform @profile, TrainingSet.published.first
       redirect_to profile_gift_recommendations_path(@profile)
@@ -44,4 +46,5 @@ class SurveyResponseCompletionsController < ApplicationController
   private def set_survey_response
     @survey_response = @profile.survey_responses.find params[:survey_id]
   end
+  
 end
