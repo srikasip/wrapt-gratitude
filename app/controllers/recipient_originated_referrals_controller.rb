@@ -11,8 +11,7 @@ class RecipientOriginatedReferralsController < ApplicationController
     @recipient_originated_referral = RecipientOriginatedReferral.new recipient_originated_referral_params
     @recipient_originated_referral.profile = @profile
     if @recipient_originated_referral.save
-      flash.notice = 'Thank you!'
-      redirect_to profile_recipient_review_path(@profile.recipient_access_token)
+      render :create
     else
       render :new
     end
