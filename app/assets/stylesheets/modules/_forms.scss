@@ -14,7 +14,7 @@ label {
 }
 .lost-password-container {
   // match password input width
-  width: 435px;
+  width: 575px;
   margin-top: -28px;
 }
 .hint {
@@ -55,7 +55,7 @@ label {
 
 .input-wrapper  #js-pw-input-for-show-hide {
   display: inline-block;
-  width: 435px;
+  width: 575px;
 }
 
 .input-wrapper--show-hide {
@@ -244,6 +244,17 @@ label {
 .wrapt-range__max-label {
   position: absolute;
   right: 0px;
+}
+.new-invite-request .radio {
+  margin-bottom: 0;
+}
+.new-invite-request .radio label{
+  font-size: rem(16);
+  line-height: 1;
+}
+.new-invite-request.sqr-form input[type="radio"], 
+.new-invite-request.sqr-form .radio-inline input[type="radio"] {
+  margin-top: 0;
 }
 
 

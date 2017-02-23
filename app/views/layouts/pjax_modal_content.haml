@@ -3,7 +3,7 @@
     =embedded_svg('icon-close', class: 'modal__icon-close')
   %h4.modal-title(data-pjax-modal-title)
     = yield :modal_title
-.modal-body.clearfix.ph3.pb3
+.modal-body.clearfix
   = render 'layouts/alerts'
   %div(data-pjax-modal-body)
     = yield

@@ -1,3 +1,6 @@
+.modal-dialog {
+  width: 748px;
+}
 .modal-content {
   @include shadowed-box__05;
   border: 0;
@@ -8,6 +11,9 @@
 }
 .modal-header {
   border-bottom: 0;
+}
+.modal-body {
+  padding: 8px 48px 62px;
 }
 .modal h1 {
   text-align: center;
