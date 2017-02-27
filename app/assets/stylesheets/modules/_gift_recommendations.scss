@@ -130,12 +130,19 @@ $gr-carousel-nav__width: 82.5px;
   position: relative;
   overflow: hidden;
 }
+
 .gr-carousel__indicator:last-child .gr-carousel__thumbnail {
   margin-right: 0;
 }
 
 .gr-carousel__indicator img {
   width: 100%;
+  vertical-align: top;
+}
+.gr-carousel__indicator img.orientation-portrait {
+  -webkit-transform: translateY(-25%);
+  -ms-transform: translateY(-25%);
+  transform: translateY(-25%);
 }
 
 // gift recommendations carousel gift
@@ -162,7 +169,10 @@ $gr-carousel-nav__width: 82.5px;
 
 .gr-carousel__like,
 .gr-carousel__dislike {
-  display: inline-block;
+  float: left;
+}
+.gr-carousel__like {
+  margin-right: 5px;
 }
 
 .gr-carousel__dislike .btn-group.open .dropdown-toggle,
@@ -199,11 +209,10 @@ $gr-carousel-nav__width: 82.5px;
 .gr-carousel__like a.gift_like_reason:active {
   background-color: transparent;
 }
-
 a.disliked {
   background-color: $orange-003;
   color: $orange-001;
-  padding: 7px 12px 0px;
+  // padding: 7px 12px 0px;
 }
 a.disliked:hover,
 a.disliked:active,
@@ -274,9 +283,9 @@ a.liked:focus {
 }
 
 .gr-carousel__gift-details {
-  min-height: 228px;
-  max-height: 228px;
-  overflow: scroll;
+  // min-height: 228px;
+  // max-height: 228px;
+  // overflow: scroll;
   width: 430px;
   padding-right: 10px;
 }
@@ -356,7 +365,7 @@ a.liked:focus {
   width: 400px;
   position: absolute;
   bottom: 40px;
-  background-color: $gray-010;
+  background-color: rgba(51, 51, 51, .8);
   height: 56px;
 }
 .gr-image-carousel__nav {

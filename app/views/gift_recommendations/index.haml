@@ -4,7 +4,7 @@
       %h1.text-center
         = "#{@profile.name}'s Gift Recommendations"
       %p.lead.tan-002.ph2.text-center
-        ="Wrapt found these 5 items uniquely suited to #{@profile.name} based on her personality, passions & purpose."
+        ="Wrapt<sup class='trademark'>&#8482;</sup> found these 5 items uniquely suited to #{@profile.name} based on her personality, passions & purpose.".html_safe
   .row.wrapt-carousel--wrapper
     .col-xs-12
       - gifts = load_gift_recommendation_carousel_data(@gift_recommendations)
