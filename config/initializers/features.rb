@@ -1,0 +1,1 @@
+Rails.application.config.x.features.enable_like_reasons = false

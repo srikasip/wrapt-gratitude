@@ -1,4 +1,13 @@
 module PjaxModalController
+  # This module sets up controllers to load their content in a modal
+  # in response to pjax requests.  See pjax-modals.js.coffee for client side details
+  # 
+  # calling render will render a template to the modal
+  # and calling redirect_to will trigger a redirect on the underlying page
+  #
+  # note that inbound links should have `data-loads-in-pjax-modal` attributes
+  # and forms should have `data-submits-to-pjax-modal`
+
   extend ActiveSupport::Concern
   
   included do

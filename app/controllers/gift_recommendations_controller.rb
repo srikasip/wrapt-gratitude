@@ -8,10 +8,6 @@ class GiftRecommendationsController < ApplicationController
   before_action :load_recommendations
   
   def index
-    @gift_dislikes = {}
-    @gift_recommendations.each do |gr|
-      @gift_dislikes[gr.id] = GiftDislike.new({gift: gr.gift})
-    end
     current_user.update_attribute :last_viewed_profile_id, @profile.id
   end
 

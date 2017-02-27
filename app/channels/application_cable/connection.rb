@@ -11,8 +11,15 @@ module ApplicationCable
       def find_verified_user
         if current_user = User.find_by(id: cookies.signed[:user_id])
           current_user
-        else
-          reject_unauthorized_connection
+        # disabling rejection of the connection, which makes it available to
+        # the public without requiring login
+        # this is needed in order to make RecipientGiftSelections channel work
+        # since it is used by gift recipients without accounts
+        # if this becomes a problem we can have ProfileRecipientReviews#show
+        # set a signed cookie for the profile access token
+        # and confirm that a profile or user exists before allowing the connection
+        # else
+        #   reject_unauthorized_connection
         end
       end
   end

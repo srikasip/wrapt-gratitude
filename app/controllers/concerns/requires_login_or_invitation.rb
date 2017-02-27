@@ -15,14 +15,14 @@ module RequiresLoginOrInvitation
     end
 
     if user
-      @_current_user = user
+      @user_from_invitation = user
     else
       require_login
     end
   end
 
   def current_user
-    super || @_current_user
+    super || @user_from_invitation
   end
 
   def with_invitation_scope path
@@ -32,5 +32,13 @@ module RequiresLoginOrInvitation
       path
     end
   end
+
+  private def authentication_from_invitation_only?
+    # this works because sorcery stores the result of its current_user
+    # method in @current_user
+    current_user
+    @current_user.blank? && current_user
+  end
+
 
 end

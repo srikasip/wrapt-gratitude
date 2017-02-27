@@ -8,6 +8,7 @@
       %thead
         %tr
           %th Email
+          %th How Found
           %th Request Date
           %th
 
@@ -15,6 +16,7 @@
         - @invitation_requests.each do |invitation_request|
           %tr
             %td= invitation_request.email
+            %td= invitation_request.humanized_how_found
             %td= invitation_request.created_at.strftime('%-m/%-d/%Y')
             %td
               = link_to 'Send Invitation', admin_invitation_request_path(invitation_request), class: 'btn btn-default btn-xs', method: :put
