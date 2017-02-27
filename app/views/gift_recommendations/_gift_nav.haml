@@ -1,10 +1,10 @@
 - css_classes = locals[:css_classes]
 %div{class: css_classes[:container]}
-  = link_to '#', class: "#{css_classes[:link]} prev" do 
+  = link_to '#', class: "#{css_classes[:link]} prev", onClick: "ga('send', 'event', 'recommendation', 'navigation', 'gift nav');" do 
     .gr-carousel__nav-icon
       =embedded_svg('icon-caret-left', class: "gr-carousel__nav--caret-left")
     .gr-carousel__nav-inner
-  = link_to '#', class: "#{css_classes[:link]} next" do
+  = link_to '#', class: "#{css_classes[:link]} next", onClick: "ga('send', 'event', 'recommendation', 'navigation', 'gift nav');" do
     .gr-carousel__nav-icon
       =embedded_svg('icon-caret-right', class: "gr-carousel__nav--caret-right")
     .gr-carousel__nav-inner
