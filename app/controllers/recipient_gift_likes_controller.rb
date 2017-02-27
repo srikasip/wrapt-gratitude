@@ -21,7 +21,7 @@ class RecipientGiftLikesController < ApplicationController
   end
 
   private def recipient_gift_like_params
-    params.require(:recipient_gift_like).permit(:gift_id)
+    params.require(:recipient_gift_like).permit(:gift_id, :reason)
   end
     
 

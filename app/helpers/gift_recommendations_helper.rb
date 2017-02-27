@@ -32,6 +32,16 @@ module GiftRecommendationsHelper
     profile.gift_dislikes.to_a.detect {|dislike| dislike.gift_id == gift.id}
   end
 
+  def like_reason_label key
+    @_like_reason_labels ||= {
+      a: 'A',
+      b: 'B',
+      c: 'C',
+      d: 'D'
+    }.with_indifferent_access
+    @_like_reason_labels[key]
+  end
+
   def dislike_reason_label key
     @_dislike_reason_labels ||= {
       giftee_similar_item: "Already has this",
