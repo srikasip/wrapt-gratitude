@@ -1,1 +1,1 @@
-Rails.application.config.x.features.enable_like_reasons = false
+Rails.application.config.x.features.enable_like_reasons = true

@@ -239,12 +239,20 @@ a.liked:focus {
 .gr-carousel__dislike .dropdown-menu,
 .gr-carousel__like .dropdown-menu {
   background-color: $blue-005;
-  width: 200px;
   margin-top: 10px;
   background-clip: inherit;
   border: 0;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.10);
 }
+
+.gr-carousel__dislike .dropdown-menu {
+    width: 200px;
+}
+
+.gr-carousel__like .dropdown-menu {
+    width: 300px;
+}
+
 .gr-carousel__dislike li,
 .gr-carousel__like li {
   margin-bottom: 0;

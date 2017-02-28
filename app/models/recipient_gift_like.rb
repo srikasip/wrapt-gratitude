@@ -5,9 +5,10 @@ class RecipientGiftLike < ApplicationRecord
   validates :gift, uniqueness: {scope: :profile}
 
   enum reason: {
-    a: 0,
-    b: 1,
-    c: 2,
-    d: 3
+    maybe: 0,
+    like: 1,
+    really_like: 2,
+    already_have_it: 3,
+    would_like_more_options: 4
   }
 end

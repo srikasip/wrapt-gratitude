@@ -34,10 +34,11 @@ module ProfileRecipientReviewsHelper
 
   def like_reason_label key
     @_like_reason_labels ||= {
-      a: 'A',
-      b: 'B',
-      c: 'C',
-      d: 'D'
+      maybe: "Maybe",
+      like: "I like this",
+      really_like: "I really like this",
+      already_have_it: "Perfect but I already have it",
+      would_like_more_options: "Would like more options similar to this"
     }.with_indifferent_access
     @_like_reason_labels[key]
   end
