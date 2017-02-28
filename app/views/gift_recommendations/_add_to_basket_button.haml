@@ -2,4 +2,4 @@
 - if gift_selection.gift_id.in? @_selected_gift_ids
   = submit_tag 'ADDED TO CART', class: 'btn btn-primary btn-narrower', disabled: true
 - else
-  = submit_tag 'ADD TO CART', class: 'btn btn-primary btn-narrower'
+  = submit_tag 'ADD TO CART', class: 'btn btn-primary btn-narrower', onClick:"ga('send', 'event', 'basket', 'add to basket', '#{gift_selection.gift.title}');"

@@ -2,7 +2,7 @@
 %div.clearfix{class: css_classes[:container]}
   -# .gr-image-carousel__image-text
   .gr-image-carousel__nav-links.clearfix.pull-right
-    = link_to '#', class: 'wrapt-carousel__nav gr-image-carousel__nav prev' do
+    = link_to '#', class: 'wrapt-carousel__nav gr-image-carousel__nav prev', onClick: "ga('send', 'event', 'recommendation', 'navigation', 'picture nav');" do
       =embedded_svg('icon-caret-left', class: "gr-carousel__image-nav--caret-left")
-    = link_to '#', class: 'wrapt-carousel__nav gr-image-carousel__nav next' do
+    = link_to '#', class: 'wrapt-carousel__nav gr-image-carousel__nav next', onClick: "ga('send', 'event', 'recommendation', 'navigation', 'picture nav');" do
       =embedded_svg('icon-caret-right', class: "gr-carousel__image-nav--caret-right")

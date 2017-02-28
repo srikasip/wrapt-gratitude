@@ -1,5 +1,5 @@
 - if gift_dislike = existing_gift_dislike(gift, profile)
-  = link_to profile_gift_dislike_path(profile, gift_dislike), method: :delete, remote: true, data: {type: 'html'}, class: 'disliked' do
+  = link_to profile_gift_dislike_path(profile, gift_dislike), method: :delete, remote: true, data: {type: 'html'}, class: 'disliked', onClick: "ga('send', 'event', 'recommendation', 'like-dislike', 'remove_dislike');" do
     = embedded_svg('icon-dislike', xlink_class: 'icon-disliked-use', class: 'recommendation__icon-disliked')
     .small-02 You Disliked This
 - else
@@ -8,4 +8,4 @@
       =embedded_svg('icon-dislike', xlink_class: 'icon-dislike-use', class: 'recommendation__icon-dislike')
     %ul.dropdown-menu.dropdown-menu-right.pa1
       - GiftDislike.reasons.keys.each do |reason_key|
-        %li= link_to dislike_reason_label(reason_key), profile_gift_dislikes_path(profile), method: :post, remote: true, data: {type: 'html', params: {gift_dislike: {gift_id: gift.id, reason: reason_key}}}, class: 'gift_dislike_reason'
+        %li= link_to dislike_reason_label(reason_key), profile_gift_dislikes_path(profile), method: :post, remote: true, data: {type: 'html', params: {gift_dislike: {gift_id: gift.id, reason: reason_key}}}, class: 'gift_dislike_reason', onClick: "ga('send', 'event', 'recommendation', 'like-dislike', 'dislike - #{reason_key}');"
