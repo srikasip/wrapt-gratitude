@@ -25,7 +25,7 @@
               Science of Gifting
           %li
             - if enable_gift_basket?
-              = link_to '#', data: {behavior: 'open-gift-basket'} do
+              = link_to '#', data: {behavior: 'open-gift-basket'}, onClick: "ga('send', 'event', 'basket', 'open-close', 'open');" do
                 =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
                 Gift Basket
                 %span.gift-basket-count{"data-behavior" => "gift-basket-count", class: ('empty' if gift_basket_empty?)}

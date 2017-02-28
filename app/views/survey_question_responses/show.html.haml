@@ -14,13 +14,12 @@
 
           - if @question_response.previous_response
 
-            = link_to with_invitation_scope(profile_survey_question_path(@profile, @survey_response, @question_response.previous_response)), class: 'sqr-previous__link', data: {behavior: 'prev-question-button'} do
+            = link_to with_invitation_scope(profile_survey_question_path(@profile, @survey_response, @question_response.previous_response)), class: 'sqr-previous__link', data: {behavior: 'prev-question-button'}, onClick: "ga('send', 'event', 'survey', 'navigation', 'question back');" do
               .sqr-previous__icon
                 =embedded_svg('icon-caret-left', class: "sqr-previous__icon--caret-left")
               .sqr-previous__sudo-link
 
           = simple_form_for @question_response, url: with_invitation_scope(profile_survey_question_path(@profile, @survey_response, @question_response)), html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
-
             = render response_fields_partial, form: form, label: @question_response.survey_question.prompt_with_substitutions(@survey_response)
             .sqr-submit__container.text-right#js-sqr-submit__container
               %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}

@@ -2,7 +2,7 @@
 
 .gift-basket{data: {behavior: 'gift-basket-container', profile_id: profile.recipient_access_token, channel_name: 'RecipientGiftSelectionsChannel'}}
   .gift-basket__inner-wrap
-    = link_to "< Back to Shopping", '#', data: {behavior: 'close-gift-basket'}, class: 'gift-basket__header small'   
+    = link_to "< Back to Shopping", '#', data: {behavior: 'close-gift-basket'}, class: 'gift-basket__header small', onClick: "ga('send', 'event', 'basket', 'open-close', 'close');" 
     .gift-basket__main
       %div{data: {behavior: 'gift-basket-gifts'}}
         = render 'recipient_gift_selections/index', profile: profile
@@ -18,7 +18,7 @@
         the better the gifting gets.
       
 
-      = link_to 'SHARE IT NOW', new_profile_recipient_originated_referral_path(profile.recipient_access_token), class: 'btn btn-primary btn-full-width btn-gift-basket-submit', data: {loads_in_pjax_modal: true, behavior: 'gift-basket-submit'}
+      = link_to 'SHARE IT NOW', new_profile_recipient_originated_referral_path(profile.recipient_access_token), class: 'btn btn-primary btn-full-width btn-gift-basket-submit', data: {loads_in_pjax_modal: true, behavior: 'gift-basket-submit'}, onClick: "ga('send', 'event', 'basket', 'share with friend', 'step 1 - button');"
 
       
 
