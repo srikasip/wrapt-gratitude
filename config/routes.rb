@@ -135,6 +135,9 @@ Rails.application.routes.draw do
       resources :imports, controller: 'profile_sets/imports', only: [:new, :create]
       resource :exports, only: :create, controller: 'profile_set_exports'    
     end
+    
+    resources :reports, only: :index do
+    end
 
   end
 
