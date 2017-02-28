@@ -7,7 +7,7 @@ class HomeController < ApplicationController
       redirect_to profile_gift_recommendations_path(current_user.last_viewed_profile) and return
     end
 
-    unless current_user
+    unless current_user&.admin?
       @invitation_request = InvitationRequest.new
     end
 

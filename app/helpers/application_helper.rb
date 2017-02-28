@@ -54,6 +54,23 @@ module ApplicationHelper
     [controller_name, params[:action]]
   end
 
+  def analytics_gifter_id
+    gift_basket_profile&.owner_id
+  end
+
+  def analytics_profile_id
+    gift_basket_profile&.id
+  end
+
+  def analytics_role
+    case current_user
+    when nil then 'guest'
+    when ->(u) { u.admin? } then 'admin'
+    when ->(u) { u.unmoderated_testing_platform? } then 'tester-loop11'
+    when ->(u) { !u.unmoderated_testing_platform } then 'tester'
+    end
+  end
+
 
 
 end

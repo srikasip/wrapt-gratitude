@@ -79,4 +79,5 @@ module ProfileRecipientReviewsHelper
     count.blank? || count == 0
   end
 
+
 end
