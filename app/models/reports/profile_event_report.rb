@@ -1,59 +1,88 @@
 module Reports
   class ProfileEventReport
-    attr_reader :begin_date, :end_date
+    attr_reader :begin_date, :end_date,
+      :preloaded_questions, :preloaded_profiles,
+      :sorted_profile_ids, :events
     
     def initialize(params)
       @begin_date = params[:begin_date]
       @end_date = params[:end_date]
+      @preloaded_questions = {}
+      @preloaded_profiles = {}
+      @sorted_profile_ids = []
+      @events = {}
     end
     
-    def profile_ids
-      @_profile_ids || load_profile_ids
+    def load_events
+      @events = {}
+      
+      load_profile_created_events
+      load_question_answered_events
+      load_survey_completed_events
+      
+      sort_events
+      sort_profile_ids
     end
     
-    def profiles
-      @_profiles || load_profiles
+    def preload_models
+      preload_profiles
+      preload_questions
     end
     
-    def created_profiles
-      @_created_profiles || load_created_profiles
+    protected
+    
+    def add_event(profile_id, type, ts, params = {})
+      profile_events = (@events[profile_id] ||= [])
+      profile_events << params.merge({type: type, ts: ts})
+      params
     end
     
-    def profile_created?(profile)
-      profiles_created.include?(profile)
-    end
-    
-    def profile_questions
-      @_profile_questions || load_profile_questions
-    end
-    
-    def completed_surveys
-      @_completed_surveys || load_completed_surveys
-    end
-    
-    def load_profiles
-      @_profiles = {}
-      Profile.preload(:owner).where(id: profile_ids).each do |profile|
-        @_profiles[profile.id] = profile
+    def sort_events
+      events.values.each do |profile_events|
+        profile_events.sort! do |a, b|
+          b[:ts] <=> a[:ts]
+        end
       end
-      @_profiles
     end
     
-    def load_profile_ids
-      (created_profiles.keys + profile_questions.keys + completed_surveys.keys).uniq
+    def sort_profile_ids
+      @sorted_profile_ids = events.keys.sort do |a, b|
+        events[b].first[:ts] <=> events[a].first[:ts]
+      end
     end
     
-    def load_created_profiles
-      @_created_profiles = {}
+    def preload_profiles
+      @preloaded_profiles = {}
+      ids = events.keys
+      if ids.any?
+        profiles = Profile.preload(:owner).where(id: ids)
+        profiles.each do |profile|
+          @preloaded_profiles[profile.id] = profile 
+        end
+      end
+      @preloaded_profiles
+    end
+
+    def preload_questions
+      @preloaded_questions = {}
+      ids = events.values.flatten.map{|e| e[:question_id]}.compact.uniq
+      if ids.any?
+        questions = SurveyQuestion.preload(:survey).where(id: ids)
+        questions.each do |question|
+          @preloaded_questions[question.id] = question 
+        end
+      end
+      @preloaded_questions
+    end
+
+    def load_profile_created_events
       sql = %{select id, created_at from profiles where created_at #{date_range_sql}}
       Profile.connection.select_rows(sql).each do |row|
-        @_created_profiles[row[0].to_i] = {ts: row[1].to_time}
+        add_event(row[0].to_i, 'profile_created', row[1].to_time)
       end
-      @_created_profiles
     end
-    
-    def load_profile_questions
-      @_profile_questions = {}
+
+    def load_question_answered_events
       sql = %{
         select profile_id, survey_question_id, ts
         from (
@@ -66,22 +95,16 @@ module Reports
         where rn = 1
       }
       Profile.connection.select_rows(sql).each do |row|
-        @_profile_questions[row[0].to_i] = {ts: row[2].to_time, last_question_id: row[1].to_i}
+        add_event(row[0].to_i, 'question_answered', row[2].to_time, question_id: row[1].to_i)
       end
-      @_profile_questions
     end
-  
-  
-    def load_completed_surveys
-      @_completed_surveys = {}
+
+    def load_survey_completed_events
       sql = %{select profile_id, completed_at from survey_responses where completed_at #{date_range_sql}}
       Profile.connection.select_rows(sql).each do |row|
-        @_completed_surveys[row[0].to_i] = {ts: row[1].to_time}
+        add_event(row[0].to_i, 'survey_completed', row[1].to_time)
       end
-      @_completed_surveys
     end
-    
-    protected
     
     def date_range_sql
       "between '#{Profile.connection.quoted_date(begin_date)}' and '#{Profile.connection.quoted_date(end_date)}'"
