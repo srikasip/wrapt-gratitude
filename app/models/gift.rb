@@ -55,7 +55,11 @@ class Gift < ApplicationRecord
 
   def cost
     if calculate_cost_from_products?
-      products.sum(:wrapt_cost)
+      if products.loaded?
+        products.reduce(0){|sum, product| sum + product.wrapt_cost}
+      else
+        products.sum(:wrapt_cost)
+      end
     else
       super
     end
@@ -63,7 +67,11 @@ class Gift < ApplicationRecord
 
   def selling_price
     if calculate_price_from_products?
-      products.sum(:price)
+      if products.loaded?
+        products.reduce(0){|sum, product| sum + product.price}
+      else
+        products.sum(:price)
+      end
     else
       super
     end

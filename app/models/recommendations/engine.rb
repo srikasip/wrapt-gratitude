@@ -70,10 +70,18 @@ module Recommendations
         generate_random_recommendations(10 * (MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length))
         apply_filters
         remove_similar_recommendations
+
+        # are we still short?
+        if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
+          # try again and allow similar this time
+          generate_random_recommendations(10 * (MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length))
+          apply_filters
+        end
         
         # are we still short?
         if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
-          generate_random_recommendations(MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length)
+          # fill the rest with purely random
+          #generate_random_recommendations(MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length)
         elsif @recommendations.length > MIN_NUMBER_OF_RECOMMENDATIONS
           @recommendations = @recommendations.take(MIN_NUMBER_OF_RECOMMENDATIONS)
         end
