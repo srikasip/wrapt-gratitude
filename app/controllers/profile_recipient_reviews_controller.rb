@@ -7,7 +7,7 @@ class ProfileRecipientReviewsController < ApplicationController
   helper CarouselHelper
 
   def show
-    @gift_recommendations = @profile.gift_recommendations.limit(GIFT_RECOMMENDATION_LIMIT)
+    @gift_recommendations = @profile.gift_recommendations_with_limit(GIFT_RECOMMENDATION_LIMIT)
     @profile.update_attribute :recipient_reviewed, true
   end
 

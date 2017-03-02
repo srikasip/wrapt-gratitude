@@ -28,6 +28,10 @@ class Gift < ApplicationRecord
   def available?
     date_available <= Date.today && date_discontinued >= Date.today
   end
+  
+  def experience?
+    product_subcategory.wrapt_sku_code == ProductCategory::EXPERIENCE_GIFT_CODE
+  end
 
   def availability_string
     if available?

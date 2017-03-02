@@ -36,7 +36,7 @@ class GiftRecommendationsController < ApplicationController
   end
 
   def load_recommendations
-    @gift_recommendations = @profile.gift_recommendations.limit(GIFT_RECOMMENDATION_LIMIT)
+    @gift_recommendations = @profile.gift_recommendations_with_limit(GIFT_RECOMMENDATION_LIMIT)
   end
 
 end

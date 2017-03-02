@@ -21,7 +21,7 @@ module Recommendations
     MIN_NUMBER_OF_RECOMMENDATIONS = 12
     RECOMMENDATION_SCORE_THRESHOLD = 5.0
     CATEGORY_LIMIT = 2
-    PERCENT_RANDOM = 20.0
+    MIN_RANDOM = 2
     RANDOM_SCORE = 0.0
     FEATURED_SCORE = 0.1
 
@@ -63,7 +63,7 @@ module Recommendations
       apply_filters
       remove_similar_recommendations
       
-      @recommendations = @recommendations.take((((100.0 - PERCENT_RANDOM) / 100.0) * MIN_NUMBER_OF_RECOMMENDATIONS).round)
+      @recommendations = @recommendations.take(MIN_NUMBER_OF_RECOMMENDATIONS - MIN_RANDOM)
       
       # are we short?
       if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
