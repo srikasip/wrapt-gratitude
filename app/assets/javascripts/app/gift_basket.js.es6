@@ -1,13 +1,16 @@
 App.GiftBasket = class GiftBasket {
-  constructor() {
+  constructor(options = {}) {
     this.container = $('[data-behavior~=gift-basket-container]')[0];
     this.overlay = $('[data-behavior~=gift-basket-overlay]')[0];
     this.profile_id = this.container.getAttribute('data-profile-id')
+    this.channel_name = this.container.getAttribute('data-channel-name')
     this.gift_list = $(this.container).find('[data-behavior~=gift-basket-gifts]')[0]
     this.count_badge = $('[data-behavior~=gift-basket-count]')[0]
+    this.channel = options.channel;
     this.handleOpenLinks();
     this.handleCloseLinks();
     this.subscribeToGiftSelectionsChannel()
+    this.handleSubmitButtonClick();
     App.giftBasketInstance = this;
   }
 
@@ -42,7 +45,7 @@ App.GiftBasket = class GiftBasket {
 
   subscribeToGiftSelectionsChannel() {
     App.gift_selections_subscription = App.cable.subscriptions.create({
-      channel: "GiftSelectionsChannel",
+      channel: this.channel_name,
       profile_id: this.profile_id
       },
       {
@@ -71,6 +74,13 @@ App.GiftBasket = class GiftBasket {
     } else {
       $(this.count_badge).addClass('empty')
     }
+  }
+
+  handleSubmitButtonClick() {
+    $(this.container).find('[data-behavior~=gift-basket-submit]').on('click', (evt) => {
+      this.close();
+      return true;
+    })
   }
 
 

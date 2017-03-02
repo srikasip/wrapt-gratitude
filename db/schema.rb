@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 20170302150531) do
 
   # These are extensions that must be enabled in order to support this database
@@ -62,6 +63,16 @@ ActiveRecord::Schema.define(version: 20170302150531) do
     t.index ["gift_id"], name: "index_gift_images_on_gift_id", using: :btree
     t.index ["primary"], name: "index_gift_images_on_primary", using: :btree
     t.index ["product_image_id"], name: "index_gift_images_on_product_image_id", using: :btree
+  end
+
+  create_table "gift_likes", force: :cascade do |t|
+    t.integer  "gift_id"
+    t.integer  "profile_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "reason"
+    t.index ["gift_id"], name: "index_gift_likes_on_gift_id", using: :btree
+    t.index ["profile_id"], name: "index_gift_likes_on_profile_id", using: :btree
   end
 
   create_table "gift_products", force: :cascade do |t|
@@ -132,6 +143,7 @@ ActiveRecord::Schema.define(version: 20170302150531) do
     t.datetime "updated_at",      null: false
     t.integer  "invited_user_id"
     t.datetime "invited_at"
+    t.string   "how_found"
     t.index ["invited_user_id"], name: "index_invitation_requests_on_invited_user_id", using: :btree
   end
 
@@ -235,6 +247,37 @@ ActiveRecord::Schema.define(version: 20170302150531) do
     t.boolean  "recommendations_in_progress",  default: false, null: false
     t.datetime "recommendations_generated_at"
     t.index ["created_at"], name: "index_profiles_on_created_at", using: :btree
+    t.string   "recipient_access_token"
+    t.boolean  "recipient_reviewed",           default: false, null: false
+  end
+
+  create_table "recipient_gift_dislikes", force: :cascade do |t|
+    t.integer  "gift_id"
+    t.integer  "profile_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "reason"
+    t.index ["gift_id"], name: "index_recipient_gift_dislikes_on_gift_id", using: :btree
+    t.index ["profile_id"], name: "index_recipient_gift_dislikes_on_profile_id", using: :btree
+  end
+
+  create_table "recipient_gift_likes", force: :cascade do |t|
+    t.integer  "profile_id"
+    t.integer  "gift_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "reason"
+    t.index ["gift_id"], name: "index_recipient_gift_likes_on_gift_id", using: :btree
+    t.index ["profile_id"], name: "index_recipient_gift_likes_on_profile_id", using: :btree
+  end
+
+  create_table "recipient_gift_selections", force: :cascade do |t|
+    t.integer  "profile_id"
+    t.integer  "gift_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gift_id"], name: "index_recipient_gift_selections_on_gift_id", using: :btree
+    t.index ["profile_id"], name: "index_recipient_gift_selections_on_profile_id", using: :btree
   end
 
   create_table "survey_question_options", force: :cascade do |t|
@@ -295,6 +338,7 @@ ActiveRecord::Schema.define(version: 20170302150531) do
     t.boolean  "yes_no_display",               default: false, null: false
     t.text     "placeholder_text"
     t.boolean  "use_response_as_relationship", default: false, null: false
+    t.text     "hint_text"
     t.boolean  "price_filter",                 default: false
     t.boolean  "category_filter",              default: false
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
@@ -400,29 +444,8 @@ ActiveRecord::Schema.define(version: 20170302150531) do
     t.index ["survey_id"], name: "index_trait_training_sets_on_survey_id", using: :btree
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "email",                                           null: false
-    t.string   "crypted_password"
-    t.string   "salt"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "remember_me_token"
-    t.datetime "remember_me_token_expires_at"
-    t.string   "reset_password_token"
-    t.datetime "reset_password_token_expires_at"
-    t.datetime "reset_password_email_sent_at"
-    t.boolean  "admin",                           default: false, null: false
-    t.string   "activation_state"
-    t.string   "activation_token"
-    t.datetime "activation_token_expires_at"
-    t.integer  "last_viewed_profile_id"
-    t.index ["activation_token"], name: "index_users_on_activation_token", using: :btree
-    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
-    t.index ["remember_me_token"], name: "index_users_on_remember_me_token", using: :btree
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
-  end
+# Could not dump table "users" because of following StandardError
+#   Unknown type 'user_source' for column 'source'
 
   create_table "vendors", force: :cascade do |t|
     t.string   "name"
@@ -446,6 +469,8 @@ ActiveRecord::Schema.define(version: 20170302150531) do
   add_foreign_key "gift_dislikes", "profiles"
   add_foreign_key "gift_images", "gifts"
   add_foreign_key "gift_images", "product_images"
+  add_foreign_key "gift_likes", "gifts"
+  add_foreign_key "gift_likes", "profiles"
   add_foreign_key "gift_products", "gifts"
   add_foreign_key "gift_products", "products"
   add_foreign_key "gift_question_impacts", "gifts"

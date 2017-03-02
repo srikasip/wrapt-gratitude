@@ -6,7 +6,7 @@
           .navbar-brand{class: ("active" if active_top_nav_section == 'home_pages')}
             = link_to root_path do
               %span Wrapt
-              =embedded_svg('wrapt-logo', class: "navbar-brand__icon-wrapt-logo")
+              =embedded_svg('wrapt-logo-tm', class: "navbar-brand__icon-wrapt-logo")
         
         %ul.nav.navbar-nav.navbar-right
           - if current_user && current_user.active?

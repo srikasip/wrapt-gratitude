@@ -1,0 +1,14 @@
+
+%h1= "Confirm #{@profile.name}'s Email Address"
+
+%p.lead.tan-002
+  We will invite her to Wrapt
+  =succeed "," do
+    %sup.trademark
+    &#8482;
+  get her feedback on our recommendations and reveal the selection you made.
+
+= simple_form_for @profile, url: profile_giftee_invitations_path(@profile), data: {submits_to_pjax_modal: true}, method: :post do |form|
+  = form.input :email, label: 'Email Address'
+
+  = form.submit "Send Email", class: 'btn btn-primary btn-full-width'

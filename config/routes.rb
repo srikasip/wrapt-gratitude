@@ -24,12 +24,18 @@ Rails.application.routes.draw do
   resources :invitations, only: :show, concerns: :profile_builder
 
   resources :profiles, only: :none do
-    resources :gift_recommendations do
-      resource :gift_dislike, only: [:create, :destroy]
-    end
+    resources :gift_recommendations
     resources :gift_selections, only: [:create, :destroy]
-    resource :checkout, only: :create, controller: 'profile_checkouts'
+    resources :giftee_invitations, only: [:new, :create]
+    resources :gift_likes, only: [:create, :destroy]
+    resources :gift_dislikes, only: [:create, :destroy]
+    resources :recipient_gift_likes, only: [:create, :destroy]
+    resources :recipient_gift_dislikes, only: [:create, :destroy]
+    resources :recipient_gift_selections, only: [:create, :destroy]
+    resources :recipient_originated_referrals, only: [:new, :create]
   end
+
+  resources :profile_recipient_reviews, only: :show
 
   #####################################################
 

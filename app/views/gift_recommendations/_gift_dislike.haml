@@ -1,15 +1,11 @@
-- gr = gift_recommendation
-- if gr.disliked?
-  = link_to profile_gift_recommendation_gift_dislike_path(profile, gr), method: :delete, remote: true, class: 'disliked' do 
-    =embedded_svg('icon-dislike', xlink_class: 'icon-disliked-use', class: 'recommendation__icon-disliked')
+- if gift_dislike = existing_gift_dislike(gift, profile)
+  = link_to profile_gift_dislike_path(profile, gift_dislike), method: :delete, remote: true, data: {type: 'html'}, class: 'disliked' do
+    = embedded_svg('icon-dislike', xlink_class: 'icon-disliked-use', class: 'recommendation__icon-disliked')
     .small-02 You Disliked This
 - else
   .btn-group
     = link_to '#', class: 'dropdown-toggle', data: {toggle: 'dropdown'} do
       =embedded_svg('icon-dislike', xlink_class: 'icon-dislike-use', class: 'recommendation__icon-dislike')
     %ul.dropdown-menu.dropdown-menu-right.pa1
-      %li
-        = simple_form_for gr.gift_dislike, url: profile_gift_recommendation_gift_dislike_path(profile, gr), namespace: "gr-#{gr.id}", data: {behavior: 'dislike-form'}, html: {class: 'gr-dislike__form'}, remote: true do |f|
-          - keys = GiftDislike.reasons.keys
-          - collection = keys.map{|key| [gr.gift_dislike.display_reason(key), key]}
-          = f.input :reason, collection: collection, as: :radio_buttons, input_html: {data: {behavior: 'dislike-reason'}}, label: false
+      - GiftDislike.reasons.keys.each do |reason_key|
+        %li= link_to dislike_reason_label(reason_key), profile_gift_dislikes_path(profile), method: :post, remote: true, data: {type: 'html', params: {gift_dislike: {gift_id: gift.id, reason: reason_key}}}, class: 'gift_dislike_reason'

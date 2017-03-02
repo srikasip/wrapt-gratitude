@@ -13,6 +13,8 @@
     = form_for  [:admin, @user_search], url: admin_users_path, html: { method: 'GET', class: 'form-inline' } do |form|
       .form-group
         = form.search_field :keyword, placeholder: 'Name or email', class: 'form-control', style: 'min-width: 300px;'
+        = form.collection_select :source, user_sources, :first, :last, {prompt: 'Source', include_blank: @user_search.source.present?}, class: 'form-control'
+        = form.collection_select :beta_round, beta_rounds, :first, :last, {prompt: 'Beta Round', include_blank: @user_search.beta_round.present?}, class: 'form-control'
         %button.btn.btn-primary
           %i.glyphicon.glyphicon-search
           Search
@@ -27,7 +29,10 @@
           %th Email
           %th Access
           %th Account Status
-          %th Invitation Valid Until
+          %th Invitation Expires
+          %th Source
+          %th How Found
+          %th Beta Round
           %th
 
       %tbody
@@ -38,6 +43,9 @@
             %td= user.admin? ? 'Admin' : 'Regular'
             %td= user.active? ? 'Active' : 'Pending Confirmation'
             %td= user.activation_token_expires_at&.strftime("%-m/%-d/%Y")
+            %td= user_sources[user.source]
+            %td= user.invitation_request_humanized_how_found
+            %td= beta_rounds[user.beta_round]
             %td
               - unless user.active?
                 = link_to 'Resend Invitation', resend_invitation_admin_user_path(user, context_params), class: 'btn btn-default btn-xs', method: :post

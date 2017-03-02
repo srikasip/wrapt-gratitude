@@ -104,7 +104,11 @@
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
 }
-
+a.wrapt-carousel__nav:hover,
+.wrapt-carousel__nav:focus,
+.wrapt-carousel__nav:active {
+  background: none;
+}
 
 
 
