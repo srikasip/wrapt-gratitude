@@ -55,22 +55,22 @@
                   Last question answered:
                   - question = @report.preloaded_questions[event[:question_id]]
                   - if question.present?
-                    '#{truncate(question.prompt, length: 40)}'
+                    '#{truncate(question.prompt, length: 80)}'
                 - elsif event[:type] == 'gift_selected' 
                   Gift added to basket:
                   - gift = @report.preloaded_gifts[event[:gift_id]]
                   - if gift.present?
-                    '#{truncate(gift.title, length: 40)}' (#{gift.wrapt_sku})
+                    '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
                 - elsif event[:type] == 'gift_liked' 
                   Liked gift:
                   - gift = @report.preloaded_gifts[event[:gift_id]]
                   - if gift.present?
-                    '#{truncate(gift.title, length: 40)}' (#{gift.wrapt_sku})
+                    '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
                 - elsif event[:type] == 'gift_disliked' 
                   Disliked gift:
                   - gift = @report.preloaded_gifts[event[:gift_id]]
                   - if gift.present?
-                    '#{truncate(gift.title, length: 40)}' (#{gift.wrapt_sku})
+                    '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
                 - elsif event[:type] == 'recipient_invited' 
                   Recipient invited
                 - else
