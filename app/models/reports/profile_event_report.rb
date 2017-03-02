@@ -168,9 +168,11 @@ module Reports
     end
     
     def load_gift_disliked_events
+      reason_lookup = GiftDislike.reasons.invert
       sql = %{select profile_id, created_at, gift_id, reason from gift_dislikes where created_at #{date_range_sql}}
       Profile.connection.select_rows(sql).each do |row|
-        add_event(row[0].to_i, 'gift_disliked', row[1].to_time, {gift_id: row[2].to_i, reason: row[3].to_i})
+        reason = reason_lookup[row[3].to_i] || ''
+        add_event(row[0].to_i, 'gift_disliked', row[1].to_time, {gift_id: row[2].to_i, reason: reason})
       end
     end
     

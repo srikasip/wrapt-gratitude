@@ -1,5 +1,7 @@
 module Admin
   class ReportsController < BaseController
+    helper :gift_recommendations
+    
     def index
       @weeks_ago = params[:weeks_ago].to_i
       @begin_date = @weeks_ago.weeks.ago.beginning_of_week

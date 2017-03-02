@@ -71,6 +71,9 @@
                   - gift = @report.preloaded_gifts[event[:gift_id]]
                   - if gift.present?
                     '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
+                  - reason_description = dislike_reason_label(event[:reason])
+                  - if reason_description.present?
+                    reason: #{reason_description}
                 - elsif event[:type] == 'recipient_invited' 
                   Recipient invited
                 - else
