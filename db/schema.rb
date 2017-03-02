@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170217135548) do
+ActiveRecord::Schema.define(version: 20170302150531) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,9 +38,11 @@ ActiveRecord::Schema.define(version: 20170217135548) do
   end
 
   create_table "gift_dislikes", force: :cascade do |t|
-    t.integer "profile_id"
-    t.integer "gift_id"
-    t.integer "reason"
+    t.integer  "profile_id"
+    t.integer  "gift_id"
+    t.integer  "reason"
+    t.datetime "created_at"
+    t.index ["created_at"], name: "index_gift_dislikes_on_created_at", using: :btree
     t.index ["gift_id"], name: "index_gift_dislikes_on_gift_id", using: :btree
     t.index ["profile_id"], name: "index_gift_dislikes_on_profile_id", using: :btree
   end
@@ -99,6 +101,7 @@ ActiveRecord::Schema.define(version: 20170217135548) do
     t.integer  "gift_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_gift_selections_on_created_at", using: :btree
     t.index ["gift_id"], name: "index_gift_selections_on_gift_id", using: :btree
     t.index ["profile_id"], name: "index_gift_selections_on_profile_id", using: :btree
   end
@@ -231,6 +234,7 @@ ActiveRecord::Schema.define(version: 20170217135548) do
     t.string   "relationship"
     t.boolean  "recommendations_in_progress",  default: false, null: false
     t.datetime "recommendations_generated_at"
+    t.index ["created_at"], name: "index_profiles_on_created_at", using: :btree
   end
 
   create_table "survey_question_options", force: :cascade do |t|
@@ -266,6 +270,7 @@ ActiveRecord::Schema.define(version: 20170217135548) do
     t.text     "other_option_text"
     t.string   "survey_response_type", null: false
     t.datetime "answered_at"
+    t.index ["answered_at"], name: "index_survey_question_responses_on_answered_at", using: :btree
     t.index ["survey_question_id"], name: "index_survey_question_responses_on_survey_question_id", using: :btree
     t.index ["survey_response_id"], name: "index_question_response_on_survey_response_id", using: :btree
   end
@@ -314,6 +319,7 @@ ActiveRecord::Schema.define(version: 20170217135548) do
     t.integer  "profile_id"
     t.integer  "survey_id"
     t.datetime "completed_at"
+    t.index ["completed_at"], name: "index_survey_responses_on_completed_at", using: :btree
     t.index ["profile_id"], name: "index_survey_responses_on_profile_id", using: :btree
     t.index ["survey_id"], name: "index_survey_responses_on_survey_id", using: :btree
   end

@@ -6,6 +6,7 @@ module Admin
       @end_date = @weeks_ago.weeks.ago.end_of_week
       @report = Reports::ProfileEventReport.new(begin_date: @begin_date, end_date: @end_date)
       @report.load_events
+      @report.generate_stats
       @report.preload_models
     end
   end

@@ -1,16 +1,18 @@
 module Reports
   class ProfileEventReport
     attr_reader :begin_date, :end_date,
-      :preloaded_questions, :preloaded_profiles,
-      :sorted_profile_ids, :events
+      :preloaded_questions, :preloaded_profiles, :preloaded_gifts,
+      :sorted_profile_ids, :events, :stats
     
     def initialize(params)
       @begin_date = params[:begin_date]
       @end_date = params[:end_date]
       @preloaded_questions = {}
       @preloaded_profiles = {}
+      @preloaded_gifts = {}
       @sorted_profile_ids = []
       @events = {}
+      @stats = {}
     end
     
     def load_events
@@ -19,14 +21,39 @@ module Reports
       load_profile_created_events
       load_question_answered_events
       load_survey_completed_events
+      load_gift_selected_events
+      load_gift_disliked_events
       
       sort_events
       sort_profile_ids
     end
     
+    def generate_stats
+      @stats = {
+        profiles_created: {count: 0},
+        surveys_completed: {count: 0},
+        gifts_selected: {count: 0},
+        gifts_disliked: {count: 0},
+      }
+      events.values.flatten.each do |event|
+        case event[:type]
+        when 'profile_created'
+          @stats[:profiles_created][:count] += 1
+        when 'survey_completed'
+          @stats[:surveys_completed][:count] += 1
+        when 'gift_selected'
+          @stats[:gifts_selected][:count] += 1
+        when 'gift_disliked'
+          @stats[:gifts_disliked][:count] += 1
+        end
+      end
+      @stats
+    end
+    
     def preload_models
       preload_profiles
       preload_questions
+      preload_gifts
     end
     
     protected
@@ -75,6 +102,18 @@ module Reports
       @preloaded_questions
     end
 
+    def preload_gifts
+      @preloaded_gifts = {}
+      ids = events.values.flatten.map{|e| e[:gift_id]}.compact.uniq
+      if ids.any?
+        gifts = Gift.where(id: ids)
+        gifts.each do |gift|
+          @preloaded_gifts[gift.id] = gift 
+        end
+      end
+      @preloaded_gifts
+    end
+
     def load_profile_created_events
       sql = %{select id, created_at from profiles where created_at #{date_range_sql}}
       Profile.connection.select_rows(sql).each do |row|
@@ -103,6 +142,20 @@ module Reports
       sql = %{select profile_id, completed_at from survey_responses where completed_at #{date_range_sql}}
       Profile.connection.select_rows(sql).each do |row|
         add_event(row[0].to_i, 'survey_completed', row[1].to_time)
+      end
+    end
+    
+    def load_gift_selected_events
+      sql = %{select profile_id, created_at, gift_id from gift_selections where created_at #{date_range_sql}}
+      Profile.connection.select_rows(sql).each do |row|
+        add_event(row[0].to_i, 'gift_selected', row[1].to_time, {gift_id: row[2].to_i})
+      end
+    end
+    
+    def load_gift_disliked_events
+      sql = %{select profile_id, created_at, gift_id, reason from gift_dislikes where created_at #{date_range_sql}}
+      Profile.connection.select_rows(sql).each do |row|
+        add_event(row[0].to_i, 'gift_disliked', row[1].to_time, {gift_id: row[2].to_i, reason: row[3].to_i})
       end
     end
     
