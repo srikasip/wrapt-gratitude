@@ -21,7 +21,9 @@
   .col-sm-2 Profiles Created: #{@report.stats[:profiles_created][:count]}
   .col-sm-2 Surveys Completed: #{@report.stats[:surveys_completed][:count]}
   .col-sm-2 Gifts Added to Cart: #{@report.stats[:gifts_selected][:count]}
+  .col-sm-2 Liked Gifts: #{@report.stats[:gifts_liked][:count]}
   .col-sm-2 Disliked Gifts: #{@report.stats[:gifts_disliked][:count]}
+  .col-sm-2 Recipient Invites: #{@report.stats[:recipients_invited][:count]}
 
 %hr
 %h5 Activity Details
@@ -37,6 +39,8 @@
               = profile.owner.email
               - if profile.name.present?
                 for #{profile.name}
+              - if profile.email.present?
+                #{profile.email}
           :ruby
             events = @report.events[id]
             if events.detect{|e| e[:type] == 'survey_completed'}
@@ -57,10 +61,17 @@
                   - gift = @report.preloaded_gifts[event[:gift_id]]
                   - if gift.present?
                     '#{truncate(gift.title, length: 40)}' (#{gift.wrapt_sku})
+                - if event[:type] == 'gift_liked' 
+                  Liked gift:
+                  - gift = @report.preloaded_gifts[event[:gift_id]]
+                  - if gift.present?
+                    '#{truncate(gift.title, length: 40)}' (#{gift.wrapt_sku})
                 - if event[:type] == 'gift_disliked' 
                   Disliked gift:
                   - gift = @report.preloaded_gifts[event[:gift_id]]
                   - if gift.present?
                     '#{truncate(gift.title, length: 40)}' (#{gift.wrapt_sku})
+                - if event[:type] == 'recipient_invited' 
+                  Recipient invited
                 - else
                   = event[:type].humanize

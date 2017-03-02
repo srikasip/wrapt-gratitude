@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170302150531) do
+ActiveRecord::Schema.define(version: 20170302154405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 20170302150531) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "reason"
+    t.index ["created_at"], name: "index_gift_likes_on_created_at", using: :btree
     t.index ["gift_id"], name: "index_gift_likes_on_gift_id", using: :btree
     t.index ["profile_id"], name: "index_gift_likes_on_profile_id", using: :btree
   end
@@ -247,7 +248,9 @@ ActiveRecord::Schema.define(version: 20170302150531) do
     t.datetime "recommendations_generated_at"
     t.string   "recipient_access_token"
     t.boolean  "recipient_reviewed",           default: false, null: false
+    t.datetime "recipient_invited_at"
     t.index ["created_at"], name: "index_profiles_on_created_at", using: :btree
+    t.index ["recipient_invited_at"], name: "index_profiles_on_recipient_invited_at", using: :btree
   end
 
   create_table "recipient_gift_dislikes", force: :cascade do |t|

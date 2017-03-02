@@ -22,7 +22,9 @@ module Reports
       load_question_answered_events
       load_survey_completed_events
       load_gift_selected_events
+      load_gift_liked_events
       load_gift_disliked_events
+      load_recipient_invited_events
       
       sort_events
       sort_profile_ids
@@ -33,7 +35,9 @@ module Reports
         profiles_created: {count: 0},
         surveys_completed: {count: 0},
         gifts_selected: {count: 0},
+        gifts_liked: {count: 0},
         gifts_disliked: {count: 0},
+        recipients_invited: {count: 0}
       }
       events.values.flatten.each do |event|
         case event[:type]
@@ -43,8 +47,12 @@ module Reports
           @stats[:surveys_completed][:count] += 1
         when 'gift_selected'
           @stats[:gifts_selected][:count] += 1
+        when 'gift_liked'
+          @stats[:gifts_liked][:count] += 1
         when 'gift_disliked'
           @stats[:gifts_disliked][:count] += 1
+        when 'recipient_invited'
+          @stats[:recipients_invited][:count] += 1
         end
       end
       @stats
@@ -121,6 +129,13 @@ module Reports
       end
     end
 
+    def load_recipient_invited_events
+      sql = %{select id, recipient_invited_at from profiles where recipient_invited_at #{date_range_sql}}
+      Profile.connection.select_rows(sql).each do |row|
+        add_event(row[0].to_i, 'recipient_invited', row[1].to_time)
+      end
+    end
+
     def load_question_answered_events
       sql = %{
         select profile_id, survey_question_id, ts
@@ -156,6 +171,13 @@ module Reports
       sql = %{select profile_id, created_at, gift_id, reason from gift_dislikes where created_at #{date_range_sql}}
       Profile.connection.select_rows(sql).each do |row|
         add_event(row[0].to_i, 'gift_disliked', row[1].to_time, {gift_id: row[2].to_i, reason: row[3].to_i})
+      end
+    end
+    
+    def load_gift_liked_events
+      sql = %{select profile_id, created_at, gift_id, reason from gift_likes where created_at #{date_range_sql}}
+      Profile.connection.select_rows(sql).each do |row|
+        add_event(row[0].to_i, 'gift_liked', row[1].to_time, {gift_id: row[2].to_i, reason: row[3].to_i})
       end
     end
     
