@@ -8,7 +8,8 @@
               2017 Wrapt
               %sup.trademark &#8482;
               All Rights Reserved
-            %li
-              = link_to "Privacy Policy", privacy_policy_path
-            %li
-              = link_to 'Terms & Conditions', terms_of_service_path
+            - if Rails.env.development?
+              %li
+                = link_to "Privacy Policy", privacy_policy_path
+              %li
+                = link_to 'Terms & Conditions', terms_of_service_path

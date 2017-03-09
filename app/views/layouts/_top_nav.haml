@@ -4,7 +4,8 @@
       %nav.navbar.navbar-default.navbar-static-top
         .navbar-header
           .navbar-brand{class: ("active" if active_top_nav_section == 'home_pages')}
-            = link_to root_path do
+            - home_link_url = current_user&.admin? ? root_path : '#'
+            = link_to home_link_url do
               %span Wrapt
               =embedded_svg('wrapt-logo-tm', class: "navbar-brand__icon-wrapt-logo")
         
@@ -19,10 +20,11 @@
               = link_to my_account_path do
                 =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
                 My Account
-          %li
-            = link_to science_of_gifting_path do
-              =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
-              Science of Gifting
+          - if Rails.env.development?
+            %li
+              = link_to science_of_gifting_path do
+                =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
+                Science of Gifting
           %li
             - if enable_gift_basket?
               = link_to '#', data: {behavior: 'open-gift-basket'} do
