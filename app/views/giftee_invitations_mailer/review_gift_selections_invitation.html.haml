@@ -24,7 +24,7 @@
           chose gifts for you based on answers they gave to a short quiz regarding your personality, passions and purpose.
 
         %p{style: "text-align: center; font-size: 16px; color: #444; font-weight: normal; line-height: 1.75;"}
-          He (as well as we!) would love to know what you think about these gifts he chose. 
+          They (as well as we!) would love to know what you think about these gifts they chose. 
           %br
           Would you review and mark as liked/not liked for the reasons in the pull down menu? 
         %p{style: "text-align: center; font-size: 16px; color: #444; font-weight: normal; line-height: 1.75;"}
@@ -32,4 +32,4 @@
         
         
 
-        = link_to "See what #{@profile.owner.first_name || 'he'} picked out for you", profile_recipient_review_url(@profile.recipient_access_token), style: "display: block; background-color: #ABBAD5; color: #333; text-transform: uppercase; font-size: 12px; letter-spacing: 1.4px; padding: 16px; text-align: center; text-decoration: none; line-height: 1;"
+        = link_to "See what #{@profile.owner.first_name || 'they'} picked out for you", profile_recipient_review_url(@profile.recipient_access_token), style: "display: block; background-color: #ABBAD5; color: #333; text-transform: uppercase; font-size: 12px; letter-spacing: 1.4px; padding: 16px; text-align: center; text-decoration: none; line-height: 1;"
