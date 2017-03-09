@@ -22,7 +22,6 @@
         %tr
           %th Gift
           %th
-          %th
       %tbody
         - @gifts.each do |gift|
           %tr{data: {gift_row: gift.id}}
@@ -40,7 +39,6 @@
                   Hide Questions
                   %span.dropup
                     %span.caret
-            %td
 
 
     = paginate @gifts

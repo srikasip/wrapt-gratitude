@@ -1,7 +1,6 @@
 - @gift_question_impacts.each do |gift_question_impact|
   %tr{data: {gift_question_impact_row_for_gift: gift_question_impact.gift_id}}
-    %td
-    %td
+    %td{style: 'padding-left:40px;'}
       (#{number_with_precision(gift_question_impact.question_impact.to_f, precision: 2)})
       = gift_question_impact.survey_question.prompt
       - if gift_question_impact.survey_question.code.present?
