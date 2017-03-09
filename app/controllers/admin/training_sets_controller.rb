@@ -11,7 +11,7 @@ module Admin
     # GET /training_sets/1
     # GET /training_sets/1.json
     def show
-      @gifts = Gift.all.page(params[:page]).per(50)
+      @gifts = Gift.order(:wrapt_sku).page(params[:page]).per(50)
       @gift_question_impact_gift_ids = @training_set.gift_question_impacts.pluck "DISTINCT gift_id"
     end
 

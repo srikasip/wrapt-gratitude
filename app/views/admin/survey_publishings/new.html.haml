@@ -2,7 +2,7 @@
   %p Please select a Training Set to use with this survey
   .form-inputs
     = form.input :survey_id, as: :hidden
-    = form.input :training_set_id, as: :select, collection: @survey.training_sets
+    = form.input :training_set_id, as: :select, collection: @survey.training_sets.order(created_at: :desc)
 
   .form-actions
     = form.submit 'Publish', class: 'btn btn-primary'

@@ -26,9 +26,13 @@ class Survey < ApplicationRecord
   end
 
   def publish!
-    Survey.update_all published: false
-    self.published = true
-    save validate: false
+    if !published?
+      Survey.transaction do
+        Survey.update_all published: false
+        self.published = true
+        save validate: false
+      end
+    end
   end
 
 end

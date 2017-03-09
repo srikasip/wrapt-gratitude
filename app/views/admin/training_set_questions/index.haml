@@ -1,7 +1,11 @@
 - @gift_question_impacts.each do |gift_question_impact|
   %tr{data: {gift_question_impact_row_for_gift: gift_question_impact.gift_id}}
     %td
-    %td= gift_question_impact.survey_question.prompt
+    %td
+      (#{number_with_precision(gift_question_impact.question_impact.to_f, precision: 2)})
+      = gift_question_impact.survey_question.prompt
+      - if gift_question_impact.survey_question.code.present?
+        [#{gift_question_impact.survey_question.code}]
     %td
       = link_to 'Edit Impact', edit_admin_training_set_gift_question_impact_path(@training_set, gift_question_impact), class: 'btn btn-xs btn-primary'
       = link_to 'Delete', admin_training_set_gift_question_impact_path(@training_set, gift_question_impact), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'

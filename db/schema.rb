@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170302154405) do
+ActiveRecord::Schema.define(version: 20170309155537) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -381,10 +381,12 @@ ActiveRecord::Schema.define(version: 20170302154405) do
   end
 
   create_table "surveys", force: :cascade do |t|
-    t.string  "title"
-    t.boolean "copy_in_progress", default: false, null: false
-    t.boolean "active"
-    t.boolean "published"
+    t.string   "title"
+    t.boolean  "copy_in_progress", default: false, null: false
+    t.boolean  "active"
+    t.boolean  "published"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "training_set_evaluations", force: :cascade do |t|
