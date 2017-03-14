@@ -11,7 +11,10 @@
       %h4.gift-basket__footer__heading
         Subtotal
         %span.pull-right &#8212;
-      %p.help.gift-basket__footer__text In our beta testing phase we are not fulfilling gift selections but we are asking that you send a notifcation to your Giftee telling them what you selected so we can inquire about effectiveness of our recommendations
+      %p.help.gift-basket__footer__text 
+        You can’t quite purchase those gifts yet, but soon you can!
+        %br
+        Instead, we would like you to share the email of your gift recipient so we can share the gifts that Wrapt recommended for her, as well as the ones you chose.
       
 
       = link_to 'SEND GIFT SELECTION NOTIFICATION', new_profile_giftee_invitation_path(profile), class: 'btn btn-primary btn-full-width btn-gift-basket-submit', data: {loads_in_pjax_modal: true, behavior: 'gift-basket-submit'}, onClick: "ga('send', 'event', 'basket', 'share with giftee', 'step 1 - button');"

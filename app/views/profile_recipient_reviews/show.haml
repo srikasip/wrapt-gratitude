@@ -4,7 +4,10 @@
       %h1.text-center
         = "Welcome to Wrapt<sup class='trademark'>&#8482;</sup>, #{@profile.name}!".html_safe
       %p.lead.tan-002.ph2.text-center
-        As part of our beta we're inviting gift recipients to our site to gather feedback on gift recommendations we've given to #{@profile.owner.first_name} based on their responses to questions about you.  Those recommendations are listed below.  Please review each gift and tell us if you like it or dislike it.  If you would want it as a gift - add it to your gift basket.
+        As part of our testing phase before we launch, we're inviting gift recipients to our site to share feedback on gift recommendations that we (together with #{@profile.owner.first_name}), chose for you.
+      %p.text-center.mh6
+        Those gift recommendations are listed below.  Please review each gift and tell us if you like/dislike it. If you would want it as a gift &#8212; add it to your gift basket. (We are not purchasing, but adding it to the basket says to us, “yes, I would like this!”)
+
   .row.wrapt-carousel--wrapper
     .col-xs-12
       - gifts = load_gift_recommendation_carousel_data(@gift_recommendations)

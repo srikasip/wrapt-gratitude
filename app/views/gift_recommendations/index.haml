@@ -4,7 +4,9 @@
       %h1.text-center
         = "#{@profile.name}'s Gift Recommendations"
       %p.lead.tan-002.ph2.text-center
-        ="Wrapt<sup class='trademark'>&#8482;</sup> found these #{@gift_recommendations.count} items uniquely suited to #{@profile.name} based on her personality, passions & purpose.".html_safe
+        ="Wrapt<sup class='trademark'>&#8482;</sup> found these #{@gift_recommendations.count} items uniquely suited to #{@profile.name} based on her personality, passions, & purpose.".html_safe
+      %p.text-center
+        Add those items to the cart that you would purchase. Rate the others for future occasions, we’ll keep them in your account. 
   .row.wrapt-carousel--wrapper
     .col-xs-12
       - gifts = load_gift_recommendation_carousel_data(@gift_recommendations)

@@ -7,6 +7,6 @@ class GifteeInvitationsMailer < ApplicationMailer
   #
   def review_gift_selections_invitation profile
     @profile = profile
-    mail to: @profile.email, subject: 'Someone was shopping for you on Wrapt'
+    mail to: @profile.email, subject: 'Pssst! Someone has been gift-shopping for you on Wrapt'
   end
 end
