@@ -5,7 +5,7 @@ module Admin
     # GET /surveys
     # GET /surveys.json
     def index
-      @surveys = Survey.all
+      @surveys = Survey.order(created_at: :desc, id: :desc)
     end
 
     # GET /surveys/1

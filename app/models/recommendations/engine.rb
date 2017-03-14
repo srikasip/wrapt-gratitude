@@ -21,7 +21,7 @@ module Recommendations
     MIN_NUMBER_OF_RECOMMENDATIONS = 12
     RECOMMENDATION_SCORE_THRESHOLD = 5.0
     CATEGORY_LIMIT = 2
-    PERCENT_RANDOM = 20.0
+    MIN_RANDOM = 2
     RANDOM_SCORE = 0.0
     FEATURED_SCORE = 0.1
 
@@ -63,17 +63,25 @@ module Recommendations
       apply_filters
       remove_similar_recommendations
       
-      @recommendations = @recommendations.take((((100.0 - PERCENT_RANDOM) / 100.0) * MIN_NUMBER_OF_RECOMMENDATIONS).round)
+      @recommendations = @recommendations.take(MIN_NUMBER_OF_RECOMMENDATIONS - MIN_RANDOM)
       
       # are we short?
       if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
         generate_random_recommendations(10 * (MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length))
         apply_filters
         remove_similar_recommendations
+
+        # are we still short?
+        if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
+          # try again and allow similar this time
+          generate_random_recommendations(10 * (MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length))
+          apply_filters
+        end
         
         # are we still short?
         if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
-          generate_random_recommendations(MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length)
+          # fill the rest with purely random
+          #generate_random_recommendations(MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length)
         elsif @recommendations.length > MIN_NUMBER_OF_RECOMMENDATIONS
           @recommendations = @recommendations.take(MIN_NUMBER_OF_RECOMMENDATIONS)
         end
@@ -240,7 +248,7 @@ module Recommendations
     end
     
     def experience_gifts
-      @_non_featured_random_gifts ||=
+      @_experience_gifts ||=
         Gift.preload(:product_subcategory, products: [:product_subcategory]).
         where(featured: true).
         where(product_subcategory: ProductCategory.where(wrapt_sku_code: ProductCategory::EXPERIENCE_GIFT_CODE)).

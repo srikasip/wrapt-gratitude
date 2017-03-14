@@ -8,9 +8,13 @@ class TrainingSet < ApplicationRecord
   scope :published, -> { where published: true}
 
   def publish!
-    TrainingSet.update_all published: false
-    self.published = true
-    save validate: false
+    if !published?
+      TrainingSet.transaction do
+        TrainingSet.update_all published: false
+        self.published = true
+        save validate: false
+      end
+    end
   end
 
 end

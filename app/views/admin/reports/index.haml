@@ -1,0 +1,80 @@
+.row
+  .col-sm-12
+    %h1 Reports
+
+:ruby
+  week_options = (0..10).map do |weeks_ago|
+    begin_date = weeks_ago.weeks.ago.beginning_of_week.strftime('%B %d, %Y')
+    end_date = weeks_ago.weeks.ago.end_of_week.strftime('%B %d, %Y')
+    ["#{begin_date} - #{end_date}", weeks_ago]
+  end
+
+.row
+  .col-sm-12
+    .well
+      = form_tag admin_reports_path, method: :get, class: 'form-inline' do
+        .form-group
+          %label User activity for the week of:
+          = select_tag :weeks_ago, options_for_select(week_options, @weeks_ago), onchange: "this.form.submit();"
+
+.row
+  .col-sm-2 Profiles Created: #{@report.stats[:profiles_created][:count]}
+  .col-sm-2 Surveys Completed: #{@report.stats[:surveys_completed][:count]}
+  .col-sm-2 Gifts Added to Cart: #{@report.stats[:gifts_selected][:count]}
+  .col-sm-2 Liked Gifts: #{@report.stats[:gifts_liked][:count]}
+  .col-sm-2 Disliked Gifts: #{@report.stats[:gifts_disliked][:count]}
+  .col-sm-2 Recipient Invites: #{@report.stats[:recipients_invited][:count]}
+
+%hr
+%h5 Activity Details
+.row
+  .col-sm-12
+    %table.table
+      %tbody
+        - @report.sorted_profile_ids.each do |id|
+          - profile = @report.preloaded_profiles[id]
+          - next if profile.blank?
+          %tr.active
+            %th{colspan: 3}
+              = profile.owner.email
+              - if profile.name.present?
+                for #{profile.name}
+              - if profile.email.present?
+                #{profile.email}
+          :ruby
+            events = @report.events[id]
+            if events.detect{|e| e[:type] == 'survey_completed'}
+              events.reject!{|e| e[:type] == 'question_answered'}
+            end
+          - events.each do |event|
+            %tr
+              %td
+              %td= event[:ts].strftime('%m/%d/%Y %I:%M %p')
+              %td
+                - if event[:type] == 'question_answered' 
+                  Last question answered:
+                  - question = @report.preloaded_questions[event[:question_id]]
+                  - if question.present?
+                    '#{truncate(question.prompt, length: 80)}'
+                - elsif event[:type] == 'gift_selected' 
+                  Gift added to basket:
+                  - gift = @report.preloaded_gifts[event[:gift_id]]
+                  - if gift.present?
+                    '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
+                - elsif event[:type] == 'gift_liked' 
+                  Liked gift:
+                  - gift = @report.preloaded_gifts[event[:gift_id]]
+                  - if gift.present?
+                    '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
+                - elsif event[:type] == 'gift_disliked' 
+                  Disliked gift:
+                  - gift = @report.preloaded_gifts[event[:gift_id]]
+                  - if gift.present?
+                    '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
+                  - reason_description = dislike_reason_label(event[:reason])
+                  - if reason_description.present?
+                    reason: #{reason_description}
+                - elsif event[:type] == 'recipient_invited' 
+                  Recipient invited
+                - else
+                  = event[:type].humanize

@@ -1,7 +1,7 @@
 module ProfileRecipientReviewsHelper
   
   def load_gift_recommendation_carousel_data(gift_recommendations)
-    gifts = gift_recommendations.preload(gift: [:gift_images, :primary_gift_image, :products]).map do |gr|
+    gifts = gift_recommendations.map do |gr|
       {
         slide_partial: 'gift',
         slide_locals: {gift: gr.gift, gift_recommendation: gr},

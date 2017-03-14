@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170222183417) do
+ActiveRecord::Schema.define(version: 20170309155537) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,9 +38,11 @@ ActiveRecord::Schema.define(version: 20170222183417) do
   end
 
   create_table "gift_dislikes", force: :cascade do |t|
-    t.integer "profile_id"
-    t.integer "gift_id"
-    t.integer "reason"
+    t.integer  "profile_id"
+    t.integer  "gift_id"
+    t.integer  "reason"
+    t.datetime "created_at"
+    t.index ["created_at"], name: "index_gift_dislikes_on_created_at", using: :btree
     t.index ["gift_id"], name: "index_gift_dislikes_on_gift_id", using: :btree
     t.index ["profile_id"], name: "index_gift_dislikes_on_profile_id", using: :btree
   end
@@ -68,6 +70,7 @@ ActiveRecord::Schema.define(version: 20170222183417) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "reason"
+    t.index ["created_at"], name: "index_gift_likes_on_created_at", using: :btree
     t.index ["gift_id"], name: "index_gift_likes_on_gift_id", using: :btree
     t.index ["profile_id"], name: "index_gift_likes_on_profile_id", using: :btree
   end
@@ -109,6 +112,7 @@ ActiveRecord::Schema.define(version: 20170222183417) do
     t.integer  "gift_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_gift_selections_on_created_at", using: :btree
     t.index ["gift_id"], name: "index_gift_selections_on_gift_id", using: :btree
     t.index ["profile_id"], name: "index_gift_selections_on_profile_id", using: :btree
   end
@@ -244,6 +248,9 @@ ActiveRecord::Schema.define(version: 20170222183417) do
     t.datetime "recommendations_generated_at"
     t.string   "recipient_access_token"
     t.boolean  "recipient_reviewed",           default: false, null: false
+    t.datetime "recipient_invited_at"
+    t.index ["created_at"], name: "index_profiles_on_created_at", using: :btree
+    t.index ["recipient_invited_at"], name: "index_profiles_on_recipient_invited_at", using: :btree
   end
 
   create_table "recipient_gift_dislikes", force: :cascade do |t|
@@ -308,6 +315,7 @@ ActiveRecord::Schema.define(version: 20170222183417) do
     t.text     "other_option_text"
     t.string   "survey_response_type", null: false
     t.datetime "answered_at"
+    t.index ["answered_at"], name: "index_survey_question_responses_on_answered_at", using: :btree
     t.index ["survey_question_id"], name: "index_survey_question_responses_on_survey_question_id", using: :btree
     t.index ["survey_response_id"], name: "index_question_response_on_survey_response_id", using: :btree
   end
@@ -332,7 +340,6 @@ ActiveRecord::Schema.define(version: 20170222183417) do
     t.boolean  "yes_no_display",               default: false, null: false
     t.text     "placeholder_text"
     t.boolean  "use_response_as_relationship", default: false, null: false
-    t.text     "hint_text"
     t.boolean  "price_filter",                 default: false
     t.boolean  "category_filter",              default: false
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
@@ -357,6 +364,7 @@ ActiveRecord::Schema.define(version: 20170222183417) do
     t.integer  "profile_id"
     t.integer  "survey_id"
     t.datetime "completed_at"
+    t.index ["completed_at"], name: "index_survey_responses_on_completed_at", using: :btree
     t.index ["profile_id"], name: "index_survey_responses_on_profile_id", using: :btree
     t.index ["survey_id"], name: "index_survey_responses_on_survey_id", using: :btree
   end
@@ -373,10 +381,12 @@ ActiveRecord::Schema.define(version: 20170222183417) do
   end
 
   create_table "surveys", force: :cascade do |t|
-    t.string  "title"
-    t.boolean "copy_in_progress", default: false, null: false
-    t.boolean "active"
-    t.boolean "published"
+    t.string   "title"
+    t.boolean  "copy_in_progress", default: false, null: false
+    t.boolean  "active"
+    t.boolean  "published"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "training_set_evaluations", force: :cascade do |t|

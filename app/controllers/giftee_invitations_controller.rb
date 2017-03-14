@@ -8,7 +8,9 @@ class GifteeInvitationsController < ApplicationController
   end
 
   def create
-    if @profile.update profile_params
+    @profile.attributes = profile_params
+    @profile.recipient_invited_at = Time.now
+    if @profile.save
       GifteeInvitationsMailer.review_gift_selections_invitation(@profile).deliver_later
       render :create
     else

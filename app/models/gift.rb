@@ -28,6 +28,10 @@ class Gift < ApplicationRecord
   def available?
     date_available <= Date.today && date_discontinued >= Date.today
   end
+  
+  def experience?
+    product_subcategory.wrapt_sku_code == ProductCategory::EXPERIENCE_GIFT_CODE
+  end
 
   def availability_string
     if available?
@@ -51,7 +55,11 @@ class Gift < ApplicationRecord
 
   def cost
     if calculate_cost_from_products?
-      products.sum(:wrapt_cost)
+      if products.loaded?
+        products.reduce(0){|sum, product| sum + product.wrapt_cost.to_f}
+      else
+        products.sum(:wrapt_cost)
+      end
     else
       super
     end
@@ -59,7 +67,11 @@ class Gift < ApplicationRecord
 
   def selling_price
     if calculate_price_from_products?
-      products.sum(:price)
+      if products.loaded?
+        products.reduce(0){|sum, product| sum + product.price.to_f}
+      else
+        products.sum(:price)
+      end
     else
       super
     end
