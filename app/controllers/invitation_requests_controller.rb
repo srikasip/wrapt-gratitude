@@ -5,7 +5,7 @@ class InvitationRequestsController < ApplicationController
   def create
     @invitation_request = InvitationRequest.new invitation_request_params
     if @invitation_request.save
-      flash.notice = 'Thank you for your interest.'
+      flash.notice = 'Thank you for your interest. As soon as we\'re ready, we\'ll send you an invite to try Wrapt!'
       redirect_to root_path
     else
       render 'home/show'

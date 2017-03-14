@@ -1,0 +1,12 @@
+.alert {
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+.alert-dismissable .close {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  color: $gray-001;
+}
