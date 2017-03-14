@@ -200,14 +200,16 @@ $gr-carousel-nav__width: 82.5px;
 }
 
 .gr-carousel__dislike a.gift_dislike_reason,
-.gr-carousel__dislike a.gift_dislike_reason:hover
+.gr-carousel__like a.gift_like_reason,{
+  background-color: transparent;
+}
+.gr-carousel__dislike a.gift_dislike_reason:hover,
 .gr-carousel__dislike a.gift_dislike_reason:focus,
 .gr-carousel__dislike a.gift_dislike_reason:active,
-.gr-carousel__like a.gift_like_reason,
 .gr-carousel__like a.gift_like_reason:hover,
 .gr-carousel__like a.gift_like_reason:focus,
 .gr-carousel__like a.gift_like_reason:active {
-  background-color: transparent;
+  background-color: lighten($blue-005, 10);
 }
 a.disliked {
   background-color: $orange-003;
