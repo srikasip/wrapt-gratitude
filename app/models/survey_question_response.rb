@@ -83,6 +83,15 @@ class SurveyQuestionResponse < ApplicationRecord
     end
     met
   end
+  
+  def to_param
+    [id, survey_question.code].
+      map(&:to_s).
+      map(&:strip).
+      select(&:present?).
+      map(&:parameterize).
+      join('-')
+  end
 
   private def update_profile_relationship
     if survey_question.use_response_as_relationship &&
