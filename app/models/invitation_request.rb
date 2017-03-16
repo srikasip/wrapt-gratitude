@@ -6,7 +6,10 @@ class InvitationRequest < ApplicationRecord
   HOW_FOUNDS = {
     facebook: 'Facebook',
     twitter: 'Twitter',
-    friend: 'A friend'
+    instagram: 'Instagram',
+    linkedin: 'LinkedIn',
+    web_search: 'Web Search',
+    friend_family: 'Friend/Family'
   }.with_indifferent_access
   validates :how_found, inclusion: {in: HOW_FOUNDS.keys}, allow_nil: true
 
