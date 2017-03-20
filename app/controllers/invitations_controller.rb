@@ -13,7 +13,9 @@ class InvitationsController < ApplicationController
     false
   end
 
-  private def success_path(user)
+  private
+  
+  def success_path(user)
     if existing_profile = user.owned_profiles.first
       survey_response = existing_profile.survey_responses.first
       question_response = survey_response.last_answered_response
@@ -25,9 +27,12 @@ class InvitationsController < ApplicationController
       end
       
     else
-      return new_invitation_profile_path(params[:id])
+      return new_invitation_profile_path(params[:id], loop11_params(user))
     end
   end
   
+  def loop11_params(user)
+    {'l11_uid' => '33106', 'UserID' => user.id}
+  end
 
 end

@@ -9,6 +9,11 @@ class ApplicationController < ActionController::Base
     true
   end
 
+  def admin_login_required?
+    false
+  end
+  helper_method :admin_login_required?
+
   private def set_signed_authentication_cookie
     cookies.signed[:user_id] = current_user&.id
   end
