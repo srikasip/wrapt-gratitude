@@ -5,7 +5,7 @@ server {
 
   server_name wrapt.greenriver.com wrapt.com wrapt.us www.wrapt.us;
 
-  return 301 http://$host$request_uri;
+  return 301 http://www.wrapt.com$request_uri;
 }
 
 server {
