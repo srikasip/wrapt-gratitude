@@ -273,3 +273,10 @@ label {
 .input-wrapper--show-hide {
   color: $gray-008;
 }
+
+// home page adjustment for responsive
+.home .sqr-form label {
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+  }
+}
