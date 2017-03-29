@@ -142,3 +142,55 @@ body.hero-bg .wrapper--full-bleed__bg-03{
 .new-quiz__gift-example h4 {
   font-weight: normal;
 }
+// Home-page specific to make it look good on mobile
+body.home,
+.home .navbar-fixed-top,
+.home .navbar-fixed-bottom {
+  min-width: initial;
+}
+.home .container {
+  width: initial;
+}
+.home .hero-overlay {
+  @media (max-width: 1055px) {
+    width: 80%;
+  }
+  @media (max-width: 989px) {
+    width: 100%;
+    padding-bottom: 8px;
+  }
+  @media (max-width: 830px) {
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-right: 24px;
+  }
+  @media (max-width: 770px) {
+    margin-top: 155px; 
+    background-color: $gray-006;
+  }
+  @media (max-width: 600px) {
+    margin-top: 50px;
+  }
+}
+.home .hero-overlay h2 {
+  @media (max-width: 868px) {
+    font-size: rem(24);
+  }
+}
+.home .hero-overlay p {
+  @media (max-width: 868px) {
+    font-size: rem(16);
+  }
+}
+.home .navbar-brand {
+  @media (max-width: 560px) {
+    padding-top: 12px;
+  }
+}
+.home .hero-overrun {
+  @media (max-width: 780px) {
+    margin-top: 20px;
+  }
+}
+.home {
+  margin-bottom: 0;
+}
