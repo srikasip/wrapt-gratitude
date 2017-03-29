@@ -45,7 +45,7 @@ class PublicSurveysFileExportJob < ApplicationJob
 
   private def write_response_rows!
     row = 1
-    survey_responses.preload({profile: :owner}, question_responses: [{survey_question: :options}, :survey_question_response_options]).each do |survey_response|
+    survey_response_scope.each do |survey_response|
       survey_response.question_responses.each do |question_response|
         survey_response_name = "#{survey_response.profile.owner.email} for #{survey_response.profile.email} on #{survey_response.created_at.strftime('%F')}"
         worksheet.write row, 0, survey_response_name
@@ -65,6 +65,16 @@ class PublicSurveysFileExportJob < ApplicationJob
         row +=1
       end
     end
+  end
+  
+  private def survey_response_scope
+    t = SurveyResponse.arel_table
+    scope = survey_responses.where(t[:created_at].gt(60.days.ago))
+    scope = scope.preload(
+        {profile: :owner},
+        question_responses: [{survey_question: :options}, :survey_question_response_options]
+      )
+    scope.order(:id)
   end
   
   private def text_wrap_format
