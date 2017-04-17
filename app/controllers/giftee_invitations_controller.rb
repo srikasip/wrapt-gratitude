@@ -12,11 +12,7 @@ class GifteeInvitationsController < ApplicationController
     @profile.recipient_invited_at = Time.now
     if @profile.save
       GifteeInvitationsMailer.review_gift_selections_invitation(@profile).deliver_later
-      if current_user.unmoderated_testing_platform?
-        redirect_to funds_path
-      else
-        render :create
-      end
+      render :create
     else
       render :new
     end
