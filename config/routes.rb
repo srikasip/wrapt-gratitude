@@ -42,6 +42,10 @@ Rails.application.routes.draw do
   resources :profile_recipient_reviews, only: :show
   resources :funds, only: :index
   
+  
+  get '/profiles/survey_completion' => 'survey_response_completions#show', as: :survey_completion
+  get '/profiles/gift_recommendations' => 'gift_recommendations#index', as: :gift_recommendations
+  
 
   #####################################################
 

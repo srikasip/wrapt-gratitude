@@ -21,7 +21,9 @@ class SurveyResponseCompletionsController < ApplicationController
       end
       @survey_response.update_attribute :completed_at, Time.now
       GenerateProfileRecommendationsJob.new.perform @profile, TrainingSet.published.first
-      redirect_to profile_gift_recommendations_path(@profile)
+      # use pretty path for loop11 testing
+      redirect_to gift_recommendations_path(profile_id: @profile)
+      #redirect_to profile_gift_recommendations_path(@profile)
     else
       flash.alert = 'Oops! Looks like we need a bit more info.'
       render :show
