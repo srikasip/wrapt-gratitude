@@ -40,6 +40,8 @@ Rails.application.routes.draw do
   end
 
   resources :profile_recipient_reviews, only: :show
+  resources :funds, only: :index
+  
 
   #####################################################
 

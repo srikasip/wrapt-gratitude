@@ -1,4 +1,5 @@
 class GiftSelectionsController < ApplicationController
+  
   before_action :set_profile
 
   def create
