@@ -25,6 +25,7 @@ module Reports
       load_gift_liked_events
       load_gift_disliked_events
       load_recipient_invited_events
+      load_recommendations_generated_events
       
       sort_events
       sort_profile_ids
@@ -66,6 +67,11 @@ module Reports
     
     protected
     
+    def parse_time(ts)
+      tz = ActiveSupport::TimeZone["UTC"]
+      tz.parse(ts).localtime
+    end
+    
     def add_event(profile_id, type, ts, params = {})
       profile_events = (@events[profile_id] ||= [])
       profile_events << params.merge({type: type, ts: ts})
@@ -90,7 +96,7 @@ module Reports
       @preloaded_profiles = {}
       ids = events.keys
       if ids.any?
-        profiles = Profile.preload(:owner).where(id: ids)
+        profiles = Profile.preload(:owner, {gift_recommendations: [:gift]}).where(id: ids)
         profiles.each do |profile|
           @preloaded_profiles[profile.id] = profile 
         end
@@ -125,14 +131,14 @@ module Reports
     def load_profile_created_events
       sql = %{select id, created_at from profiles where created_at #{date_range_sql}}
       Profile.connection.select_rows(sql).each do |row|
-        add_event(row[0].to_i, 'profile_created', row[1].to_time)
+        add_event(row[0].to_i, 'profile_created', parse_time(row[1]))
       end
     end
 
     def load_recipient_invited_events
       sql = %{select id, recipient_invited_at from profiles where recipient_invited_at #{date_range_sql}}
       Profile.connection.select_rows(sql).each do |row|
-        add_event(row[0].to_i, 'recipient_invited', row[1].to_time)
+        add_event(row[0].to_i, 'recipient_invited', parse_time(row[1]))
       end
     end
 
@@ -149,21 +155,31 @@ module Reports
         where rn = 1
       }
       Profile.connection.select_rows(sql).each do |row|
-        add_event(row[0].to_i, 'question_answered', row[2].to_time, question_id: row[1].to_i)
+        add_event(row[0].to_i, 'question_answered', parse_time(row[2]), question_id: row[1].to_i)
+      end
+    end
+
+    def load_recommendations_generated_events
+      sql = %{
+        select profile_id, max(created_at) from gift_recommendations
+        where created_at #{date_range_sql} group by profile_id
+      }
+      Profile.connection.select_rows(sql).each do |row|
+        add_event(row[0].to_i, 'recommendations_generated', parse_time(row[1]))
       end
     end
 
     def load_survey_completed_events
       sql = %{select profile_id, completed_at from survey_responses where completed_at #{date_range_sql}}
       Profile.connection.select_rows(sql).each do |row|
-        add_event(row[0].to_i, 'survey_completed', row[1].to_time)
+        add_event(row[0].to_i, 'survey_completed', parse_time(row[1]))
       end
     end
     
     def load_gift_selected_events
       sql = %{select profile_id, created_at, gift_id from gift_selections where created_at #{date_range_sql}}
       Profile.connection.select_rows(sql).each do |row|
-        add_event(row[0].to_i, 'gift_selected', row[1].to_time, {gift_id: row[2].to_i})
+        add_event(row[0].to_i, 'gift_selected', parse_time(row[1]), {gift_id: row[2].to_i})
       end
     end
     
@@ -172,14 +188,16 @@ module Reports
       sql = %{select profile_id, created_at, gift_id, reason from gift_dislikes where created_at #{date_range_sql}}
       Profile.connection.select_rows(sql).each do |row|
         reason = reason_lookup[row[3].to_i] || ''
-        add_event(row[0].to_i, 'gift_disliked', row[1].to_time, {gift_id: row[2].to_i, reason: reason})
+        add_event(row[0].to_i, 'gift_disliked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
       end
     end
     
     def load_gift_liked_events
+      reason_lookup = GiftLike.reasons.invert
       sql = %{select profile_id, created_at, gift_id, reason from gift_likes where created_at #{date_range_sql}}
       Profile.connection.select_rows(sql).each do |row|
-        add_event(row[0].to_i, 'gift_liked', row[1].to_time, {gift_id: row[2].to_i, reason: row[3].to_i})
+        reason = reason_lookup[row[3].to_i] || ''
+        add_event(row[0].to_i, 'gift_liked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
       end
     end
     
