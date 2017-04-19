@@ -42,6 +42,7 @@ module ProfileRecipientReviewsHelper
     }.with_indifferent_access
     @_like_reason_labels[key]
   end
+  module_function :like_reason_label
 
   def dislike_reason_label reason_key
     @_reason_labels = {
@@ -52,6 +53,7 @@ module ProfileRecipientReviewsHelper
     }.with_indifferent_access
     @_reason_labels[reason_key]
   end
+  module_function :dislike_reason_label
 
   def enable_gift_basket?
     true    

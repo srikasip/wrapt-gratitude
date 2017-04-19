@@ -1,0 +1,34 @@
+.row
+  .col-sm-2 Profiles Created: #{@report.stats[:profiles_created]}
+  .col-sm-2 Surveys Completed: #{@report.stats[:surveys_completed]}
+  .col-sm-2 Recipient Invites: #{@report.stats[:recipients_invited]}
+
+.row
+  .col-sm-6
+    %table.table.table-bordered.table-condensed{style: 'margin-top:30px;'}
+      %tr
+        %th All Gifts
+        %td.text-align-right
+          %span.glyphicon.glyphicon-gift
+          Selected
+        %td.text-align-right
+          %span.glyphicon.glyphicon-thumbs-up
+          Liked
+        %td.text-align-right
+          %span.glyphicon.glyphicon-thumbs-down
+          Disliked
+      %tr
+        %td Gifter
+        %td.text-align-right #{@report.stats[:gifts_selected]}
+        %td.text-align-right #{@report.stats[:gifts_liked]}
+        %td.text-align-right #{@report.stats[:gifts_disliked]}
+      %tr
+        %td Recipient
+        %td.text-align-right #{@report.stats[:recipient_gifts_selected]}
+        %td.text-align-right #{@report.stats[:recipient_gifts_liked]}
+        %td.text-align-right #{@report.stats[:recipient_gifts_disliked]}
+      %tr
+        %td Both
+        %td.text-align-right #{@report.stats[:both_gifts_selected]}
+        %td.text-align-right #{@report.stats[:both_gifts_liked]}
+        %td.text-align-right #{@report.stats[:both_gifts_disliked]}

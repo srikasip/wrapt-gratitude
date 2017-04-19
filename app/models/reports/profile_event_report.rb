@@ -26,6 +26,9 @@ module Reports
       load_gift_disliked_events
       load_recipient_invited_events
       load_recommendations_generated_events
+      load_recipient_gift_liked_events
+      load_recipient_gift_disliked_events
+      load_recipient_gift_selected_events
       
       sort_events
       sort_profile_ids
@@ -33,29 +36,56 @@ module Reports
     
     def generate_stats
       @stats = {
-        profiles_created: {count: 0},
-        surveys_completed: {count: 0},
-        gifts_selected: {count: 0},
-        gifts_liked: {count: 0},
-        gifts_disliked: {count: 0},
-        recipients_invited: {count: 0}
+        profiles_created: 0,
+        surveys_completed: 0,
+        gifts_selected: 0,
+        gifts_liked: 0,
+        gifts_disliked: 0,
+        recipients_invited: 0,
+        recipient_gifts_selected: 0,
+        recipient_gifts_liked: 0,
+        recipient_gifts_disliked: 0,
+        both_gifts_selected: 0,
+        both_gifts_liked: 0,
+        both_gifts_disliked: 0,
       }
+      
+      profile_gifts = {liked: [], disliked: [], selected: []}
+      recipient_profile_gifts = {liked: [], disliked: [], selected: []}
+      
       events.values.flatten.each do |event|
         case event[:type]
         when 'profile_created'
-          @stats[:profiles_created][:count] += 1
+          @stats[:profiles_created] += 1
         when 'survey_completed'
-          @stats[:surveys_completed][:count] += 1
+          @stats[:surveys_completed] += 1
         when 'gift_selected'
-          @stats[:gifts_selected][:count] += 1
+          @stats[:gifts_selected] += 1
+          profile_gifts[:selected] << [event[:profile_id], event[:gift_id]]
         when 'gift_liked'
-          @stats[:gifts_liked][:count] += 1
+          @stats[:gifts_liked] += 1
+          profile_gifts[:liked] << [event[:profile_id], event[:gift_id]]
         when 'gift_disliked'
-          @stats[:gifts_disliked][:count] += 1
+          @stats[:gifts_disliked] += 1
+          profile_gifts[:disliked] << [event[:profile_id], event[:gift_id]]
+        when 'recipient_gift_selected'
+          @stats[:recipient_gifts_selected] += 1
+          recipient_profile_gifts[:selected] << [event[:profile_id], event[:gift_id]]
+        when 'recipient_gift_liked'
+          @stats[:recipient_gifts_liked] += 1
+          recipient_profile_gifts[:liked] << [event[:profile_id], event[:gift_id]]
+        when 'recipient_gift_disliked'
+          @stats[:gifts_disliked] += 1
+          recipient_profile_gifts[:disliked] << [event[:profile_id], event[:gift_id]]
         when 'recipient_invited'
-          @stats[:recipients_invited][:count] += 1
+          @stats[:recipients_invited] += 1
         end
       end
+      
+      @stats[:both_gifts_selected] = (profile_gifts[:selected] & recipient_profile_gifts[:selected]).size
+      @stats[:both_gifts_liked] = (profile_gifts[:liked] & recipient_profile_gifts[:liked]).size
+      @stats[:both_gifts_disliked] = (profile_gifts[:disliked] & recipient_profile_gifts[:disliked]).size
+      
       @stats
     end
     
@@ -74,7 +104,7 @@ module Reports
     
     def add_event(profile_id, type, ts, params = {})
       profile_events = (@events[profile_id] ||= [])
-      profile_events << params.merge({type: type, ts: ts})
+      profile_events << params.merge({profile_id: profile_id, type: type, ts: ts})
       params
     end
     
@@ -198,6 +228,31 @@ module Reports
       Profile.connection.select_rows(sql).each do |row|
         reason = reason_lookup[row[3].to_i] || ''
         add_event(row[0].to_i, 'gift_liked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
+      end
+    end
+
+    def load_recipient_gift_selected_events
+      sql = %{select profile_id, created_at, gift_id from recipient_gift_selections where created_at #{date_range_sql}}
+      Profile.connection.select_rows(sql).each do |row|
+        add_event(row[0].to_i, 'recipient_gift_selected', parse_time(row[1]), {gift_id: row[2].to_i})
+      end
+    end
+    
+    def load_recipient_gift_disliked_events
+      reason_lookup = RecipientGiftDislike.reasons.invert
+      sql = %{select profile_id, created_at, gift_id, reason from recipient_gift_dislikes where created_at #{date_range_sql}}
+      Profile.connection.select_rows(sql).each do |row|
+        reason = reason_lookup[row[3].to_i] || ''
+        add_event(row[0].to_i, 'recipient_gift_disliked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
+      end
+    end
+    
+    def load_recipient_gift_liked_events
+      reason_lookup = RecipientGiftLike.reasons.invert
+      sql = %{select profile_id, created_at, gift_id, reason from recipient_gift_likes where created_at #{date_range_sql}}
+      Profile.connection.select_rows(sql).each do |row|
+        reason = reason_lookup[row[3].to_i] || ''
+        add_event(row[0].to_i, 'recipient_gift_liked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
       end
     end
     
