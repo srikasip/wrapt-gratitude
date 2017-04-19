@@ -16,8 +16,6 @@
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
     = render 'layouts/favicons'
     = render 'layouts/social_tags'
-    - if Rails.env.production? && !admin_login_required?
-      = render 'layouts/loop11_script'
   %body{class: body_classes}
     -# svg include needs to be first thing in body tag
     = svg 'symbol-defs'
@@ -37,3 +35,5 @@
     = render 'pjax_modal_frame'
     = render_gift_basket if enable_gift_basket?
     = yield :page_js
+    - if Rails.env.production? && !admin_login_required?
+      = render 'layouts/loop11_script'
