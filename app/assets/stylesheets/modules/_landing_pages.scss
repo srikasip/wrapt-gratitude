@@ -47,6 +47,9 @@ body.hero-bg .wrapper--full-bleed__bg-03{
 .new-quiz__about-intro-wrapper {
   margin: 72px 0;
   width: 100%;
+  @media (max-width: $screen-xs-max) {
+    margin: 48px 0;
+  }
 }
 
 .new-quiz__about-intro-content {
@@ -55,10 +58,14 @@ body.hero-bg .wrapper--full-bleed__bg-03{
   text-align: center;
   padding-bottom: 40px;
   border-bottom: solid 2px $gray-004;
+  @media (max-width: $screen-xs-max) {
+    padding-bottom: 24px;
+    width: 90%;
+  }
 }
 .new-quiz__about-intro-content.border-dark {
   border-color: rgba(77, 76, 77, 0.2);
-  width: 668px;
+  max-width: 668px;
   padding-bottom: 23px;
 }
 
@@ -73,6 +80,9 @@ body.hero-bg .wrapper--full-bleed__bg-03{
   background-position: top left;
   padding-left: 108px;
   padding-right: 200px;
+  @media (max-width: $screen-sm-max) {
+    padding-right: 0;
+  }
 }
 
 .new-quiz__about-step.right {
@@ -80,6 +90,9 @@ body.hero-bg .wrapper--full-bleed__bg-03{
   background-position: top right;
   padding-right: 108px;
   padding-left: 200px;
+  @media (max-width: $screen-sm-max) {
+    padding-left: 0;
+  }
 }
 
 .new-quiz__about-step.step-1 {
@@ -99,44 +112,76 @@ body.hero-bg .wrapper--full-bleed__bg-03{
 
 .new-quiz__gift-examples {
   @include flexbox();
+  max-width: 1200px;
+  justify-content: space-around;
+  margin-left: auto;
+  margin-right: auto;
+  @media (min-width: $screen-sm-min) and (max-width: $screen-lg-min) {
+    width: 100%;
+  }
+  @media (max-width: $screen-xs-max) {
+    flex-direction: column;
+    max-width: 90%;
+  }
   overflow: hidden;
 }
 
 .new-quiz__gift-example {
   @include akkurat-light;
-  @include flex(1);
-  width: 32%;
-  margin-right: 2%;
+  @include flex(0);
+  flex-basis: 32%;
   &:last-child { margin-right: 0;}
   background-color: white;
   position: relative;
+  @media (max-width: $screen-xs-max) {
+    flex-direction: column;
+    max-width: initial;
+    flex-basis: 100%;
+    margin-bottom: 24px;
+  }
+  @media (min-width: $screen-lg-min) {
+    max-width: 355px;
+  }
 }
 
 .new-quiz__gift-example-image {
-  max-height: 250px;
+  position: relative;
 }
-
 .new-quiz__gift-example-image img {
   width: 100%;
 }
 
 .new-quiz__gift-example-badge {
+  // @include vertical-align(absolute);
   position: absolute;
-  top: 154px;
+  bottom: -36px;
   left: 24px;
   width: 72px;
   height: 72px;
   border-radius: 50%;
   background-color: $orange-002;
   text-align: center;
+  @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+    width: 60px;
+    height: 60px;
+    left: 18px;
+    bottom: -30px;
+  }
 }
 
 .new-quiz__gift-example-badge svg {
   @include vertical-align();
+  @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+    height: 30px;
+    width: 30px;
+  }
 }
 
 .new-quiz__gift-example-text {
-  padding: 50px 24px 42px 24px;
+  padding: 50px 24px 30px;
+  @media (min-width: $screen-sm-min) and (max-width: $screen-lg-min) {
+    padding: 40px 24px 30px;
+  }
 }
 
 .new-quiz__gift-example h4 {
