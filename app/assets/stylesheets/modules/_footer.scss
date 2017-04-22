@@ -9,14 +9,7 @@ body {
 body.modal-body {
   margin-bottom: 0;
 }
-// .footer {
-//   position: absolute;
-//   bottom: 0;
-//   height: 120px;
-//   width: 100%;
-//   margin-top: 45px;
-// }
-footer ul {
+.footer__links {
   list-style: none;
   display: block;
   text-align: center;
@@ -24,12 +17,12 @@ footer ul {
   margin-bottom: 0;
   @extend .help;
 }
-footer li {
+.footer__link-item {
   display: inline-block;
-  float: left;
+  // float: left;
   margin-right: 10px;
   margin-bottom: 0;
-  line-height: 1;
+  line-height: 1.4;
 }
 footer li:after {
   content: '\00a0|';

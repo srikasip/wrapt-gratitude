@@ -3,13 +3,13 @@
     .row
       .col-xs-12
         .table-display
-          %ul
-            %li
+          %ul.footer__links
+            %li.footer__link-item
               2017 Wrapt
               %sup.trademark &#8482;
               All Rights Reserved
             - if Rails.env.development?
-              %li
+              %li.footer__link-item
                 = link_to "Privacy Policy", privacy_policy_path
-              %li
+              %li.footer__link-item
                 = link_to 'Terms & Conditions', terms_of_service_path
