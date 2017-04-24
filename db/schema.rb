@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170309155537) do
+ActiveRecord::Schema.define(version: 20170424145625) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20170309155537) do
     t.datetime "updated_at",                                   null: false
     t.integer  "profile_set_survey_response_id"
     t.integer  "gift_id",                                      null: false
+    t.integer  "position",                       default: 0
     t.index ["gift_id"], name: "index_evaluation_recommendations_on_gift_id", using: :btree
     t.index ["profile_set_survey_response_id"], name: "eval_rec_survey_response", using: :btree
     t.index ["training_set_evaluation_id"], name: "index_evaluation_recommendations_on_training_set_evaluation_id", using: :btree
@@ -103,6 +104,7 @@ ActiveRecord::Schema.define(version: 20170309155537) do
     t.datetime "updated_at",               null: false
     t.integer  "profile_id"
     t.float    "score",      default: 0.0, null: false
+    t.integer  "position",   default: 0
     t.index ["gift_id"], name: "index_gift_recommendations_on_gift_id", using: :btree
     t.index ["profile_id"], name: "index_gift_recommendations_on_profile_id", using: :btree
   end

@@ -1,16 +1,10 @@
 module Recommendations
   class Engine
 
-    # TODO as of 8/31/16
-    # accomodate the front end survey responses
-    # accomodate multiple multiple choice questions
-    # exclude text questions
-    # tests
+    attr_reader :training_set, :response, :recommendations,
+      :response_adapter, :question_ranks, :filters
 
-    attr_reader :training_set, :response, :recommendations, :response_adapter, :question_ranks,
-      :filters
-
-    delegate :add_recommendation,
+    delegate :create_recommendation!,
       :destroy_recommendations!,
       to: :response_adapter
       
@@ -18,12 +12,16 @@ module Recommendations
 
     NEGATIVE_RANK_PENALTY = 5.0
     QUESTION_WEIGHT_BASE = 100.0
-    MIN_NUMBER_OF_RECOMMENDATIONS = 12
-    RECOMMENDATION_SCORE_THRESHOLD = 5.0
-    CATEGORY_LIMIT = 2
-    MIN_RANDOM = 2
+    MAX_RECOMMENDATIONS = 10
+    MIN_RECOMMENDATIONS = 10
     RANDOM_SCORE = 0.0
     FEATURED_SCORE = 0.1
+    EXPERIENCE_SCORE = 0.2
+    RECOMMENDATION_SCORE_THRESHOLD = 5.0
+    MAX_PER_CATEGORY = 2
+    MAX_EXPERIENCE = 1
+    MIN_EXPERIENCE = 1
+    MIN_RANDOM = 2
 
     def initialize(training_set, response = nil)
       @training_set = training_set
@@ -60,35 +58,18 @@ module Recommendations
       clear_recommendations
       
       generate_candidate_recommendations
+      generate_experience_recommendations
+      generate_featured_recommendations
+      generate_random_recommendations
+      
       apply_filters
-      remove_similar_recommendations
+      apply_max_per_category_limit
+      apply_max_experience_limit
+      apply_max_candidate_limit
+      apply_max_recommendation_limit
       
-      @recommendations = @recommendations.take(MIN_NUMBER_OF_RECOMMENDATIONS - MIN_RANDOM)
-      
-      # are we short?
-      if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
-        generate_random_recommendations(10 * (MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length))
-        apply_filters
-        remove_similar_recommendations
-
-        # are we still short?
-        if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
-          # try again and allow similar this time
-          generate_random_recommendations(10 * (MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length))
-          apply_filters
-        end
-        
-        # are we still short?
-        if @recommendations.length < MIN_NUMBER_OF_RECOMMENDATIONS
-          # fill the rest with purely random
-          #generate_random_recommendations(MIN_NUMBER_OF_RECOMMENDATIONS - @recommendations.length)
-        elsif @recommendations.length > MIN_NUMBER_OF_RECOMMENDATIONS
-          @recommendations = @recommendations.take(MIN_NUMBER_OF_RECOMMENDATIONS)
-        end
-      end
-      
-      @recommendations.sort!{|a, b| b.score <=> a.score}
-      
+      normalize_positions
+       
       @recommendations
     end
 
@@ -98,11 +79,7 @@ module Recommendations
       @_question_responses_by_question = nil
       true
     end
-    
-    def create_recommendations!
-      @recommendations.map(&:save)
-    end
-    
+       
     def recommendation_question_ranks(recommendation)
       results = question_ranks.select{|qr| qr.gift == recommendation.gift}
       results.sort!{|a, b| b.score <=> a.score}
@@ -128,40 +105,45 @@ module Recommendations
     end
     
     def apply_filters
+      selected_recommendations = @recommendations
       filters.each do |filter|
-        @recommendations = filter.apply(@recommendations)
+        selected_recommendations = filter.apply(selected_recommendations)
       end
+      rejected_recommendations = @recommendations - selected_recommendations
+      remove_recommendations(rejected_recommendations.reverse)
       @recommendations
     end
     
-    def generate_random_recommendations(count)
+    def generate_experience_recommendations
       added = []
-
-      if added.length < count
-        gift_pool = experience_gifts - @recommendations.map(&:gift)
-        # force one experience gift into the random set
-        gift_pool.sample(1).each do |gift|
-          added << add_recommendation(gift, FEATURED_SCORE)
-        end
+      experience_gifts.sample(10 * MIN_EXPERIENCE).each do |gift|
+        added << add_recommendation(gift, EXPERIENCE_SCORE)
       end
-      
-      if added.length < count
-        gift_pool = featured_random_gifts - @recommendations.map(&:gift)
-        gift_pool.sample(count - added.length).each do |gift|
-          added << add_recommendation(gift, FEATURED_SCORE)
-        end
-      end
-      
-      if added.length < count
-        gift_pool = non_featured_random_gifts - @recommendations.map(&:gift)
-        gift_pool.sample(count - added.length).each do |gift|
-          added << add_recommendation(gift, RANDOM_SCORE)
-        end
-      end
-      
-      added
+      added.compact
     end
     
+    def generate_featured_recommendations
+      added = []
+      featured_random_gifts.sample(10 * MIN_RANDOM).each do |gift|
+        added << add_recommendation(gift, FEATURED_SCORE)
+      end
+      added.compact
+    end
+    
+    def generate_random_recommendations
+      added = []
+      non_featured_random_gifts.sample(20 * MIN_RANDOM).each do |gift|
+        added << add_recommendation(gift, RANDOM_SCORE)
+      end
+      added.compact
+    end
+    
+    def normalize_positions
+      @recommendations.each_with_index do |recommendation, position|
+        recommendation.position = position
+      end
+    end
+        
     def generate_candidate_recommendations
       max_rank = 0.0
       training_set_gifts.each do |gift|
@@ -180,16 +162,73 @@ module Recommendations
       @recommendations
     end
     
-    def remove_similar_recommendations
+    def apply_max_candidate_limit
+      max_candidates = MAX_RECOMMENDATIONS - MIN_EXPERIENCE - MIN_RANDOM
+      candidate_count = 0
+      violations = @recommendations.select do |recommendation|
+        candidate_count += 1 if !recommendation.random?
+        candidate_count > max_candidates
+      end
+      remove_recommendations(violations.reverse)
+    end
+
+    def apply_max_experience_limit
+      experience_count = 0
+      violations = @recommendations.select do |recommendation|
+        experience_count += 1 if recommendation.gift.experience?
+        experience_count > MAX_EXPERIENCE
+      end
+      remove_recommendations(violations.reverse)
+    end
+    
+    def apply_max_recommendation_limit
+      # apply the hard limit
+      @recommendations = @recommendations.take(MAX_RECOMMENDATIONS)
+    end
+    
+    def apply_max_per_category_limit
       used_category_counts = {}
-      @recommendations.reject! do |recommendation|
+      violations = @recommendations.select do |recommendation|
         max_category_count = 0
         categories_by_gifts[recommendation.gift].each do |category|
           category_count = used_category_counts.fetch(category, 0.0) + 1
           max_category_count = category_count if category_count > max_category_count
           used_category_counts[category] = category_count
         end
-        max_category_count > CATEGORY_LIMIT
+        max_category_count > MAX_PER_CATEGORY
+      end
+      remove_recommendations(violations.reverse)
+    end
+    
+    def remove_recommendations(recommendations_to_remove)
+      # enforce the min recommendation limit when removing
+      max_remove_count = [@recommendations.size - MIN_RECOMMENDATIONS, 0].max
+      if recommendations_to_remove.length > max_remove_count
+        recommendations_to_remove = recommendations_to_remove.take(max_remove_count)
+      end
+      
+      # enforce the min experience limit
+      experience_count = @recommendations.select{|r| r.gift.experience?}.size
+      recommendations_to_remove = recommendations_to_remove.select do |recommendation|
+        if recommendation.gift.experience?
+          experience_count -= 1
+          experience_count > MIN_EXPERIENCE
+        else
+          true
+        end
+      end
+      
+      @recommendations -= recommendations_to_remove
+      recommendations_to_remove
+    end
+
+    def add_recommendation(gift, score = 0.0)
+      if @recommendations.detect{|r| r.gift == gift}.present?
+        nil
+      else
+        recommendation = GiftRecommendation.new(gift: gift, score: score)
+        recommendations << recommendation
+        recommendation
       end
     end
 
@@ -240,11 +279,15 @@ module Recommendations
     end
 
     def featured_random_gifts
-      @_featured_random_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).where(featured: true).order('RANDOM()').limit(50).to_a
+      @_featured_random_gifts ||=
+      Gift.preload(:product_subcategory, products: [:product_subcategory]).
+      where(featured: true).order('RANDOM()').limit(50 * MIN_RANDOM).to_a
     end
     
     def non_featured_random_gifts
-      @_non_featured_random_gifts ||= Gift.preload(:product_subcategory, products: [:product_subcategory]).where(featured: false).order('RANDOM()').limit(50).to_a
+      @_non_featured_random_gifts ||=
+      Gift.preload(:product_subcategory, products: [:product_subcategory]).
+      where(featured: false).order('RANDOM()').limit(50 * MIN_RANDOM).to_a
     end
     
     def experience_gifts
@@ -252,7 +295,7 @@ module Recommendations
         Gift.preload(:product_subcategory, products: [:product_subcategory]).
         where(featured: true).
         where(product_subcategory: ProductCategory.where(wrapt_sku_code: ProductCategory::EXPERIENCE_GIFT_CODE)).
-        order('RANDOM()').limit(50).to_a
+        order('RANDOM()').limit(50 * MIN_EXPERIENCE).to_a
     end
 
     def categories_by_gifts

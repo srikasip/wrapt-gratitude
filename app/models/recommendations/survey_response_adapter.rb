@@ -17,15 +17,11 @@ module Recommendations
       @engine = engine
     end
 
-    def add_recommendation(gift, score = 0.0)
-      recommendation = GiftRecommendation.new(
-        profile: response.profile,
-        gift: gift,
-        score: score)
-      
-      recommendations << recommendation
-      
-      recommendation
+    def create_recommendations!
+      @recommendations.each do |recommendation|
+        recommendation.profile = response.profile
+        recommendation.save
+      end
     end
 
     # Note this destroys recommendations for the entire profile

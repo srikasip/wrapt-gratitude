@@ -14,16 +14,12 @@ module Recommendations
       @engine = engine
     end
 
-    def add_recommendation(gift, score = 0.0)
-      recommendation = EvaluationRecommendation.new(
-        survey_response: response,
-        gift: gift,
-        training_set_evaluation: training_set.evaluation,
-        score: score)
-      
-      recommendations << recommendation
-      
-      recommendation
+    def create_recommendations!
+      @recommendations.each do |recommendation|
+        recommendation.survey_response = response
+        recommendation.training_set_evaluation = training_set.evaluation
+        recommendation.save
+      end
     end
 
     def destroy_recommendations!
@@ -32,6 +28,5 @@ module Recommendations
         training_set_evaluation:
         training_set.evaluation).delete_all
     end
-
   end
 end
