@@ -340,6 +340,7 @@ ActiveRecord::Schema.define(version: 20170309155537) do
     t.boolean  "yes_no_display",               default: false, null: false
     t.text     "placeholder_text"
     t.boolean  "use_response_as_relationship", default: false, null: false
+    t.text     "hint_text"
     t.boolean  "price_filter",                 default: false
     t.boolean  "category_filter",              default: false
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
