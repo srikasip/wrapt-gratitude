@@ -51,7 +51,8 @@ module Recommendations
       protected
       
       def has_category_code?(gift, codes)
-        codes.include?(gift&.product_category&.wrapt_sku_code.to_s)
+        gift_codes = gift.products.map{|p| (p.product_category&.wrapt_sku_code).to_s}
+        (codes & gift_codes).any?
       end
       
       def codes_from_params(param_name)

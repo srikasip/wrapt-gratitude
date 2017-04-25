@@ -15,7 +15,7 @@ module Recommendations
     end
 
     def create_recommendations!
-      @recommendations.each do |recommendation|
+      recommendations.each do |recommendation|
         recommendation.survey_response = response
         recommendation.training_set_evaluation = training_set.evaluation
         recommendation.save

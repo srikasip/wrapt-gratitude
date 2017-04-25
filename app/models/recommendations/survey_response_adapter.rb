@@ -18,7 +18,7 @@ module Recommendations
     end
 
     def create_recommendations!
-      @recommendations.each do |recommendation|
+      recommendations.each do |recommendation|
         recommendation.profile = response.profile
         recommendation.save
       end

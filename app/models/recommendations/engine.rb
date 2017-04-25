@@ -4,7 +4,7 @@ module Recommendations
     attr_reader :training_set, :response, :recommendations,
       :response_adapter, :question_ranks, :filters
 
-    delegate :create_recommendation!,
+    delegate :create_recommendations!,
       :destroy_recommendations!,
       to: :response_adapter
       
@@ -166,8 +166,12 @@ module Recommendations
       max_candidates = MAX_RECOMMENDATIONS - MIN_EXPERIENCE - MIN_RANDOM
       candidate_count = 0
       violations = @recommendations.select do |recommendation|
-        candidate_count += 1 if !recommendation.random?
-        candidate_count > max_candidates
+        if recommendation.random?
+          false
+        else
+          candidate_count += 1
+          candidate_count > max_candidates
+        end
       end
       remove_recommendations(violations.reverse)
     end
@@ -175,8 +179,12 @@ module Recommendations
     def apply_max_experience_limit
       experience_count = 0
       violations = @recommendations.select do |recommendation|
-        experience_count += 1 if recommendation.gift.experience?
-        experience_count > MAX_EXPERIENCE
+        if recommendation.gift.experience?
+          experience_count += 1
+          experience_count > MAX_EXPERIENCE
+        else
+          false
+        end
       end
       remove_recommendations(violations.reverse)
     end
@@ -201,18 +209,20 @@ module Recommendations
     end
     
     def remove_recommendations(recommendations_to_remove)
+
       # enforce the min recommendation limit when removing
       max_remove_count = [@recommendations.size - MIN_RECOMMENDATIONS, 0].max
       if recommendations_to_remove.length > max_remove_count
         recommendations_to_remove = recommendations_to_remove.take(max_remove_count)
       end
-      
-      # enforce the min experience limit
+
+            
+      # always enforce the min experience limit
       experience_count = @recommendations.select{|r| r.gift.experience?}.size
       recommendations_to_remove = recommendations_to_remove.select do |recommendation|
         if recommendation.gift.experience?
           experience_count -= 1
-          experience_count > MIN_EXPERIENCE
+          experience_count >= MIN_EXPERIENCE
         else
           true
         end
