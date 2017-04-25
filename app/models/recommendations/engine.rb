@@ -303,7 +303,6 @@ module Recommendations
     def experience_gifts
       @_experience_gifts ||=
         Gift.preload(:product_subcategory, products: [:product_subcategory]).
-        where(featured: true).
         where(product_subcategory: ProductCategory.where(wrapt_sku_code: ProductCategory::EXPERIENCE_GIFT_CODE)).
         order('RANDOM()').limit(50 * MIN_EXPERIENCE).to_a
     end
