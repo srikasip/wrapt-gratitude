@@ -20,8 +20,7 @@ module Admin
         flash.notice = "Sent an account invitation to #{@user.email}.  They can now be found in the main user section."
         redirect_to admin_invitation_requests_path
       else
-        flash.alert = "Sorry, we were unable to invite #{@user.email}.  Does a user with that email address already exist?"
-        render :index
+        redirect_to({action: :index}, alert: "Sorry, we were unable to invite #{@user.email}.  Does a user with that email address already exist?")
       end
     end
 
