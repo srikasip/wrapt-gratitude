@@ -2,19 +2,24 @@ class User < ApplicationRecord
   authenticates_with_sorcery!
 
   # TODO: change this to :mvp1a when the first MVP release + testing round starts
-  CURRENT_ROUND = :mvp1a
+  CURRENT_ROUND = 'mvp1a'
+  
+  SOURCES = %w{admin_invitation requested_invitation recipient_referral unmoderated_testing_platform}
+  BETA_ROUNDS = %w{pre_release_testing mvp1a}
 
   ###########################
   ### Validations
   ###########################
   
   validates :email, presence: true, uniqueness: true
-  validates :source, :beta_round, presence: true
+  validates :source, presence: true, inclusion: SOURCES
+  validates :beta_round, presence: true, inclusion: BETA_ROUNDS
 
   ###########################
   ### Callbacks
   ###########################
   before_validation :set_beta_round, on: :create
+  before_save :set_source
 
   ###########################
   ### Associations
@@ -25,22 +30,6 @@ class User < ApplicationRecord
   belongs_to :last_viewed_profile, class_name: 'Profile'
   belongs_to :recipient_referring_profile, class_name: 'Profile'
   has_one :invitation_request, foreign_key: :invited_user_id
-
-
-  ###########################
-  ### Enums
-  ###########################
-
-  enum source: {
-    admin_invitation: 'admin_invitation',
-    requested_invitation: 'requested_invitation',
-    recipient_referral: 'recipient_referral'
-  }
-
-  enum beta_round: {
-    pre_release_testing: 'pre_release_testing',
-    mvp1a: 'mvp1a'
-  }
 
   ###########################
   ### Methods
@@ -70,6 +59,12 @@ class User < ApplicationRecord
 
   private def set_beta_round
     self.beta_round = CURRENT_ROUND
+  end
+  
+  private def set_source
+    if unmoderated_testing_platform?
+      self.source = 'unmoderated_testing_platform'
+    end
   end
 
 end

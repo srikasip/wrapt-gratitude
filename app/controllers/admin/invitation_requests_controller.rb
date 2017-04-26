@@ -13,7 +13,7 @@ module Admin
       @invitation_request = InvitationRequest.find params[:id]
       @user = @invitation_request.to_user
       @user.setup_activation
-      @user.source = :requested_invitation
+      @user.source = 'requested_invitation'
       if @user.save
         @invitation_request.update invited_user: @user
         UserActivationsMailer.activation_needed_email(@user).deliver_later

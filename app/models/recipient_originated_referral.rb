@@ -14,7 +14,7 @@ class RecipientOriginatedReferral
         user = User.new
         user.email = email
         user.recipient_referring_profile = profile
-        user.source = :recipient_referral
+        user.source = 'recipient_referral'
         user.setup_activation
         if user.save
           UserActivationsMailer.activation_needed_email(user).deliver_later
