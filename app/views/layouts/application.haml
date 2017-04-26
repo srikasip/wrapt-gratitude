@@ -35,5 +35,5 @@
     = render 'pjax_modal_frame'
     = render_gift_basket if enable_gift_basket?
     = yield :page_js
-    - if Rails.env.production? && !admin_login_required?
+    - if Rails.env.production? && loop11_enabled?
       = render 'layouts/loop11_script'

@@ -10,7 +10,10 @@ class HomeController < ApplicationController
     unless current_user&.admin?
       @invitation_request = InvitationRequest.new
     end
-
+  end
+  
+  def loop11_enabled?
+    false
   end
 
   private def login_required?

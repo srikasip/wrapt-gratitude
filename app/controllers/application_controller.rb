@@ -14,6 +14,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :admin_login_required?
 
+  def loop11_enabled?
+    !admin_login_required?
+  end
+  helper_method :loop11_enabled?
+
   private def set_signed_authentication_cookie
     cookies.signed[:user_id] = current_user&.id
   end
