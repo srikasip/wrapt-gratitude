@@ -2,7 +2,7 @@ class User < ApplicationRecord
   authenticates_with_sorcery!
 
   # TODO: change this to :mvp1a when the first MVP release + testing round starts
-  CURRENT_ROUND = :pre_release_testing
+  CURRENT_ROUND = :mvp1a
 
   ###########################
   ### Validations
