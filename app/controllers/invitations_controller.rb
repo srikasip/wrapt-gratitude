@@ -32,7 +32,11 @@ class InvitationsController < ApplicationController
   end
   
   def loop11_params(user)
-    {'l11_uid' => '33106', 'UserID' => user.id}
+    if user.unmoderated_testing_platform?
+      {'l11_uid' => '33106', 'UserID' => user.id}
+    else
+      {}
+    end
   end
 
 end
