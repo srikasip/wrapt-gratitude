@@ -25,9 +25,7 @@ class SurveyQuestionResponsesController < ApplicationController
         if @question_response.next_response.present?
           redirect_to with_invitation_scope(profile_survey_question_path(@profile, @survey_response, @question_response.next_response))
         else
-          # use pretty path for loop11 testing
-          redirect_to with_invitation_scope(survey_completion_path(profile_id: @profile, survey_id: @survey_response))
-          #redirect_to with_invitation_scope(profile_survey_completion_path(@profile, @survey_response))
+          redirect_to with_invitation_scope(profile_survey_completion_path(@profile, @survey_response))
         end
       end
     else
