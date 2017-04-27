@@ -12,10 +12,9 @@ server 'wrapt.greenriver.com', user: 'ubuntu', roles: %w{app db web}, primary: t
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Secrets and any environment variables are stored in this file
-set :linked_files, fetch(:linked_files, []).push('.env.production')
+set :linked_files, fetch(:linked_files, []).push('.env.staging')
 
-set :deploy_to, '/var/www/wrapt-gratitude'
-
+set :deploy_to, '/var/www/wrapt-gratitude-staging'
 
 # role-based syntax
 # ==================

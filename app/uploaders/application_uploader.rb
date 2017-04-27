@@ -9,7 +9,7 @@ class ApplicationUploader < CarrierWave::Uploader::Base
   process :set_content_type
 
   def store_dir
-    if Rails.env.production?
+    if Rails.env.production? || Rails.env.staging?
       "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
     else
       "development-#{`whoami`.chomp}/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"

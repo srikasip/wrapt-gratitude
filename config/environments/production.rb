@@ -39,7 +39,8 @@ Rails.application.configure do
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
   # config.action_cable.url = 'wss://example.com/cable'
-  config.action_cable.allowed_request_origins = [ 'http://www.wrapt.com', 'https://www.wrapt.com' ]
+  fqdn = ENV.fetch('APP_FQDN') { 'wrapt.com' }
+  config.action_cable.allowed_request_origins = [ "http://#{fqdn}", "https://#{fqdn}" ]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
@@ -58,7 +59,8 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "wrapt-gratitude_#{Rails.env}"
   config.action_mailer.perform_caching = false
-  config.action_mailer.default_url_options = { host: 'wrapt.com' }
+  host = ENV.fetch('APP_DOMAIN') { 'wrapt.com' }
+  config.action_mailer.default_url_options = { host: host }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true

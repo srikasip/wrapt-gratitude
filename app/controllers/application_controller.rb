@@ -4,6 +4,16 @@ class ApplicationController < ActionController::Base
   before_action :require_login, if: :login_required?
   before_action :set_signed_authentication_cookie
 
+  if ENV['BASIC_AUTH_USERNAME'].present? && ENV['BASIC_AUTH_PASSWORD'].present?
+    before_action :_basic_auth
+
+    def _basic_auth
+      authenticate_or_request_with_http_basic do |user, password|
+        user == ENV['BASIC_AUTH_USERNAME'] && password == ENV['BASIC_AUTH_PASSWORD']
+      end
+    end
+  end
+
   # TODO redefine in subclasses as needed
   def login_required?
     true
