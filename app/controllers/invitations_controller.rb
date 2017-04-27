@@ -3,6 +3,8 @@ class InvitationsController < ApplicationController
   def show
     if user = User.load_from_activation_token(params[:id])
       redirect_to success_path(user)
+    elsif current_user && current_user.last_viewed_profile.present?
+      redirect_to profile_gift_recommendations_path(current_user.last_viewed_profile)
     else
       flash.alert = 'Sorry that link is not valid'
       redirect_to root_path
@@ -22,10 +24,8 @@ class InvitationsController < ApplicationController
       if question_response.next_response
         return invitation_profile_survey_question_path(params[:id], existing_profile, survey_response, question_response.next_response)
       else
-        # TODO send to gift selection screen
-        return invitation_profile_survey_question_path(params[:id], existing_profile, survey_response, question_response.next_response)
+        return invitation_profile_survey_completion_path(params[:id], existing_profile, survey_response)
       end
-      
     else
       return new_invitation_profile_path(params[:id], loop11_params(user))
     end
