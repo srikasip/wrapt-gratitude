@@ -34,6 +34,14 @@ module Reports
       sort_profile_ids
     end
     
+    def summary_report
+      if @summary_report.blank?
+        @summary_report = Reports::ProfileEventSummaryReport.new(self)
+        @summary_report.load_stats
+      end
+      @summary_report
+    end
+    
     def generate_stats
       @stats = {
         profiles_created: 0,
