@@ -1,7 +1,7 @@
 .row
-  .col-sm-2 Profiles Created: #{@report.stats[:profiles_created]}
-  .col-sm-2 Surveys Completed: #{@report.stats[:surveys_completed]}
-  .col-sm-2 Recipient Invites: #{@report.stats[:recipients_invited]}
+  .col-sm-2 Profiles Created: #{@summary.aggregate_stats[:profiles_created]}
+  .col-sm-2 Surveys Completed: #{@summary.aggregate_stats[:surveys_completed]}
+  .col-sm-2 Recipient Invites: #{@summary.aggregate_stats[:recipients_invited]}
 
 .row
   .col-sm-6

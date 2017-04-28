@@ -10,6 +10,8 @@ module Admin
       @report.load_events
       @report.generate_stats
       @report.preload_models
+      
+      @summary = @report.summary_report
     end
   end
 end
