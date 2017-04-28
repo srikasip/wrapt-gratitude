@@ -6,8 +6,8 @@
 .row
   .col-sm-6
     %table.table.table-bordered.table-condensed{style: 'margin-top:30px;'}
-      %tr
-        %th All Gifts
+      %tr.active
+        %th
         %td.text-align-right
           %span.glyphicon.glyphicon-gift
           Selected
@@ -17,6 +17,8 @@
         %td.text-align-right
           %span.glyphicon.glyphicon-thumbs-down
           Disliked
+      %tr.active
+        %th{colspan: 4} All Gifts
       %tr
         %td Gifter
         %td.text-align-right #{@report.stats[:gifts_selected]}
@@ -32,3 +34,23 @@
         %td.text-align-right #{@report.stats[:both_gifts_selected]}
         %td.text-align-right #{@report.stats[:both_gifts_liked]}
         %td.text-align-right #{@report.stats[:both_gifts_disliked]}
+
+      %tr.active
+        %th{colspan: 4}
+          %span.glyphicon.glyphicon-star
+          Recommended Gifts
+      %tr
+        %td Gifter
+        %td.text-align-right #{@report.stats[:recommended_gifts_selected]}
+        %td.text-align-right #{@report.stats[:recommended_gifts_liked]}
+        %td.text-align-right #{@report.stats[:recommended_gifts_disliked]}
+      %tr
+        %td Recipient
+        %td.text-align-right #{@report.stats[:recipient_recommended_gifts_selected]}
+        %td.text-align-right #{@report.stats[:recipient_recommended_gifts_liked]}
+        %td.text-align-right #{@report.stats[:recipient_recommended_gifts_disliked]}
+      %tr
+        %td Both
+        %td.text-align-right #{@report.stats[:both_recommended_gifts_selected]}
+        %td.text-align-right #{@report.stats[:both_recommended_gifts_liked]}
+        %td.text-align-right #{@report.stats[:both_recommended_gifts_disliked]}

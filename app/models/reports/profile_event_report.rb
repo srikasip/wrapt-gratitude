@@ -48,10 +48,21 @@ module Reports
         both_gifts_selected: 0,
         both_gifts_liked: 0,
         both_gifts_disliked: 0,
+        recommended_gifts_selected: 0,
+        recommended_gifts_liked: 0,
+        recommended_gifts_disliked: 0,
+        recipient_recommended_gifts_selected: 0,
+        recipient_recommended_gifts_liked: 0,
+        recipient_recommended_gifts_disliked: 0,
+        both_recommended_gifts_selected: 0,
+        both_recommended_gifts_liked: 0,
+        both_recommended_gifts_disliked: 0,
       }
       
       profile_gifts = {liked: [], disliked: [], selected: []}
       recipient_profile_gifts = {liked: [], disliked: [], selected: []}
+      profile_recommended_gifts = {liked: [], disliked: [], selected: []}
+      recipient_profile_recommended_gifts = {liked: [], disliked: [], selected: []}
       
       events.values.flatten.each do |event|
         case event[:type]
