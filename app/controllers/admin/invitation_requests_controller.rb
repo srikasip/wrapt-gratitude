@@ -14,6 +14,7 @@ module Admin
       @user = @invitation_request.to_user
       @user.setup_activation
       @user.source = 'requested_invitation'
+      @user.unmoderated_testing_platform = (params[:unmoderated].to_i != 0)
       if @user.save
         @invitation_request.update invited_user: @user
         UserActivationsMailer.activation_needed_email(@user).deliver_later
