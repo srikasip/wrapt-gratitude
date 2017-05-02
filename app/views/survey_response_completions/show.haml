@@ -3,20 +3,12 @@
     .col-xs-12
       .pa3.text-center
         %h1 Great Job! Now we have all the information we need to make gift recommendations for #{@survey_response.giftee_name}.
-        %p.tan-002 But before we share her matched gifts, here’s a special request
 
 
       = simple_form_for @survey_response_completion, url: with_invitation_scope(profile_survey_completion_path(@profile, @survey_response)) do |form|
-        .floating-container.floating-container__invite
-          %h4 Invite #{@survey_response.giftee_name}!
-          %p During this stage of our testing we would like to circle back with her and see how well we did. We will ask her to review gift recommendations by Wrapt, your choices and rate some of the items in our collection. 
-          .row
-            .col-xs-6
-              = form.input :profile_email, label: 'Her Email Address'
-            .col-xs-6
-              .wrapt-highlight-text.text-center
-                We take privacy seriously, we'll never sell or abuse your email address.
         .pa4
+          -# TODO: Fix this. Making this a hidden field because we don't want to show this form
+          = form.hidden_field :profile_email
           - unless current_user.active?
             %h4 Create Your Account
             .row
