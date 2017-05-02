@@ -14,6 +14,10 @@
     = action_cable_meta_tag
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+
+    - if Rails.env.production? && loop11_enabled?
+      = render 'layouts/loop11_script'
+
     = render 'layouts/favicons'
     = render 'layouts/social_tags'
   %body{class: body_classes}
@@ -35,5 +39,3 @@
     = render 'pjax_modal_frame'
     = render_gift_basket if enable_gift_basket?
     = yield :page_js
-    - if Rails.env.production? && loop11_enabled?
-      = render 'layouts/loop11_script'
