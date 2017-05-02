@@ -3,6 +3,7 @@ class SurveyResponseCompletionsController < ApplicationController
 
   before_action :set_profile
   before_action :set_survey_response
+  before_action :testing_redirect, only: :show
 
   def login_required?
     false
@@ -19,11 +20,10 @@ class SurveyResponseCompletionsController < ApplicationController
       if authentication_from_invitation_only?
         auto_login(current_user)
       end
+      @profile.touch
       @survey_response.update_attribute :completed_at, Time.now
       GenerateProfileRecommendationsJob.new.perform @profile, TrainingSet.published.first
-      # use pretty path for loop11 testing
-      redirect_to gift_recommendations_path(profile_id: @profile)
-      #redirect_to profile_gift_recommendations_path(@profile)
+      redirect_to profile_gift_recommendations_path(@profile)
     else
       flash.alert = 'Oops! Looks like we need a bit more info.'
       render :show
@@ -39,14 +39,26 @@ class SurveyResponseCompletionsController < ApplicationController
       :user_password
     )
   end
+ 
+  private
   
-
-  private def set_profile
-    @profile = current_user.owned_profiles.find params[:profile_id]
+  def testing_redirect
+    if params[:profile_id].present? && current_user.unmoderated_testing_platform?
+      # go directly to pretty url for loop11 testing (do not collect $200)
+      redirect_to testing_survey_complete_path
+    end
+  end
+   
+  def set_profile
+    profile_id = params[:profile_id] || session[:profile_id]
+    @profile = current_user.owned_profiles.find profile_id
+    session[:profile_id] = @profile.id
   end
 
-  private def set_survey_response
-    @survey_response = @profile.survey_responses.find params[:survey_id]
+  def set_survey_response
+    survey_id = params[:survey_id] || session[:survey_id]
+    @survey_response = @profile.survey_responses.find survey_id
+    session[:survey_id] = @survey_response.id
   end
   
 end
