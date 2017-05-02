@@ -45,7 +45,7 @@
   width: 100px;
   height: 100%;
   border-radius: 50%;
-  background-color: rgba($blue-005, 0.2);
+  background-color: rgba($blue-005, 0.4);
   z-index: -1;
   top: 0px;
   left: 0px;
@@ -58,7 +58,7 @@
   margin-top: -59px;
 }
 .sqr-previous__link:hover .sqr-previous__sudo-link {
-  background-color: rgba($blue-005, 0.25);
+  background-color: rgba($blue-005, 0.5);
   width: 118px;
 }
 
