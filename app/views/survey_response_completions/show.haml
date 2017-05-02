@@ -7,8 +7,6 @@
 
       = simple_form_for @survey_response_completion, url: with_invitation_scope(profile_survey_completion_path(@profile, @survey_response)) do |form|
         .pa4
-          -# TODO: Fix this. Making this a hidden field because we don't want to show this form
-          = form.hidden_field :profile_email
           - unless current_user.active?
             %h4 Create Your Account
             .row

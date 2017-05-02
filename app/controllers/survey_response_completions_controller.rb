@@ -31,7 +31,7 @@ class SurveyResponseCompletionsController < ApplicationController
   end
 
   private def survey_response_completion_params
-    params.require(:survey_response_completion).permit(
+    params.fetch(:survey_response_completion, {}).permit(
       :profile_email,
       :user_first_name,
       :user_last_name,
