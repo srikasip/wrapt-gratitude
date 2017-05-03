@@ -5,34 +5,26 @@ class GiftRecommendationsController < ApplicationController
   helper CarouselHelper
 
   before_action :load_profile
+  before_action :testing_redirect
   before_action :load_recommendations
   
   def index
     current_user.update_attribute :last_viewed_profile_id, @profile.id
   end
 
-  def show
-  end
-
-  def new
-  end
-
-  def create
-  end
-
-  def edit
-  end
-
-  def update
-  end
-
-  def destroy
-  end
-
   private
 
   def load_profile
-    @profile = Profile.find(params[:profile_id])
+    profile_id = params[:profile_id] || session[:profile_id]
+    @profile = current_user.owned_profiles.find(profile_id)
+    session[:profile_id] = @profile.id
+  end
+  
+  def testing_redirect
+    if params[:profile_id].present? && current_user.unmoderated_testing_platform?
+      # send them to pretty url for loop11 testing
+      redirect_to testing_gift_recommendations_path
+    end
   end
 
   def load_recommendations

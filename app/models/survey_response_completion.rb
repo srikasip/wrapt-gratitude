@@ -25,7 +25,6 @@ class SurveyResponseCompletion
     prefix: true,
     allow_nil: true
 
-  validates :profile_email, presence: true
   validates :user_email, :user_first_name, :user_last_name, :user_password, presence: true, unless: :user_active?
 
   def save

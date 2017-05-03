@@ -19,6 +19,7 @@ class SurveyQuestionResponsesController < ApplicationController
     @question_response.run_front_end_validations = true
     if @question_response.update question_response_params
       @question_response.update_attribute :answered_at, Time.now
+      @profile.touch
       if request.xhr?
         render :json => {question_response: @question_response}
       else
@@ -34,11 +35,15 @@ class SurveyQuestionResponsesController < ApplicationController
   end
 
   private def set_profile
-    @profile = current_user.owned_profiles.find params[:profile_id]
+    profile_id = params[:profile_id] || session[:profile_id]
+    @profile = current_user.owned_profiles.find profile_id
+    session[:profile_id] = @profile.id
   end
 
   private def set_survey_response
-    @survey_response = @profile.survey_responses.find params[:survey_id]
+    survey_id = params[:survey_id] || session[:survey_id]
+    @survey_response = @profile.survey_responses.find survey_id
+    session[:survey_id] = @survey_response.id
   end
 
   private def question_response_params
