@@ -42,7 +42,7 @@ Rails.application.routes.draw do
   resources :profile_recipient_reviews, only: :show
   resources :funds, only: :index
   
-  get 'testing/survey_complete', to: 'survey_completions#create'
+  get 'testing/survey_complete', to: 'survey_response_completions#show'
   get 'testing/gift_recommendations', to: 'gift_recommendations#index'
     
 
