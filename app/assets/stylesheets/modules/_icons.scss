@@ -50,7 +50,7 @@ a:active .navbar-static-top__icon-circle {
 .gr-carousel__nav--caret-right {
   width: 14px;
   height: 14px;
-  fill: $blue-005;
+  fill: darken($blue-005, 15);
 }
 .gr-carousel__image-nav--caret-left,
 .gr-carousel__image-nav--caret-right {
