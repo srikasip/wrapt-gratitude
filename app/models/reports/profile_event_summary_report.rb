@@ -18,7 +18,7 @@ module Reports
     
     def load_aggregate_stats
       @aggregate_stats = build_aggregate_stats_record
-      
+
       count_keys = @aggregate_stats.keys.select do |key|
         key.to_s.ends_with?('_count')
       end
@@ -35,13 +35,13 @@ module Reports
       @profile_stats = {}
       
       events.each do |profile_id, profile_events|
-        profile = preload_profiles[:profile_id]
+        profile = preloaded_profiles[:profile_id]
         next if profile.blank?
         
         record = build_profile_stats_record
         generate_profile_stats(record, profile, profile_events)
         
-        @profile_stats[profile_id] << record
+        @profile_stats[profile_id] = record
       end
     end
     
@@ -99,9 +99,9 @@ module Reports
     
     def build_profile_stats_record
       {
-        profiles_created_count: 0,
-        surveys_completed_count: 0,
-        recipients_invited_count: 0,
+        profile_created_count: 0,
+        survey_completed_count: 0,
+        recipient_invited_count: 0,
         
         gift_selected_count: 0,
         gift_liked_count: 0,

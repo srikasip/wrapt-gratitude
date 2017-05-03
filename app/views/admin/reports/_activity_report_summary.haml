@@ -1,7 +1,10 @@
+:ruby
+  aggregate_stats = @summary.aggregate_stats
+
 .row
-  .col-sm-2 Profiles Created: #{@summary.aggregate_stats[:profiles_created]}
-  .col-sm-2 Surveys Completed: #{@summary.aggregate_stats[:surveys_completed]}
-  .col-sm-2 Recipient Invites: #{@summary.aggregate_stats[:recipients_invited]}
+  .col-sm-2 Profiles Created: #{aggregate_stats[:profile_created_count]}
+  .col-sm-2 Surveys Completed: #{aggregate_stats[:survey_completed_count]}
+  .col-sm-2 Recipient Invites: #{aggregate_stats[:recipient_invited_count]}
 
 .row
   .col-sm-6
@@ -21,19 +24,19 @@
         %th{colspan: 4} All Gifts
       %tr
         %td Gifter
-        %td.text-align-right #{@report.stats[:gifts_selected]}
-        %td.text-align-right #{@report.stats[:gifts_liked]}
-        %td.text-align-right #{@report.stats[:gifts_disliked]}
+        %td.text-align-right #{aggregate_stats[:gift_selected_count]}
+        %td.text-align-right #{aggregate_stats[:gift_liked_count]}
+        %td.text-align-right #{aggregate_stats[:gift_disliked_count]}
       %tr
         %td Recipient
-        %td.text-align-right #{@report.stats[:recipient_gifts_selected]}
-        %td.text-align-right #{@report.stats[:recipient_gifts_liked]}
-        %td.text-align-right #{@report.stats[:recipient_gifts_disliked]}
+        %td.text-align-right #{aggregate_stats[:recipient_gift_selected_count]}
+        %td.text-align-right #{aggregate_stats[:recipient_gift_liked_count]}
+        %td.text-align-right #{aggregate_stats[:recipient_gift_disliked_count]}
       %tr
         %td Both
-        %td.text-align-right #{@report.stats[:both_gifts_selected]}
-        %td.text-align-right #{@report.stats[:both_gifts_liked]}
-        %td.text-align-right #{@report.stats[:both_gifts_disliked]}
+        %td.text-align-right #{aggregate_stats[:both_gift_selected_count]}
+        %td.text-align-right #{aggregate_stats[:both_gift_liked_count]}
+        %td.text-align-right #{aggregate_stats[:both_gift_disliked_count]}
 
       %tr.active
         %th{colspan: 4}
@@ -41,16 +44,16 @@
           Recommended Gifts
       %tr
         %td Gifter
-        %td.text-align-right #{@report.stats[:recommended_gifts_selected]}
-        %td.text-align-right #{@report.stats[:recommended_gifts_liked]}
-        %td.text-align-right #{@report.stats[:recommended_gifts_disliked]}
+        %td.text-align-right #{aggregate_stats[:recommended_gift_selected_count]}
+        %td.text-align-right #{aggregate_stats[:recommended_gift_liked_count]}
+        %td.text-align-right #{aggregate_stats[:recommended_gift_disliked_count]}
       %tr
         %td Recipient
-        %td.text-align-right #{@report.stats[:recipient_recommended_gifts_selected]}
-        %td.text-align-right #{@report.stats[:recipient_recommended_gifts_liked]}
-        %td.text-align-right #{@report.stats[:recipient_recommended_gifts_disliked]}
+        %td.text-align-right #{aggregate_stats[:recipient_recommended_gift_selected_count]}
+        %td.text-align-right #{aggregate_stats[:recipient_recommended_gift_liked_count]}
+        %td.text-align-right #{aggregate_stats[:recipient_recommended_gift_disliked_count]}
       %tr
         %td Both
-        %td.text-align-right #{@report.stats[:both_recommended_gifts_selected]}
-        %td.text-align-right #{@report.stats[:both_recommended_gifts_liked]}
-        %td.text-align-right #{@report.stats[:both_recommended_gifts_disliked]}
+        %td.text-align-right #{aggregate_stats[:both_recommended_gift_selected_count]}
+        %td.text-align-right #{aggregate_stats[:both_recommended_gift_liked_count]}
+        %td.text-align-right #{aggregate_stats[:both_recommended_gift_disliked_count]}
