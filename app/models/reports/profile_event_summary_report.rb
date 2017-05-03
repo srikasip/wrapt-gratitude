@@ -35,9 +35,9 @@ module Reports
       @profile_stats = {}
       
       events.each do |profile_id, profile_events|
-        profile = preloaded_profiles[:profile_id]
+        profile = preloaded_profiles[profile_id]
         next if profile.blank?
-        
+
         record = build_profile_stats_record
         generate_profile_stats(record, profile, profile_events)
         
@@ -47,9 +47,7 @@ module Reports
     
     def generate_profile_stats(record, profile, profile_events)
       # get the recommended gifts that were generated via the algorithm (non-random)
-      non_random_gifts = profile.gift_recommendations.detect do |recommendation|
-        !recommendation.random? && recommendation.gift == gift
-      end
+      non_random_gifts = profile.gift_recommendations.reject(&:random?).map(&:gift)
       
       # gather up the gift models for calculating some more interesting stats
       event_gifts = {
@@ -76,21 +74,21 @@ module Reports
         end
       end
       
-      both_selected_gifts = event_gifts[:gift_selected] & gift_events[:recipient_gift_selected]
+      both_selected_gifts = event_gifts[:gift_selected] & event_gifts[:recipient_gift_selected]
       record[:both_gift_selected_count] = both_selected_gifts.size
-      record[:both_recommended_gifts_selected_count] = (both_selected_gifts & non_random_gifts).size
+      record[:both_recommended_gift_selected_count] = (both_selected_gifts & non_random_gifts).size
       record[:recommended_gift_selected_count] = (event_gifts[:gift_selected] & non_random_gifts).size
       record[:recipient_recommended_gift_selected_count] = (event_gifts[:recipient_gift_selected] & non_random_gifts).size
 
-      both_liked_gifts = event_gifts[:gift_liked] & gift_events[:recipient_gift_liked]
+      both_liked_gifts = event_gifts[:gift_liked] & event_gifts[:recipient_gift_liked]
       record[:both_gift_liked_count] = both_liked_gifts.size
-      record[:both_recommended_gifts_liked_count] = (both_liked_gifts & non_random_gifts).size
+      record[:both_recommended_gift_liked_count] = (both_liked_gifts & non_random_gifts).size
       record[:recommended_gift_liked_count] = (event_gifts[:gift_liked] & non_random_gifts).size
       record[:recipient_recommended_gift_liked_count] = (event_gifts[:recipient_gift_liked] & non_random_gifts).size
 
-      both_disliked_gifts = event_gifts[:gift_disliked] & gift_events[:recipient_gift_disliked]
+      both_disliked_gifts = event_gifts[:gift_disliked] & event_gifts[:recipient_gift_disliked]
       record[:both_gift_disliked_count] = both_disliked_gifts.size
-      record[:both_recommended_gifts_disliked_count] = (both_disliked_gifts & non_random_gifts).size
+      record[:both_recommended_gift_disliked_count] = (both_disliked_gifts & non_random_gifts).size
       record[:recommended_gift_disliked_count] = (event_gifts[:gift_disliked] & non_random_gifts).size
       record[:recipient_recommended_gift_disliked_count] = (event_gifts[:recipient_gift_disliked] & non_random_gifts).size
       
