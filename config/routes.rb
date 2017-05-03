@@ -28,7 +28,7 @@ Rails.application.routes.draw do
   resources :invitations, only: :show, concerns: :profile_builder
 
   resources :profiles, only: :none do
-    resources :gift_recommendations
+    resources :gift_recommendations, only: :index
     resources :gift_selections, only: [:create, :destroy]
     resources :giftee_invitations, only: [:new, :create]
     resources :gift_likes, only: [:create, :destroy]
@@ -42,10 +42,9 @@ Rails.application.routes.draw do
   resources :profile_recipient_reviews, only: :show
   resources :funds, only: :index
   
-  
-  get '/profiles/survey_completion' => 'survey_response_completions#show', as: :survey_completion
-  get '/profiles/gift_recommendations' => 'gift_recommendations#index', as: :gift_recommendations
-  
+  get 'testing/survey_complete', to: 'survey_response_completions#show'
+  get 'testing/gift_recommendations', to: 'gift_recommendations#index'
+    
 
   #####################################################
 

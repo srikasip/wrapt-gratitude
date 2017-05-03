@@ -10,8 +10,10 @@ module RequiresLoginOrInvitation
   def require_login_or_invitation
     return true if current_user
 
-    if params[:invitation_id]
-      user = User.find_by_activation_token params[:invitation_id]
+    invitation_id = params[:invitation_id] || session[:invitation_id]
+    if invitation_id.present?
+      user = User.find_by_activation_token invitation_id
+      session[:invitation_id] = user.activation_token
     end
 
     if user
