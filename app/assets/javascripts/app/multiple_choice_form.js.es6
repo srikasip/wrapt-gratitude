@@ -34,7 +34,17 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
         this.unselectOtherOptionsIfOptionSelected(option_id)
       }
       this.updateDisplay();
-      this.showOptionExplanation(option_id);
+      this.showOptionExplanation(option_id, 'checked');
+    })
+    this.buttons_selector.on('mouseenter', evt => {
+      const clicked_button = evt.currentTarget
+      const option_id = clicked_button.getAttribute('data-option-id');
+      this.showOptionExplanation(option_id, 'show');
+    })
+    this.buttons_selector.on('mouseout', evt => {
+      const clicked_button = evt.currentTarget
+      const option_id = clicked_button.getAttribute('data-option-id');
+      this.showOptionExplanation(option_id, 'hide');
     })
   }
 
@@ -104,7 +114,6 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
   }
 
   setOtherTextVisibility() {
-    console.log('set other text visibility called');
     const otherTextWrapperSelector = $(this.form_element).find('[data-behavior~=other-text-input-wrapper]')
     const selectedOtherOptionInput = $(this.hidden_inputs_selector).filter('[data-behavior~=other-option]:checked')
     if (selectedOtherOptionInput.length > 0) {
@@ -115,13 +124,22 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
     }
   }
 
-  showOptionExplanation(option_id) {
+  showOptionExplanation(option_id, type) {
     const explanation_selector = $(this.form_element).find('[data-behavior~=option-explantion]')
-    explanation_selector.hide('slow');
+    const other_explanation_selector = $(this.form_element).find('[data-behavior~=option-explantion]:not([data-option-id="'+option_id+'"])')
+    other_explanation_selector.hide()
     const selected_option_input_selector = this.hidden_inputs_selector.filter(`[value=${option_id}]:checked`)
-    if (selected_option_input_selector.length > 0) {
-     // explanation_selector.filter(`[data-option-id=${option_id}]`).show('normal')     
-      explanation_selector.filter(`[data-option-id=${option_id}]`).show('slow'); 
+    if(type === 'checked') {
+      if (selected_option_input_selector.length > 0) {     
+        explanation_selector.filter(`[data-option-id=${option_id}]`).addClass('j-last-shown').show('slow'); 
+      }
+    } else if(type === 'show') {
+      explanation_selector.hide();
+      explanation_selector.filter(`[data-option-id=${option_id}]`).show();
+    } else if(type === 'hide') {
+      if(selected_option_input_selector.length === 0) {
+        explanation_selector.hide();
+      }
     }
  
   }
