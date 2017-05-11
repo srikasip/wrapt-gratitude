@@ -12,6 +12,8 @@ class Gift < ApplicationRecord
 
   belongs_to :product_category, required: true
   belongs_to :product_subcategory, required: true, class_name: 'ProductCategory'
+  
+  has_one :calculated_gift_field
 
   before_save :generate_wrapt_sku, if: :sku_needs_updating?
 

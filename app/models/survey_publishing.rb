@@ -3,7 +3,7 @@ class SurveyPublishing
 
   attr_accessor :survey_id, :training_set_id
   validates :survey_id, presence: true
-  validates :training_set_id, presence: true
+  #validates :training_set_id, presence: true
 
   def survey
     @survey = Survey.where(id: survey_id).first
@@ -16,7 +16,7 @@ class SurveyPublishing
   def save
     if valid?
       survey.publish!
-      training_set.publish!
+      #training_set.publish!
       return true
     else
       return false
