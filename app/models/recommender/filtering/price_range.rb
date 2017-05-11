@@ -1,11 +1,12 @@
 module Recommender
   module Filtering
-    class PriceRange
+    class PriceRange < Base
       attr_reader :min_price, :max_price
       
       def load_params
         @min_price = nil
         @max_price = nil
+        # we only support one price_range filter
         params = find_params('price_range').first
         if params.present?
           @min_price = params['min_price'].to_f if params.has_key?('min_price')
@@ -30,7 +31,7 @@ module Recommender
       def gift_scope
         return nil unless valid?
         cgf = CalculatedGiftField.arel_table
-        scope = Gift.joins(:gift_prices)
+        scope = Gift.joins(:calculated_gift_field)
         if min_price.present? && max_price.present?
           scope = scope.where(cgf[:price].between(min_price..max_price))
         elsif min_price.present?
@@ -38,7 +39,7 @@ module Recommender
         elsif max_price.present?
           scope = scope.where(cgf[:price].lteq(max_price))
         end
-        scope
+        scope.select(:id)
       end
     end
   end

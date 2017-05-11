@@ -38,7 +38,7 @@ module Recommender
       
       def self.create_filters(engine)
         [
-          Recommender::Filtering::Price
+          Recommender::Filtering::PriceRange
         ].map do |klass|
           klass.new(engine)
         end.select(&:active?)
