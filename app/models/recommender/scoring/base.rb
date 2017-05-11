@@ -1,5 +1,5 @@
 module Recommender
-  module Filtering
+  module Scoring
     class Base
       
       attr_reader :engine
@@ -32,16 +32,16 @@ module Recommender
         !valid?
       end
 
-      def gift_scope
+      def scoring_sql
         nil
       end
       
-      def self.create_filters(engine)
+      def self.create_scorers(engine)
         [
-          Recommender::Filtering::PriceRange
+          Recommender::Scoring::Standard
         ].map do |klass|
           klass.new(engine)
-        end.select(&:valid?)
+        end#.select(&:valid?)
       end
       
     end
