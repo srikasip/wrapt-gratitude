@@ -1,4 +1,7 @@
 class Gift < ApplicationRecord
+  
+  acts_as_taggable
+  
   has_many :gift_products, inverse_of: :gift, dependent: :destroy
   has_many :products, through: :gift_products
 
