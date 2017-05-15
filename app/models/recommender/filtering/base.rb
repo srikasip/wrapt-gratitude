@@ -31,6 +31,10 @@ module Recommender
       def invalid?
         !valid?
       end
+      
+      def exclusive_scope?
+        false
+      end
 
       def gift_scope
         nil
@@ -38,7 +42,8 @@ module Recommender
       
       def self.create_filters(engine)
         [
-          Recommender::Filtering::PriceRange
+          Recommender::Filtering::PriceRange,
+          Recommender::Filtering::ExcludeTags
         ].map do |klass|
           klass.new(engine)
         end.select(&:valid?)

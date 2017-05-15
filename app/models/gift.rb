@@ -1,7 +1,9 @@
 class Gift < ApplicationRecord
   
   acts_as_taggable
-  
+
+  validate :validate_tag
+
   has_many :gift_products, inverse_of: :gift, dependent: :destroy
   has_many :products, through: :gift_products
 
@@ -81,6 +83,12 @@ class Gift < ApplicationRecord
       super
     end
   end
+
+  def validate_tag
+    tag_list.each do |tag|
+      errors.add(:tag_list, "tag names can only contain alphanumeric characters or underscore") unless tag =~ /[a-z0-9_]/i
+    end
+  end  
 
   private def sku_prefix
     segments = []

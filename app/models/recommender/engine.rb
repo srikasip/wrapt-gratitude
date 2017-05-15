@@ -64,8 +64,13 @@ module Recommender
     
     def build_gift_scope
       @gift_scope = Gift.all
+      g = Gift.arel_table
       filters.each do |filter|
-        @gift_scope = @gift_scope.where(id: filter.gift_scope)
+        @gift_scope = if filter.exclusive_scope?
+          @gift_scope.where(g[:id].not_in(filter.gift_scope))
+        else
+          @gift_scope.where(id: filter.gift_scope)
+        end
       end
       @gift_scope
     end
