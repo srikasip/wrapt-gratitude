@@ -75,6 +75,7 @@ Rails.application.routes.draw do
     resources :invitation_requests, only: [:index, :update, :destroy]
 
     resources :public_survey_exports, only: [:create]
+    resources :gift_tag_exports, only: [:create]
 
     resources :trait_training_sets, except: :show do
       resources :questions, except: [:show, :destroy], controller: 'trait_training_set_questions' do
