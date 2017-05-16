@@ -15,7 +15,7 @@ module Recommender
         %{
           select id,
             case
-            when featured then #{featured_boost}
+            when featured then #{featured_boost.to_i}
             else 0
             end as score
           from gifts

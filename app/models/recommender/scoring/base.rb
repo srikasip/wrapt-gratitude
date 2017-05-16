@@ -38,10 +38,11 @@ module Recommender
       
       def self.create_scorers(engine)
         [
-          Recommender::Scoring::Standard
+          Recommender::Scoring::Standard,
+          Recommender::Scoring::TagBoost
         ].map do |klass|
           klass.new(engine)
-        end#.select(&:valid?)
+        end.select(&:valid?)
       end
       
     end
