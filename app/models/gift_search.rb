@@ -42,7 +42,7 @@ class GiftSearch
   end
   
   private def tags_filter scope
-    @tags = @tags.split(/,\s/).map(&:strip).reject(&:blank?).uniq
+    @tags = @tags.split(/,|\s/).map(&:strip).reject(&:blank?).uniq
     scope.tagged_with(@tags, :any => true)
   end
   

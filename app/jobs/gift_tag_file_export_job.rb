@@ -34,11 +34,10 @@ class GiftTagFileExportJob < ApplicationJob
   private def write_response_rows!
     row = 1
     # enable once we have tags
-    #Gift.all.preload(:tags).order(:wrapt_sku).each do |gift|
-    Gift.all.order(:wrapt_sku).each do |gift|
+    Gift.all.preload(:tags).order(:wrapt_sku).each do |gift|
       worksheet.write row, 0, gift.wrapt_sku
       worksheet.write row, 1, gift.title
-      #worksheet.write row, 2, gift.tag_list
+      worksheet.write row, 2, gift.tags.join(', ')
       row +=1
     end
   end

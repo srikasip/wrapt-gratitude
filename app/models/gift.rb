@@ -86,7 +86,7 @@ class Gift < ApplicationRecord
 
   def validate_tag
     tag_list.each do |tag|
-      errors.add(:tag_list, "tag names can only contain alphanumeric characters or underscore") unless tag =~ /[a-z0-9_]/i
+      errors.add(:tag_list, "-#{tag}- tag names can only contain alphanumeric characters or underscore") unless tag =~ /^[a-z0-9][a-z0-9_]*$/i
     end
   end  
 

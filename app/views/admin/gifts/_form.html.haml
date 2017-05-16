@@ -4,7 +4,7 @@
   .form-inputs
     = f.input :title
     = f.input :description
-    = f.input :tag_list, label: "Tags", hint: "List tags names separated with a comma (ex: not_for_wife, outdoorsy, sophisticated)"
+    = f.input :tag_list, label: "Tags", hint: "List tags names separated with a comma (ex: not_for_wife, outdoorsy, sophisticated)", as: :text
     .row
       .col-xs-3
         = f.input :selling_price, wrapper: :vertical_input_group, label: 'Selling Price' do
