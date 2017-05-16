@@ -8,6 +8,9 @@
     %p
       %span.label.label-default= @gift.product_category&.name
       %span.label.label-default= @gift.product_subcategory&.name
+      - @gift.tags.each do |tag|
+        %span.label.label-primary.label-inverse= tag.name
+      
 
     %p
       %b Title:
