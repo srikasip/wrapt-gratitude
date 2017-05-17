@@ -2,12 +2,12 @@ class ProfileRecipientReviewsController < ApplicationController
 
   include AuthenticatesWithRecipientAccessToken
 
-  GIFT_RECOMMENDATION_LIMIT = 10
-
   helper CarouselHelper
 
   def show
-    @gift_recommendations = @profile.gift_recommendations_with_limit(GIFT_RECOMMENDATION_LIMIT)
+    @gift_recommendations = @profile.gift_recommendations.preload(
+      gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field])
+    
     @profile.update_attribute :recipient_reviewed, true
   end
 

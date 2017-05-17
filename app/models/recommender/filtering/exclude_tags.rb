@@ -4,19 +4,11 @@ module Recommender
       attr_reader :tag_names
       
       def load_params
-        @tag_names = []
-        params = find_params('exclude_tags')
-        params.each do |excluded_tags|
-          excluded_tags = Array.wrap(excluded_tags).map do |tag_name|
-            tag_name.to_s.gsub(/[^a-z0-9_]/i, '')
-          end.select(&:present?)
-          @tag_names += excluded_tags
-        end
-        @tag_names.uniq!
+        @tag_names = collect_tag_names(find_params('exclude_tags'))
       end
       
       def valid?
-        tag_names.present?
+        tag_names.any?
       end
       
       def exclusive_scope?

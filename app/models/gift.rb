@@ -1,6 +1,8 @@
 class Gift < ApplicationRecord
   
   acts_as_taggable
+  
+  VALID_TAG_REGEXP = /^[a-z0-9][a-z0-9_]*$/i
 
   validate :validate_tag
 
@@ -61,32 +63,16 @@ class Gift < ApplicationRecord
   end
 
   def cost
-    if calculate_cost_from_products?
-      if products.loaded?
-        products.reduce(0){|sum, product| sum + product.wrapt_cost.to_f}
-      else
-        products.sum(:wrapt_cost)
-      end
-    else
-      super
-    end
+    calculated_gift_field.cost
   end
 
   def selling_price
-    if calculate_price_from_products?
-      if products.loaded?
-        products.reduce(0){|sum, product| sum + product.price.to_f}
-      else
-        products.sum(:price)
-      end
-    else
-      super
-    end
+    calculated_gift_field.price
   end
 
   def validate_tag
     tag_list.each do |tag|
-      errors.add(:tag_list, "-#{tag}- tag names can only contain alphanumeric characters or underscore") unless tag =~ /^[a-z0-9][a-z0-9_]*$/i
+      errors.add(:tag_list, "-#{tag}- tag names can only contain alphanumeric characters or underscore") unless tag =~ VALID_TAG_REGEXP
     end
   end  
 
@@ -157,8 +143,6 @@ class Gift < ApplicationRecord
   # they're only here to allow foreign keys to be cleaned up via dependent destroy
   ################################################################################
   
-  has_many :gift_question_impacts, dependent: :destroy
-  has_many :evaluation_recommendations, dependent: :destroy
   has_many :gift_recommendations, dependent: :destroy
   # not sure why the association below exists?
   #has_many :survey_responses, dependent: :destroy

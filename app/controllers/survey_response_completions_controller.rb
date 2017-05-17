@@ -22,7 +22,8 @@ class SurveyResponseCompletionsController < ApplicationController
       end
       @profile.touch
       @survey_response.update_attribute :completed_at, Time.now
-      GenerateProfileRecommendationsJob.new.perform @profile, TrainingSet.published.first
+      job = GenerateRecommendationsJob.new
+      job.perform(@survey_response)
       redirect_to profile_gift_recommendations_path(@profile)
     else
       flash.alert = 'Oops! Looks like we need a bit more info.'

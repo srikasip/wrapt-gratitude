@@ -5,31 +5,21 @@ module Admin
 
     include PjaxModalController
 
-    def new
-      @survey_publishing = SurveyPublishing.new survey_id: @survey.id
-    end
-
     def create
-      @survey_publishing = SurveyPublishing.new survey_publishing_params
+      @survey_publishing = SurveyPublishing.new
       @survey_publishing.survey_id = @survey
       if @survey_publishing.save
-        flash.notice = "We've set #{@survey_publishing.survey.title} as the published Quiz"
+        flash.notice = "We've set '#{@survey_publishing.survey.title}' as the published Quiz"
         redirect_to admin_survey_path @survey
       else
-        binding.pry
-        render :new
+        flash.alert = "Failed to publish Quiz '#{@survey_publishing.survey.title}'"
+        redirect_to admin_survey_path @survey
       end
     end
 
     private def set_survey
       @survey = Survey.find params[:survey_id]
     end
-    
-
-    private def survey_publishing_params
-      params.require(:survey_publishing).permit(:training_set_id)
-    end
-    
 
   end
 end

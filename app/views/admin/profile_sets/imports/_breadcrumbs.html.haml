@@ -1,6 +1,0 @@
-- unless params[:action] == 'index'
-  .row.breadcrumbs
-    .col-sm-12
-      = link_to "Response Sets".html_safe, admin_profile_sets_path
-      &raquo;
-      = link_to "#{@profile_set.name}".html_safe, [:admin, @profile_set]

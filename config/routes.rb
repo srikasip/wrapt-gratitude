@@ -77,19 +77,6 @@ Rails.application.routes.draw do
     resources :public_survey_exports, only: [:create]
     resources :gift_tag_exports, only: [:create]
 
-    resources :trait_training_sets, except: :show do
-      resources :questions, except: [:show, :destroy], controller: 'trait_training_set_questions' do
-        resources :response_impacts, only: :index, controller: 'trait_training_set_response_impacts'
-      end
-      resources :evaluations, only: [:index, :show], controller: 'survey_response_trait_evaluations'
-      resources :match_exports, only: :show, controller: 'trait_training_set_match_exports'
-    end
-    namespace :profile_traits, except: :show do
-      resources :topics do
-        resources :facets, except: :show
-      end
-    end
-
     resources :vendors
     
     resources :product_categories, except: :show do
@@ -130,26 +117,7 @@ Rails.application.routes.draw do
       resource :copying, only: :create, controller: 'survey_copyings'
       resources :sections, except: :show, controller: 'survey_sections'
       resource :section_ordering, only: :create, controller: 'survey_section_orderings'
-      resource :publishing, only: [:new, :create], controller: 'survey_publishings'
-    end
-
-    resources :training_sets do
-      resources :gifts, only: :none do
-        resources :questions, only: :index, controller: 'training_set_questions'
-      end
-      resources :gift_question_impacts, controller: 'gift_question_impacts', except: [:index, :show]
-      resource :evaluation, only: [:show], controller: 'training_set_evaluations' do
-        resources :recommendations, only: :show, controller: 'evaluation_recommendations'
-      end
-      resources :imports, controller: 'training_sets/imports', only: [:new, :create]
-      resource :export, only: :show, controller: 'training_set_exports'
-    end
-
-
-    resources :profile_sets do
-      resources :survey_responses, controller: 'profile_set_survey_responses', except: [:index, :show]
-      resources :imports, controller: 'profile_sets/imports', only: [:new, :create]
-      resource :exports, only: :create, controller: 'profile_set_exports'    
+      resource :publishing, only: [:create], controller: 'survey_publishings'
     end
     
     resources :reports, only: :index do

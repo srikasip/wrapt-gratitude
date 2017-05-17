@@ -12,7 +12,7 @@
     = link_to "Add New Question", new_admin_survey_question_path(@survey), class: 'btn btn-primary'
     = link_to "Edit Sections", admin_survey_sections_path(@survey), class: 'btn btn-primary'
     = link_to 'Create a Copy of this Quiz', admin_survey_copying_path(@survey), class: 'btn btn-primary', data: {method: 'post'}
-    = link_to 'Publish this Quiz', new_admin_survey_publishing_path(@survey), class: 'btn btn-primary', data: {loads_in_pjax_modal: true}
+    = link_to 'Publish this Quiz', admin_survey_publishing_path(@survey), method: :create, class: 'btn btn-primary'
     = link_to 'Delete this Quiz', admin_survey_path(@survey), class: 'btn btn-danger', method: :delete,data: {confirm: 'Are you sure?'}
 
 .row

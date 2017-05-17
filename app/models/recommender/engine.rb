@@ -36,7 +36,7 @@ module Recommender
     end
     
     def create_recommendations!
-      @gift_recommendations.map(&:save)
+      @recommendations.map(&:save)
     end
     
     def destroy_recommendations!
@@ -64,12 +64,11 @@ module Recommender
     
     def build_gift_scope
       @gift_scope = Gift.all
-      g = Gift.arel_table
       filters.each do |filter|
         @gift_scope = if filter.exclusive_scope?
-          @gift_scope.where(g[:id].not_in(filter.gift_scope))
+          @gift_scope.where("gifts.id not in (#{filter.gift_scope.to_sql})")
         else
-          @gift_scope.where(id: filter.gift_scope)
+          @gift_scope.where("gifts.id in (#{filter.gift_scope.to_sql})")
         end
       end
       @gift_scope

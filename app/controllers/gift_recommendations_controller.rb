@@ -28,7 +28,8 @@ class GiftRecommendationsController < ApplicationController
   end
 
   def load_recommendations
-    @gift_recommendations = @profile.gift_recommendations_with_limit(GIFT_RECOMMENDATION_LIMIT)
+    @gift_recommendations = @profile.gift_recommendations.preload(
+      gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field])
   end
 
 end

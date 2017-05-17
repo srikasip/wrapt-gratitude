@@ -5,15 +5,7 @@ module Recommender
       
       def load_params
         @boost = 1
-        @tag_names = []
-        params = find_params('boost_tags')
-        params.each do |boost_tags|
-          excluded_tags = Array.wrap(excluded_tags).map do |tag_name|
-            tag_name.to_s.gsub(/[^a-z0-9_]/i, '')
-          end.select(&:present?)
-          @tag_names += boost_tags
-        end
-        @tag_names.uniq!
+        @tag_names = collect_tag_names(find_params('boost_tags'))
       end
       
       def valid?

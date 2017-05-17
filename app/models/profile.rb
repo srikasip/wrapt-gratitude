@@ -16,24 +16,4 @@ class Profile < ApplicationRecord
     self.recipient_access_token = SecureRandom.urlsafe_base64(nil, false)
   end
   
-  def gift_recommendations_with_limit(max_total, min_random = 1)
-    limited_recs = []
-    
-    min_random = 0 if min_random < 1
-    all_recs = gift_recommendations.preload(
-      gift: [:gift_images, :primary_gift_image, :products, :product_subcategory])
-    
-    if max_total == 1
-      limited_recs << all_recs.first
-    elsif max_total > 1
-      non_random_recs = all_recs.reject(&:random?)
-      random_recs = all_recs.select(&:random?)
-      limited_recs += non_random_recs.take(max_total - min_random)
-      limited_recs += random_recs.take(max_total - limited_recs.count)
-    end
-    
-    limited_recs
-  end
-  
-
 end
