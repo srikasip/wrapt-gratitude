@@ -30,6 +30,7 @@ class Survey < ApplicationRecord
       Survey.transaction do
         Survey.update_all published: false
         self.published = true
+        self.test_mode = false
         save validate: false
       end
     end

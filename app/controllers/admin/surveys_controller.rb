@@ -65,7 +65,7 @@ module Admin
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def survey_params
-        params.require(:survey).permit(:title)
+        params.require(:survey).permit(:title, :test_mode)
       end
   end
 end

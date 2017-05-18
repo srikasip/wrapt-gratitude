@@ -5,7 +5,10 @@
       - if @survey.published?
         %small
           %span.label.label-default Published
-      = link_to "Edit Title", edit_admin_survey_path(@survey), class: 'btn btn-default btn-sm'
+      - elsif @survey.test_mode?
+        %small
+          %span.label.label-default Test Mode
+      = link_to "Edit Properties", edit_admin_survey_path(@survey), class: 'btn btn-default btn-sm'
 
 .row.admin__actions
   .col-sm-12
