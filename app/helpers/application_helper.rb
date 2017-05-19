@@ -10,7 +10,7 @@ module ApplicationHelper
   end
 
   def gift_basket_profile
-    @profile || current_user&.mvp_profile
+    @profile ||= current_user&.mvp_profile
   end
 
   def gift_basket_count
@@ -28,7 +28,7 @@ module ApplicationHelper
   end
 
   def enable_gift_basket?
-    gift_basket_profile && !gift_basket_profile.new_record?
+    current_user && gift_basket_profile && !gift_basket_profile.new_record? && gift_basket_profile.gift_recommendations.any?
   end
 
   def render_gift_basket

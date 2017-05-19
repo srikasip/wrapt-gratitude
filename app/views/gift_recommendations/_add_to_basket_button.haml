@@ -1,5 +1,5 @@
 - @_selected_gift_ids ||= profile.gift_selections.pluck(:gift_id)
 - if gift_selection.gift_id.in? @_selected_gift_ids
-  = submit_tag 'ADDED TO CART', class: 'btn btn-primary btn-narrower', disabled: true
+  = submit_tag 'ADDED TO BASKET', class: 'btn btn-primary btn-narrower', disabled: true
 - else
-  = submit_tag 'ADD TO CART', class: 'btn btn-primary btn-narrower', onClick:"ga('send', 'event', 'basket', 'add to basket', '#{gift_selection.gift.title}');"
+  = submit_tag 'ADD TO BASKET', class: 'btn btn-primary btn-narrower', onClick:"ga('send', 'event', 'basket', 'add to basket', '#{gift_selection.gift.title}');"
