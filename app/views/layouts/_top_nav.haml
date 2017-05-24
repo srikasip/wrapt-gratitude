@@ -8,7 +8,7 @@
             = link_to home_link_url do
               %span Wrapt
               =embedded_svg('wrapt-logo-tm', class: "navbar-brand__icon-wrapt-logo")
-        
+
         %ul.nav.navbar-nav.navbar-right
           - if current_user && current_user.active?
             - if current_user&.admin?
@@ -20,11 +20,10 @@
               = link_to my_account_path do
                 =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
                 My Account
-          - if Rails.env.development?
             %li
               = link_to science_of_gifting_path do
                 =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
-                Science of Gifting
+                The Science
           %li
             - if enable_gift_basket?
               = link_to '#', data: {behavior: 'open-gift-basket'}, onClick: "ga('send', 'event', 'basket', 'open-close', 'open');" do
@@ -32,7 +31,7 @@
                 Gift Basket
                 %span.gift-basket-count{"data-behavior" => "gift-basket-count", class: ('empty' if gift_basket_empty?)}
                   = gift_basket_count
-                  
+
           - if current_user
             %li
               = link_to user_session_path, method: :delete do
@@ -43,4 +42,3 @@
               = link_to new_user_session_path, data: {loads_in_pjax_modal: true} do
                 =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
                 Sign In
-            
