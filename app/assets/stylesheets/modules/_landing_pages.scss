@@ -266,27 +266,23 @@ body.home,
   background-color: $gray-012;
   width: 100%;
   height: 33%;
-  transform: translateY(-100%);
+  transition: transform 0.25s;
   overflow: hidden;
-  // animation: shrink-to-0-height 0.33s;
 }
 
 .home__gift-example:hover .flyover {
   display: block;
   height: 33%;
   transform: translateY(0);
-  // animation: grow-to-33-height 0.33s;
 }
 
 .home__gift-example .flyover.top {
   top: 0;
   transform-origin: top;
   transform: translateY(-100%);
-  animation: fly-out-to-top 0.33s;
 }
 .home__gift-example:hover .flyover.top {
   transform: translateY(0);
-  animation: fly-in-from-top 0.33s;
 }
 
 .home__gift-example .flyover.bottom {
@@ -294,11 +290,9 @@ body.home,
   opacity: 0.8;
   transform-origin: bottom;
   transform: translateY(100%);
-  animation: fly-out-to-bottom 0.33s;
 }
 .home__gift-example:hover .flyover.bottom {
   transform: translateY(0);
-  animation: fly-in-from-bottom 0.33s;
 }
 
 @keyframes fly-in-from-top {
