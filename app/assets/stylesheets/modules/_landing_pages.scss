@@ -35,17 +35,15 @@ body.hero-bg .wrapper--full-bleed__bg-03{
 .hero-overrun .btn.btn-multiple-choice-option {
   min-width: 148px;
 }
-.new-quiz__about h4 {
-  margin-bottom: 6px;
-}
+
 .new-quiz__about p {
   color: $gray-007;
 }
 .new-quiz__about-intro-wrapper {
-  margin: 72px 0;
+  margin: 24px 0;
   width: 100%;
   @media (max-width: $screen-xs-max) {
-    margin: 48px 0;
+    margin: 16px 0;
   }
 }
 
@@ -66,41 +64,23 @@ body.hero-bg .wrapper--full-bleed__bg-03{
   padding-bottom: 23px;
 }
 
-.new-quiz__about-step {
-  margin-bottom: 18px;
-  padding-top: 100px;
-  background-repeat: no-repeat;
+.about-step-number {
+  border: solid 1px $blue-001;
+  border-radius: 50%;
+  font-size: rem(36);
+  height: 72px;
+  width: 72px;
+  line-height: 72px;
+  margin: 0 auto;
+  text-align: center;
 }
 
-.new-quiz__about-step.left {
-  text-align: left;
-  background-position: top left;
-  padding-left: 108px;
-  padding-right: 200px;
-  @media (max-width: $screen-sm-max) {
-    padding-right: 0;
-  }
+.about-step__header {
+  margin-top: 24px;
 }
 
-.new-quiz__about-step.right {
-  text-align: right;
-  background-position: top right;
-  padding-right: 108px;
-  padding-left: 200px;
-  @media (max-width: $screen-sm-max) {
-    padding-left: 0;
-  }
-}
-
-.new-quiz__about-step.step-1 {
-  background-image: image-url('about-step-1.png');
-}
-.new-quiz__about-step.step-2 {
-  background-image: image-url('about-step-2.png');
-}
-.new-quiz__about-step.step-3 {
-  background-image: image-url('about-step-3.png');
-  margin-bottom: 100px;
+.about-step__description {
+  margin-top: 24px;
 }
 
 .new-quiz__after-wrapper {
