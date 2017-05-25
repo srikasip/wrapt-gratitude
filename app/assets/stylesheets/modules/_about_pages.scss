@@ -2,7 +2,7 @@
 // Terms of Service, etc.
 
 .about-page__header {
-  width: 50%;
+  width: 80%;
   margin: 0 auto;
   text-align: center;
   padding-bottom: 33px;
@@ -10,16 +10,21 @@
   @include akkurat-light();
   font-weight: normal;
 }
-
+.about-page__header__second-line {
+  font-size: .8em;
+}
 .about-page__tagline {
-  width: 100%;
-  margin: 40px auto 100px auto;
+  // width: 100%;
+  font-size: 20px;
+  margin: 40px auto 40px;
   text-align: center;
   @include akkurat-light();
 }
-
+sup:last-child {
+  margin-right: 3px;
+}
 .about-page__subsection {
-  margin-bottom: 126px;
+  margin-bottom: 70px;
   @include akkurat-light();
 }
 
