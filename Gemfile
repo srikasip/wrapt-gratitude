@@ -77,8 +77,10 @@ group :development do
   gem 'seed_dump'
   gem 'foreman'
   gem 'letter_opener'
-  gem 'better_errors'
   gem "binding_of_caller"
+  gem 'rack-livereload'
+  gem 'guard'
+  gem 'guard-livereload'
 end
 
 group :test do
