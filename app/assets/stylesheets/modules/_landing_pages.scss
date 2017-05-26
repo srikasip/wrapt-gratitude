@@ -276,23 +276,3 @@ body.home,
 .home__gift-example:hover .flyover.bottom {
   transform: translateY(0);
 }
-
-@keyframes fly-in-from-top {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(0); }
-}
-
-@keyframes fly-out-to-top {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-100%); }
-}
-
-@keyframes fly-in-from-bottom {
-  0% { transform: translateY(100%); }
-  100% { transform: translateY(0); }
-}
-
-@keyframes fly-out-to-bottom {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(100%); }
-}
