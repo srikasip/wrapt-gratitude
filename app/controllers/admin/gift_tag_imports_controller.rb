@@ -7,7 +7,7 @@ module Admin
     end
 
     def create
-      @job = GiftTagFileExportJob.new
+      @job = GiftTagFileImportJob.new
       if @job.perform(params[:import_file])
         redirect_to admin_gifts_path, notice: 'The gift tags have been imported.'
       else

@@ -3,7 +3,7 @@ require 'write_xlsx'
 class GiftTagFileImportJob < ApplicationJob
   queue_as :default
 
-  attr_reader :file, :worksheet
+  attr_reader :file, :worksheet, :errors
 
   def perform(file)
     @file = file

@@ -76,6 +76,7 @@ Rails.application.routes.draw do
 
     resources :public_survey_exports, only: [:create]
     resources :gift_tag_exports, only: [:create]
+    resources :gift_tag_imports, only: [:new, :create]
 
     resources :vendors
     
