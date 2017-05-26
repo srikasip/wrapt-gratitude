@@ -1,0 +1,17 @@
+= render 'imports/processing_import_modal'
+= form_tag admin_gift_tag_imports_path, method: :post, multipart: true do
+  %p
+    Here you can upload an Excel spreadsheet containing the tags for gifts
+
+  .form-inputs
+    .form-group.required
+      %label.control-label.required Import File
+      = file_field_tag 'import_file'
+      
+  .form-actions= submit_tag 'Import', class: 'btn btn-primary'
+
+  - if @errors.present? && @errors.any?
+    .alert.alert-danger.alert-dismissable
+      %strong Some problems were detected in the import file.
+      - @errors.each do |message|
+        %p= message
