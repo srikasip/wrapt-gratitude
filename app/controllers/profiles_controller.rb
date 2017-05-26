@@ -12,7 +12,11 @@ class ProfilesController < ApplicationController
 
   def new
     @profile = current_user.owned_profiles.new
-    first_question = @survey.sections.first.questions.first
+    first_question = if @survey.sections.any?
+      @survey.sections.first.questions.first
+    else
+      @survey.questions.first
+    end
     @question_response = SurveyQuestionResponse.new survey_question: first_question
   end
 
