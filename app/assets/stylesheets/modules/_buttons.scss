@@ -1,3 +1,5 @@
+@import "helpers";
+
 .btn {
   line-height: 1;
   min-width: 180px;
@@ -6,11 +8,11 @@
   padding-left: 20px;
   padding-right: 20px;
 }
-.btn:focus, 
+.btn:focus,
 .btn.focus,
-.btn:active:focus, 
-.btn:active.focus, 
-.btn.active:focus, 
+.btn:active:focus,
+.btn:active.focus,
+.btn.active:focus,
 .btn.active.focus {
   outline: none;
   box-shadow: none;
@@ -30,22 +32,22 @@
 .new-invite-request .btn-primary {
   text-transform: uppercase;
 }
-.btn-primary:focus, 
+.btn-primary:focus,
 .btn-primary.focus {
   border-color: darken($blue-004, 10%)
 }
 
 .btn-default:active,
-.btn-default:active:hover, 
-.btn-default:active.focus, 
-.btn-default.active:hover,  
+.btn-default:active:hover,
+.btn-default:active.focus,
+.btn-default.active:hover,
 .btn-default.active.focus {
   background-color: $blue-007;
   border-color: $blue-006;
 }
-.btn-primary:active:hover, 
-.btn-primary:active.focus, 
-.btn-primary.active:hover,  
+.btn-primary:active:hover,
+.btn-primary:active.focus,
+.btn-primary.active:hover,
 .btn-primary.active.focus {
   background-color: $blue-008;
   border-color: $blue-008;
@@ -78,9 +80,9 @@
   background-color: $orange-002;
   border-color: $orange-002;
 }
-.btn-secondary:active:hover, 
-.btn-secondary:active.focus, 
-.btn-secondary.active:hover, 
+.btn-secondary:active:hover,
+.btn-secondary:active.focus,
+.btn-secondary.active:hover,
 .btn-secondary.active.focus {
   background-color: $orange-002;
   border-color: $orange-002;
@@ -95,7 +97,7 @@
 .btn-sm {
   min-width: 90px;
 }
-.btn-xs, 
+.btn-xs,
 .btn-group-xs > .btn {
   font-size: 11px;
   min-width: 80px;
@@ -137,7 +139,7 @@
 .btn.btn-yes-no:hover,
 .btn.btn-multiple-choice-option:active,
 .btn.btn-yes-no:active,
-.btn.btn-multiple-choice-option.selected:hover, 
+.btn.btn-multiple-choice-option.selected:hover,
 .btn.btn-yes-no.selected:hover {
   background-color: rgba(242, 226, 170, .60);
   letter-spacing: 0;
@@ -162,8 +164,8 @@
   background-color: #E9ECEC;
   border: none;
 }
-.btn.disabled, 
-.btn[disabled], 
+.btn.disabled,
+.btn[disabled],
 fieldset[disabled] .btn {
   opacity: 1;
 }

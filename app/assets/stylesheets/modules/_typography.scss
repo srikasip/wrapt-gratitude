@@ -1,3 +1,5 @@
+@import "helpers";
+
 // Zero out heading margin tops. BS sets margin-top on headings. This can mess with the margin cadence as often elements where we'd expect margins to collapse have an intervening dom node.
 h1,
 h2,
@@ -52,7 +54,7 @@ p {
 }
 .lead {
   font-size: rem(20);
-  line-height: 1.6; 
+  line-height: 1.6;
   margin-bottom: 16px;
 }
 .small {

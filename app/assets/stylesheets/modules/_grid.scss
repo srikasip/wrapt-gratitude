@@ -1,5 +1,7 @@
 // responsive is disabled, so set container widths here and use .col-xs-* everywhere
 
+@import "helpers";
+
 .wrapper--full-bleed__bg-01 {
   background-color: $gray-001;
 }
@@ -24,7 +26,7 @@
 
 // When it's time to make the site responsive:
 // 1. Remove inclusion of this file in /app/assets/stylesheets/modules/modules
-// 2. Add .nav-collapse to <nav> 
+// 2. Add .nav-collapse to <nav>
 // 3. Add .col-sm-* and .col-md-* as needed
 
 

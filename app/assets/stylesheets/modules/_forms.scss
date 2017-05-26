@@ -1,3 +1,5 @@
+@import "helpers";
+
 label {
   color: $gray-008;
   font-weight: normal;
@@ -83,7 +85,7 @@ label {
 
 // styles for simple form input wrapt_range
 .wrapt-range__container {
-  
+
   // START remove styles range inputs in all browsers
   input[type=range] {
     -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
@@ -103,7 +105,7 @@ label {
     width: 100%;
     cursor: pointer;
     /* Hides the slider so custom styles can be added */
-    background: transparent; 
+    background: transparent;
     border-color: transparent;
     color: transparent;
   }
@@ -113,10 +115,10 @@ label {
 
   // Special styling for WebKit
   // Note: can't comma-separate these type of selectors. Browsers will drop the entire selector if it doesn't understand a part of it
-  
+
   input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    margin-top: -15.5px; 
+    margin-top: -15.5px;
     // You need to specify a margin in Chrome, but in Firefox and IE it is automatic
   }
 
@@ -129,14 +131,14 @@ label {
     border-radius: 50%;
     background: $blue-001;
     cursor: pointer;
-  } 
+  }
   input[type=range]::-moz-range-thumb {
     height: 34px;
     width: 34px;
     border-radius: 50%;
     background: $blue-001;
     cursor: pointer;
-  } 
+  }
   input[type=range]::-ms-thumb {
     height: 34px;
     width: 34px;
@@ -256,7 +258,7 @@ label {
   font-size: rem(16);
   line-height: 1;
 }
-.new-invite-request.sqr-form input[type="radio"], 
+.new-invite-request.sqr-form input[type="radio"],
 .new-invite-request.sqr-form .radio-inline input[type="radio"] {
   margin-top: 0;
 }
