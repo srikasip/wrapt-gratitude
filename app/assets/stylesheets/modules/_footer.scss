@@ -74,6 +74,10 @@ body.hero-bg {
   width: 32px;
   line-height: 32px;
   text-align: center;
+  &:hover, &:active, &:focus {
+    color: white;
+    background-color: transparent;
+  }
 }
 
 .footer .container {
