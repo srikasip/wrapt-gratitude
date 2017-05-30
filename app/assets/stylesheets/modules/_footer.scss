@@ -59,14 +59,21 @@ body.hero-bg {
 }
 
 .footer__social-links {
+  margin-bottom: 12px;
   text-align: center;
 }
 
 .footer__social_link {
   display: inline-block;
-  padding: 0 4px;
+  margin: 0 4px;
   color: white;
-  font-size: rem(18)
+  font-size: rem(18);
+  border-radius: 50%;
+  border: solid white 1px;
+  height: 32px;
+  width: 32px;
+  line-height: 32px;
+  text-align: center;
 }
 
 .footer .container {
