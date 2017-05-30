@@ -3,6 +3,9 @@
 .top-navigation__container {
   height: 120px;
   padding: 0 15px;
+  @media (max-width: $screen-xs-max) {
+    width: 100%;
+  }
 }
 
 .top-navigation__nav {
@@ -13,6 +16,9 @@
   top: 50%;
   transform: translateY(-50%);
   width: 100%;
+  @media (max-width: $screen-xs-max) {
+    flex-direction: column;
+  }
 }
 
 .top-navigation__menu-item {

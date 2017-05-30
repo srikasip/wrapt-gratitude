@@ -4,29 +4,45 @@
 @import "helpers";
 
 .home__hero {
-  // background-image: image-url('hero-image');
+  background-image: image-url('hero-image');
   background-size: 100vw;
   background-repeat: no-repeat;
-  background-color: #CCC;
   border: none;
-  margin-bottom: 48px;
+  margin-bottom: 96px;
   padding-top: 48px;
   position: relative;
-  min-height: 480px;
+  // min-height: 840px;
+  min-height: 60vw;
+  @media (max-width: $screen-xs-max) {
+    min-height: 100vw;
+    margin-top: 360px;
+  }
 }
 
 .not-signed-in .home__hero {
   margin-bottom: 360px;
 }
 
-.main-header {
+.home__hero-text {
   text-align: center;
 }
 
-.hero-overlay p {
-  font-size: 20px;
-  line-height: 32px;
-  letter-spacing: 0.83px;
+.home__hero-text.container {
+  @media (max-width: $screen-xs-max) {
+    width: 100%;
+    position: absolute;
+    top:0;
+    transform: translateY(-100%);
+  }
+}
+
+.home__hero-text h1 {
+  font-size: rem(60);
+}
+
+.home__hero-text p {
+  font-size: rem(28px);
+  line-height: 1.2em;
 }
 
 .hero-overrun {
@@ -34,10 +50,10 @@
   background-color: #fff;
   padding: 40px;
   box-shadow: 0 2px 4px 4px rgba(0, 0, 0, 0.08), 0 2px 12px 12px rgba(0, 0, 0, 0.05);
-  // transform: translateY(66%);
   position: absolute;
-  // bottom: 0;
-  width: 100%;
+  bottom: 0;
+  left: 0;
+  transform: translateY(66%);
 }
 
 .profiles.new .hero-overrun form {
@@ -45,7 +61,8 @@
 }
 
 .profiles.new .hero-overrun label {
-  font-size: rem(24);
+  font-size: rem(33);
+  line-height: 1.1;
 }
 
 .invitation_request_email label {
@@ -71,6 +88,13 @@
   }
 }
 
+.home__after-hero__site-description {
+  font-size: rem(44);
+}
+
+/////////////////////////////////
+// How Wrapt Works
+/////////////////////////////////
 .new-quiz__about-intro-content {
   width: 60%;
   margin: 0 auto;
@@ -96,7 +120,7 @@
 .about-step-number {
   border: solid 1px $blue-001;
   border-radius: 50%;
-  font-size: rem(36);
+  font-size: rem(44);
   height: 72px;
   width: 72px;
   line-height: 72px;
@@ -106,10 +130,11 @@
 
 .about-step__header {
   margin-top: 24px;
+  font-size: rem(30)
 }
 
 .about-step__description {
-  margin-top: 24px;
+  margin-top: 20px;
 }
 
 .new-quiz__after-wrapper {
@@ -201,48 +226,14 @@ body.home,
   min-width: initial;
 }
 
-.home .hero-overlay {
-  @media (max-width: 1055px) {
-    width: 80%;
-  }
-  @media (max-width: 989px) {
-    width: 100%;
-    padding-bottom: 8px;
-  }
-  @media (max-width: 830px) {
-    background-color: rgba(0, 0, 0, 0.4);
-    padding-right: 24px;
-  }
-  @media (max-width: 770px) {
-    margin-top: 155px;
-    background-color: $gray-006;
-  }
-  @media (max-width: 600px) {
-    margin-top: 50px;
-  }
-}
-.home .hero-overlay h2 {
-  @media (max-width: 868px) {
-    font-size: rem(24);
-  }
-}
-.home .hero-overlay p {
-  @media (max-width: 868px) {
-    font-size: rem(16);
-  }
-}
-.home .navbar-brand {
-  @media (max-width: 560px) {
-    padding-top: 12px;
-  }
-}
-.home .hero-overrun {
-  @media (max-width: 780px) {
-    margin-top: 20px;
-  }
-}
 .home {
   margin-bottom: 0;
+}
+
+.container.home__after-hero {
+  @media (max-width: $screen-xs-max) {
+    width: 100%;
+  }
 }
 
 ///////////////////////////////////
@@ -261,6 +252,9 @@ body.home,
 .home__gift-example {
   position: relative;
   overflow: hidden;
+  @media (max-width: $screen-xs-max) {
+    margin: 24px 0;
+  }
 }
 
 .home__gift-example img {
@@ -307,34 +301,14 @@ body.home,
 
 .home__flyover-header {
   position: relative;
-  top: 66%;
+  top: 50%;
   text-transform: uppercase;
+  font-size: rem(58);
 }
 
 .home__flyover-description {
   padding: 8.163265306122%;
-  line-height: 1.25;
+  line-height: 1.2;
   opacity: 1;
-}
-
-/////////////////////////////////////////////
-// Home Bottom Logo (Gift Better Gift Wrapt)
-/////////////////////////////////////////////
-
-.home__bottom-logo {
-  margin: 80px 0;
-  border: solid 2px $blue-001;
-  margin-left: auto;
-  margin-right: auto;
-  display: inline-block;
-}
-.home__bottom-logo__inner-box {
-  display: inline-block;
-  padding: 16px;
-}
-.home__bottom-logo__inner-box:first-child {
-  border-right: solid 2px $blue-001;
-}
-.home__bottom-logo h3 {
-  margin: 0;
+  font-size: rem(20);
 }

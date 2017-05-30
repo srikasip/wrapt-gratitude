@@ -68,3 +68,9 @@ body.hero-bg {
   color: white;
   font-size: rem(18)
 }
+
+.footer .container {
+  @media (max-width: $screen-xs-max) {
+    width: 100%;
+  }
+}

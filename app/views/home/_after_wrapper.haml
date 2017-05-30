@@ -1,7 +1,7 @@
 .container.home__after-hero
   .row
     .col-xs-12.col-sm-10.col-sm-offset-1
-      %h3.text-center Wrapt is a fun and easy way to find inspired gifts that match who they are, with stories they will love.
+      %h3.text-center.home__after-hero__site-description Wrapt is a fun and easy way to find inspired gifts that match who they are, with stories they will love.
   .row
     .col-xs-12
       .new-quiz__about
@@ -11,18 +11,18 @@
               How Wrapt Works
 
         .row.home__about-steps
-          .col-sm-4.about-step
+          .col-sm-4.col-xs-12.about-step
             .about-step-number.text-center.light 1
             .text-center
               %h4.about-step__header Give us a few basics.
             %p.about-step__description Answer some optional questions about their personality, passions and purpose–it will help us match gifts to them better!
 
-          .col-sm-4.about-step
+          .col-sm-4.col-xs-12.about-step
             .about-step-number.light 2
             %h4.about-step__header We will recommend unique, artisanal items, lovingly made with stories that inspire.
             %p.about-step__description We’ll share stories about our artisans and impact from each purchase.
 
-          .col-sm-4.about-step
+          .col-sm-4.col-xs-12.about-step
             .about-step-number.light 3
             %h4.about-step__header We send to your gift recipient, Wrapt and delivered, with love.
             %p.about-step__description Wrapt is ready for your next gift occasion with your profiles saved with their interests, passions and favorites.
@@ -54,8 +54,4 @@
         Hand made by artisan jeweler Kristin Ford, who combines precious stones with metals to make meaning.
 
 .text-center
-  .home__bottom-logo
-    .home__bottom-logo__inner-box
-      %h3.light <3
-    .home__bottom-logo__inner-box
-      %h3.light Gift Better. Gift Wrapt.
+  = embedded_svg 'icon-gift-better-gift-wrapt'
