@@ -55,8 +55,9 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.active_job.queue_adapter = :sidekiq
-  if ENV['BETTER_ERRORS_EDITOR']
-    BetterErrors.editor = ENV['BETTER_ERRORS_EDITOR'].to_sym
+
+  if ENV["LIVERELOAD"]
+    config.middleware.insert_before ActionDispatch::ShowExceptions, Rack::LiveReload
   end
-  
+
 end

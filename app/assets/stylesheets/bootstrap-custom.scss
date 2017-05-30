@@ -5,7 +5,8 @@
  */
 
 // Core variables and mixins
-@import "helpers/variables"; // Green River copy and adjustments of and to bs3 variables 
+@import "bootstrap-sprockets";
+@import "helpers/variables"; // Green River copy and adjustments of and to bs3 variables
 // @import "bootstrap/variables";
 @import "bootstrap/mixins";
 

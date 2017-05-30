@@ -14,18 +14,17 @@
  *= require bootstrap-slider
  */
 
-@import "modules/fonts";
-@import "bootstrap-sprockets";
-@import 'bootstrap-custom';
-@import "font-awesome-sprockets";
-@import "font-awesome";
-// @import "helpers/variables"; included in bootstrap_custom
-@import "helpers/mixins";
-@import "helpers/helper_classes";
-@import "helpers/margins_padding";
-@import "modules/modules";
+ // Use 'require' here to cut down on css reloading time.
+ // Individual module files should @import 'helpers' at the top of the file
 
+ //////////////////////
+ // Vendored Libraries
+ /////////////////////
+//= require font-awesome-sass
+//= require bootstrap-custom
 
-
-
-
+//////////////////////////////////////////
+// Owned and Operated by Verite
+/////////////////////////////////////////
+// use require_directory because admin stuff is in admin/modules
+//= require_directory ./modules

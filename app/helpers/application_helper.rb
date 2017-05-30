@@ -38,10 +38,10 @@ module ApplicationHelper
 
   # path to svg files so we can include them like a partial
   # http://cobwwweb.com/render-inline-svg-rails-middleman#sthash.0TA73Fi9.dpuf
-  def svg(name) 
-    file_path = "#{Rails.root}/app/assets/images/#{name}.svg" 
-    return File.read(file_path).html_safe if File.exists?(file_path) 
-    '(not found)' 
+  def svg(name)
+    file_path = "#{Rails.root}/app/assets/images/#{name}.svg"
+    return File.read(file_path).html_safe if File.exists?(file_path)
+    '(not found)'
   end
 
   # embed an svg from a sprite (pick the symbol to use and give it a class)
@@ -51,7 +51,11 @@ module ApplicationHelper
   end
 
   def body_classes
-    [controller_name, params[:action]]
+    [controller_name, params[:action], signin_state_body_class]
+  end
+
+  private def signin_state_body_class
+    current_user ? 'signed-in' : 'not-signed-in'
   end
 
   def analytics_gifter_id

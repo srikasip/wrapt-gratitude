@@ -1,30 +1,72 @@
 // Styles for Welcoming pages with the full-bleed hero images
 // e.g. Home Page and Quiz Landing page
 
-body.hero-bg .wrapper--full-bleed__bg-03{
+@import "helpers";
+
+.home__hero {
   background-image: image-url('hero-image');
   background-size: 100vw;
   background-repeat: no-repeat;
+  border: none;
+  margin-bottom: 148px;
+  padding-top: 48px;
+  position: relative;
+  // min-height: 840px;
+  min-height: 60vw;
+  @media (max-width: $screen-xs-max) {
+    min-height: 100vw;
+    margin-top: 360px;
+  }
 }
 
-.hero-overlay {
-  background-color: rgba(0, 0, 0, 0.2);
-  padding: 26px 120px 40px 36px;
-  color: #fff;
-  width: 60%;
+.not-signed-in .home__hero {
+  margin-bottom: 360px;
 }
 
-.hero-overlay p {
-  font-size: 20px;
-  line-height: 32px;
-  letter-spacing: 0.83px;
+.home__hero-text {
+  text-align: center;
+}
+
+.home__hero-text.container {
+  @media (max-width: $screen-xs-max) {
+    width: 100%;
+    position: absolute;
+    top:0;
+    transform: translateY(-100%);
+  }
+}
+
+.home__hero-text h1 {
+  font-size: rem(60);
+}
+
+.home__hero-text p {
+  font-size: rem(28px);
+  line-height: 1.2em;
 }
 
 .hero-overrun {
   margin-top: 100px;
   background-color: #fff;
   padding: 40px;
-  box-shadow: 0 0 9px 2px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px 4px rgba(0, 0, 0, 0.08), 0 2px 12px 12px rgba(0, 0, 0, 0.05);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: translateY(66%);
+}
+
+.profiles.new .hero-overrun form {
+  text-align: center;
+}
+
+.profiles.new .hero-overrun label {
+  font-size: rem(33);
+  line-height: 1.1;
+}
+
+.hero-overrun .btn.btn-multiple-choice-option {
+  border: solid 2px $blue-001;
 }
 
 .invitation_request_email label {
@@ -38,72 +80,65 @@ body.hero-bg .wrapper--full-bleed__bg-03{
 .hero-overrun .btn.btn-multiple-choice-option {
   min-width: 148px;
 }
-.new-quiz__about h4 {
-  margin-bottom: 6px;
-}
+
 .new-quiz__about p {
   color: $gray-007;
 }
 .new-quiz__about-intro-wrapper {
-  margin: 72px 0;
+  margin-top: 80px;
   width: 100%;
   @media (max-width: $screen-xs-max) {
-    margin: 48px 0;
+    margin: 16px 0;
   }
 }
 
+.home__after-hero__site-description {
+  font-size: rem(44);
+}
+
+/////////////////////////////////
+// How Wrapt Works
+/////////////////////////////////
 .new-quiz__about-intro-content {
   width: 60%;
   margin: 0 auto;
   text-align: center;
-  padding-bottom: 40px;
+  padding-bottom: 24px;
   border-bottom: solid 2px $gray-004;
   @media (max-width: $screen-xs-max) {
     padding-bottom: 24px;
     width: 90%;
   }
 }
+
+.home__about-steps {
+  margin-top: 40px;
+}
+
 .new-quiz__about-intro-content.border-dark {
   border-color: rgba(77, 76, 77, 0.2);
   max-width: 668px;
   padding-bottom: 23px;
 }
 
-.new-quiz__about-step {
-  margin-bottom: 18px;
-  padding-top: 100px;
-  background-repeat: no-repeat;
+.about-step-number {
+  border: solid 1px $blue-001;
+  border-radius: 50%;
+  font-size: rem(44);
+  height: 72px;
+  width: 72px;
+  line-height: 72px;
+  margin: 0 auto;
+  text-align: center;
 }
 
-.new-quiz__about-step.left {
-  text-align: left;
-  background-position: top left;
-  padding-left: 108px;
-  padding-right: 200px;
-  @media (max-width: $screen-sm-max) {
-    padding-right: 0;
-  }
+.about-step__header {
+  margin-top: 24px;
+  font-size: rem(30)
 }
 
-.new-quiz__about-step.right {
-  text-align: right;
-  background-position: top right;
-  padding-right: 108px;
-  padding-left: 200px;
-  @media (max-width: $screen-sm-max) {
-    padding-left: 0;
-  }
-}
-
-.new-quiz__about-step.step-1 {
-  background-image: image-url('about-step-1.png');
-}
-.new-quiz__about-step.step-2 {
-  background-image: image-url('about-step-2.png');
-}
-.new-quiz__about-step.step-3 {
-  background-image: image-url('about-step-3.png');
-  margin-bottom: 100px;
+.about-step__description {
+  margin-top: 20px;
 }
 
 .new-quiz__after-wrapper {
@@ -194,49 +229,90 @@ body.home,
 .home .navbar-fixed-bottom {
   min-width: initial;
 }
-.home .container {
-  width: initial;
-}
-.home .hero-overlay {
-  @media (max-width: 1055px) {
-    width: 80%;
-  }
-  @media (max-width: 989px) {
-    width: 100%;
-    padding-bottom: 8px;
-  }
-  @media (max-width: 830px) {
-    background-color: rgba(0, 0, 0, 0.4);
-    padding-right: 24px;
-  }
-  @media (max-width: 770px) {
-    margin-top: 155px; 
-    background-color: $gray-006;
-  }
-  @media (max-width: 600px) {
-    margin-top: 50px;
-  }
-}
-.home .hero-overlay h2 {
-  @media (max-width: 868px) {
-    font-size: rem(24);
-  }
-}
-.home .hero-overlay p {
-  @media (max-width: 868px) {
-    font-size: rem(16);
-  }
-}
-.home .navbar-brand {
-  @media (max-width: 560px) {
-    padding-top: 12px;
-  }
-}
-.home .hero-overrun {
-  @media (max-width: 780px) {
-    margin-top: 20px;
-  }
-}
+
 .home {
   margin-bottom: 0;
+}
+
+.container.home__after-hero {
+  @media (max-width: $screen-xs-max) {
+    width: 100%;
+  }
+}
+
+///////////////////////////////////
+// Gift Examples w/ Impact Flyovers
+///////////////////////////////////
+
+.home__gift-examples {
+  display: flex;
+  width: 100%;
+  margin-top: 24px;
+  @media (max-width: $screen-xs-max) {
+    flex-direction: column;
+  }
+}
+
+.home__gift-example {
+  position: relative;
+  overflow: hidden;
+  @media (max-width: $screen-xs-max) {
+    margin: 24px 0;
+  }
+}
+
+.home__gift-example img {
+  width: 100%;
+}
+
+
+.home__gift-example .flyover {
+  height: 0;
+  position: absolute;
+  width: 100%;
+  height: 33%;
+  transition: transform 0.25s;
+  overflow: hidden;
+}
+
+.home__gift-example:hover .flyover {
+  display: block;
+  height: 33%;
+  transform: translateY(0);
+  color: white;
+}
+
+.home__gift-example .flyover.top {
+  top: 0;
+  transform-origin: top;
+  transform: translateY(-100%);
+  text-align: center;
+  background-color: $gray-012;
+}
+.home__gift-example:hover .flyover.top {
+  transform: translateY(0);
+}
+
+.home__gift-example .flyover.bottom {
+  bottom: 0;
+  transform-origin: bottom;
+  transform: translateY(100%);
+  background-color: rgba(161, 172, 178, 0.8)
+}
+.home__gift-example:hover .flyover.bottom {
+  transform: translateY(0);
+}
+
+.home__flyover-header {
+  position: relative;
+  top: 50%;
+  text-transform: uppercase;
+  font-size: rem(58);
+}
+
+.home__flyover-description {
+  padding: 8.163265306122%;
+  line-height: 1.2;
+  opacity: 1;
+  font-size: rem(20);
 }

@@ -1,6 +1,8 @@
 // gift recommendation carousel specific styles
 // also used on the recipient review page
 
+@import "helpers";
+
 .gr-carousel__gifts {
   @include floating-container;
   width: 945px;
@@ -393,4 +395,3 @@ a.liked:focus {
 .gr-image-carousel__nav.prev {
   margin-right: -4px;
 }
-

@@ -1,13 +1,19 @@
-.container
-  .row
-    .col-xs-12.col-sm-10.col-sm-offset-1
-      .hero-overlay
-        %h2.light
-          Introducting Wrapt,
-          a personalized gift whisperer to help you find gifts for the women in your life.
-        %p.light We use the science of gifting and gratitude to match her personality, passions and purpose, to gifts she will love, no matter the occasion.
-      
-      .hero-overrun
+.home__hero
+  .home__hero-text.container
+    .row
+      .col-xs-12.col-xs-12.col-sm-8.col-sm-offset-2
+        %h1.light
+          Gift Better.
+          %br
+          Gift Wrapt.
+        %p.light
+          We use the science of gifting to find the best gifts for you,
+          %br
+          while doing a little good in the world
+
+  .container
+    .row
+      .hero-overrun.col-xs-12.col-sm-8.col-sm-offset-2
         - if current_user&.admin?
           %p In MVP1a, when we invite people for testing, they will be taken to a special landing page.
           %p
@@ -24,14 +30,16 @@
             .form-inputs
               = form.input :email, label: 'What is your email address?', required: false
               = form.input :how_found, label: 'How did you hear about us?', as: :radio_buttons, collection: InvitationRequest::HOW_FOUNDS, label_method: :last, value_method: :first, wrapper_html: {class: 'labels-no-bottom-margin'}
-          
+
             .form-actions.pull-right
               = form.submit 'Submit', class: 'btn btn-primary'
             .clearfix
-      =render 'home/how_wrapt_works'
+
+
 
 - content_for :after_wrapper do
-  =render 'home/our_own_collection'
+  = render 'home/after_wrapper'
+
 
 
 

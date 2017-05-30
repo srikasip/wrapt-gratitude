@@ -11,7 +11,7 @@ class HomeController < ApplicationController
       @invitation_request = InvitationRequest.new
     end
   end
-  
+
   def loop11_enabled?
     false
   end
