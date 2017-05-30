@@ -1,44 +1,41 @@
-.container
-  .row
-    .col-xs-12
-      %nav.navbar.navbar-default.navbar-static-top
-        .navbar-header
-          .navbar-brand{class: ("active" if active_top_nav_section == 'home_pages')}
-            - home_link_url = current_user&.admin? ? root_path : '#'
-            = link_to home_link_url do
-              %span Wrapt
-              =embedded_svg('wrapt-logo-tm', class: "navbar-brand__icon-wrapt-logo")
+.top-navigation__container.container
+  %nav.top-navigation__nav
+    .top-navigation__brand{class: ("active" if active_top_nav_section == 'home_pages')}
+      - home_link_url = current_user&.admin? ? root_path : '#'
+      = link_to home_link_url, class: "top-navigation__brand-link" do
+        %span Wrapt
+        =embedded_svg('wrapt-logo-tm', class: "navbar-brand__icon-wrapt-logo")
 
-        %ul.nav.navbar-nav.navbar-right
-          - if current_user && current_user.active?
-            - if current_user&.admin?
-              %li
-                = link_to admin_root_path do
-                  =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
-                  Admin
-            %li
-              = link_to my_account_path do
-                =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
-                My Account
-            %li
-              = link_to science_of_gifting_path do
-                =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
-                The Science
-          %li
-            - if enable_gift_basket?
-              = link_to '#', data: {behavior: 'open-gift-basket'}, onClick: "ga('send', 'event', 'basket', 'open-close', 'open');" do
-                =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
-                Gift Basket
-                %span.gift-basket-count{"data-behavior" => "gift-basket-count", class: ('empty' if gift_basket_empty?)}
-                  = gift_basket_count
+    .top-navigation__menu
+      - if current_user && current_user.active?
+        - if current_user&.admin?
+          %span.top-navigation__menu-item
+            = link_to admin_root_path do
+              =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
+              Admin
+        %span.top-navigation__menu-item
+          = link_to my_account_path do
+            =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
+            My Account
+        %span.top-navigation__menu-item
+          = link_to science_of_gifting_path do
+            =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
+            The Science
+      - if enable_gift_basket?
+        %span.top-navigation__menu-item
+          = link_to '#', data: {behavior: 'open-gift-basket'}, onClick: "ga('send', 'event', 'basket', 'open-close', 'open');" do
+            =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
+            Gift Basket
+            %span.gift-basket-count{"data-behavior" => "gift-basket-count", class: ('empty' if gift_basket_empty?)}
+              = gift_basket_count
 
-          - if current_user
-            %li
-              = link_to user_session_path, method: :delete do
-                =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
-                Sign Out
-          - else
-            %li
-              = link_to new_user_session_path, data: {loads_in_pjax_modal: true} do
-                =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
-                Sign In
+      - if current_user
+        %span.top-navigation__menu-item
+          = link_to user_session_path, method: :delete do
+            =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
+            Sign Out
+      - else
+        %span.top-navigation__menu-item
+          = link_to new_user_session_path, data: {loads_in_pjax_modal: true} do
+            =embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
+            Sign In

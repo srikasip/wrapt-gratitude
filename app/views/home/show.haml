@@ -1,37 +1,38 @@
-.container
-  .row
-    .col-xs-12.col-sm-10.col-sm-offset-1
-      .main-header
-        %h1
-          Gift Better.
-          %br
-          Gift Wrapt.
-        %p
-          We use the science of gifting to find the best gifts for you,
-          %br
-          while doing a little good in the world
-
-      .hero-overrun
-        - if current_user&.admin?
-          %p In MVP1a, when we invite people for testing, they will be taken to a special landing page.
+.home__hero
+  .container
+    .row
+      .col-xs-12.col-sm-10.col-sm-offset-1
+        .main-header
+          %h1
+            Gift Better.
+            %br
+            Gift Wrapt.
           %p
-            = link_to 'Tester Landing Page: Start a New Quiz', new_profile_path
-            - test_surveys = Survey.where(test_mode: true)
-            - if test_surveys.any?
-              %p Select a quiz that is currently in test mode:
-              %ul
-                - test_surveys.each do |test_survey|
-                  %li= link_to test_survey.title, new_profile_path(survey_id: test_survey.id)
-        - else
-          .sqr-progress.sqr-progress--one-question-only
-          = simple_form_for @invitation_request, html: {class: 'sqr-form new-invite-request'} do |form|
-            .form-inputs
-              = form.input :email, label: 'What is your email address?', required: false
-              = form.input :how_found, label: 'How did you hear about us?', as: :radio_buttons, collection: InvitationRequest::HOW_FOUNDS, label_method: :last, value_method: :first, wrapper_html: {class: 'labels-no-bottom-margin'}
+            We use the science of gifting to find the best gifts for you,
+            %br
+            while doing a little good in the world
 
-            .form-actions.pull-right
-              = form.submit 'Submit', class: 'btn btn-primary'
-            .clearfix
+        .hero-overrun
+          - if current_user&.admin?
+            %p In MVP1a, when we invite people for testing, they will be taken to a special landing page.
+            %p
+              = link_to 'Tester Landing Page: Start a New Quiz', new_profile_path
+              - test_surveys = Survey.where(test_mode: true)
+              - if test_surveys.any?
+                %p Select a quiz that is currently in test mode:
+                %ul
+                  - test_surveys.each do |test_survey|
+                    %li= link_to test_survey.title, new_profile_path(survey_id: test_survey.id)
+          - else
+            .sqr-progress.sqr-progress--one-question-only
+            = simple_form_for @invitation_request, html: {class: 'sqr-form new-invite-request'} do |form|
+              .form-inputs
+                = form.input :email, label: 'What is your email address?', required: false
+                = form.input :how_found, label: 'How did you hear about us?', as: :radio_buttons, collection: InvitationRequest::HOW_FOUNDS, label_method: :last, value_method: :first, wrapper_html: {class: 'labels-no-bottom-margin'}
+
+              .form-actions.pull-right
+                = form.submit 'Submit', class: 'btn btn-primary'
+              .clearfix
 
 
 

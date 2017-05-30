@@ -1,4 +1,4 @@
-.container
+.container.home__after-hero
   .row
     .col-xs-12.col-sm-10.col-sm-offset-1
       %h3.text-center Wrapt is a fun and easy way to find inspired gifts that match who they are, with stories they will love.
@@ -10,10 +10,11 @@
             %h2.light.mb1
               How Wrapt Works
 
-        .row
+        .row.home__about-steps
           .col-sm-4.about-step
             .about-step-number.text-center.light 1
-            %h4.about-step__header Give us a few basics.
+            .text-center
+              %h4.about-step__header Give us a few basics.
             %p.about-step__description Answer some optional questions about their personality, passions and purpose–it will help us match gifts to them better!
 
           .col-sm-4.about-step
@@ -33,22 +34,28 @@
       %h1.home__flyover-header.light Impact
     = image_tag "gift-example__bag.jpg"
     .flyover.bottom
-      %p.home__flyover-description Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      %p.home__flyover-description
+        Made by a social enterprise in India, these JOYN bags are 100% handmade.
 
   .home__gift-example
     .flyover.top
       %h1.home__flyover-header.light Impact
     = image_tag "gift-example__glass.jpg"
     .flyover.bottom
-      %p.home__flyover-description Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+      %p.home__flyover-description
+        Supporting ancient glass blowing (since the eighth century) as an art form in Murano Italy (Venice).
 
   .home__gift-example
     .flyover.top
       %h1.home__flyover-header.light Impact
     = image_tag "gift-example__earrings.jpg"
     .flyover.bottom
-      %p.home__flyover-description Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      %p.home__flyover-description
+        Hand made by artisan jeweler Kristin Ford, who combines precious stones with metals to make meaning.
 
-.home__bottom-logo.text-center
-  %h3.light Gift Better. Gift Wrapt.
+.text-center
+  .home__bottom-logo
+    .home__bottom-logo__inner-box
+      %h3.light <3
+    .home__bottom-logo__inner-box
+      %h3.light Gift Better. Gift Wrapt.

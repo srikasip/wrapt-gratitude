@@ -44,3 +44,27 @@ footer li a {
     text-decoration: none;
   }
 }
+
+// Blue Background New Home Page Footer
+body.hero-bg {
+  margin-bottom: 0;
+}
+.hero-bg .footer {
+  background-color: $blue-001;
+}
+
+.hero-bg footer li a,
+.hero-bg .footer__links {
+  color: white;
+}
+
+.footer__social-links {
+  text-align: center;
+}
+
+.footer__social_link {
+  display: inline-block;
+  padding: 0 4px;
+  color: white;
+  font-size: rem(18)
+}

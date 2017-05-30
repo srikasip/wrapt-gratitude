@@ -3,13 +3,20 @@
 
 @import "helpers";
 
-body.hero-bg .wrapper--full-bleed__bg-03{
-  background-image: image-url('hero-image');
+.home__hero {
+  // background-image: image-url('hero-image');
   background-size: 100vw;
   background-repeat: no-repeat;
-  // background-color: #CCC;
+  background-color: #CCC;
   border: none;
-  margin-bottom: 48px
+  margin-bottom: 48px;
+  padding-top: 48px;
+  position: relative;
+  min-height: 480px;
+}
+
+.not-signed-in .home__hero {
+  margin-bottom: 360px;
 }
 
 .main-header {
@@ -26,7 +33,19 @@ body.hero-bg .wrapper--full-bleed__bg-03{
   margin-top: 100px;
   background-color: #fff;
   padding: 40px;
-  box-shadow: 0 2px 4px 4px rgba(0, 0, 0, 0.08), 0 2px 12px 12px rgba(0, 0, 0, 0.05)
+  box-shadow: 0 2px 4px 4px rgba(0, 0, 0, 0.08), 0 2px 12px 12px rgba(0, 0, 0, 0.05);
+  // transform: translateY(66%);
+  position: absolute;
+  // bottom: 0;
+  width: 100%;
+}
+
+.profiles.new .hero-overrun form {
+  text-align: center;
+}
+
+.profiles.new .hero-overrun label {
+  font-size: rem(24);
 }
 
 .invitation_request_email label {
@@ -45,7 +64,7 @@ body.hero-bg .wrapper--full-bleed__bg-03{
   color: $gray-007;
 }
 .new-quiz__about-intro-wrapper {
-  margin: 24px 0;
+  margin-top: 80px;
   width: 100%;
   @media (max-width: $screen-xs-max) {
     margin: 16px 0;
@@ -56,13 +75,18 @@ body.hero-bg .wrapper--full-bleed__bg-03{
   width: 60%;
   margin: 0 auto;
   text-align: center;
-  padding-bottom: 40px;
+  padding-bottom: 24px;
   border-bottom: solid 2px $gray-004;
   @media (max-width: $screen-xs-max) {
     padding-bottom: 24px;
     width: 90%;
   }
 }
+
+.home__about-steps {
+  margin-top: 40px;
+}
+
 .new-quiz__about-intro-content.border-dark {
   border-color: rgba(77, 76, 77, 0.2);
   max-width: 668px;
@@ -176,9 +200,7 @@ body.home,
 .home .navbar-fixed-bottom {
   min-width: initial;
 }
-.home .container {
-  width: initial;
-}
+
 .home .hero-overlay {
   @media (max-width: 1055px) {
     width: 80%;
@@ -223,9 +245,14 @@ body.home,
   margin-bottom: 0;
 }
 
+///////////////////////////////////
+// Gift Examples w/ Impact Flyovers
+///////////////////////////////////
+
 .home__gift-examples {
   display: flex;
   width: 100%;
+  margin-top: 24px;
   @media (max-width: $screen-xs-max) {
     flex-direction: column;
   }
@@ -240,10 +267,6 @@ body.home,
   width: 100%;
 }
 
-.home__bottom-logo {
-  margin-top: 80px;
-  border: solid 2px $blue-001;
-}
 
 .home__gift-example .flyover {
   height: 0;
@@ -292,4 +315,26 @@ body.home,
   padding: 8.163265306122%;
   line-height: 1.25;
   opacity: 1;
+}
+
+/////////////////////////////////////////////
+// Home Bottom Logo (Gift Better Gift Wrapt)
+/////////////////////////////////////////////
+
+.home__bottom-logo {
+  margin: 80px 0;
+  border: solid 2px $blue-001;
+  margin-left: auto;
+  margin-right: auto;
+  display: inline-block;
+}
+.home__bottom-logo__inner-box {
+  display: inline-block;
+  padding: 16px;
+}
+.home__bottom-logo__inner-box:first-child {
+  border-right: solid 2px $blue-001;
+}
+.home__bottom-logo h3 {
+  margin: 0;
 }

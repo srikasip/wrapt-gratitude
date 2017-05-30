@@ -1,21 +1,45 @@
 @import "helpers";
 
-.navbar-nav li {
+.top-navigation__container {
+  height: 120px;
+  padding: 0 15px;
+}
+
+.top-navigation__nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
+.top-navigation__menu-item {
+  display: inline-block;
   font-size: rem(12);
   letter-spacing: 1.8px;
   text-transform: uppercase;
   @include akkurat-bold;
   color: $gray-008;
+  padding: 0 15px;
 }
-.navbar-static-top {
-  border-width: 0;
+
+.top-navigation__brand-link {
+  position: relative;
 }
-.navbar-brand span {
-  display: inline-block;
-  text-indent: -9999px;
+.top-navigation__brand-link span {
+  position: absolute;
+  left: -9999px;
 }
-.navbar-brand a:hover,
-.navbar-brand a:active {
+
+.top-navigation__menu-item a {
+  color: $gray-008;
+}
+
+.top-navigation__menu-item a:hover,
+.top-navigation__menu-item a:active,
+.top-navigation__menu-item a:focus {
   text-decoration: none;
   background-color: transparent;
 }
@@ -25,6 +49,9 @@
 .nav a {
   cursor: pointer;
 }
+
+
+// .navbar--secondary unused except in style guide
 .navbar--secondary {
   text-align: center;
   font-size: rem(18);

@@ -8,9 +8,15 @@
 .wrapper--full-bleed__bg-02 {
   background-color: #fff;
 }
+
 .wrapper--full-bleed__bg-03 {
   background: rgba(209,217,232,0.10);
-  border: 1px solid #E2E2E2;
+  border-bottom: 1px solid #E2E2E2;
+  padding-bottom: 8rem;
+}
+.hero-bg .wrapper--full-bleed__bg-03 {
+  border-bottom: none;
+  padding-bottom: 16rem;
 }
 
 .floating-container {

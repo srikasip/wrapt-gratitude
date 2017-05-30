@@ -1,26 +1,25 @@
-.container
-  .row
-    .col-xs-12.col-sm-10.col-sm-offset-1
-      .main-header
-        %h1
-          Gift Better.
-          %br
-          Gift Wrapt.
-        %p
-          We use the science of gifting to find the best gifts for you,
-          %br
-          while doing a little good in the world
+.home__hero
+  .container
+    .row
+      .col-xs-12.col-sm-10.col-sm-offset-1
+        .main-header
+          %h1
+            Gift Better.
+            %br
+            Gift Wrapt.
+          %p
+            We use the science of gifting to find the best gifts for you,
+            %br
+            while doing a little good in the world
 
-      .hero-overrun
-        .sqr-progress
-        = simple_form_for @question_response, url: with_invitation_scope(profiles_path), html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
-          - if current_user&.admin?
-            = hidden_field_tag :survey_id, @survey.id
-          = render response_fields_partial, form: form, label: @question_response.survey_question.prompt
-          .sqr-submit__container.text-right#js-sqr-submit__container
-            %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}
-              Start Quiz
-      =render 'home/how_wrapt_works'
+        .hero-overrun
+          = simple_form_for @question_response, url: with_invitation_scope(profiles_path), html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
+            - if current_user&.admin?
+              = hidden_field_tag :survey_id, @survey.id
+            = render response_fields_partial, form: form, label: @question_response.survey_question.prompt
+            .sqr-submit__container.text-right#js-sqr-submit__container
+              %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}
+                Start Quiz
 
 - content_for :after_wrapper do
   =render 'home/after_wrapper'
