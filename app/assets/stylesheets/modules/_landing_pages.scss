@@ -8,7 +8,7 @@
   background-size: 100vw;
   background-repeat: no-repeat;
   border: none;
-  margin-bottom: 96px;
+  margin-bottom: 148px;
   padding-top: 48px;
   position: relative;
   // min-height: 840px;
@@ -63,6 +63,10 @@
 .profiles.new .hero-overrun label {
   font-size: rem(33);
   line-height: 1.1;
+}
+
+.hero-overrun .btn.btn-multiple-choice-option {
+  border: solid 2px $blue-001;
 }
 
 .invitation_request_email label {
