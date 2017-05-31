@@ -6,7 +6,7 @@
           .sqr-container__header.pb3
             %h1.text-center= @question_response.survey_question.survey_section.introduction_heading_with_profile_relationship(@profile)
             %p.tan-002= @question_response.survey_question.survey_section.introduction_text_with_profile_relationship(@profile)
-      
+
         .sqr-question__container.floating-container
           .sqr-progress
             .sqr-progress__small
@@ -30,12 +30,10 @@
               .sqr-submit__keyboard-hint#js-next-question-hint-text
                 Or Hit Enter to Continue
 
-        = survey_sections_progress_bar(@survey_response)
-        
+        -# = survey_sections_progress_bar(@survey_response)
+        = render 'survey_sections_progress_bar', progress_widths: survey_section_progress_bar_widths(@survey_response)
+
+
 - content_for :page_js do
   :javascript
     new App.PrevButtonBehavior()
-
-
-
-

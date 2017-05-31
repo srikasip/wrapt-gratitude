@@ -1,5 +1,5 @@
 module SurveyQuestionResponsesHelper
-  
+
   def response_fields_partial
     case @question_response.survey_question
     when SurveyQuestions::MultipleChoice then multiple_choice_fields_partial
@@ -40,49 +40,32 @@ module SurveyQuestionResponsesHelper
     end
   end
 
-  def survey_sections_progress_bar(survey_response)
-    content_tag :div, class: 'sqr-section-progress-bar' do
-      concat content_tag :div, survey_section_icon, class: 'sqr-section-icon__container'
-      concat content_tag :div, survey_sections(survey_response, :progress), class: 'sqr-section-progress__container clearfix'
-      concat content_tag :div, survey_sections(survey_response, :labels), class: 'sqr-section-label__container clearfix'
-    end
-  end
+  # returns percentage widths for the 4 sections of the survey section progress bar
+  # based on total progress through the quiz's initial section (the only one required)
+  def survey_section_progress_bar_widths survey_response
+    result = []
 
-  def survey_section_icon
-    content_tag :div, class: 'sqr-section-icon__outer' do
-      concat content_tag :div, embedded_svg('icon-wrapt-heart', class: 'sqr-section-icon sqr-section-icon__heart'), class: 'sqr-section-icon__inner'
-    end
-  end
+    question_ids = survey_response.survey.sections.first.questions.pluck(:id)
+    answered_question_response_count = survey_response
+      .question_responses
+      .where(survey_question_id: question_ids)
+      .where.not(answered_at: nil)
+      .count
 
-  def survey_sections(survey_response, display)
-    section_question_responses = survey_response.question_responses_grouped_by_section
-    section_groups = section_question_responses.keys.in_groups(2, false)
-    render "survey_section", section_groups: survey_section_data(section_question_responses), display: display
-  end
-
-  def survey_section_data(section_question_responses)
-    section_groups = section_question_responses.keys.in_groups(2, false)
-    section_groups_data = []
-    section_groups.each_with_index do |section_group, index|
-      group_data = []
-      section_group.each do |section|
-        section_width = 100/section_group.size
-        questions = section_question_responses[section]
-        answered_questions_size = questions.
-          select{|question_response| !question_response&.answered_at.nil? }.
-          size
-        progress_width = answered_questions_size > 0 ? 100/(questions.size/answered_questions_size.to_f) : 0
-        section_data = {
-          section_name: section.name,
-          section_width: section_width, 
-          progress_width: progress_width,
-        }
-        group_data << section_data
+    progress = (answered_question_response_count.to_f / question_ids.length.to_f) * 100
+    [(0...25), (25...50), (50...75), (75...100)].each do |step_range|
+      if progress.in? step_range
+        result << ((progress - step_range.begin) / 25) * 100
+      elsif progress < step_range.end
+        result << 0
+      else
+        result << 100
       end
-      section_groups_data << group_data
     end
-    section_groups_data
+
+    return result
   end
+
 
   def other_optional_text_init_style(question_response)
     style = question_response.survey_question_response_options.map{|option| option.survey_question_option.type == 'SurveyQuestionOtherOption'}.any? ? 'display:block;' : 'display:none;'

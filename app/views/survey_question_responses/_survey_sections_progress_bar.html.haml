@@ -1,0 +1,28 @@
+.sqr-section-progress-bar
+  .sqr-section-icon__container
+    .sqr-section-icon__outer
+      .sqr-section-icon__inner
+        %svg.sqr-section-icon.sqr-section-icon__heart
+          %use{"xlink:href" => "#icon-wrapt-heart", "xmlns:xlink" => "http://www.w3.org/1999/xlink"}
+  .sqr-section-progress__container.clearfix
+    .sqr-sections__left
+      .sqr-section{:style => "width: 50%"}
+        .sqr-section__progress{:style => "width: #{progress_widths[0]}%"}
+      .sqr-section{:style => "width: 50%"}
+        .sqr-section__progress{:style => "width: #{progress_widths[1]}%"}
+    .sqr-sections__right
+      .sqr-section{:style => "width: 50%"}
+        .sqr-section__progress{:style => "width: #{progress_widths[2]}%"}
+      .sqr-section{:style => "width: 50%"}
+        .sqr-section__progress{:style => "width: #{progress_widths[3]}%"}
+  .sqr-section-label__container.clearfix
+    .sqr-sections__left
+      .sqr-section__label{:style => "width: 50%"}
+        .small Who are they?
+      .sqr-section__label{:style => "width: 50%"}
+        .small Their Passions
+    .sqr-sections__right
+      .sqr-section__label{:style => "width: 50%"}
+        .small Their Personality
+      .sqr-section__label{:style => "width: 50%"}
+        .small Their Purpose
