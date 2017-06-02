@@ -1,5 +1,5 @@
 .top-navigation__container.container
-  %nav.top-navigation__nav
+  %nav.top-navigation__nav.nav-collapse
     .top-navigation__brand{class: ("active" if active_top_nav_section == 'home_pages')}
       - home_link_url = current_user&.admin? ? root_path : '#'
       = link_to home_link_url, class: "top-navigation__brand-link" do

@@ -1,19 +1,22 @@
 .home__hero
-  .home__hero-text.container
+  .container.home__hero-text
     .row
-      .col-xs-12.col-xs-12.col-sm-8.col-sm-offset-2
-        %h1.light
+      .col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2
+        %h1.light.text-center
           Gift Better.
           %br
           Gift Wrapt.
-        %p.light
-          We use the science of gifting to find the best gifts for you,
-          %br
-          while doing a little good in the world
+.container.home__hero-text-secondary
+  .row
+    .col-lg-8.col-lg-offset-2
+      %p.home__hero-text-secondary__p.light.text-center
+        We use the science of gifting to find the best gifts for you,
+        %br
+        while doing a little good in the world
 
   .container
     .row
-      .hero-overrun.col-xs-12.col-sm-8.col-sm-offset-2
+      .hero-overrun.col-sm-10.col-sm-offset-1
         - if current_user&.admin?
           %p In MVP1a, when we invite people for testing, they will be taken to a special landing page.
           %p

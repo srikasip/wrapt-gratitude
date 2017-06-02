@@ -7,53 +7,71 @@
   background-image: image-url('hero-image');
   background-size: 100vw;
   background-repeat: no-repeat;
+  background-position: 0% 50%;
   border: none;
-  margin-bottom: 148px;
+  margin-bottom: 24px;
   padding-top: 48px;
   position: relative;
-  // min-height: 840px;
-  min-height: 60vw;
   @media (max-width: $screen-xs-max) {
-    min-height: 100vw;
-    margin-top: 360px;
+    margin-top: 20px;
+    padding-top: 28px;
+  }
+  @media (min-width: $screen-sm-min) {
+    background-position: 0% 0%;
+  }
+  @media (min-width: $screen-lg-min) {
+    background-position: 0% 90%;
   }
 }
 
-.not-signed-in .home__hero {
-  margin-bottom: 360px;
-}
-
-.home__hero-text {
-  text-align: center;
-}
-
-.home__hero-text.container {
-  @media (max-width: $screen-xs-max) {
-    width: 100%;
-    position: absolute;
-    top:0;
-    transform: translateY(-100%);
-  }
-}
 
 .home__hero-text h1 {
   font-size: rem(60);
+  margin-bottom: 140px;
+  @media (min-width: $screen-sm-min) {
+    margin-bottom: 360px;
+    line-height: 1;
+  }
+  @media (min-width: $screen-md-min) {
+    margin-bottom: 500px;
+    line-height: 1.2;
+  }
+  @media (min-width: $screen-lg-min) {
+  }
 }
-
-.home__hero-text p {
+.home__hero-text-secondary .home__hero-text-secondary__p {
   font-size: rem(28px);
-  line-height: 1.2em;
+  line-height: 1.2em;  
+  @media (min-width: $screen-sm-min) {
+    margin-top: -380px;
+  }
+  @media (min-width: $screen-md-min) {
+    margin-top: -500px;
+  }
+  @media (min-width: $screen-lg-min) {
+    margin-top: -520px;
+  }
 }
 
 .hero-overrun {
-  margin-top: 100px;
   background-color: #fff;
   padding: 40px;
   box-shadow: 0 2px 4px 4px rgba(0, 0, 0, 0.08), 0 2px 12px 12px rgba(0, 0, 0, 0.05);
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  transform: translateY(66%);
+  @media (min-width: $screen-sm-min) {
+    margin-top: -120px;
+  }
+  @media (min-width: 790px) and (max-width: $screen-sm-max) {
+    margin-top: -80px;
+  }
+  @media (min-width: $screen-md-min) and (max-width: 1080px) {
+    margin-top: -130px;
+  }
+  @media (min-width: 1081px) {
+    margin-top: -110px;
+  }
+  @media (min-width: $screen-lg-min) {
+    margin-top: -110px;
+  }
 }
 
 .profiles.new .hero-overrun form {
@@ -85,7 +103,7 @@
   color: $gray-007;
 }
 .new-quiz__about-intro-wrapper {
-  margin-top: 80px;
+  margin-top: 60px;
   width: 100%;
   @media (max-width: $screen-xs-max) {
     margin: 16px 0;
@@ -94,6 +112,7 @@
 
 .home__after-hero__site-description {
   font-size: rem(44);
+  margin-bottom: 0;
 }
 
 /////////////////////////////////
@@ -104,7 +123,7 @@
   margin: 0 auto;
   text-align: center;
   padding-bottom: 24px;
-  border-bottom: solid 2px $gray-004;
+  border-bottom: solid 2px $gray-006;
   @media (max-width: $screen-xs-max) {
     padding-bottom: 24px;
     width: 90%;
@@ -125,20 +144,23 @@
   border: solid 1px $blue-001;
   border-radius: 50%;
   font-size: rem(44);
-  height: 72px;
-  width: 72px;
-  line-height: 72px;
+  height: 90px;
+  width: 90px;
+  line-height: 90px;
   margin: 0 auto;
   text-align: center;
 }
 
 .about-step__header {
   margin-top: 24px;
-  font-size: rem(30)
+  font-size: rem(25)
 }
 
 .about-step__description {
   margin-top: 20px;
+  margin-bottom: 0;
+  font-size: rem(19);
+  line-height: 1.4;
 }
 
 .new-quiz__after-wrapper {
@@ -229,11 +251,16 @@ body.home,
 .home .navbar-fixed-bottom {
   min-width: initial;
 }
-
 .home {
   margin-bottom: 0;
 }
-
+.home .top-navigation__container,
+.home .container {
+  width: 100%;
+  @media (min-width: 1140px) {
+    width: 1140px;
+  }
+}
 .container.home__after-hero {
   @media (max-width: $screen-xs-max) {
     width: 100%;
@@ -247,7 +274,7 @@ body.home,
 .home__gift-examples {
   display: flex;
   width: 100%;
-  margin-top: 24px;
+  margin-top: 60px;
   @media (max-width: $screen-xs-max) {
     flex-direction: column;
   }

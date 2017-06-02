@@ -8,6 +8,11 @@ h4,
 h5 {
   margin-top: 0;
 }
+html {
+  @media (max-width: $screen-xs-max) {
+    font-size: 8px;
+  }
+}
 h1 {
   font-size: rem(40);
   font-weight: 500;
@@ -88,7 +93,9 @@ a:active {
 a:active {
   text-decoration: none;
 }
-
+h2.how-wrapt-works {
+  font-size: rem(44);
+}
 .wrapt-highlight-text {
   background-color: rgba(196, 210, 233, .2);
   color: $blue-002;
