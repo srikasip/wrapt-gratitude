@@ -133,6 +133,12 @@
 .home__about-steps {
   margin-top: 40px;
 }
+.about-step {
+  @media (max-width: $screen-xs-max) {
+    padding: 24px;
+    text-align: center;
+  }
+}
 
 .new-quiz__about-intro-content.border-dark {
   border-color: rgba(77, 76, 77, 0.2);
@@ -283,9 +289,6 @@ body.home,
 .home__gift-example {
   position: relative;
   overflow: hidden;
-  @media (max-width: $screen-xs-max) {
-    margin: 24px 0;
-  }
 }
 
 .home__gift-example img {
