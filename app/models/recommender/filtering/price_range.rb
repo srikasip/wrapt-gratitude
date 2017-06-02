@@ -1,6 +1,8 @@
 module Recommender
   module Filtering
     class PriceRange < Base
+      include ActionView::Helpers::NumberHelper
+      
       attr_reader :min_price, :max_price
       
       def load_params
@@ -11,6 +13,18 @@ module Recommender
         if params.present?
           @min_price = params['min_price'].to_f if params.has_key?('min_price')
           @max_price = params['max_price'].to_f if params.has_key?('max_price')
+        end
+      end
+      
+      def description
+        if !valid?
+          ""
+        elsif min_price.present? && max_price.present?
+          "price is between #{number_to_currency(min_price)} and #{number_to_currency(max_price)}"
+        elsif min_price.present?
+          "price is greater than or equal to #{number_to_currency(min_price)}"
+        elsif max_price.present?
+          "price is less than or equal to #{number_to_currency(max_price)}"
         end
       end
       

@@ -11,6 +11,14 @@ module Recommender
       def valid?
         tag_names.any?
       end
+
+      def description
+        if !valid?
+          ""
+        else
+          "add #{@boost} for each tag: #{tag_names.join(', ')}"
+        end
+      end
       
       def scoring_sql
         return nil unless valid?

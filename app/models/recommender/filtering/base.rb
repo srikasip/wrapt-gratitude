@@ -12,6 +12,14 @@ module Recommender
         load_params
       end
       
+      def name
+        self.class.name.demodulize.underscore.humanize.titleize
+      end
+      
+      def description
+        ""
+      end
+      
       def load_params
       end
       

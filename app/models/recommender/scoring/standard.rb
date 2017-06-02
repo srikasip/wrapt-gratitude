@@ -11,6 +11,10 @@ module Recommender
         true
       end
       
+      def description
+        "add #{@featured_boost} if featured"
+      end
+      
       def scoring_sql
         %{
           select id,

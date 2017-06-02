@@ -10,7 +10,10 @@ class GenerateRecommendationsJob < ApplicationJob
       engine.destroy_recommendations!
       engine.create_recommendations!
     end
-    profile.update_attribute :recommendations_generated_at, Time.now
+    profile.update_attributes(
+      recommendation_stats: engine.stats,
+      recommendations_generated_at: Time.now
+    )
   ensure
     profile.update_attribute :recommendations_in_progress, false
   end
