@@ -67,6 +67,9 @@ a:active .navbar-static-top__icon-circle {
 .landing-bottom__icon-gift-better-gift-wrapt {
   width: 443px;
   height: 73px;
+  @media (max-width: $screen-sm-max) {
+    width: 90vw;
+  }
 }
 use.icon-dislike-use .path1,
 use.icon-dislike-use .path2,

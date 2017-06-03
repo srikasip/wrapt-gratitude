@@ -7,17 +7,17 @@
   background-image: image-url('hero-image');
   background-size: 100vw;
   background-repeat: no-repeat;
-  background-position: 0% 50%;
+  background-position: 0% 0%;
   border: none;
   margin-bottom: 24px;
   padding-top: 48px;
   position: relative;
   @media (max-width: $screen-xs-max) {
-    margin-top: 20px;
-    padding-top: 28px;
+    margin-top: 10px;
+    padding-top: 20px;
   }
   @media (min-width: $screen-sm-min) {
-    background-position: 0% 0%;
+
   }
   @media (min-width: $screen-lg-min) {
     background-position: 0% 90%;
@@ -27,10 +27,10 @@
 
 .home__hero-text h1 {
   font-size: rem(60);
-  margin-bottom: 140px;
+  line-height: 1;
+  margin-bottom: 100px;
   @media (min-width: $screen-sm-min) {
     margin-bottom: 360px;
-    line-height: 1;
   }
   @media (min-width: $screen-md-min) {
     margin-bottom: 500px;
