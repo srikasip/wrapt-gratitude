@@ -14,7 +14,7 @@
       %p.help.gift-basket__footer__text 
         You can’t quite purchase those gifts yet, but soon you can!
         %br
-        Instead, we'd like to share the gifts Wrapt recommended with your #{@profile.relationship.downcase}, and ask which ones #{@profile.name} would like or not like. If you're up for having us email #{@profile.name}, please click the button below and provide their email address. Thank you!
+        Instead, we'd like to share the gifts Wrapt recommended with your #{@profile.relationship&.downcase}, and ask which ones #{@profile.name} would like or not like. If you're up for having us email #{@profile.name}, please click the button below and provide their email address. Thank you!
       
 
       = link_to 'SEND GIFT SELECTION NOTIFICATION', new_profile_giftee_invitation_path(profile), class: 'btn btn-primary btn-full-width btn-gift-basket-submit', data: {loads_in_pjax_modal: true, behavior: 'gift-basket-submit'}, onClick: "ga('send', 'event', 'basket', 'share with giftee', 'step 1 - button');"

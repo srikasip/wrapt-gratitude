@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170518213211) do
+ActiveRecord::Schema.define(version: 20170602141804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -251,6 +251,7 @@ ActiveRecord::Schema.define(version: 20170518213211) do
     t.string   "recipient_access_token"
     t.boolean  "recipient_reviewed",           default: false, null: false
     t.datetime "recipient_invited_at"
+    t.text     "recommendation_stats"
     t.index ["created_at"], name: "index_profiles_on_created_at", using: :btree
     t.index ["recipient_invited_at"], name: "index_profiles_on_recipient_invited_at", using: :btree
   end
@@ -342,7 +343,6 @@ ActiveRecord::Schema.define(version: 20170518213211) do
     t.boolean  "yes_no_display",               default: false, null: false
     t.text     "placeholder_text"
     t.boolean  "use_response_as_relationship", default: false, null: false
-    t.text     "hint_text"
     t.boolean  "price_filter",                 default: false
     t.boolean  "category_filter",              default: false
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree

@@ -15,6 +15,14 @@ module Recommender
         true
       end
       
+      def description
+        if !valid?
+          ""
+        else
+          "exclude if any tags are present: #{tag_names.join(', ')}"
+        end
+      end
+      
       def gift_scope
         return nil unless valid?
         t = ActsAsTaggableOn::Tag.arel_table

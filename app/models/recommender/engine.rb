@@ -2,7 +2,7 @@ module Recommender
   class Engine
     
     attr_reader :survey_response, :recommendations, :filters, :scorers,
-      :max_total, :gift_scope
+      :max_total, :gift_scope, :stats
     
     delegate :profile, :survey, :question_responses, to: :survey_response
     
@@ -33,6 +33,7 @@ module Recommender
       @scorers = []
       @gift_scope = nil
       @gift_scores = []
+      @stats = {}
     end
     
     def create_recommendations!
@@ -45,10 +46,18 @@ module Recommender
     
     def load_filters
       @filters = Recommender::Filtering::Base.create_filters(self)
+      @stats[:filters] = @filters.map do |filter|
+        {name: filter.name, description: filter.description}
+      end
+      @filters
     end
     
     def load_scorers
       @scorers = Recommender::Scoring::Base.create_scorers(self)
+      @stats[:scorers] = @scorers.map do |scorer|
+        {name: scorer.name, description: scorer.description}
+      end
+      @scorers
     end
     
     def preload_models

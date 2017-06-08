@@ -10,6 +10,8 @@ class Profile < ApplicationRecord
   has_many :recipient_gift_dislikes, inverse_of: :profile, dependent: :destroy
   has_many :recipient_gift_selections, -> {order 'recipient_gift_selections.id'}, dependent: :destroy
 
+  serialize :recommendation_stats, Hash
+  
   before_create :generate_recipient_access_token
 
   def generate_recipient_access_token

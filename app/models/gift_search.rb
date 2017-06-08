@@ -19,8 +19,11 @@ class GiftSearch
   end
 
   private def keyword_filter scope
-    scope.where("LOWER(title) LIKE ?", "%#{keyword.downcase}%")
-      .or(Gift.where("wrapt_sku LIKE ?", "%#{keyword}%"))
+    t = Gift.arel_table
+    scope.where(
+      t[:title].matches("%#{keyword}%").or(
+      t[:wrapt_sku].matches("%#{keyword}%"))
+    )
   end
 
   private def product_category_id_filter scope
