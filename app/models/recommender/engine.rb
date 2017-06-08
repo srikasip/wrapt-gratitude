@@ -9,7 +9,7 @@ module Recommender
     def initialize(survey_response)
       @survey_response = survey_response
       
-      @max_total = 12
+      @max_total = 6
       
       reset
     end
