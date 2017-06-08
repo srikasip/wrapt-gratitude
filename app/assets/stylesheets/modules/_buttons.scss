@@ -120,18 +120,31 @@
 .btn.btn-yes-no:last-child {
   border-left: none;
 }
-.btn.btn-multiple-choice-option {
+.sqr-form label.btn-multiple-choice-option {
+  transition: all 0.3s ease 0s;
+  text-align: center;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 19px 10px;
+  margin-bottom: 16px;
+  margin-top: 0px;
+  line-height: 1;
+}
+.btn.btn-multiple-choice-option,
+label.btn-multiple-choice-option {
   min-width: 158px;
   padding-left: 10px;
   padding-right: 10px;
   margin-right: 13px;
   margin-bottom: 16px;
 }
-.btn.btn-multiple-choice-option:last-child {
+.btn.btn-multiple-choice-option:last-child,
+label.btn-multiple-choice-option:last-child {
   margin-right: 0;
 }
 .btn.btn-multiple-choice-option,
-.btn.btn-yes-no {
+.btn.btn-yes-no,
+label.btn-multiple-choice-option {
   background-color: #fff;
   border: 1px solid $gray-005;
 }
@@ -140,12 +153,15 @@
 .btn.btn-multiple-choice-option:active,
 .btn.btn-yes-no:active,
 .btn.btn-multiple-choice-option.selected:hover,
-.btn.btn-yes-no.selected:hover {
+.btn.btn-yes-no.selected:hover,
+label.btn-multiple-choice-option:hover,
+label.btn-multiple-choice-option:active {
   background-color: rgba(242, 226, 170, .60);
   letter-spacing: 0;
 }
 .btn.btn-multiple-choice-option.selected,
-.btn.btn-yes-no.selected {
+.btn.btn-yes-no.selected,
+label.btn-multiple-choice-option.selected {
   background-color: rgba(242, 226, 170, .70);
 }
 .sqr-submit__btn {
