@@ -2,7 +2,7 @@
   .row
     .col-xs-12
       .pa3.text-center
-        %h1 Great Job! Now we have all the information we need to make gift recommendations for #{@survey_response.giftee_name}.
+        %h1 Terrific, now we have all the information we need to make gift recommendations for #{@survey_response.giftee_name}.
 
 
       = simple_form_for @survey_response_completion, url: with_invitation_scope(profile_survey_completion_path(@profile, @survey_response)) do |form|
