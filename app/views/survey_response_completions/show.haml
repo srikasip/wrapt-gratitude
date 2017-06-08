@@ -22,7 +22,7 @@
 
           = form.submit 'View Gift Recommendations'.upcase, class: 'btn btn-primary btn-sm btn-full-width'
 
-
+= render 'application/loading'
 = content_for :page_js do
   :javascript
     new App.PasswordRevealer() 

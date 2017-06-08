@@ -1,0 +1,13 @@
+.app-loading__container
+  = image_tag 'icons/loading'
+
+= content_for :page_js do
+  :javascript
+    $(document).ready(function() {
+      var loading = $('.app-loading__container');
+      setTimeout(function() {
+        loading.fadeOut('slow', function() {
+          $(this).addClass('hidden');
+        });
+      }, 5000)
+    });

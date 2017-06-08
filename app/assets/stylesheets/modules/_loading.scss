@@ -1,0 +1,18 @@
+.app-loading__container {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  &.hidden {
+    display: none;
+  }
+  img {
+    width: 200px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
