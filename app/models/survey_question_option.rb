@@ -3,10 +3,8 @@ class SurveyQuestionOption < ApplicationRecord
   mount_uploader :image, SurveyQuestionOptionImageUploader
 
   # unused relationships but they're here to clean up foreign keys
-  has_many :training_set_response_impacts, dependent: :destroy
   has_many :survey_question_response_options, dependent: :destroy
   has_many :conditional_question_options, dependent: :destroy
-  has_many :trait_response_impacts, dependent: :destroy
   
   validate :validate_configuration_string_format
 
