@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170602141804) do
+ActiveRecord::Schema.define(version: 20170609164649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,6 +147,26 @@ ActiveRecord::Schema.define(version: 20170602141804) do
     t.datetime "invited_at"
     t.string   "how_found"
     t.index ["invited_user_id"], name: "index_invitation_requests_on_invited_user_id", using: :btree
+  end
+
+  create_table "mvp1b_user_surveys", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "age"
+    t.string   "gender"
+    t.string   "zip"
+    t.string   "response_confidence"
+    t.string   "recommendation_confidence"
+    t.text     "recommendation_comment"
+    t.string   "would_use_again"
+    t.string   "would_tell_friend"
+    t.string   "would_create_wish_list"
+    t.string   "would_pay"
+    t.text     "pay_comment"
+    t.text     "other_services"
+    t.text     "mailing_address"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["user_id"], name: "index_mvp1b_user_surveys_on_user_id", using: :btree
   end
 
   create_table "product_categories", force: :cascade do |t|

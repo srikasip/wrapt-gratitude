@@ -1,0 +1,47 @@
+.container
+  .row
+    .col-xs-12
+      %h1 Self-moderated testing questions
+      
+      = simple_form_for [@survey] do |form|
+      
+        %p 1. What's your age?
+        %p= form.input_field :age, as: :radio_buttons, collection: ['< 20', '20 - 29', '30 - 39']
+      
+        %p 2. What's your gender?
+        %p= form.input_field :gender, as: :radio_buttons, collection: ['Male', 'Female', 'Other']
+
+        %p 3. What's your zip code?
+        %p= form.input_field :zip
+      
+        %p 4. Response confidence?
+        %p= form.input_field :response_confidence, as: :radio_buttons, collection: ['Very confident', 'Confident', 'Skeptical']
+
+        %p 5. Recommendation confidence?
+        %p= form.input_field :recommendation_confidence, as: :radio_buttons, collection: ['Very confident', 'Confident', 'Skeptical']
+
+        %p 6. Recommendation comments?
+        %p= form.input_field :recommendation_comment
+
+        %p 7. Would use again?
+        %p= form.input_field :would_use_again, as: :radio_buttons, collection: ['Very likely', 'Likely', 'Unlikely']
+
+        %p 8. Would tell friend?
+        %p= form.input_field :would_tell_friend, as: :radio_buttons, collection: ['Very likely', 'Likely', 'Unlikely']
+
+        %p 9. Would create wish list?
+        %p= form.input_field :would_create_wish_list, as: :radio_buttons, collection: ['Very likely', 'Likely', 'Unlikely']
+
+        %p 10. Would pay?
+        %p= form.input_field :would_pay, as: :radio_buttons, collection: ['Yes', 'No']
+
+        %p 11. Pay comment?
+        %p= form.input_field :pay_comment
+
+        %p 12. Other Services?
+        %p= form.input_field :other_services
+
+        %p 13. Mailing Address?
+        %p= form.input_field :mailing_address
+
+        %p= form.submit 'Save', class: 'btn btn-primary'
