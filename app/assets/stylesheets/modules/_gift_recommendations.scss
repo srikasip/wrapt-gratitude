@@ -397,3 +397,17 @@ a.liked:focus {
 .gr-image-carousel__nav.prev {
   margin-right: -4px;
 }
+.recommendations-intro__next-step {
+  background-color: $blue-004;
+  width: 500px;
+  margin: 0 auto;
+  padding: 20px 12px 1px 0;
+  color: #fff;
+}
+.recommendations-intro__next-step__ul {
+  margin-bottom: 0;
+}
+.recommendation-intro__next-step__li {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}

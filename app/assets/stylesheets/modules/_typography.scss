@@ -93,6 +93,17 @@ a:active {
 a:active {
   text-decoration: none;
 }
+a.link--white-on-blue {
+  color: #fff;
+  text-decoration: underline;
+  &:hover,
+  &:focus,
+  &:active {
+    color: #fff;
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
 h2.how-wrapt-works {
   font-size: rem(44);
 }

@@ -282,3 +282,28 @@ label {
     margin-bottom: 20px;
   }
 }
+
+// mvp1b user survey
+.mvp1b_user_surveys .radio input[type="radio"], 
+.mvp1b_user_surveys .radio-inline input[type="radio"], 
+.mvp1b_user_surveys .checkbox input[type="checkbox"], 
+.mvp1b_user_surveys .checkbox-inline input[type="checkbox"] {
+  margin-top: 0;
+}
+.mvp1b_user_surveys textarea,
+.mvp1b_user_surveys input[type="text"] {
+  display: block;
+  width: 600px;
+}
+.mvp1b_user_surveys textarea {
+  min-height: 100px;
+}
+.mvp1b_user_surveys input.input-small[type="text"] {
+  width: 140px;
+}
+.mvp1b-user-surveys__questions {
+  margin-top: 24px;
+}
+.mvp1b-user-surveys__questions li {
+  margin-bottom: 18px;
+}

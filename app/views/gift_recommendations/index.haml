@@ -4,18 +4,24 @@
       %h1.text-center
         = "#{@profile.name}'s Gift Recommendations"
       %p.lead.tan-002.ph2.text-center
-        ="Wrapt<sup class='trademark'>&#8482;</sup> found these #{@gift_recommendations.count} items uniquely suited to #{@profile.name} based on her personality, passions, & purpose.".html_safe
-      %p.text-center
-        Add those items to the cart that you would purchase. Rate the others for future occasions, we’ll keep them in your account. 
+        ="Wrapt found these #{@gift_recommendations.count} items uniquely suited to #{@profile.name} based on her personality, passions, & purpose.".html_safe
+      .recommendations-intro__next-step
+        %ol
+          %li
+            Add those items to the basket that you would purchase if Wrapt was fulilling orders at this time. Rate the others (like/dislike) for future occasions: we’ll keep them in your account. 
+          %li
+            Once you've reviewed the gifts, please 
+            = succeed "." do
+              = link_to "answer a few questions about Wrapt", new_mvp1b_user_survey_path, class: 'link--white-on-blue'
   .row.wrapt-carousel--wrapper
     .col-xs-12
       - gifts = load_gift_recommendation_carousel_data(@gift_recommendations)
       = carousel(carousel: gifts, unique_carousel_name: 'gr-carousel', slide_content_singular: 'gift')
       
       
-  %p
+  %p.text-center
     - if current_user&.unmoderated_testing_platform? || current_user&.admin?
-      = link_to "MVP1B Testing Survey", new_mvp1b_user_survey_path, class: 'btn'
+      = link_to "Answer a few questions about Wrapt", new_mvp1b_user_survey_path, class: 'btn btn-primary'
 
 - content_for :page_js do
   = render '/application/carousel_js'
