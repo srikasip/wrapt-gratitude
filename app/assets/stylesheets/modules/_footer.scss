@@ -66,14 +66,23 @@ body.hero-bg {
 .footer__social_link {
   display: inline-block;
   margin: 0 4px;
-  color: white;
+  color: $blue-001;;
   font-size: rem(18);
   border-radius: 50%;
-  border: solid white 1px;
+  border: solid $blue-001 1px;
   height: 32px;
   width: 32px;
   line-height: 32px;
   text-align: center;
+  &:hover, &:active, &:focus {
+    color: white;
+    background-color: transparent;
+  }
+}
+.home .footer__social_link,
+.profiles.new .footer__social_link {
+  color: white;
+  border: solid white 1px;
   &:hover, &:active, &:focus {
     color: white;
     background-color: transparent;
