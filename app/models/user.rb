@@ -2,7 +2,7 @@ class User < ApplicationRecord
   authenticates_with_sorcery!
 
   # TODO: change this to :mvp1a when the first MVP release + testing round starts
-  CURRENT_ROUND = 'mvp1b'
+  CURRENT_ROUND = 'mvp1a'
   
   SOURCES = %w{admin_invitation requested_invitation recipient_referral unmoderated_testing_platform}
   BETA_ROUNDS = %w{pre_release_testing mvp1a}
