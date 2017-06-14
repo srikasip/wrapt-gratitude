@@ -1,0 +1,35 @@
+# vim: syntax=nginx ts=4 sw=4 sts=4 sr noet
+
+server {
+  listen 80;
+  server_name staging.wrapt.greenriver.com;
+
+  return 301 http://staging.wrapt.com$request_uri;
+}
+
+server {
+    listen 80;
+    server_name staging.wrapt.com;
+
+    root /var/www/wrapt-gratitude-staging/current/public;
+	passenger_app_env staging;
+    passenger_enabled on;
+
+    location /cable {
+        passenger_app_group_name wrapt_staging_action_cable;
+        passenger_force_max_concurrent_requests_per_process 0;
+    }
+}
+
+#server {
+#    listen YOUR_ACTION_CABLE_PORT_NUMBER_HERE;
+#    server_name YOUR_ACTION_CABLE_HOST_NAME_HERE;
+#    root /path-to-your-app/public;
+#    passenger_enabled on;
+#    passenger_app_group_name YOUR_APP_NAME_HERE_action_cable;
+#    passenger_app_type rack;
+#    passenger_startup_file config/cable.ru;
+#    passenger_force_max_concurrent_requests_per_process 0;
+#}
+
+#PassengerRuby /usr/local/rvm/gems/ruby-2.3.1/wrappers/ruby

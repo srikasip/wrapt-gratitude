@@ -26,13 +26,27 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.delivery_method = :letter_opener
-  config.action_mailer.raise_delivery_errors = false
-
-  config.action_mailer.perform_caching = false
-
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  if ENV['SMTP_ADDRESS'].present? && ENV['SMTP_DOMAIN'].present? && ENV['SMTP_USER_NAME'].present? && ENV['SMTP_PASSWORD'].present?
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.smtp_settings = {
+      address:              ENV['SMTP_ADDRESS'],
+      port:                 587,
+      domain:               ENV['SMTP_DOMAIN'],
+      user_name:            ENV['SMTP_USER_NAME'],
+      password:             ENV['SMTP_PASSWORD'],
+      authentication:       'plain',
+      enable_starttls_auto: true
+    }
+  else
+    config.action_mailer.delivery_method = :letter_opener
+    config.action_mailer.raise_delivery_errors = false
+    config.action_mailer.perform_caching = false
+  end
+  host = ENV.fetch('APP_DOMAIN') { 'localhost' }
+  port = ENV.fetch('APP_PORT') { '3000' }
+  config.action_mailer.default_url_options = { host: host, port: port }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -59,5 +73,4 @@ Rails.application.configure do
   if ENV["LIVERELOAD"]
     config.middleware.insert_before ActionDispatch::ShowExceptions, Rack::LiveReload
   end
-
 end
