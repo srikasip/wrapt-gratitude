@@ -2,7 +2,12 @@
 // e.g. Home Page and Quiz Landing page
 
 @import "helpers";
-
+.rotate-words__sentence {
+  @media (min-width: $screen-sm-min) {
+    text-align: left;
+    margin-left: 180px;
+  }
+}
 .rotate-words__container {
   display: inline-block;
   overflow: hiddne;
@@ -64,9 +69,12 @@
 
 
 .home__hero-text h1 {
-  font-size: rem(60);
-  line-height: 1;
-  margin-bottom: 100px;
+  font-size: rem(40);
+  @media (min-width: $screen-sm-min) {
+    font-size: rem(60);
+    line-height: 1;
+    margin-bottom: 100px;
+  }
   @media (min-width: $screen-sm-min) {
     margin-bottom: 360px;
   }
