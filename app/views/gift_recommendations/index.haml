@@ -24,8 +24,7 @@
       
       
   %p.text-center
-    - if current_user&.unmoderated_testing_platform? || current_user&.admin?
-      = link_to "Answer a few questions about Wrapt", new_mvp1b_user_survey_path, class: 'btn btn-primary'
+    = link_to "Answer a few questions about Wrapt", new_mvp1b_user_survey_path, class: 'btn btn-primary'
 
 - content_for :page_js do
   = render '/application/carousel_js'
