@@ -1,0 +1,20 @@
+= render 'report_nav'
+
+%table.table.table-condensed
+  %thead
+    %tr
+      %th Multiple Choice Questions
+      %th Reponses
+      %th.text-right Counts
+  %tbody
+    - @summary_report.questions.each do |question|
+      - (key, label) = question
+      - response_stats = @summary_report.stats[key] || []
+      %tr.active
+        %td{colspan: 3}= label
+      - response_stats.each do |response_stat|
+        %tr
+          %td
+          %td= truncate(response_stat[0], length: 100)
+          %td.text-right= response_stat[1]
+        

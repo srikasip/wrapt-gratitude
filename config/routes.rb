@@ -123,8 +123,8 @@ Rails.application.routes.draw do
       resource :publishing, only: [:create], controller: 'survey_publishings'
     end
     
-    resources :reports, only: :index do
-    end
+    resources :reports, only: :index
+    resources :mvp1b_user_surveys, only: :index
 
   end
 

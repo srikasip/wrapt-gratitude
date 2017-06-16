@@ -1,0 +1,22 @@
+.row
+  .col-sm-12
+    %h1 Reports
+    
+
+:ruby
+  buttons = []
+  buttons << {label: "Activity Report", url: admin_reports_path, name: 'activity_report'}
+  buttons << {label: "MVP-1b Survey Report", url: admin_mvp1b_user_surveys_path, name: 'mvp1b_survey_report'}
+
+.row.admin__actions
+  .col-sm-12
+    - buttons.each do |button|
+      :ruby
+        css_classes = ['btn']
+        if button[:name] == active_report_nav_section
+          css_classes << 'btn-primary' 
+        else
+          css_classes << 'btn-default' 
+        end
+
+      = link_to button[:label], button[:url], class: css_classes

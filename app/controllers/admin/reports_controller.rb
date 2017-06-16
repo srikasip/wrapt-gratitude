@@ -1,5 +1,5 @@
 module Admin
-  class ReportsController < BaseController
+  class ReportsController < ReportBaseController
     helper :gift_recommendations
     
     def index
@@ -12,6 +12,10 @@ module Admin
       @report.preload_models
       
       @summary = @report.summary_report
+    end
+
+    def active_report_nav_section
+      'activity_report'
     end
   end
 end
