@@ -398,11 +398,10 @@ a.liked:focus {
   margin-right: -4px;
 }
 .recommendations-intro__next-step {
-  background-color: $blue-004;
+  background-color: rgba(170, 186, 213, 0.45);
   width: 500px;
   margin: 0 auto;
   padding: 20px 12px 1px 0;
-  color: #fff;
 }
 .recommendations-intro__next-step__ul {
   margin-bottom: 0;
@@ -410,4 +409,17 @@ a.liked:focus {
 .recommendation-intro__next-step__li {
   padding-bottom: 0;
   margin-bottom: 0;
+}
+.recommendations-intro__next-step a {
+  color: $gray-008;
+  text-decoration: underline;
+}
+.recommendations-intro__next-step a:hover,
+.recommendations-intro__next-step a:active,
+.recommendations-intro__next-step a:focus {
+  background-color: transparent;
+  text-decoration: none;
+}
+.recommendations-intro__next-step h4 {
+  padding-left: 18px;
 }

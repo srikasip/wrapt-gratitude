@@ -6,17 +6,14 @@
       %p.lead.tan-002.ph2.text-center
         ="Wrapt found these #{@gift_recommendations.count} items uniquely suited to #{@profile.name} based on her personality, passions, & purpose.".html_safe
       .recommendations-intro__next-step
+        %h4 Here's what we'd like you to do:
         %ol
           %li
-            Add items to the basket that you would purchase if Wrapt was fulfilling orders at this time. 
+            Add to basket what you could imagine buying, like/dislike the rest. 
           %li
-            Rate the others (like/dislike) for future occasions: we’ll keep them in your account.
+            Share our recommendations with your giftee (see button in basket)
           %li
-            Open the Gift Basket, and share the gift recommendations you chose with your giftee (if you’re willing, of course. It will really help us to learn).
-          %li
-            Once you've reviewed the gifts, simply 
-            = succeed "." do
-              = link_to "answer a few questions about Wrapt", new_mvp1b_user_survey_path, class: 'link--white-on-blue'
+            = link_to "Answer a few questions", new_mvp1b_user_survey_path
   .row.wrapt-carousel--wrapper
     .col-xs-12
       - gifts = load_gift_recommendation_carousel_data(@gift_recommendations)
