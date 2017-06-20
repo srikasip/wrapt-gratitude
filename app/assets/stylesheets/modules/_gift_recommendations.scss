@@ -190,9 +190,10 @@ $gr-carousel-nav__width: 82.5px;
 }
 
 .gr-carousel__dislike a, .gr-carousel__like a {
-  background-color: $blue-010;
+  background-color: rgba($blue-005, 0.35);
   padding: 12px 12px 3px;
   display: inline-block;
+  color: $blue-003;
 }
 .gr-carousel__dislike a:hover,
 .gr-carousel__dislike a:focus,
