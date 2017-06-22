@@ -81,6 +81,7 @@ Rails.application.routes.draw do
     resources :gift_tag_imports, only: [:new, :create]
 
     resources :vendors
+    resources :survey_responses, only: [:show]
     
     resources :product_categories, except: :show do
       resource :subcategories, controller: 'product_subcategories', only: :show

@@ -1,0 +1,14 @@
+%ol
+  - @question_responses.each do |response|
+    %li
+      = truncate(response.survey_question.prompt, length: 80)
+      - case response.survey_question.type
+        - when 'SurveyQuestions::MultipleChoice'
+          - if response.survey_question_options.any?
+            (#{response.survey_question_options.map(&:text).join(', ')})
+        - when 'SurveyQuestions::Text'
+          - if response.text_response.present?
+            (#{truncate(response.text_response, length: 80)})
+        - when 'SurveyQuestions::Range'
+          - if response.range_response.present?
+            (#{response.range_response})

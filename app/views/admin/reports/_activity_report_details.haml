@@ -56,6 +56,13 @@
                   - question = @report.preloaded_questions[event[:question_id]]
                   - if question.present?
                     '#{truncate(question.prompt, length: 80)}'
+
+                - when 'survey_completed' 
+                  Survey Completed
+                  = link_to "[view responses]", admin_survey_response_path(event[:survey_id]), class: 'view-responses'
+                  - question = @report.preloaded_questions[event[:question_id]]
+                  - if question.present?
+                    '#{truncate(question.prompt, length: 80)}'
                     
                 - when 'gift_selected' 
                   Gift added to basket:
@@ -173,3 +180,16 @@
 
                 - else
                   = event[:type].humanize
+
+= content_for :page_js do
+  :coffeescript
+    $ ->
+      $('.view-responses').click (e) ->
+        link = $(@)
+        $.ajax(
+          url: link.attr('href')
+          success: (data) -> link.replaceWith(data)
+        )
+        e.preventDefault()
+        false
+        

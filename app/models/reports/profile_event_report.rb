@@ -219,9 +219,9 @@ module Reports
     end
 
     def load_survey_completed_events
-      sql = %{select profile_id, completed_at from survey_responses where completed_at #{date_range_sql}}
+      sql = %{select profile_id, completed_at, id from survey_responses where completed_at #{date_range_sql}}
       Profile.connection.select_rows(sql).each do |row|
-        add_event(row[0].to_i, 'survey_completed', parse_time(row[1]))
+        add_event(row[0].to_i, 'survey_completed', parse_time(row[1]), {survey_id: row[2].to_i})
       end
     end
     
