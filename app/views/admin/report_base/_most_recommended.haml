@@ -1,0 +1,24 @@
+%h3 Most Recommended Gifts
+- if @report.most_recommended_gifts.any?
+  %table.table.table-condensed
+    %thead
+      %tr
+        %th 
+        %th Gift
+        %th.text-align-right Recommended
+        %th.text-align-right Avg Position
+        %th.text-align-right Avg Score
+        %th.text-align-right Selected
+    %tbody
+      - @report.most_recommended_gifts.each_with_index do |row, index|
+        - gift = @report.preloaded_gifts[row['gift_id']]
+        - next if gift.blank?
+        %tr
+          %td.text-align-right= index + 1
+          %td '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
+          %td.text-align-right= row['recommendation_count']
+          %td.text-align-right= number_with_precision(row['avg_position'], precision: 2)
+          %td.text-align-right= number_with_precision(row['avg_score'], precision: 2)
+          %td.text-align-right= row['selection_count']
+- else
+  %p No gift recommendations found.

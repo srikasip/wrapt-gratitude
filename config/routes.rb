@@ -126,6 +126,7 @@ Rails.application.routes.draw do
     
     resources :reports, only: :index
     resources :mvp1b_user_surveys, only: :index
+    resources :top_gifts_reports, only: :index
 
   end
 

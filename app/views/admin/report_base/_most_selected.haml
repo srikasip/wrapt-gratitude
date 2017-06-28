@@ -1,0 +1,18 @@
+%h3 Most Selected Gifts
+- if @report.most_selected_gifts.any?
+  %table.table.table-condensed
+    %thead
+      %tr
+        %th 
+        %th Gift
+        %th.text-align-right Occurrences
+    %tbody
+      - @report.most_selected_gifts.each_with_index do |row, index|
+        - gift = @report.preloaded_gifts[row['gift_id']]
+        - next if gift.blank?
+        %tr
+          %td.text-align-right= index + 1
+          %td '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
+          %td.text-align-right= row['selection_count']
+- else
+  %p No gift selections found.
