@@ -30,11 +30,23 @@ module Reports
     end
     
     def load_most_selected_gifts
-      sql = %{
+      sql_recommended = %{
+        select gift_id, count(id) as recommendation_count,
+          avg(position + 1) as avg_position, avg(score) as avg_score
+        from gift_recommendations
+        where created_at #{date_range_sql}
+        group by gift_id
+      }
+      sql_selection = %{
         select gift_id, count(id) as selection_count
         from gift_selections
         where created_at #{date_range_sql}
         group by gift_id
+      }
+      sql = %{
+        select gs.gift_id, selection_count, recommendation_count, avg_position, avg_score
+        from (#{sql_selection}) as gs
+        join (#{sql_recommended}) as gr on gs.gift_id = gr.gift_id
         order by selection_count desc
         limit 10
       }
