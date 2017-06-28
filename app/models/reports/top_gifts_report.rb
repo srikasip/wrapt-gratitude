@@ -16,10 +16,22 @@ module Reports
         from gift_selections as gs
         where gs.gift_id = gr.gift_id and created_at #{date_range_sql}
       }
+      sql_likes = %{
+        select count(gl.id)
+        from gift_likes as gl
+        where gl.gift_id = gr.gift_id and created_at #{date_range_sql}
+      }
+      sql_dislikes = %{
+        select count(gd.id)
+        from gift_dislikes as gd
+        where gd.gift_id = gr.gift_id and created_at #{date_range_sql}
+      }
       sql = %{
         select gr.gift_id, count(gr.id) as recommendation_count,
           avg(gr.position + 1) as avg_position, avg(gr.score) as avg_score,
-          (#{sql_selections}) as selection_count
+          (#{sql_selections}) as selection_count,
+          (#{sql_likes}) as liked_count,
+          (#{sql_dislikes}) as disliked_count
         from gift_recommendations as gr
         where created_at #{date_range_sql}
         group by gr.gift_id
