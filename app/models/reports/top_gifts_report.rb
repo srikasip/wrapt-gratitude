@@ -14,7 +14,7 @@ module Reports
       sql_selections = %{
         select count(gs.id)
         from gift_selections as gs
-        where gs.gift_id = gr.gift_id
+        where gs.gift_id = gr.gift_id and created_at #{date_range_sql}
       }
       sql = %{
         select gr.gift_id, count(gr.id) as recommendation_count,
