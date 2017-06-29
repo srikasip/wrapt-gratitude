@@ -1,5 +1,9 @@
 = render 'report_nav'
 
+.panel.panel-default
+  .panel-body
+    NOTE: Internal users removed from data
+
 %table.table.table-condensed
   %thead
     %tr
@@ -16,7 +20,9 @@
       - response_stats.each do |response_stat|
         - total += response_stat[:count]
         %tr
-          %td{style: 'padding-left:30px;'}= truncate(response_stat[:choice], length: 300)
+          %td{style: 'padding-left:30px;'}
+            = truncate(response_stat[:choice], length: 300)
+            %p= response_stat[:users].join(', ')
           %td.text-right= response_stat[:count]
           %td.text-right= number_to_percentage(response_stat[:pct], precision: 0)
       

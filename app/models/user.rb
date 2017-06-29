@@ -55,6 +55,13 @@ class User < ApplicationRecord
   def mvp_profile
     owned_profiles.last
   end
+  
+  def self.external
+    t = User.arel_table
+    self.where(admin: false).
+     where.not(t[:email].matches('%@greenriver%')).
+     where.not(t[:email].matches('%@wrapt%'))
+  end
 
   private def set_beta_round
     self.beta_round = CURRENT_ROUND

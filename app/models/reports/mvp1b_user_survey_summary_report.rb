@@ -3,7 +3,7 @@ module Reports
     attr_reader :stats, :surveys
     
     def initialize(surveys)
-      @surveys = surveys
+      @surveys = surveys.preload(:user)
       @stats = {}
     end
     
@@ -43,7 +43,12 @@ module Reports
       end.each do |choice, responses|
         if choice.present?
           total_response_count += responses.count
-          question_stats << {choice: choice, count: responses.count, pct: 0.0}
+          question_stats << {
+            choice: choice,
+            count: responses.count,
+            pct: 0.0,
+            users: responses.map{|r| r.user.email}
+          }
         end
       end
       question_stats.each do |qstat|
