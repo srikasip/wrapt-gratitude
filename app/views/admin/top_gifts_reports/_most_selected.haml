@@ -9,6 +9,7 @@
         %th.text-align-right Avg Position
         %th.text-align-right Avg Score
         %th.text-align-right Recommended
+        %th.text-align-right Hit Rate
     %tbody
       - @report.most_selected_gifts.each_with_index do |row, index|
         - gift = @report.preloaded_gifts[row['gift_id']]
@@ -20,5 +21,6 @@
           %td.text-align-right= number_with_precision(row['avg_position'], precision: 2)
           %td.text-align-right= number_with_precision(row['avg_score'], precision: 2)
           %td.text-align-right= row['recommendation_count']
+          %td.text-align-right= number_to_percentage(100.0 * row['selection_count'] / row['recommendation_count'], precision: 1)
 - else
   %p No gift selections found.
