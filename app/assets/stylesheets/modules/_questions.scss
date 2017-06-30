@@ -71,6 +71,9 @@
   line-height: 1.6;
   color: $gray-010;
 }
+.home.not-signed-in label {
+  margin-bottom: 18px;
+}
 
 .sqr-form .labels-no-bottom-margin label {
   margin-bottom: 0;

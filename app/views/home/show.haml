@@ -41,7 +41,7 @@
           .sqr-progress.sqr-progress--one-question-only
           = simple_form_for @invitation_request, html: {class: 'sqr-form new-invite-request'} do |form|
             .form-inputs
-              = form.input :email, label: 'What is your email address?', required: false
+              = form.input :email, label: 'What is your email address?', required: false, hint: "We’ll send you an invite to try Wrapt"
               = form.input :how_found, as: :wrapt_radio_as_buttons, collection: InvitationRequest::HOW_FOUNDS, label: 'How did you hear about us?'
 
             .form-actions.pull-right
