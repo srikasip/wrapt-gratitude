@@ -5,3 +5,34 @@
 .panel.panel-default
   .panel-body
     NOTE: Internal users removed from data
+
+- @report.preloaded_surveys.values.each do |survey|
+  - survey_stats = @report.survey_response_stats.detect{|s| s['survey_id'] == survey.id}
+  - next if survey_stats.blank?
+  - total_responses = survey_stats['response_count']
+  %h3= survey.title
+  
+  .row{style: 'margin-bottom:30px;'}
+    .col-sm-2 Respondent Count: #{total_responses}
+  
+  %table.table.table-condensed
+    %thead
+      %tr
+        %th Questions/Response
+        %th.text-right Count
+        %th.text-right Pct
+    %tbody
+      - survey.questions.each do |question|
+        - next unless question.is_a?(SurveyQuestions::MultipleChoice)
+        - question_stats = @report.choice_response_stats.select{|s| s['survey_question_id'] == question.id}
+        - next unless question_stats.any?
+        %tr.active
+          %td{colspan: 4}= question.prompt
+        - question.options.each do |option|
+          - response_stats = question_stats.detect{|s| s['survey_question_option_id'] == option.id}
+          - next if response_stats.blank?
+          %tr
+            %td{style: 'padding-left:30px;'}= option.text
+            %td.text-right= response_stats['option_count']
+            %td.text-right= number_to_percentage(100.0 * response_stats['option_count'] / total_responses, precision: 0)
+            
