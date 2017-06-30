@@ -42,7 +42,7 @@ module Reports
         where profile_id in (#{profile_id_sql})
         group by gr.gift_id
         order by recommendation_count desc, avg_position asc, avg_score desc
-        limit 25
+        limit 100
       }
       @most_recommended_gifts = GiftRecommendation.connection.select_all(sql)
     end
@@ -66,7 +66,7 @@ module Reports
         from (#{sql_selection}) as gs
         join (#{sql_recommended}) as gr on gs.gift_id = gr.gift_id
         order by selection_count desc
-        limit 25
+        limit 100
       }
       @most_selected_gifts = GiftRecommendation.connection.select_all(sql)
     end
