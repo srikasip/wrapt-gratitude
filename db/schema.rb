@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170609164649) do
+ActiveRecord::Schema.define(version: 20170705192456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -518,6 +518,7 @@ ActiveRecord::Schema.define(version: 20170609164649) do
     t.string   "beta_round"
     t.integer  "recipient_referring_profile_id"
     t.boolean  "unmoderated_testing_platform",    default: false, null: false
+    t.datetime "activation_token_generated_at"
     t.index ["activation_token"], name: "index_users_on_activation_token", using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["recipient_referring_profile_id"], name: "index_users_on_recipient_referring_profile_id", using: :btree

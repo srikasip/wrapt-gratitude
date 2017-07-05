@@ -5,10 +5,21 @@ module Admin
     def index
       @user_search = UserSearch.new(user_search_params)
       @users = User
-        .all
+        .where(activation_state: 'active')
         .preload(:invitation_request)
         .search(user_search_params)
-        .order(:last_name, :first_name)
+        .order(:email)
+        .page(params[:page])
+        .per(50)
+    end
+
+    def pending_invites
+      @user_search = UserSearch.new(user_search_params)
+      @users = User
+        .where(activation_state: 'pending')
+        .preload(:invitation_request)
+        .search(user_search_params)
+        .order(:activation_token_generated_at, :email)
         .page(params[:page])
         .per(50)
     end
@@ -55,7 +66,7 @@ module Admin
       @user.save validate: false
       UserActivationsMailer.activation_needed_email(@user).deliver_later
       flash[:notice] = "Sent an account invitation to #{@user.full_name}."
-      redirect_to admin_users_path(context_params)
+      redirect_to :back
     end
     
   

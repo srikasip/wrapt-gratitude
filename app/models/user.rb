@@ -62,6 +62,11 @@ class User < ApplicationRecord
      where.not(t[:email].matches('%@greenriver%')).
      where.not(t[:email].matches('%@wrapt%'))
   end
+  
+  def setup_activation
+    self.activation_token_generated_at = Time.now
+    super
+  end
 
   private def set_beta_round
     self.beta_round = CURRENT_ROUND

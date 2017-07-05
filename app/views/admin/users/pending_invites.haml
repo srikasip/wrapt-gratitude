@@ -11,6 +11,7 @@
           %th Source
           %th How Found
           %th Beta Round
+          %th Invitation Sent
           %th
 
       %tbody
@@ -23,6 +24,9 @@
             %td= user.invitation_request_humanized_how_found
             %td= beta_rounds[user.beta_round]
             %td
+              #{time_ago_in_words(user.activation_token_generated_at || user.created_at)} ago
+            %td
+              = link_to 'Resend Invitation', resend_invitation_admin_user_path(user, context_params), class: 'btn btn-default btn-xs', method: :post
               = link_to 'Edit', edit_admin_user_path(user), class: 'btn btn-default btn-xs'
               = link_to 'Delete', admin_user_path(user, context_params), :method => :delete, :data => { :confirm => "Are you sure you want to delete this account?" }, class: 'btn btn-danger btn-xs'
 

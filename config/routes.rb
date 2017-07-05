@@ -72,6 +72,9 @@ Rails.application.routes.draw do
       member do
         post :resend_invitation
       end
+      collection do
+        get :pending_invites
+      end
     end
     resources :user_imports, only: [:new, :create]
     resources :invitation_requests, only: [:index, :update, :destroy]

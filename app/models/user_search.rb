@@ -11,6 +11,14 @@ class UserSearch
     result = beta_round_filter(result) if beta_round.present?
     return result
   end
+  
+  def to_params
+    params = {}
+    params[:keyword] = keyword if keyword.present?
+    params[:beta_round] = beta_round if beta_round.present?
+    params[:source] = source if source.present?
+    params
+  end
 
   private def keyword_filter scope
     scope.where("LOWER(first_name) LIKE ?", "%#{keyword.downcase}%")
