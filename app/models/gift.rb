@@ -63,11 +63,11 @@ class Gift < ApplicationRecord
   end
 
   def cost
-    calculated_gift_field.cost
+    calculated_gift_field&.cost
   end
 
   def selling_price
-    calculated_gift_field.price
+    calculated_gift_field&.price
   end
 
   def validate_tag
