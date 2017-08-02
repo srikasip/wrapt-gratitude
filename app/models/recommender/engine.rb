@@ -22,6 +22,7 @@ module Recommender
       build_gift_scope
       load_scorers
       generate_gift_scores
+      sort_gift_scores
       generate_recommendations
       
       @recommendations
@@ -90,7 +91,7 @@ module Recommender
         from (#{sql_union_scorers}) as raw
         group by id
         order by score desc, random()
-        limit #{max_total}
+        limit #{10 * max_total}
       }
       rows = Gift.connection.select_rows(sql_scores)
       
@@ -99,8 +100,13 @@ module Recommender
       end
     end
     
+    def sort_gift_scores
+      sorter = Recommender::Sorting::CategorySort.new(@gift_scores)
+      @gift_scores = sorter.sort
+    end
+        
     def generate_recommendations
-      @gift_scores.each_with_index do |gift_score, position|
+      @gift_scores.take(max_total).each_with_index do |gift_score, position|
         recommendation = GiftRecommendation.new(
           gift_id: gift_score[:id],
           score: gift_score[:score],
