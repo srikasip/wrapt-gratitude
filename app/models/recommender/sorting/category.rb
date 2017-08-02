@@ -43,21 +43,26 @@ module Recommender
       end
       
       def build_bags
+        # create bags of gifts by category with some stats for each bag
         @gift_scores.group_by{|_| _[:category_id]}.each do |category_id, bag_scores|
+          scores = bag_scores.map{|_| _[:score]}
           @bags << {
             category_id:  category_id,
-            max_score:    bag_scores.map{|_| _[:score]}.max,
+            max_score:    scores.max,
+            avg_score:    scores.sum.to_f / bag_scores.count,
             gift_scores:  bag_scores
           }
         end
       end
       
       def sort_gift_scores
+        # interleave the gifts from each category bag
         @gift_scores = @bags.map{|_| _[:gift_scores]}.zip
       end
       
       def sort_bags
-        @bag.sort!{|a, b| b[:max_score] <=> a[:max_score]}
+        # descending order by max_score and avg_score
+        @bag.sort!{|a, b| [b[:max_score], b[:avg_score]] <=> [a[:max_score], a[:avg_score]]}
       end
     end
   end
