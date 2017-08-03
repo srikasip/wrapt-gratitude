@@ -29,13 +29,9 @@ module Recommender
         map = {}
         gift_ids = @unsorted_gift_scores.map{|_| _[:id]}
         sql = %{
-          select g.id, max(pc.id)
+          select g.id, g.product_subcategory_id as category_id
           from gifts as g
-          join gift_products as gp on g.id = gp.gift_id
-          join products as p on gp.product_id = p.id
-          join product_categories as pc on p.product_subcategory_id = pc.id
           where g.id in (#{gift_ids.join(',')})
-          group by g.id
         }
         rows = Gift.connection.select_rows(sql)
         rows.each {|_| map[_[0].to_i] = _[1].to_i}
