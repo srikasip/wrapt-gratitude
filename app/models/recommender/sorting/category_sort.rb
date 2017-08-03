@@ -12,10 +12,12 @@ module Recommender
         @gift_categories = {}
         @bags = []
         
-        load_categories
-        build_bags
-        sort_bags
-        sort_gift_scores
+        if @unsorted_gift_scores.any?
+          load_categories
+          build_bags
+          sort_bags
+          sort_gift_scores
+        end
         
         @gift_scores
       end
@@ -25,7 +27,7 @@ module Recommender
       def load_categories
         # build a map between gifts and a single product subcategory
         map = {}
-        gift_ids = @gift_scores.map{|_| _[:id]}
+        gift_ids = @unsorted_gift_scores.map{|_| _[:id]}
         sql = %{
           select g.id, max(pc.id)
           from gifts as g
@@ -39,30 +41,36 @@ module Recommender
         rows.each {|_| map[_[0].to_i] = _[1].to_i}
         
         # add the category to the gift scores
-        @gift_scores.each {|_| _[:category_id] = map[_[:id]]}
+        @unsorted_gift_scores.each {|_| _[:category_id] = map[_[:id]]}
       end
       
       def build_bags
         # create bags of gifts by category with some stats for each bag
-        @gift_scores.group_by{|_| _[:category_id]}.each do |category_id, bag_scores|
-          scores = bag_scores.map{|_| _[:score]}
+        @unsorted_gift_scores.group_by{|_| _[:category_id]}.each do |category_id, bag_gift_scores|
+          bag_gift_scores.sort!{|a, b| b[:score] <=> a[:score]}
+          scores = bag_gift_scores.map{|_| _[:score]}
           @bags << {
             category_id:  category_id,
             max_score:    scores.max,
-            avg_score:    scores.sum.to_f / bag_scores.count,
-            gift_scores:  bag_scores
+            avg_score:    scores.sum.to_f / bag_gift_scores.count,
+            gift_scores:  bag_gift_scores
           }
         end
       end
       
       def sort_gift_scores
-        # interleave the gifts from each category bag
-        @gift_scores = @bags.map{|_| _[:gift_scores]}.zip
+        # interleave the gifts from each category bag. The bags are sorted by score.
+        bag_gift_scores = @bags.map{|_| _[:gift_scores].dup}
+        
+        while (bag_gift_scores = bag_gift_scores.select(&:any?)).any?
+          # take the first gift_score from each remaining bag
+          @gift_scores += bag_gift_scores.map(&:shift)
+        end
       end
       
       def sort_bags
         # descending order by max_score and avg_score
-        @bag.sort!{|a, b| [b[:max_score], b[:avg_score]] <=> [a[:max_score], a[:avg_score]]}
+        @bags.sort!{|a, b| [b[:max_score], b[:avg_score]] <=> [a[:max_score], a[:avg_score]]}
       end
     end
   end

@@ -91,7 +91,7 @@ module Recommender
         from (#{sql_union_scorers}) as raw
         group by id
         order by score desc, random()
-        limit #{10 * max_total}
+        limit #{4 * max_total}
       }
       rows = Gift.connection.select_rows(sql_scores)
       
