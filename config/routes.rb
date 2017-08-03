@@ -42,7 +42,8 @@ Rails.application.routes.draw do
   resources :profile_recipient_reviews, only: :show
   resources :funds, only: :index
   
-  resources :mvp1b_user_surveys, only: [:show, :new, :create]
+  # removed pt story #149729697
+  # resources :mvp1b_user_surveys, only: [:show, :new, :create]
   
   get 'testing/survey_complete', to: 'survey_response_completions#show'
   get 'testing/gift_recommendations', to: 'gift_recommendations#index'
