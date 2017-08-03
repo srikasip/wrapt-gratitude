@@ -1,5 +1,5 @@
 module Recommender
-  module Sorting
+  module PostProcessing
     class CategorySort
       attr_reader :gift_scores
       
