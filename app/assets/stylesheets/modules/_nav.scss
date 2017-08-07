@@ -1,5 +1,34 @@
 @import "helpers";
 
+.navbar-toggle {
+  background-color: $blue-001;
+  border-radius: 50%;
+  height: 44px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  .icon-bar {
+    background-color: #FFFFFF;
+  }
+}
+
+.navbar-toggle__close {
+  display: none;
+  width: 44px;
+  height: 44px;
+  background-color: #FFFFFF;
+  position: absolute;
+  top: 30px;
+  right: 15px;
+  font-size: 32px;
+  line-height: 44px;
+  padding: 0px;
+  color: $blue-001;
+  @media(max-width: $screen-xs-max) {
+    display: inline-block;
+  }
+}
+
 .top-navigation__container {
   height: 120px;
   padding: 30px 15px;
@@ -14,12 +43,43 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
   width: 100%;
-  @media (max-width: $screen-xs-max) {
-    flex-direction: column;
+}
+
+.top-navigation__menu {
+  transition: opacity 0.5s ease-in-out;
+  @media(max-width: $screen-xs-max) {
+    width: 100vw;
+    height: 100vh;
+    padding-top: 91px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: 100;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-color: $blue-001;
+  }
+}
+
+.top-navigation__menu.tnm__closed {
+  @media(max-width: $screen-xs-max) {
+    height: 0px;
+    padding-top: 0px;
+  }
+}
+
+.top-navigation__menu.tnm-fade__in {
+  @media(max-width: $screen-xs-max) {
+    opacity: 1;
+  }
+}
+
+.top-navigation__menu.tnm-fade__out {
+  @media(max-width: $screen-xs-max) {
+    opacity: 0; 
   }
 }
 
@@ -31,10 +91,39 @@
   @include akkurat-bold;
   color: $gray-008;
   padding: 0 15px;
+  @media(max-width: $screen-xs-max) {
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    &:not(:first-of-type) {
+      margin-top: 40px;
+    }
+    svg{display:none;}
+  }
+}
+
+.top-navigation__menu-item a {
+  color: $gray-008;
+  @media(max-width: $screen-xs-max) {
+    color: #FFFFFF;
+    svg{display: none;}
+  }
+}
+
+.top-navigation__menu-item a:hover,
+.top-navigation__menu-item a:active,
+.top-navigation__menu-item a:focus {
+  text-decoration: none;
+  background-color: transparent;
+  @media(max-width: $screen-xs-max) {
+    svg{display: none;}
+  }
 }
 
 .top-navigation__brand-link {
   position: relative;
+  height: 61px;
+  display: block;
 }
 .top-navigation__brand-link:hover,
 .top-navigation__brand-link:focus,
@@ -46,16 +135,6 @@
   left: -9999px;
 }
 
-.top-navigation__menu-item a {
-  color: $gray-008;
-}
-
-.top-navigation__menu-item a:hover,
-.top-navigation__menu-item a:active,
-.top-navigation__menu-item a:focus {
-  text-decoration: none;
-  background-color: transparent;
-}
 .nav li {
   margin-bottom: 0;
 }

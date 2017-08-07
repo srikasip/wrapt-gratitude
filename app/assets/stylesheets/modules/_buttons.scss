@@ -116,6 +116,9 @@
   padding-right: 0;
   display: block;
   float: left;
+  @media(max-width: $screen-xs-max) {
+    width: 50%;
+  }
 }
 .btn.btn-yes-no:last-child {
   border-left: none;
@@ -137,6 +140,17 @@ label.btn-multiple-choice-option {
   padding-right: 10px;
   margin-right: 13px;
   margin-bottom: 16px;
+  &:nth-child(even) {
+    @media(max-width: $screen-sm-max) {
+      margin-right: 0px;
+    }
+  }
+  @media(max-width: $screen-sm-max) {
+    width: 310px;
+  }
+  @media(max-width: $screen-xs-max) {
+    width: 100%;
+  }
 }
 .btn.btn-multiple-choice-option:last-child,
 label.btn-multiple-choice-option:last-child {

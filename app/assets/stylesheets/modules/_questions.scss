@@ -1,8 +1,11 @@
 @import "helpers";
 
 .sqr-container {
-  width: 945px;
+  max-width: 945px;
   margin: 0 auto;
+  @media(max-width: $screen-xs-max) {
+    width: 90%;
+  }
 }
 
 .sqr-container__header {
@@ -35,6 +38,10 @@
   background-color: transparent;
   border: none;
   // has transition in transitions_animations
+  @media(max-width: $screen-xs-max) {
+    width: 30px;
+    margin-left: -30px;
+  }
 }
 
 .sqr-previous__icon {
@@ -105,6 +112,15 @@
   width: 80%;
   margin: 0px auto;
   margin-bottom: 40px;
+  @media(max-width: $screen-sm-max) {
+    width: 90%;
+  }
+}
+
+.sqr-section-label__container {
+  @media(max-width: $screen-xs-max) {
+    display: none;
+  }
 }
 
 .sqr-section-icon__container {
@@ -115,6 +131,9 @@
   left: 50%;
   margin-left: -50px;
   margin-top: -50px;
+  @media(max-width: $screen-xs-max) {
+    display: none;
+  }
 }
 
 .sqr-section-icon__outer {

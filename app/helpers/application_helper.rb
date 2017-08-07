@@ -4,6 +4,63 @@ module ApplicationHelper
     controller_name
   end
 
+  def top_nav_links
+    links = []
+    if current_user && current_user.active?
+      links << [admin_root_path, 'Admin', :default] if current_user.admin?
+      links << [my_account_path, 'My Account', :default]
+    end
+    links << [science_of_gifting_path, 'The Science', :default]
+    links << ['#', 'Gift Basket', :gift_basket] if enable_gift_basket?
+    if current_user
+      links << [user_session_path, 'Sign Out', :default]
+    else
+      links << [new_user_session_path, 'Sign In', :default]
+    end
+    links
+  end
+
+  def top_nav_link(content)
+    content_tag :span, class: 'top-navigation__menu-item' do
+      concat content
+    end
+  end
+
+  def top_nav_link_default(path, text)
+    content = link_to path do
+      concat embedded_svg('icon-circle', class: 'icon navbar-static-top__icon-circle')
+      concat " #{text}"
+    end
+    top_nav_link(content)
+  end
+
+  def top_nav_link_gift_basket(path, text)
+    a_data = {behavior: 'open-gift-basket'}
+    a_onClick = "ga('send', 'event', 'basket', 'open-close', 'open');"
+    count_data = {behavior: 'gift-basket-count'}
+    count_classes = gift_basket_empty? ? 'gift-basket-count empty' : 'gift-basket-count'
+    content = link_to path, data: a_data, onClick: a_onClick do
+      concat embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
+      concat " #{text}"
+      concat content_tag :span, gift_basket_count, data: count_data, class: count_classes
+    end
+    top_nav_link(content)
+  end
+
+  def top_nav_toggle(action)
+    css_classes = action == :in ? 'navbar-toggle' : 'navbar-toggle navbar-toggle__close'
+    data = {toggle: "fade #{action.to_s}", target: '.top-navigation__menu'}
+    content_tag :button, class: css_classes, data: data do
+      if action == :in
+        3.times do |time|
+          concat content_tag :span, '', class: 'icon-bar'
+        end
+      elsif action == :out
+        '✕'
+      end
+    end
+  end
+
   # override in specific helpers as needed
   def show_top_nav?
     true
