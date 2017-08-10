@@ -1,8 +1,8 @@
 App.MultipleChoiceForm = class MultipleChoiceForm {
   constructor(options = {}) {
-    this.form_element = $('[data-behavior~=question-response-form]')[0];
-    this.hidden_inputs_selector = $(this.form_element).find('[data-behavior~=option-id-input]');
-    this.buttons_selector = $(this.form_element).find('[data-behavior~=option-button]')
+    this.form_element = $('[data-behavior~="question-response-form"]')[0];
+    this.hidden_inputs_selector = $(this.form_element).find('[data-behavior~="option-id-input"]');
+    this.buttons_selector = $(this.form_element).find('[data-behavior~="option-button"]')
     this.multipleOptionResponses = options.multipleOptionResponses;
     this.handleButtonClick();
     this.updateDisplay(true);
@@ -25,7 +25,10 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
   }
 
   handleButtonClick() {
-    this.buttons_selector.on('click', evt => {
+    // mouseenter event on element causes mobile devices 
+    // to need double click to register click event
+    // add touchend for mobile to override this
+    this.buttons_selector.on('click touchend', evt => {
       evt.preventDefault();
       const clicked_button = evt.currentTarget
       const option_id = clicked_button.getAttribute('data-option-id');
@@ -60,7 +63,7 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
       option_input_selector.prop('checked', true)
     }
     // submit the form if something was selected and it's not an other button
-    const selectedOtherOptionInput = $(this.hidden_inputs_selector).filter('[data-behavior~=other-option]:checked')
+    const selectedOtherOptionInput = $(this.hidden_inputs_selector).filter('[data-behavior~="other-option"]:checked')
     if (selectedOtherOptionInput.length == 0 && option_input_selector.is(':checked')) {
       this.submitting = true;
       this.form_element.submit()
@@ -77,7 +80,7 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
   }
 
   setNextButtonVisibilityMultipleOptionResponses() {
-    const nextButton = $(this.form_element).find('[data-behavior~=next-question-button]')[0]
+    const nextButton = $(this.form_element).find('[data-behavior~="next-question-button"]')[0]
     const selected_option_inputs_selector = this.hidden_inputs_selector.filter(':checked')
     const nextHint = $('#js-next-question-hint-text')
     if (selected_option_inputs_selector.length > 0) {
@@ -92,7 +95,7 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
   }
 
   setNextButtonVisibilitySingleOptionResponses(init) {
-    const nextButton = $(this.form_element).find('[data-behavior~=next-question-button]')[0]
+    const nextButton = $(this.form_element).find('[data-behavior~="next-question-button"]')[0]
     const selected_option_inputs_selector = this.hidden_inputs_selector.filter(':checked')
     if (init && selected_option_inputs_selector.length > 0) {
       // returning to the question via the previous button
@@ -115,18 +118,18 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
 
   setOtherTextVisibility() {
     const otherTextWrapperSelector = $(this.form_element).find('[data-behavior~=other-text-input-wrapper]')
-    const selectedOtherOptionInput = $(this.hidden_inputs_selector).filter('[data-behavior~=other-option]:checked')
+    const selectedOtherOptionInput = $(this.hidden_inputs_selector).filter('[data-behavior~="other-option"]:checked')
     if (selectedOtherOptionInput.length > 0) {
       otherTextWrapperSelector.slideDown();
     } else {
       otherTextWrapperSelector.slideUp();
-      otherTextWrapperSelector.find('[data-behavior~=other-text-input]').val('')
+      otherTextWrapperSelector.find('[data-behavior~="other-text-input"]').val('')
     }
   }
 
   showOptionExplanation(option_id, type) {
-    const explanation_selector = $(this.form_element).find('[data-behavior~=option-explantion]')
-    const other_explanation_selector = $(this.form_element).find('[data-behavior~=option-explantion]:not([data-option-id="'+option_id+'"])')
+    const explanation_selector = $(this.form_element).find('[data-behavior~="option-explantion"]')
+    const other_explanation_selector = $(this.form_element).find('[data-behavior~="option-explantion"]:not([data-option-id="'+option_id+'"])')
     other_explanation_selector.hide()
     const selected_option_input_selector = this.hidden_inputs_selector.filter(`[value=${option_id}]:checked`)
     if(type === 'checked') {

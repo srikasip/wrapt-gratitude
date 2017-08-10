@@ -240,16 +240,19 @@ label {
 
 .wrapt-range__label {
   display: inline-block;
+  max-width: 35%;
 }
 
 .wrapt-range__min-label {
   position: absolute;
   left: 0px;
+  text-align: left;
 }
 
 .wrapt-range__max-label {
   position: absolute;
   right: 0px;
+  text-align: right;
 }
 .new-invite-request .radio {
   margin-bottom: 0;

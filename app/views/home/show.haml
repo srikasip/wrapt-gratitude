@@ -57,7 +57,6 @@
 - content_for :page_js do
   :javascript
     $(document).ready(function() {
-      console.log('hello world');
       $('.j-radio-as-button').change(function() {
         $('.j-radio-as-button__label').removeClass('selected');
         var label = $(this).parents('.j-radio-as-button__label');
