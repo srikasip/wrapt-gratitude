@@ -1,14 +1,6 @@
 .pb4.pt4
   .container
     .row
-      .col-xs-12.footer__social-links
-        %a.footer__social_link(href="https://facebook.com/GiftWrapt" target="_blank")
-          = icon "facebook"
-        %a.footer__social_link(href="https://twitter.com/Gift_Wrapt" target="_blank")
-          = icon "twitter"
-        %a.footer__social_link(href="https://instagram.com/giftwrapt" target="_blank")
-          = icon "instagram"
-    .row
       .col-xs-12
         .table-display
           %ul.footer__links
@@ -21,3 +13,11 @@
                 = link_to "Privacy Policy", privacy_policy_path
               %li.footer__link-item
                 = link_to 'Terms & Conditions', terms_of_service_path
+    .row
+      .col-xs-12.footer__social-links.mt2
+        %a.footer__social_link(href="https://facebook.com/GiftWrapt" target="_blank")
+          = icon "facebook"
+        %a.footer__social_link(href="https://twitter.com/Gift_Wrapt" target="_blank")
+          = icon "twitter"
+        %a.footer__social_link(href="https://instagram.com/giftwrapt" target="_blank")
+          = icon "instagram"

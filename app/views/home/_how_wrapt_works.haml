@@ -1,0 +1,24 @@
+:ruby
+  steps = [
+    ['A few basics', 'Tell us about her personality, passions and purpose.'],
+    ['Our recommendations', 'We will recommend unique, artisanal items, lovingly made with stories that inspire.'],
+    ['Wrapt & delivered', 'We send to your gift recipient, Wrapt and delivered, with love.']
+  ]
+.wrapper--full-bleed__bg-03.pb5  
+  .container.hpl__container
+    .row
+      .col-xs-12
+        %h3.text-center.light How Wrapt Works
+        %p.home__about-intro.text-center 
+          Wrapt is a fun and easy way to find a gift that matches who she is, 
+          %br
+          made by artisans that will inspire her.
+    .row.home__about-steps.pb5
+      - steps.each_with_index do |step, index|
+        - header, explanation = step
+        .col-sm-4.col-xs-12
+          .about-step
+            .about-step-number.text-center.light= index+1
+            .text-center
+              %h4.about-step__header= header
+              %p.about-step__description.light= explanation

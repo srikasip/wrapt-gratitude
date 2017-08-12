@@ -7,6 +7,7 @@
       @slide_container = '.' + $(@carousel).data('slide-container')
       @nav_selector = '.' + $(@carousel).data('nav')
       @indicator_container = '.' + $(@carousel).data('indicator-container')
+      @performResize = null
       
       @_load_slides()
 
@@ -32,6 +33,10 @@
         unless $(slide).hasClass('active')
           $(slide).addClass('hidden')
       @_init();
+
+    _reset_slides: ->
+      @slides.each (i, slide) =>
+        $(slide).removeAttr('style')
 
     _load_nav: ->
       @nav_next = $(@carousel).find(@nav_selector + '.next')
@@ -129,6 +134,50 @@
       @_update_indicators()
       $(@carousel).trigger('slide:change')
 
+    _debounce: (func, wait) ->
+      console.log('debounce')
+      timeout = null
+      that = this
+      ->
+        context = that
+        args = arguments
+        later = ->
+          timeout = null
+          func.apply(context, args)
+        
+        clearTimeout(timeout)
+        timeout = setTimeout(later, wait)
+      
+
+    _perform_resize: () ->
+      # console.log('perform resize')
+      # clearTimeout(@performResize)
+      # width = $(window).width()
+      # if width < 1115
+      #   console.log('set height')
+      #   @_reset_slides()
+      #   @_set_height()
+      #   @_init_slides()
+      width = $(window).width()
+      if width < 1115
+        console.log('set height')
+        @_reset_slides()
+        @_set_height()
+        @_init_slides()
+
+    _resize_carousel: () ->
+      # $(window).resize () =>
+      #   clearTimeout(@performResize)
+      #   @performResize = setTimeout(@_perform_resize(), 5000)
+      
+      debounce_func = @_debounce(@_perform_resize, 500)
+      $(window).resize(debounce_func)
+
+      # $(window).resize () =>
+      #   that = @
+      #   @_debounce((that) ->
+      #     that._perform_resize()
+      #   500)
 
   class ImageCarousel extends Carousel
 
@@ -137,6 +186,7 @@
       @_set_image_text(@active);
       $(@carousel).on 'slide:change', () =>
         @_set_image_text(@next);
+      @_resize_carousel()
 
     _set_image_text: (slide) ->
       slideImage = $(slide).find('.gr-image-carousel__image')
@@ -145,7 +195,8 @@
 
 
     _set_height: ->
-      containerSelector = $(@carousel).data('container')
+      # containerSelector = $(@carousel).data('container')
+      containerSelector = $('.gr-carousel__gift-image')
       containerHeight = $(containerSelector).height()
       $(@carousel).css('height', containerHeight)
 
@@ -153,7 +204,8 @@
   class ItemCarousel extends Carousel
 
     _init: ->
-      # class specific initializer  
+      # class specific initializer 
+      @_resize_carousel() 
 
     _set_height: ->
       @carouselHeight = 520
@@ -171,8 +223,23 @@
       wrapperHeight += (parseInt($('.gr-carousel__indicators').css('margin-top')) || 0)
       $('.wrapt-carousel--wrapper').css('height', wrapperHeight)
 
+  class ExampleCarousel extends Carousel
 
-    
+    _init: ->
+      # class specific initializer
+      @_resize_carousel()
+
+    _set_height: ->
+      @carouselHeight = 0
+      @slides.each (i, item) =>
+        if $(item).height() > @carouselHeight
+          @carouselHeight = $(item).height()
+      $(@carousel).css('height', @carouselHeight + 'px')
+      $(@container).css('height', @carouselHeight + 'px')
+
+  $('.hgec-carousel').each (i, carousel) ->
+    new ExampleCarousel(carousel)
+
   $('.gr-carousel').each (i, carousel) ->
     new ItemCarousel(carousel)
 

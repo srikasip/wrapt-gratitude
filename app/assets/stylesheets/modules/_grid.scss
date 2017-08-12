@@ -16,6 +16,9 @@
 .hero-bg .wrapper--full-bleed__bg-03 {
   border-bottom: none;
 }
+.hero-bg .wrapper--full-bleed__bg-03.wfb-include-border {
+  border-bottom: 1px solid #E2E2E2;
+}
 
 .floating-container {
   @include floating-container()

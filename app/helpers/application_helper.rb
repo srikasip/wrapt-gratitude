@@ -1,5 +1,17 @@
 module ApplicationHelper
 
+  def load_home_page_carousel_data
+    examples = GiftExamples.new().examples.map do |example|
+      {
+        slide_partial: 'wrapt_story',
+        slide_locals: example,
+        thumbnail_partial: 'wrapt_story_thumb',
+        thumbnail_locals: {image: example[:image], title: example[:title]}
+      }
+    end
+    {nav_partial: 'wrapt_stories_nav', slides: examples}
+  end
+
   def active_top_nav_section
     controller_name
   end

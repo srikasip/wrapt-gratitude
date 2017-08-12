@@ -1,0 +1,26 @@
+- image = locals[:image]
+- title = locals[:title]
+- tagline = locals[:tagline]
+- details = locals[:details]
+- labels = locals[:labels]
+.hgec-carousel__example.clearfix
+  .hgec-carousel__example-image{style: "background-image: url(#{image_path image})"}
+  .hgec-carousel__example-content.pa2
+    %h3.hgec__title.light= title
+    %p.hgec__tagline.light= tagline
+    .hgec__details-labels-container.pt2.pb2.pl1.pr1
+      %table.hgec__dl-table
+        - labels.each_with_index do |label, index|
+          %tr
+            - if index == 0
+              %td.hgec__details{width: '75%', rowspan: labels.size}
+                
+                - details.each do |detail|
+                  %p=detail
+            %td
+              .hgec__label
+                = embedded_svg(label[:icon], class: 'hgec__label-icon')
+                .hgec__label-text= label[:text]
+
+
+    

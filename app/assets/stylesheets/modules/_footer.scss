@@ -22,6 +22,7 @@ body.modal-body {
   letter-spacing: 1px;
   margin-bottom: 8px;
   color: $gray-006;
+  padding-left: 0px;
 }
 .footer__link-item {
   display: inline-block;
@@ -49,14 +50,14 @@ footer li a {
 body.hero-bg {
   margin-bottom: 0;
 }
-.hero-bg .footer {
-  background-color: $blue-001;
-}
+// .hero-bg .footer {
+//   background-color: $blue-001;
+// }
 
-.hero-bg footer li a,
-.hero-bg .footer__links {
-  color: white;
-}
+// .hero-bg footer li a,
+// .hero-bg .footer__links {
+//   color: white;
+// }
 
 .footer__social-links {
   margin-bottom: 12px;
@@ -79,7 +80,7 @@ body.hero-bg {
     background-color: transparent;
   }
 }
-.home .footer__social_link,
+// .home .footer__social_link,
 .profiles.new .footer__social_link {
   color: white;
   border: solid white 1px;

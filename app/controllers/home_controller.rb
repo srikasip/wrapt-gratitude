@@ -1,6 +1,7 @@
 class HomeController < ApplicationController
 
   helper HeroBackgroundHelper
+  helper CarouselHelper
 
   def show
     if current_user && current_user.last_viewed_profile.present? && !current_user.admin?
