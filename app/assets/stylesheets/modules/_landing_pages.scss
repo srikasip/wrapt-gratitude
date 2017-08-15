@@ -3,14 +3,23 @@
 
 @import "helpers";
 .rotate-words__sentence {
-  @media (min-width: $screen-sm-min) {
-    text-align: left;
-    margin-left: 180px;
+  display: inline-block;
+  text-align: left;
+  min-width: 460px;
+  @media (max-width: $screen-xs-max) {
+    text-align: center;
+    min-width: 0px;
+    display: block;
+  }
+  @media (max-width: $screen-sm-max) {
+    min-width: 380px;
+  }
+  @media (max-width: $screen-md-max) {
+    min-width: 370px;
   }
 }
 .rotate-words__container {
   display: inline-block;
-  overflow: hiddne;
   vertical-align: top;
   width: 176px;
   height: 1.2em;
@@ -47,10 +56,12 @@
 }
 
 .home__hero {
-  background-image: image-url('hero-image');
+  // background-image: image-url('hero-image');
+  background-image: image-url('hero-image-v2');
   background-size: 100vw;
   background-repeat: no-repeat;
-  background-position: 0% 0%;
+  // background-position: left top;
+  background-position: left 40%;
   border: none;
   margin-bottom: 24px;
   padding-top: 48px;
@@ -58,44 +69,72 @@
   @media (max-width: $screen-xs-max) {
     margin-top: 10px;
     padding-top: 20px;
+    background-size: cover;
+    background-position: 55% 50%;
   }
-  @media (min-width: $screen-sm-min) {
+  // @media (min-width: $screen-sm-min) {
 
-  }
-  @media (min-width: $screen-lg-min) {
-    background-position: 0% 90%;
-  }
+  // }
+  // @media (max-width: $screen-md-min) {
+  //   background-position: left 40%;
+  // }
+  // @media (min-width: $screen-lg-min) {
+  //   background-position: left 40%;
+  // }
 }
 
 
 .home__hero-text h1 {
   font-size: rem(40);
-  @media (min-width: $screen-sm-min) {
-    font-size: rem(60);
-    line-height: 1;
-    margin-bottom: 100px;
+  color: $gray-010;
+  -webkit-text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
+  -moz-text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
+  text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
+  @media (max-width: $screen-xs-max) {
+    margin-bottom: 500px;
   }
   @media (min-width: $screen-sm-min) {
-    margin-bottom: 360px;
+    line-height: 1;
+  }
+  @media (min-width: $screen-sm-min) {
+    margin-bottom: 420px;
   }
   @media (min-width: $screen-md-min) {
     margin-bottom: 500px;
     line-height: 1.2;
   }
   @media (min-width: $screen-lg-min) {
+    font-size: rem(50);
   }
 }
 .home__hero-text-secondary .home__hero-text-secondary__p {
   font-size: rem(28px);
-  line-height: 1.2em;  
+  line-height: 1.5em;
+  color: $gray-010;
+  -webkit-text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
+  -moz-text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
+  text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
+  @media (max-width: $screen-xs-max) {
+    @include akkurat-regular;
+    font-size: rem(26px);
+    margin: 0px auto;
+    margin-top: -520px;
+    max-width: 577px;
+
+  } 
+  @media (max-width: $screen-sm-max) {
+    br {display: none;}
+  } 
   @media (min-width: $screen-sm-min) {
-    margin-top: -380px;
+    margin-top: -440px;
+    font-size: rem(22px);
+    @include akkurat-regular;
   }
   @media (min-width: $screen-md-min) {
     margin-top: -500px;
   }
   @media (min-width: $screen-lg-min) {
-    margin-top: -520px;
+    margin-top: -500px;
   }
 }
 
@@ -103,21 +142,7 @@
   background-color: #fff;
   padding: 40px;
   box-shadow: 0 2px 4px 4px rgba(0, 0, 0, 0.08), 0 2px 12px 12px rgba(0, 0, 0, 0.05);
-  @media (min-width: $screen-sm-min) {
-    margin-top: -120px;
-  }
-  @media (min-width: 790px) and (max-width: $screen-sm-max) {
-    margin-top: -80px;
-  }
-  @media (min-width: $screen-md-min) and (max-width: 1080px) {
-    margin-top: -130px;
-  }
-  @media (min-width: 1081px) {
-    margin-top: -110px;
-  }
-  @media (min-width: $screen-lg-min) {
-    margin-top: -110px;
-  }
+  margin-top: -80px;
 }
 
 .profiles.new .hero-overrun form {
@@ -393,12 +418,22 @@ body.home,
 .hgec__dl-table {
   table-layout: fixed;
   width: 100%;
+  @media(max-width: $screen-xs-max) {
+    tr td:last-child {
+      display: none;
+    }
+  }
 }
 
 .hgec__details {
   border-right: 1px solid $gray-005;
   font-size: rem(12);
   padding-right: 8px;
+  @media(max-width: $screen-xs-max) {
+    padding-right: 0px;
+    border-right: none;
+    font-size: rem(16);
+  }
 }
 
 .hgec__label {

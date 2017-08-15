@@ -143,25 +143,16 @@ $gr-carousel-nav__width: 82.5px;
   height: 100px;
   margin-top: -50px;
   display: table;
-  // @media (max-width: $screen-sm-max) {
-  //   width: 10%;
-  // }
 }
 
 .gr-carousel__nav.prev,
 .hgec-carousel__nav.prev {
   margin-left: $gr-carousel-nav__width - 40;
-  // @media (max-width: $screen-md-max) {
-  //   margin-left: 0px;
-  // }
 }
 
 .gr-carousel__nav.next,
 .hgec-carousel__nav.next {
   margin-right: $gr-carousel-nav__width - 40;
-  // @media (max-width: $screen-md-max) {
-  //   margin-right: 0px;
-  // }
 }
 
 .gr-carousel__nav-inner,
@@ -248,6 +239,12 @@ $gr-carousel-nav__width: 82.5px;
   }
 }
 
+.hgec-carousel__indicators {
+  @media(max-width: $screen-xs-max) {
+    margin-top: 24px;
+  }
+}
+
 .gr-carousel__indicator,
 .hgec-carousel__indicator {
   border-radius: 0px;
@@ -263,6 +260,30 @@ $gr-carousel-nav__width: 82.5px;
 .hgec-carousel__indicator:active {
   background-color: initial;
   text-decoration: none;
+}
+
+.hgec-carousel__indicator:hover,
+.hgec-carousel__indicator:focus,
+.hgec-carousel__indicator:active {
+  @media(max-width: $screen-xs-max) {
+    background-color: $blue-006;
+  }
+}
+
+.hgec-carousel__indicator {
+  @media(max-width: $screen-xs-max) {
+    display: inline-block;
+    width: 40px;
+    height: 5px;
+    border: 1px solid $blue-006;
+    border-radius: 4px;
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+    &.active {
+      background-color: $blue-006;
+    }
+  }
 }
 
 .gr__indicator-inactive-overlay {
@@ -286,7 +307,6 @@ $gr-carousel-nav__width: 82.5px;
 
 .gr-carousel__indicator.active .gr__indicator-inactive-overlay,
 .hgec-carousel__indicator.active .gr__indicator-inactive-overlay {
-  // display: none;
   background: none;
 }
 
@@ -302,14 +322,18 @@ $gr-carousel-nav__width: 82.5px;
   overflow: hidden;
 }
 
+.hgec__indicator-thumbnail {
+  @media(max-width: $screen-xs-max) {
+    display: none;
+  }
+}
+
 .gr__indicator-thumbnail {
   @media(max-width: $screen-xs-max) {
     margin: 0px;
     width: 16%;
     margin-right: 4%;
     height: auto;
-    // max-height: 80px;
-    // min-height: 60px;
     height: 60px;
   }
 }

@@ -26,13 +26,19 @@ body.modal-body {
 }
 .footer__link-item {
   display: inline-block;
-  // float: left;
   margin-right: 10px;
   margin-bottom: 0;
   line-height: 1.4;
+  @media (max-width: $screen-xs-max) {
+    display: block;
+    margin-bottom: 10px;
+  }
 }
 footer li:after {
   content: '\00a0|';
+  @media (max-width: $screen-xs-max) {
+    display: none;
+  }
 }
 footer li:last-child:after {
   content: '';
@@ -41,7 +47,6 @@ footer li a {
   color: $gray-006;
   cursor: pointer;
   &:hover {
-    // color: $gray-006;
     text-decoration: none;
   }
 }
