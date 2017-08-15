@@ -7,6 +7,9 @@
       @slide_container = '.' + $(@carousel).data('slide-container')
       @nav_selector = '.' + $(@carousel).data('nav')
       @indicator_container = '.' + $(@carousel).data('indicator-container')
+      @small_nav_scroll_selector = '.' + $(@carousel).data('small-nav')
+      @small_nav_text_selector = '.' + $(@carousel).data('small-nav-text')
+
       @performResize = null
       
       @_load_slides()
@@ -17,14 +20,16 @@
       @max = @slides.length
 
       @_set_height()
-      @_init_slides()
+      @_init_slides(true)
 
       @_load_nav()
       @_init_nav()
 
-    _init_slides: ->
+      @_init()
+
+    _init_slides: (first_time)->
       @slides.each (i, slide) =>
-        if i == 0
+        if i == 0 && first_time
           $(slide).addClass('active')
         $(slide).css('position', 'absolute')
         $(slide).css('top', '0px')
@@ -32,7 +37,7 @@
         $(slide).css('left', '0px')
         unless $(slide).hasClass('active')
           $(slide).addClass('hidden')
-      @_init();
+      # @_init();
 
     _reset_slides: ->
       @slides.each (i, slide) =>
@@ -71,6 +76,9 @@
       else
         @next = $(@carousel).find(@slide_container + "[data-position='" + prev_position + "']") 
 
+    _update_small_indicator_text: (text) ->
+      $(@small_nav_text_selector).text(text)
+
     _nav_click_handler: (element, directionClassOut, directionClassIn) ->
       $(element).click (e) =>
         e.preventDefault()
@@ -81,6 +89,7 @@
           else
             @_load_prev()
           @_slide(directionClassOut, directionClassIn)
+          @_update_small_indicator_text(@next.data('title'))
 
     _indicator_click_handler: ->
       @indicators.each (i, indicator) =>
@@ -88,8 +97,8 @@
           e.preventDefault()
           if @clickable
             @_load_active()
-            indicator_position = parseInt($(indicator).data('position'), 10)
-            active_position = parseInt($(@active).data('position'), 10) 
+            indicator_position = $(indicator).data('position')
+            active_position = $(@active).data('position')
             unless indicator_position == active_position
               @clickable = false
               @next = $(@carousel).find(@slide_container + "[data-position='" + indicator_position + "']")
@@ -100,6 +109,7 @@
                 directionClassOut = 'slideOutRight'
                 directionClassIn = 'slideInRight'
               @_slide(directionClassOut, directionClassIn)
+              @_update_small_indicator_text($(indicator).find('img').attr('alt'))
 
     _update_indicators: ->
       @indicators.each (i, indicator) =>
@@ -135,7 +145,6 @@
       $(@carousel).trigger('slide:change')
 
     _debounce: (func, wait) ->
-      console.log('debounce')
       timeout = null
       that = this
       ->
@@ -150,34 +159,14 @@
       
 
     _perform_resize: () ->
-      # console.log('perform resize')
-      # clearTimeout(@performResize)
-      # width = $(window).width()
-      # if width < 1115
-      #   console.log('set height')
-      #   @_reset_slides()
-      #   @_set_height()
-      #   @_init_slides()
       width = $(window).width()
-      if width < 1115
-        console.log('set height')
-        @_reset_slides()
-        @_set_height()
-        @_init_slides()
+      @_reset_slides()
+      @_set_height()
+      @_init_slides(false)
 
     _resize_carousel: () ->
-      # $(window).resize () =>
-      #   clearTimeout(@performResize)
-      #   @performResize = setTimeout(@_perform_resize(), 5000)
-      
       debounce_func = @_debounce(@_perform_resize, 500)
       $(window).resize(debounce_func)
-
-      # $(window).resize () =>
-      #   that = @
-      #   @_debounce((that) ->
-      #     that._perform_resize()
-      #   500)
 
   class ImageCarousel extends Carousel
 
@@ -195,17 +184,70 @@
 
 
     _set_height: ->
-      # containerSelector = $(@carousel).data('container')
-      containerSelector = $('.gr-carousel__gift-image')
-      containerHeight = $(containerSelector).height()
-      $(@carousel).css('height', containerHeight)
+      # set in parent slider
 
 
   class ItemCarousel extends Carousel
 
     _init: ->
       # class specific initializer 
-      @_resize_carousel() 
+      @_resize_carousel()
+      @_small_indicator_scroll_click_handler()
+
+    _load_group_positions: ()->
+      total_groups = Math.ceil(@indicators.length/5)
+      positions = [1..@indicators.length]
+      grouped_positions = []
+      for i in [0...total_groups]
+        grouped_positions[i] = positions.slice(i*5, (i*5)+5)
+      grouped_positions
+
+    _load_group_next: (nav) ->
+      direction = if $(nav).hasClass('next') then '.next' else '.prev'
+      $(@small_nav_scroll_selector+direction).data('group')
+
+    _update_group_data: (nav, next, current) ->
+      grouped_positions = @_load_group_positions()
+      prevEle = $(@small_nav_scroll_selector+'.prev')
+      nextEle = $(@small_nav_scroll_selector+'.next')
+      if $(nav).hasClass('next')
+        $(prevEle).data('group', current)
+        $(nextEle).data('group', next+1)
+      else
+        $(prevEle).data('group', current-2)
+        $(nextEle).data('group', next+1)
+      
+      if $(prevEle).data('group') == 0
+        $(prevEle).addClass('disabled')
+      else
+        $(prevEle).removeClass('disabled')
+      
+      if grouped_positions[$(nextEle).data('group')-1]
+        $(nextEle).removeClass('disabled')
+      else
+        $(nextEle).addClass('disabled')
+
+    _transition_indicators: (next_gp) ->
+      $(@indicators).animate {opacity: 0}, 500, =>
+        $(@indicators).addClass('hidden-xs')
+        $(@indicators).css('opacity', 1)  
+        i_to_show = $(@indicators).filter (index) ->
+          $.inArray($(this).data('position'), next_gp) != -1
+        i_to_show.removeClass('hidden-xs')
+        i_to_show.animate {opacity: 1}, 500
+
+    _small_indicator_scroll_click_handler: ->
+      @grouped_positions = @_load_group_positions()
+      
+      $(@small_nav_scroll_selector).each (i, nav) =>
+        $(nav).click (e) =>
+          e.preventDefault()
+          prevEle = $(@small_nav_scroll_selector+'.prev')
+          current = prevEle.data('group') + 1
+          next = @_load_group_next(nav)
+          next_gp = @grouped_positions[next-1]
+          @_transition_indicators(next_gp)
+          @_update_group_data(nav, next, current)
 
     _set_height: ->
       @carouselHeight = 520
@@ -214,6 +256,10 @@
           @carouselHeight = $(item).height()
       $(@carousel).css('height', @carouselHeight + 'px')
       $(@container).css('height', @carouselHeight + 'px')
+
+      # set image carousel height here too
+      image_carousel = $('.gr-image-carousel')
+      image_carousel.css('height', image_carousel.parent('.gr-carousel__gift-image').height())
 
       # Also set the wrapper height so the thumbnail nav
       # gets pushed down below the footer

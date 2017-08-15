@@ -231,6 +231,23 @@ $gr-carousel-nav__width: 82.5px;
   }
 }
 
+.gr-carousel__indicators {
+  @media (max-width: $screen-xs-max) {
+    position: relative;
+    padding: 8px;
+    position: fixed;
+    margin-bottom: 0px;
+    z-index: 12;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: $blue-006;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: left;
+  }
+}
+
 .gr-carousel__indicator,
 .hgec-carousel__indicator {
   border-radius: 0px;
@@ -285,6 +302,18 @@ $gr-carousel-nav__width: 82.5px;
   overflow: hidden;
 }
 
+.gr__indicator-thumbnail {
+  @media(max-width: $screen-xs-max) {
+    margin: 0px;
+    width: 16%;
+    margin-right: 4%;
+    height: auto;
+    // max-height: 80px;
+    // min-height: 60px;
+    height: 60px;
+  }
+}
+
 .hgec__indicator-thumbnail {
   background-size: cover;
   background-position: center;
@@ -292,7 +321,10 @@ $gr-carousel-nav__width: 82.5px;
 
 .gr-carousel__indicator:last-child .gr__indicator-thumbnail,
 .gr-carousel__indicator:nth-child(6) .gr__indicator-thumbnail {
-  margin-right: 0;
+  
+  @media(min-width: $screen-xs-max) {
+    margin-right: 0;
+  }
 }
 .gr-carousel__indicator img {
   width: 100%;
@@ -302,6 +334,47 @@ $gr-carousel-nav__width: 82.5px;
   -webkit-transform: translateY(-25%);
   -ms-transform: translateY(-25%);
   transform: translateY(-25%);
+}
+
+.gr-carousel__sm-nav-link {
+  color: $gray-008;
+  text-transform: uppercase;
+  font-size: rem(14);
+  @include akkurat-bold;
+  letter-spacing: 1px;
+  width: 25%;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: middle;
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: transparent;
+  }
+}
+
+.gr-carousel__sm-nav-link.prev {
+  text-align: left;
+}
+
+.gr-carousel__sm-nav-link.next {
+  text-align: right;
+}
+
+.gr-carousel__sm-nav-link.disabled {
+  pointer-events: none;
+  color: $gray-006;
+}
+
+.gr-carousel__sm-nav-text {
+  text-align: center;
+  width: 50%;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: middle;
+  margin: 8px 0px 16px;
+  font-size: rem(16);
+  text-overflow: ellipsis;
 }
 
 // gift recommendations carousel gift
@@ -325,23 +398,20 @@ $gr-carousel-nav__width: 82.5px;
 }
 
 .gr-carousel__gift-content {
-  @media(max-width: $screen-sm-max) {
-    height: auto;
-  }
-}
-
-.gr-carousel__gift-image,
-.hgec-carousel__example-image {
-  @media(max-width: $screen-xs-max) {
-    height: 400px;
+  @media(min-width: $screen-md-min) {
+    min-height: 520px;
   }
 }
 
 .gr-carousel__gift-image,
 .hgec-carousel__example-image {
   width: 45%;
+  height: auto;
+  min-height: 520px;
   @media(max-width: $screen-xs-max) {
     width: 100%;
+    height: 400px;
+    min-height: 0;
   }
 }
 
@@ -480,11 +550,12 @@ a.liked:focus {
 }
 
 .gr-carousel__gift-details {
-  // min-height: 228px;
-  // max-height: 228px;
-  // overflow: scroll;
   max-width: 430px;
   padding-right: 10px;
+  padding-bottom: 72px;
+  @media(max-width: $screen-xs-max) {
+    padding-bottom: 0px;
+  }
 }
 
 .gr-carousel__gift-actions {
@@ -492,6 +563,9 @@ a.liked:focus {
   bottom: 0px;
   right: 0px;
   left: 0px;
+  @media(max-width: $screen-xs-max) {
+    position: static;
+  }
 }
 
 .gr-carousel__price,
@@ -501,9 +575,18 @@ a.liked:focus {
 }
 .gr-carousel__quantity {
   right: 30px;
+  @media(max-width: $screen-xs-max) {
+    position: static;
+    input {
+      width: 100%;
+    }
+  }
 }
 .gr-carousel__price {
   left: 28px;
+  @media(max-width: $screen-xs-max) {
+    position: static;
+  }
 }
 
 .gr-carousel__price {
@@ -512,6 +595,13 @@ a.liked:focus {
 }
 
 // gift image carousel specific styles
+
+.gr-image-carousel {
+  min-height: 520px;
+  @media(max-width: $screen-xs-max) {
+    min-height: 400px;
+  }
+}
 
 .gr-image-carousel__images {
   display: block;
@@ -524,8 +614,6 @@ a.liked:focus {
 }
 
 .gr-image-carousel__image {
-  // width: 100%;
-  // height: 100%;
   white-space: normal;
   background-repeat: no-repeat;
   background-position: center;
@@ -564,6 +652,9 @@ a.liked:focus {
   bottom: 40px;
   background-color: rgba(51, 51, 51, .8);
   height: 56px;
+  @media(max-width: $screen-md-max) {
+    width: 80%;
+  }
 }
 .gr-image-carousel__nav {
   height: 56px;

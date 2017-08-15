@@ -10,7 +10,7 @@ module CarouselHelper
           concat carousel_nav(nav_container_class: classes[:nav_container], nav_class: classes[:nav], nav_partial: nav_partial)
         end
         concat carousel_slide_container(slides: slides, slides_container: classes[:slides_container], slide_container: classes[:slide_container])
-        concat carousel_indicators(slides: slides, indicators: classes[:indicators_container], indicator: classes[:indicator_container])
+        concat carousel_indicators(carousel_classes: classes, slides: slides, indicators: classes[:indicators_container], indicator: classes[:indicator_container])
       end
     end
   end
@@ -24,21 +24,38 @@ module CarouselHelper
       indicator_container: "#{unique_carousel_name}__indicator",
       nav_container: "#{unique_carousel_name}__nav-container",
       nav: "#{unique_carousel_name}__nav",
+      small_nav: "#{unique_carousel_name}__sm-nav-link",
+      small_nav_text: "#{unique_carousel_name}__sm-nav-text",
       container: container
     }
   end
 
-  def carousel_indicators(slides: slides, indicators: '', indicator: '')
+  def carousel_indicators(carousel_classes: carousel_classes, slides: slides, indicators: '', indicator: '')
+    is_gr_carousel = carousel_classes[:carousel] == 'gr-carousel'
     content_tag :div, class: "wrapt-carousel__indicators #{indicators}" do
+      if is_gr_carousel
+        concat carousel_small_indicator_nav(slides, carousel_classes)
+      end
       slides.each_with_index do |slide, index|
-        concat carousel_indicator(slide: slide, index: index, indicator: indicator)
+        concat carousel_indicator(slide: slide, index: index, indicator: indicator, is_gr_carousel: is_gr_carousel)
       end
     end
   end
 
-  def carousel_indicator(slide: slide, index: index, indicator: '')
+  def carousel_small_indicator_nav(slides, carousel_classes)
+    content_tag :div, class: 'visible-xs' do
+      concat link_to '< Prev 5', '#', class: "#{carousel_classes[:small_nav]} prev disabled", data: {group: 0}
+      title = slides[0][:slide_locals][:gift].title
+      concat content_tag :div, title, class: "#{carousel_classes[:small_nav_text]}"
+      concat link_to 'Next 5 >', '#', class: "#{carousel_classes[:small_nav]} next", data: {group: 2}
+    end
+  end
+
+  def carousel_indicator(slide: slide, index: index, indicator: '', is_gr_carousel: false)
     locals = slide[:thumbnail_locals].merge({index: index + 1})
-    link_to '#', class: "wrapt-carousel__indicator #{indicator}", data: {position: index + 1} do
+    base_classes = "wrapt-carousel__indicator #{indicator}"
+    classes = (is_gr_carousel && index > 4) ? "#{base_classes} hidden-xs" : base_classes
+    link_to '#', class: classes, data: {position: index + 1} do
       render slide[:thumbnail_partial], locals: locals
     end
   end
@@ -51,7 +68,12 @@ module CarouselHelper
   def carousel_slide_container(slides: slides, slides_container: '', slide_container: '')
     content_tag :div, class: "wrapt-carousel__slides #{slides_container}" do
       slides.each_with_index do |slide, index|
-        concat content_tag :div, slide_content(slide: slide, index: index, slide_container: slide_container), class: "wrapt-carousel__slide #{slide_container}", data: {position: index + 1}
+        if slide[:slide_locals][:gift].present?
+          title = slide[:slide_locals][:gift][:title]
+        else
+          title = ''
+        end
+        concat content_tag :div, slide_content(slide: slide, index: index, slide_container: slide_container), class: "wrapt-carousel__slide #{slide_container}", data: {position: index + 1, title: title}
       end
     end
   end
