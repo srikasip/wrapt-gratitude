@@ -9,8 +9,6 @@ class Survey < ApplicationRecord
   has_one :name_question, -> {where use_response_as_name: true}, class_name: 'SurveyQuestion'
   has_one :relationship_question, -> {where use_response_as_relationship: true}, class_name: 'SurveyQuestion'
 
-  has_many :profile_sets, inverse_of: :survey, dependent: :destroy
-  has_many :training_sets, inverse_of: :survey, dependent: :destroy
   has_many :survey_responses, inverse_of: :survey, dependent: :destroy
 
   has_many :sections, -> {order 'sort_order ASC'}, class_name: 'SurveySection', inverse_of: :survey, dependent: :destroy
