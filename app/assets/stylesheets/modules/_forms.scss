@@ -16,7 +16,8 @@ label {
 }
 .lost-password-container {
   // match password input width
-  width: 575px;
+  max-width: 575px;
+  width: 100%;
   margin-top: -28px;
 }
 .hint {
@@ -61,7 +62,11 @@ label {
 }
 .modal-body .input-wrapper  #js-pw-input-for-show-hide {
   display: inline-block;
-  width: 575px;
+  width: 100%;
+  max-width: 575px;
+  @media(max-width: $screen-xs-max) {
+    max-width: 100%;
+  }
 }
 
 .input-wrapper--show-hide {

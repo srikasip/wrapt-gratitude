@@ -7,6 +7,7 @@
   margin-top: 0px;
   margin-bottom: 0px;
   margin-right: 0px;
+  opacity: 0.8;
   .icon-bar {
     background-color: #FFFFFF;
   }
@@ -24,8 +25,21 @@
   line-height: 44px;
   padding: 0px;
   color: $blue-001;
+  opacity: 0.8;
   @media(max-width: $screen-xs-max) {
     display: inline-block;
+  }
+}
+
+.navbar-toggle,
+.navbar-toggle__close {
+  &:hover,
+  &:active,
+  &:focus {
+    opacity: 1;
+  }
+  &:focus {
+    outline: auto 5px -webkit-focus-ring-color;
   }
 }
 

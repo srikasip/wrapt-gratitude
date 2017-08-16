@@ -39,9 +39,21 @@ module ApplicationHelper
   end
 
   def top_nav_link_default(path, text)
-    content = link_to path do
-      concat embedded_svg('icon-circle', class: 'icon navbar-static-top__icon-circle')
-      concat " #{text}"
+    if text == 'Sign Out'
+      content = link_to path, method: :delete do
+        concat embedded_svg('icon-circle', class: 'icon navbar-static-top__icon-circle')
+        concat " #{text}"
+      end
+    elsif text == 'Sign In'
+      content = link_to path, data: {loads_in_pjax_modal: true, toggle: "fade out", target: '.top-navigation__menu'} do
+        concat embedded_svg('icon-circle', class: 'icon navbar-static-top__icon-circle')
+        concat " #{text}"
+      end
+    else
+      content = link_to path do
+        concat embedded_svg('icon-circle', class: 'icon navbar-static-top__icon-circle')
+        concat " #{text}"
+      end
     end
     top_nav_link(content)
   end
@@ -62,13 +74,14 @@ module ApplicationHelper
   def top_nav_toggle(action)
     css_classes = action == :in ? 'navbar-toggle' : 'navbar-toggle navbar-toggle__close'
     data = {toggle: "fade #{action.to_s}", target: '.top-navigation__menu'}
-    content_tag :button, class: css_classes, data: data do
+    content_tag :button, type: 'button', class: css_classes, data: data do
       if action == :in
         3.times do |time|
           concat content_tag :span, '', class: 'icon-bar'
         end
       elsif action == :out
-        '✕'
+        # '✕'
+        embedded_svg('icon-close', class: 'modal__icon-close')
       end
     end
   end
