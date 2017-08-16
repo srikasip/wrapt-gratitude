@@ -418,12 +418,21 @@ $gr-carousel-nav__width: 82.5px;
   position: relative;
   @media(max-width: $screen-xs-max) {
     height: auto;
+    position: static;
   }
 }
 
 .gr-carousel__gift-content {
   @media(min-width: $screen-md-min) {
     min-height: 520px;
+  }
+  @media(max-width: $screen-xs-max) {
+    &.pr1 {
+      padding-right: 2.8rem;
+    }
+    &.pb2 {
+      padding-bottom: 115px;
+    }
   }
 }
 
@@ -588,7 +597,10 @@ a.liked:focus {
   right: 0px;
   left: 0px;
   @media(max-width: $screen-xs-max) {
-    position: static;
+    // position: static;
+    right: 2.8rem;
+    left: 2.8rem;
+    bottom: 2.8rem;
   }
 }
 
