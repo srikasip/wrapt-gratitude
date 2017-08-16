@@ -1,6 +1,7 @@
 class InvitationRequestsController < ApplicationController
 
   helper HeroBackgroundHelper
+  helper CarouselHelper
 
   def create
     @invitation_request = InvitationRequest.new invitation_request_params

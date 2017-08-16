@@ -1,19 +1,7 @@
 .home__hero
-  .container.home__hero-text
-    .row
-      .col-sm-10.col-sm-offset-1.col-md-8.col-md-offset-2
-        %h1.light.text-center
-          Gift Better.
-          %br
-          Gift Wrapt.
+  = render 'home/hero_text_1'
 .container.home__hero-text-secondary
-  .row
-    .col-lg-8.col-lg-offset-2
-      %p.home__hero-text-secondary__p.light.text-center
-        We use the science of gifting to find the best gifts for you,
-        %br
-        while doing a little good in the world
-
+  = render 'home/hero_text_2'
   .container
     .row
       .hero-overrun.col-sm-10.col-sm-offset-1
@@ -26,4 +14,5 @@
               Start Quiz
 
 - content_for :after_wrapper do
-  =render 'home/after_wrapper'
+  = render 'home/how_wrapt_works'
+  = render 'home/wrapt_stories'

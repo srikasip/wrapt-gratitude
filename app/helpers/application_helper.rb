@@ -3,13 +3,13 @@ module ApplicationHelper
   def load_home_page_carousel_data
     examples = GiftExamples.new().examples.map do |example|
       {
-        slide_partial: 'wrapt_story',
+        slide_partial: 'home/wrapt_story',
         slide_locals: example,
-        thumbnail_partial: 'wrapt_story_thumb',
+        thumbnail_partial: 'home/wrapt_story_thumb',
         thumbnail_locals: {image: example[:image], title: example[:title]}
       }
     end
-    {nav_partial: 'wrapt_stories_nav', slides: examples}
+    {nav_partial: 'home/wrapt_stories_nav', slides: examples}
   end
 
   def active_top_nav_section
@@ -59,7 +59,7 @@ module ApplicationHelper
   end
 
   def top_nav_link_gift_basket(path, text)
-    a_data = {behavior: 'open-gift-basket'}
+    a_data = {behavior: 'open-gift-basket', toggle: "fade out", target: '.top-navigation__menu'}
     a_onClick = "ga('send', 'event', 'basket', 'open-close', 'open');"
     count_data = {behavior: 'gift-basket-count'}
     count_classes = gift_basket_empty? ? 'gift-basket-count empty' : 'gift-basket-count'

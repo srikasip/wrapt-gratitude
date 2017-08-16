@@ -1,29 +1,7 @@
 .home__hero
-  .container.home__hero-text
-    .row
-      .col-sm-12.col-md-8.col-md-offset-2
-        %h1.light.text-center
-          .rotate-words__sentence
-            %span Gift
-            .rotate-words__container 
-              %span Better.
-              %span Kindness.
-              %span Peace.
-              %span Compassion.
-              %span Understanding.
-              %span Generosity.
-              %span Gratitude.
-              %span Empathy.
-              %span Love.
-          Gift Wrapt.
+  = render 'hero_text_1'
 .container.home__hero-text-secondary
-  .row
-    .col-xs-12.col-sm-8.col-sm-offset-2.col-lg-8.col-lg-offset-2
-      %p.home__hero-text-secondary__p.light.text-center
-        We use the science of gifting to find the best gifts for her,
-        %br
-        while doing a little good in the world
-
+  = render 'hero_text_2'
   .container
     .row
       .hero-overrun.col-sm-10.col-sm-offset-1
@@ -51,7 +29,6 @@
 - content_for :after_wrapper do
   = render 'home/how_wrapt_works'
   = render 'home/wrapt_stories'
-  -#= render 'home/after_wrapper'
 
 
 - content_for :page_js do

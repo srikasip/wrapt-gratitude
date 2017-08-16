@@ -3,6 +3,7 @@ class ProfilesController < ApplicationController
   include RequiresLoginOrInvitation
   helper SurveyQuestionResponsesHelper
   helper HeroBackgroundHelper
+  helper CarouselHelper
   
   before_filter :set_survey
 
