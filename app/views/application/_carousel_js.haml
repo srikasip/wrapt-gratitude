@@ -276,12 +276,18 @@
 
       # Also set the wrapper height so the thumbnail nav
       # gets pushed down below the footer
-      wrapperHeight = 0
-      wrapperHeight += @carouselHeight
-      wrapperHeight += (parseInt($('.gr-carousel__indicators').height()) || 0)
-      wrapperHeight += (parseInt($('.gr-carousel__indicators').css('margin-top')) || 0)
-      $('.wrapt-carousel--wrapper').css('height', wrapperHeight)
-
+      width = $(window).width()
+      console.log(width)
+      if width > 767
+        wrapperHeight = 0
+        wrapperHeight += @carouselHeight
+        wrapperHeight += (parseInt($('.gr-carousel__indicators').height()) || 0)
+        wrapperHeight += (parseInt($('.gr-carousel__indicators').css('margin-top')) || 0)
+        $('.wrapt-carousel--wrapper').css('height', wrapperHeight)
+      else
+        # on mobile we don't need the extra space
+        $('.wrapt-carousel--wrapper').css('height', 'auto')
+  
   class ExampleCarousel extends Carousel
 
     _init: ->
