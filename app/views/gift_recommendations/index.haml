@@ -5,24 +5,11 @@
         = "#{@profile.name}'s Gift Recommendations"
       %p.lead.tan-002.ph2.text-center
         ="Wrapt found these #{@gift_recommendations.count} items uniquely suited to #{@profile.name} based on her personality, passions, & purpose.".html_safe
-      .recommendations-intro__next-step
-        %h4 Here's what we'd like you to do:
-        %ol
-          %li
-            Add to basket what you could imagine buying, like/dislike the rest. 
-          %li
-            = link_to 'Share our recommendations with your giftee', new_profile_giftee_invitation_path(@profile), data: {loads_in_pjax_modal: true, behavior: 'gift-basket-submit'}, onClick: "ga('send', 'event', 'basket', 'share with giftee', 'step 1 - button');"
-          %li
-            = link_to "Answer a few questions", new_mvp1b_user_survey_path
   .row.wrapt-carousel--wrapper
     .col-xs-12
       - gifts = load_gift_recommendation_carousel_data(@gift_recommendations)
       = carousel(carousel: gifts, unique_carousel_name: 'gr-carousel', slide_content_singular: 'gift')
-      
-      
-  %p.text-center
-    = link_to "Answer a few questions about Wrapt", new_mvp1b_user_survey_path, class: 'btn btn-primary'
-
+  
 - content_for :page_js do
   = render '/application/carousel_js'
   :javascript
