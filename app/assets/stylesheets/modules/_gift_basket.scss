@@ -15,7 +15,8 @@
   top: 0;
   right: 0;
   height: 100%;
-  width: 480px;
+  max-width: 480px;
+  width: 100%;
   z-index:  $zIndex-4--gift-basket;
   background-color: rgba(255, 255, 255, .9);
   display: none;
@@ -136,6 +137,14 @@
   letter-spacing: 1px;
 }
 .btn-gift-basket-submit {
-  width: 415px;
-  margin: 0 10px 26px;
+  // width: 415px;
+  // margin: 0 10px 26px;
+  width: 100%;
+  max-width: 415px;
+  margin: 0px auto;
+  display: block;
+  @media(max-width: $screen-xs-max) {
+    padding: 19px 0px;
+    font-size: rem(14);
+  }
 }

@@ -461,7 +461,9 @@ $gr-carousel-nav__width: 82.5px;
   float: left;
 }
 .gr-carousel__like {
-  margin-right: 5px;
+  @media(max-width: $screen-xs-max) {
+    margin-right: -10px;
+  }
 }
 
 .gr-carousel__dislike .btn-group.open .dropdown-toggle,
@@ -479,6 +481,9 @@ $gr-carousel-nav__width: 82.5px;
   padding: 12px 12px 3px;
   display: inline-block;
   color: $blue-003;
+  stroke: $blue-003;
+  stroke-width: 2px;
+  fill: transparent;
 }
 .gr-carousel__dislike a:hover,
 .gr-carousel__dislike a:focus,
@@ -511,6 +516,10 @@ a.disliked:active,
 a.disliked:focus {
   text-decoration: none;
   background-color: darken($orange-003, 5);
+}
+
+a.liked {
+  fill: $blue-003;
 }
 
 a.liked:hover,

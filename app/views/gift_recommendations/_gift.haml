@@ -8,8 +8,6 @@
     .pull-right.text-right.pb1
       .gr-carousel__like{data: {behavior: 'gift-like-wrapper'}}
         = render 'gift_like', gift: gift, profile: @profile
-      .gr-carousel__dislike{data: {behavior: 'gift-dislike-wrapper'}}
-        = render 'gift_dislike', gift: gift, profile: @profile
     %h3.carousel__gift-name= gift.name
     .gr-carousel__gift-details
       %p.gift-description= gift.description

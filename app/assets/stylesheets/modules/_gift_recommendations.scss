@@ -28,3 +28,21 @@
 .recommendations-intro__next-step h4 {
   padding-left: 18px;
 }
+
+.quiz-complete__text {
+  @media(max-width: $screen-xs-max) {
+    &.pa3 {
+      padding-left: 0px;
+      padding-right: 0px;
+    }
+  }
+}
+
+.quiz-complete__form {
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .pa4 {
+    padding: 0px;
+  }
+}

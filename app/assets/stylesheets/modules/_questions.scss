@@ -99,7 +99,8 @@
   position: absolute;
   left: 0px;
   right: 0px;
-  bottom: 20px;
+  // bottom: 20px;
+  bottom: 15px;
   height: 37px;
 }
 
@@ -110,6 +111,9 @@
   margin-bottom: -50px;
   padding-right: 40px;
   height: 75px;
+  @media(max-width: $screen-xs-max) {
+    padding-right: 20px;
+  }
 }
 
 .sqr-section-progress-bar {
@@ -172,6 +176,17 @@
   width: 50%;
   float: left;
   padding: 2px 4px;
+}
+
+.sqr-sections__left {
+  @media(max-width: $screen-xs-max) {
+    padding-right: 0px;
+  }
+}
+.sqr-sections__right {
+  @media(max-width: $screen-xs-max) {
+    padding-left: 0px;
+  }
 }
 
 .sqr-sections__right {
