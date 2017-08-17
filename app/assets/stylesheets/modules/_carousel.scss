@@ -145,14 +145,17 @@ $gr-carousel-nav__width: 82.5px;
   display: table;
 }
 
-.gr-carousel__nav.prev,
 .hgec-carousel__nav.prev {
   margin-left: $gr-carousel-nav__width - 40;
 }
-
-.gr-carousel__nav.next,
+.gr-carousel__nav.prev {
+  margin-left: $gr-carousel-nav__width - 24;
+}
 .hgec-carousel__nav.next {
   margin-right: $gr-carousel-nav__width - 40;
+}
+.gr-carousel__nav.next {
+  margin-right: $gr-carousel-nav__width - 24;
 }
 
 .gr-carousel__nav-inner,
@@ -161,7 +164,7 @@ $gr-carousel-nav__width: 82.5px;
   width: 100px;
   height: 100%;
   border-radius: 50%;
-  background-color: rgba($blue-005, 0.4);
+  background-color: rgba($blue-005, 0.9);
 }
 
 .gr-carousel__nav-icon,
@@ -177,6 +180,7 @@ $gr-carousel-nav__width: 82.5px;
   .gr-carousel__nav-inner {
    top: 0px;
    left: 0px;
+   z-index: -100;
   }
 }
 
@@ -186,6 +190,7 @@ $gr-carousel-nav__width: 82.5px;
   .gr-carousel__nav-inner {
     top: 0px;
     right: 0px;
+    z-index: -100;
   }
 }
 
@@ -715,4 +720,9 @@ a.liked:focus {
 }
 .gr-image-carousel__nav.prev {
   margin-right: -4px;
+}
+// Hiding home page carousel controls until we have content
+.hgec-carousel__nav,
+.hgec-carousel__indicators {
+  display: none;
 }

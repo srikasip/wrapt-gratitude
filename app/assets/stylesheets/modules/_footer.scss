@@ -81,16 +81,6 @@ body.hero-bg {
   line-height: 32px;
   text-align: center;
   &:hover, &:active, &:focus {
-    color: white;
-    background-color: transparent;
-  }
-}
-// .home .footer__social_link,
-.profiles.new .footer__social_link {
-  color: white;
-  border: solid white 1px;
-  &:hover, &:active, &:focus {
-    color: white;
     background-color: transparent;
   }
 }

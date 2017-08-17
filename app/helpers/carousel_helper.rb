@@ -47,7 +47,7 @@ module CarouselHelper
       concat link_to '< Prev 5', '#', class: "#{carousel_classes[:small_nav]} prev disabled", data: {group: 0}
       title = slides[0][:slide_locals][:gift].title
       concat content_tag :div, title, class: "#{carousel_classes[:small_nav_text]}"
-      concat link_to 'Next 5 >', '#', class: "#{carousel_classes[:small_nav]} next", data: {group: 2}
+      concat link_to 'Next 4 >', '#', class: "#{carousel_classes[:small_nav]} next", data: {group: 2}
     end
   end
 

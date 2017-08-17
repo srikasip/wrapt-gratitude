@@ -18,7 +18,7 @@ class GiftExamples
     labels: [
       {icon: 'icon-wrapt-heart', text: 'handmade'},
       {icon: 'icon-wrapt-heart', text: 'fair trade'},
-      {icon: 'icon-wrapt-heart', text: 'Made in India'}
+      {icon: 'icon-wrapt-heart', text: 'sustainable'}
     ]
   }
 

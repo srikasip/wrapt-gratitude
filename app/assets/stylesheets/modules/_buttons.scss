@@ -171,6 +171,9 @@ label.btn-multiple-choice-option {
 label.btn-multiple-choice-option {
   background-color: #fff;
   border: 1px solid $gray-005;
+  @media(max-width: $screen-xs-max) {
+    font-size: 14px;
+  }
 }
 .btn.btn-multiple-choice-option:hover,
 .btn.btn-yes-no:hover,
@@ -198,7 +201,9 @@ label.btn-multiple-choice-option.selected {
   padding-left: initial;
   padding-right: initial;
   @media(max-width: $screen-xs-max) {
-    width: 130px;
+    width: initial;
+    font-size: rem(16);
+    padding: 14px 12px;
   }
 }
 

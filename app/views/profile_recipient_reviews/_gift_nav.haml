@@ -6,5 +6,5 @@
     .gr-carousel__nav-inner
   = link_to '#', class: "#{css_classes[:link]} next", onClick: "ga('send', 'event', 'recommendation', 'navigation', 'gift nav');" do
     .gr-carousel__nav-icon
-      =embedded_svg('icon-caret-right', class: "gr-carousel__nav--caret-right")
+      =embedded_svg('icon-caret-right', xlink_class: 'icon-caret-right-use', class: "gr-carousel__nav--caret-right")
     .gr-carousel__nav-inner

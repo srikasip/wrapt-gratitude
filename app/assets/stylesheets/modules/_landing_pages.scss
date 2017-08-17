@@ -67,7 +67,7 @@
   padding-top: 48px;
   position: relative;
   @media (max-width: $screen-xs-max) {
-    margin-top: 10px;
+    // margin-top: 10px;
     padding-top: 20px;
     background-size: cover;
     background-position: 55% 50%;
@@ -251,7 +251,7 @@
 .about-step__header {
   margin-top: 24px;
   font-size: rem(18);
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   @include akkurat-regular;
   text-transform: uppercase;
   white-space: nowrap;
@@ -443,12 +443,6 @@ body.home,
   margin-bottom: 8px;
   text-align: center; 
   padding-left: 8px;
-}
-
-.hgec__label-icon {
-  width: 30px;
-  height: 30px;
-  margin: 0px auto;
 }
 
 .hgec__label-text {

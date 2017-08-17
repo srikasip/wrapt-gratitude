@@ -37,8 +37,13 @@ a:active .navbar-static-top__icon-circle {
   fill: $blue-001;
 }
 .navbar-brand__icon-wrapt-logo {
-  height: 61px;
-  width: 136px;
+  height: 64px;
+  width: 142px;
+  @media (max-width: $screen-xs-max) {
+    height: 31px;
+    width: 68px;
+    @include vertical-align;
+  }
 }
 .btn__icon-caret-right {
   width: 14px;
@@ -46,13 +51,29 @@ a:active .navbar-static-top__icon-circle {
   vertical-align: middle;
   margin-left: 28px;
   margin-top: -2px;
+  @media (max-width: $screen-xs-max) {
+    width: 11px;
+    height: 11px;
+    margin-left: 4px;
+  }
 }
 .sqr-previous__icon--caret-left,
 .gr-carousel__nav--caret-left,
 .gr-carousel__nav--caret-right {
   width: 14px;
   height: 14px;
-  fill: darken($blue-005, 15);
+}
+.sqr-previous__icon--caret-left,
+.gr-carousel__nav--caret-left,
+.gr-carousel__nav--caret-right {
+  fill: #fff;
+}
+a:hover {
+  .sqr-previous__icon--caret-left,
+  .gr-carousel__nav--caret-left,
+  .gr-carousel__nav--caret-right {
+    fill: $blue-009;
+  }
 }
 .gr-carousel__image-nav--caret-left,
 .gr-carousel__image-nav--caret-right {
@@ -65,14 +86,20 @@ a:active .navbar-static-top__icon-circle {
   height: 22px;
 }
 .landing-bottom__icon-gift-better-gift-wrapt {
-  width: 443px;
-  height: 73px;
+  width: 282px;
+  height: 48px;
   @media (max-width: $screen-xs-max) {
     width: 90vw;
     &.mt4 {
       margin-top: 0px;
     }
   }
+}
+.hgec__label-icon {
+  width: 30px;
+  height: 30px;
+  margin: 0px auto;
+  fill: $blue-005;
 }
 use.icon-dislike-use .path1,
 use.icon-dislike-use .path2,
