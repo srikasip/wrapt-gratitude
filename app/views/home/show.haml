@@ -8,7 +8,7 @@
         - if current_user&.admin?
           %p In MVP1a, when we invite people for testing, they will be taken to a special landing page.
           %p
-            = link_to 'Tester Landing Page: Start a New Quiz', new_profile_path
+            = link_to 'Beta Testing Landing Page: Start a New Quiz', new_profile_path
             - test_surveys = Survey.where(test_mode: true)
             - if test_surveys.any?
               %p Select a quiz that is currently in test mode:
