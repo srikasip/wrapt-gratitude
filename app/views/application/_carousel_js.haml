@@ -37,7 +37,6 @@
         $(slide).css('left', '0px')
         unless $(slide).hasClass('active')
           $(slide).addClass('hidden')
-      # @_init();
 
     _reset_slides: ->
       @slides.each (i, slide) =>
@@ -90,6 +89,7 @@
             @_load_prev()
           @_slide(directionClassOut, directionClassIn)
           @_update_small_indicator_text(@next.data('title'))
+          @_reset_zoom()
 
     _indicator_click_handler: ->
       @indicators.each (i, indicator) =>
@@ -110,6 +110,7 @@
                 directionClassIn = 'slideInRight'
               @_slide(directionClassOut, directionClassIn)
               @_update_small_indicator_text($(indicator).find('img').attr('alt'))
+              @_reset_zoom()
 
     _update_indicators: ->
       @indicators.each (i, indicator) =>
@@ -177,9 +178,40 @@
       @_reset_slides()
       @_set_height()
       @_init_slides(false)
+      if @zoom_element_selector
+        @_remove_zoom()
+        @_set_zoom('#active-zoom')
 
     _resize_carousel: () ->
       $(window).resize @_debounce(@_perform_resize, 1000)
+
+    _remove_zoom: ->
+      $('.zoomContainer').remove()
+      $('.gr-image-carousel__image').removeData('elevateZoom')
+
+    _reset_zoom: ->
+      # reset zoom element to active element
+      # http://www.elevateweb.co.uk/image-zoom/examples
+      if @zoom_element_selector
+        # $('.zoomContainer').remove()
+        # $('#active-zoom').removeData('elevateZoom')
+        # $('#active-zoom').removeAttr('id')
+        @_remove_zoom()
+        $('.gr-image-carousel__image').removeAttr('id')
+
+        activeImage = $(@next).find(@zoom_element_selector)
+        $(activeImage).attr('id', 'active-zoom')
+        # $(activeImage).elevateZoom()
+        @_set_zoom(activeImage)
+
+    _set_zoom: (ele)->
+      width = $(window).width()
+      if width > 768
+        $(ele).elevateZoom()
+      else
+        $(ele).elevateZoom({
+          zoomType: 'inner'
+        })
 
   class ImageCarousel extends Carousel
 
@@ -189,6 +221,7 @@
       $(@carousel).on 'slide:change', () =>
         @_set_image_text(@next);
       @_resize_carousel()
+      @zoom_element_selector = '.gr-image-carousel__image'
 
     _set_image_text: (slide) ->
       slideImage = $(slide).find('.gr-image-carousel__image')
@@ -203,9 +236,10 @@
   class ItemCarousel extends Carousel
 
     _init: ->
-      # class specific initializer 
       @_resize_carousel()
       @_small_indicator_scroll_click_handler()
+      @_set_zoom('#active-zoom')
+      @zoom_element_selector = '.gr-image-carousel__image-container.active .gr-image-carousel__image'
 
     _load_group_positions: ()->
       total_groups = Math.ceil(@indicators.length/5)
@@ -277,7 +311,6 @@
       # Also set the wrapper height so the thumbnail nav
       # gets pushed down below the footer
       width = $(window).width()
-      console.log(width)
       if width > 767
         wrapperHeight = 0
         wrapperHeight += @carouselHeight
@@ -288,10 +321,10 @@
         # on mobile we don't need the extra space
         $('.wrapt-carousel--wrapper').css('height', 'auto')
   
+  
   class ExampleCarousel extends Carousel
 
     _init: ->
-      # class specific initializer
       @_resize_carousel()
 
     _set_height: ->
@@ -301,6 +334,7 @@
           @carouselHeight = $(item).height()
       $(@carousel).css('height', @carouselHeight + 'px')
       $(@container).css('height', @carouselHeight + 'px')
+
 
   $('.hgec-carousel').each (i, carousel) ->
     new ExampleCarousel(carousel)

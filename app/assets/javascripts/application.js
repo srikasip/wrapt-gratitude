@@ -22,6 +22,7 @@
 //= require jquery.iframe-transport
 //= require jquery.fileupload
 //= require cable
+//= require jquery.elevatezoom
 
 // Application Code
 //= require app/init

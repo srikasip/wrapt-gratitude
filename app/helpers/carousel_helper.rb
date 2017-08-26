@@ -1,15 +1,15 @@
 module CarouselHelper
 
-  def carousel(carousel: {}, unique_carousel_name:, slide_content_singular:, container: " ")
+  def carousel(carousel: {}, unique_carousel_name:, slide_content_singular:, container: " ", id: "", parent_slide_index: nil)
     slides = carousel[:slides]
     nav_partial = carousel[:nav_partial]
     if slides.present?
       classes = load_carousel_classes(unique_carousel_name, slide_content_singular, container)
-      content_tag :div, class: "wrapt-carousel #{classes[:carousel]}", data: classes do
+      content_tag :div, id: id, class: "wrapt-carousel #{classes[:carousel]}", data: classes do
         unless slides.length == 1
           concat carousel_nav(nav_container_class: classes[:nav_container], nav_class: classes[:nav], nav_partial: nav_partial)
         end
-        concat carousel_slide_container(slides: slides, slides_container: classes[:slides_container], slide_container: classes[:slide_container])
+        concat carousel_slide_container(slides: slides, slides_container: classes[:slides_container], slide_container: classes[:slide_container], parent_slide_index: parent_slide_index)
         concat carousel_indicators(carousel_classes: classes, slides: slides, indicators: classes[:indicators_container], indicator: classes[:indicator_container])
       end
     end
@@ -65,7 +65,7 @@ module CarouselHelper
     render nav_partial, locals: css_classes
   end
   
-  def carousel_slide_container(slides: slides, slides_container: '', slide_container: '')
+  def carousel_slide_container(slides: slides, slides_container: '', slide_container: '', parent_slide_index: nil)
     content_tag :div, class: "wrapt-carousel__slides #{slides_container}" do
       slides.each_with_index do |slide, index|
         if slide[:slide_locals][:gift].present?
@@ -73,13 +73,18 @@ module CarouselHelper
         else
           title = ''
         end
-        concat content_tag :div, slide_content(slide: slide, index: index, slide_container: slide_container), class: "wrapt-carousel__slide #{slide_container}", data: {position: index + 1, title: title}
+        image_url = slide[:slide_locals][:image_url]
+        if image_url.present? 
+          concat content_tag :div, slide_content(slide: slide, index: index, slide_container: slide_container, parent_slide_index: parent_slide_index), class: "wrapt-carousel__slide #{slide_container}", data: {position: index + 1, title: title, zoom_image: image_path(image_url)}
+        else
+          concat content_tag :div, slide_content(slide: slide, index: index, slide_container: slide_container), class: "wrapt-carousel__slide #{slide_container}", data: {position: index + 1, title: title}
+        end
       end
     end
   end
 
-  def slide_content(slide: slide, index: index, slide_container: '')
-    render slide[:slide_partial], locals: slide[:slide_locals]
+  def slide_content(slide: slide, index: index, slide_container: '', parent_slide_index: nil)
+    render slide[:slide_partial], locals: slide[:slide_locals].merge({index: index, parent_slide_index: parent_slide_index})
   end
 
 end
