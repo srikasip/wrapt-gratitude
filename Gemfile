@@ -22,10 +22,12 @@ gem 'rails', '~> 5.0.0'
 gem 'redis', '~> 3.0' # Use Redis adapter to run Action Cable in production
 gem 'roo' # read excel files
 gem 'sass-rails', '~> 5.0' # Use SCSS for stylesheets
+gem 'shippo', '~> 3.0.0' # Every app needs a shipping hippo.
 gem 'sidekiq'
 gem 'simple_form'
 gem 'sorcery'
 gem 'sprockets-es6' # Javascript
+gem 'stripe' # Credit card processing
 gem 'turbolinks', '~> 5' # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'uglifier', '>= 1.3.0' # Use Uglifier as compressor for JavaScript assets
 gem 'whenever', require: false
