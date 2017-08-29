@@ -1,0 +1,46 @@
+- if @errors.present? && @errors.any?
+  .row
+    .col-sm-12
+      .alert.alert-danger.alert-dismissable
+        %strong Some problems were detected in the import file.
+        - @errors.each do |message|
+          %p= message
+
+.row.admin__intro
+  .col-sm-12
+    %h1 Inventory
+    %p
+      This importer will ignore columns it does not recognise, and the column
+      "Wrapt SKU" must be present to identify products correctly. If a SKU
+      appears more that once for any reason, the last row will "win." The
+      fields that will be honored for updating are
+      %ul
+        - InventoryJobConstants::WRITABLE_COLUMNS_HUMAN.each do |column_name|
+          %li= column_name
+
+.row.admin__actions
+  .col-sm-12
+    = link_to 'Upload Inventory', upload_admin_ecommerce_inventory_items_path, class: 'btn btn-primary', data: {loads_in_pjax_modal: true}
+    = link_to 'Download Inventory', download_admin_ecommerce_inventory_items_path, class: 'btn btn-primary', 'data-disable' => 'Downloading...'
+
+.row
+  .col-sm-12
+    %table.table.index-table
+      %thead
+        %tr
+          %th Vendor SKU
+          %th Wrapt SKU
+          %th Description
+          %th Inventory Count
+          %th Price
+
+      %tbody
+        - @products.preload(:primary_product_image, :gifts, :single_product_gift).each do |product|
+          %tr
+            %td.admin-index-table--sku-cell= product.vendor_sku
+            %td.admin-index-table--sku-cell= product.wrapt_sku
+            %td= product.description
+            %td= product.units_available
+            %td= number_to_currency(product.price)
+
+    %p=paginate @products

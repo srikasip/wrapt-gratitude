@@ -1,4 +1,8 @@
 class Product < ApplicationRecord
+  validates :price, numericality: { greater_than: 0.00 }
+  validates :description, length: { minimum: 10 }
+  validates :units_available, numericality: { only_integer: true }
+
   belongs_to :product_category, required: true
   belongs_to :product_subcategory, required: true, class_name: 'ProductCategory'
 
@@ -20,7 +24,7 @@ class Product < ApplicationRecord
   after_save :regenerate_dependent_skus!, if: :dependent_skus_need_regeneration
 
   def self.search search_params
-    self.all.merge(ProductSearch.new(search_params).to_scope)        
+    self.all.merge(ProductSearch.new(search_params).to_scope)
   end
 
   private def sku_prefix

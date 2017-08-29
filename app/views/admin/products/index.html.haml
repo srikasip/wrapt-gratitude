@@ -37,7 +37,7 @@
           %tr
             %td.admin-index-table--image-cell
               - if product.primary_product_image.present?
-                = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image'
+                = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image', alt: product.title
             %td= product.title
             %td
               - if product.product_category.present?

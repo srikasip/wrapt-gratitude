@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
 
   root to: 'home#show'
-  
+
   if Rails.env.development?
     get 'terms-of-service', to: 'static_pages#terms_of_service', as: :terms_of_service
     get 'privacy-policy', to: 'static_pages#privacy_policy', as: :privacy_policy
   end
-  
+
   get 'science-of-gifting', to: 'static_pages#science_of_gifting', as: :science_of_gifting
 
   resources :invitation_requests, only: :create
@@ -47,7 +47,7 @@ Rails.application.routes.draw do
   
   get 'testing/survey_complete', to: 'survey_response_completions#show'
   get 'testing/gift_recommendations', to: 'gift_recommendations#index'
-    
+
 
   #####################################################
 
@@ -86,7 +86,7 @@ Rails.application.routes.draw do
 
     resources :vendors
     resources :survey_responses, only: [:show]
-    
+
     resources :product_categories, except: :show do
       resource :subcategories, controller: 'product_subcategories', only: :show
     end
@@ -127,12 +127,25 @@ Rails.application.routes.draw do
       resource :section_ordering, only: :create, controller: 'survey_section_orderings'
       resource :publishing, only: [:create], controller: 'survey_publishings'
     end
-    
+
     resources :reports, only: :index
     resources :mvp1b_user_surveys, only: :index
     resources :top_gifts_reports, only: :index
     resources :survey_response_reports, only: :index
 
+    namespace :ecommerce do
+      get '/' => 'dashboard#index'
+      resources :inventory_items, only: [:index] do
+        collection do
+          get :upload, action: 'upload_form'
+          put :upload
+          get :download
+        end
+      end
+      resources :billings, only: [:index]
+      resources :orders, only: [:index]
+      resources :purchase_orders, only: [:index]
+    end
   end
 
   ####################
