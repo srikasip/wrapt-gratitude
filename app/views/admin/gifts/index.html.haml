@@ -25,6 +25,10 @@
           = form.collection_select :product_category_id, ProductCategory.categories, :id, :name, {prompt: 'Category'}, class: 'form-control', data: {behavior: 'product-category-input'}
           = form.collection_select :product_subcategory_id, ProductCategory.subcategories.where(parent_id: @gift_search.product_category_id), :id, :name, {prompt: 'Sub-category'}, class: 'form-control', data: {behavior: 'product-subcategory-input'}
       .form-group
+        %label.col-sm-2.control-label Vendor
+        .col-sm-4
+          = form.collection_select :vendor_id, Vendor.order(:name), :id, :name, {prompt: 'Vendor'}, class: 'form-control'
+      .form-group
         %label.col-sm-2.control-label Price Range
         .col-sm-4
           .input-group

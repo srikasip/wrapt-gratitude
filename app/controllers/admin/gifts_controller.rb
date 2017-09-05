@@ -5,7 +5,7 @@ module Admin
     def index
       @gift_search = GiftSearch.new(gift_search_params)
       @gifts = Gift
-        .preload(:primary_gift_image, :product_category, :product_subcategory, :products, :tags)
+        .preload(:primary_gift_image, :gift_images, :product_category, :product_subcategory, {products: [:product_images]}, :tags, :calculated_gift_field)
         .search(gift_search_params)
         .page(params[:page])
         .per(50)
@@ -67,7 +67,7 @@ module Admin
 
     def gift_search_params
       params_base = params[:gift_search] || ActionController::Parameters.new
-      params_base.permit(:keyword, :product_category_id, :product_subcategory_id, :min_price, :max_price, :tags)
+      params_base.permit(:keyword, :product_category_id, :product_subcategory_id, :min_price, :max_price, :tags, :vendor_id)
     end
     helper_method :gift_search_params
 
