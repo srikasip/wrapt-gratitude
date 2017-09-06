@@ -16,6 +16,7 @@ gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease. Read more: https://github.
 gem 'jquery-rails' # Use jquery as the JavaScript library
 gem 'kaminari'
 gem 'mini_magick'
+gem 'paper_trail'
 gem 'pg'
 gem 'puma', '~> 3.0' # Use Puma as the app server
 gem 'rails', '~> 5.0.0'

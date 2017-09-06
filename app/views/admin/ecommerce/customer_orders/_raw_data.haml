@@ -1,0 +1,11 @@
+%h2 Raw Data
+
+%h3 Order
+%pre= order.ai(plain: true)
+
+%h3 Charge
+%pre= order.charge.ai(plain: true)
+
+%h3 Shipping Labels
+- order.purchase_orders.each do |po|
+  %pre= po.shipping_label.ai(plain: true)

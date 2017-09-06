@@ -1,0 +1,31 @@
+= render "admin/ecommerce/styles"
+
+.row.admin__intro
+  .col-sm-12
+    %h1
+      Billing Reports
+
+.row.admin__search
+  .col-sm-12
+    = form_tag(admin_ecommerce_billings_path, method: 'GET', class: 'form-inline') do
+
+      .form-group.multi-choice-flex
+        - CustomerOrder::VALID_STATUSES.each do |status|
+          %label{for: "search_status_#{status}"}
+            = check_box_tag "search[status][#{status}]", "on", params[:search][:status][status]=='on'
+            = status.titleize
+      .form-group{style: 'margin-top: 10px'}
+        Vendor
+        = select_tag('search[vendor_id]', options_from_collection_for_select(Vendor.all, :id, :name), placeholder: 'Vendor', class: 'form-control', style: 'min-width: 200px;')
+        from
+        = date_field_tag 'search[date_range_start]', :date_range_start, placeholder: 'Date Created', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:date_range_start]
+        to
+        = date_field_tag 'search[date_range_end]', :date_range_end, placeholder: 'Date Created', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:date_range_end]
+
+        %button.btn.btn-primary
+          %i.glyphicon.glyphicon-search
+          Generate
+        %button.btn.btn-primary
+          %i.glyphicon.glyphicon-arrow-down
+          Download
+        = link_to 'Clear Fields (Show All)', admin_ecommerce_billings_path, class: 'btn btn-default'

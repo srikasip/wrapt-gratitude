@@ -46,7 +46,11 @@ module Admin
 
       def vendor_params
         params.require(:vendor).permit :name,
-          :address,
+          :street1,
+          :city,
+          :state,
+          :zip,
+          :country,
           :contact_name,
           :email,
           :phone,

@@ -1,9 +1,18 @@
 = simple_form_for( [:admin, @vendor]) do |f|
   = f.error_notification
 
+  %pre
+    = f.object.defunct_address
+
   .form-inputs
     = f.input :name
-    = f.input :address
+    = f.input :street1
+    = f.input :street2
+    = f.input :street3
+    = f.input :city
+    = f.input :state
+    = f.input :zip
+    = f.input :country, as: :text
     = f.input :contact_name, label: 'Contact Name'
     = f.input :email
     = f.input :phone

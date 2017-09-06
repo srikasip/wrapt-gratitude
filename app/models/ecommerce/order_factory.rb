@@ -2,6 +2,21 @@
 
 module OrderFactory
   def self.create_order!
+
+    if ENV['ALLOW_BOGUS_ORDER_CREATION']=='true'
+      Product.where('weight_in_pounds is null or weight_in_pounds <= 0').update_all('weight_in_pounds=5')
+
+      Vendor.where("street1 = 'unknown'").update_all(<<~SQL)
+        street1 = '14325 Norwood',
+        city = 'Leawood',
+        state = 'KS',
+        zip = '66212',
+        country = 'US'
+      SQL
+
+      Product.where('units_available < 10').update_all('units_available = 10')
+    end
+
     stripe_token = Stripe::Token.create(
       :card => {
         :number => "4242424242424242",
@@ -20,21 +35,45 @@ module OrderFactory
       CustomerPurchaseService::DesiredGift.new(gift, Random.rand(3)+1)
     end
 
+    cart_id = SecureRandom.hex(10)
+
     customer_purchase = CustomerPurchaseService.new({
-      cart_id: SecureRandom.hex(10),
-      stripe_token: stripe_token.id,
+      cart_id: cart_id,
       customer: customer,
       profile: profile,
       desired_gifts: desired_gifts,
       shipping_info: {
-        ship_address_1: '319 Hague Rd',
-        ship_city: 'Dummerston',
-        ship_postal_code: '05301',
-        ship_region: 'VT',
-        ship_country: 'USA'
+        name: 'Mr. Some Receiver',
+        street1: '319 Hague Rd',
+        street2: '',
+        street3: '',
+        city: 'Dummerston',
+        zip: '05301',
+        state: 'VT',
+        country: 'US',
+        phone:  '123-123-1234',
+        email: 'example@example.com',
       }
     })
 
     order = customer_purchase.generate_order!
+
+    choices = customer_purchase.shipping_choices
+
+    picked_choice = choices.keys.sample
+
+    # A difference virtual page load in the shopping process
+    customer_purchase = CustomerPurchaseService.new(cart_id: cart_id, stripe_token: stripe_token.id)
+    customer_purchase.pick_shipping!(picked_choice)
+
+    # A difference virtual page load in the shopping process
+    customer_purchase = CustomerPurchaseService.new(cart_id: cart_id)
+    customer_purchase.authorize!
+
+    # A difference virtual page load in the shopping process
+    customer_purchase = CustomerPurchaseService.new(cart_id: cart_id)
+    customer_purchase.charge!
+
+    order
   end
 end

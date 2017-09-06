@@ -1,0 +1,78 @@
+.row
+  .col-sm-12
+    = link_to '« Back to Purchase Orders', admin_ecommerce_purchase_orders_path
+    %h1
+      Purchase Order
+      = @order.order_number
+      -#= link_to 'Resend notification to vendor', admin_ecommerce_purchase_order_path(@order), :method => :put, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+
+.row
+  .col-sm-12
+    %p
+      %b Ship From:
+
+  .col-sm-12
+    %p
+      %b Ship To:
+      %br
+      :ruby
+        address_lines = [
+          @order.recipient_name,
+          @order.ship_street1,
+          @order.ship_street2,
+          @order.ship_street3,
+          "#{@order.ship_city}, #{@order.ship_state} #{@order.ship_zip}",
+          @order.ship_country
+        ].select(&:present?)
+      - address_lines.each do |line|
+        = line
+        %br
+
+.row
+  .col-sm-12
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Item
+          %th SKU
+          %th Vendor
+          %th.text-right Quantity
+          %th.text-right Price Each
+          %th.text-right Total Price
+
+      %tbody
+        - @order.line_items.each do |line_item|
+          %tr
+            %td
+              %i= line_item.orderable.title
+            %td= line_item.orderable.wrapt_sku
+            %td
+              = link_to line_item.vendor_name, admin_vendor_path(line_item.vendor)
+
+              :ruby
+                gift = @order.gift
+
+            %td.text-right= line_item.quantity
+            %td.text-right= number_to_currency(line_item.price_per_each_in_dollars)
+            %td.text-right
+              %i= number_to_currency(line_item.total_price_in_dollars)
+
+        %tr
+          %td
+            %i Total
+          %td
+          %td
+          %td
+          %td
+          %td.text-right
+            %b= number_to_currency(@order.total_due_in_dollars)
+
+
+-#.row
+-#  .col-sm-12
+-#    %h3 Order Changes
+-#    = render "versions", versions: @order.versions
+-#
+-#.row
+-#  .col-sm-12
+-#    = render "raw_data", order: @order

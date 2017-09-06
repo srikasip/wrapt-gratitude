@@ -13,6 +13,8 @@ class Gift < ApplicationRecord
   has_many :uploaded_gift_images, class_name: 'GiftImages::Uploaded'
   has_many :gift_images_from_products, class_name: 'GiftImages::FromProduct'
 
+  has_one :gift_parcel
+  has_one :parcel, through: :gift_parcel
   has_one :primary_gift_image, -> {where primary: true}, class_name: 'GiftImage'
 
   belongs_to :source_product, class_name: 'Product', required: false
@@ -21,7 +23,7 @@ class Gift < ApplicationRecord
   belongs_to :product_subcategory, required: true, class_name: 'ProductCategory'
 
   has_one :calculated_gift_field
-  delegate :cost, :price, to: :calculated_gift_field
+  delegate :cost, :price, :weight_in_pounds, to: :calculated_gift_field
 
   before_save :generate_wrapt_sku, if: :sku_needs_updating?
 

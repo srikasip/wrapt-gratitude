@@ -1,13 +1,22 @@
 class Shipment < ApplicationRecord
+  has_paper_trail(
+    ignore: [:updated_at, :created_at, :id],
+    meta: {
+      cart_id: :cart_id
+    }
+  )
+
   include ChargeConstants
 
-  belongs_to :order
+  belongs_to :customer_order
+  belongs_to :purchase_order
+
+  has_one :shipping_label, dependent: :destroy
 
   validates :address_from, presence: true
   validates :address_to, presence: true
   validates :parcel, presence: true
 
-  before_save :run!, only: :create
   before_save :_cache_the_results
 
   def run!
@@ -24,7 +33,6 @@ class Shipment < ApplicationRecord
   end
 
   private def _cache_the_results
-    puts "snapple"
     self.success = self.api_response['status'] == SHIPPO_SUCCESS
   end
 end
