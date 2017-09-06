@@ -40,4 +40,6 @@ module ChargeConstants
 
   # After an auth, must charge within this timespan
   TIME_TO_CAPTURE = 7.days
+
+  SHIPPO_SUCCESS = 'SUCCESS'
 end

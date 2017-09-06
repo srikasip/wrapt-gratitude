@@ -1,0 +1,65 @@
+:sass
+  .multi-choice-flex
+    display: flex !important
+    width: 90%
+    flex-flow: row wrap
+    justify-content: space-around
+    label
+      flex-basis: 15%
+
+.row.admin__intro
+  .col-sm-12
+    %h1
+      Orders
+      - if ENV['ALLOW_BOGUS_ORDER_CREATION']=='true'
+        = link_to admin_ecommerce_orders_path, method: 'post', class: 'btn btn-warning btn-xs' do
+          %i.glyphicon.glyphicon-plus
+          Create a Random Test Order
+
+.row.admin__search
+  .col-sm-12
+    = form_tag(admin_ecommerce_orders_path, method: 'GET', class: 'form-inline') do
+
+      .form-group.multi-choice-flex
+        - Order::VALID_STATUSES.each do |status|
+          %label{for: "search_status_#{status}"}
+            = check_box_tag "search[status][#{status}]", "on", params[:search][:status][status]=='on'
+            = status.titleize
+      .form-group{style: 'margin-top: 10px'}
+        = search_field_tag 'search[order_number]', :order_number, placeholder: 'Order Number', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:order_number]
+        = date_field_tag 'search[created_on]', :created_on, placeholder: 'Date Created', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:created_on]
+        = search_field_tag 'search[email]', :email, placeholder: 'Email', class: 'form-control', style: 'min-width: 300px;', value: params[:search][:email]
+
+        %button.btn.btn-primary
+          %i.glyphicon.glyphicon-search
+          Search
+        = link_to 'Clear Search (Show All)', admin_ecommerce_orders_path, class: 'btn btn-default'
+
+.row
+  .col-sm-12
+    %table.table.index-table
+      %thead
+        %tr
+          %th Order Number
+          %th Date Created
+          %th Customer Email
+          %th Status
+          %th Amount
+          %th
+
+      %tbody
+        - @orders.each do |order|
+          %tr
+            %td= order.order_number
+            %td= format_date(order.created_on)
+            %td= order.user_email
+            %td= order.status.titleize
+            %td= number_to_currency(order.total_price_in_dollars)
+            %td.admin-index-table--buttons-cell
+              = link_to 'View', url_for(action: :show, id: order.id), class: 'btn btn-default btn-xs'
+              = link_to 'Cancel Order', admin_ecommerce_order_path(order), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+          %tr
+            %td{colspan: 6}
+              wip: gifts in the order here, etc.
+
+    %p=paginate @orders

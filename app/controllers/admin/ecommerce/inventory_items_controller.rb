@@ -1,6 +1,8 @@
 module Admin
   module Ecommerce
     class InventoryItemsController < BaseController
+      before_action { @active_top_nav_section = 'ecommerce' }
+
       include PjaxModalController
 
       def index

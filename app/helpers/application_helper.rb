@@ -13,7 +13,7 @@ module ApplicationHelper
   end
 
   def active_top_nav_section
-    controller_name
+    @active_top_nav_section || controller_name
   end
 
   def top_nav_links
@@ -157,6 +157,7 @@ module ApplicationHelper
     end
   end
 
-
-
+  def format_date date
+    date.strftime("%b %e, %Y")
+  end
 end

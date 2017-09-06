@@ -143,7 +143,7 @@ Rails.application.routes.draw do
         end
       end
       resources :billings, only: [:index]
-      resources :orders, only: [:index]
+      resources :orders, only: [:index, :show, :delete, :create]
       resources :purchase_orders, only: [:index]
     end
   end
