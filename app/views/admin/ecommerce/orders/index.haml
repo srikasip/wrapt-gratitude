@@ -5,7 +5,11 @@
     flex-flow: row wrap
     justify-content: space-around
     label
-      flex-basis: 15%
+      flex-basis: 14%
+  .even-customer-order
+    background-color: white
+  .odd-customer-order
+    background-color: #FEFEF2
 
 .row.admin__intro
   .col-sm-12
@@ -21,7 +25,7 @@
     = form_tag(admin_ecommerce_orders_path, method: 'GET', class: 'form-inline') do
 
       .form-group.multi-choice-flex
-        - Order::VALID_STATUSES.each do |status|
+        - CustomerOrder::VALID_STATUSES.each do |status|
           %label{for: "search_status_#{status}"}
             = check_box_tag "search[status][#{status}]", "on", params[:search][:status][status]=='on'
             = status.titleize
@@ -49,7 +53,8 @@
 
       %tbody
         - @orders.each do |order|
-          %tr
+          - this_cycle_class = cycle('even-customer-order', 'odd-customer-order')
+          %tr{class: this_cycle_class}
             %td= order.order_number
             %td= format_date(order.created_on)
             %td= order.user_email
@@ -58,8 +63,13 @@
             %td.admin-index-table--buttons-cell
               = link_to 'View', url_for(action: :show, id: order.id), class: 'btn btn-default btn-xs'
               = link_to 'Cancel Order', admin_ecommerce_order_path(order), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
-          %tr
-            %td{colspan: 6}
-              wip: gifts in the order here, etc.
+          - order.line_items.each do |line_item|
+            %tr{class: this_cycle_class}
+              %td
+              %td{colspan: 5}
+                %i
+                  = line_item.name
+                  &times;
+                  = line_item.quantity
 
     %p=paginate @orders

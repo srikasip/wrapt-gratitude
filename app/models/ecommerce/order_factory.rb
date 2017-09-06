@@ -21,6 +21,7 @@ module OrderFactory
     end
 
     customer_purchase = CustomerPurchaseService.new({
+      cart_id: SecureRandom.hex(10),
       stripe_token: stripe_token.id,
       customer: customer,
       profile: profile,

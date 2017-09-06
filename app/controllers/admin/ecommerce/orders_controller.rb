@@ -19,7 +19,7 @@ module Admin
       end
 
       def show
-        @order = Order.find(params[:id])
+        @order = CustomerOrder.find(params[:id])
       end
 
       def destroy
@@ -31,7 +31,7 @@ module Admin
         def results
           search_params = params[:search]
 
-          base_scope = Order.all
+          base_scope = CustomerOrder.all
 
           if search_params[:order_number].present?
             base_scope = base_scope.where("order_number ilike ?", '%'+search_params[:order_number]+'%')

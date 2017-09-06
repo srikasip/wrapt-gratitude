@@ -3,16 +3,19 @@ class CustomerPurchaseService
 
   DesiredGift = Struct.new(:gift, :quantity)
 
-  attr_accessor :stripe_token, :desired_gifts, :customer, :profile, :our_charge, :stripe_charge, :shipment, :shipping_label, :order, :shipping_info
+  attr_accessor :cart_id, :customer, :desired_gifts, :customer_order,
+    :our_charge, :profile, :shipment, :shipping_info, :shipping_label,
+    :stripe_charge, :stripe_token
 
   #delegate :error_message, to: :our_charge, prefix: false
 
-  def initialize(stripe_token:, customer:, desired_gifts:, profile:, shipping_info:)
+  def initialize(cart_id:, customer: nil, desired_gifts: nil, profile: nil, shipping_info: nil, stripe_token: nil)
+    self.cart_id       = cart_id
     self.customer      = customer
     self.desired_gifts = desired_gifts
     self.profile       = profile
-    self.stripe_token  = stripe_token
     self.shipping_info = shipping_info
+    self.stripe_token  = stripe_token
   end
 
   def generate_order!
@@ -24,13 +27,13 @@ class CustomerPurchaseService
       _init_our_charge_record!
     end
 
-    self.order
+    self.customer_order
   end
 
   def _init_order_and_purchase_orders!
-    self.order = CustomerOrder.where(card_id: self.cart_id).first_or_initialize
+    self.customer_order = CustomerOrder.where(cart_id: self.cart_id).first_or_initialize
 
-    self.order.assign_attributes({
+    self.customer_order.assign_attributes({
       user: self.customer,
       profile: self.profile,
       recipient_name: profile.name,
@@ -41,19 +44,19 @@ class CustomerPurchaseService
       ship_country:  shipping_info[:ship_country]
     })
 
-    self.order.save!
+    self.customer_order.save!
 
     self.desired_gifts.each do |dg|
       gift = dg.gift
 
       purchase_order = PurchaseOrder.
-        where(order: self.order).
+        where(customer_order: self.customer_order).
         where(vendor: gift.vendor).
         first_or_initialize
 
       purchase_order.save!
 
-     line_item = order.
+    line_item = self.customer_order.
        line_items.
        where(orderable: gift).
        first_or_initialize
@@ -88,9 +91,13 @@ class CustomerPurchaseService
   end
 
   def _init_our_charge_record!
-#WIP: key off of card id instead?
-    self.our_charge = Charge.where(token: self.stripe_token).first_or_initialize
+    if self.stripe_token.blank?
+      raise InternalConsistencyError, "You must have a stripe token to even think of charging a card"
+    end
+
+    self.our_charge = Charge.where(cart_id: self.cart_id).first_or_initialize
     self.our_charge.assign_attributes({
+      token: self.stripe_token,
       state: INITIALIZED,
       amount_in_cents: amount_in_cents,
       description: _description,
@@ -155,6 +162,8 @@ class CustomerPurchaseService
       raise InternalConsistencyError, "There is at least one product that has insufficient quantities available."
     elsif gifts_span_vendors?
       raise InternalConsistencyError, "Each gift must only have products for one vendor"
+    elsif self.cart_id.blank?
+      raise InternalConsistencyError, "You must have a context for the purchase (cart ID)"
     end
   end
 

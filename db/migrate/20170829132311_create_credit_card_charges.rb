@@ -5,6 +5,8 @@ class CreateCreditCardCharges < ActiveRecord::Migration[5.0]
       t.references :user, foreign_key: true, null: false
       t.references :profile, foreign_key: true, null: false
 
+      t.string :cart_id, null: false
+
       t.string :order_number, null: false
       t.string :status, null: false
 
@@ -55,6 +57,7 @@ class CreateCreditCardCharges < ActiveRecord::Migration[5.0]
     create_table :charges do |t|
       t.references :customer_order, foreign_key: true
 
+      t.string :cart_id, null: false
       t.integer :charge_id
       t.string :state
       t.text :description
@@ -92,6 +95,7 @@ class CreateCreditCardCharges < ActiveRecord::Migration[5.0]
     create_table :shipments do |t|
       t.references :customer_order, foreign_key: true
       t.references :purchase_order, foreign_key: true
+      t.string :cart_id, null: false
       t.jsonb :address_from
       t.jsonb :address_to
       t.jsonb :parcel
@@ -104,6 +108,7 @@ class CreateCreditCardCharges < ActiveRecord::Migration[5.0]
       t.references :shipment, foreign_key: true
       #t.references :purchase_order, foreign_key: true
 
+      t.string :cart_id, null: false
       t.string :tracking_number
       t.jsonb :api_response
       t.boolean :success
