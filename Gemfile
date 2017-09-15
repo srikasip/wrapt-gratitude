@@ -45,6 +45,7 @@ gem 'kaminari'
 gem 'sidekiq'
 gem 'font-awesome-sass'
 gem 'acts-as-taggable-on'
+gem 'awesome_print'
 
 # For reading/writing files
 gem 'roo'
