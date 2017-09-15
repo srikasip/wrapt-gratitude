@@ -7,7 +7,7 @@
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
-server 'wrapt.greenriver.com', user: 'ubuntu', roles: %w{app db web}, primary: true
+server 'wrapt.greenriver.com', user: 'ubuntu', roles: %w{app db web cron staging_cron}, primary: true
 
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 

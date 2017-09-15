@@ -14,7 +14,7 @@ set :repo_url, 'git@github.com:greenriver/wrapt-gratitude.git'
 # set :format, :pretty
 
 # Default value for :log_level is :debug
-# set :log_level, :debug
+set :log_level, :info
 
 # Default value for :pty is false
 # Note There is a known bug that prevents sidekiq from starting when pty is true on Capistrano 3.
@@ -34,6 +34,9 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 # set :keep_releases, 5
 
 set :sidekiq_queue, ['default', 'mailers']
+
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+set :whenever_roles, [:cron, :production_cron, :staging_cron]
 
 namespace :deploy do
   after :restart, :clear_cache do
