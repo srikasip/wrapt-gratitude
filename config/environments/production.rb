@@ -74,6 +74,15 @@ Rails.application.configure do
     enable_starttls_auto: true
   }
 
+  if ENV['EXCEPTION_RECIPIENTS'].present?
+    config.middleware.use ExceptionNotification::Rack,
+      :email => {
+        :email_prefix => "[Wrapt Exception #{Rails.env}] ",
+        :sender_address => [ ENV.fetch('MAIL_SENDER') { "noreply@#{ENV['SMTP_DOMAIN']}" } ],
+        :exception_recipients => ENV.fetch('EXCEPTION_RECIPIENTS') { '' }.split(',')
+    }
+  end
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false

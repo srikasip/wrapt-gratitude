@@ -47,6 +47,7 @@ gem 'font-awesome-sass'
 gem 'acts-as-taggable-on'
 gem 'awesome_print'
 gem 'whenever', require: false
+gem 'exception_notification'
 
 # For reading/writing files
 gem 'roo'
