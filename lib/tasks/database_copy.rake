@@ -32,8 +32,9 @@ namespace :db do
 
     puts "Removing all tables or else new tables on staging will cause migration failures on subsequent migrations"
     ActiveRecord::Base.connection.tables.each do |table_name|
-      ActiveRecord::Base.connection.execute("truncate table #{table_name} CASCADE")
+      ActiveRecord::Base.connection.execute("drop table #{table_name} CASCADE")
     end
+    ActiveRecord::Base.connection.execute("drop sequence internal_order_numbers")
 
     psql_path  = ENV.fetch('PSQL_PATH')               { '/usr/lib/postgresql/9.5/bin/psql' }
     db_config  = ActiveRecord::Base.connection_config
