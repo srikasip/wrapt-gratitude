@@ -16,16 +16,62 @@
             = status.titleize
       .form-group{style: 'margin-top: 10px'}
         Vendor
-        = select_tag('search[vendor_id]', options_from_collection_for_select(Vendor.all, :id, :name), placeholder: 'Vendor', class: 'form-control', style: 'min-width: 200px;')
+        = select_tag('search[vendor_id]', content_tag(:option,'select one...',:value=>"")+options_from_collection_for_select(Vendor.all, :id, :name, params[:search][:vendor_id]), placeholder: 'Vendor', class: 'form-control', style: 'min-width: 200px;')
         from
         = date_field_tag 'search[date_range_start]', :date_range_start, placeholder: 'Date Created', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:date_range_start]
         to
         = date_field_tag 'search[date_range_end]', :date_range_end, placeholder: 'Date Created', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:date_range_end]
 
-        %button.btn.btn-primary
+        %button.btn.btn-primary{name: 'content_type', value: 'html'}
           %i.glyphicon.glyphicon-search
           Generate
-        %button.btn.btn-primary
+        %button.btn.btn-primary{name: 'content_type', value: 'csv'}
           %i.glyphicon.glyphicon-arrow-down
           Download
         = link_to 'Clear Fields (Show All)', admin_ecommerce_billings_path, class: 'btn btn-default'
+
+= page_entries_info @purchase_orders
+
+- if @purchase_orders.any?
+  .row
+    .col-sm-12
+      %table.table.index-table
+        %thead
+          %tr
+            %th PO Number
+            %th CO Number
+            %th Date
+            %th Status
+            %th Wrapt SKU
+            %th Vendor SKU
+            %th Description
+            %th.text-right Wrapt Cost
+            %th.text-right Shipping Cost
+            %th.text-right Shipping Charged
+
+        %tbody
+          - @purchase_orders.each do |po|
+            - this_cycle_class = cycle('even-order', 'odd-order')
+            - po.line_items.each_with_index do |line_item,index|
+              - product = line_item.orderable
+              - customer_order = po.customer_order
+              %tr{class: this_cycle_class}
+                %td= po.order_number
+                %td= customer_order.order_number
+                %td= format_date(po.created_on)
+                %td= customer_order.status
+                %td= product.wrapt_sku
+                %td= product.vendor_sku.presence || 'N/A'
+                %td= product.description
+                %td.text-right= number_to_currency(product.wrapt_cost)
+                - if index == 0
+                  %td.text-right= number_to_currency(customer_order.shipping_cost_in_dollars)
+                  %td.text-right= number_to_currency(customer_order.shipping_in_dollars)
+                - else
+                  %td.text-right
+                    %span.glyphicon.glyphicon-arrow-up
+                  %td.text-right
+                    %span.glyphicon.glyphicon-arrow-up
+
+
+  = paginate @purchase_orders

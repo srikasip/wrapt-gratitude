@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170705192456) do
+ActiveRecord::Schema.define(version: 20170920163019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -185,19 +185,21 @@ ActiveRecord::Schema.define(version: 20170705192456) do
   create_table "gifts", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
-    t.decimal  "selling_price",                 precision: 10, scale: 2
-    t.decimal  "cost",                          precision: 10, scale: 2
+    t.decimal  "selling_price",                  precision: 10, scale: 2
+    t.decimal  "cost",                           precision: 10, scale: 2
     t.string   "wrapt_sku"
-    t.date     "date_available",                                         default: '1900-01-01', null: false
-    t.date     "date_discontinued",                                      default: '2999-12-31', null: false
-    t.datetime "created_at",                                                                    null: false
-    t.datetime "updated_at",                                                                    null: false
-    t.boolean  "calculate_cost_from_products",                           default: true,         null: false
-    t.boolean  "calculate_price_from_products",                          default: true,         null: false
+    t.date     "date_available",                                          default: '1900-01-01', null: false
+    t.date     "date_discontinued",                                       default: '2999-12-31', null: false
+    t.datetime "created_at",                                                                     null: false
+    t.datetime "updated_at",                                                                     null: false
+    t.boolean  "calculate_cost_from_products",                            default: true,         null: false
+    t.boolean  "calculate_price_from_products",                           default: true,         null: false
     t.integer  "product_category_id"
     t.integer  "product_subcategory_id"
     t.integer  "source_product_id"
-    t.boolean  "featured",                                               default: false,        null: false
+    t.boolean  "featured",                                                default: false,        null: false
+    t.boolean  "calculate_weight_from_products",                          default: true,         null: false
+    t.decimal  "weight_in_pounds"
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
     t.index ["wrapt_sku"], name: "index_gifts_on_wrapt_sku", using: :btree
   end
@@ -304,6 +306,7 @@ ActiveRecord::Schema.define(version: 20170705192456) do
     t.integer  "source_vendor_id"
     t.integer  "product_category_id"
     t.integer  "product_subcategory_id"
+    t.decimal  "weight_in_pounds"
     t.index ["product_category_id"], name: "index_products_on_product_category_id", using: :btree
     t.index ["vendor_id"], name: "index_products_on_vendor_id", using: :btree
     t.index ["wrapt_sku"], name: "index_products_on_wrapt_sku", using: :btree
@@ -369,8 +372,8 @@ ActiveRecord::Schema.define(version: 20170705192456) do
     t.integer  "vendor_id"
     t.integer  "customer_order_id"
     t.integer  "gift_id"
+    t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
-    t.datetime "created_at"
     t.string   "order_number",       null: false
     t.date     "created_on",         null: false
     t.decimal  "total_due_in_cents"
@@ -671,14 +674,21 @@ ActiveRecord::Schema.define(version: 20170705192456) do
 
   create_table "vendors", force: :cascade do |t|
     t.string   "name"
-    t.text     "address"
+    t.text     "defunct_address"
     t.string   "contact_name"
     t.string   "email"
     t.string   "phone"
     t.text     "notes"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.string   "wrapt_sku_code"
+    t.string   "street1",         default: "unknown", null: false
+    t.string   "city",            default: "unknown", null: false
+    t.string   "state",           default: "unknown", null: false
+    t.string   "zip",             default: "unknown", null: false
+    t.string   "country",         default: "unknown", null: false
+    t.string   "street2"
+    t.string   "street3"
     t.index ["wrapt_sku_code"], name: "index_vendors_on_wrapt_sku_code", using: :btree
   end
 
@@ -697,6 +707,8 @@ ActiveRecord::Schema.define(version: 20170705192456) do
   add_foreign_key "charges", "customer_orders"
   add_foreign_key "conditional_question_options", "survey_question_options"
   add_foreign_key "conditional_question_options", "survey_questions"
+  add_foreign_key "customer_orders", "profiles"
+  add_foreign_key "customer_orders", "users"
   add_foreign_key "evaluation_recommendations", "gifts"
   add_foreign_key "evaluation_recommendations", "profile_set_survey_responses"
   add_foreign_key "evaluation_recommendations", "training_set_evaluations"
@@ -706,6 +718,7 @@ ActiveRecord::Schema.define(version: 20170705192456) do
   add_foreign_key "gift_images", "product_images"
   add_foreign_key "gift_likes", "gifts"
   add_foreign_key "gift_likes", "profiles"
+  add_foreign_key "gift_parcels", "gifts"
   add_foreign_key "gift_parcels", "parcels"
   add_foreign_key "gift_products", "gifts"
   add_foreign_key "gift_products", "products"
@@ -717,6 +730,7 @@ ActiveRecord::Schema.define(version: 20170705192456) do
   add_foreign_key "gift_selections", "gifts"
   add_foreign_key "gift_selections", "profiles"
   add_foreign_key "gifts", "product_categories"
+  add_foreign_key "line_items", "vendors"
   add_foreign_key "product_images", "products"
   add_foreign_key "products", "product_categories"
   add_foreign_key "products", "vendors"
@@ -726,6 +740,8 @@ ActiveRecord::Schema.define(version: 20170705192456) do
   add_foreign_key "profile_traits_tags", "profile_traits_facets", column: "facet_id"
   add_foreign_key "profiles", "users", column: "owner_id"
   add_foreign_key "purchase_orders", "customer_orders"
+  add_foreign_key "purchase_orders", "gifts"
+  add_foreign_key "purchase_orders", "vendors"
   add_foreign_key "shipments", "customer_orders"
   add_foreign_key "shipments", "purchase_orders"
   add_foreign_key "shipping_labels", "customer_orders"

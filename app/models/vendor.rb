@@ -18,6 +18,12 @@ class Vendor < ApplicationRecord
   before_save :set_skus_need_regeneration, if: :wrapt_sku_code_changed?
   after_save :regenerate_dependent_skus!, if: :skus_need_regeneration
 
+  before_destroy -> { raise "Cannot destroy" unless deleteable? }
+
+  def deleteable?
+    PurchaseOrder.where(vendor: self).none?
+  end
+
   private def set_skus_need_regeneration
     self.skus_need_regeneration = true
   end

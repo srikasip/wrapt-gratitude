@@ -39,8 +39,11 @@
       %tbody
         - @orders.each do |order|
           %tr
-            %td= order.customer_order.order_number
-            %td= order.order_number
+            %td
+              = order.order_number
+            %td
+              = link_to admin_ecommerce_customer_order_path(order.customer_order) do
+                = order.customer_order.order_number
             %td= format_date(order.created_on)
             %td.text-right
               = number_to_currency(order.total_due_in_dollars)

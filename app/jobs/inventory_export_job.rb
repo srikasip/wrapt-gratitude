@@ -5,12 +5,15 @@ class InventoryExportJob < ApplicationJob
 
   queue_as :default
 
-  attr_reader :target_file_path, :workbook, :worksheet
+  attr_reader :target_file_path, :workbook, :worksheet, :params
 
-  def perform(target_file_path)
+  def perform(target_file_path, params)
     @target_file_path = target_file_path
-    @workbook = WriteXLSX.new target_file_path
-    @worksheet = workbook.add_worksheet
+    @workbook         = WriteXLSX.new target_file_path
+    @worksheet        = workbook.add_worksheet
+    @params           = params
+    @params ||= {}
+    @params[:search] ||= {}
 
     write_headers!
     write_response_rows!
@@ -31,7 +34,8 @@ class InventoryExportJob < ApplicationJob
 
   private def write_response_rows!
     row = 1
-    Product.all.order(:wrapt_sku).each do |product|
+    products = InventorySearch.new(params).unpaginated_results
+    products.each do |product|
       COLUMN_DATA.each_with_index do |field, column_number|
         worksheet.write row, column_number, product.send(field.getter.to_sym)
       end

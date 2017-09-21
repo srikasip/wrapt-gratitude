@@ -27,7 +27,7 @@ module Admin
       def download
         Tempfile.open('export.xlsx') do |tempfile|
           @job = InventoryExportJob.new
-          @job.perform(tempfile.path)
+          @job.perform(tempfile.path, params)
           tempfile.rewind
           now = Time.zone.now.strftime('%Y.%m.%d')
           send_file(tempfile.path, content_type: 'application/vnd.ms-excel', filename: "inventory-export-#{now}.xlsx")
@@ -37,7 +37,8 @@ module Admin
       private
 
       def _load_products
-        @products = Product.order('wrapt_sku').page(params[:page])
+        params[:search] ||= {}
+        @products = InventorySearch.new(params).results
       end
     end
   end

@@ -21,18 +21,46 @@
 .row.admin__actions
   .col-sm-12
     = link_to 'Upload Inventory', upload_admin_ecommerce_inventory_items_path, class: 'btn btn-primary', data: {loads_in_pjax_modal: true}
-    = link_to 'Download Inventory', download_admin_ecommerce_inventory_items_path, class: 'btn btn-primary', 'data-disable' => 'Downloading...'
+
+.row.admin__search
+  .col-sm-12
+    = form_tag(admin_ecommerce_inventory_items_path, method: 'GET', class: 'form-inline', id: 'js-download-form') do
+
+      .form-group{style: 'margin-top: 10px'}
+        Vendor
+        = select_tag('search[vendor_id]', content_tag(:option,'select one...',:value=>"")+options_from_collection_for_select(Vendor.all, :id, :name, params[:search][:vendor_id]), placeholder: 'Vendor', class: 'form-control', style: 'min-width: 200px;')
+
+      .form-group{style: 'margin-top: 10px'}
+        = search_field_tag 'search[wrapt_sku]', :order_number, placeholder: 'Wrapt SKU', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:wrapt_sku]
+
+      .form-group{style: 'margin-top: 10px'}
+        %button.btn.btn-primary
+          %i.glyphicon.glyphicon-search
+          Search
+        %button#js-download.btn.btn-primary
+          %i.glyphicon.glyphicon-arrow-down
+          Download
+        = link_to 'Clear Search (Show All)', admin_ecommerce_inventory_items_path, class: 'btn btn-default'
+        = content_for :page_js do
+          :javascript
+            $('#js-download').click(function(event) {
+              event.preventDefault();
+              $('#js-download-form').prop('action', '#{download_admin_ecommerce_inventory_items_path}');
+              $('#js-download-form').submit();
+              $('#js-download-form').prop('action', '#{admin_ecommerce_inventory_items_path}');
+            });
+
 
 .row
   .col-sm-12
-    %table.table.index-table
+    %table.table.table-striped
       %thead
         %tr
           %th Vendor SKU
           %th Wrapt SKU
           %th Description
-          %th Inventory Count
-          %th Price
+          %th.text-right Inventory Count
+          %th.text-right Price
 
       %tbody
         - @products.preload(:primary_product_image, :gifts, :single_product_gift).each do |product|
@@ -40,7 +68,7 @@
             %td.admin-index-table--sku-cell= product.vendor_sku
             %td.admin-index-table--sku-cell= product.wrapt_sku
             %td= product.description
-            %td= product.units_available
-            %td= number_to_currency(product.price)
+            %td.text-right= product.units_available
+            %td.text-right= number_to_currency(product.price)
 
     %p=paginate @products

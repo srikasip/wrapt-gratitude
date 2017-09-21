@@ -7,11 +7,7 @@
       = link_to 'Cancel Order', admin_ecommerce_customer_order_path(@order), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
 
 .row
-  .col-sm-12
-    %p
-      %b Ship From:
-
-  .col-sm-12
+  .col-sm-3
     %p
       %b Ship To:
       %br
@@ -64,7 +60,7 @@
             %td.text-right
               %i= number_to_currency(line_item.total_price_in_dollars)
 
-        %tr
+        %tr{style: 'border-top-style: double'}
           %td
             %i Sub-total
           %td
@@ -97,7 +93,7 @@
           %td.text-right
             %i= number_to_currency(@order.taxes_in_dollars)
 
-        %tr
+        %tr{style: 'border-top-style: double'}
           %td
             %i Total
           %td
@@ -108,15 +104,4 @@
           %td.text-right
             %b= number_to_currency(@order.total_to_charge_in_dollars)
 
-
-.row
-  .col-sm-12
-    %h3 Order Changes
-    = render "versions", versions: @order.versions
-
-    %h3 Charge Changes
-    = render "versions", versions: @order.charge.versions
-
-.row
-  .col-sm-12
-    = render "raw_data", order: @order
+=render 'details'

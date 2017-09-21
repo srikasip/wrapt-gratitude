@@ -57,7 +57,8 @@
             %td.admin-index-table--buttons-cell
               = link_to 'View', [:admin, product], class: 'btn btn-default btn-xs'
               = link_to 'Edit', edit_admin_product_path(product), class: 'btn btn-default btn-xs'
-              = link_to 'Delete', admin_product_path(product, context_params), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+              - if product.deleteable?
+                = link_to 'Delete', admin_product_path(product, context_params), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
 
     %p=paginate @products
 

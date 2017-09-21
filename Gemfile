@@ -4,7 +4,7 @@ gem "fog-aws"
 gem 'acts-as-taggable-on'
 gem 'awesome_nested_set'
 gem 'awesome_print'
-gem 'bootstrap-sass', '~> 3.3.6'
+gem 'bootstrap-sass', '~> 3.3.7'
 gem 'carrierwave'
 gem 'carrierwave_direct'
 gem 'coffee-rails', '~> 4.2' # Use CoffeeScript for .coffee assets and views

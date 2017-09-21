@@ -70,7 +70,7 @@
               - if gift.product_subcategory.present?
                 %span.label.label-default= gift.product_subcategory&.name
               - if gift.featured?
-                %span.label.label-default featured                
+                %span.label.label-default featured
               - gift.tags.each do |tag|
                 %span.label.label-primary.label-inverse= tag.name
             %td.admin-index-table--buttons-cell(style="line-height: 24px; text-align: left;")
@@ -78,8 +78,9 @@
               = link_to 'Preview', admin_gift_preview_modal_path(gift), class: 'btn btn-default btn-xs', data: {loads_in_pjax_modal: true}
               %br
               = link_to 'Edit', edit_admin_gift_path(gift), class: 'btn btn-default btn-xs'
-              = link_to 'Delete', admin_gift_path(gift, context_params), :method => :delete, :data => { :confirm => 'Are you sure you want to delete this gift?' }, class: 'btn btn-danger btn-xs'
-    
+              - if gift.deleteable?
+                = link_to 'Delete', admin_gift_path(gift, context_params), :method => :delete, :data => { :confirm => 'Are you sure you want to delete this gift?' }, class: 'btn btn-danger btn-xs'
+
     %p= paginate @gifts
 
 - content_for :page_js do

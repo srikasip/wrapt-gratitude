@@ -4,14 +4,30 @@
     %h1
       Purchase Order
       = @order.order_number
-      -#= link_to 'Resend notification to vendor', admin_ecommerce_purchase_order_path(@order), :method => :put, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+      = link_to 'Resend notification to vendor', resend_notification_admin_ecommerce_purchase_order_path(@order), :method => :put, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-warning btn-xs'
+    %h4
+      Associated with customer order
+      = link_to @order.customer_order.order_number, admin_ecommerce_customer_order_path(@order.customer_order)
 
 .row
-  .col-sm-12
+  .col-sm-3
     %p
       %b Ship From:
+      %br
+      :ruby
+        address_lines = [
+          @vendor.name,
+          @vendor.street1,
+          @vendor.street2,
+          @vendor.street3,
+          "#{@vendor.city}, #{@vendor.state} #{@vendor.zip}",
+          @vendor.country
+        ].select(&:present?)
+      - address_lines.each do |line|
+        = line
+        %br
 
-  .col-sm-12
+  .col-sm-3
     %p
       %b Ship To:
       %br
@@ -57,7 +73,7 @@
             %td.text-right
               %i= number_to_currency(line_item.total_price_in_dollars)
 
-        %tr
+        %tr{style: 'border-top-style: double'}
           %td
             %i Total
           %td

@@ -24,8 +24,14 @@ class Product < ApplicationRecord
   before_save :set_dependent_skus_need_regeneration, if: :vendor_id_changed?
   after_save :regenerate_dependent_skus!, if: :dependent_skus_need_regeneration
 
+  before_destroy -> { raise "Cannot destroy" unless deleteable? }
+
   def self.search search_params
     self.all.merge(ProductSearch.new(search_params).to_scope)
+  end
+
+  def deleteable?
+    LineItem.where(orderable: self).none?
   end
 
   private def sku_prefix
@@ -79,5 +85,4 @@ class Product < ApplicationRecord
       end
     end
   end
-
 end

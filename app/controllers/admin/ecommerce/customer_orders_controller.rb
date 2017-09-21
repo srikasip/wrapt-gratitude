@@ -24,8 +24,8 @@ module Admin
       end
 
       def destroy
-        # cancel an order if it hasn't been shipped.
-        raise "wip"
+        flash[:alert] = "Cancellation has not been implemented yet."
+        redirect_back(fallback_location: url_for(action: :index))
       end
     end
   end

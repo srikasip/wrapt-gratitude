@@ -27,6 +27,8 @@ class Gift < ApplicationRecord
 
   before_save :generate_wrapt_sku, if: :sku_needs_updating?
 
+  before_destroy -> { raise "Cannot destroy" unless deleteable? }
+
   # These are implemented as not null in the database
   # so we can treat them as not null for sorting purposese
   # and nullable for display purposes
@@ -36,6 +38,10 @@ class Gift < ApplicationRecord
 
   def self.search search_params
     self.all.merge(GiftSearch.new(search_params).to_scope)
+  end
+
+  def deleteable?
+    LineItem.where(orderable: self).none?
   end
 
   def vendor

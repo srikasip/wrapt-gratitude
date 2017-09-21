@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.4.0'
+lock '3.9.0'
 
 set :application, 'wrapt-gratitude'
 set :repo_url, 'git@github.com:greenriver/wrapt-gratitude.git'
@@ -20,6 +20,12 @@ set :log_level, :info
 # Note There is a known bug that prevents sidekiq from starting when pty is true on Capistrano 3.
 # see https://github.com/seuros/capistrano-sidekiq
 # set :pty, true
+
+if !ENV['FORCE_SSH_KEY'].nil?
+  set :ssh_options, {
+    keys: [ENV['FORCE_SSH_KEY']]
+  }
+end
 
 # Default value for :linked_files is []
 set :linked_files, fetch(:linked_files, []).push('config/database.yml')

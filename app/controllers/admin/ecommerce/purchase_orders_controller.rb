@@ -12,6 +12,12 @@ module Admin
 
       def show
         @order = PurchaseOrder.find(params[:id])
+        @vendor = @order.vendor
+      end
+
+      def resend_notification
+        flash[:alert] = "Note: notification resending not yet implemented"
+        redirect_back(fallback_location: admin_ecommerce_purchase_orders_path)
       end
     end
   end

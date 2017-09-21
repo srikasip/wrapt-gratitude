@@ -143,8 +143,12 @@ Rails.application.routes.draw do
         end
       end
       resources :billings, only: [:index]
-      resources :customer_orders, only: [:index, :show, :delete, :create]
-      resources :purchase_orders, only: [:index, :show]
+      resources :customer_orders, only: [:index, :show, :destroy, :create]
+      resources :purchase_orders, only: [:index, :show] do
+        member do
+          put :resend_notification
+        end
+      end
     end
   end
 
