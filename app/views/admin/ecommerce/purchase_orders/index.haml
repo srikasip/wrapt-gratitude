@@ -26,7 +26,7 @@
 
 .row
   .col-sm-12
-    %table.table.index-table
+    %table.table.table-striped
       %thead
         %tr
           %th Purchase Order Number
@@ -35,6 +35,7 @@
           %th.text-right Amount
           %th Status
           %th Tracking Number
+          %th
 
       %tbody
         - @orders.each do |order|

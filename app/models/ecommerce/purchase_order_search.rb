@@ -9,7 +9,7 @@ class PurchaseOrderSearch < Struct.new(:params)
     end
 
     if search_params[:created_on].present?
-      base_scope = base_scope.where("created_on = ?", search_params[:created_on])
+      base_scope = base_scope.where("purchase_orders.created_on = ?", search_params[:created_on])
     end
 
     if search_params[:email].present?
@@ -24,6 +24,6 @@ class PurchaseOrderSearch < Struct.new(:params)
       })
     end
 
-    base_scope.order('created_at desc').preload(:customer_order, :shipping_label).page(params[:page])
+    base_scope.order('purchase_orders.created_at desc').preload(:customer_order, :shipping_label).page(params[:page])
   end
 end

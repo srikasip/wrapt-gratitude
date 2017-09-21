@@ -4,7 +4,7 @@ server {
   listen 80;
   server_name staging.wrapt.greenriver.com;
 
-  return 301 http://staging.wrapt.com$request_uri;
+  return 302 http://staging.wrapt.com$request_uri;
 }
 
 server {

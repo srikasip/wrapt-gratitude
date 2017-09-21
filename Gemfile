@@ -15,6 +15,7 @@ gem 'haml-rails'
 gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails' # Use jquery as the JavaScript library
 gem 'kaminari'
+gem 'letsencrypt_plugin'
 gem 'mini_magick'
 gem 'paper_trail'
 gem 'pg'

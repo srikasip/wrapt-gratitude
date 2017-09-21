@@ -149,7 +149,9 @@ Rails.application.routes.draw do
           put :resend_notification
         end
       end
+      post 'webhooks/tracking' => 'webhooks#tracking'
     end
+
   end
 
   ####################
@@ -168,6 +170,8 @@ Rails.application.routes.draw do
   constraints lambda {|request| SidekiqDashboardAuthentication.authenticated? request} do
     mount Sidekiq::Web => '/sidekiq'
   end
+
+  mount LetsencryptPlugin::Engine, at: '/'  # It must be at root level
 
   # Serve websocket cable requests in-process
   mount ActionCable.server => '/cable'

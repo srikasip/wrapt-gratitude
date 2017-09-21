@@ -1,4 +1,5 @@
 class CustomerOrder < ApplicationRecord
+  include ShippingComputer
   has_paper_trail(
     ignore: [:updated_at, :created_at, :id],
     meta: {
@@ -42,29 +43,10 @@ class CustomerOrder < ApplicationRecord
   delegate :email, :name, to: :user, prefix: true
   delegate :name, to: :profile, prefix: true
 
-  # Amount charged to customer
-  def shipping_in_dollars
-    self.shipping_in_cents / 100.0
-  end
-
-  # Wrapt's cost
-  def shipping_cost_in_dollars
-    self.shipping_cost_in_cents / 100.0
-  end
-
-  def total_to_charge_in_dollars
-    self.total_to_charge_in_cents / 100.0
-  end
-
-  def shipping_in_dollars
-    self.shipping_in_cents / 100.0
-  end
-
-  def taxes_in_dollars
-    self.taxes_in_cents / 100.0
-  end
-
-  def subtotal_in_dollars
-    self.subtotal_in_cents / 100.0
-  end
+  define_method(:shipping_in_dollars)        { self.shipping_in_cents / 100.0 } # Amount charged to customer
+  define_method(:shipping_cost_in_dollars)   { self.shipping_cost_in_cents / 100.0 } # Wrapt's cost
+  define_method(:total_to_charge_in_dollars) { self.total_to_charge_in_cents / 100.0 }
+  define_method(:shipping_in_dollars)        { self.shipping_in_cents / 100.0 }
+  define_method(:taxes_in_dollars)           { self.taxes_in_cents / 100.0 }
+  define_method(:subtotal_in_dollars)        { self.subtotal_in_cents / 100.0 }
 end

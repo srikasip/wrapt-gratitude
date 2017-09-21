@@ -1,12 +1,35 @@
 class BillingReport < Struct.new(:params)
+  PER_PAGE = 100
+
   def paginated_results
     base_scope = _generate_results!
-    base_scope.order('purchase_orders.created_at desc').preload(:vendor, :line_items => :orderable).page(params[:page])
+    base_scope.page(params[:page]).per(PER_PAGE)
   end
 
   def csv_results
     base_scope = _generate_results!
-    "a,b\n1,2"
+    CSV.generate do |csv|
+      csv << [ 'PO Number', 'CO Number', 'Date', 'Status', 'Wrapt SKU', 'Vendor SKU', 'Description', 'Wrapt Cost', 'Shipping Cost', 'Shipping Charged' ]
+      base_scope.each do |po|
+        po.line_items.each do |line_item|
+          product = line_item.orderable
+          customer_order = po.customer_order
+          po.line_items
+          csv << [
+            po.order_number,
+            customer_order.order_number,
+            po.created_on,
+            customer_order.status,
+            product.wrapt_sku,
+            product.vendor_sku,
+            product.description,
+            product.wrapt_cost,
+            po.shipping_cost_in_dollars_for(product),
+            po.shipping_in_dollars_for(product)
+          ]
+        end
+      end
+    end
   end
 
   def csv_filename
@@ -24,21 +47,23 @@ class BillingReport < Struct.new(:params)
   end
 
   def _generate_results!
-    PurchaseOrder.all.tap do |base_scope|
-      if _cannot_report?
-        return base_scope.where('false').page(1)
-      end
+    base_scope = PurchaseOrder.all
 
-      base_scope = base_scope.where(vendor_id: search_params[:vendor_id])
-
-      base_scope = base_scope.where("purchase_orders.created_on between ? AND ?", Date.parse(search_params[:date_range_start]), Date.parse(search_params[:date_range_end]))
-
-      if search_params[:status].present?
-        base_scope = base_scope.joins(:customer_order).where({
-          customer_orders: { status: search_params[:status].keys }
-        })
-      end
+    if _cannot_report?
+      return base_scope.where('false').page(1)
     end
+
+    base_scope = base_scope.where(vendor_id: search_params[:vendor_id])
+
+    base_scope = base_scope.where("purchase_orders.created_on between ? AND ?", Date.parse(search_params[:date_range_start]), Date.parse(search_params[:date_range_end]))
+
+    if search_params[:status].present?
+      base_scope = base_scope.joins(:customer_order).where({
+        customer_orders: { status: search_params[:status].keys }
+      })
+    end
+
+    base_scope = base_scope.order('purchase_orders.created_at desc').preload(:customer_order, :vendor, :line_items => :orderable)
   end
 
   def _cannot_report?

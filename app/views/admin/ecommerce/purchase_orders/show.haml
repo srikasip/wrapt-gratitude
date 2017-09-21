@@ -5,6 +5,7 @@
       Purchase Order
       = @order.order_number
       = link_to 'Resend notification to vendor', resend_notification_admin_ecommerce_purchase_order_path(@order), :method => :put, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-warning btn-xs'
+      = link_to 'View Shipping Label', @order.shipping_label.url, target: '_blank', class: 'btn btn-default btn-xs'
     %h4
       Associated with customer order
       = link_to @order.customer_order.order_number, admin_ecommerce_customer_order_path(@order.customer_order)
@@ -60,7 +61,8 @@
         - @order.line_items.each do |line_item|
           %tr
             %td
-              %i= line_item.orderable.title
+              = link_to(admin_product_path(line_item.orderable)) do
+                %i= line_item.orderable.title
             %td= line_item.orderable.wrapt_sku
             %td
               = link_to line_item.vendor_name, admin_vendor_path(line_item.vendor)

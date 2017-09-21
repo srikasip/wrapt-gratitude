@@ -1,4 +1,6 @@
 class PurchaseOrder < ApplicationRecord
+  include ShippingComputer
+
   has_many :line_items, as: :order, dependent: :destroy
 
   has_one :shipment, dependent: :destroy

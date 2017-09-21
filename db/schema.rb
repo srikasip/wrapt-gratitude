@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170920163019) do
+ActiveRecord::Schema.define(version: 20170922134827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -372,11 +372,13 @@ ActiveRecord::Schema.define(version: 20170920163019) do
     t.integer  "vendor_id"
     t.integer  "customer_order_id"
     t.integer  "gift_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.string   "order_number",       null: false
-    t.date     "created_on",         null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "order_number",           null: false
+    t.date     "created_on",             null: false
     t.decimal  "total_due_in_cents"
+    t.decimal  "shipping_in_cents"
+    t.decimal  "shipping_cost_in_cents"
     t.index ["customer_order_id"], name: "index_purchase_orders_on_customer_order_id", using: :btree
     t.index ["gift_id"], name: "index_purchase_orders_on_gift_id", using: :btree
     t.index ["vendor_id"], name: "index_purchase_orders_on_vendor_id", using: :btree

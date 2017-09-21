@@ -67,7 +67,9 @@
           %tr
             %td.admin-index-table--sku-cell= product.vendor_sku
             %td.admin-index-table--sku-cell= product.wrapt_sku
-            %td= product.description
+            %td
+              = link_to admin_product_path(product) do
+                = product.description
             %td.text-right= product.units_available
             %td.text-right= number_to_currency(product.price)
 

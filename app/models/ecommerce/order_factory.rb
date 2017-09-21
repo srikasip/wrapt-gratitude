@@ -14,7 +14,9 @@ module OrderFactory
         country = 'US'
       SQL
 
-      Product.where('units_available < 10').update_all('units_available = 10')
+      Product.where('units_available < 3').update_all('units_available = 10')
+
+      Profile.where('name is null').update_all("name = 'Karen'")
     end
 
     stripe_token = Stripe::Token.create(

@@ -279,6 +279,11 @@ class CustomerPurchaseService
       rate = po.shipment.rates.find { |x| x.dig('servicelevel', 'token') == shippo_token }
 
       co.shipping_cost_in_cents += rate['amount'].to_f * 100
+
+      po.update_attributes({
+        shipping_cost_in_cents: rate['amount'].to_f * 100,
+        shipping_in_cents: rate['amount'].to_f * 100 * SHIPPING_MARKUP
+      })
     end
 
     co.shipping_in_cents = co.shipping_cost_in_cents * SHIPPING_MARKUP
@@ -313,7 +318,8 @@ class CustomerPurchaseService
       metadata: {
         user_id: customer_order.user_id,
         profile_id: customer_order.profile_id,
-        gifts: self.customer_order.gifts.map(&:name).join('; ')
+        gifts: self.customer_order.gifts.map(&:name).join('; '),
+        customer_order_number: customer_order.order_number
       }
     })
 
@@ -519,7 +525,7 @@ class CustomerPurchaseService
         error_message: (e.message + e.backtrace.to_s)
       })
     end
-    if self.customer_order.present?
+    if self.customer_order.present? && self.customer_order.persisted?
       self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
     end
     raise

@@ -50,28 +50,50 @@
             %th.text-right Shipping Charged
 
         %tbody
+          :ruby
+            sum_wrapt_cost = 0.0
+            sum_shipping_cost = 0.0
+            sum_shipping_charged = 0.0
           - @purchase_orders.each do |po|
             - this_cycle_class = cycle('even-order', 'odd-order')
-            - po.line_items.each_with_index do |line_item,index|
-              - product = line_item.orderable
-              - customer_order = po.customer_order
+            - po.line_items.each do |line_item|
+              :ruby
+                product = line_item.orderable
+                customer_order = po.customer_order
+                sum_wrapt_cost += product.wrapt_cost
+                sum_shipping_cost +=  po.shipping_cost_in_dollars_for(product)
+                sum_shipping_charged += po.shipping_in_dollars_for(product)
               %tr{class: this_cycle_class}
-                %td= po.order_number
-                %td= customer_order.order_number
+                %td
+                  = link_to admin_ecommerce_purchase_order_path(po) do
+                    = po.order_number
+                %td
+                  = link_to admin_ecommerce_customer_order_path(customer_order) do
+                    = customer_order.order_number
                 %td= format_date(po.created_on)
                 %td= customer_order.status
                 %td= product.wrapt_sku
                 %td= product.vendor_sku.presence || 'N/A'
-                %td= product.description
+                %td
+                  = link_to admin_product_path(product) do
+                    = truncate(product.description, length: 60)
                 %td.text-right= number_to_currency(product.wrapt_cost)
-                - if index == 0
-                  %td.text-right= number_to_currency(customer_order.shipping_cost_in_dollars)
-                  %td.text-right= number_to_currency(customer_order.shipping_in_dollars)
-                - else
-                  %td.text-right
-                    %span.glyphicon.glyphicon-arrow-up
-                  %td.text-right
-                    %span.glyphicon.glyphicon-arrow-up
+                %td.text-right= number_to_currency(po.shipping_cost_in_dollars_for(product))
+                %td.text-right= number_to_currency(po.shipping_in_dollars_for(product))
 
+          %tr{style: 'border-top-style: double'}
+            - if @purchase_orders.total_pages == 1
+              %td{colspan: 6}
+              %td.text-right
+                %strong Sum
+              %td.text-right
+                %strong= number_to_currency(sum_wrapt_cost)
+              %td.text-right
+                %strong= number_to_currency(sum_shipping_cost)
+              %td.text-right
+                %strong= number_to_currency(sum_shipping_charged)
+            - else
+              %td{colspan: 7}
+              %td.text-right{colspan: 3} Filter report further for sums
 
   = paginate @purchase_orders

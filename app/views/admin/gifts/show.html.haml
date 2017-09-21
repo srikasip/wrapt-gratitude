@@ -10,7 +10,7 @@
       %span.label.label-default= @gift.product_subcategory&.name
       - @gift.tags.each do |tag|
         %span.label.label-primary.label-inverse= tag.name
-      
+
 
     %p
       %b Title:
@@ -20,10 +20,10 @@
       = @gift.description
     %p
       %b Selling price:
-      = @gift.selling_price
+      = number_to_currency(@gift.selling_price)
     %p
       %b Cost:
-      = @gift.cost
+      = number_to_currency(@gift.cost)
     %p
       %b Wrapt sku:
       = @gift.wrapt_sku
@@ -55,14 +55,14 @@
                   = image_tag product.primary_product_image.image_url(:small), class: "admin-index-table--image"
               %td= link_to product.title, admin_product_path(product)
               %td= product.wrapt_sku
-              %td= product.price
+              %td= number_to_currency(product.price)
 
     %h3 Images
     - if @gift.gift_images.none?
       %p
         No images yet.
         = link_to "Add some", admin_gift_images_path(@gift)
-    - else      
+    - else
       - @gift.gift_images.each do |gift_image|
         %p
           = image_tag gift_image.image_url(:small)
