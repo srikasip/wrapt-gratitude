@@ -28,12 +28,20 @@ namespace :db do
       raise "You can't clone production unless you've set ALLOW_CLONE_PRODUCTION to true"
     end
 
+    raise "Nope" if Rails.env.production?
+
+    puts "Removing all tables or else new tables on staging will cause migration failures on subsequent migrations"
+    ActiveRecord::Base.connection.tables.each do |table_name|
+      ActiveRecord::Base.connection.execute("truncate table #{table_name} CASCADE")
+    end
+
     psql_path  = ENV.fetch('PSQL_PATH')               { '/usr/lib/postgresql/9.5/bin/psql' }
     db_config  = ActiveRecord::Base.connection_config
     my_db_host = db_config[:host] || 'localhost'
     my_db_name = ENV.fetch('RESTORE_DB_NAME')         { db_config[:database] || raise("Must have database name") }
     my_db_user = ENV.fetch('RESTORE_DB_USER') { db_config[:user] || 'root' }
     host_clause = ENV['RESTORE_NO_HOST']=='true' ? '' : "--host=#{my_db_host}"
+
 
     cmd = "#{psql_path} #{host_clause} --dbname=#{my_db_name} --username=#{my_db_user} -w --file=#{@dump_path}.filt"
     puts "Running: `#{cmd}`"
@@ -52,6 +60,8 @@ namespace :db do
   end
 
   task :sync_s3 do
+    raise "Nope" if Rails.env.production?
+
     environment_to_go_to = Rails.env.staging? ? 'staging' : 'development'
     cmd = "aws s3 sync --profile wrapt s3://wrapt-gratitude-production/ s3://wrapt-gratitude-#{environment_to_go_to}/"
     puts "Running `#{cmd}`"
