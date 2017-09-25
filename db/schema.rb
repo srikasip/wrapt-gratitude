@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170925193704) do
+ActiveRecord::Schema.define(version: 20170925200227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -436,18 +436,22 @@ ActiveRecord::Schema.define(version: 20170925193704) do
 
   create_table "shipping_labels", force: :cascade do |t|
     t.integer  "shipment_id"
-    t.string   "cart_id",           null: false
+    t.string   "cart_id",             null: false
     t.string   "tracking_number"
     t.jsonb    "api_response"
     t.boolean  "success"
     t.text     "url"
     t.string   "shippo_object_id"
     t.text     "error_messages"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.integer  "purchase_order_id", null: false
-    t.integer  "customer_order_id", null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.integer  "purchase_order_id",   null: false
+    t.integer  "customer_order_id",   null: false
     t.string   "tracking_url"
+    t.datetime "eta"
+    t.string   "tracking_status"
+    t.datetime "tracking_updated_at"
+    t.jsonb    "tracking_payload"
     t.index ["customer_order_id"], name: "index_shipping_labels_on_customer_order_id", using: :btree
     t.index ["purchase_order_id"], name: "index_shipping_labels_on_purchase_order_id", using: :btree
     t.index ["shipment_id"], name: "index_shipping_labels_on_shipment_id", using: :btree

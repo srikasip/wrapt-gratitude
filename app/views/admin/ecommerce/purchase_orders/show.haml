@@ -11,7 +11,7 @@
       = link_to @order.customer_order.order_number, admin_ecommerce_customer_order_path(@order.customer_order)
 
 .row
-  .col-sm-3
+  .col-sm-4
     %p
       %b Ship From:
       %br
@@ -28,7 +28,7 @@
         = line
         %br
 
-  .col-sm-3
+  .col-sm-4
     %p
       %b Ship To:
       %br
@@ -44,6 +44,23 @@
       - address_lines.each do |line|
         = line
         %br
+
+  .col-sm-4
+    %p
+      %strong Shipping Information:
+      %br
+      %strong ETA:
+      =@shipping_label.eta || 'N/A'
+      %br
+      %strong Tracking Status:
+      =@shipping_label.tracking_status || 'N/A'
+      %br
+      %strong Tracking Link:
+      = link_to @shipping_label.tracking_url, target: '_blank' do
+        = @shipping_label.tracking_number
+      %br
+      %strong Tracking Updated At:
+      = format_date(@shipping_label.tracking_updated_at)
 
 .row
   .col-sm-12

@@ -38,6 +38,7 @@ gem 'write_xlsx' # write excel files
 
 group :development, :test do
   gem 'byebug', platform: :mri # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'factory_girl_rails'
 end
 
 group :production do

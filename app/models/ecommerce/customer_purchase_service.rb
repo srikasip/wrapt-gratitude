@@ -86,13 +86,6 @@ class CustomerPurchaseService
     end
   end
 
-  def auth_and_charge!
-    authorize!
-    if our_charge.auth_success?
-      charge!
-    end
-  end
-
   def authorize!
     _sanity_check!
 
