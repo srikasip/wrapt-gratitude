@@ -28,11 +28,8 @@
       %b Wrapt sku:
       = @gift.wrapt_sku
     %p
-      %b Date available:
-      = @gift.display_date_available
-    %p
-      %b Date discontinued:
-      = @gift.display_date_discontinued
+      %b Available to Customers?
+      = @gift.available?
 
     %h3 Products
     - if @gift.products.none?

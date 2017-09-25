@@ -65,7 +65,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE ar_internal_metadata (
@@ -77,7 +77,7 @@ CREATE TABLE ar_internal_metadata (
 
 
 --
--- Name: gift_products; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: gift_products; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE gift_products (
@@ -90,7 +90,7 @@ CREATE TABLE gift_products (
 
 
 --
--- Name: gifts; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: gifts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE gifts (
@@ -100,8 +100,6 @@ CREATE TABLE gifts (
     selling_price numeric(10,2),
     cost numeric(10,2),
     wrapt_sku character varying,
-    date_available date DEFAULT '1900-01-01'::date NOT NULL,
-    date_discontinued date DEFAULT '2999-12-31'::date NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     calculate_cost_from_products boolean DEFAULT true NOT NULL,
@@ -109,12 +107,15 @@ CREATE TABLE gifts (
     product_category_id integer,
     product_subcategory_id integer,
     source_product_id integer,
-    featured boolean DEFAULT false NOT NULL
+    featured boolean DEFAULT false NOT NULL,
+    calculate_weight_from_products boolean DEFAULT true NOT NULL,
+    weight_in_pounds numeric,
+    available boolean DEFAULT true NOT NULL
 );
 
 
 --
--- Name: products; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: products; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE products (
@@ -133,7 +134,8 @@ CREATE TABLE products (
     notes text,
     source_vendor_id integer,
     product_category_id integer,
-    product_subcategory_id integer
+    product_subcategory_id integer,
+    weight_in_pounds numeric
 );
 
 
@@ -155,18 +157,26 @@ CREATE VIEW calculated_gift_fields AS
                FROM (products p
                  JOIN gift_products gp ON (((gp.gift_id = g.id) AND (gp.product_id = p.id)))))
             ELSE g.selling_price
-        END AS price
+        END AS price,
+        CASE
+            WHEN g.calculate_weight_from_products THEN ( SELECT sum(p.weight_in_pounds) AS sum
+               FROM (products p
+                 JOIN gift_products gp ON (((gp.gift_id = g.id) AND (gp.product_id = p.id)))))
+            ELSE g.weight_in_pounds
+        END AS weight_in_pounds
    FROM gifts g;
 
 
 --
--- Name: charges; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: charges; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE charges (
     id integer NOT NULL,
-    charge_id integer,
-    state character varying,
+    customer_order_id integer,
+    cart_id character varying NOT NULL,
+    charge_id character varying,
+    status character varying,
     description text,
     amount_in_cents integer,
     payment_made_at timestamp without time zone,
@@ -208,7 +218,7 @@ ALTER SEQUENCE charges_id_seq OWNED BY charges.id;
 
 
 --
--- Name: conditional_question_options; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: conditional_question_options; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE conditional_question_options (
@@ -240,25 +250,42 @@ ALTER SEQUENCE conditional_question_options_id_seq OWNED BY conditional_question
 
 
 --
--- Name: customer_purchases; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: customer_orders; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE customer_purchases (
+CREATE TABLE customer_orders (
     id integer NOT NULL,
-    charge_id integer,
-    order_id integer,
-    shipment_id integer,
-    shipping_label_id integer,
-    user_id integer,
-    profile_id integer
+    user_id integer NOT NULL,
+    profile_id integer NOT NULL,
+    cart_id character varying NOT NULL,
+    shippo_token_choice character varying,
+    order_number character varying NOT NULL,
+    status character varying NOT NULL,
+    recipient_name character varying NOT NULL,
+    ship_street1 character varying NOT NULL,
+    ship_street2 character varying,
+    ship_street3 character varying,
+    ship_city character varying NOT NULL,
+    ship_state character varying NOT NULL,
+    ship_zip character varying NOT NULL,
+    ship_country character varying NOT NULL,
+    notes text,
+    subtotal_in_cents integer DEFAULT 0 NOT NULL,
+    taxes_in_cents integer DEFAULT 0 NOT NULL,
+    shipping_in_cents integer DEFAULT 0 NOT NULL,
+    shipping_cost_in_cents integer DEFAULT 0 NOT NULL,
+    total_to_charge_in_cents integer DEFAULT 0 NOT NULL,
+    created_on date NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
 --
--- Name: customer_purchases_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: customer_orders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE customer_purchases_id_seq
+CREATE SEQUENCE customer_orders_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -267,14 +294,14 @@ CREATE SEQUENCE customer_purchases_id_seq
 
 
 --
--- Name: customer_purchases_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: customer_orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE customer_purchases_id_seq OWNED BY customer_purchases.id;
+ALTER SEQUENCE customer_orders_id_seq OWNED BY customer_orders.id;
 
 
 --
--- Name: evaluation_recommendations; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: evaluation_recommendations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE evaluation_recommendations (
@@ -309,7 +336,7 @@ ALTER SEQUENCE evaluation_recommendations_id_seq OWNED BY evaluation_recommendat
 
 
 --
--- Name: gift_dislikes; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: gift_dislikes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE gift_dislikes (
@@ -341,7 +368,7 @@ ALTER SEQUENCE gift_dislikes_id_seq OWNED BY gift_dislikes.id;
 
 
 --
--- Name: gift_images; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: gift_images; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE gift_images (
@@ -380,7 +407,7 @@ ALTER SEQUENCE gift_images_id_seq OWNED BY gift_images.id;
 
 
 --
--- Name: gift_likes; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: gift_likes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE gift_likes (
@@ -413,6 +440,38 @@ ALTER SEQUENCE gift_likes_id_seq OWNED BY gift_likes.id;
 
 
 --
+-- Name: gift_parcels; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE gift_parcels (
+    id integer NOT NULL,
+    gift_id integer NOT NULL,
+    parcel_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: gift_parcels_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE gift_parcels_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: gift_parcels_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE gift_parcels_id_seq OWNED BY gift_parcels.id;
+
+
+--
 -- Name: gift_products_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -432,7 +491,7 @@ ALTER SEQUENCE gift_products_id_seq OWNED BY gift_products.id;
 
 
 --
--- Name: gift_question_impacts; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: gift_question_impacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE gift_question_impacts (
@@ -467,7 +526,7 @@ ALTER SEQUENCE gift_question_impacts_id_seq OWNED BY gift_question_impacts.id;
 
 
 --
--- Name: gift_recommendations; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: gift_recommendations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE gift_recommendations (
@@ -501,7 +560,7 @@ ALTER SEQUENCE gift_recommendations_id_seq OWNED BY gift_recommendations.id;
 
 
 --
--- Name: gift_selections; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: gift_selections; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE gift_selections (
@@ -564,7 +623,7 @@ CREATE SEQUENCE internal_order_numbers
 
 
 --
--- Name: invitation_requests; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: invitation_requests; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE invitation_requests (
@@ -598,19 +657,23 @@ ALTER SEQUENCE invitation_requests_id_seq OWNED BY invitation_requests.id;
 
 
 --
--- Name: line_items; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: line_items; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE line_items (
     id integer NOT NULL,
-    gift_id integer,
-    order_id integer,
+    orderable_id integer NOT NULL,
+    orderable_type character varying NOT NULL,
+    order_id integer NOT NULL,
+    order_type character varying NOT NULL,
+    vendor_id integer,
     accounted_for_in_inventory boolean DEFAULT false NOT NULL,
     price_per_each_in_dollars numeric,
     quantity integer,
     total_price_in_dollars numeric,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    related_line_item_id integer
 );
 
 
@@ -634,7 +697,7 @@ ALTER SEQUENCE line_items_id_seq OWNED BY line_items.id;
 
 
 --
--- Name: mvp1b_user_surveys; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: mvp1b_user_surveys; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE mvp1b_user_surveys (
@@ -678,56 +741,7 @@ ALTER SEQUENCE mvp1b_user_surveys_id_seq OWNED BY mvp1b_user_surveys.id;
 
 
 --
--- Name: orders; Type: TABLE; Schema: public; Owner: -; Tablespace:
---
-
-CREATE TABLE orders (
-    id integer NOT NULL,
-    shipping_carrier_id integer,
-    user_id integer,
-    order_number character varying,
-    status character varying,
-    customer_email character varying,
-    customer_name character varying,
-    recipient_name character varying,
-    ship_address_1 character varying,
-    ship_address_2 character varying,
-    ship_address_3 character varying,
-    ship_city character varying,
-    ship_region character varying,
-    ship_postal_code character varying,
-    ship_country character varying,
-    notes text,
-    customer_shipping_cost_in_dollars numeric,
-    actual_shipping_cost_in_dollars numeric,
-    total_price_in_dollars numeric,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    created_on date
-);
-
-
---
--- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE orders_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE orders_id_seq OWNED BY orders.id;
-
-
---
--- Name: parcels; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: parcels; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE parcels (
@@ -736,6 +750,7 @@ CREATE TABLE parcels (
     length_in_inches numeric NOT NULL,
     width_in_inches numeric NOT NULL,
     height_in_inches numeric NOT NULL,
+    weight_in_pounds numeric NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -761,7 +776,7 @@ ALTER SEQUENCE parcels_id_seq OWNED BY parcels.id;
 
 
 --
--- Name: product_categories; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: product_categories; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE product_categories (
@@ -798,7 +813,7 @@ ALTER SEQUENCE product_categories_id_seq OWNED BY product_categories.id;
 
 
 --
--- Name: product_images; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: product_images; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE product_images (
@@ -854,7 +869,7 @@ ALTER SEQUENCE products_id_seq OWNED BY products.id;
 
 
 --
--- Name: profile_set_survey_responses; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: profile_set_survey_responses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE profile_set_survey_responses (
@@ -886,7 +901,7 @@ ALTER SEQUENCE profile_set_survey_responses_id_seq OWNED BY profile_set_survey_r
 
 
 --
--- Name: profile_sets; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: profile_sets; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE profile_sets (
@@ -918,7 +933,7 @@ ALTER SEQUENCE profile_sets_id_seq OWNED BY profile_sets.id;
 
 
 --
--- Name: profile_traits_facets; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: profile_traits_facets; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE profile_traits_facets (
@@ -950,7 +965,7 @@ ALTER SEQUENCE profile_traits_facets_id_seq OWNED BY profile_traits_facets.id;
 
 
 --
--- Name: profile_traits_tags; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: profile_traits_tags; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE profile_traits_tags (
@@ -983,7 +998,7 @@ ALTER SEQUENCE profile_traits_tags_id_seq OWNED BY profile_traits_tags.id;
 
 
 --
--- Name: profile_traits_topics; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: profile_traits_topics; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE profile_traits_topics (
@@ -1014,7 +1029,7 @@ ALTER SEQUENCE profile_traits_topics_id_seq OWNED BY profile_traits_topics.id;
 
 
 --
--- Name: profiles; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: profiles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE profiles (
@@ -1054,47 +1069,21 @@ ALTER SEQUENCE profiles_id_seq OWNED BY profiles.id;
 
 
 --
--- Name: purchase_order_line_items; Type: TABLE; Schema: public; Owner: -; Tablespace:
---
-
-CREATE TABLE purchase_order_line_items (
-    id integer NOT NULL,
-    purchase_order_id integer,
-    line_item_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: purchase_order_line_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE purchase_order_line_items_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: purchase_order_line_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE purchase_order_line_items_id_seq OWNED BY purchase_order_line_items.id;
-
-
---
--- Name: purchase_orders; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: purchase_orders; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE purchase_orders (
     id integer NOT NULL,
     vendor_id integer,
-    order_id integer,
+    customer_order_id integer,
+    gift_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    order_number character varying NOT NULL,
+    created_on date NOT NULL,
+    total_due_in_cents numeric,
+    shipping_in_cents numeric,
+    shipping_cost_in_cents numeric
 );
 
 
@@ -1118,7 +1107,7 @@ ALTER SEQUENCE purchase_orders_id_seq OWNED BY purchase_orders.id;
 
 
 --
--- Name: recipient_gift_dislikes; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: recipient_gift_dislikes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE recipient_gift_dislikes (
@@ -1151,7 +1140,7 @@ ALTER SEQUENCE recipient_gift_dislikes_id_seq OWNED BY recipient_gift_dislikes.i
 
 
 --
--- Name: recipient_gift_likes; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: recipient_gift_likes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE recipient_gift_likes (
@@ -1184,7 +1173,7 @@ ALTER SEQUENCE recipient_gift_likes_id_seq OWNED BY recipient_gift_likes.id;
 
 
 --
--- Name: recipient_gift_selections; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: recipient_gift_selections; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE recipient_gift_selections (
@@ -1216,7 +1205,7 @@ ALTER SEQUENCE recipient_gift_selections_id_seq OWNED BY recipient_gift_selectio
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE schema_migrations (
@@ -1225,12 +1214,14 @@ CREATE TABLE schema_migrations (
 
 
 --
--- Name: shipments; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: shipments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE shipments (
     id integer NOT NULL,
-    order_id integer,
+    customer_order_id integer,
+    purchase_order_id integer,
+    cart_id character varying NOT NULL,
     address_from jsonb,
     address_to jsonb,
     parcel jsonb,
@@ -1261,7 +1252,7 @@ ALTER SEQUENCE shipments_id_seq OWNED BY shipments.id;
 
 
 --
--- Name: shipping_carriers; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: shipping_carriers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE shipping_carriers (
@@ -1292,13 +1283,13 @@ ALTER SEQUENCE shipping_carriers_id_seq OWNED BY shipping_carriers.id;
 
 
 --
--- Name: shipping_labels; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: shipping_labels; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE shipping_labels (
     id integer NOT NULL,
     shipment_id integer,
-    purchase_order_id integer,
+    cart_id character varying NOT NULL,
     tracking_number character varying,
     api_response jsonb,
     success boolean,
@@ -1306,7 +1297,10 @@ CREATE TABLE shipping_labels (
     shippo_object_id character varying,
     error_messages text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    purchase_order_id integer NOT NULL,
+    customer_order_id integer NOT NULL,
+    tracking_url character varying
 );
 
 
@@ -1330,7 +1324,7 @@ ALTER SEQUENCE shipping_labels_id_seq OWNED BY shipping_labels.id;
 
 
 --
--- Name: survey_question_options; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: survey_question_options; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE survey_question_options (
@@ -1367,7 +1361,7 @@ ALTER SEQUENCE survey_question_options_id_seq OWNED BY survey_question_options.i
 
 
 --
--- Name: survey_question_response_options; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: survey_question_response_options; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE survey_question_response_options (
@@ -1399,7 +1393,7 @@ ALTER SEQUENCE survey_question_response_options_id_seq OWNED BY survey_question_
 
 
 --
--- Name: survey_question_responses; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: survey_question_responses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE survey_question_responses (
@@ -1437,7 +1431,7 @@ ALTER SEQUENCE survey_question_responses_id_seq OWNED BY survey_question_respons
 
 
 --
--- Name: survey_questions; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: survey_questions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE survey_questions (
@@ -1486,7 +1480,7 @@ ALTER SEQUENCE survey_questions_id_seq OWNED BY survey_questions.id;
 
 
 --
--- Name: survey_response_trait_evaluations; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: survey_response_trait_evaluations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE survey_response_trait_evaluations (
@@ -1520,7 +1514,7 @@ ALTER SEQUENCE survey_response_trait_evaluations_id_seq OWNED BY survey_response
 
 
 --
--- Name: survey_responses; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: survey_responses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE survey_responses (
@@ -1553,7 +1547,7 @@ ALTER SEQUENCE survey_responses_id_seq OWNED BY survey_responses.id;
 
 
 --
--- Name: survey_sections; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: survey_sections; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE survey_sections (
@@ -1588,7 +1582,7 @@ ALTER SEQUENCE survey_sections_id_seq OWNED BY survey_sections.id;
 
 
 --
--- Name: surveys; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: surveys; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE surveys (
@@ -1623,7 +1617,7 @@ ALTER SEQUENCE surveys_id_seq OWNED BY surveys.id;
 
 
 --
--- Name: taggings; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: taggings; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE taggings (
@@ -1658,7 +1652,7 @@ ALTER SEQUENCE taggings_id_seq OWNED BY taggings.id;
 
 
 --
--- Name: tags; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: tags; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE tags (
@@ -1688,7 +1682,7 @@ ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
 
 
 --
--- Name: training_set_evaluations; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: training_set_evaluations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE training_set_evaluations (
@@ -1720,7 +1714,7 @@ ALTER SEQUENCE training_set_evaluations_id_seq OWNED BY training_set_evaluations
 
 
 --
--- Name: training_set_response_impacts; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: training_set_response_impacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE training_set_response_impacts (
@@ -1753,7 +1747,7 @@ ALTER SEQUENCE training_set_response_impacts_id_seq OWNED BY training_set_respon
 
 
 --
--- Name: training_sets; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: training_sets; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE training_sets (
@@ -1786,7 +1780,7 @@ ALTER SEQUENCE training_sets_id_seq OWNED BY training_sets.id;
 
 
 --
--- Name: trait_response_impacts; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: trait_response_impacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE trait_response_impacts (
@@ -1820,7 +1814,7 @@ ALTER SEQUENCE trait_response_impacts_id_seq OWNED BY trait_response_impacts.id;
 
 
 --
--- Name: trait_training_set_questions; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: trait_training_set_questions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE trait_training_set_questions (
@@ -1853,7 +1847,7 @@ ALTER SEQUENCE trait_training_set_questions_id_seq OWNED BY trait_training_set_q
 
 
 --
--- Name: trait_training_sets; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: trait_training_sets; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE trait_training_sets (
@@ -1885,7 +1879,7 @@ ALTER SEQUENCE trait_training_sets_id_seq OWNED BY trait_training_sets.id;
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE users (
@@ -1935,20 +1929,27 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
--- Name: vendors; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: vendors; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE vendors (
     id integer NOT NULL,
     name character varying,
-    address text,
+    defunct_address text,
     contact_name character varying,
     email character varying,
     phone character varying,
     notes text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    wrapt_sku_code character varying
+    wrapt_sku_code character varying,
+    street1 character varying DEFAULT 'unknown'::character varying NOT NULL,
+    city character varying DEFAULT 'unknown'::character varying NOT NULL,
+    state character varying DEFAULT 'unknown'::character varying NOT NULL,
+    zip character varying DEFAULT 'unknown'::character varying NOT NULL,
+    country character varying DEFAULT 'unknown'::character varying NOT NULL,
+    street2 character varying,
+    street3 character varying
 );
 
 
@@ -1972,6 +1973,42 @@ ALTER SEQUENCE vendors_id_seq OWNED BY vendors.id;
 
 
 --
+-- Name: versions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE versions (
+    id integer NOT NULL,
+    item_type character varying NOT NULL,
+    item_id integer NOT NULL,
+    event character varying NOT NULL,
+    whodunnit character varying,
+    object text,
+    object_changes text,
+    cart_id character varying,
+    created_at timestamp without time zone
+);
+
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE versions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1989,7 +2026,7 @@ ALTER TABLE ONLY conditional_question_options ALTER COLUMN id SET DEFAULT nextva
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY customer_purchases ALTER COLUMN id SET DEFAULT nextval('customer_purchases_id_seq'::regclass);
+ALTER TABLE ONLY customer_orders ALTER COLUMN id SET DEFAULT nextval('customer_orders_id_seq'::regclass);
 
 
 --
@@ -2018,6 +2055,13 @@ ALTER TABLE ONLY gift_images ALTER COLUMN id SET DEFAULT nextval('gift_images_id
 --
 
 ALTER TABLE ONLY gift_likes ALTER COLUMN id SET DEFAULT nextval('gift_likes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY gift_parcels ALTER COLUMN id SET DEFAULT nextval('gift_parcels_id_seq'::regclass);
 
 
 --
@@ -2074,13 +2118,6 @@ ALTER TABLE ONLY line_items ALTER COLUMN id SET DEFAULT nextval('line_items_id_s
 --
 
 ALTER TABLE ONLY mvp1b_user_surveys ALTER COLUMN id SET DEFAULT nextval('mvp1b_user_surveys_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY orders ALTER COLUMN id SET DEFAULT nextval('orders_id_seq'::regclass);
 
 
 --
@@ -2151,13 +2188,6 @@ ALTER TABLE ONLY profile_traits_topics ALTER COLUMN id SET DEFAULT nextval('prof
 --
 
 ALTER TABLE ONLY profiles ALTER COLUMN id SET DEFAULT nextval('profiles_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY purchase_order_line_items ALTER COLUMN id SET DEFAULT nextval('purchase_order_line_items_id_seq'::regclass);
 
 
 --
@@ -2336,7 +2366,14 @@ ALTER TABLE ONLY vendors ALTER COLUMN id SET DEFAULT nextval('vendors_id_seq'::r
 
 
 --
--- Name: ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq'::regclass);
+
+
+--
+-- Name: ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY ar_internal_metadata
@@ -2344,7 +2381,7 @@ ALTER TABLE ONLY ar_internal_metadata
 
 
 --
--- Name: charges_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: charges_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY charges
@@ -2352,7 +2389,7 @@ ALTER TABLE ONLY charges
 
 
 --
--- Name: conditional_question_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: conditional_question_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY conditional_question_options
@@ -2360,15 +2397,15 @@ ALTER TABLE ONLY conditional_question_options
 
 
 --
--- Name: customer_purchases_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: customer_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY customer_purchases
-    ADD CONSTRAINT customer_purchases_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY customer_orders
+    ADD CONSTRAINT customer_orders_pkey PRIMARY KEY (id);
 
 
 --
--- Name: evaluation_recommendations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: evaluation_recommendations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY evaluation_recommendations
@@ -2376,7 +2413,7 @@ ALTER TABLE ONLY evaluation_recommendations
 
 
 --
--- Name: gift_dislikes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: gift_dislikes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY gift_dislikes
@@ -2384,7 +2421,7 @@ ALTER TABLE ONLY gift_dislikes
 
 
 --
--- Name: gift_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: gift_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY gift_images
@@ -2392,7 +2429,7 @@ ALTER TABLE ONLY gift_images
 
 
 --
--- Name: gift_likes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: gift_likes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY gift_likes
@@ -2400,7 +2437,15 @@ ALTER TABLE ONLY gift_likes
 
 
 --
--- Name: gift_products_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: gift_parcels_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY gift_parcels
+    ADD CONSTRAINT gift_parcels_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gift_products_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY gift_products
@@ -2408,7 +2453,7 @@ ALTER TABLE ONLY gift_products
 
 
 --
--- Name: gift_question_impacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: gift_question_impacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY gift_question_impacts
@@ -2416,7 +2461,7 @@ ALTER TABLE ONLY gift_question_impacts
 
 
 --
--- Name: gift_recommendations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: gift_recommendations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY gift_recommendations
@@ -2424,7 +2469,7 @@ ALTER TABLE ONLY gift_recommendations
 
 
 --
--- Name: gift_selections_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: gift_selections_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY gift_selections
@@ -2432,7 +2477,7 @@ ALTER TABLE ONLY gift_selections
 
 
 --
--- Name: gifts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: gifts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY gifts
@@ -2440,7 +2485,7 @@ ALTER TABLE ONLY gifts
 
 
 --
--- Name: invitation_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: invitation_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY invitation_requests
@@ -2448,7 +2493,7 @@ ALTER TABLE ONLY invitation_requests
 
 
 --
--- Name: line_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: line_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY line_items
@@ -2456,7 +2501,7 @@ ALTER TABLE ONLY line_items
 
 
 --
--- Name: mvp1b_user_surveys_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: mvp1b_user_surveys_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY mvp1b_user_surveys
@@ -2464,15 +2509,7 @@ ALTER TABLE ONLY mvp1b_user_surveys
 
 
 --
--- Name: orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
---
-
-ALTER TABLE ONLY orders
-    ADD CONSTRAINT orders_pkey PRIMARY KEY (id);
-
-
---
--- Name: parcels_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: parcels_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY parcels
@@ -2480,7 +2517,7 @@ ALTER TABLE ONLY parcels
 
 
 --
--- Name: product_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: product_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY product_categories
@@ -2488,7 +2525,7 @@ ALTER TABLE ONLY product_categories
 
 
 --
--- Name: product_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: product_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY product_images
@@ -2496,7 +2533,7 @@ ALTER TABLE ONLY product_images
 
 
 --
--- Name: products_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: products_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY products
@@ -2504,7 +2541,7 @@ ALTER TABLE ONLY products
 
 
 --
--- Name: profile_set_survey_responses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: profile_set_survey_responses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY profile_set_survey_responses
@@ -2512,7 +2549,7 @@ ALTER TABLE ONLY profile_set_survey_responses
 
 
 --
--- Name: profile_sets_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: profile_sets_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY profile_sets
@@ -2520,7 +2557,7 @@ ALTER TABLE ONLY profile_sets
 
 
 --
--- Name: profile_traits_facets_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: profile_traits_facets_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY profile_traits_facets
@@ -2528,7 +2565,7 @@ ALTER TABLE ONLY profile_traits_facets
 
 
 --
--- Name: profile_traits_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: profile_traits_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY profile_traits_tags
@@ -2536,7 +2573,7 @@ ALTER TABLE ONLY profile_traits_tags
 
 
 --
--- Name: profile_traits_topics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: profile_traits_topics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY profile_traits_topics
@@ -2544,7 +2581,7 @@ ALTER TABLE ONLY profile_traits_topics
 
 
 --
--- Name: profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY profiles
@@ -2552,15 +2589,7 @@ ALTER TABLE ONLY profiles
 
 
 --
--- Name: purchase_order_line_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
---
-
-ALTER TABLE ONLY purchase_order_line_items
-    ADD CONSTRAINT purchase_order_line_items_pkey PRIMARY KEY (id);
-
-
---
--- Name: purchase_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: purchase_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY purchase_orders
@@ -2568,7 +2597,7 @@ ALTER TABLE ONLY purchase_orders
 
 
 --
--- Name: recipient_gift_dislikes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: recipient_gift_dislikes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY recipient_gift_dislikes
@@ -2576,7 +2605,7 @@ ALTER TABLE ONLY recipient_gift_dislikes
 
 
 --
--- Name: recipient_gift_likes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: recipient_gift_likes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY recipient_gift_likes
@@ -2584,7 +2613,7 @@ ALTER TABLE ONLY recipient_gift_likes
 
 
 --
--- Name: recipient_gift_selections_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: recipient_gift_selections_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY recipient_gift_selections
@@ -2592,7 +2621,7 @@ ALTER TABLE ONLY recipient_gift_selections
 
 
 --
--- Name: schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY schema_migrations
@@ -2600,7 +2629,7 @@ ALTER TABLE ONLY schema_migrations
 
 
 --
--- Name: shipments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: shipments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY shipments
@@ -2608,7 +2637,7 @@ ALTER TABLE ONLY shipments
 
 
 --
--- Name: shipping_carriers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: shipping_carriers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY shipping_carriers
@@ -2616,7 +2645,7 @@ ALTER TABLE ONLY shipping_carriers
 
 
 --
--- Name: shipping_labels_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: shipping_labels_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY shipping_labels
@@ -2624,7 +2653,7 @@ ALTER TABLE ONLY shipping_labels
 
 
 --
--- Name: survey_question_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: survey_question_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY survey_question_options
@@ -2632,7 +2661,7 @@ ALTER TABLE ONLY survey_question_options
 
 
 --
--- Name: survey_question_response_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: survey_question_response_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY survey_question_response_options
@@ -2640,7 +2669,7 @@ ALTER TABLE ONLY survey_question_response_options
 
 
 --
--- Name: survey_question_responses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: survey_question_responses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY survey_question_responses
@@ -2648,7 +2677,7 @@ ALTER TABLE ONLY survey_question_responses
 
 
 --
--- Name: survey_questions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: survey_questions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY survey_questions
@@ -2656,7 +2685,7 @@ ALTER TABLE ONLY survey_questions
 
 
 --
--- Name: survey_response_trait_evaluations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: survey_response_trait_evaluations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY survey_response_trait_evaluations
@@ -2664,7 +2693,7 @@ ALTER TABLE ONLY survey_response_trait_evaluations
 
 
 --
--- Name: survey_responses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: survey_responses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY survey_responses
@@ -2672,7 +2701,7 @@ ALTER TABLE ONLY survey_responses
 
 
 --
--- Name: survey_sections_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: survey_sections_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY survey_sections
@@ -2680,7 +2709,7 @@ ALTER TABLE ONLY survey_sections
 
 
 --
--- Name: surveys_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: surveys_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY surveys
@@ -2688,7 +2717,7 @@ ALTER TABLE ONLY surveys
 
 
 --
--- Name: taggings_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: taggings_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY taggings
@@ -2696,7 +2725,7 @@ ALTER TABLE ONLY taggings
 
 
 --
--- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY tags
@@ -2704,7 +2733,7 @@ ALTER TABLE ONLY tags
 
 
 --
--- Name: training_set_evaluations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: training_set_evaluations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY training_set_evaluations
@@ -2712,7 +2741,7 @@ ALTER TABLE ONLY training_set_evaluations
 
 
 --
--- Name: training_set_response_impacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: training_set_response_impacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY training_set_response_impacts
@@ -2720,7 +2749,7 @@ ALTER TABLE ONLY training_set_response_impacts
 
 
 --
--- Name: training_sets_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: training_sets_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY training_sets
@@ -2728,7 +2757,7 @@ ALTER TABLE ONLY training_sets
 
 
 --
--- Name: trait_response_impacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: trait_response_impacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY trait_response_impacts
@@ -2736,7 +2765,7 @@ ALTER TABLE ONLY trait_response_impacts
 
 
 --
--- Name: trait_training_set_questions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: trait_training_set_questions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY trait_training_set_questions
@@ -2744,7 +2773,7 @@ ALTER TABLE ONLY trait_training_set_questions
 
 
 --
--- Name: trait_training_sets_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: trait_training_sets_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY trait_training_sets
@@ -2752,7 +2781,7 @@ ALTER TABLE ONLY trait_training_sets
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY users
@@ -2760,7 +2789,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: vendors_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: vendors_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY vendors
@@ -2768,776 +2797,753 @@ ALTER TABLE ONLY vendors
 
 
 --
--- Name: eval_rec_survey_response; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY versions
+    ADD CONSTRAINT versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: eval_rec_survey_response; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX eval_rec_survey_response ON evaluation_recommendations USING btree (profile_set_survey_response_id);
 
 
 --
--- Name: index_conditional_question_options_on_survey_question_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_charges_on_customer_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_charges_on_customer_order_id ON charges USING btree (customer_order_id);
+
+
+--
+-- Name: index_conditional_question_options_on_survey_question_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_conditional_question_options_on_survey_question_id ON conditional_question_options USING btree (survey_question_id);
 
 
 --
--- Name: index_conditional_question_options_on_survey_question_option_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_conditional_question_options_on_survey_question_option_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_conditional_question_options_on_survey_question_option_id ON conditional_question_options USING btree (survey_question_option_id);
 
 
 --
--- Name: index_customer_purchases_on_charge_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_customer_orders_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_customer_purchases_on_charge_id ON customer_purchases USING btree (charge_id);
-
-
---
--- Name: index_customer_purchases_on_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
---
-
-CREATE INDEX index_customer_purchases_on_order_id ON customer_purchases USING btree (order_id);
+CREATE INDEX index_customer_orders_on_profile_id ON customer_orders USING btree (profile_id);
 
 
 --
--- Name: index_customer_purchases_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_customer_orders_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_customer_purchases_on_profile_id ON customer_purchases USING btree (profile_id);
-
-
---
--- Name: index_customer_purchases_on_shipment_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
---
-
-CREATE INDEX index_customer_purchases_on_shipment_id ON customer_purchases USING btree (shipment_id);
+CREATE INDEX index_customer_orders_on_user_id ON customer_orders USING btree (user_id);
 
 
 --
--- Name: index_customer_purchases_on_shipping_label_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
---
-
-CREATE INDEX index_customer_purchases_on_shipping_label_id ON customer_purchases USING btree (shipping_label_id);
-
-
---
--- Name: index_customer_purchases_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
---
-
-CREATE INDEX index_customer_purchases_on_user_id ON customer_purchases USING btree (user_id);
-
-
---
--- Name: index_evaluation_recommendations_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_evaluation_recommendations_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_evaluation_recommendations_on_gift_id ON evaluation_recommendations USING btree (gift_id);
 
 
 --
--- Name: index_evaluation_recommendations_on_training_set_evaluation_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_evaluation_recommendations_on_training_set_evaluation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_evaluation_recommendations_on_training_set_evaluation_id ON evaluation_recommendations USING btree (training_set_evaluation_id);
 
 
 --
--- Name: index_gift_dislikes_on_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_dislikes_on_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_dislikes_on_created_at ON gift_dislikes USING btree (created_at);
 
 
 --
--- Name: index_gift_dislikes_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_dislikes_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_dislikes_on_gift_id ON gift_dislikes USING btree (gift_id);
 
 
 --
--- Name: index_gift_dislikes_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_dislikes_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_dislikes_on_profile_id ON gift_dislikes USING btree (profile_id);
 
 
 --
--- Name: index_gift_images_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_images_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_images_on_gift_id ON gift_images USING btree (gift_id);
 
 
 --
--- Name: index_gift_images_on_primary; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_images_on_primary; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_images_on_primary ON gift_images USING btree ("primary");
 
 
 --
--- Name: index_gift_images_on_product_image_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_images_on_product_image_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_images_on_product_image_id ON gift_images USING btree (product_image_id);
 
 
 --
--- Name: index_gift_likes_on_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_likes_on_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_likes_on_created_at ON gift_likes USING btree (created_at);
 
 
 --
--- Name: index_gift_likes_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_likes_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_likes_on_gift_id ON gift_likes USING btree (gift_id);
 
 
 --
--- Name: index_gift_likes_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_likes_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_likes_on_profile_id ON gift_likes USING btree (profile_id);
 
 
 --
--- Name: index_gift_products_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_parcels_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_gift_parcels_on_gift_id ON gift_parcels USING btree (gift_id);
+
+
+--
+-- Name: index_gift_parcels_on_parcel_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_gift_parcels_on_parcel_id ON gift_parcels USING btree (parcel_id);
+
+
+--
+-- Name: index_gift_products_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_products_on_gift_id ON gift_products USING btree (gift_id);
 
 
 --
--- Name: index_gift_products_on_product_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_products_on_product_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_products_on_product_id ON gift_products USING btree (product_id);
 
 
 --
--- Name: index_gift_question_impacts_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_question_impacts_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_question_impacts_on_gift_id ON gift_question_impacts USING btree (gift_id);
 
 
 --
--- Name: index_gift_question_impacts_on_survey_question_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_question_impacts_on_survey_question_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_question_impacts_on_survey_question_id ON gift_question_impacts USING btree (survey_question_id);
 
 
 --
--- Name: index_gift_question_impacts_on_training_set_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_question_impacts_on_training_set_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_question_impacts_on_training_set_id ON gift_question_impacts USING btree (training_set_id);
 
 
 --
--- Name: index_gift_recommendations_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_recommendations_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_recommendations_on_gift_id ON gift_recommendations USING btree (gift_id);
 
 
 --
--- Name: index_gift_recommendations_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_recommendations_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_recommendations_on_profile_id ON gift_recommendations USING btree (profile_id);
 
 
 --
--- Name: index_gift_selections_on_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_selections_on_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_selections_on_created_at ON gift_selections USING btree (created_at);
 
 
 --
--- Name: index_gift_selections_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_selections_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_selections_on_gift_id ON gift_selections USING btree (gift_id);
 
 
 --
--- Name: index_gift_selections_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gift_selections_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gift_selections_on_profile_id ON gift_selections USING btree (profile_id);
 
 
 --
--- Name: index_gifts_on_product_category_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gifts_on_product_category_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gifts_on_product_category_id ON gifts USING btree (product_category_id);
 
 
 --
--- Name: index_gifts_on_wrapt_sku; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_gifts_on_wrapt_sku; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_gifts_on_wrapt_sku ON gifts USING btree (wrapt_sku);
 
 
 --
--- Name: index_invitation_requests_on_invited_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_invitation_requests_on_invited_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_invitation_requests_on_invited_user_id ON invitation_requests USING btree (invited_user_id);
 
 
 --
--- Name: index_line_items_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_line_items_on_vendor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_line_items_on_gift_id ON line_items USING btree (gift_id);
+CREATE INDEX index_line_items_on_vendor_id ON line_items USING btree (vendor_id);
 
 
 --
--- Name: index_mvp1b_user_surveys_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_mvp1b_user_surveys_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_mvp1b_user_surveys_on_user_id ON mvp1b_user_surveys USING btree (user_id);
 
 
 --
--- Name: index_orders_on_shipping_carrier_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
---
-
-CREATE INDEX index_orders_on_shipping_carrier_id ON orders USING btree (shipping_carrier_id);
-
-
---
--- Name: index_orders_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
---
-
-CREATE INDEX index_orders_on_user_id ON orders USING btree (user_id);
-
-
---
--- Name: index_product_categories_on_lft; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_product_categories_on_lft; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_product_categories_on_lft ON product_categories USING btree (lft);
 
 
 --
--- Name: index_product_categories_on_parent_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_product_categories_on_parent_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_product_categories_on_parent_id ON product_categories USING btree (parent_id);
 
 
 --
--- Name: index_product_categories_on_rgt; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_product_categories_on_rgt; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_product_categories_on_rgt ON product_categories USING btree (rgt);
 
 
 --
--- Name: index_product_categories_on_wrapt_sku_code; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_product_categories_on_wrapt_sku_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_product_categories_on_wrapt_sku_code ON product_categories USING btree (wrapt_sku_code);
 
 
 --
--- Name: index_product_images_on_primary; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_product_images_on_primary; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_product_images_on_primary ON product_images USING btree ("primary");
 
 
 --
--- Name: index_product_images_on_product_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_product_images_on_product_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_product_images_on_product_id ON product_images USING btree (product_id);
 
 
 --
--- Name: index_products_on_product_category_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_products_on_product_category_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_products_on_product_category_id ON products USING btree (product_category_id);
 
 
 --
--- Name: index_products_on_vendor_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_products_on_vendor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_products_on_vendor_id ON products USING btree (vendor_id);
 
 
 --
--- Name: index_products_on_wrapt_sku; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_products_on_wrapt_sku; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_products_on_wrapt_sku ON products USING btree (wrapt_sku);
 
 
 --
--- Name: index_profile_set_survey_responses_on_profile_set_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_profile_set_survey_responses_on_profile_set_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_profile_set_survey_responses_on_profile_set_id ON profile_set_survey_responses USING btree (profile_set_id);
 
 
 --
--- Name: index_profile_sets_on_survey_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_profile_sets_on_survey_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_profile_sets_on_survey_id ON profile_sets USING btree (survey_id);
 
 
 --
--- Name: index_profile_traits_facets_on_topic_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_profile_traits_facets_on_topic_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_profile_traits_facets_on_topic_id ON profile_traits_facets USING btree (topic_id);
 
 
 --
--- Name: index_profile_traits_tags_on_facet_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_profile_traits_tags_on_facet_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_profile_traits_tags_on_facet_id ON profile_traits_tags USING btree (facet_id);
 
 
 --
--- Name: index_profiles_on_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_profiles_on_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_profiles_on_created_at ON profiles USING btree (created_at);
 
 
 --
--- Name: index_profiles_on_recipient_invited_at; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_profiles_on_recipient_invited_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_profiles_on_recipient_invited_at ON profiles USING btree (recipient_invited_at);
 
 
 --
--- Name: index_purchase_order_line_items_on_line_item_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_purchase_orders_on_customer_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_purchase_order_line_items_on_line_item_id ON purchase_order_line_items USING btree (line_item_id);
-
-
---
--- Name: index_purchase_order_line_items_on_purchase_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
---
-
-CREATE INDEX index_purchase_order_line_items_on_purchase_order_id ON purchase_order_line_items USING btree (purchase_order_id);
+CREATE INDEX index_purchase_orders_on_customer_order_id ON purchase_orders USING btree (customer_order_id);
 
 
 --
--- Name: index_purchase_orders_on_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_purchase_orders_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_purchase_orders_on_order_id ON purchase_orders USING btree (order_id);
+CREATE INDEX index_purchase_orders_on_gift_id ON purchase_orders USING btree (gift_id);
 
 
 --
--- Name: index_purchase_orders_on_vendor_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_purchase_orders_on_vendor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_purchase_orders_on_vendor_id ON purchase_orders USING btree (vendor_id);
 
 
 --
--- Name: index_question_response_on_survey_response_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_question_response_on_survey_response_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_question_response_on_survey_response_id ON survey_question_responses USING btree (survey_response_id);
 
 
 --
--- Name: index_recipient_gift_dislikes_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_recipient_gift_dislikes_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_recipient_gift_dislikes_on_gift_id ON recipient_gift_dislikes USING btree (gift_id);
 
 
 --
--- Name: index_recipient_gift_dislikes_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_recipient_gift_dislikes_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_recipient_gift_dislikes_on_profile_id ON recipient_gift_dislikes USING btree (profile_id);
 
 
 --
--- Name: index_recipient_gift_likes_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_recipient_gift_likes_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_recipient_gift_likes_on_gift_id ON recipient_gift_likes USING btree (gift_id);
 
 
 --
--- Name: index_recipient_gift_likes_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_recipient_gift_likes_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_recipient_gift_likes_on_profile_id ON recipient_gift_likes USING btree (profile_id);
 
 
 --
--- Name: index_recipient_gift_selections_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_recipient_gift_selections_on_gift_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_recipient_gift_selections_on_gift_id ON recipient_gift_selections USING btree (gift_id);
 
 
 --
--- Name: index_recipient_gift_selections_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_recipient_gift_selections_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_recipient_gift_selections_on_profile_id ON recipient_gift_selections USING btree (profile_id);
 
 
 --
--- Name: index_response_impacts_option_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_response_impacts_option_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_response_impacts_option_id ON training_set_response_impacts USING btree (survey_question_option_id);
 
 
 --
--- Name: index_response_trait_evals_on_trait_training_set; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_response_trait_evals_on_trait_training_set; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_response_trait_evals_on_trait_training_set ON survey_response_trait_evaluations USING btree (trait_training_set_id);
 
 
 --
--- Name: index_shipments_on_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_shipments_on_customer_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_shipments_on_order_id ON shipments USING btree (order_id);
+CREATE INDEX index_shipments_on_customer_order_id ON shipments USING btree (customer_order_id);
 
 
 --
--- Name: index_shipping_labels_on_purchase_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_shipments_on_purchase_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_shipments_on_purchase_order_id ON shipments USING btree (purchase_order_id);
+
+
+--
+-- Name: index_shipping_labels_on_customer_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_shipping_labels_on_customer_order_id ON shipping_labels USING btree (customer_order_id);
+
+
+--
+-- Name: index_shipping_labels_on_purchase_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_shipping_labels_on_purchase_order_id ON shipping_labels USING btree (purchase_order_id);
 
 
 --
--- Name: index_shipping_labels_on_shipment_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_shipping_labels_on_shipment_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_shipping_labels_on_shipment_id ON shipping_labels USING btree (shipment_id);
 
 
 --
--- Name: index_survey_question_options_on_survey_question_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_survey_question_options_on_survey_question_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_survey_question_options_on_survey_question_id ON survey_question_options USING btree (survey_question_id);
 
 
 --
--- Name: index_survey_question_responses_on_answered_at; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_survey_question_responses_on_answered_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_survey_question_responses_on_answered_at ON survey_question_responses USING btree (answered_at);
 
 
 --
--- Name: index_survey_question_responses_on_survey_question_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_survey_question_responses_on_survey_question_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_survey_question_responses_on_survey_question_id ON survey_question_responses USING btree (survey_question_id);
 
 
 --
--- Name: index_survey_questions_on_survey_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_survey_questions_on_survey_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_survey_questions_on_survey_id ON survey_questions USING btree (survey_id);
 
 
 --
--- Name: index_survey_questions_on_survey_section_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_survey_questions_on_survey_section_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_survey_questions_on_survey_section_id ON survey_questions USING btree (survey_section_id);
 
 
 --
--- Name: index_survey_response_trait_evaluations_on_response_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_survey_response_trait_evaluations_on_response_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_survey_response_trait_evaluations_on_response_id ON survey_response_trait_evaluations USING btree (response_id);
 
 
 --
--- Name: index_survey_responses_on_completed_at; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_survey_responses_on_completed_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_survey_responses_on_completed_at ON survey_responses USING btree (completed_at);
 
 
 --
--- Name: index_survey_responses_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_survey_responses_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_survey_responses_on_profile_id ON survey_responses USING btree (profile_id);
 
 
 --
--- Name: index_survey_responses_on_survey_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_survey_responses_on_survey_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_survey_responses_on_survey_id ON survey_responses USING btree (survey_id);
 
 
 --
--- Name: index_survey_sections_on_survey_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_survey_sections_on_survey_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_survey_sections_on_survey_id ON survey_sections USING btree (survey_id);
 
 
 --
--- Name: index_taggings_on_context; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_taggings_on_context; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_taggings_on_context ON taggings USING btree (context);
 
 
 --
--- Name: index_taggings_on_tag_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_taggings_on_tag_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_taggings_on_tag_id ON taggings USING btree (tag_id);
 
 
 --
--- Name: index_taggings_on_taggable_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_taggings_on_taggable_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_taggings_on_taggable_id ON taggings USING btree (taggable_id);
 
 
 --
--- Name: index_taggings_on_taggable_id_and_taggable_type_and_context; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_taggings_on_taggable_id_and_taggable_type_and_context; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_taggings_on_taggable_id_and_taggable_type_and_context ON taggings USING btree (taggable_id, taggable_type, context);
 
 
 --
--- Name: index_taggings_on_taggable_type; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_taggings_on_taggable_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_taggings_on_taggable_type ON taggings USING btree (taggable_type);
 
 
 --
--- Name: index_taggings_on_tagger_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_taggings_on_tagger_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_taggings_on_tagger_id ON taggings USING btree (tagger_id);
 
 
 --
--- Name: index_taggings_on_tagger_id_and_tagger_type; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_taggings_on_tagger_id_and_tagger_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_taggings_on_tagger_id_and_tagger_type ON taggings USING btree (tagger_id, tagger_type);
 
 
 --
--- Name: index_tags_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_tags_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_tags_on_name ON tags USING btree (name);
 
 
 --
--- Name: index_training_set_evaluations_on_training_set_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_training_set_evaluations_on_training_set_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_training_set_evaluations_on_training_set_id ON training_set_evaluations USING btree (training_set_id);
 
 
 --
--- Name: index_training_set_response_impacts_on_gift_question_impact_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_training_set_response_impacts_on_gift_question_impact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_training_set_response_impacts_on_gift_question_impact_id ON training_set_response_impacts USING btree (gift_question_impact_id);
 
 
 --
--- Name: index_training_sets_on_survey_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_training_sets_on_survey_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_training_sets_on_survey_id ON training_sets USING btree (survey_id);
 
 
 --
--- Name: index_trait_evaluations_on_matched_tag_id_counts; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_trait_evaluations_on_matched_tag_id_counts; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_trait_evaluations_on_matched_tag_id_counts ON survey_response_trait_evaluations USING gin (matched_tag_id_counts);
 
 
 --
--- Name: index_trait_response_impacts_on_profile_traits_tag_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_trait_response_impacts_on_profile_traits_tag_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_trait_response_impacts_on_profile_traits_tag_id ON trait_response_impacts USING btree (profile_traits_tag_id);
 
 
 --
--- Name: index_trait_response_impacts_on_survey_question_option_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_trait_response_impacts_on_survey_question_option_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_trait_response_impacts_on_survey_question_option_id ON trait_response_impacts USING btree (survey_question_option_id);
 
 
 --
--- Name: index_trait_response_impacts_on_trait_training_set_question_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_trait_response_impacts_on_trait_training_set_question_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_trait_response_impacts_on_trait_training_set_question_id ON trait_response_impacts USING btree (trait_training_set_question_id);
 
 
 --
--- Name: index_trait_training_set_questions_on_facet_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_trait_training_set_questions_on_facet_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_trait_training_set_questions_on_facet_id ON trait_training_set_questions USING btree (facet_id);
 
 
 --
--- Name: index_trait_training_set_questions_on_question_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_trait_training_set_questions_on_question_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_trait_training_set_questions_on_question_id ON trait_training_set_questions USING btree (question_id);
 
 
 --
--- Name: index_trait_training_set_questions_on_trait_training_set_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_trait_training_set_questions_on_trait_training_set_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_trait_training_set_questions_on_trait_training_set_id ON trait_training_set_questions USING btree (trait_training_set_id);
 
 
 --
--- Name: index_trait_training_sets_on_survey_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_trait_training_sets_on_survey_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_trait_training_sets_on_survey_id ON trait_training_sets USING btree (survey_id);
 
 
 --
--- Name: index_users_on_activation_token; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_users_on_activation_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_users_on_activation_token ON users USING btree (activation_token);
 
 
 --
--- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 
 
 --
--- Name: index_users_on_recipient_referring_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_users_on_recipient_referring_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_users_on_recipient_referring_profile_id ON users USING btree (recipient_referring_profile_id);
 
 
 --
--- Name: index_users_on_remember_me_token; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_users_on_remember_me_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_users_on_remember_me_token ON users USING btree (remember_me_token);
 
 
 --
--- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
 
 
 --
--- Name: index_vendors_on_wrapt_sku_code; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_vendors_on_wrapt_sku_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_vendors_on_wrapt_sku_code ON vendors USING btree (wrapt_sku_code);
 
 
 --
--- Name: response_options_on_option_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (item_type, item_id);
+
+
+--
+-- Name: response_options_on_option_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX response_options_on_option_id ON survey_question_response_options USING btree (survey_question_option_id);
 
 
 --
--- Name: response_options_on_response_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: response_options_on_response_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX response_options_on_response_id ON survey_question_response_options USING btree (survey_question_response_id);
 
 
 --
--- Name: taggings_idx; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: taggings_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX taggings_idx ON taggings USING btree (tag_id, taggable_id, taggable_type, context, tagger_id, tagger_type);
 
 
 --
--- Name: taggings_idy; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: taggings_idy; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX taggings_idy ON taggings USING btree (taggable_id, taggable_type, tagger_id, context);
-
-
---
--- Name: attempt_calculated_gift_fields_del; Type: RULE; Schema: public; Owner: -
---
-
-CREATE RULE attempt_calculated_gift_fields_del AS
-    ON DELETE TO calculated_gift_fields DO INSTEAD NOTHING;
-
-
---
--- Name: attempt_calculated_gift_fields_up; Type: RULE; Schema: public; Owner: -
---
-
-CREATE RULE attempt_calculated_gift_fields_up AS
-    ON UPDATE TO calculated_gift_fields DO INSTEAD NOTHING;
-
-
---
--- Name: fk_rails_076023328d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY customer_purchases
-    ADD CONSTRAINT fk_rails_076023328d FOREIGN KEY (shipment_id) REFERENCES shipments(id);
 
 
 --
@@ -3546,6 +3552,22 @@ ALTER TABLE ONLY customer_purchases
 
 ALTER TABLE ONLY evaluation_recommendations
     ADD CONSTRAINT fk_rails_0d540f40de FOREIGN KEY (profile_set_survey_response_id) REFERENCES profile_set_survey_responses(id);
+
+
+--
+-- Name: fk_rails_118f1565ac; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY gift_parcels
+    ADD CONSTRAINT fk_rails_118f1565ac FOREIGN KEY (parcel_id) REFERENCES parcels(id);
+
+
+--
+-- Name: fk_rails_13c04d48c9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY shipping_labels
+    ADD CONSTRAINT fk_rails_13c04d48c9 FOREIGN KEY (customer_order_id) REFERENCES customer_orders(id);
 
 
 --
@@ -3581,11 +3603,43 @@ ALTER TABLE ONLY trait_training_set_questions
 
 
 --
+-- Name: fk_rails_253ed9ebe3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY shipments
+    ADD CONSTRAINT fk_rails_253ed9ebe3 FOREIGN KEY (purchase_order_id) REFERENCES purchase_orders(id);
+
+
+--
+-- Name: fk_rails_297dcce5fd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY purchase_orders
+    ADD CONSTRAINT fk_rails_297dcce5fd FOREIGN KEY (customer_order_id) REFERENCES customer_orders(id);
+
+
+--
 -- Name: fk_rails_2c01fd8bb6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY profile_set_survey_responses
     ADD CONSTRAINT fk_rails_2c01fd8bb6 FOREIGN KEY (profile_set_id) REFERENCES profile_sets(id);
+
+
+--
+-- Name: fk_rails_3eeeba9af9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY gift_parcels
+    ADD CONSTRAINT fk_rails_3eeeba9af9 FOREIGN KEY (gift_id) REFERENCES gifts(id);
+
+
+--
+-- Name: fk_rails_4014fb2166; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY shipments
+    ADD CONSTRAINT fk_rails_4014fb2166 FOREIGN KEY (customer_order_id) REFERENCES customer_orders(id);
 
 
 --
@@ -3605,19 +3659,19 @@ ALTER TABLE ONLY survey_question_responses
 
 
 --
--- Name: fk_rails_5007b05b14; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY customer_purchases
-    ADD CONSTRAINT fk_rails_5007b05b14 FOREIGN KEY (user_id) REFERENCES users(id);
-
-
---
 -- Name: fk_rails_52615103db; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY products
     ADD CONSTRAINT fk_rails_52615103db FOREIGN KEY (vendor_id) REFERENCES vendors(id);
+
+
+--
+-- Name: fk_rails_53aa67bd89; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY line_items
+    ADD CONSTRAINT fk_rails_53aa67bd89 FOREIGN KEY (vendor_id) REFERENCES vendors(id);
 
 
 --
@@ -3653,27 +3707,11 @@ ALTER TABLE ONLY gift_recommendations
 
 
 --
--- Name: fk_rails_62918e37d2; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY customer_purchases
-    ADD CONSTRAINT fk_rails_62918e37d2 FOREIGN KEY (shipping_label_id) REFERENCES shipping_labels(id);
-
-
---
 -- Name: fk_rails_6739b67360; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY shipping_labels
     ADD CONSTRAINT fk_rails_6739b67360 FOREIGN KEY (purchase_order_id) REFERENCES purchase_orders(id);
-
-
---
--- Name: fk_rails_68a1b3d5ee; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY purchase_order_line_items
-    ADD CONSTRAINT fk_rails_68a1b3d5ee FOREIGN KEY (line_item_id) REFERENCES line_items(id);
 
 
 --
@@ -3685,19 +3723,19 @@ ALTER TABLE ONLY trait_response_impacts
 
 
 --
--- Name: fk_rails_6ab48a186b; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY orders
-    ADD CONSTRAINT fk_rails_6ab48a186b FOREIGN KEY (shipping_carrier_id) REFERENCES shipping_carriers(id);
-
-
---
 -- Name: fk_rails_6ad12784ff; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY gift_question_impacts
     ADD CONSTRAINT fk_rails_6ad12784ff FOREIGN KEY (survey_question_id) REFERENCES survey_questions(id);
+
+
+--
+-- Name: fk_rails_6e3e73ceac; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY customer_orders
+    ADD CONSTRAINT fk_rails_6e3e73ceac FOREIGN KEY (profile_id) REFERENCES profiles(id);
 
 
 --
@@ -3773,11 +3811,11 @@ ALTER TABLE ONLY gift_dislikes
 
 
 --
--- Name: fk_rails_9892d6a938; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_90249e6b2c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY shipments
-    ADD CONSTRAINT fk_rails_9892d6a938 FOREIGN KEY (order_id) REFERENCES orders(id);
+ALTER TABLE ONLY customer_orders
+    ADD CONSTRAINT fk_rails_90249e6b2c FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -3786,6 +3824,14 @@ ALTER TABLE ONLY shipments
 
 ALTER TABLE ONLY survey_sections
     ADD CONSTRAINT fk_rails_9b63456ac4 FOREIGN KEY (survey_id) REFERENCES surveys(id);
+
+
+--
+-- Name: fk_rails_9d72c18252; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY charges
+    ADD CONSTRAINT fk_rails_9d72c18252 FOREIGN KEY (customer_order_id) REFERENCES customer_orders(id);
 
 
 --
@@ -3802,14 +3848,6 @@ ALTER TABLE ONLY profile_traits_tags
 
 ALTER TABLE ONLY gift_selections
     ADD CONSTRAINT fk_rails_a3d269d472 FOREIGN KEY (gift_id) REFERENCES gifts(id);
-
-
---
--- Name: fk_rails_a841c2fcee; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY purchase_order_line_items
-    ADD CONSTRAINT fk_rails_a841c2fcee FOREIGN KEY (purchase_order_id) REFERENCES purchase_orders(id);
 
 
 --
@@ -3842,6 +3880,14 @@ ALTER TABLE ONLY training_set_response_impacts
 
 ALTER TABLE ONLY conditional_question_options
     ADD CONSTRAINT fk_rails_bc25ee4e95 FOREIGN KEY (survey_question_option_id) REFERENCES survey_question_options(id);
+
+
+--
+-- Name: fk_rails_bd30155fe7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY purchase_orders
+    ADD CONSTRAINT fk_rails_bd30155fe7 FOREIGN KEY (gift_id) REFERENCES gifts(id);
 
 
 --
@@ -3885,14 +3931,6 @@ ALTER TABLE ONLY gift_question_impacts
 
 
 --
--- Name: fk_rails_d42aea1f2e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY customer_purchases
-    ADD CONSTRAINT fk_rails_d42aea1f2e FOREIGN KEY (charge_id) REFERENCES charges(id);
-
-
---
 -- Name: fk_rails_d66b19ca6c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3901,27 +3939,11 @@ ALTER TABLE ONLY survey_responses
 
 
 --
--- Name: fk_rails_daf14e8a00; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY customer_purchases
-    ADD CONSTRAINT fk_rails_daf14e8a00 FOREIGN KEY (order_id) REFERENCES orders(id);
-
-
---
 -- Name: fk_rails_dcc7f5b054; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY gift_dislikes
     ADD CONSTRAINT fk_rails_dcc7f5b054 FOREIGN KEY (gift_id) REFERENCES gifts(id);
-
-
---
--- Name: fk_rails_e0b97cce56; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY purchase_orders
-    ADD CONSTRAINT fk_rails_e0b97cce56 FOREIGN KEY (order_id) REFERENCES orders(id);
 
 
 --
@@ -3954,30 +3976,6 @@ ALTER TABLE ONLY gifts
 
 ALTER TABLE ONLY evaluation_recommendations
     ADD CONSTRAINT fk_rails_f2f9a0258f FOREIGN KEY (training_set_evaluation_id) REFERENCES training_set_evaluations(id);
-
-
---
--- Name: fk_rails_f39eaf89b2; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY line_items
-    ADD CONSTRAINT fk_rails_f39eaf89b2 FOREIGN KEY (gift_id) REFERENCES gifts(id);
-
-
---
--- Name: fk_rails_f618a88677; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY customer_purchases
-    ADD CONSTRAINT fk_rails_f618a88677 FOREIGN KEY (profile_id) REFERENCES profiles(id);
-
-
---
--- Name: fk_rails_f868b47f6a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY orders
-    ADD CONSTRAINT fk_rails_f868b47f6a FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -4175,4 +4173,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170609164649'),
 ('20170705192456'),
 ('20170829132311'),
-('20170831164959');
+('20170831164959'),
+('20170919152105'),
+('20170920152258'),
+('20170920163019'),
+('20170922134827'),
+('20170925171024');
+
+

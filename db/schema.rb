@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170922134827) do
+ActiveRecord::Schema.define(version: 20170925171024) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -188,18 +188,17 @@ ActiveRecord::Schema.define(version: 20170922134827) do
     t.decimal  "selling_price",                  precision: 10, scale: 2
     t.decimal  "cost",                           precision: 10, scale: 2
     t.string   "wrapt_sku"
-    t.date     "date_available",                                          default: '1900-01-01', null: false
-    t.date     "date_discontinued",                                       default: '2999-12-31', null: false
-    t.datetime "created_at",                                                                     null: false
-    t.datetime "updated_at",                                                                     null: false
-    t.boolean  "calculate_cost_from_products",                            default: true,         null: false
-    t.boolean  "calculate_price_from_products",                           default: true,         null: false
+    t.datetime "created_at",                                                              null: false
+    t.datetime "updated_at",                                                              null: false
+    t.boolean  "calculate_cost_from_products",                            default: true,  null: false
+    t.boolean  "calculate_price_from_products",                           default: true,  null: false
     t.integer  "product_category_id"
     t.integer  "product_subcategory_id"
     t.integer  "source_product_id"
-    t.boolean  "featured",                                                default: false,        null: false
-    t.boolean  "calculate_weight_from_products",                          default: true,         null: false
+    t.boolean  "featured",                                                default: false, null: false
+    t.boolean  "calculate_weight_from_products",                          default: true,  null: false
     t.decimal  "weight_in_pounds"
+    t.boolean  "available",                                               default: true,  null: false
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
     t.index ["wrapt_sku"], name: "index_gifts_on_wrapt_sku", using: :btree
   end

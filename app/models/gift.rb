@@ -29,13 +29,6 @@ class Gift < ApplicationRecord
 
   before_destroy -> { raise "Cannot destroy" unless deleteable? }
 
-  # These are implemented as not null in the database
-  # so we can treat them as not null for sorting purposese
-  # and nullable for display purposes
-  DEFAULT_DATE_AVAILABLE = Date.new(1900, 1, 1)
-  DEFAULT_DATE_DISCONTINUED = Date.new(2999, 12, 31)
-
-
   def self.search search_params
     self.all.merge(GiftSearch.new(search_params).to_scope)
   end
@@ -47,10 +40,6 @@ class Gift < ApplicationRecord
   def vendor
     # Assumption is that all the products of a gift are the same vendor
     products.first.vendor
-  end
-
-  def available?
-    date_available <= Date.today && date_discontinued >= Date.today
   end
 
   def experience?
@@ -67,14 +56,6 @@ class Gift < ApplicationRecord
 
   def name
     title
-  end
-
-  def display_date_available format = '%B %-d, %Y'
-    (date_available == DEFAULT_DATE_AVAILABLE) ? '' : date_available.strftime(format)
-  end
-
-  def display_date_discontinued format = '%B %-d, %Y'
-    (date_discontinued == DEFAULT_DATE_DISCONTINUED) ? '' : date_discontinued.strftime(format)
   end
 
   def cost
