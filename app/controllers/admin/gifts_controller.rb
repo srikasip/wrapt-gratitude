@@ -60,7 +60,8 @@ module Admin
         :product_category_id,
         :product_subcategory_id,
         :featured,
-        :tag_list
+        :tag_list,
+        :gift_parcel_attributes => [:id, :parcel_id, :gift_id]
         )
     end
 

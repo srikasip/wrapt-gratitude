@@ -31,6 +31,10 @@
       %b Available to Customers?
       = @gift.available?
 
+    %p
+      %b Box:
+      = @gift.parcel&.description
+
     %h3 Products
     - if @gift.products.none?
       %p

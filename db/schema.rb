@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170925184052) do
+ActiveRecord::Schema.define(version: 20170925193704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -250,13 +250,14 @@ ActiveRecord::Schema.define(version: 20170925184052) do
   end
 
   create_table "parcels", force: :cascade do |t|
-    t.string   "description",      null: false
-    t.decimal  "length_in_inches", null: false
-    t.decimal  "width_in_inches",  null: false
-    t.decimal  "height_in_inches", null: false
-    t.decimal  "weight_in_pounds", null: false
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.string   "description",                     null: false
+    t.decimal  "length_in_inches",                null: false
+    t.decimal  "width_in_inches",                 null: false
+    t.decimal  "height_in_inches",                null: false
+    t.decimal  "weight_in_pounds",                null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "active",           default: true, null: false
   end
 
   create_table "product_categories", force: :cascade do |t|

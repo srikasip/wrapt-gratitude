@@ -29,6 +29,8 @@ class Gift < ApplicationRecord
 
   before_destroy -> { raise "Cannot destroy" unless deleteable? }
 
+  accepts_nested_attributes_for :gift_parcel
+
   def self.search search_params
     self.all.merge(GiftSearch.new(search_params).to_scope)
   end

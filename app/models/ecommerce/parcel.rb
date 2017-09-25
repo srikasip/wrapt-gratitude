@@ -9,6 +9,8 @@ class Parcel < ApplicationRecord
   validates :width_in_inches,  numericality: { greater_than: 0 }
   validates :width_in_inches,  presence: true
 
+  scope :active, -> { where(active: true) }
+
   def self.dummy_parcel
     @dummy_parcel ||= create!({
       description: '6 Inch Cube (dummy)',

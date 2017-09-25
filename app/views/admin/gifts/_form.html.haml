@@ -19,6 +19,11 @@
         = f.association :product_category, as: :select, collection: ProductCategory.categories, input_html: {data: {behavior: 'product-category-input'}}
         = f.association :product_subcategory, as: :select, collection: (@gift.product_category&.children || []), input_html: {data: {behavior: 'product-subcategory-input'}}
         = f.input :wrapt_sku, label: 'Wrapt SKU', disabled: true
+
+        = f.fields_for :gift_parcel do |gp|
+          = gp.input :parcel_id, collection: Parcel.active.all, value_method: :id, label_method: :description, input_html: {}
+          = gp.input :gift_id, as: :hidden, value: @gift.id
+
     = f.input :available, label: 'Availabe to Customers'
     = f.input :featured, label: 'Promote this gift in the recommendations'
 
