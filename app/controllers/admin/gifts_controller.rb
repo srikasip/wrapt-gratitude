@@ -15,7 +15,7 @@ module Admin
     end
 
     def new
-      @gift = Gift.new date_available: Date.today, product_category: Gift.default_product_category
+      @gift = Gift.new product_category: Gift.default_product_category
     end
 
     def edit
@@ -43,7 +43,7 @@ module Admin
       redirect_to admin_gifts_url(context_params), notice: "#{@gift.title} has been deleted."
     end
 
-    
+
     private def set_gift
       @gift = Gift.find(params[:id])
     end
@@ -54,8 +54,7 @@ module Admin
         :selling_price,
         :cost,
         :wrapt_sku,
-        :date_available,
-        :date_discontinued,
+        :available,
         :calculate_cost_from_products,
         :calculate_price_from_products,
         :product_category_id,
@@ -67,7 +66,7 @@ module Admin
 
     def gift_search_params
       params_base = params[:gift_search] || ActionController::Parameters.new
-      params_base.permit(:keyword, :product_category_id, :product_subcategory_id, :min_price, :max_price, :tags, :vendor_id)
+      params_base.permit(:keyword, :product_category_id, :product_subcategory_id, :min_price, :max_price, :tags, :vendor_id, :available)
     end
     helper_method :gift_search_params
 
