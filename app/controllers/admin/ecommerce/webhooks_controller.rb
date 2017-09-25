@@ -6,8 +6,8 @@ module Admin
       skip_before_action :verify_authenticity_token
 
       def tracking
-        Rails.logger.warn "Body: #{request.body.read}"
-        Rails.logger.warn "Params: #{params.to_unsafe_h.inspect}"
+        Rails.logger.info "Body: #{request.body.read}"
+        Rails.logger.info "Params: #{params.to_unsafe_h.inspect}"
         head :ok
       end
 
