@@ -31,6 +31,12 @@
         =@order.user.full_name
       %br
       =@order.user.email
+  .col-sm-4
+    %p
+      %b Order Status:
+      %br
+      - style = "color: red" if @order.status == 'failed'
+      %span{style: "#{style}"}= @order.status
 
 .row
   .col-sm-12
