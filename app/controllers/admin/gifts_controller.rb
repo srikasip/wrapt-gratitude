@@ -16,9 +16,11 @@ module Admin
 
     def new
       @gift = Gift.new product_category: Gift.default_product_category
+      @gift.gift_parcels.build
     end
 
     def edit
+      @gift.gift_parcels.empty? and @gift.gift_parcels.build
     end
 
     def create
@@ -61,7 +63,7 @@ module Admin
         :product_subcategory_id,
         :featured,
         :tag_list,
-        :gift_parcel_attributes => [:id, :parcel_id, :gift_id]
+        :gift_parcels_attributes => [:id, :parcel_id, :gift_id]
         )
     end
 

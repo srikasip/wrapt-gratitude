@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170925200227) do
+ActiveRecord::Schema.define(version: 20170926134941) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -199,6 +199,9 @@ ActiveRecord::Schema.define(version: 20170925200227) do
     t.boolean  "calculate_weight_from_products",                          default: true,  null: false
     t.decimal  "weight_in_pounds"
     t.boolean  "available",                                               default: true,  null: false
+    t.integer  "parcel_id"
+    t.integer  "shipping_parcel_id"
+    t.index ["parcel_id"], name: "index_gifts_on_parcel_id", using: :btree
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
     t.index ["wrapt_sku"], name: "index_gifts_on_wrapt_sku", using: :btree
   end
@@ -250,14 +253,20 @@ ActiveRecord::Schema.define(version: 20170925200227) do
   end
 
   create_table "parcels", force: :cascade do |t|
-    t.string   "description",                     null: false
-    t.decimal  "length_in_inches",                null: false
-    t.decimal  "width_in_inches",                 null: false
-    t.decimal  "height_in_inches",                null: false
-    t.decimal  "weight_in_pounds",                null: false
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.boolean  "active",           default: true, null: false
+    t.string   "description",                         null: false
+    t.decimal  "length_in_inches",                    null: false
+    t.decimal  "width_in_inches",                     null: false
+    t.decimal  "height_in_inches",                    null: false
+    t.decimal  "weight_in_pounds",                    null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.boolean  "active",           default: true,     null: false
+    t.integer  "case_pack"
+    t.string   "color"
+    t.string   "source"
+    t.string   "stock_number"
+    t.string   "usage",            default: "pretty", null: false
+    t.string   "code"
   end
 
   create_table "product_categories", force: :cascade do |t|
@@ -735,6 +744,8 @@ ActiveRecord::Schema.define(version: 20170925200227) do
   add_foreign_key "gift_recommendations", "profiles"
   add_foreign_key "gift_selections", "gifts"
   add_foreign_key "gift_selections", "profiles"
+  add_foreign_key "gifts", "parcels"
+  add_foreign_key "gifts", "parcels", column: "shipping_parcel_id", name: "shipping_parcel_fk"
   add_foreign_key "gifts", "product_categories"
   add_foreign_key "line_items", "vendors"
   add_foreign_key "product_images", "products"

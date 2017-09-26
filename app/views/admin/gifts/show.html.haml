@@ -33,7 +33,7 @@
 
     %p
       %b Box:
-      = @gift.parcel&.description
+      = @gift.pretty_parcel&.description
 
     %h3 Products
     - if @gift.products.none?
