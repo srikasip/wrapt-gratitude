@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170926134941) do
+ActiveRecord::Schema.define(version: 20170926182243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -199,9 +199,6 @@ ActiveRecord::Schema.define(version: 20170926134941) do
     t.boolean  "calculate_weight_from_products",                          default: true,  null: false
     t.decimal  "weight_in_pounds"
     t.boolean  "available",                                               default: true,  null: false
-    t.integer  "parcel_id"
-    t.integer  "shipping_parcel_id"
-    t.index ["parcel_id"], name: "index_gifts_on_parcel_id", using: :btree
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
     t.index ["wrapt_sku"], name: "index_gifts_on_wrapt_sku", using: :btree
   end
@@ -381,16 +378,20 @@ ActiveRecord::Schema.define(version: 20170926134941) do
     t.integer  "vendor_id"
     t.integer  "customer_order_id"
     t.integer  "gift_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.string   "order_number",           null: false
-    t.date     "created_on",             null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "order_number",                  null: false
+    t.date     "created_on",                    null: false
     t.decimal  "total_due_in_cents"
     t.decimal  "shipping_in_cents"
     t.decimal  "shipping_cost_in_cents"
+    t.string   "vendor_token",                  null: false
+    t.string   "vendor_acknowledgement_status"
+    t.string   "vendor_acknowledgement_reason"
     t.index ["customer_order_id"], name: "index_purchase_orders_on_customer_order_id", using: :btree
     t.index ["gift_id"], name: "index_purchase_orders_on_gift_id", using: :btree
     t.index ["vendor_id"], name: "index_purchase_orders_on_vendor_id", using: :btree
+    t.index ["vendor_token"], name: "index_purchase_orders_on_vendor_token", unique: true, using: :btree
   end
 
   create_table "recipient_gift_dislikes", force: :cascade do |t|
@@ -744,8 +745,6 @@ ActiveRecord::Schema.define(version: 20170926134941) do
   add_foreign_key "gift_recommendations", "profiles"
   add_foreign_key "gift_selections", "gifts"
   add_foreign_key "gift_selections", "profiles"
-  add_foreign_key "gifts", "parcels"
-  add_foreign_key "gifts", "parcels", column: "shipping_parcel_id", name: "shipping_parcel_fk"
   add_foreign_key "gifts", "product_categories"
   add_foreign_key "line_items", "vendors"
   add_foreign_key "product_images", "products"

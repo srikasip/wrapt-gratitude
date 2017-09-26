@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   root to: 'home#show'
 
   if Rails.env.development?
@@ -62,6 +61,27 @@ Rails.application.routes.draw do
   # My Account Area
   ###################################
   resource :my_account, only: [:show, :edit, :update]
+
+  ###################################
+  ### Checkout and shopping cart
+  ###################################
+  namespace :ecommerce do
+    resources :line_items
+
+    VALID_STEPS = ['gift-wrap', 'shipping', 'payment', 'review', 'finalize']
+    VALID_STEPS.each do |step|
+      action = step.tr('-', '_')
+      get "checkout/#{step}" => "checkout#show_#{action}"
+      put "checkout/#{step}" => "checkout#save_#{action}"
+    end
+
+    resources :vendor_confirmations, only: [:show, :update] do
+      collection do
+        get :error
+        get :thanks
+      end
+    end
+  end
 
   ###################################
   ### Admin

@@ -47,6 +47,7 @@
           %th SKU
           %th Vendor
           %th Purchase Order
+          %th.text-center Vendor<br>Okay
           %th.text-right Quantity
           %th.text-right Price Each
           %th.text-right Total Price
@@ -70,6 +71,14 @@
               - purchase_orders.each do |po|
                 = link_to po.order_number, admin_ecommerce_purchase_order_path(po)
                 %br
+            %td.text-center
+              - purchase_orders.each do |po|
+                - if po.vendor_accepted?
+                  %span.glyphicon.glyphicon-ok{style: 'color: green'}
+                - else
+                  %span.glyphicon.glyphicon-remove{style: 'color: red'}
+                %br
+
             %td.text-right= line_item.quantity
             %td.text-right= number_to_currency(line_item.price_per_each_in_dollars)
             %td.text-right
@@ -78,44 +87,28 @@
         %tr{style: 'border-top-style: double'}
           %td
             %i Sub-total
-          %td
-          %td
-          %td
-          %td
-          %td
+          %td{colspan: 6}
           %td.text-right
             %b= number_to_currency(@order.subtotal_in_dollars)
 
         %tr
           %td
             %i Shipping
-          %td
-          %td
-          %td
-          %td
-          %td
+          %td{colspan: 6}
           %td.text-right
             %i= number_to_currency(@order.shipping_in_dollars)
 
         %tr
           %td
             %i Taxes
-          %td
-          %td
-          %td
-          %td
-          %td
+          %td{colspan: 6}
           %td.text-right
             %i= number_to_currency(@order.taxes_in_dollars)
 
         %tr{style: 'border-top-style: double'}
           %td
             %i Total
-          %td
-          %td
-          %td
-          %td
-          %td
+          %td{colspan: 6}
           %td.text-right
             %b= number_to_currency(@order.total_to_charge_in_dollars)
 

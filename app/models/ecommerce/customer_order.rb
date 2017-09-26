@@ -10,7 +10,7 @@ class CustomerOrder < ApplicationRecord
   VALID_STATUSES = [
     INITIALIZED = 'initialized',
     SUBMITTED   = 'submitted',
-    APPROVED    = 'approved',    # Vendor acknowedged they can fulfill order
+    APPROVED    = 'approved',    # *All* Vendors acknowedged they can fulfill order
     PROCESSING  = 'processing',
     SHIPPED     = 'shipped',
     RECEIVED    = 'received',

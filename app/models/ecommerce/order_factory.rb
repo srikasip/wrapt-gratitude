@@ -75,9 +75,9 @@ module OrderFactory
     customer_purchase = CustomerPurchaseService.new(cart_id: cart_id)
     customer_purchase.authorize!
 
-    # A difference virtual page load in the shopping process
-    customer_purchase = CustomerPurchaseService.new(cart_id: cart_id)
-    customer_purchase.charge!
+    # This happens when a vendor confirms they have inventory
+    #customer_purchase = CustomerPurchaseService.new(cart_id: cart_id)
+    #customer_purchase.charge!
 
     order
   end

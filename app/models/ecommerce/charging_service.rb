@@ -42,23 +42,24 @@ class ChargingService
     self.our_charge.save!
   end
 
-  def authorize!
-    _sanity_check!
+  def authorize!(before_hook: ->{}, after_hook: ->{})
+    _sanity_check!(:auth)
 
     _safely do
+      before_hook.call
       _do_stripe_auth!
       _verify_consistency!(captured: false)
       _save_auth_results!
+      after_hook.call
     end
 
     self.our_charge
   end
 
   def charge!(before_hook: ->{}, after_hook: ->{})
-    _sanity_check!
+    _sanity_check!(:charge)
 
     _safely do
-      #REMOVE: _adjust_inventory!
       before_hook.call
 
       _do_stripe_charge!
@@ -66,17 +67,30 @@ class ChargingService
       _save_charge_results!
 
       after_hook.call
-      #REMOVE: _purchase_shipping_labels!
     end
+  end
+
+  def authed?
+    our_charge.status == 'auth_succeeded'
+  end
+
+  def charged?
+    our_charge.status == 'charge_succeeded'
+  end
+
+  def authed_or_charged?
+    authed? || charged?
   end
 
   private
 
-  def _sanity_check!
+  def _sanity_check! meth
     if ENV['STRIPE_SECRET_KEY'].blank?
       raise InternalConsistencyError, "You must have a stripe token"
     elsif self.cart_id.blank?
       raise InternalConsistencyError, "You must have a context for the purchase (cart ID)"
+    elsif authed_or_charged? && [:auth, :charge].include?(meth)
+      raise InternalConsistencyError, "You cannot auth of charge more than once"
     end
   end
 
@@ -137,6 +151,8 @@ class ChargingService
       charge_id: self.stripe_charge.id,
       status: AUTH_SUCCEEDED
     })
+
+    self.customer_order.update_attribute(:status, CustomerOrder::SUBMITTED)
   end
 
   def _save_charge_results!

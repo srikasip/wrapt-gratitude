@@ -88,17 +88,55 @@ class CustomerPurchaseService
   end
 
   def authorize!
-    charging_service.authorize!
-  end
-
-  def charge!
-    charging_service.charge!({
-      before_hook: -> { _adjust_inventory! },
-      after_hook: -> { _purchase_shipping_labels! }
+    _sanity_check!
+    charging_service.authorize!({
+      after_hook: -> { _email_vendors_the_acknowledgement_link }
     })
   end
 
+  def okay_to_charge?
+    purchase_orders.all?(&:vendor_accepted?) && charge_service.authed?
+  end
+
+  def should_cancel?
+    purchase_orders.any?(&:vendor_rejected?)
+  end
+
+  # Just because a vendor just acknowledged doesn't mean the order is ready
+  # since all vendors need to acknowledge. One "cannot fulfill" cancels the whole
+  # order
+  def charge_or_cancel_or_not_ready!
+    _sanity_check!
+    if okay_to_charge?
+      _unconditional_charge!
+    elsif should_cancel?
+      cancel_order!
+    else
+      Rails.logger.info "CANNOT Charge cart ID #{cart_id}. There remains un-acknowledged vendor purchase orders"
+      :dont_know_yet
+    end
+  end
+
+  def cancel_order!
+    Rails.logger.info "canceling cart ID #{cart_id}. One or more vendors cannot fulfill"
+    raise "WIP"
+    email_customer_about_cancel
+    email_vendors_about_cancel
+  end
+
   private
+
+  def _unconditional_charge!
+    Rails.logger.info "Charging cart ID #{cart_id}. Also adjusting inventory and buying shipping labels"
+    charging_service.charge!({
+      before_hook: -> { _adjust_inventory! },
+      after_hook: -> {
+        _purchase_shipping_labels!
+        _email_customer_now_maybe
+        _email_vendors_with_everything_they_need_to_send_like_label_etc
+      }
+    })
+  end
 
   def _sanity_check!
     if ENV['SHIPPO_TOKEN'].blank?
@@ -117,7 +155,7 @@ class CustomerPurchaseService
         raise InternalConsistencyError, "You specified a non-natural number for a gift quantity."
       elsif self.profile.owner != customer
         raise InternalConsistencyError, "The profile must belong to the customer"
-      elsif !can_fulfill? && ENV['ALLOW_BOGUS_ORDER_CREATION']!='true'
+      elsif !can_fulfill?
         raise InternalConsistencyError, "There is at least one product that has insufficient quantities available."
       elsif gifts_span_vendors?
         raise InternalConsistencyError, "Each gift must only have products for one vendor"
