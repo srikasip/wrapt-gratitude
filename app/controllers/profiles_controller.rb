@@ -23,6 +23,7 @@ class ProfilesController < ApplicationController
 
   def create
     @profile = current_user.owned_profiles.new
+    @profile.name = 'Unknown'
     if @profile.save
       @survey_response = @profile.survey_responses.create survey: @survey
       @survey_response.ordered_question_responses.first.update question_response_params.merge(answered_at: Time.now)
