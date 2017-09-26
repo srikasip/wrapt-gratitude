@@ -2,7 +2,6 @@
 
 module OrderFactory
   def self.create_order!
-
     if ENV['ALLOW_BOGUS_ORDER_CREATION']=='true'
       Product.where('weight_in_pounds is null or weight_in_pounds <= 0').update_all('weight_in_pounds=5')
 
@@ -17,6 +16,10 @@ module OrderFactory
       Product.where('units_available < 3').update_all('units_available = 10')
 
       Profile.where('name is null').update_all("name = 'Karen'")
+
+      Gift.joins('left join gift_parcels ON (gifts.id = gift_parcels.gift_id)').where('gift_parcels.gift_id IS NULL').each do |gift|
+        gift.gift_parcels.create(parcel: Parcel.active.where(usage: 'pretty').first)
+      end
     end
 
     stripe_token = Stripe::Token.create(
