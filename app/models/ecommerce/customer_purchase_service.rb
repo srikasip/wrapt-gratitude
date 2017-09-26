@@ -329,26 +329,9 @@ class CustomerPurchaseService
     end
   end
 
-  def order_config
-    return @order_config unless @order_config.nil?
-
-    @order_config = {products: {}}
-
-    # Aggregate order_config
-    self.desired_gifts.each do |dg|
-      dg.gift.products.each do |product|
-        @order_config[:products][product] ||= {}
-        @order_config[:products][product][:quantity] ||= 0
-        @order_config[:products][product][:quantity] += dg.quantity
-      end
-    end
-
-    @order_config
-  end
-
   def can_fulfill?
-    order_config[:products].none? do |product, values|
-      Product.where(id: product.id).where('units_available < ?', values[:quantity]).any?
+    self.desired_gifts.all? do |dg|
+      dg.gift.units_available > dg.quantity
     end
   end
 
