@@ -1,10 +1,10 @@
 class ProfilesController < ApplicationController
-
   include RequiresLoginOrInvitation
+
   helper SurveyQuestionResponsesHelper
   helper HeroBackgroundHelper
   helper CarouselHelper
-  
+
   before_filter :set_survey
 
   def login_required?
@@ -31,7 +31,7 @@ class ProfilesController < ApplicationController
       render :new
     end
   end
-  
+
   private def set_survey
     if current_user&.admin? && params[:survey_id]
       @survey = Survey.where(id: params[:survey_id], test_mode: true).first
@@ -57,9 +57,4 @@ class ProfilesController < ApplicationController
       survey_question_option_ids: []
     )
   end
-  
-
-  
-  
-
 end
