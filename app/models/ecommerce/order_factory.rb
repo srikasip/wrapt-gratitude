@@ -54,38 +54,42 @@ module OrderFactory
 
     # A different page in the shopping process
     customer_purchase = CustomerPurchase.new(cart_id: cart_id)
-    customer_purchase.gift_wrapt!({
-      gift_wrapt: ['1', '0'].sample,
-      include_note: ['1', '0'].sample,
-      note_from: "Your snookie",
-      note_to: "Best friend ever",
-      note_content: "Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Pellentesque in ipsum id orci porta dapibus. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Vivamus suscipit tortor eget felis porttitor volutpat. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.  Sed porttitor lectus nibh. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Nulla porttitor accumsan tincidunt. Cras ultricies ligula sed magna dictum porta. Vivamus suscipit tortor eget felis porttitor volutpat. Donec sollicitudin molestie malesuada. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rutrum congue leo eget malesuada."
-    })
+    customer_purchase.gift_wrapt!(
+      ActionController::Parameters.new({ customer_order: {
+        gift_wrapt: ['1', '0'].sample,
+        include_note: ['1', '0'].sample,
+        note_from: "Your snookie",
+        note_to: "Best friend ever",
+        note_content: "Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Pellentesque in ipsum id orci porta dapibus. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Vivamus suscipit tortor eget felis porttitor volutpat. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.  Sed porttitor lectus nibh. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Nulla porttitor accumsan tincidunt. Cras ultricies ligula sed magna dictum porta. Vivamus suscipit tortor eget felis porttitor volutpat. Donec sollicitudin molestie malesuada. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rutrum congue leo eget malesuada."
+      }})
+    )
 
     # A different page in the shopping process
     customer_purchase = CustomerPurchase.new(cart_id: cart_id)
-    customer_purchase.set_address_to!({
-      street1: '319 Hague Rd',
-      street2: '',
-      city: 'Dummerston',
-      zip: '05301',
-      state: 'VT',
-      country: 'US',
-      phone:  '123-123-1234',
-      email: 'example@example.com',
-    })
+    customer_purchase.set_address!(
+      ActionController::Parameters.new({customer_order: {
+        ship_street1: '319 Hague Rd',
+        ship_street2: '',
+        ship_city: 'Dummerston',
+        ship_zip: '05301',
+        ship_state: 'VT',
+        ship_country: 'US',
+        phone:  '123-123-1234',
+        email: 'example@example.com',
+      }})
+    )
 
     choices = customer_purchase.shipping_choices
     picked_choice = choices.keys.sample
 
     # A difference virtual page load in the shopping process
-    customer_purchase = CustomerPurchase.new(cart_id: cart_id, stripe_token: stripe_token.id)
+    customer_purchase = CustomerPurchase.new(cart_id: cart_id)
     customer_purchase.pick_shipping!(picked_choice)
 
     # A difference virtual page load in the shopping process
     customer_purchase = CustomerPurchase.new(cart_id: cart_id)
-    customer_purchase.init_our_charge_record!
-    #
+    customer_purchase.init_our_charge_record!(stripe_token.id)
+
     # A difference virtual page load in the shopping process
     customer_purchase = CustomerPurchase.new(cart_id: cart_id)
     customer_purchase.authorize!
