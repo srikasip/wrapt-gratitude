@@ -1,17 +1,16 @@
-class ChargingService
+class CustomerPurchase::ChargingService
   include ChargeConstants
 
-  attr_accessor :cart_id, :customer_order, :stripe_token, :our_charge, :stripe_charge
+  attr_accessor :cart_id, :customer_order, :our_charge, :stripe_charge
 
-  def initialize(cart_id:, stripe_token:nil, customer_order:nil)
+  def initialize(cart_id:, customer_order:nil)
     self.cart_id        = cart_id
     self.our_charge     = Charge.where(cart_id: self.cart_id).first_or_initialize
     self.customer_order = customer_order || CustomerOrder.find_by(cart_id: self.cart_id)
-    self.stripe_token   = stripe_token || self.our_charge.token
   end
 
-  def init_our_charge_record!
-    if self.stripe_token.blank?
+  def init_our_charge_record!(stripe_token)
+    if stripe_token.blank?
       raise InternalConsistencyError, "You must have a stripe token to even think of charging a card"
     end
 
@@ -89,8 +88,10 @@ class ChargingService
       raise InternalConsistencyError, "You must have a stripe token"
     elsif self.cart_id.blank?
       raise InternalConsistencyError, "You must have a context for the purchase (cart ID)"
-    elsif authed_or_charged? && [:auth, :charge].include?(meth)
-      raise InternalConsistencyError, "You cannot auth of charge more than once"
+    elsif authed_or_charged? && meth==:auth
+      raise InternalConsistencyError, "You cannot auth more than once"
+    elsif charged? && meth==:charge
+      raise InternalConsistencyError, "You cannot charge more than once"
     end
   end
 

@@ -8,7 +8,11 @@ class ProfilesController < ApplicationController
   before_filter :set_survey
 
   def login_required?
-    false
+    true
+  end
+
+  def index
+    @profiles = current_user.owned_profiles
   end
 
   def new

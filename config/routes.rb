@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   # for MVP1A they can be accessed via notification link or logged in user
   ##########################
   concern :profile_builder do
-    resources :profiles, only: [:new, :create] do
+    resources :profiles, only: [:index, :new, :create] do
       resources :surveys, only: :show, controller: 'survey_responses' do
         resources :questions, only: [:show, :update], controller: 'survey_question_responses'
         resource :completion, only: [:show, :create], controller: 'survey_response_completions'
@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   concerns :profile_builder
   resources :invitations, only: :show, concerns: :profile_builder
 
-  resources :profiles, only: :none do
+  resources :profiles, only: [:new, :create] do
     resources :gift_recommendations, only: :index
     resources :gift_selections, only: [:create, :destroy]
     resources :giftee_invitations, only: [:new, :create]
@@ -66,14 +66,13 @@ Rails.application.routes.draw do
   ### Checkout and shopping cart
   ###################################
   namespace :ecommerce do
-    resources :line_items
-
-    VALID_STEPS = ['gift-wrap', 'shipping', 'payment', 'review', 'finalize']
+    VALID_STEPS = ['gift-wrapt', 'address', 'shipping', 'payment', 'review']
     VALID_STEPS.each do |step|
       action = step.tr('-', '_')
-      get "checkout/#{step}" => "checkout#show_#{action}"
-      put "checkout/#{step}" => "checkout#save_#{action}"
+      get "checkout/#{step}" => "checkout#edit_#{action}"
+      patch "checkout/#{step}" => "checkout#save_#{action}"
     end
+    get "checkout/finalize" => "checkout#finalize"
 
     resources :vendor_confirmations, only: [:show, :update] do
       collection do

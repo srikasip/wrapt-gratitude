@@ -1,28 +1,30 @@
-class CustomerPurchaseService
-  include ChargeConstants
+# This is a service object that orchestrates creating an order and associated
+# vendor purchase orders along with shipping, taxes, credit card charging, and
+# email messaging associated with these things.
 
-  DesiredGift = Struct.new(:gift, :quantity)
+class CustomerPurchase
+  include ChargeConstants
 
   SHIPPING_MARKUP = 1.05
 
   AbortOrderError = Class.new(StandardError)
 
   attr_accessor :cart_id, :customer, :desired_gifts, :customer_order,
-    :profile, :shipment, :shipping_info, :shipping_label,
-    :stripe_token, :purchase_orders, :charging_service
+    :profile, :shipping_label,
+    :purchase_orders, :charging_service
 
-  def initialize(cart_id:, customer: nil, desired_gifts: nil, profile: nil, shipping_info: nil, stripe_token: nil)
+  delegate :our_charge, to: :charging_service, prefix: false
+
+  def initialize(cart_id:, customer: nil, desired_gifts: nil, profile: nil)
     self.cart_id       = cart_id
     self.customer      = customer
     self.desired_gifts = desired_gifts
     self.profile       = profile
-    self.shipping_info = shipping_info
-    self.stripe_token  = stripe_token
 
-    self.customer_order  = CustomerOrder.find_by(cart_id: self.cart_id)
-    self.purchase_orders = self.customer_order.purchase_orders if self.customer_order.present?
-
-    self.charging_service = ChargingService.new(cart_id: cart_id, stripe_token: stripe_token)
+    self.customer_order   = CustomerOrder.find_by(cart_id: self.cart_id)
+    self.purchase_orders  = self.customer_order.purchase_orders if self.customer_order.present?
+    self.charging_service = ChargingService.new(cart_id: cart_id)
+    self.profile        ||= self.customer_order.profile
   end
 
   def generate_order!
@@ -31,17 +33,52 @@ class CustomerPurchaseService
     _safely do
       _init_order!
       _init_purchase_orders!
-      _init_shipments!
     end
 
-    self.customer_order
+    customer_order
+  end
+
+  def gift_wrapt!(params)
+    _sanity_check!
+
+    whitelisted_params = params.require(:customer_order).permit( :gift_wrapt, :include_note, :note_from, :note_to, :note_content)
+
+    _safely do
+      self.customer_order.assign_attributes(whitelisted_params)
+      @result = self.customer_order.save!
+    end
+
+    @result
+  end
+
+  def set_address!(params)
+    _sanity_check!
+
+    required_fields = ['ship_street1', 'ship_city', 'ship_zip', 'ship_state' ].to_set
+
+    permitted_fields = required_fields.to_a + ['ship_street2', 'ship_country']
+
+    whitelisted_params = params.require(:customer_order).permit(*permitted_fields)
+
+
+    if whitelisted_params.blank? || whitelisted_params.keys.to_set.intersection(required_fields) != required_fields
+      raise InternalConsistencyError, "Your shipping destination fields aren't complete enough."
+    end
+
+    _safely do
+      self.customer_order.assign_attributes(whitelisted_params)
+      self.customer_order.save!
+      _init_shipments!
+    end
   end
 
   # Aggregate all the purchase orders together
   def shipping_choices
     return @shipping_choices unless @shipping_choices.nil?
 
-    _check_shipping_choices_for_parallelism!
+    # Each PO can have a different set of shipping options. Need to handle PT story #151525308
+    raise "NOT READY" if Rails.env.staging?
+    #_check_shipping_choices_for_parallelism!
 
     @shipping_choices = {}
 
@@ -73,6 +110,12 @@ class CustomerPurchaseService
     @shipping_choices
   end
 
+  def shipping_choices_for_view
+    shipping_choices.map do |choice, data|
+      [choice.gsub('_', ' ').titleize, choice]
+    end
+  end
+
   def pick_shipping!(shippo_token)
     _sanity_check!
 
@@ -83,19 +126,20 @@ class CustomerPurchaseService
     _safely do
       self.customer_order.update_attribute(:shippo_token_choice, shippo_token)
       _update_order_totals!(shippo_token)
-      charging_service.init_our_charge_record!
     end
   end
+
+  delegate :init_our_charge_record!, to: :charging_service
 
   def authorize!
     _sanity_check!
     charging_service.authorize!({
-      after_hook: -> { _email_vendors_the_acknowledgement_link }
+      after_hook: -> { _email_vendors_the_acknowledgement_link! }
     })
   end
 
   def okay_to_charge?
-    purchase_orders.all?(&:vendor_accepted?) && charge_service.authed?
+    purchase_orders.all?(&:vendor_accepted?) && charging_service.authed?
   end
 
   def should_cancel?
@@ -109,6 +153,7 @@ class CustomerPurchaseService
     _sanity_check!
     if okay_to_charge?
       _unconditional_charge!
+      _remove_gifts_from_gift_basket!
     elsif should_cancel?
       cancel_order!
     else
@@ -124,6 +169,10 @@ class CustomerPurchaseService
     email_vendors_about_cancel
   end
 
+  def things_look_shipable?
+    @shipments_okay
+  end
+
   private
 
   def _unconditional_charge!
@@ -132,10 +181,14 @@ class CustomerPurchaseService
       before_hook: -> { _adjust_inventory! },
       after_hook: -> {
         _purchase_shipping_labels!
-        _email_customer_now_maybe
-        _email_vendors_with_everything_they_need_to_send_like_label_etc
+        #TODO: _email_customer_now_maybe
+        #TODO: _email_vendors_with_everything_they_need_to_send_like_labels_etc
       }
     })
+  end
+
+  def _remove_gifts_from_gift_basket!
+    raise "WIP: TODO"
   end
 
   def _sanity_check!
@@ -161,8 +214,6 @@ class CustomerPurchaseService
         raise InternalConsistencyError, "Each gift must only have products for one vendor"
       elsif desired_gifts.any? { |dg| dg.gift.weight_in_pounds.nil? || dg.gift.weight_in_pounds <= 0 }
         raise InternalConsistencyError, "You can't have weightless gifts."
-      elsif self.shipping_info.present? && self.shipping_info.keys.to_set != [:name, :street1, :street2, :street3, :city, :zip, :state, :country, :phone, :email].to_set
-        raise InternalConsistencyError, "Your shipping destination fields aren't precisely right."
       end
     end
   end
@@ -175,13 +226,11 @@ class CustomerPurchaseService
       profile: self.profile,
       status: INITIALIZED,
       recipient_name: profile.name,
-      ship_street1:   shipping_info[:street1],
-      ship_street2:   shipping_info[:street2],
-      ship_street3:   shipping_info[:street3],
-      ship_city:      shipping_info[:city],
-      ship_zip:       shipping_info[:zip],
-      ship_state:     shipping_info[:state],
-      ship_country:   shipping_info[:country]
+      ship_street1: '',
+      ship_city:    '',
+      ship_zip:     '',
+      ship_state:   '',
+      ship_country: 'US'
     })
 
     self.customer_order.save!
@@ -236,30 +285,58 @@ class CustomerPurchaseService
   end
 
   def _init_shipments!
-    self.customer_order.purchase_orders.each do |purchase_order|
-      self.shipment = Shipment.where(cart_id: self.cart_id, purchase_order: purchase_order).first_or_initialize
+    @shipments_okay = true
 
-      self.shipment.address_from =
+    if customer_order.ship_street1.blank? ||
+      customer_order.ship_city.blank? ||
+      customer_order.ship_state.blank? ||
+      customer_order.ship_zip.blank? ||
+      customer_order.ship_country.blank?
+
+      @shipments_okay = false
+      return
+    end
+
+    self.customer_order.purchase_orders.each do |purchase_order|
+      shipment = Shipment.where(cart_id: self.cart_id, purchase_order: purchase_order).first_or_initialize
+
+      shipment.address_from =
         purchase_order.
           vendor.
           attributes.
           keep_if { |key| key.in?(["name", "street1", "street2", "street3", "city", "state", "zip", "country", "phone", "email"]) }
 
-      self.shipment.address_to = self.shipping_info
+      co = self.customer_order
+      shipment.address_to = {
+        name: co.profile.name,
+        street1: co.ship_street1,
+        street2: co.ship_street2,
+        street3: co.ship_street3,
+        city:    co.ship_city,
+        state:   co.ship_state,
+        zip:     co.ship_zip,
+        country: co.ship_country,
+        phone:   co.user.email,
+        email:   co.user.email
+      }
 
       parcel = purchase_order.shippo_parcel_hash
 
       if parcel.blank?
+        @shipments_okay = false
+
+        # It's exceptional for a gift not to have a box.
         raise InternalConsistencyError, "need a box!"
       end
 
-      self.shipment.parcel = parcel
+      shipment.parcel = parcel
+      shipment.api_response = nil
+      shipment.run!
+      shipment.save!
 
-      self.shipment.api_response = nil
-
-      self.shipment.run!
-
-      self.shipment.save!
+      if !shipment.success?
+        @shipments_okay &= false
+      end
     end
   end
 
@@ -307,6 +384,13 @@ class CustomerPurchaseService
     co.save!
   end
 
+  def _email_vendors_the_acknowledgement_link!
+    purchase_orders.each do |po|
+      VendorMailer.acknowledge_order_request(po.id).deliver_later
+    end
+  end
+
+
   def gifts_span_vendors?
     self.desired_gifts.any? do |dg|
       unique_vendors = dg.gift.products.map(&:vendor).uniq
@@ -353,6 +437,8 @@ class CustomerPurchaseService
       }).first_or_initialize
 
       shipping_label.shippo_object_id = rate['object_id']
+      shipping_label.carrier = rate['provider']
+      shipping_label.service_level = rate.dig('servicelevel', 'name')
 
       shipping_label.run!
 
@@ -369,6 +455,7 @@ class CustomerPurchaseService
     self.shipment.success = false
     self.shipment.save # Might not succeed. Such is life.
     self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
+    raise
   rescue Exception => e
     if self.customer_order.present? && self.customer_order.persisted?
       self.customer_order.update_attribute(:status, CustomerOrder::FAILED)

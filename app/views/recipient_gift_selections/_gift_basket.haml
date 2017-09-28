@@ -2,7 +2,7 @@
 
 .gift-basket{data: {behavior: 'gift-basket-container', profile_id: profile.recipient_access_token, channel_name: 'RecipientGiftSelectionsChannel'}}
   .gift-basket__inner-wrap
-    = link_to "< Back to Shopping", '#', data: {behavior: 'close-gift-basket'}, class: 'gift-basket__header small', onClick: "ga('send', 'event', 'basket', 'open-close', 'close');" 
+    = link_to "< Back to Shopping", '#', data: {behavior: 'close-gift-basket'}, class: 'gift-basket__header small', onClick: "ga('send', 'event', 'basket', 'open-close', 'close');"
     .gift-basket__main
       %div{data: {behavior: 'gift-basket-gifts'}}
         = render 'recipient_gift_selections/index', profile: profile
@@ -11,15 +11,17 @@
       %h4.gift-basket__footer__heading
         Thank You!
         %span.pull-right &#8212;
-      %p.help.gift-basket__footer__text 
+      %p.help.gift-basket__footer__text
         In our testing phase we are not fulfilling gift selections but we will be soon.
         %br
-        To help us refine our ‘gift whispering’ skills, please share our site with friends &amp; family  you think would enjoy giving us feedback: the more we get, the better our gifting improves.
-      
+        To help us refine our ‘gift whispering’ skills, please share our site
+        with friends &amp; family you think would enjoy giving us feedback: the
+        more we get, the better our gifting improves.
+
 
       = link_to 'SHARE WRAPT NOW', new_profile_recipient_originated_referral_path(profile.recipient_access_token), class: 'btn btn-primary btn-full-width btn-gift-basket-submit', data: {loads_in_pjax_modal: true, behavior: 'gift-basket-submit'}
 
-      
+
 
 - content_for :page_js do
   :javascript

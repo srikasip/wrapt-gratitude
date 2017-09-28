@@ -25,18 +25,30 @@
         %br
   .col-sm-4
     %p
-      %b Customer Information:
-      %br
+      %strong Customer Name:
       = link_to edit_admin_user_path(@order.user) do
         =@order.user.full_name
       %br
+      %strong Customer Email:
       =@order.user.email
   .col-sm-4
     %p
-      %b Order Status:
-      %br
+      %strong Order Status:
       - style = "color: red" if @order.status == 'failed'
       %span{style: "#{style}"}= @order.status
+      %br
+      %strong Gift wrapt:
+      = @order.gift_wrapt? ? 'Yes' : 'No'
+      %br
+      %strong Include a note:
+      = @order.include_note? ? 'Yes' : 'No'
+      %br
+      - if @order.include_note?
+        %strong From:
+        = @order.note_from
+        %br
+        %strong To:
+        = @order.note_to
 
 .row
   .col-sm-12

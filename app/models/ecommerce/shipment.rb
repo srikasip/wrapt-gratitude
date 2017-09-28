@@ -33,6 +33,7 @@ class Shipment < ApplicationRecord
   end
 
   private def _cache_the_results
-    self.success = self.api_response['status'] == SHIPPO_SUCCESS
+    # The status field of success does not mean success. You must just see if we have any rates
+    self.success = rates.present?
   end
 end

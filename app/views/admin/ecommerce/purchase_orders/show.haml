@@ -5,7 +5,7 @@
       Purchase Order
       = @order.order_number
       = link_to 'Resend notification to vendor', resend_notification_admin_ecommerce_purchase_order_path(@order), :method => :put, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-warning btn-xs'
-      = link_to 'View confirmation page for vendor', checkout_vendor_confirmation_path(id: @order.vendor_token), class: 'btn btn-default btn-xs'
+      = link_to 'View confirmation page for vendor', ecommerce_vendor_confirmation_path(id: @order.vendor_token), class: 'btn btn-default btn-xs'
       - if @shipping_label.present?
         = link_to 'View Shipping Label', @order.shipping_label.url, target: '_blank', class: 'btn btn-default btn-xs'
     %h4
@@ -54,6 +54,10 @@
         %br
         %strong ETA:
         =@shipping_label.eta || 'N/A'
+        %br
+        %strong Carrier:
+        =@shipping_label.carrier
+        =@shipping_label.service_level
         %br
         %strong Tracking Status:
         =@shipping_label.tracking_status || 'N/A'

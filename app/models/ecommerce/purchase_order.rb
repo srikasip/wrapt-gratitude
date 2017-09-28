@@ -52,6 +52,7 @@ class PurchaseOrder < ApplicationRecord
 
     parcel.as_shippo_hash.tap do |result|
       result[:weight] += gift.weight_in_pounds
+      result[:weight] = result[:weight].round(2)
     end
   end
 

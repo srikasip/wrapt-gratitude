@@ -1,5 +1,7 @@
 class GiftSelectionsController < ApplicationController
-  
+  include ActionView::Helpers::NumberHelper
+  include ActionView::Helpers::TextHelper
+
   before_action :set_profile
 
   def create
@@ -32,15 +34,16 @@ class GiftSelectionsController < ApplicationController
       gift_selections_html: render_gift_selections,
       gift_basket_count: @profile.gift_selections.count,
       updated_gift_id: @gift_selection.gift_id,
-      add_button_html: render_add_button_html
+      add_button_html: render_add_button_html,
+      num_gifts_words: pluralize(@profile.gift_selections.count, 'item'),
+      subtotal: number_to_currency(@profile.selling_price_total)
   end
-  
 
   private def render_gift_selections
     ApplicationController.renderer.render 'gift_selections/_index', locals: {profile: @profile}, layout: false
   end
 
-  
+
   private def render_add_button_html
     ApplicationController.renderer.render 'gift_recommendations/_add_to_basket_button', locals: {gift_selection: @gift_selection, profile: @profile}, layout: false
   end

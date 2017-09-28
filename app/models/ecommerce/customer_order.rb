@@ -1,5 +1,6 @@
 class CustomerOrder < ApplicationRecord
   include ShippingComputer
+
   has_paper_trail(
     ignore: [:updated_at, :created_at, :id],
     meta: {
@@ -23,11 +24,7 @@ class CustomerOrder < ApplicationRecord
 
   validates :status, inclusion: { in: VALID_STATUSES }
   validates :order_number, presence: true
-  validates :ship_street1, presence: true
-  validates :ship_city, presence: true
-  validates :ship_state, presence: true
-  validates :ship_country, presence: true
-  validates :ship_zip, presence: true
+  validates :ship_zip, length: { minimum: 5 }, allow_blank: true
 
   belongs_to :profile
   belongs_to :user

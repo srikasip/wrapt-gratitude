@@ -1,0 +1,2 @@
+class CustomerPurchase::ShippingService
+end

@@ -1,0 +1,7 @@
+= link_to "« Set Address", url_for(action: :edit_address)
+
+= simple_form_for @customer_order, url: url_for, method: :patch do |f|
+  = f.input :shippo_token_choice, collection: @shipping_choices
+  = f.submit
+
+= render "debug", customer_order: @customer_order
