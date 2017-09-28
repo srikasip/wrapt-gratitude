@@ -24,7 +24,7 @@ class CustomerPurchase
     self.customer_order   = CustomerOrder.find_by(cart_id: self.cart_id)
     self.purchase_orders  = self.customer_order.purchase_orders if self.customer_order.present?
     self.charging_service = ChargingService.new(cart_id: cart_id)
-    self.profile        ||= self.customer_order.profile
+    #self.profile        ||= self.customer_order.profile
   end
 
   def generate_order!
