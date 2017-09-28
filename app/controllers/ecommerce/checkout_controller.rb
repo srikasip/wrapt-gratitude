@@ -112,6 +112,6 @@ class Ecommerce::CheckoutController < ApplicationController
   def _load_service_object
     @customer_purchase = ::CustomerPurchase.new(cart_id: session[:cart_id])
     @customer_order = @customer_purchase.customer_order
-    @profile = @customer_purchase.profile
+    @profile = @customer_order.profile
   end
 end
