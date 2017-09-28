@@ -1,137 +1,51 @@
 .container
   .row
-    .col-xs-10.col-xs-offset-1
-      %h1.about-page__header 
+    .col-xs-12.text-center
+      %h1.about-page__header.fancy 
         The Science of Gifting
-        %br
-        %span.about-page__header__second-line
-          (why choosing the right gift is hard)
-      %p.about-page__tagline 
-        WRAPT 
-        helps people give, connect and understand each other better. 
+      %p.about-page__tagline= content_with_citation(@tagline[:content], @tagline[:citations])
+  .sg-boxes__container
+    .row.sg-boxes__header
+      .col-xs-12
+        %h2.about-page__header Why is it so hard to get the right gift?
+    .row.sg-boxes
+      - @boxes.each do |box|
+        .col-xs-12.col-md-4.sg-box
+          .sg-box__content
+            .sg-box__ill{id: box[:id]}
+            %h5= box[:title]
+            %p= content_with_citation(box[:content], box[:citations])
+  - @content.each do |c|
+    .row
+      .col-xs-12.col-md-10.col-md-offset-1
+        = c[:container] == 'sg-quote' ? content_quote(c) : content_section(c)
+  .row
+    .col-xs-12
+      .sg-references
+        - @references.each_with_index do |r, index|
+          - num = index+1
+          .sg-reference{id: "citation-0#{num}"}
+            %span.sg-reference__num= "#{num}. "
+            = link_to r[:text], r[:link], class: 'hidden-xs hidden-sm', target: '_blank'
+            = link_to r[:short_text], r[:link], class: 'hidden-md hidden-lg', target: '_blank'
 
-      -# .row.about-page__subsection.with-image.image-left
-      -#   = image_tag 'http://placehold.it/456x474'
-      .row.about-page__subsection
-        .col-xs-12
-          .about-page__subsection-text
-            %p.text-center
-              We buy gifts because we care. But we often worry we will choose the wrong gift, disappointing the very person we were hoping to delight.
-              %sup
-                =succeed "," do
-                  =link_to "1","#citation-01"
-              %sup
-                =succeed "," do
-                  =link_to "2","#citation-02"
-              %sup
-                =link_to "3","#citation-03"
-              Why does this happen?
-        
-            %h4 It turns out choosing a gift for someone else is actually hard because: 
-            %ul
-              %li
-                We have a hard time putting ourselves in other people’s shoes
-                %sup
-                  =succeed "," do
-                    =link_to "4","#citation-04"
-                  =link_to "5","#citation-05"
-              %li
-                We tend to think the people we care about have the same interests that we do
-                %sup
-                  =link_to "6", "#citation-06"
-              %li
-                We are bad at predicting what types of gifts people will appreciate the most
-                %sup
-                  =link_to "7", "#citation-07"
-            %p
-              The wrong gift can tear us apart rather than bring us together. 
-              %sup
-                =link_to "8", "#citation-08"
-              So how do we make gift giving the pleasurable and delighting experience it is meant to be?
-
-
-        
-            %h4 Choose gifts the other person would really want to receive.
-            %p 
-              "The most important thing in the exchanging of gifts is it shows that you really know the person well, and you really care about them," said Ryan Howell, a psychologist at San Francisco State University and co-founder of 
-              =succeed "." do
-                =link_to "beyondthepurchase.org", "http://beyondthepurchase.org", target: "_blank"
-              %strong
-                That generally means tailoring the gift to the recipient. 
-              For example, Howell told Live Science, research finds that people who want to buy 
-              =link_to "meaningful gifts", "http://www.livescience.com/27746-how-to-get-happy-seek-a-meaningful-life.html", target: "_blank" 
-              don't buy the same gift for two of their friends&#8212;even if those friends don't know each other, would never compare the gifts, and would both enjoy the same item.
-            %h4 WRAPT is a platform for giving gifts from the heart.
-            %p
-              Because we know that your giftee is one of a kind, our Wrapt quiz helps you easily identify what makes her tick. WRAPT’s unique matching intelligence pins down her Personality, Passions, and Purpose to recommend the perfect gift&#8212;a gift that is about more than just her interests, a gift that brings out who she is and what she cares about in this world.
-            %p
-              In addition,  Wrapt gifts are artisanal&#8212;of the hand-made, fair trade, and sustainable variety, making recipients feel special. These gifts also support artisan communities around the globe, offering stories of positive social change that add additional value to your to gift recipient.
-
-
-
-            
-            %h4 Give handmade goods
-            %p
-              New and store-bought is not always best. A 
-              =link_to "study published in March 2015", "http://www.eurekalert.org/pub_releases/2015-03/ama-cvh032415.php", target: "_blank"
-              in the Journal of Marketing found that people prefer buying homemade items for loved ones and were even willing to pay as much as 17 percent more for homemade things versus mass-produced items. The findings suggest that people feel that homemade items show more love, and love is what they want to express to the gift recipient
-              =succeed "." do
-                %sup
-                  =link_to "9", "#citation-9"
-            
-      .row.about-page__subsection
-        .col-xs-12
-          .citations
-            %h4.mt0 Footnotes
-            %p.citation.citation-footnote#citation-01
-              %sup 1
-              (
-              =succeed ")" do
-                =link_to "Flynn and Adams, 2009 [pdf]", "http://francisflynn.org/wp-content/uploads/2010/03/Money-cant-buy-love.pdf", target: "_blank"
-            %p.citation.citation-footnote#citation-02
-              %sup 2
-              (
-              =succeed ")" do
-                =link_to "Wooten 2000 [pdf]", "https://www.researchgate.net/profile/David_Wooten2/publication/24099051_Qualitative_Steps_toward_an_Expanded_Model_of_Anxiety_in_Gift-Giving/links/55d784f708ae9d65948d93a0.pdf", target: "_blank"
-            %p.citation.citation-footnote#citation-03
-              %sup 3
-              =link_to "http://www.hugeinc.com/ideas/perspective/can-ai-finally-help-humans-choose-the-right-gift", "http://www.hugeinc.com/ideas/perspective/can-ai-finally-help-humans-choose-the-right-gift", target: "_blank"
-            %p.citation.citation-footnote#citation-04
-              %sup 4
-              (
-              =succeed ")" do
-                =link_to "Flynn and Adams, 2009 [pdf]", "http://francisflynn.org/wp-content/uploads/2010/03/Money-cant-buy-love.pdf", target: "_blank"
-            %p.citation.citation-footnote#citation-05
-              %sup 5
-              (
-              =succeed ")" do
-                =link_to "Ross et al., 1977 [pdf]", "http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=DB798E2D75BAD5E9301ABF7D1AB2B8AD?doi=10.1.1.655.750&rep=rep1&type=pdf", target: "_blank"
-            %p.citation.citation-footnote#citation-06
-              %sup 6
-              (
-              =succeed ")" do
-                =link_to "Ward and Broniarczyk, 2001 [pdf]", "http://www.ejcr.org/Curations/Curations-PDFs/Curations4/Ward_Broniarczyk.pdf", target: "_blank"
-            %p.citation.citation-footnote#citation-07
-              %sup 7
-              (
-              =succeed ")" do
-                =link_to "Flynn and Adams, 2009 [pdf]", "http://francisflynn.org/wp-content/uploads/2010/03/Money-cant-buy-love.pdf", target: "_blank"
-            %p.citation.citation-footnote#citation-08
-              %sup 8
-              (
-              =succeed ")" do
-                =link_to "Ruth, Otnes and Brunel, 1999 [pdf]", "https://www.researchgate.net/profile/Julie_Ruth/publication/24099017_Gift_Receipt_and_the_Reformulation_of_Interpersonal_Relationships/links/02e7e51e934068390c000000.pdf", target: "_blank"
-            
-            %p.citation.citation-footnote#citation-9
-              %sup
-                9
-              (
-              =succeed ")" do
-                =link_to "Fuchs, Schreier, & van Osselaer, 2015 [pdf]", "https://www.researchgate.net/profile/Stijn_Van_Osselaer/publication/273529358_The_Handmade_Effect_What%27s_Love_Got_to_Do_with_It/links/55cb517208aeb975674c5f58.pdf", target: "_blank"
-            %h4.mt2 Bibliography
-            %p.citation.citation--bibliography
-              Sirgy, M. J. (1982). Self-concept in consumer behavior: A critical review. <em>Journal of consumer research</em>, 9(3), 287-300.
-              =link_to "http://s3.amazonaws.com/academia.edu.documents/6454659/sirgy_jcr-1982_.pdf?AWSAccessKeyId=AKIAJ56TQJRTWSMTNPEA&Expires=1481581321&Signature=b0zTmMtYCRnd8g09BXNMWYGqI90%3D&response-content-disposition=inline%3B%20filename%3DSelf-concept_in_consumer_behavior_A_crit.pdf", "http://s3.amazonaws.com/academia.edu.documents/6454659/sirgy_jcr-1982_.pdf?AWSAccessKeyId=AKIAJ56TQJRTWSMTNPEA&Expires=1481581321&Signature=b0zTmMtYCRnd8g09BXNMWYGqI90%3D&response-content-disposition=inline%3B%20filename%3DSelf-concept_in_consumer_behavior_A_crit.pdf", target: "_blank"
-            %p.citation.citation--bibliography
-              Grubb, E. L., & Grathwohl, H. L. (1967). Consumer self-concept, symbolism and market behavior: A theoretical approach. <em>The Journal of Marketing</em>, 22-27.
-              =link_to "https://brainmass.com/file/254218/Consumer+Self-Concept.pdf", "https://brainmass.com/file/254218/Consumer+Self-Concept.pdf", target: "_blank"
+- content_for :after_wrapper do
+  .wrapper--full-bleed__bg-02.mb1
+    .container
+      .sg-question__container
+        .row
+          .col-xs-12
+            %h2.about-page__header Are you Ready to Gift Better?
+        .row
+          .col-xs-12.col-sm-10.col-sm-offset-1
+            .sg-question
+              -# TODO: add correct url here
+              = simple_form_for @question_response, url: '#', html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
+                - if current_user&.admin?
+                  = hidden_field_tag :survey_id, @survey.id
+                = render response_fields_partial, form: form, label: @question_response.survey_question.prompt
+                .sqr-submit__container.text-right#js-sqr-submit__container
+                  %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}
+                    Start Quiz
+        .text-center
+          = embedded_svg('icon-gift-better-gift-wrapt', class: "landing-bottom__icon-gift-better-gift-wrapt mt6")
