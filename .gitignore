@@ -27,3 +27,4 @@
 .env
 .env.local
 /.tags
+.DS_Store
