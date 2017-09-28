@@ -1,31 +1,43 @@
 %h2 Order Audit Trail and Technical Details
 
 #accordion.panel-group
-  .panel.panel-default
-    .panel-heading
-      %h4.panel-title
-        %span.glyphicon.glyphicon-plus
-        %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseOne"}
-          Order Changes
-    #collapseOne.panel-collapse.collapse
-      .panel-body
-        = render "versions", versions: @order.versions
+  - if @order.include_note?
+    .panel.panel-default
+      .panel-heading
+        %h4.panel-title
+          %span.glyphicon.glyphicon-plus
+          %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseOne"}
+            Note from customer
+      #collapseOne.panel-collapse.collapse
+        .panel-body
+          = @order.note_content
 
   .panel.panel-default
     .panel-heading
       %h4.panel-title
         %span.glyphicon.glyphicon-plus
         %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseTwo"}
-          Charge Chages
-    #collapseTwo.panel-collapse.collapse
+          Order Changes
+    #collapseOne.panel-collapse.collapse
       .panel-body
-        = render "versions", versions: @order.charge.versions
+        = render "versions", versions: @order.versions
+
+  - if @order.charge.present?
+    .panel.panel-default
+      .panel-heading
+        %h4.panel-title
+          %span.glyphicon.glyphicon-plus
+          %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseThree"}
+            Charge Changes
+      #collapseTwo.panel-collapse.collapse
+        .panel-body
+          = render "versions", versions: @order.charge.versions
 
   .panel.panel-default
     .panel-heading
       %h4.panel-title
         %span.glyphicon.glyphicon-plus
-        %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseThree"}
+        %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseFour"}
           Raw Data
     #collapseThree.panel-collapse.collapse
       .panel-body

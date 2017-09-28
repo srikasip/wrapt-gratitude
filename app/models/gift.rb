@@ -13,8 +13,12 @@ class Gift < ApplicationRecord
   has_many :uploaded_gift_images, class_name: 'GiftImages::Uploaded'
   has_many :gift_images_from_products, class_name: 'GiftImages::FromProduct'
 
-  has_one :gift_parcel
-  has_one :parcel, through: :gift_parcel
+  has_many :gift_parcels
+  has_many :pretty_parcels, -> { where(usage: 'pretty') }, through: :gift_parcels, class_name: 'Parcel', source: :parcel
+  has_many :shipping_parcels, -> { where(usage: 'shipping') }, through: :gift_parcels, class_name: 'Parcel', source: :parcel
+  define_method(:pretty_parcel) { pretty_parcels.active.first }
+  define_method(:shipping_parcel) { shipping_parcels.active.first }
+
   has_one :primary_gift_image, -> {where primary: true}, class_name: 'GiftImage'
 
   belongs_to :source_product, class_name: 'Product', required: false
@@ -23,11 +27,13 @@ class Gift < ApplicationRecord
   belongs_to :product_subcategory, required: true, class_name: 'ProductCategory'
 
   has_one :calculated_gift_field
-  delegate :cost, :price, :weight_in_pounds, to: :calculated_gift_field
+  delegate :cost, :price, :weight_in_pounds, :units_available, to: :calculated_gift_field
 
   before_save :generate_wrapt_sku, if: :sku_needs_updating?
 
   before_destroy -> { raise "Cannot destroy" unless deleteable? }
+
+  accepts_nested_attributes_for :gift_parcels
 
   def self.search search_params
     self.all.merge(GiftSearch.new(search_params).to_scope)

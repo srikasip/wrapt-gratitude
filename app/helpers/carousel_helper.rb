@@ -30,7 +30,7 @@ module CarouselHelper
     }
   end
 
-  def carousel_indicators(carousel_classes: carousel_classes, slides: slides, indicators: '', indicator: '')
+  def carousel_indicators(carousel_classes: , slides: , indicators: '', indicator: '')
     is_gr_carousel = carousel_classes[:carousel] == 'gr-carousel'
     content_tag :div, class: "wrapt-carousel__indicators #{indicators}" do
       if is_gr_carousel
@@ -51,7 +51,7 @@ module CarouselHelper
     end
   end
 
-  def carousel_indicator(slide: slide, index: index, indicator: '', is_gr_carousel: false)
+  def carousel_indicator(slide: , index: , indicator: '', is_gr_carousel: false)
     locals = slide[:thumbnail_locals].merge({index: index + 1})
     base_classes = "wrapt-carousel__indicator #{indicator}"
     classes = (is_gr_carousel && index > 4) ? "#{base_classes} hidden-xs" : base_classes
@@ -60,12 +60,12 @@ module CarouselHelper
     end
   end
 
-  def carousel_nav(nav_container_class: nav_container_class, nav_class: nav_class, nav_partial: nav_partial)
+  def carousel_nav(nav_container_class: , nav_class: , nav_partial: )
     css_classes = {css_classes: {container: nav_container_class, link: "wrapt-carousel__nav #{nav_class}"}}
     render nav_partial, locals: css_classes
   end
-  
-  def carousel_slide_container(slides: slides, slides_container: '', slide_container: '')
+
+  def carousel_slide_container(slides: , slides_container: '', slide_container: '')
     content_tag :div, class: "wrapt-carousel__slides #{slides_container}" do
       slides.each_with_index do |slide, index|
         if slide[:slide_locals][:gift].present?
@@ -78,7 +78,7 @@ module CarouselHelper
     end
   end
 
-  def slide_content(slide: slide, index: index, slide_container: '')
+  def slide_content(slide: , index: , slide_container: '')
     render slide[:slide_partial], locals: slide[:slide_locals]
   end
 

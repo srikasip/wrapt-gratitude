@@ -1,0 +1,18 @@
+:ruby
+  debug_on = ENV.fetch('DEBUG_ORDERS') { Rails.env.development? }.to_s == 'true'
+
+- if debug_on && customer_order.present?
+  - if customer_order.charge.present?
+    %h3 Charge
+    %pre= customer_order.charge.ai(plain: true)
+
+  %h3 Order
+  %pre= customer_order.ai(plain: true)
+
+  - customer_order.purchase_orders.each do |po|
+    %h3= po.order_number
+    %pre
+      = po.ai(plain: true)
+      - if po.shipment.present?
+        RATES:
+        = po.shipment.rates.ai(plain: true)

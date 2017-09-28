@@ -1,27 +1,30 @@
-class CustomerPurchaseService
-  include ChargeConstants
+# This is a service object that orchestrates creating an order and associated
+# vendor purchase orders along with shipping, taxes, credit card charging, and
+# email messaging associated with these things.
 
-  DesiredGift = Struct.new(:gift, :quantity)
+class CustomerPurchase
+  include ChargeConstants
 
   SHIPPING_MARKUP = 1.05
 
   AbortOrderError = Class.new(StandardError)
 
   attr_accessor :cart_id, :customer, :desired_gifts, :customer_order,
-    :our_charge, :profile, :shipment, :shipping_info, :shipping_label,
-    :stripe_charge, :stripe_token, :purchase_orders
+    :profile, :shipping_label,
+    :purchase_orders, :charging_service
 
-  def initialize(cart_id:, customer: nil, desired_gifts: nil, profile: nil, shipping_info: nil, stripe_token: nil)
+  delegate :our_charge, to: :charging_service, prefix: false
+
+  def initialize(cart_id:, customer: nil, desired_gifts: nil, profile: nil)
     self.cart_id       = cart_id
     self.customer      = customer
     self.desired_gifts = desired_gifts
     self.profile       = profile
-    self.shipping_info = shipping_info
-    self.stripe_token  = stripe_token
 
-    self.customer_order  = CustomerOrder.find_by(cart_id: self.cart_id)
-    self.our_charge      = Charge.find_by(cart_id: self.cart_id)
-    self.purchase_orders = self.customer_order.purchase_orders if self.customer_order.present?
+    self.customer_order   = CustomerOrder.find_by(cart_id: self.cart_id)
+    self.purchase_orders  = self.customer_order.purchase_orders if self.customer_order.present?
+    self.charging_service = ChargingService.new(cart_id: cart_id)
+    self.profile        ||= self.customer_order.profile
   end
 
   def generate_order!
@@ -30,17 +33,52 @@ class CustomerPurchaseService
     _safely do
       _init_order!
       _init_purchase_orders!
-      _init_shipments!
     end
 
-    self.customer_order
+    customer_order
+  end
+
+  def gift_wrapt!(params)
+    _sanity_check!
+
+    whitelisted_params = params.require(:customer_order).permit( :gift_wrapt, :include_note, :note_from, :note_to, :note_content)
+
+    _safely do
+      self.customer_order.assign_attributes(whitelisted_params)
+      @result = self.customer_order.save!
+    end
+
+    @result
+  end
+
+  def set_address!(params)
+    _sanity_check!
+
+    required_fields = ['ship_street1', 'ship_city', 'ship_zip', 'ship_state' ].to_set
+
+    permitted_fields = required_fields.to_a + ['ship_street2', 'ship_country']
+
+    whitelisted_params = params.require(:customer_order).permit(*permitted_fields)
+
+
+    if whitelisted_params.blank? || whitelisted_params.keys.to_set.intersection(required_fields) != required_fields
+      raise InternalConsistencyError, "Your shipping destination fields aren't complete enough."
+    end
+
+    _safely do
+      self.customer_order.assign_attributes(whitelisted_params)
+      self.customer_order.save!
+      _init_shipments!
+    end
   end
 
   # Aggregate all the purchase orders together
   def shipping_choices
     return @shipping_choices unless @shipping_choices.nil?
 
-    _check_shipping_choices_for_parallelism!
+    # Each PO can have a different set of shipping options. Need to handle PT story #151525308
+    raise "NOT READY" if Rails.env.staging?
+    #_check_shipping_choices_for_parallelism!
 
     @shipping_choices = {}
 
@@ -72,6 +110,12 @@ class CustomerPurchaseService
     @shipping_choices
   end
 
+  def shipping_choices_for_view
+    shipping_choices.map do |choice, data|
+      [choice.gsub('_', ' ').titleize, choice]
+    end
+  end
+
   def pick_shipping!(shippo_token)
     _sanity_check!
 
@@ -82,48 +126,74 @@ class CustomerPurchaseService
     _safely do
       self.customer_order.update_attribute(:shippo_token_choice, shippo_token)
       _update_order_totals!(shippo_token)
-      _init_our_charge_record!
     end
   end
 
-  def auth_and_charge!
-    authorize!
-    if our_charge.auth_success?
-      charge!
-    end
-  end
+  delegate :init_our_charge_record!, to: :charging_service
 
   def authorize!
     _sanity_check!
-
-    _safely do
-      _do_stripe_auth!
-      _verify_consistency!(captured: false)
-      _save_auth_results!
-    end
-
-    self.our_charge
+    charging_service.authorize!({
+      after_hook: -> { _email_vendors_the_acknowledgement_link! }
+    })
   end
 
-  def charge!
-    _sanity_check!
+  def okay_to_charge?
+    purchase_orders.all?(&:vendor_accepted?) && charging_service.authed?
+  end
 
-    _safely do
-      _adjust_inventory!
-      _do_stripe_charge!
-      _verify_consistency!(captured: true)
-      _save_charge_results!
-      _purchase_shipping_labels!
+  def should_cancel?
+    purchase_orders.any?(&:vendor_rejected?)
+  end
+
+  # Just because a vendor just acknowledged doesn't mean the order is ready
+  # since all vendors need to acknowledge. One "cannot fulfill" cancels the whole
+  # order
+  def charge_or_cancel_or_not_ready!
+    _sanity_check!
+    if okay_to_charge?
+      _unconditional_charge!
+      _remove_gifts_from_gift_basket!
+    elsif should_cancel?
+      cancel_order!
+    else
+      Rails.logger.info "CANNOT Charge cart ID #{cart_id}. There remains un-acknowledged vendor purchase orders"
+      :dont_know_yet
     end
+  end
+
+  def cancel_order!
+    Rails.logger.info "canceling cart ID #{cart_id}. One or more vendors cannot fulfill"
+    raise "WIP"
+    email_customer_about_cancel
+    email_vendors_about_cancel
+  end
+
+  def things_look_shipable?
+    @shipments_okay
   end
 
   private
 
+  def _unconditional_charge!
+    Rails.logger.info "Charging cart ID #{cart_id}. Also adjusting inventory and buying shipping labels"
+    charging_service.charge!({
+      before_hook: -> { _adjust_inventory! },
+      after_hook: -> {
+        _purchase_shipping_labels!
+        #TODO: _email_customer_now_maybe
+        #TODO: _email_vendors_with_everything_they_need_to_send_like_labels_etc
+      }
+    })
+  end
+
+  def _remove_gifts_from_gift_basket!
+    raise "WIP: TODO"
+  end
+
   def _sanity_check!
     if ENV['SHIPPO_TOKEN'].blank?
       raise InternalConsistencyError, "You must have a shippo token"
-    elsif ENV['STRIPE_SECRET_KEY'].blank?
-      raise InternalConsistencyError, "You must have a stripe token"
     elsif self.cart_id.blank?
       raise InternalConsistencyError, "You must have a context for the purchase (cart ID)"
     end
@@ -138,14 +208,12 @@ class CustomerPurchaseService
         raise InternalConsistencyError, "You specified a non-natural number for a gift quantity."
       elsif self.profile.owner != customer
         raise InternalConsistencyError, "The profile must belong to the customer"
-      elsif !can_fulfill? && ENV['ALLOW_BOGUS_ORDER_CREATION']!='true'
+      elsif !can_fulfill?
         raise InternalConsistencyError, "There is at least one product that has insufficient quantities available."
       elsif gifts_span_vendors?
         raise InternalConsistencyError, "Each gift must only have products for one vendor"
       elsif desired_gifts.any? { |dg| dg.gift.weight_in_pounds.nil? || dg.gift.weight_in_pounds <= 0 }
         raise InternalConsistencyError, "You can't have weightless gifts."
-      elsif self.shipping_info.present? && self.shipping_info.keys.to_set != [:name, :street1, :street2, :street3, :city, :zip, :state, :country, :phone, :email].to_set
-        raise InternalConsistencyError, "Your shipping destination fields aren't precisely right."
       end
     end
   end
@@ -158,13 +226,11 @@ class CustomerPurchaseService
       profile: self.profile,
       status: INITIALIZED,
       recipient_name: profile.name,
-      ship_street1:   shipping_info[:street1],
-      ship_street2:   shipping_info[:street2],
-      ship_street3:   shipping_info[:street3],
-      ship_city:      shipping_info[:city],
-      ship_zip:       shipping_info[:zip],
-      ship_state:     shipping_info[:state],
-      ship_country:   shipping_info[:country]
+      ship_street1: '',
+      ship_city:    '',
+      ship_zip:     '',
+      ship_state:   '',
+      ship_country: 'US'
     })
 
     self.customer_order.save!
@@ -219,36 +285,58 @@ class CustomerPurchaseService
   end
 
   def _init_shipments!
-    self.customer_order.purchase_orders.each do |purchase_order|
-      self.shipment = Shipment.where(cart_id: self.cart_id, purchase_order: purchase_order).first_or_initialize
+    @shipments_okay = true
 
-      self.shipment.address_from =
+    if customer_order.ship_street1.blank? ||
+      customer_order.ship_city.blank? ||
+      customer_order.ship_state.blank? ||
+      customer_order.ship_zip.blank? ||
+      customer_order.ship_country.blank?
+
+      @shipments_okay = false
+      return
+    end
+
+    self.customer_order.purchase_orders.each do |purchase_order|
+      shipment = Shipment.where(cart_id: self.cart_id, purchase_order: purchase_order).first_or_initialize
+
+      shipment.address_from =
         purchase_order.
           vendor.
           attributes.
           keep_if { |key| key.in?(["name", "street1", "street2", "street3", "city", "state", "zip", "country", "phone", "email"]) }
 
-      self.shipment.address_to = self.shipping_info
+      co = self.customer_order
+      shipment.address_to = {
+        name: co.profile.name,
+        street1: co.ship_street1,
+        street2: co.ship_street2,
+        street3: co.ship_street3,
+        city:    co.ship_city,
+        state:   co.ship_state,
+        zip:     co.ship_zip,
+        country: co.ship_country,
+        phone:   co.user.email,
+        email:   co.user.email
+      }
 
       parcel = purchase_order.shippo_parcel_hash
 
       if parcel.blank?
-        if ENV['ALLOW_BOGUS_ORDER_CREATION']=='true'
-          new_parcel = Parcel.dummy_parcel
-          GiftParcel.create!({gift: purchase_order.gift, parcel: new_parcel})
-          parcel = purchase_order.reload.shippo_parcel_hash
-        else
-          raise InternalConsistencyError, "need a box!"
-        end
+        @shipments_okay = false
+
+        # It's exceptional for a gift not to have a box.
+        raise InternalConsistencyError, "need a box!"
       end
 
-      self.shipment.parcel = parcel
+      shipment.parcel = parcel
+      shipment.api_response = nil
+      shipment.run!
+      shipment.save!
 
-      self.shipment.api_response = nil
-
-      self.shipment.run!
-
-      self.shipment.save!
+      if !shipment.success?
+        @shipments_okay &= false
+      end
     end
   end
 
@@ -296,37 +384,12 @@ class CustomerPurchaseService
     co.save!
   end
 
-  def _init_our_charge_record!
-    if self.stripe_token.blank?
-      raise InternalConsistencyError, "You must have a stripe token to even think of charging a card"
+  def _email_vendors_the_acknowledgement_link!
+    purchase_orders.each do |po|
+      VendorMailer.acknowledge_order_request(po.id).deliver_later
     end
-
-    self.our_charge = Charge.where(cart_id: self.cart_id).first_or_initialize
-
-    if self.our_charge.charged?
-      raise InternalConsistencyError, "Initing a charge record, but it's already been charged."
-    end
-
-    self.our_charge.assign_attributes({
-      token: self.stripe_token,
-      customer_order: self.customer_order,
-      status: INITIALIZED,
-      amount_in_cents: self.customer_order.total_to_charge_in_cents,
-      description: "Gifts for #{customer_order.profile_name}",
-      idempotency_key: SecureRandom.hex(10),
-      idempotency_key_expires_at: (Time.now+1.day),
-      metadata: {
-        user_id: customer_order.user_id,
-        profile_id: customer_order.profile_id,
-        gifts: self.customer_order.gifts.map(&:name).join('; '),
-        customer_order_number: customer_order.order_number
-      }
-    })
-
-    self.customer_order.update_attribute(:status, CustomerOrder::SUBMITTED)
-
-    self.our_charge.save!
   end
+
 
   def gifts_span_vendors?
     self.desired_gifts.any? do |dg|
@@ -336,41 +399,10 @@ class CustomerPurchaseService
     end
   end
 
-  def order_config
-    return @order_config unless @order_config.nil?
-
-    @order_config = {products: {}}
-
-    # Aggregate order_config
-    self.desired_gifts.each do |dg|
-      dg.gift.products.each do |product|
-        @order_config[:products][product] ||= {}
-        @order_config[:products][product][:quantity] ||= 0
-        @order_config[:products][product][:quantity] += dg.quantity
-      end
-    end
-
-    @order_config
-  end
-
   def can_fulfill?
-    order_config[:products].none? do |product, values|
-      Product.where(id: product.id).where('units_available < ?', values[:quantity]).any?
+    self.desired_gifts.all? do |dg|
+      dg.gift.units_available > dg.quantity
     end
-  end
-
-  def _do_stripe_auth!
-    self.stripe_charge = Stripe::Charge.create({
-        currency: USD,
-        source: self.our_charge.token,
-        capture: false, # <- Do an auth. This DOES NOT charge the card
-        amount: self.our_charge.amount_in_cents,
-        description: self.our_charge.description,
-        metadata: self.our_charge.metadata
-      },{
-        idempotency_key: self.our_charge.idempotency_key
-      }
-    )
   end
 
   def _adjust_inventory!
@@ -384,59 +416,6 @@ class CustomerPurchaseService
         raise AbortOrderError, "A product has become unavailable while customer was shopping"
       end
     end
-  end
-
-  def _do_stripe_charge!
-    self.stripe_charge = Stripe::Charge.retrieve(self.our_charge.charge_id)
-
-    if self.stripe_charge.captured == false && (Time.now-self.our_charge.authed_at) > TIME_TO_CAPTURE
-      raise InternalConsistencyError, "You didn't charge the auth soon enough. It must be done within 7 days"
-    end
-
-    self.stripe_charge.capture
-  end
-
-  def _verify_consistency!(captured:)
-    unless self.stripe_charge.status.in? GOOD_STRIPE_STATUSES
-      raise InternalConsistencyError, "unexpected status=#{self.stripe_charge.status.to_json}"
-    end
-
-    unless self.stripe_charge.captured == captured
-      raise InternalConsistencyError, "Expected captured to be #{captured}. It wasn't"
-    end
-
-    unless self.stripe_charge.paid
-      raise InternalConsistencyError, "unexpected paid=#{self.stripe_charge.paid.to_json}"
-    end
-
-    unless self.stripe_charge.outcome.type == 'authorized'
-      raise InternalConsistencyError, "This should have been authorized"
-    end
-
-    unless self.stripe_charge.id
-      raise InternalConsistencyError, "missing id"
-    end
-
-    if Rails.env.production? && !self.stripe_charge.livemode
-      raise InternalConsistencyError, "unexpected livemode=#{self.stripe_charge.livemode.to_json}"
-    end
-  end
-
-  def _save_auth_results!
-    self.our_charge.update_attributes({
-      authed_at: Time.now,
-      charge_id: self.stripe_charge.id,
-      status: AUTH_SUCCEEDED
-    })
-  end
-
-  def _save_charge_results!
-    self.our_charge.update_attributes({
-      payment_made_at: Time.now,
-      status: CHARGE_SUCCEEDED
-    })
-
-    self.customer_order.update_attribute(:status, CustomerOrder::PROCESSING)
   end
 
   def _purchase_shipping_labels!
@@ -458,6 +437,8 @@ class CustomerPurchaseService
       }).first_or_initialize
 
       shipping_label.shippo_object_id = rate['object_id']
+      shipping_label.carrier = rate['provider']
+      shipping_label.service_level = rate.dig('servicelevel', 'name')
 
       shipping_label.run!
 
@@ -472,59 +453,10 @@ class CustomerPurchaseService
   rescue Shippo::Exceptions::APIServerError => e
     self.shipment.api_response = e.response
     self.shipment.success = false
-    self.shipment.save!
+    self.shipment.save # Might not succeed. Such is life.
     self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
-  rescue Stripe::CardError => e
-    # Since it's a decline, Stripe::CardError will be caught
-    body = e.json_body
-    err  = body[:error]
-
-    self.our_charge.update_attributes({
-      http_status: e.http_status,
-      error_type: err[:type],
-      charge_id: err[:charge],
-      error_code: err[:code],
-      decline_code: err[:decline_code],
-      error_param: err[:param],
-      error_message: err[:message],
-      status: DECLINED,
-      declined_at: Time.now
-    })
-
-    self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
-  rescue Stripe::RateLimitError => e
-    self.our_charge.update_attributes({
-      status: RATE_LIMIT_FAIL,
-      error_message: e.message
-    })
-    self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
-  rescue Stripe::InvalidRequestError => e
-    self.our_charge.update_attributes({
-      status: INVALID_REQUEST_FAIL,
-      error_message: e.message
-    })
-    self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
-  rescue Stripe::AuthenticationError => e
-    self.our_charge.update_attributes({
-      status: AUTHENTICATION_FAIL,
-      error_message: e.message
-    })
-    self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
-  rescue Stripe::APIConnectionError => e
-    self.our_charge.update_attributes({
-      status: API_CONNECTION_FAIL,
-      error_message: e.message
-    })
-    self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
-  rescue RechargeError => e
     raise
   rescue Exception => e
-    if self.our_charge.present?
-      self.our_charge.update_attributes({
-        status: INTERNAL_CONSISTENCY_FAIL,
-        error_message: (e.message + e.backtrace.to_s)
-      })
-    end
     if self.customer_order.present? && self.customer_order.persisted?
       self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
     end

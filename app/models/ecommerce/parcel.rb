@@ -1,5 +1,9 @@
 class Parcel < ApplicationRecord
+  USAGE_TYPES = ['pretty', 'shipping']
+
   validates :description,      presence: true
+  validates :code,             presence: true, uniqueness: true
+  validates :case_pack, numericality: { only_integer: true }, allow_nil: true
   validates :height_in_inches, numericality: { greater_than: 0 }
   validates :height_in_inches, presence: true
   validates :length_in_inches, numericality: { greater_than: 0 }
@@ -8,16 +12,8 @@ class Parcel < ApplicationRecord
   validates :weight_in_pounds, presence: true
   validates :width_in_inches,  numericality: { greater_than: 0 }
   validates :width_in_inches,  presence: true
-
-  def self.dummy_parcel
-    @dummy_parcel ||= create!({
-      description: '6 Inch Cube (dummy)',
-      height_in_inches: 6,
-      length_in_inches: 6,
-      weight_in_pounds: 0.25,
-      width_in_inches: 6,
-    })
-  end
+  validates :usage, inclusion: { in: USAGE_TYPES, message: "must be either #{USAGE_TYPES.first} or #{USAGE_TYPES.last}" }
+  scope :active, -> { where(active: true) }
 
   def as_shippo_hash
     {

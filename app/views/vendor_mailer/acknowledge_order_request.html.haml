@@ -1,0 +1,30 @@
+%p
+  Hello #{@vendor.name},
+
+%p
+  An order has come through on wrapt.com. Please follow
+  = link_to ecommerce_vendor_confirmation_url(@purchase_order.vendor_token)  do
+    this link
+  to tell us if you can or cannot fulfill this order. After all other vendors
+  and purchase orders associated with this customer's entire order are
+  verified, you will receive the information to complete fulfillment such as
+  shipping labels, a packling slip, etc.
+
+%table
+  %thead
+    %tr
+      %th SKU
+      %th Description
+      %th Quantity
+  %tbody
+    - @purchase_order.line_items.each do |line_item|
+      - product = line_item.orderable
+      %tr
+        %td= product.vendor_sku
+        %td= product.description
+        %td= line_item.quantity
+
+%p
+  Thanks,
+  %br
+  The Wrapt Team

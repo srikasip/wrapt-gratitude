@@ -163,7 +163,10 @@ CREATE VIEW calculated_gift_fields AS
                FROM (products p
                  JOIN gift_products gp ON (((gp.gift_id = g.id) AND (gp.product_id = p.id)))))
             ELSE g.weight_in_pounds
-        END AS weight_in_pounds
+        END AS weight_in_pounds,
+    ( SELECT COALESCE(min(p.units_available), 0) AS "coalesce"
+           FROM (products p
+             JOIN gift_products gp ON (((gp.gift_id = g.id) AND (gp.product_id = p.id))))) AS units_available
    FROM gifts g;
 
 
@@ -752,7 +755,8 @@ CREATE TABLE parcels (
     height_in_inches numeric NOT NULL,
     weight_in_pounds numeric NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    active boolean DEFAULT true NOT NULL
 );
 
 
@@ -1300,7 +1304,11 @@ CREATE TABLE shipping_labels (
     updated_at timestamp without time zone NOT NULL,
     purchase_order_id integer NOT NULL,
     customer_order_id integer NOT NULL,
-    tracking_url character varying
+    tracking_url character varying,
+    eta timestamp without time zone,
+    tracking_status character varying,
+    tracking_updated_at timestamp without time zone,
+    tracking_payload jsonb
 );
 
 
@@ -4178,6 +4186,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170920152258'),
 ('20170920163019'),
 ('20170922134827'),
-('20170925171024');
+('20170925171024'),
+('20170925184052'),
+('20170925193704'),
+('20170925200227');
 
 

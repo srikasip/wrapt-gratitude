@@ -1,0 +1,6 @@
+Review.
+
+%form{action: url_for, method: :patch}
+  %input.btn.btn-primary{value: 'finalize order?', type: :submit}
+
+= render "debug", customer_order: @customer_order

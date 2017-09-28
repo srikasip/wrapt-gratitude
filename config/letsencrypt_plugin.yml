@@ -33,7 +33,7 @@ staging:
 production:
   <<: *default
   cert_name: 'production'
-  domain: "wrapt.com www.wrapt.com"
+  domain: "wrapt.com www.wrapt.com wrapt.greenriver.com wrapt.us www.wrapt.us"
 
 development:
   cert_name: 'development'

@@ -13,6 +13,7 @@ module Admin
       def show
         @order = PurchaseOrder.find(params[:id])
         @vendor = @order.vendor
+        @shipping_label = @order.shipping_label
       end
 
       def resend_notification

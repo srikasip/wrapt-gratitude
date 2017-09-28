@@ -11,6 +11,8 @@ App.GiftBasket = class GiftBasket {
     this.handleCloseLinks();
     this.subscribeToGiftSelectionsChannel()
     this.handleSubmitButtonClick();
+    this.subtotal = $('.js-subtotal');
+    this.num_gifts_words = $('.js-num-gifts-words');
     App.giftBasketInstance = this;
   }
 
@@ -55,7 +57,9 @@ App.GiftBasket = class GiftBasket {
           $(this.gift_list).html(data.gift_selections_html);
           $(this.count_badge).html(this._giftBasketCount(data.gift_basket_count));
           this.updateGiftBasketCountEmptyIndicator(data.gift_basket_count);
-          $(`[data-behavior~=add-to-gift-basket-wrapper][data-gift-id=${data.updated_gift_id}]`).html(data.add_button_html)
+          $(`[data-behavior~=add-to-gift-basket-wrapper][data-gift-id=${data.updated_gift_id}]`).html(data.add_button_html);
+          this.subtotal.html(data.subtotal);
+          this.num_gifts_words.html(data.num_gifts_words);
       }
     });
   }

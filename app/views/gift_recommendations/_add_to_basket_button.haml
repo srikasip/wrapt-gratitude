@@ -3,5 +3,5 @@
   -#= submit_tag 'ADDED TO BASKET', class: 'btn btn-primary btn-narrower', disabled: true
   = link_to 'VIEW BASKET', '#', class: 'btn btn-primary btn-narrower btn-full-width', data: {behavior: 'open-gift-basket'}
 - else
-  = submit_tag 'ADD TO BASKET', class: 'btn btn-primary btn-narrower', onClick:"ga('send', 'event', 'basket', 'add to basket', '#{gift_selection.gift.title}');"
+  = submit_tag 'ADD TO BASKET', class: 'btn btn-primary btn-narrower', onClick:"ga('send', 'event', 'basket', 'add to basket', '#{gift_selection.gift.title.gsub(/'/, "\x5c\x27")}');"
 

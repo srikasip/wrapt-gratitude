@@ -6,8 +6,12 @@ module Admin
       skip_before_action :verify_authenticity_token
 
       def tracking
-        Rails.logger.warn "Body: #{request.body.read}"
-        Rails.logger.warn "Params: #{params.to_unsafe_h.inspect}"
+        Rails.logger.debug { "Body: #{request.body.read}" }
+        Rails.logger.info { "Params: #{params.to_unsafe_h.inspect}" }
+
+        webhook = ShippoTrackingWebhook.new(params.to_unsafe_h['webhook'])
+        webhook.run!
+
         head :ok
       end
 

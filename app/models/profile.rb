@@ -20,4 +20,7 @@ class Profile < ApplicationRecord
     self.recipient_access_token = SecureRandom.urlsafe_base64(nil, false)
   end
 
+  def selling_price_total
+    gift_selections.map(&:gift).map(&:selling_price).sum
+  end
 end

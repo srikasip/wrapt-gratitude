@@ -14,7 +14,7 @@ module Admin
       if ENV['ALLOW_BOGUS_ORDER_CREATION']=='true'
         def create
           order = OrderFactory.create_order!
-          flash[:notice] = "Created order #{order.order_number}"
+          flash[:notice] = "Created order #{order.order_number}."
           redirect_to action: :index
         end
       end

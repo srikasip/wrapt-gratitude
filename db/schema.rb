@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170925171024) do
+ActiveRecord::Schema.define(version: 20170927203446) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,29 +52,34 @@ ActiveRecord::Schema.define(version: 20170925171024) do
   end
 
   create_table "customer_orders", force: :cascade do |t|
-    t.integer  "user_id",                              null: false
-    t.integer  "profile_id",                           null: false
-    t.string   "cart_id",                              null: false
+    t.integer  "user_id",                                  null: false
+    t.integer  "profile_id",                               null: false
+    t.string   "cart_id",                                  null: false
     t.string   "shippo_token_choice"
-    t.string   "order_number",                         null: false
-    t.string   "status",                               null: false
-    t.string   "recipient_name",                       null: false
-    t.string   "ship_street1",                         null: false
+    t.string   "order_number",                             null: false
+    t.string   "status",                                   null: false
+    t.string   "recipient_name",                           null: false
+    t.string   "ship_street1",                             null: false
     t.string   "ship_street2"
     t.string   "ship_street3"
-    t.string   "ship_city",                            null: false
-    t.string   "ship_state",                           null: false
-    t.string   "ship_zip",                             null: false
-    t.string   "ship_country",                         null: false
+    t.string   "ship_city",                                null: false
+    t.string   "ship_state",                               null: false
+    t.string   "ship_zip",                                 null: false
+    t.string   "ship_country",                             null: false
     t.text     "notes"
-    t.integer  "subtotal_in_cents",        default: 0, null: false
-    t.integer  "taxes_in_cents",           default: 0, null: false
-    t.integer  "shipping_in_cents",        default: 0, null: false
-    t.integer  "shipping_cost_in_cents",   default: 0, null: false
-    t.integer  "total_to_charge_in_cents", default: 0, null: false
-    t.date     "created_on",                           null: false
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.integer  "subtotal_in_cents",        default: 0,     null: false
+    t.integer  "taxes_in_cents",           default: 0,     null: false
+    t.integer  "shipping_in_cents",        default: 0,     null: false
+    t.integer  "shipping_cost_in_cents",   default: 0,     null: false
+    t.integer  "total_to_charge_in_cents", default: 0,     null: false
+    t.date     "created_on",                               null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "gift_wrapt",               default: true,  null: false
+    t.boolean  "include_note",             default: false, null: false
+    t.string   "note_from"
+    t.string   "note_to"
+    t.text     "note_content"
     t.index ["profile_id"], name: "index_customer_orders_on_profile_id", using: :btree
     t.index ["user_id"], name: "index_customer_orders_on_user_id", using: :btree
   end
@@ -250,13 +255,20 @@ ActiveRecord::Schema.define(version: 20170925171024) do
   end
 
   create_table "parcels", force: :cascade do |t|
-    t.string   "description",      null: false
-    t.decimal  "length_in_inches", null: false
-    t.decimal  "width_in_inches",  null: false
-    t.decimal  "height_in_inches", null: false
-    t.decimal  "weight_in_pounds", null: false
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.string   "description",                         null: false
+    t.decimal  "length_in_inches",                    null: false
+    t.decimal  "width_in_inches",                     null: false
+    t.decimal  "height_in_inches",                    null: false
+    t.decimal  "weight_in_pounds",                    null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.boolean  "active",           default: true,     null: false
+    t.integer  "case_pack"
+    t.string   "color"
+    t.string   "source"
+    t.string   "stock_number"
+    t.string   "usage",            default: "pretty", null: false
+    t.string   "code"
   end
 
   create_table "product_categories", force: :cascade do |t|
@@ -371,16 +383,20 @@ ActiveRecord::Schema.define(version: 20170925171024) do
     t.integer  "vendor_id"
     t.integer  "customer_order_id"
     t.integer  "gift_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.string   "order_number",           null: false
-    t.date     "created_on",             null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "order_number",                  null: false
+    t.date     "created_on",                    null: false
     t.decimal  "total_due_in_cents"
     t.decimal  "shipping_in_cents"
     t.decimal  "shipping_cost_in_cents"
+    t.string   "vendor_token",                  null: false
+    t.string   "vendor_acknowledgement_status"
+    t.string   "vendor_acknowledgement_reason"
     t.index ["customer_order_id"], name: "index_purchase_orders_on_customer_order_id", using: :btree
     t.index ["gift_id"], name: "index_purchase_orders_on_gift_id", using: :btree
     t.index ["vendor_id"], name: "index_purchase_orders_on_vendor_id", using: :btree
+    t.index ["vendor_token"], name: "index_purchase_orders_on_vendor_token", unique: true, using: :btree
   end
 
   create_table "recipient_gift_dislikes", force: :cascade do |t|
@@ -435,18 +451,24 @@ ActiveRecord::Schema.define(version: 20170925171024) do
 
   create_table "shipping_labels", force: :cascade do |t|
     t.integer  "shipment_id"
-    t.string   "cart_id",           null: false
+    t.string   "cart_id",             null: false
     t.string   "tracking_number"
     t.jsonb    "api_response"
     t.boolean  "success"
     t.text     "url"
     t.string   "shippo_object_id"
     t.text     "error_messages"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.integer  "purchase_order_id", null: false
-    t.integer  "customer_order_id", null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.integer  "purchase_order_id",   null: false
+    t.integer  "customer_order_id",   null: false
     t.string   "tracking_url"
+    t.datetime "eta"
+    t.string   "tracking_status"
+    t.datetime "tracking_updated_at"
+    t.jsonb    "tracking_payload"
+    t.string   "carrier",             null: false
+    t.string   "service_level",       null: false
     t.index ["customer_order_id"], name: "index_shipping_labels_on_customer_order_id", using: :btree
     t.index ["purchase_order_id"], name: "index_shipping_labels_on_purchase_order_id", using: :btree
     t.index ["shipment_id"], name: "index_shipping_labels_on_shipment_id", using: :btree

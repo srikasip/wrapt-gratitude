@@ -44,7 +44,13 @@ class CalculatedGiftField < ApplicationRecord
           )
         else
           g.weight_in_pounds
-        end as weight_in_pounds
+        end as weight_in_pounds,
+
+        (
+          select COALESCE(min(p.units_available), 0)
+          from products as p
+          join gift_products as gp on gp.gift_id = g.id and gp.product_id = p.id
+        ) as units_available
 
       from gifts as g
     SQL

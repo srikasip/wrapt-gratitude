@@ -1,0 +1,40 @@
+.row
+  .col-sm-6
+    Order: #{@purchase_order.order_number}
+
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Description
+          %th SKU
+          %th Quantity
+      %tbody
+        - @purchase_order.line_items.each do |line_item|
+          - product = line_item.orderable
+          %tr
+            %td= product.description
+            %td= product.vendor_sku
+            %td= line_item.quantity
+
+    = simple_form_for @purchase_order, url: url_for, method: :put do |f|
+      = f.input :vendor_acknowledgement_status, collection: [ ['I have all products and will ship them to the customer', PurchaseOrder::FULFILL], ['I cannot fulfill this order', PurchaseOrder::DO_NOT_FULFILL] ]
+      = f.input :vendor_acknowledgement_reason, collection: PurchaseOrder::NO_FULFILL_REASONS
+      = f.submit
+      = content_for :page_js do
+        :javascript
+          $('document').ready(function() {
+            function update_form() {
+              var value =  $('#purchase_order_vendor_acknowledgement_status')[0].value;
+
+              if ( value === 'true' ) {
+                $('.purchase_order_vendor_acknowledgement_reason').hide();
+              } else {
+                $('.purchase_order_vendor_acknowledgement_reason').show();
+              }
+            }
+
+            update_form();
+            $('#purchase_order_vendor_acknowledgement_status').change(function(e) {
+              update_form();
+            });
+          });
