@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170927203446) do
+ActiveRecord::Schema.define(version: 20170929125823) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -732,9 +732,6 @@ ActiveRecord::Schema.define(version: 20170927203446) do
   add_foreign_key "conditional_question_options", "survey_questions"
   add_foreign_key "customer_orders", "profiles"
   add_foreign_key "customer_orders", "users"
-  add_foreign_key "evaluation_recommendations", "gifts"
-  add_foreign_key "evaluation_recommendations", "profile_set_survey_responses"
-  add_foreign_key "evaluation_recommendations", "training_set_evaluations"
   add_foreign_key "gift_dislikes", "gifts"
   add_foreign_key "gift_dislikes", "profiles"
   add_foreign_key "gift_images", "gifts"
@@ -745,9 +742,6 @@ ActiveRecord::Schema.define(version: 20170927203446) do
   add_foreign_key "gift_parcels", "parcels"
   add_foreign_key "gift_products", "gifts"
   add_foreign_key "gift_products", "products"
-  add_foreign_key "gift_question_impacts", "gifts"
-  add_foreign_key "gift_question_impacts", "survey_questions"
-  add_foreign_key "gift_question_impacts", "training_sets"
   add_foreign_key "gift_recommendations", "gifts"
   add_foreign_key "gift_recommendations", "profiles"
   add_foreign_key "gift_selections", "gifts"
@@ -777,7 +771,6 @@ ActiveRecord::Schema.define(version: 20170927203446) do
   add_foreign_key "survey_responses", "surveys"
   add_foreign_key "survey_sections", "surveys"
   add_foreign_key "training_set_evaluations", "training_sets"
-  add_foreign_key "training_set_response_impacts", "gift_question_impacts"
   add_foreign_key "trait_response_impacts", "profile_traits_tags"
   add_foreign_key "trait_response_impacts", "survey_question_options"
   add_foreign_key "trait_response_impacts", "trait_training_set_questions"
