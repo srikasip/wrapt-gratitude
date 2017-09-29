@@ -75,9 +75,11 @@ Rails.application.routes.draw do
     get "checkout/finalize" => "checkout#finalize"
 
     resources :vendor_confirmations, only: [:show, :update] do
+      member do
+        get :details
+      end
       collection do
         get :error
-        get :thanks
       end
     end
   end
