@@ -35,6 +35,8 @@ class Gift < ApplicationRecord
 
   accepts_nested_attributes_for :gift_parcels
 
+  scope :available, -> { where(available: true) }
+
   def self.search search_params
     self.all.merge(GiftSearch.new(search_params).to_scope)
   end
