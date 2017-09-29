@@ -1,4 +1,6 @@
 class Ecommerce::CheckoutController < ApplicationController
+  before_action -> { redirect_to :root }, if: -> { ENV.fetch('CHECKOUT_ENABLED') { 'false' } == 'false' }
+
   before_action :_load_service_object, except: [:edit_gift_wrap]
 
   def edit_gift_wrapt
