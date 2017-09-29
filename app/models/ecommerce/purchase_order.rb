@@ -59,4 +59,8 @@ class PurchaseOrder < ApplicationRecord
   def total_due_in_dollars
     self.total_due_in_cents / 100.0
   end
+
+  def handling_cost_in_dollars
+    self.handling_cost_in_cents / 100.0
+  end
 end

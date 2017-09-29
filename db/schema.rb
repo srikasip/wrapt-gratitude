@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170929125823) do
+ActiveRecord::Schema.define(version: 20170929155100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,8 @@ ActiveRecord::Schema.define(version: 20170929125823) do
     t.string   "note_from"
     t.string   "note_to"
     t.text     "note_content"
+    t.integer  "handling_cost_in_cents",   default: 0,     null: false
+    t.integer  "handling_in_cents",        default: 0,     null: false
     t.index ["profile_id"], name: "index_customer_orders_on_profile_id", using: :btree
     t.index ["user_id"], name: "index_customer_orders_on_user_id", using: :btree
   end
@@ -383,16 +385,18 @@ ActiveRecord::Schema.define(version: 20170929125823) do
     t.integer  "vendor_id"
     t.integer  "customer_order_id"
     t.integer  "gift_id"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.string   "order_number",                  null: false
-    t.date     "created_on",                    null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.string   "order_number",                              null: false
+    t.date     "created_on",                                null: false
     t.decimal  "total_due_in_cents"
     t.decimal  "shipping_in_cents"
     t.decimal  "shipping_cost_in_cents"
-    t.string   "vendor_token",                  null: false
+    t.string   "vendor_token",                              null: false
     t.string   "vendor_acknowledgement_status"
     t.string   "vendor_acknowledgement_reason"
+    t.integer  "handling_cost_in_cents",        default: 0, null: false
+    t.integer  "handling_in_cents",             default: 0, null: false
     t.index ["customer_order_id"], name: "index_purchase_orders_on_customer_order_id", using: :btree
     t.index ["gift_id"], name: "index_purchase_orders_on_gift_id", using: :btree
     t.index ["vendor_id"], name: "index_purchase_orders_on_vendor_id", using: :btree
@@ -702,16 +706,17 @@ ActiveRecord::Schema.define(version: 20170929125823) do
     t.string   "email"
     t.string   "phone"
     t.text     "notes"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
     t.string   "wrapt_sku_code"
-    t.string   "street1",         default: "unknown", null: false
-    t.string   "city",            default: "unknown", null: false
-    t.string   "state",           default: "unknown", null: false
-    t.string   "zip",             default: "unknown", null: false
-    t.string   "country",         default: "unknown", null: false
+    t.string   "street1",                        default: "unknown", null: false
+    t.string   "city",                           default: "unknown", null: false
+    t.string   "state",                          default: "unknown", null: false
+    t.string   "zip",                            default: "unknown", null: false
+    t.string   "country",                        default: "unknown", null: false
     t.string   "street2"
     t.string   "street3"
+    t.integer  "purchase_order_markup_in_cents", default: 800,       null: false
     t.index ["wrapt_sku_code"], name: "index_vendors_on_wrapt_sku_code", using: :btree
   end
 

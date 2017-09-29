@@ -357,6 +357,8 @@ class CustomerPurchase
 
     co.subtotal_in_cents        = 0
     co.taxes_in_cents           = 0
+    co.handling_in_cents        = 0
+    co.handling_cost_in_cents   = 0
     co.shipping_in_cents        = 0
     co.shipping_cost_in_cents   = 0
     co.total_to_charge_in_cents = 0
@@ -366,22 +368,28 @@ class CustomerPurchase
     end
 
     co.purchase_orders.each do |po|
-      rate = po.shipment.rates.find { |x| x.dig('servicelevel', 'token') == shippo_token }
+      rate                   = po.shipment.rates.find { |x| x.dig('servicelevel', 'token') == shippo_token }
+      shipping_cost_in_cents = rate['amount'].to_f * 100
+      vendor_markup          = po.vendor.purchase_order_markup_in_cents
 
-      co.shipping_cost_in_cents += rate['amount'].to_f * 100
+      co.shipping_cost_in_cents += shipping_cost_in_cents
+      co.handling_cost_in_cents += vendor_markup
+      co.handling_in_cents      += vendor_markup
+      co.shipping_in_cents      += shipping_cost_in_cents * SHIPPING_MARKUP
 
       po.update_attributes({
-        shipping_cost_in_cents: rate['amount'].to_f * 100,
-        shipping_in_cents: rate['amount'].to_f * 100 * SHIPPING_MARKUP
+        shipping_cost_in_cents: shipping_cost_in_cents,
+        shipping_in_cents: shipping_cost_in_cents * SHIPPING_MARKUP,
+        handling_cost_in_cents: vendor_markup,
+        handling_in_cents: vendor_markup
       })
     end
 
-    co.shipping_in_cents = co.shipping_cost_in_cents * SHIPPING_MARKUP
 
     # TODO: Taxes when we know
     co.taxes_in_cents = 0.0
 
-    co.total_to_charge_in_cents = co.subtotal_in_cents + co.shipping_in_cents + co.taxes_in_cents
+    co.total_to_charge_in_cents = co.subtotal_in_cents + co.shipping_in_cents + co.handling_in_cents + co.taxes_in_cents
 
     co.save!
   end

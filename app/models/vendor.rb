@@ -11,6 +11,7 @@ class Vendor < ApplicationRecord
   validates :country, presence: true
   validates :phone, presence: true
   validates :email, presence: true
+  validates :purchase_order_markup_in_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   before_validation :upcase_wrapt_sku_code
 
@@ -22,6 +23,14 @@ class Vendor < ApplicationRecord
 
   def deleteable?
     PurchaseOrder.where(vendor: self).none?
+  end
+
+  def purchase_order_markup_in_dollars
+    purchase_order_markup_in_cents / 100.0
+  end
+
+  def purchase_order_markup_in_dollars= val
+    self.purchase_order_markup_in_cents = val.to_f * 100.0
   end
 
   private def set_skus_need_regeneration

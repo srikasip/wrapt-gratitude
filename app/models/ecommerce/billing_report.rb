@@ -9,7 +9,7 @@ class BillingReport < Struct.new(:params)
   def csv_results
     base_scope = _generate_results!
     CSV.generate do |csv|
-      csv << [ 'PO Number', 'CO Number', 'Date', 'Status', 'Wrapt SKU', 'Vendor SKU', 'Description', 'Wrapt Cost', 'Shipping Cost', 'Shipping Charged' ]
+      csv << [ 'PO Number', 'CO Number', 'Date', 'Status', 'Wrapt SKU', 'Vendor SKU', 'Description', 'Wrapt Cost', 'Handling in dollars' ]
       base_scope.each do |po|
         po.line_items.each do |line_item|
           product = line_item.orderable
@@ -24,8 +24,7 @@ class BillingReport < Struct.new(:params)
             product.vendor_sku,
             product.description,
             product.wrapt_cost,
-            po.shipping_cost_in_dollars_for(product),
-            po.shipping_in_dollars_for(product)
+            po.handling_cost_in_dollars
           ]
         end
       end
