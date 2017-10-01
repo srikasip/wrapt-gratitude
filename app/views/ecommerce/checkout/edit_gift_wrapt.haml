@@ -1,9 +1,15 @@
-= simple_form_for @customer_order, url: url_for, method: :patch do |f|
-  = f.input :gift_wrapt
-  = f.input :include_note
-  = f.input :note_from
-  = f.input :note_to
-  = f.input :note_content
-  = f.submit
+.container
+  = render 'header'
+  .row
+    .col-xs-12.col-md-10.col-md-offset-1
+      .co-container
+        = simple_form_for @customer_order, url: url_for, method: :patch do |f|
+          = f.input :gift_wrapt
+          = f.input :include_note
+          = f.input :note_from
+          = f.input :note_to
+          = f.input :note_content
+          = f.submit
 
 = render "debug", customer_order: @customer_order
+

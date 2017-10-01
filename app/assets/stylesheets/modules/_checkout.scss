@@ -1,0 +1,27 @@
+@import "helpers";
+
+#co-progress-bar {
+  position: relative;
+}
+
+#co-progress-bar a {
+  position: absolute;
+  display: inline-block;
+  width: 25%;
+  height: 60px;
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: transparent;
+  }
+}
+
+.co-progress-bar__disabled {
+  cursor: not-allowed;
+}
+
+.co-container {
+  @include shadowed-box__02();
+  background-color: #FFFFFF;
+  padding: 32px 16px;
+}

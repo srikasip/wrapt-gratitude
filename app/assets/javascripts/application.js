@@ -22,6 +22,7 @@
 //= require jquery.iframe-transport
 //= require jquery.fileupload
 //= require cable
+//= require d3.min
 
 // Application Code
 //= require app/init

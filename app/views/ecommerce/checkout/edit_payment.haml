@@ -1,3 +1,7 @@
+.container
+  = render 'header'
+
+
 = link_to "« Pick Shipping", url_for(action: :edit_shipping)
 
 = form_tag(url_for, method: :patch) do

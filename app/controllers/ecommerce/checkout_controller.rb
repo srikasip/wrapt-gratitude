@@ -3,6 +3,7 @@ class Ecommerce::CheckoutController < ApplicationController
 
   def edit_gift_wrapt
     @checkout_step = :gift_wrapt
+    _load_progress_bar
 
     flash.now[:notice] = <<~EOS
       You're getting a new shopping cart each time you visit this page. Todd
@@ -40,6 +41,7 @@ class Ecommerce::CheckoutController < ApplicationController
 
   def edit_address
     @checkout_step = :shipping
+    _load_progress_bar
   end
 
   def save_address
@@ -57,6 +59,7 @@ class Ecommerce::CheckoutController < ApplicationController
   def edit_shipping
     flash.now[:notice] = "Always pick USPS while we're developing a solution to reconciling shippo choices across all purchase orders"
     @checkout_step = :shipping
+    _load_progress_bar
     @shipping_choices = @customer_purchase.shipping_choices_for_view
   end
 
@@ -74,6 +77,7 @@ class Ecommerce::CheckoutController < ApplicationController
 
   def edit_payment
     @checkout_step = :payment
+    _load_progress_bar
   end
 
   def save_payment
@@ -108,6 +112,10 @@ class Ecommerce::CheckoutController < ApplicationController
   end
 
   private
+
+  def _load_progress_bar
+    @pb = ::ProgressBarViewModel.new(@customer_order, @customer_purchase, @checkout_step)
+  end
 
   def _load_service_object
     @customer_purchase = ::CustomerPurchase.new(cart_id: session[:cart_id])
