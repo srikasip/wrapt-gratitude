@@ -21,7 +21,8 @@
 }
 
 .co-container {
-  @include shadowed-box__02();
+  @include shadowed-box__gray;
   background-color: #FFFFFF;
   padding: 32px 16px;
+  margin: 40px 0px;
 }

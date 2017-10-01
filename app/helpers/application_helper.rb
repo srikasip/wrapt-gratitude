@@ -161,4 +161,50 @@ module ApplicationHelper
     return 'N/A' if date.nil?
     date.strftime("%b %e, %Y")
   end
+
+  def content_quote(quote)
+    content_tag :div, class: quote[:container] do
+      concat content_tag :p, quote[:content].html_safe
+      concat content_tag :small, quote[:credit].html_safe
+    end
+  end
+
+  def content_section(content)
+    content_tag :div, class: content[:container] do
+      if content[:header].present?
+        concat content_tag :h4, content_with_citation(content[:header][:text], content[:header][:citations]), class: 'about-page__header'
+      end
+      concat content_section_text(content[:content], content[:citations])
+    end
+  end
+
+  def content_section_text(content, citations)
+    content_tag :p do
+      content.each_with_index do |c, index|
+        cits = citations[index] || []
+        concat content_with_citation(c, cits)
+      end
+    end
+  end
+
+  def content_with_citation(content, citations)
+    content_tag :span do
+      concat "#{content} ".html_safe
+      citations.each_with_index do |cit, index|
+        concat content_tag :sup, citation_link(index, citations)
+      end
+    end
+  end
+
+  def citation_link(index, citations)
+    cit = citations[index]
+    if index == citations.size - 1
+      link_to cit, "#citation-0#{cit}"
+    else
+      succeed ',' do
+        link_to cit, "#citation-0#{cit}"
+      end
+    end
+  end
+
 end
