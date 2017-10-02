@@ -154,7 +154,7 @@ class CustomerPurchase::ShippingService
     shipping_choice = self.customer_order.shipping_choice
 
     self.customer_order.purchase_orders.each do |po|
-      rate = CustomerPurchase::ShippingService.find_rate(rates: po.shipment.rates, choice: shipping_choice, vendor: po.vendor)
+      rate = CustomerPurchase::ShippingService.find_rate(rates: po.shipment.rates, shipping_choice: shipping_choice, vendor: po.vendor)
       shipment = po.shipment
 
       if Rails.env.production? && rate['test']
