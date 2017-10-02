@@ -1,47 +1,47 @@
 .container
   = render 'header'
-
-
-= link_to "« Pick Shipping", url_for(action: :edit_shipping)
-
-= form_tag(url_for, method: :patch) do
-  .form-group.row
-    .col-xs-8
-      %label{for: 'cardholder-name'} Name On Card
-      %input#cardholder-name.name-on-card.field.form-control.string{name: 'cardholder-name'}
-      %small.form-text.text-muted e.g. Jane Doe
-    .col-xs-4
-      %label{for: 'js-postal-code'} Postal Code
-      %input#js-postal-code.field.form-control.string{name: 'address-zip'}
-      %small.form-text.text-muted e.g. 66212
-  .form-group.row
-    .col-xs-8
-      %label{for: 'js-card-number'}
-        <abbr title="required">*</abbr>
-        Card Number
-      #js-card-number.field.form-control.string.required
-      %small.form-text.text-muted e.g. 4242 4242 4242 4242
-    .col-xs-2
-      %label{for: 'js-cvc'}
-        <abbr title="required">*</abbr>
-        CVC
-      #js-cvc.field.form-control.string.required
-      %small.form-text.text-muted e.g. 123
-    .col-xs-2
-      %label{for: 'js-expiry-field'}
-        <abbr title="required">*</abbr>
-        Expiry
-      #js-expiry.field.form-control.string.required
-      %small.form-text.text-muted e.g. 11/19
-
   .row
-    .col-xs-12
-      #js-stripe-errors
+    .col-xs-12.col-md-10.col-md-offset-1
+      .co-container
+        %h2.light Payment Information
+        = form_tag(url_for, method: :patch) do
+          .form-group.row
+            .col-xs-8
+              %label{for: 'cardholder-name'} Name On Card
+              %input#cardholder-name.name-on-card.field.form-control.string{name: 'cardholder-name'}
+              %small.form-text.text-muted e.g. Jane Doe
+            .col-xs-4
+              %label{for: 'js-postal-code'} Postal Code
+              %input#js-postal-code.field.form-control.string{name: 'address-zip'}
+              %small.form-text.text-muted e.g. 66212
+          .form-group.row
+            .col-xs-8
+              %label{for: 'js-card-number'}
+                <abbr title="required">*</abbr>
+                Card Number
+              #js-card-number.field.form-control.string.required
+              %small.form-text.text-muted e.g. 4242 4242 4242 4242
+            .col-xs-2
+              %label{for: 'js-cvc'}
+                <abbr title="required">*</abbr>
+                CVC
+              #js-cvc.field.form-control.string.required
+              %small.form-text.text-muted e.g. 123
+            .col-xs-2
+              %label{for: 'js-expiry-field'}
+                <abbr title="required">*</abbr>
+                Expiry
+              #js-expiry.field.form-control.string.required
+              %small.form-text.text-muted e.g. 11/19
 
-  .row
-    .col-xs-12
-      .gi-submit.clearfix
-        %input.btn.btn-primary{value: 'next', type: :submit}
+        .row
+          .col-xs-12
+            #js-stripe-errors
+
+        .row
+          .col-xs-12
+            .gi-submit.clearfix
+              %input.btn.btn-primary{value: 'next', type: :submit}
 
 = content_for :page_js do
   :javascript

@@ -3,13 +3,19 @@
   .row
     .col-xs-12.col-md-10.col-md-offset-1
       .co-container
+        %h2.light Gift Wrapt
         = simple_form_for @customer_order, url: url_for, method: :patch do |f|
           = f.input :gift_wrapt
           = f.input :include_note
-          = f.input :note_from
-          = f.input :note_to
-          = f.input :note_content
-          = f.submit
+          .row
+            .col-xs-12.col-md-6
+              = f.input :note_from, label: 'From'
+            .col-xs-12.col-md-6
+              = f.input :note_to, label: 'To'
+          = f.input :note_content, label: 'Your Note'
+          %button.btn.btn-primary{type: 'submit'}
+            = "Next <svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
 
-= render "debug", customer_order: @customer_order
+
+  = render "debug", customer_order: @customer_order
 

@@ -19,17 +19,6 @@ class ProgressBarViewModel
     }
   }
 
-  # Step = Struct.new(:key, :active, :disabled) do
-  #   def progress_bar_title
-  #     key.to_s.humanize.titleize
-  #   end
-
-  #   def page_title
-  #     base = key.to_s.humanize.titleize
-  #     [:shipping, :payment].include?(key) ? "#{base} Information" : base
-  #   end      
-  # end
-
   def initialize(customer_order, customer_purchase, current_step)
     @customer_order = customer_order
     @current_step = current_step
@@ -48,7 +37,6 @@ class ProgressBarViewModel
       active = step_active?(step)
       disabled = step_disabled?(step)
       complete = step_complete?(step)  
-      # steps.push(Step.new(step, active, disabled))
       steps.push({
         step: step, 
         active: active, 

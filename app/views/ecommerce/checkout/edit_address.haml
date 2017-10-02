@@ -1,22 +1,30 @@
 .container
   = render 'header'
-  
-= link_to "« Gift Wrapt", url_for(action: :edit_gift_wrapt)
+  .row
+    .col-xs-12.col-md-10.col-md-offset-1
+      .co-container
+        %h2.light Shipping Information
+        = simple_form_for @customer_order, url: url_for, method: :patch do |f|
+          %label
+            = radio_button_tag :toggle_address_choice, :ship_to_me
+            Ship to me
+          |
+          %label
+            = radio_button_tag :toggle_address_choice, :ship_to_giftee
+            Ship to #{@profile.name}
+          .row
+            .col-xs-12.col-md-10
+              = f.input :ship_street1, label: 'Street Address'
+            .col-xs-12.col-md-2
+              = f.input :ship_street2, label: 'Apt / Suite #'
+          .row
+            .col-xs-12.col-md-8
+              = f.input :ship_city, label: 'City'
+            .col-xs-12.col-md-2
+              = f.input :ship_state, label: 'State'
+            .col-xs-12.col-md-2
+              = f.input :ship_zip, label: 'Zip Code'
+          %button.btn.btn-primary{type: 'submit'}
+            = "Next <svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
 
-= simple_form_for @customer_order, url: url_for, method: :patch do |f|
-  %label
-    = radio_button_tag :toggle_address_choice, :ship_to_me
-    Ship to me
-  |
-  %label
-    = radio_button_tag :toggle_address_choice, :ship_to_giftee
-    Ship to #{@profile.name}
-
-  = f.input :ship_street1
-  = f.input :ship_street2, label: 'Apt # or suite'
-  = f.input :ship_city
-  = f.input :ship_state
-  = f.input :ship_zip
-  = f.submit
-
-= render "debug", customer_order: @customer_order
+  = render "debug", customer_order: @customer_order
