@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 20171002133537) do
     t.integer  "user_id",                                  null: false
     t.integer  "profile_id",                               null: false
     t.string   "cart_id",                                  null: false
-    t.string   "shippo_token_choice"
+    t.string   "shipping_choice"
     t.string   "order_number",                             null: false
     t.string   "status",                                   null: false
     t.string   "recipient_name",                           null: false

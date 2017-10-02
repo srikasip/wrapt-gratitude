@@ -6,6 +6,8 @@ class AddMoreShippingThings < ActiveRecord::Migration[5.0]
 
     add_column :parcels, :shippo_template_name, :string
 
+    rename_column :customer_orders, :shippo_token_choice, :shipping_choice
+
     add_index :shipping_carriers, :shippo_provider_name, unique: true
     add_index :shipping_carriers, :name, unique: true
 

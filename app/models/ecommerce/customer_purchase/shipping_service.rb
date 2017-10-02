@@ -63,72 +63,94 @@ class CustomerPurchase::ShippingService
   end
 
   # Aggregate all the purchase orders together
-  def shipping_choices
-    return @shipping_choices unless @shipping_choices.nil?
-
-    # Each PO can have a different set of shipping options. Need to handle PT story #151525308
-    _check_shipping_choices_for_parallelism!
-
-    @shipping_choices = {}
-
-    self.customer_order.purchase_orders.each do |po|
-      po.shipment.rates.each do |rate|
-        token = rate.dig('servicelevel', 'token')
-        name = rate.dig('servicelevel', 'name')
-
-        @shipping_choices[token] ||= {}
-
-        @shipping_choices[token]['name'] = name
-
-        fields_to_copy = [
-          'duration_terms',
-          'estimated_days',
-          'provider_image_200',
-          'provider_image_75'
-        ]
-
-        fields_to_copy.each do |field|
-          @shipping_choices[token][field] = rate[field]
-        end
-
-        @shipping_choices[token]['amount_in_dollars'] ||= 0.0
-        @shipping_choices[token]['amount_in_dollars'] += rate['amount'].to_f
-      end
-    end
-
-    @shipping_choices
-  end
+  #def shipping_choices
+  #  return @shipping_choices unless @shipping_choices.nil?
+  #
+  #  @shipping_choices = {}
+  #
+  #  self.customer_order.purchase_orders.each do |po|
+  #    po.shipment.rates.each do |rate|
+  #      token = rate.dig('servicelevel', 'token')
+  #      name = rate.dig('servicelevel', 'name')
+  #
+  #      @shipping_choices[token] ||= {}
+  #
+  #      @shipping_choices[token]['name'] = name
+  #
+  #      fields_to_copy = [
+  #        'duration_terms',
+  #        'estimated_days',
+  #        'provider_image_200',
+  #        'provider_image_75'
+  #      ]
+  #
+  #      fields_to_copy.each do |field|
+  #        @shipping_choices[token][field] = rate[field]
+  #      end
+  #
+  #      @shipping_choices[token]['amount_in_dollars'] ||= 0.0
+  #      @shipping_choices[token]['amount_in_dollars'] += rate['amount'].to_f
+  #    end
+  #  end
+  #
+  #  @shipping_choices
+  #end
 
   def shipping_choices_for_view
-    shipping_choices.map do |choice, data|
-      [choice.gsub('_', ' ').titleize, choice]
-    end
+    [
+      ['Fastest', 'fastest'],
+      ['Least Expensive', 'cheapest'],
+      ['Best Value', 'bestvalue']
+    ]
   end
 
-  def things_look_shipable?
-    shipping_choices
-
-    @shipments_okay
-  end
-
-  def pick_shipping!(shippo_token, after_hook: -> {} )
+  def pick_shipping!(shipping_choice, after_hook: -> {} )
     _sanity_check!
 
-    if shipping_choices.keys.exclude?(shippo_token)
-      raise InternalConsistencyError, "You picked an unknown or invalid shippo shipping token"
+    if shipping_choices_for_view.map(&:last).exclude?(shipping_choice)
+      raise InternalConsistencyError, "You picked an unknown or invalid shipping choice"
     end
 
     _safely do
-      self.customer_order.update_attribute(:shippo_token_choice, shippo_token)
+      self.customer_order.update_attribute(:shipping_choice, shipping_choice)
       after_hook.call
     end
   end
 
+  def self.find_rate(rates:, shipping_choice:, vendor:)
+    allowed_rates = rates.select do |rate|
+      if vendor.shipping_service_levels.blank?
+        # No choices mean all choices are okay
+        true
+      else
+        # Limit choices to those allowed for this vendor
+        vendor.shipping_service_levels.map(&:shippo_token).include?(rate.dig('servicelevel', 'name'))
+      end
+    end
+
+    picked_rate = allowed_rates.find { |r| r['attributes'].include?(shipping_choice.upcase) }
+
+    if picked_rate.nil?
+      case shipping_choice.upcase
+      when 'FASTEST'
+        picked_rate = allowed_rates.sort_by { |r| r['estimated_days'].to_i }.first
+      else
+        picked_rate = allowed_rates.sort_by { |r| r['amount'].to_f }.first
+      end
+    end
+
+    if picked_rate.nil?
+      raise InternalConsistencyError, "Unable to find a way to ship!"
+    end
+
+    picked_rate
+  end
+
   def purchase_shipping_labels!
-    choice = self.customer_order.shippo_token_choice
+    shipping_choice = self.customer_order.shipping_choice
 
     self.customer_order.purchase_orders.each do |po|
-      rate = po.shipment.rates.find { |r| r.dig('servicelevel', 'token') == choice }
+      rate = CustomerPurchase::ShippingService.find_rate(rates: po.shipment.rates, choice: shipping_choice, vendor: po.vendor)
       shipment = po.shipment
 
       if Rails.env.production? && rate['test']
@@ -168,16 +190,6 @@ class CustomerPurchase::ShippingService
 
   private
 
-  def _check_shipping_choices_for_parallelism!
-    uniq_tokens = self.customer_order.purchase_orders.map do |po|
-      po.shipment.rates.map { |x| x.dig('servicelevel', 'token') }.sort
-    end.uniq
-
-    if uniq_tokens.length != 1
-      raise InternalConsistencyError, "All POs should have same number and type of shipping choices"
-    end
-  end
-
   def _sanity_check!
     if ENV['SHIPPO_TOKEN'].blank?
       raise InternalConsistencyError, "You must have a shippo token"
@@ -194,8 +206,6 @@ class CustomerPurchase::ShippingService
     elsif self.cart_id.blank?
       raise InternalConsistencyError, "You must have a context for the purchase (cart ID)"
     end
-
-    raise "also check shippo token isn't test when in production"
   end
 
   def _safely

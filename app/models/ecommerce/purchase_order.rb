@@ -23,8 +23,11 @@ class PurchaseOrder < ApplicationRecord
   belongs_to :vendor
   belongs_to :gift
 
-  has_one :gift_parcel, primary_key: 'gift_id', foreign_key: 'gift_id'
-  has_one :parcel, through: :gift_parcel
+  #has_one :gift_parcel, primary_key: 'gift_id', foreign_key: 'gift_id'
+  #has_one :parcel, through: :gift_parcel
+  has_many :pretty_parcels, through: :gift
+  has_many :shipping_parcels, through: :gift
+  delegate :pretty_parcel, :shipping_parcel, to: :gift, prefix: false
 
   validates :order_number, presence: true
   validates :vendor_token, uniqueness: true
@@ -56,10 +59,20 @@ class PurchaseOrder < ApplicationRecord
   end
 
   def shippo_parcel_hash
-    return unless parcel.present?
+    return unless shipping_parcel.present?
 
-    parcel.as_shippo_hash.tap do |result|
+    shipping_parcel.as_shippo_hash.tap do |result|
+      # Start with the parcel's weight
+
+      # Add the gift weight
       result[:weight] += gift.weight_in_pounds
+
+      # Add the pretty box's weight
+      result[:weight] += pretty_parcel.weight_in_pounds
+
+      # Packing material estimate
+      result[:weight] += ESTIMATED_WEIGHT_IN_POUNDS_OF_PACKING_MATERIAL
+
       result[:weight] = result[:weight].round(2)
     end
   end

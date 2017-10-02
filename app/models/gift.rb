@@ -1,10 +1,15 @@
 class Gift < ApplicationRecord
-
   acts_as_taggable
 
   VALID_TAG_REGEXP = /^[a-z0-9][a-z0-9_]*$/i
 
+  validates :name, presence: true
+  validates :wrapt_sku, presence: true
   validate :validate_tag
+  validate :_has_boxes
+  validate :_has_products
+  validate :_has_price
+  validate :_has_weight
 
   has_many :gift_products, inverse_of: :gift, dependent: :destroy
   has_many :products, through: :gift_products
@@ -13,11 +18,11 @@ class Gift < ApplicationRecord
   has_many :uploaded_gift_images, class_name: 'GiftImages::Uploaded'
   has_many :gift_images_from_products, class_name: 'GiftImages::FromProduct'
 
-  has_many :gift_parcels
+  has_many :gift_parcels, dependent: :destroy
   has_many :pretty_parcels, -> { joins(:parcel).where(parcels: { usage: 'pretty' }) }, class_name: 'GiftParcel'
   has_many :shipping_parcels, -> { joins(:parcel).where(parcels: { usage: 'shipping' }) }, class_name: 'GiftParcel'
-  define_method(:pretty_parcel) { pretty_parcels.first.parcel }
-  define_method(:shipping_parcel) { shipping_parcels.first.parcel }
+  define_method(:pretty_parcel) { pretty_parcels.first&.parcel }
+  define_method(:shipping_parcel) { shipping_parcels.first&.parcel }
 
   has_one :primary_gift_image, -> {where primary: true}, class_name: 'GiftImage'
 
@@ -79,6 +84,30 @@ class Gift < ApplicationRecord
     tag_list.each do |tag|
       errors.add(:tag_list, "-#{tag}- tag names can only contain alphanumeric characters or underscore") unless tag =~ VALID_TAG_REGEXP
     end
+  end
+
+  def _has_boxes
+    return if pretty_parcel.present? && shipping_parcel.present?
+
+    errors.add(:base, "Must have a gift box and shipping box")
+  end
+
+  def _has_products
+    return if products.present?
+
+    errors.add(:base, "Must have at least one product")
+  end
+
+  def _has_weight
+    return if weight_in_pounds > 0.0
+
+    errors.add(:base, "Must have a weight")
+  end
+
+  def _has_price
+    return if selling_price > 0.0
+
+    errors.add(:base, "Must have a price")
   end
 
   private def sku_prefix

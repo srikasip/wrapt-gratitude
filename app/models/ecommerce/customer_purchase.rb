@@ -99,29 +99,6 @@ class CustomerPurchase
     })
   end
 
-  def okay_to_charge?
-    # The first vendor to accept, triggers a charge. In any other had or will
-    # reject, we'll generate a refund.
-    purchase_orders.any?(&:vendor_accepted?) && charging_service.authed?
-  end
-
-  def should_cancel?
-    purchase_orders.all?(&:vendor_rejected?)
-  end
-
-  def all_vendors_responded?
-    purchase_orders.acknowledged.count == purchase_orders.count
-  end
-
-  def should_partially_cancel?
-    any_rejections = purchase_orders.do_not_fulfill.any?
-
-    all_vendors_responded? && any_rejections
-  end
-
-  def all_vendors_accepted?
-    purchase_orders.okay_to_fulfill == purchase_orders.count
-  end
 
   # Just because a vendor just acknowledged doesn't mean the order is ready
   # since all vendors need to acknowledge. One "cannot fulfill" cancels the whole
@@ -171,6 +148,30 @@ class CustomerPurchase
 
   def partially_cancel_order!
     raise 'wip'
+  end
+
+  def okay_to_charge?
+    # The first vendor to accept, triggers a charge. In any other had or will
+    # reject, we'll generate a refund.
+    purchase_orders.any?(&:vendor_accepted?) && charging_service.authed?
+  end
+
+  def should_cancel?
+    purchase_orders.all?(&:vendor_rejected?)
+  end
+
+  def all_vendors_responded?
+    purchase_orders.acknowledged.count == purchase_orders.count
+  end
+
+  def should_partially_cancel?
+    any_rejections = purchase_orders.do_not_fulfill.any?
+
+    all_vendors_responded? && any_rejections
+  end
+
+  def all_vendors_accepted?
+    purchase_orders.okay_to_fulfill == purchase_orders.count
   end
 
   private
@@ -285,7 +286,7 @@ class CustomerPurchase
 
   def _update_order_totals!
     co = self.customer_order
-    shippo_token = co.shippo_token_choice
+    shipping_choice = co.shipping_choice
 
     co.subtotal_in_cents        = 0
     co.taxes_in_cents           = 0
@@ -300,7 +301,8 @@ class CustomerPurchase
     end
 
     co.purchase_orders.each do |po|
-      rate                   = po.shipment.rates.find { |x| x.dig('servicelevel', 'token') == shippo_token }
+      rate = ShippingService.find_rate(rates: po.shipment.rates, shipping_choice: shipping_choice, vendor: po.vendor)
+
       shipping_cost_in_cents = rate['amount'].to_f * 100
       vendor_markup          = po.vendor.purchase_order_markup_in_cents
 

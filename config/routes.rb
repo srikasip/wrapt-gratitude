@@ -156,6 +156,7 @@ Rails.application.routes.draw do
 
     namespace :ecommerce do
       get '/' => 'dashboard#index'
+      get '/stats' => 'dashboard#stats'
       resources :inventory_items, only: [:index] do
         collection do
           get :upload, action: 'upload_form'

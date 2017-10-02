@@ -1,4 +1,6 @@
 module ShippingComputer
+  ESTIMATED_WEIGHT_IN_POUNDS_OF_PACKING_MATERIAL = 0.02
+
   def shipping_in_dollars_for(orderable)
     shipping_computer(orderable, :shipping_in_cents)
   end

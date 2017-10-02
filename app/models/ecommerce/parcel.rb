@@ -36,6 +36,10 @@ class Parcel < ApplicationRecord
       distance_unit: :in,
       weight:        self.weight_in_pounds,
       mass_unit:     :lb
-    }
+    }.tap do |shippo_hash|
+      if shippo_template_name.present?
+        shippo_hash[:template] = shippo_template_name
+      end
+    end
   end
 end

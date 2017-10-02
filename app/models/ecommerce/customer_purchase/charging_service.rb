@@ -103,8 +103,6 @@ class CustomerPurchase::ChargingService
     elsif charged? && meth==:charge
       raise InternalConsistencyError, "You cannot charge more than once"
     end
-
-    raise "also check key isn't test when in production"
   end
 
   def _do_stripe_auth!
