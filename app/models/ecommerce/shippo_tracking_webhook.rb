@@ -21,14 +21,7 @@ class ShippoTrackingWebhook < ShippoWebhook
   end
 
   def _process_data!
-    shipping_label = ShippingLabel.find_by(shippo_object_id: data.dig('tracking_status', 'object_id'))
-
-    shipping_label.update_attributes({
-      eta: data['eta'],
-      tracking_status: data.dig('tracking_status', 'status'),
-      tracking_updated_at: data.dig('tracking_status', 'status_date'),
-      tracking_payload: data
-    })
+    ShippingService.update_shipping_status!(data)
   end
 
   def data

@@ -1,0 +1,62 @@
+%h2 Vendors With Missing Information
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th name
+      %th Street
+      %th City
+      %th State
+      %th Zip Code
+      %th Country
+      %th Phone
+      %th Email
+      %th Errors
+  %tbody
+    - @vendors.each do |vendor|
+      - unless vendor.valid?
+        %tr
+          %td= vendor.name
+          %td= vendor.street1
+          %td= vendor.city
+          %td= vendor.state
+          %td= vendor.zip
+          %td= vendor.country
+          %td= vendor.phone
+          %td= vendor.email
+          %td
+            = vendor.errors.full_messages.join('. ')
+
+%h2 Gifts With Problems
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th ID
+      %th Name
+      %th Errors
+  %tbody
+    - @gifts.each do |gift|
+      - unless gift.valid?
+        %tr
+          %td= gift.id
+          %td= gift.name
+          %td
+            = gift.errors.full_messages.join('. ')
+
+%h2 Products With Problems
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th ID
+      %th Description
+      %th Errors
+  %tbody
+    - @products.each do |product|
+      - unless product.valid?
+        %tr
+          %td= product.id
+          %td= product.description
+          %td
+            = product.errors.full_messages.join('. ')

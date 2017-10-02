@@ -35,6 +35,10 @@
       %b Box:
       = @gift.pretty_parcel&.description
 
+    %p
+      %b Shipping Box:
+      = @gift.shipping_parcel&.description
+
     %h3 Products
     - if @gift.products.none?
       %p

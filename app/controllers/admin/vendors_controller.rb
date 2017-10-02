@@ -54,6 +54,7 @@ module Admin
           :contact_name,
           :email,
           :phone,
+          :purchase_order_markup_in_dollars,
           :notes,
           :wrapt_sku_code
       end

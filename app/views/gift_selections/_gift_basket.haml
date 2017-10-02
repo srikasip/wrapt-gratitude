@@ -21,8 +21,10 @@
       -#  taking Wrapt for a spin! We hope you like what you found.
 
       -#= link_to 'SEND GIFT SELECTION NOTIFICATION', new_profile_giftee_invitation_path(profile), class: 'btn btn-primary btn-full-width btn-gift-basket-submit', data: {loads_in_pjax_modal: true, behavior: 'gift-basket-submit'}, onClick: "ga('send', 'event', 'basket', 'share with giftee', 'step 1 - button');"
-      = link_to 'CHECK OUT', ecommerce_checkout_gift_wrapt_path(profile_id: profile.id), class: 'btn btn-primary btn-full-width btn-gift-basket-submit'
-
+      - if ENV.fetch('CHECKOUT_ENABLED') { 'false' } == 'true'
+        = link_to 'CHECK OUT', ecommerce_checkout_gift_wrapt_path(profile_id: profile.id), class: 'btn btn-primary btn-full-width btn-gift-basket-submit'
+      - else
+        = link_to 'CHECK OUT COMING SOON', 'javascript:void(0)', class: 'btn btn-primary btn-full-width btn-gift-basket-submit'
 
 
 - content_for :page_js do

@@ -3,6 +3,9 @@ class VendorMailer < ApplicationMailer
     @purchase_order = PurchaseOrder.find(purchase_order_id)
     @vendor = @purchase_order.vendor
 
-    mail to: @vendor.email
+    mail({
+      to: @vendor.email,
+      subject: "Order Placed"
+    })
   end
 end

@@ -86,6 +86,16 @@ class CustomerPurchase::ChargingService
   def _sanity_check! meth
     if ENV['STRIPE_SECRET_KEY'].blank?
       raise InternalConsistencyError, "You must have a stripe token"
+    elsif ENV['STRIPE_SECRET_KEY'].match(/live/) && !Rails.env.production?
+      raise InternalConsistencyError, <<~EOS
+        Comment out these lines if you really want to use the production stripe
+        key outside of production
+      EOS
+    elsif ENV['STRIPE_SECRET_KEY'].match(/test/) && Rails.env.production?
+      raise InternalConsistencyError, <<~EOS
+        Comment out these lines if you really want to use test mode for stripe
+        on production
+      EOS
     elsif self.cart_id.blank?
       raise InternalConsistencyError, "You must have a context for the purchase (cart ID)"
     elsif authed_or_charged? && meth==:auth

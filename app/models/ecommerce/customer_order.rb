@@ -1,5 +1,6 @@
 class CustomerOrder < ApplicationRecord
   include ShippingComputer
+  include OrderStatuses
 
   has_paper_trail(
     ignore: [:updated_at, :created_at, :id],
@@ -8,21 +9,10 @@ class CustomerOrder < ApplicationRecord
     }
   )
 
-  VALID_STATUSES = [
-    INITIALIZED = 'initialized',
-    SUBMITTED   = 'submitted',
-    APPROVED    = 'approved',    # *All* Vendors acknowedged they can fulfill order
-    PROCESSING  = 'processing',
-    SHIPPED     = 'shipped',
-    RECEIVED    = 'received',
-    CANCELLED   = 'cancelled',
-    FAILED      = 'failed',
-  ]
-
   before_validation -> { self.order_number ||= "WRAPT-#{InternalOrderNumber.next_val_humanized}" }
   before_validation -> { self.status ||= INITIALIZED }
 
-  validates :status, inclusion: { in: VALID_STATUSES }
+  validates :status, inclusion: { in: VALID_ORDER_STATUSES }
   validates :order_number, presence: true
   validates :ship_zip, length: { minimum: 5 }, allow_blank: true
 

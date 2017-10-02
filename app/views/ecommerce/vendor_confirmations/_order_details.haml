@@ -1,0 +1,28 @@
+.row
+  .col-xs-12
+    %h3 Purchase Order
+
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Description
+          %th SKU
+          %th Quantity
+      %tbody
+        - @purchase_order.line_items.each do |line_item|
+          - product = line_item.orderable
+          %tr
+            %td= product.description
+            %td= product.vendor_sku
+            %td= line_item.quantity
+
+    %h3 Note Information
+
+    %strong To:
+    = @customer_order.note_to
+    %br
+    %strong From:
+    = @customer_order.note_from
+    %br
+    %strong Note:
+    = @customer_order.note_content

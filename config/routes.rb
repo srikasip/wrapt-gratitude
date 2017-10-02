@@ -75,9 +75,11 @@ Rails.application.routes.draw do
     get "checkout/finalize" => "checkout#finalize"
 
     resources :vendor_confirmations, only: [:show, :update] do
+      member do
+        get :details
+      end
       collection do
         get :error
-        get :thanks
       end
     end
   end
@@ -154,6 +156,7 @@ Rails.application.routes.draw do
 
     namespace :ecommerce do
       get '/' => 'dashboard#index'
+      get '/stats' => 'dashboard#stats'
       resources :inventory_items, only: [:index] do
         collection do
           get :upload, action: 'upload_form'

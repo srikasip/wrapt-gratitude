@@ -16,11 +16,13 @@ module Admin
 
     def new
       @gift = Gift.new product_category: Gift.default_product_category
-      @gift.gift_parcels.build
+      @gift.pretty_parcels.build
+      @gift.shipping_parcels.build
     end
 
     def edit
-      @gift.gift_parcels.empty? and @gift.gift_parcels.build
+      @gift.shipping_parcels.empty? and @gift.shipping_parcels.build
+      @gift.pretty_parcels.empty? and @gift.pretty_parcels.build
     end
 
     def create
@@ -51,7 +53,7 @@ module Admin
     end
 
     private def gift_params
-      result = params.require(:gift).permit(:title,
+      params.require(:gift).permit(:title,
         :description,
         :selling_price,
         :cost,
@@ -63,8 +65,9 @@ module Admin
         :product_subcategory_id,
         :featured,
         :tag_list,
+        :shipping_parcels_attributes => [:id, :parcel_id, :gift_id],
         :gift_parcels_attributes => [:id, :parcel_id, :gift_id]
-        )
+      )
     end
 
     def gift_search_params
