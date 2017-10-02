@@ -5,7 +5,6 @@ class Ecommerce::CheckoutController < ApplicationController
 
   def edit_gift_wrapt
     @checkout_step = :gift_wrapt
-    _load_progress_bar
 
     flash.now[:notice] = <<~EOS
       You're getting a new shopping cart each time you visit this page. Todd
@@ -29,6 +28,8 @@ class Ecommerce::CheckoutController < ApplicationController
     })
 
     @customer_order = @customer_purchase.generate_order!
+
+    _load_progress_bar
   end
 
   def save_gift_wrapt
