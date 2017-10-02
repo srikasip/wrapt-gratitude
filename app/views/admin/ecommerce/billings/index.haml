@@ -10,7 +10,7 @@
     = form_tag(admin_ecommerce_billings_path, method: 'GET', class: 'form-inline') do
 
       .form-group.multi-choice-flex
-        - CustomerOrder::VALID_STATUSES.each do |status|
+        - CustomerOrder::VALID_ORDER_STATUSES.each do |status|
           %label{for: "search_status_#{status}"}
             = check_box_tag "search[status][#{status}]", "on", params[:search][:status][status]=='on'
             = status.titleize
@@ -46,8 +46,7 @@
             %th Vendor SKU
             %th Description
             %th.text-right Wrapt Cost
-            %th.text-right Shipping Cost
-            %th.text-right Shipping Charged
+            %th.text-right Handling
 
         %tbody
           :ruby
@@ -78,8 +77,7 @@
                   = link_to admin_product_path(product) do
                     = truncate(product.description, length: 60)
                 %td.text-right= number_to_currency(product.wrapt_cost)
-                %td.text-right= number_to_currency(po.shipping_cost_in_dollars_for(product))
-                %td.text-right= number_to_currency(po.shipping_in_dollars_for(product))
+                %td.text-right= number_to_currency(po.handling_cost_in_dollars)
 
           %tr{style: 'border-top-style: double'}
             - if @purchase_orders.total_pages == 1

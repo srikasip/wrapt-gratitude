@@ -1,0 +1,16 @@
+Thanks. Here are the details.
+
+= render "order_details"
+
+- if @purchase_order.shipping_label.present?
+  %h3
+    Ship to: #{@purchase_order.customer_order.note_to}
+
+  = link_to @purchase_order.shipping_label.url, target: '_blank' do
+    Shipping Label
+
+- else
+  %p
+    The shipping label isn't quite ready yet, but
+    = link_to 'click here', url_for
+    to check again.  It shouldn't take more than a few moments.

@@ -79,8 +79,11 @@ module OrderFactory
       }})
     )
 
-    choices = customer_purchase.shipping_choices
-    picked_choice = choices.keys.sample
+    # usps only since I haven't yet developed the logic for handling shipping
+    # across all the choices/vendors/pos to be consistent yet. usps options are always
+    # choices, so they're safe.
+    choices = customer_purchase.shipping_choices_for_view
+    picked_choice = choices.sample.last
 
     # A difference virtual page load in the shopping process
     customer_purchase = CustomerPurchase.new(cart_id: cart_id)
@@ -103,7 +106,7 @@ module OrderFactory
 
     # This happens when a vendor confirms they have inventory
     customer_purchase = CustomerPurchase.new(cart_id: cart_id)
-    customer_purchase.charge_or_cancel_or_not_ready!
+    customer_purchase.update_from_vendor_responses!
 
     order
   end

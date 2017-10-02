@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170927203446) do
+ActiveRecord::Schema.define(version: 20171002133537) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 20170927203446) do
     t.integer  "user_id",                                  null: false
     t.integer  "profile_id",                               null: false
     t.string   "cart_id",                                  null: false
-    t.string   "shippo_token_choice"
+    t.string   "shipping_choice"
     t.string   "order_number",                             null: false
     t.string   "status",                                   null: false
     t.string   "recipient_name",                           null: false
@@ -80,6 +80,8 @@ ActiveRecord::Schema.define(version: 20170927203446) do
     t.string   "note_from"
     t.string   "note_to"
     t.text     "note_content"
+    t.integer  "handling_cost_in_cents",   default: 0,     null: false
+    t.integer  "handling_in_cents",        default: 0,     null: false
     t.index ["profile_id"], name: "index_customer_orders_on_profile_id", using: :btree
     t.index ["user_id"], name: "index_customer_orders_on_user_id", using: :btree
   end
@@ -255,20 +257,21 @@ ActiveRecord::Schema.define(version: 20170927203446) do
   end
 
   create_table "parcels", force: :cascade do |t|
-    t.string   "description",                         null: false
-    t.decimal  "length_in_inches",                    null: false
-    t.decimal  "width_in_inches",                     null: false
-    t.decimal  "height_in_inches",                    null: false
-    t.decimal  "weight_in_pounds",                    null: false
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.boolean  "active",           default: true,     null: false
+    t.string   "description",                             null: false
+    t.decimal  "length_in_inches",                        null: false
+    t.decimal  "width_in_inches",                         null: false
+    t.decimal  "height_in_inches",                        null: false
+    t.decimal  "weight_in_pounds",                        null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "active",               default: true,     null: false
     t.integer  "case_pack"
     t.string   "color"
     t.string   "source"
     t.string   "stock_number"
-    t.string   "usage",            default: "pretty", null: false
+    t.string   "usage",                default: "pretty", null: false
     t.string   "code"
+    t.string   "shippo_template_name"
   end
 
   create_table "product_categories", force: :cascade do |t|
@@ -383,16 +386,19 @@ ActiveRecord::Schema.define(version: 20170927203446) do
     t.integer  "vendor_id"
     t.integer  "customer_order_id"
     t.integer  "gift_id"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.string   "order_number",                  null: false
-    t.date     "created_on",                    null: false
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+    t.string   "order_number",                                          null: false
+    t.date     "created_on",                                            null: false
     t.decimal  "total_due_in_cents"
     t.decimal  "shipping_in_cents"
     t.decimal  "shipping_cost_in_cents"
-    t.string   "vendor_token",                  null: false
+    t.string   "vendor_token",                                          null: false
     t.string   "vendor_acknowledgement_status"
     t.string   "vendor_acknowledgement_reason"
+    t.integer  "handling_cost_in_cents",        default: 0,             null: false
+    t.integer  "handling_in_cents",             default: 0,             null: false
+    t.string   "status",                        default: "initialized", null: false
     t.index ["customer_order_id"], name: "index_purchase_orders_on_customer_order_id", using: :btree
     t.index ["gift_id"], name: "index_purchase_orders_on_gift_id", using: :btree
     t.index ["vendor_id"], name: "index_purchase_orders_on_vendor_id", using: :btree
@@ -444,9 +450,12 @@ ActiveRecord::Schema.define(version: 20170927203446) do
   end
 
   create_table "shipping_carriers", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",                 null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.string   "shippo_provider_name", null: false
+    t.index ["name"], name: "index_shipping_carriers_on_name", unique: true, using: :btree
+    t.index ["shippo_provider_name"], name: "index_shipping_carriers_on_shippo_provider_name", unique: true, using: :btree
   end
 
   create_table "shipping_labels", force: :cascade do |t|
@@ -472,6 +481,18 @@ ActiveRecord::Schema.define(version: 20170927203446) do
     t.index ["customer_order_id"], name: "index_shipping_labels_on_customer_order_id", using: :btree
     t.index ["purchase_order_id"], name: "index_shipping_labels_on_purchase_order_id", using: :btree
     t.index ["shipment_id"], name: "index_shipping_labels_on_shipment_id", using: :btree
+  end
+
+  create_table "shipping_service_levels", force: :cascade do |t|
+    t.integer  "shipping_carrier_id", null: false
+    t.string   "name",                null: false
+    t.string   "shippo_token",        null: false
+    t.integer  "estimated_days",      null: false
+    t.string   "terms",               null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.index ["shipping_carrier_id"], name: "index_shipping_service_levels_on_shipping_carrier_id", using: :btree
+    t.index ["shippo_token"], name: "index_shipping_service_levels_on_shippo_token", using: :btree
   end
 
   create_table "survey_question_options", force: :cascade do |t|
@@ -695,6 +716,16 @@ ActiveRecord::Schema.define(version: 20170927203446) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
   end
 
+  create_table "vendor_service_levels", force: :cascade do |t|
+    t.integer  "vendor_id",                 null: false
+    t.integer  "shipping_service_level_id", null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["shipping_service_level_id"], name: "index_vendor_service_levels_on_shipping_service_level_id", using: :btree
+    t.index ["vendor_id", "shipping_service_level_id"], name: "vsl_vendor_id_ssl_id_unq_idx", unique: true, using: :btree
+    t.index ["vendor_id"], name: "index_vendor_service_levels_on_vendor_id", using: :btree
+  end
+
   create_table "vendors", force: :cascade do |t|
     t.string   "name"
     t.text     "defunct_address"
@@ -702,16 +733,17 @@ ActiveRecord::Schema.define(version: 20170927203446) do
     t.string   "email"
     t.string   "phone"
     t.text     "notes"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
     t.string   "wrapt_sku_code"
-    t.string   "street1",         default: "unknown", null: false
-    t.string   "city",            default: "unknown", null: false
-    t.string   "state",           default: "unknown", null: false
-    t.string   "zip",             default: "unknown", null: false
-    t.string   "country",         default: "unknown", null: false
+    t.string   "street1",                        default: "unknown", null: false
+    t.string   "city",                           default: "unknown", null: false
+    t.string   "state",                          default: "unknown", null: false
+    t.string   "zip",                            default: "unknown", null: false
+    t.string   "country",                        default: "unknown", null: false
     t.string   "street2"
     t.string   "street3"
+    t.integer  "purchase_order_markup_in_cents", default: 800,       null: false
     t.index ["wrapt_sku_code"], name: "index_vendors_on_wrapt_sku_code", using: :btree
   end
 
@@ -732,9 +764,6 @@ ActiveRecord::Schema.define(version: 20170927203446) do
   add_foreign_key "conditional_question_options", "survey_questions"
   add_foreign_key "customer_orders", "profiles"
   add_foreign_key "customer_orders", "users"
-  add_foreign_key "evaluation_recommendations", "gifts"
-  add_foreign_key "evaluation_recommendations", "profile_set_survey_responses"
-  add_foreign_key "evaluation_recommendations", "training_set_evaluations"
   add_foreign_key "gift_dislikes", "gifts"
   add_foreign_key "gift_dislikes", "profiles"
   add_foreign_key "gift_images", "gifts"
@@ -745,9 +774,6 @@ ActiveRecord::Schema.define(version: 20170927203446) do
   add_foreign_key "gift_parcels", "parcels"
   add_foreign_key "gift_products", "gifts"
   add_foreign_key "gift_products", "products"
-  add_foreign_key "gift_question_impacts", "gifts"
-  add_foreign_key "gift_question_impacts", "survey_questions"
-  add_foreign_key "gift_question_impacts", "training_sets"
   add_foreign_key "gift_recommendations", "gifts"
   add_foreign_key "gift_recommendations", "profiles"
   add_foreign_key "gift_selections", "gifts"
@@ -770,6 +796,7 @@ ActiveRecord::Schema.define(version: 20170927203446) do
   add_foreign_key "shipping_labels", "customer_orders"
   add_foreign_key "shipping_labels", "purchase_orders"
   add_foreign_key "shipping_labels", "shipments"
+  add_foreign_key "shipping_service_levels", "shipping_carriers"
   add_foreign_key "survey_question_response_options", "survey_question_options"
   add_foreign_key "survey_question_response_options", "survey_question_responses"
   add_foreign_key "survey_question_responses", "survey_questions"
@@ -777,11 +804,12 @@ ActiveRecord::Schema.define(version: 20170927203446) do
   add_foreign_key "survey_responses", "surveys"
   add_foreign_key "survey_sections", "surveys"
   add_foreign_key "training_set_evaluations", "training_sets"
-  add_foreign_key "training_set_response_impacts", "gift_question_impacts"
   add_foreign_key "trait_response_impacts", "profile_traits_tags"
   add_foreign_key "trait_response_impacts", "survey_question_options"
   add_foreign_key "trait_response_impacts", "trait_training_set_questions"
   add_foreign_key "trait_training_set_questions", "survey_questions", column: "question_id"
   add_foreign_key "trait_training_set_questions", "trait_training_sets"
   add_foreign_key "trait_training_sets", "surveys"
+  add_foreign_key "vendor_service_levels", "shipping_service_levels"
+  add_foreign_key "vendor_service_levels", "vendors"
 end

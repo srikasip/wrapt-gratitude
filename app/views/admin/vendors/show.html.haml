@@ -43,6 +43,9 @@
   %b Phone:
   = @vendor.phone
 %p
+  %b Markup:
+  = number_to_currency(@vendor.purchase_order_markup_in_dollars)
+%p
   %b Notes:
   = @vendor.notes
 %p
