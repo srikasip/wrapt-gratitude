@@ -19,9 +19,7 @@ class PurchaseOrderSearch < Struct.new(:params)
     end
 
     if search_params[:status].present?
-      base_scope = base_scope.joins(:customer_order).where({
-        customer_orders: { status: search_params[:status].keys }
-      })
+      base_scope = base_scope.where(status: search_params[:status])
     end
 
     base_scope.order('purchase_orders.created_at desc').preload(:customer_order, :shipping_label).page(params[:page])

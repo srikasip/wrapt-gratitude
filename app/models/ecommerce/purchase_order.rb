@@ -1,5 +1,6 @@
 class PurchaseOrder < ApplicationRecord
   include ShippingComputer
+  include OrderStatuses
 
   FULFILL = 'fulfill'
   DO_NOT_FULFILL = 'do_not_fulfill'
@@ -27,6 +28,8 @@ class PurchaseOrder < ApplicationRecord
 
   validates :order_number, presence: true
   validates :vendor_token, uniqueness: true
+  validates :status, inclusion: { in: VALID_ORDER_STATUSES }
+  validates :status, exclusion: { in: [PARTIALLY_CANCELLED] }
 
   before_validation -> { self.order_number ||= "PO-#{InternalOrderNumber.next_val_humanized}" }
   before_validation -> { self.vendor_token ||= self.vendor_id.to_s+'-'+self.order_number+'-'+SecureRandom.hex(16) }
@@ -34,6 +37,11 @@ class PurchaseOrder < ApplicationRecord
   delegate :name, to: :vendor, prefix: true
   delegate :cart_id, :status, :recipient_name, :ship_street1, :ship_street2, :ship_street3, :ship_city, :ship_state, :ship_zip, :ship_country, to: :customer_order
   delegate :tracking_url, :tracking_number, to: :shipping_label, allow_nil: true
+
+  scope :okay_to_fulfill, -> { where(vendor_acknowledgement_status: FULFILL) }
+  scope :do_not_fulfill, -> {  where(vendor_acknowledgement_status: DO_NOT_FULFILL) }
+  scope :acknowledged, -> {  where(vendor_acknowledgement_status: [FULFILL, DO_NOT_FULFILL]) }
+  scope :unacknowledged, -> {  where(vendor_acknowledgement_status: nil) }
 
   def can_change_acknowledgements?
     self.status == CustomerOrder::SUBMITTED

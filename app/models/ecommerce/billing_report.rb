@@ -57,9 +57,7 @@ class BillingReport < Struct.new(:params)
     base_scope = base_scope.where("purchase_orders.created_on between ? AND ?", Date.parse(search_params[:date_range_start]), Date.parse(search_params[:date_range_end]))
 
     if search_params[:status].present?
-      base_scope = base_scope.joins(:customer_order).where({
-        customer_orders: { status: search_params[:status].keys }
-      })
+      base_scope = base_scope.where(status: search_params[:status])
     end
 
     base_scope = base_scope.order('purchase_orders.created_at desc').preload(:customer_order, :vendor, :line_items => :orderable)

@@ -80,7 +80,10 @@ module OrderFactory
     )
 
     choices = customer_purchase.shipping_choices
-    picked_choice = choices.keys.sample
+    # usps only since I haven't yet developed the logic for handling shipping
+    # across all the choices/vendors/pos to be consistent yet. usps options are always
+    # choices, so they're safe.
+    picked_choice = choices.keys.select { |x| x.match(/usps/i) }.sample
 
     # A difference virtual page load in the shopping process
     customer_purchase = CustomerPurchase.new(cart_id: cart_id)
