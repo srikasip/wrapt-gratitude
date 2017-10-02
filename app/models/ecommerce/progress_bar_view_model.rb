@@ -6,15 +6,15 @@ class ProgressBarViewModel
       fields: [:gift_wrapt, :include_note, :note_from, :note_to, :note_content]
     },
     shipping: {
-      required_fields: [:gift_wrapt, :include_note, :ship_street1, :ship_city, :ship_zip, :ship_state, :shippo_token_choice],
+      required_fields: [:gift_wrapt, :include_note, :ship_street1, :ship_city, :ship_zip, :ship_state, :shipping_choice],
       fields: []
     },
     payment: {
-      required_fields: [:gift_wrapt, :include_note, :ship_street1, :ship_city, :ship_zip, :ship_state, :shippo_token_choice],
+      required_fields: [:gift_wrapt, :include_note, :ship_street1, :ship_city, :ship_zip, :ship_state, :shipping_choice],
       fields: []
     },
     review: {
-      required_fields: [:gift_wrapt, :include_note, :ship_street1, :ship_city, :ship_zip, :ship_state, :shippo_token_choice],
+      required_fields: [:gift_wrapt, :include_note, :ship_street1, :ship_city, :ship_zip, :ship_state, :shipping_choice],
       fields: []
     }
   }
