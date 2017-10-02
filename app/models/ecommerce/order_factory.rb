@@ -17,8 +17,13 @@ module OrderFactory
 
       Profile.where('name is null').update_all("name = 'Karen'")
 
-      Gift.joins('left join gift_parcels ON (gifts.id = gift_parcels.gift_id)').where('gift_parcels.gift_id IS NULL').each do |gift|
-        gift.gift_parcels.create(parcel: Parcel.active.where(usage: 'pretty').first)
+      Gift.preload(:gift_parcels => :gift).find_each do |gift|
+        if gift.pretty_parcel.blank?
+          gift.gift_parcels.create(parcel: Parcel.active.where(usage: 'pretty').first)
+        end
+        if gift.shipping_parcel.blank?
+          gift.gift_parcels.create(parcel: Parcel.active.where(usage: 'shipping').first)
+        end
       end
     end
 
