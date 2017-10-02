@@ -257,20 +257,21 @@ ActiveRecord::Schema.define(version: 20171002133537) do
   end
 
   create_table "parcels", force: :cascade do |t|
-    t.string   "description",                         null: false
-    t.decimal  "length_in_inches",                    null: false
-    t.decimal  "width_in_inches",                     null: false
-    t.decimal  "height_in_inches",                    null: false
-    t.decimal  "weight_in_pounds",                    null: false
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.boolean  "active",           default: true,     null: false
+    t.string   "description",                             null: false
+    t.decimal  "length_in_inches",                        null: false
+    t.decimal  "width_in_inches",                         null: false
+    t.decimal  "height_in_inches",                        null: false
+    t.decimal  "weight_in_pounds",                        null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "active",               default: true,     null: false
     t.integer  "case_pack"
     t.string   "color"
     t.string   "source"
     t.string   "stock_number"
-    t.string   "usage",            default: "pretty", null: false
+    t.string   "usage",                default: "pretty", null: false
     t.string   "code"
+    t.string   "shippo_template_name"
   end
 
   create_table "product_categories", force: :cascade do |t|

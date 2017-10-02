@@ -14,10 +14,10 @@ class Gift < ApplicationRecord
   has_many :gift_images_from_products, class_name: 'GiftImages::FromProduct'
 
   has_many :gift_parcels
-  has_many :pretty_parcels, -> { where(usage: 'pretty') }, through: :gift_parcels, class_name: 'Parcel', source: :parcel
-  has_many :shipping_parcels, -> { where(usage: 'shipping') }, through: :gift_parcels, class_name: 'Parcel', source: :parcel
-  define_method(:pretty_parcel) { pretty_parcels.active.first }
-  define_method(:shipping_parcel) { shipping_parcels.active.first }
+  has_many :pretty_parcels, -> { joins(:parcel).where(parcels: { usage: 'pretty' }) }, class_name: 'GiftParcel'
+  has_many :shipping_parcels, -> { joins(:parcel).where(parcels: { usage: 'shipping' }) }, class_name: 'GiftParcel'
+  define_method(:pretty_parcel) { pretty_parcels.first.parcel }
+  define_method(:shipping_parcel) { shipping_parcels.first.parcel }
 
   has_one :primary_gift_image, -> {where primary: true}, class_name: 'GiftImage'
 
@@ -33,7 +33,8 @@ class Gift < ApplicationRecord
 
   before_destroy -> { raise "Cannot destroy" unless deleteable? }
 
-  accepts_nested_attributes_for :gift_parcels
+  accepts_nested_attributes_for :pretty_parcels
+  accepts_nested_attributes_for :shipping_parcels
 
   scope :available, -> { where(available: true) }
 

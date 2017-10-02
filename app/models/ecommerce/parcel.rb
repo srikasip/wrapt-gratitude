@@ -1,5 +1,14 @@
 class Parcel < ApplicationRecord
-  USAGE_TYPES = ['pretty', 'shipping']
+  USAGE_TYPES = [
+    PRETTY= 'pretty',
+    SHIPPING = 'shipping'
+  ]
+
+  TEMPLATES = [
+    'USPS_SmallFlatRateBox',
+    'USPS_MediumFlatRateBox1',
+    'USPS_MediumFlatRateBox2',
+  ]
 
   validates :description,      presence: true
   validates :code,             presence: true, uniqueness: true
@@ -13,7 +22,11 @@ class Parcel < ApplicationRecord
   validates :width_in_inches,  numericality: { greater_than: 0 }
   validates :width_in_inches,  presence: true
   validates :usage, inclusion: { in: USAGE_TYPES, message: "must be either #{USAGE_TYPES.first} or #{USAGE_TYPES.last}" }
+  validates :shippo_template_name, inclusion: { in: TEMPLATES }, allow_nil: true
+
   scope :active, -> { where(active: true) }
+  scope :pretty, -> { where(usage: PRETTY) }
+  scope :shipping, -> { where(usage: SHIPPING) }
 
   def as_shippo_hash
     {

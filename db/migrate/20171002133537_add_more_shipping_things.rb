@@ -4,6 +4,8 @@ class AddMoreShippingThings < ActiveRecord::Migration[5.0]
 
     add_column :shipping_carriers, :shippo_provider_name, :string, null: false
 
+    add_column :parcels, :shippo_template_name, :string
+
     add_index :shipping_carriers, :shippo_provider_name, unique: true
     add_index :shipping_carriers, :name, unique: true
 
@@ -27,8 +29,11 @@ class AddMoreShippingThings < ActiveRecord::Migration[5.0]
     reversible do |change|
       change.up do
         begin
-          path = File.join(Rails.root, 'db', 'seeds', 'carriers.rb')
           say_with_time "Seeding carrier data" do
+            path = File.join(Rails.root, 'db', 'seeds', 'carriers.rb')
+            load(path)
+
+            path = File.join(Rails.root, 'db', 'seeds', 'parcels.rb')
             load(path)
           end
         rescue StandardError => e
