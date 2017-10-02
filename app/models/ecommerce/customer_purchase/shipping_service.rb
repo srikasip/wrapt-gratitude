@@ -96,6 +96,10 @@ class CustomerPurchase::ShippingService
   #  @shipping_choices
   #end
 
+  def things_look_shipable?
+    true
+  end
+
   def shipping_choices_for_view
     [
       ['Fastest', 'fastest'],

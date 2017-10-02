@@ -36,7 +36,7 @@ class CustomerPurchase
       _init_purchase_orders!
     end
 
-    customer_order
+    self.customer_order
   end
 
   def gift_wrapt!(params)
