@@ -1,28 +1,9 @@
 # README
 
-* Configuration
+## Configuration
 
-You can set environment variables in a file called `.env`. At this point, it's probably only useful
-for setting AWS environment variables if you were testing that.
+You can set environment variables in a file called `.env.local`.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## External Documentation
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* [Shippo](https://github.com/goshippo/shippo-ruby-client)

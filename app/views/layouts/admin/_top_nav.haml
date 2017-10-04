@@ -10,6 +10,8 @@
         %li{class: ("active" if active_top_nav_section == 'products')}= link_to "Products", admin_products_path
         %li{class: ("active" if active_top_nav_section == 'vendors')}= link_to "Vendors", admin_vendors_path
         %li{class: ("active" if active_top_nav_section == 'product_categories')}= link_to "Product Categories", admin_product_categories_path
+        %li{class: ("active" if active_top_nav_section == 'ecommerce')}= link_to "E-commerce", admin_ecommerce_path
+        %li.divider-vertical
         %li{class: ("active" if active_top_nav_section == 'surveys')}= link_to "Quizzes", admin_surveys_path
         %li.divider-vertical
         -# %li{class: ("active" if active_top_nav_section == 'profile_traits')}= link_to "Profile Traits", admin_profile_traits_topics_path
@@ -19,5 +21,4 @@
         %li{class: ("active" if active_top_nav_section == 'reports')}= link_to "Reports", admin_reports_path
         %li.divider-vertical
         %li{class: ("active" if active_top_nav_section == 'users')}= link_to "Manage Users", admin_users_path
-        
 

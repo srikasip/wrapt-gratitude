@@ -5,9 +5,6 @@ class ApplicationUploader < CarrierWave::Uploader::Base
 
   storage :fog
 
-  include CarrierWave::MimeTypes
-  process :set_content_type
-
   def store_dir
     if Rails.env.production? || Rails.env.staging?
       "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"

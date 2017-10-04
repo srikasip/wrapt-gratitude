@@ -1,0 +1,59 @@
+= render "admin/ecommerce/styles"
+
+.row.admin__intro
+  .col-sm-12
+    %h1
+      Purchase Orders
+
+.row.admin__search
+  .col-sm-12
+    = form_tag(admin_ecommerce_purchase_orders_path, method: 'GET', class: 'form-inline') do
+
+      .form-group.multi-choice-flex
+        - CustomerOrder::VALID_ORDER_STATUSES.each do |status|
+          %label{for: "search_status_#{status}"}
+            = check_box_tag "search[status][#{status}]", "on", params[:search][:status][status]=='on'
+            = status.titleize
+      .form-group{style: 'margin-top: 10px'}
+        = search_field_tag 'search[order_number]', :order_number, placeholder: 'Order Number', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:order_number]
+        = date_field_tag 'search[created_on]', :created_on, placeholder: 'Date Created', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:created_on]
+        = search_field_tag 'search[email]', :email, placeholder: 'Email', class: 'form-control', style: 'min-width: 300px;', value: params[:search][:email]
+
+        %button.btn.btn-primary
+          %i.glyphicon.glyphicon-search
+          Search
+        = link_to 'Clear Search (Show All)', admin_ecommerce_purchase_orders_path, class: 'btn btn-default'
+
+.row
+  .col-sm-12
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Purchase Order Number
+          %th Customer Order Number
+          %th Date Created
+          %th.text-right Amount
+          %th Status
+          %th Tracking Number
+          %th
+
+      %tbody
+        - @orders.each do |order|
+          %tr
+            %td
+              = order.order_number
+            %td
+              = link_to admin_ecommerce_customer_order_path(order.customer_order) do
+                = order.customer_order.order_number
+            %td= format_date(order.created_on)
+            %td.text-right
+              = number_to_currency(order.total_due_in_dollars)
+            %td
+              = order.customer_order.status.titleize
+            %td
+              = link_to order.tracking_url, target: '_blank' do
+                = order.tracking_number
+            %td.admin-index-table--buttons-cell
+              = link_to 'View', url_for(action: :show, id: order.id), class: 'btn btn-default btn-xs'
+
+    %p=paginate @orders

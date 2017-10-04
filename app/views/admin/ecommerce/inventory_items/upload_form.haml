@@ -1,0 +1,13 @@
+= content_for :modal_title do
+  Upload Inventory
+
+= form_tag upload_admin_ecommerce_inventory_items_path, method: :put, multipart: true do
+  %p
+    Here you can upload an Excel spreadsheet containing inventory counts and prices
+
+  .form-inputs
+    .form-group.required
+      %label.control-label.required Import File
+      = file_field_tag 'import_file'
+
+  .form-actions= submit_tag 'Upload', class: 'btn btn-primary'

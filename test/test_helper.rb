@@ -8,6 +8,7 @@ require "support/test_data"
 require "support/loads_test_data"
 require 'support/integration_test_authenticator'
 
+
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new(:color => !ENV["MINITEST_NOCOLOR"]),
   ENV,
   Minitest.backtrace_filter

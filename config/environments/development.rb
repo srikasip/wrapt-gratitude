@@ -44,7 +44,7 @@ Rails.application.configure do
     config.action_mailer.raise_delivery_errors = false
     config.action_mailer.perform_caching = false
   end
-  host = ENV.fetch('APP_DOMAIN') { 'localhost' }
+  host = ENV.fetch('APP_FQDN') { 'localhost' }
   port = ENV.fetch('APP_PORT') { '3000' }
   config.action_mailer.default_url_options = { host: host, port: port }
 
@@ -68,7 +68,7 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
-  config.active_job.queue_adapter = :sidekiq
+  config.active_job.queue_adapter = ENV.fetch('JOB_QUEUE_ADAPTER') { :inline }.to_sym
 
   if ENV["LIVERELOAD"]
     config.middleware.insert_before ActionDispatch::ShowExceptions, Rack::LiveReload

@@ -22,6 +22,18 @@
   box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 }
 
+@mixin shadowed-hero-box {
+  background-color: #fff;
+  padding: 40px;
+  box-shadow: 0 2px 4px 4px rgba(0, 0, 0, 0.08), 0 2px 12px 12px rgba(0, 0, 0, 0.05);
+}
+
+@mixin shadowed-box__gray {
+  box-shadow: 1px 5px 32px rgba(161,172,178, 0.09), 1px 3px 14px rgba(161,172,178, 0.3);
+  transition: all 0.3s ease;
+}
+
+
 @mixin akkurat-regular {
   font-family: "Akkurat-Regular", sans-serif;
 }
@@ -97,6 +109,20 @@
   display: flex;
 }
 
+@mixin flexwrap() {
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+@mixin flexcolumn() {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
 @mixin flex($values) {
   -webkit-box-flex: $values;
   -moz-box-flex:  $values;
@@ -112,3 +138,4 @@
   -webkit-order: $val;  
   order: $val;
 }
+

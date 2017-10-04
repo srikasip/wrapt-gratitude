@@ -1,14 +1,18 @@
 class ProfilesController < ApplicationController
-
   include RequiresLoginOrInvitation
+
   helper SurveyQuestionResponsesHelper
   helper HeroBackgroundHelper
   helper CarouselHelper
-  
+
   before_filter :set_survey
 
   def login_required?
-    false
+    true
+  end
+
+  def index
+    @profiles = current_user.owned_profiles
   end
 
   def new
@@ -23,6 +27,7 @@ class ProfilesController < ApplicationController
 
   def create
     @profile = current_user.owned_profiles.new
+    @profile.name = 'Unknown'
     if @profile.save
       @survey_response = @profile.survey_responses.create survey: @survey
       @survey_response.ordered_question_responses.first.update question_response_params.merge(answered_at: Time.now)
@@ -31,7 +36,7 @@ class ProfilesController < ApplicationController
       render :new
     end
   end
-  
+
   private def set_survey
     if current_user&.admin? && params[:survey_id]
       @survey = Survey.where(id: params[:survey_id], test_mode: true).first
@@ -57,9 +62,4 @@ class ProfilesController < ApplicationController
       survey_question_option_ids: []
     )
   end
-  
-
-  
-  
-
 end

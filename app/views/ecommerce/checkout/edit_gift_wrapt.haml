@@ -1,0 +1,33 @@
+.container
+  = render 'header'
+  .row
+    .col-xs-12.col-md-10.col-md-offset-1
+      .co-container
+        %h3.light Gift Wrapt
+        = simple_form_for @customer_order, url: url_for, method: :patch do |f|
+          .co-toggle
+            = f.input :gift_wrapt, as: :wrapt_radio_toggle, collection: [['Wrapt With Love', true], ['Do Not Gift Wrapt', false]], label: false
+          .j-co-gift-wrapt__note-1{style: f.object.gift_wrapt? ? '' : 'display: none;'}
+            .co-add-a-note
+              %h4.light Add a Note
+              -# FYI: this checkbox is checked on false!
+              = f.input :include_note, as: :wrapt_styled_checkbox, label: 'Do not include a note', checked_value: 0, unchecked_value: 1
+            .j-co-gift-wrapt__note-2{style: f.object.include_note? ? '' : 'display: none;'}
+              .row
+                .col-xs-12.col-md-6
+                  = f.input :note_from, label: 'From'
+                .col-xs-12.col-md-6
+                  = f.input :note_to, label: 'To'
+              = f.input :note_content, label: 'Your Note'
+          %button.btn.btn-primary{type: 'submit'}
+            = "Next <svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
+
+
+  = render "debug", customer_order: @customer_order
+
+- content_for :page_js do
+  :javascript
+    $(document).ready(function() {
+      App.NoteBehavior('customer_order', 'gift_wrapt', 'true', '.j-co-gift-wrapt__note-1', true)
+      App.NoteBehavior('customer_order', 'include_note', '0', '.j-co-gift-wrapt__note-2', false)
+    })

@@ -2,26 +2,34 @@
 
 // CSS for about pages e.g. Science of Gifting
 // Terms of Service, etc.
-
 .about-page__header {
-  width: 80%;
-  margin: 0 auto;
   text-align: center;
-  padding-bottom: 33px;
-  border-bottom: solid 2px $tan-001;
   @include akkurat-light();
   font-weight: normal;
+  color: $gray-008;
+  sup {
+    font-size: 50%;
+  }
+}
+.about-page__header.fancy {
+  display: inline-block;
+  padding: 0px 40px 20px;
+  margin: 0 auto;
+  border-bottom: solid 2px $tan-001;
+  color: $gray-010;
 }
 .about-page__header__second-line {
   font-size: .8em;
 }
 .about-page__tagline {
-  // width: 100%;
   font-size: 20px;
-  margin: 40px auto 40px;
+  margin: 40px auto;
   text-align: center;
+  max-width: 720px;
+  color: $gray-007;
   @include akkurat-light();
 }
+
 sup:last-child {
   margin-right: 3px;
 }
@@ -56,3 +64,185 @@ sup:last-child {
   @include flex(1);
   width: 48%;
 }
+
+.sg-content,
+.sg-quote {
+  color: $gray-007;
+  text-align: center;
+  margin: 0px auto;
+  .about-page__header {
+    margin-top: 0px;
+    margin-bottom: 30px;
+  }
+  small {
+    color: $blue-002;
+    font-size: 70%;
+    @include akkurat-regular();
+  }
+  p {
+    @include akkurat-light();
+  }
+  p:last-child {
+    margin-bottom: 0px;
+  }
+}
+
+.sg-content {
+  padding: 30px 0px;
+  font-size: 16px;
+}
+
+.sg-quote {
+  border: 3px solid $blue-005;
+  padding: 30px 24px;
+  margin: 24px auto;
+  font-size: 20px;
+  @include akkurat-light();
+}
+
+.sg-quote p:before {
+  content: '“';
+  margin-right: 6px;
+}
+
+.sg-quote p:after {
+  content: '”';
+  margin-left: 6px;
+}
+
+.sg-quote p:before,
+.sg-quote p:after {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: text-top;
+  font-size: 36px;
+  color: $blue-005;
+  line-height: 30px;
+  position: relative;
+  top: 5px;
+}
+
+.sg-question__container {
+  margin-top: -180px;
+}
+
+.sg-question {
+  @include shadowed-hero-box();
+  // hero shadow just seemed darker than mock
+  @include shadowed-box__gray();
+  margin-top: 20px;
+}
+
+.sg-references {
+  border-bottom: 2px solid $gray-004;
+  padding: 24px;
+  padding-bottom: 50px;
+  margin-bottom: 180px;
+  @media(max-width: $screen-sm-max) {
+    text-align: center;
+    line-height: 1.3;
+  }
+}
+
+.sg-reference {
+  color: $gray-006;
+  font-size: 12px;
+  position: relative;
+  padding-left: 40px;
+  @include akkurat-light();
+  a {
+    color: $gray-006;
+  }
+  @media(max-width: $screen-sm-max) {
+    padding-left: 0px;
+    display: inline;
+  }
+}
+
+.sg-reference__num {
+  position: absolute;
+  top: 0;
+  left: 0;
+  @media(max-width: $screen-sm-max) {
+    position: static;
+  }
+}
+
+.sg-boxes__container {
+  @media(max-width: $screen-sm-max) {
+    @include shadowed-box__gray;
+    background-color: #FFFFFF;
+  }
+  margin-bottom: 50px;
+}
+
+.sg-boxes__header {
+  margin-bottom: 20px;
+  @media(max-width: $screen-sm-max) {
+    text-align: center;
+    .about-page__header {
+      display: inline-block;
+      padding: 32px 10px 20px;
+      margin: 0px 30px;
+      border-bottom: 2px solid $gray-004;
+      line-height: 1.5;
+    }
+  }
+}
+
+.sg-boxes {
+  @include flexbox();
+  @include flexwrap();
+}
+
+.sg-box {
+  @include flexbox();
+  @include flexcolumn();
+}
+
+.sg-box__content {
+  background-color: #FFFFFF;
+  @include shadowed-box__gray;
+  height: 100%;
+  width: 100%;
+  padding: 32px;
+  text-align: center;
+  @media(max-width: $screen-sm-max) {
+    box-shadow: none;
+  }
+  h5 {
+    margin-bottom: 10px;
+    color: $blue-012;
+    @include akkurat-light();
+    line-height: 1.3;
+  }
+  p {
+    margin-bottom: 0px;
+    color: $gray-007;
+    font-size: 14px;
+  }
+}
+
+.sg-box__ill {
+  height: 50px;
+  margin: 10px 0px 30px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sg-box__ill#shoe {
+  background-image: image-url('illustrations/illus-shoe.svg');
+}
+
+.sg-box__ill#ball {
+  background-image: image-url('illustrations/illus-ball.svg');
+}
+
+.sg-box__ill#bag {
+  background-image: image-url('illustrations/illus-shopping.svg');
+}
+
+
+
+

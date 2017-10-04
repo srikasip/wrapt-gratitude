@@ -10,11 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170705192456) do
+ActiveRecord::Schema.define(version: 20171002133537) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+
+  create_table "charges", force: :cascade do |t|
+    t.integer  "customer_order_id"
+    t.string   "cart_id",                    null: false
+    t.string   "charge_id"
+    t.string   "status"
+    t.text     "description"
+    t.integer  "amount_in_cents"
+    t.datetime "payment_made_at"
+    t.datetime "declined_at"
+    t.string   "idempotency_key"
+    t.datetime "idempotency_key_expires_at"
+    t.text     "error_message"
+    t.jsonb    "metadata"
+    t.string   "token"
+    t.string   "error_code"
+    t.string   "error_param"
+    t.string   "decline_code"
+    t.string   "error_type"
+    t.string   "http_status"
+    t.integer  "amount_refunded_in_cents"
+    t.datetime "authed_at"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["customer_order_id"], name: "index_charges_on_customer_order_id", using: :btree
+  end
 
   create_table "conditional_question_options", force: :cascade do |t|
     t.integer  "survey_question_id"
@@ -23,6 +49,41 @@ ActiveRecord::Schema.define(version: 20170705192456) do
     t.datetime "updated_at",                null: false
     t.index ["survey_question_id"], name: "index_conditional_question_options_on_survey_question_id", using: :btree
     t.index ["survey_question_option_id"], name: "index_conditional_question_options_on_survey_question_option_id", using: :btree
+  end
+
+  create_table "customer_orders", force: :cascade do |t|
+    t.integer  "user_id",                                  null: false
+    t.integer  "profile_id",                               null: false
+    t.string   "cart_id",                                  null: false
+    t.string   "shipping_choice"
+    t.string   "order_number",                             null: false
+    t.string   "status",                                   null: false
+    t.string   "recipient_name",                           null: false
+    t.string   "ship_street1",                             null: false
+    t.string   "ship_street2"
+    t.string   "ship_street3"
+    t.string   "ship_city",                                null: false
+    t.string   "ship_state",                               null: false
+    t.string   "ship_zip",                                 null: false
+    t.string   "ship_country",                             null: false
+    t.text     "notes"
+    t.integer  "subtotal_in_cents",        default: 0,     null: false
+    t.integer  "taxes_in_cents",           default: 0,     null: false
+    t.integer  "shipping_in_cents",        default: 0,     null: false
+    t.integer  "shipping_cost_in_cents",   default: 0,     null: false
+    t.integer  "total_to_charge_in_cents", default: 0,     null: false
+    t.date     "created_on",                               null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "gift_wrapt",               default: true,  null: false
+    t.boolean  "include_note",             default: false, null: false
+    t.string   "note_from"
+    t.string   "note_to"
+    t.text     "note_content"
+    t.integer  "handling_cost_in_cents",   default: 0,     null: false
+    t.integer  "handling_in_cents",        default: 0,     null: false
+    t.index ["profile_id"], name: "index_customer_orders_on_profile_id", using: :btree
+    t.index ["user_id"], name: "index_customer_orders_on_user_id", using: :btree
   end
 
   create_table "evaluation_recommendations", force: :cascade do |t|
@@ -76,6 +137,15 @@ ActiveRecord::Schema.define(version: 20170705192456) do
     t.index ["profile_id"], name: "index_gift_likes_on_profile_id", using: :btree
   end
 
+  create_table "gift_parcels", force: :cascade do |t|
+    t.integer  "gift_id",    null: false
+    t.integer  "parcel_id",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gift_id"], name: "index_gift_parcels_on_gift_id", using: :btree
+    t.index ["parcel_id"], name: "index_gift_parcels_on_parcel_id", using: :btree
+  end
+
   create_table "gift_products", force: :cascade do |t|
     t.integer  "gift_id"
     t.integer  "product_id"
@@ -122,19 +192,20 @@ ActiveRecord::Schema.define(version: 20170705192456) do
   create_table "gifts", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
-    t.decimal  "selling_price",                 precision: 10, scale: 2
-    t.decimal  "cost",                          precision: 10, scale: 2
+    t.decimal  "selling_price",                  precision: 10, scale: 2
+    t.decimal  "cost",                           precision: 10, scale: 2
     t.string   "wrapt_sku"
-    t.date     "date_available",                                         default: '1900-01-01', null: false
-    t.date     "date_discontinued",                                      default: '2999-12-31', null: false
-    t.datetime "created_at",                                                                    null: false
-    t.datetime "updated_at",                                                                    null: false
-    t.boolean  "calculate_cost_from_products",                           default: true,         null: false
-    t.boolean  "calculate_price_from_products",                          default: true,         null: false
+    t.datetime "created_at",                                                              null: false
+    t.datetime "updated_at",                                                              null: false
+    t.boolean  "calculate_cost_from_products",                            default: true,  null: false
+    t.boolean  "calculate_price_from_products",                           default: true,  null: false
     t.integer  "product_category_id"
     t.integer  "product_subcategory_id"
     t.integer  "source_product_id"
-    t.boolean  "featured",                                               default: false,        null: false
+    t.boolean  "featured",                                                default: false, null: false
+    t.boolean  "calculate_weight_from_products",                          default: true,  null: false
+    t.decimal  "weight_in_pounds"
+    t.boolean  "available",                                               default: true,  null: false
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
     t.index ["wrapt_sku"], name: "index_gifts_on_wrapt_sku", using: :btree
   end
@@ -147,6 +218,22 @@ ActiveRecord::Schema.define(version: 20170705192456) do
     t.datetime "invited_at"
     t.string   "how_found"
     t.index ["invited_user_id"], name: "index_invitation_requests_on_invited_user_id", using: :btree
+  end
+
+  create_table "line_items", force: :cascade do |t|
+    t.integer  "orderable_id",                               null: false
+    t.string   "orderable_type",                             null: false
+    t.integer  "order_id",                                   null: false
+    t.string   "order_type",                                 null: false
+    t.integer  "vendor_id"
+    t.boolean  "accounted_for_in_inventory", default: false, null: false
+    t.decimal  "price_per_each_in_dollars"
+    t.integer  "quantity"
+    t.decimal  "total_price_in_dollars"
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.integer  "related_line_item_id"
+    t.index ["vendor_id"], name: "index_line_items_on_vendor_id", using: :btree
   end
 
   create_table "mvp1b_user_surveys", force: :cascade do |t|
@@ -167,6 +254,24 @@ ActiveRecord::Schema.define(version: 20170705192456) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.index ["user_id"], name: "index_mvp1b_user_surveys_on_user_id", using: :btree
+  end
+
+  create_table "parcels", force: :cascade do |t|
+    t.string   "description",                             null: false
+    t.decimal  "length_in_inches",                        null: false
+    t.decimal  "width_in_inches",                         null: false
+    t.decimal  "height_in_inches",                        null: false
+    t.decimal  "weight_in_pounds",                        null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "active",               default: true,     null: false
+    t.integer  "case_pack"
+    t.string   "color"
+    t.string   "source"
+    t.string   "stock_number"
+    t.string   "usage",                default: "pretty", null: false
+    t.string   "code"
+    t.string   "shippo_template_name"
   end
 
   create_table "product_categories", force: :cascade do |t|
@@ -215,6 +320,7 @@ ActiveRecord::Schema.define(version: 20170705192456) do
     t.integer  "source_vendor_id"
     t.integer  "product_category_id"
     t.integer  "product_subcategory_id"
+    t.decimal  "weight_in_pounds"
     t.index ["product_category_id"], name: "index_products_on_product_category_id", using: :btree
     t.index ["vendor_id"], name: "index_products_on_vendor_id", using: :btree
     t.index ["wrapt_sku"], name: "index_products_on_wrapt_sku", using: :btree
@@ -276,6 +382,29 @@ ActiveRecord::Schema.define(version: 20170705192456) do
     t.index ["recipient_invited_at"], name: "index_profiles_on_recipient_invited_at", using: :btree
   end
 
+  create_table "purchase_orders", force: :cascade do |t|
+    t.integer  "vendor_id"
+    t.integer  "customer_order_id"
+    t.integer  "gift_id"
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+    t.string   "order_number",                                          null: false
+    t.date     "created_on",                                            null: false
+    t.decimal  "total_due_in_cents"
+    t.decimal  "shipping_in_cents"
+    t.decimal  "shipping_cost_in_cents"
+    t.string   "vendor_token",                                          null: false
+    t.string   "vendor_acknowledgement_status"
+    t.string   "vendor_acknowledgement_reason"
+    t.integer  "handling_cost_in_cents",        default: 0,             null: false
+    t.integer  "handling_in_cents",             default: 0,             null: false
+    t.string   "status",                        default: "initialized", null: false
+    t.index ["customer_order_id"], name: "index_purchase_orders_on_customer_order_id", using: :btree
+    t.index ["gift_id"], name: "index_purchase_orders_on_gift_id", using: :btree
+    t.index ["vendor_id"], name: "index_purchase_orders_on_vendor_id", using: :btree
+    t.index ["vendor_token"], name: "index_purchase_orders_on_vendor_token", unique: true, using: :btree
+  end
+
   create_table "recipient_gift_dislikes", force: :cascade do |t|
     t.integer  "gift_id"
     t.integer  "profile_id"
@@ -303,6 +432,67 @@ ActiveRecord::Schema.define(version: 20170705192456) do
     t.datetime "updated_at", null: false
     t.index ["gift_id"], name: "index_recipient_gift_selections_on_gift_id", using: :btree
     t.index ["profile_id"], name: "index_recipient_gift_selections_on_profile_id", using: :btree
+  end
+
+  create_table "shipments", force: :cascade do |t|
+    t.integer  "customer_order_id"
+    t.integer  "purchase_order_id"
+    t.string   "cart_id",           null: false
+    t.jsonb    "address_from"
+    t.jsonb    "address_to"
+    t.jsonb    "parcel"
+    t.jsonb    "api_response"
+    t.boolean  "success"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["customer_order_id"], name: "index_shipments_on_customer_order_id", using: :btree
+    t.index ["purchase_order_id"], name: "index_shipments_on_purchase_order_id", using: :btree
+  end
+
+  create_table "shipping_carriers", force: :cascade do |t|
+    t.string   "name",                 null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.string   "shippo_provider_name", null: false
+    t.index ["name"], name: "index_shipping_carriers_on_name", unique: true, using: :btree
+    t.index ["shippo_provider_name"], name: "index_shipping_carriers_on_shippo_provider_name", unique: true, using: :btree
+  end
+
+  create_table "shipping_labels", force: :cascade do |t|
+    t.integer  "shipment_id"
+    t.string   "cart_id",             null: false
+    t.string   "tracking_number"
+    t.jsonb    "api_response"
+    t.boolean  "success"
+    t.text     "url"
+    t.string   "shippo_object_id"
+    t.text     "error_messages"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.integer  "purchase_order_id",   null: false
+    t.integer  "customer_order_id",   null: false
+    t.string   "tracking_url"
+    t.datetime "eta"
+    t.string   "tracking_status"
+    t.datetime "tracking_updated_at"
+    t.jsonb    "tracking_payload"
+    t.string   "carrier",             null: false
+    t.string   "service_level",       null: false
+    t.index ["customer_order_id"], name: "index_shipping_labels_on_customer_order_id", using: :btree
+    t.index ["purchase_order_id"], name: "index_shipping_labels_on_purchase_order_id", using: :btree
+    t.index ["shipment_id"], name: "index_shipping_labels_on_shipment_id", using: :btree
+  end
+
+  create_table "shipping_service_levels", force: :cascade do |t|
+    t.integer  "shipping_carrier_id", null: false
+    t.string   "name",                null: false
+    t.string   "shippo_token",        null: false
+    t.integer  "estimated_days",      null: false
+    t.string   "terms",               null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.index ["shipping_carrier_id"], name: "index_shipping_service_levels_on_shipping_carrier_id", using: :btree
+    t.index ["shippo_token"], name: "index_shipping_service_levels_on_shippo_token", using: :btree
   end
 
   create_table "survey_question_options", force: :cascade do |t|
@@ -526,40 +716,70 @@ ActiveRecord::Schema.define(version: 20170705192456) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
   end
 
+  create_table "vendor_service_levels", force: :cascade do |t|
+    t.integer  "vendor_id",                 null: false
+    t.integer  "shipping_service_level_id", null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["shipping_service_level_id"], name: "index_vendor_service_levels_on_shipping_service_level_id", using: :btree
+    t.index ["vendor_id", "shipping_service_level_id"], name: "vsl_vendor_id_ssl_id_unq_idx", unique: true, using: :btree
+    t.index ["vendor_id"], name: "index_vendor_service_levels_on_vendor_id", using: :btree
+  end
+
   create_table "vendors", force: :cascade do |t|
     t.string   "name"
-    t.text     "address"
+    t.text     "defunct_address"
     t.string   "contact_name"
     t.string   "email"
     t.string   "phone"
     t.text     "notes"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
     t.string   "wrapt_sku_code"
+    t.string   "street1",                        default: "unknown", null: false
+    t.string   "city",                           default: "unknown", null: false
+    t.string   "state",                          default: "unknown", null: false
+    t.string   "zip",                            default: "unknown", null: false
+    t.string   "country",                        default: "unknown", null: false
+    t.string   "street2"
+    t.string   "street3"
+    t.integer  "purchase_order_markup_in_cents", default: 800,       null: false
     t.index ["wrapt_sku_code"], name: "index_vendors_on_wrapt_sku_code", using: :btree
   end
 
+  create_table "versions", force: :cascade do |t|
+    t.string   "item_type",      null: false
+    t.integer  "item_id",        null: false
+    t.string   "event",          null: false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.text     "object_changes"
+    t.string   "cart_id"
+    t.datetime "created_at"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
+  end
+
+  add_foreign_key "charges", "customer_orders"
   add_foreign_key "conditional_question_options", "survey_question_options"
   add_foreign_key "conditional_question_options", "survey_questions"
-  add_foreign_key "evaluation_recommendations", "gifts"
-  add_foreign_key "evaluation_recommendations", "profile_set_survey_responses"
-  add_foreign_key "evaluation_recommendations", "training_set_evaluations"
+  add_foreign_key "customer_orders", "profiles"
+  add_foreign_key "customer_orders", "users"
   add_foreign_key "gift_dislikes", "gifts"
   add_foreign_key "gift_dislikes", "profiles"
   add_foreign_key "gift_images", "gifts"
   add_foreign_key "gift_images", "product_images"
   add_foreign_key "gift_likes", "gifts"
   add_foreign_key "gift_likes", "profiles"
+  add_foreign_key "gift_parcels", "gifts"
+  add_foreign_key "gift_parcels", "parcels"
   add_foreign_key "gift_products", "gifts"
   add_foreign_key "gift_products", "products"
-  add_foreign_key "gift_question_impacts", "gifts"
-  add_foreign_key "gift_question_impacts", "survey_questions"
-  add_foreign_key "gift_question_impacts", "training_sets"
   add_foreign_key "gift_recommendations", "gifts"
   add_foreign_key "gift_recommendations", "profiles"
   add_foreign_key "gift_selections", "gifts"
   add_foreign_key "gift_selections", "profiles"
   add_foreign_key "gifts", "product_categories"
+  add_foreign_key "line_items", "vendors"
   add_foreign_key "product_images", "products"
   add_foreign_key "products", "product_categories"
   add_foreign_key "products", "vendors"
@@ -568,6 +788,15 @@ ActiveRecord::Schema.define(version: 20170705192456) do
   add_foreign_key "profile_traits_facets", "profile_traits_topics", column: "topic_id"
   add_foreign_key "profile_traits_tags", "profile_traits_facets", column: "facet_id"
   add_foreign_key "profiles", "users", column: "owner_id"
+  add_foreign_key "purchase_orders", "customer_orders"
+  add_foreign_key "purchase_orders", "gifts"
+  add_foreign_key "purchase_orders", "vendors"
+  add_foreign_key "shipments", "customer_orders"
+  add_foreign_key "shipments", "purchase_orders"
+  add_foreign_key "shipping_labels", "customer_orders"
+  add_foreign_key "shipping_labels", "purchase_orders"
+  add_foreign_key "shipping_labels", "shipments"
+  add_foreign_key "shipping_service_levels", "shipping_carriers"
   add_foreign_key "survey_question_response_options", "survey_question_options"
   add_foreign_key "survey_question_response_options", "survey_question_responses"
   add_foreign_key "survey_question_responses", "survey_questions"
@@ -575,11 +804,12 @@ ActiveRecord::Schema.define(version: 20170705192456) do
   add_foreign_key "survey_responses", "surveys"
   add_foreign_key "survey_sections", "surveys"
   add_foreign_key "training_set_evaluations", "training_sets"
-  add_foreign_key "training_set_response_impacts", "gift_question_impacts"
   add_foreign_key "trait_response_impacts", "profile_traits_tags"
   add_foreign_key "trait_response_impacts", "survey_question_options"
   add_foreign_key "trait_response_impacts", "trait_training_set_questions"
   add_foreign_key "trait_training_set_questions", "survey_questions", column: "question_id"
   add_foreign_key "trait_training_set_questions", "trait_training_sets"
   add_foreign_key "trait_training_sets", "surveys"
+  add_foreign_key "vendor_service_levels", "shipping_service_levels"
+  add_foreign_key "vendor_service_levels", "vendors"
 end

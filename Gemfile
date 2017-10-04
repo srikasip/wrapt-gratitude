@@ -1,62 +1,46 @@
 source 'https://rubygems.org'
 
-
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.0'
-gem 'pg'
-# Use Puma as the app server
-gem 'puma', '~> 3.0'
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
-# Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.2'
-
-gem 'dotenv-rails'
-
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
-
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.5'
-# Use Redis adapter to run Action Cable in production
-gem 'redis', '~> 3.0'
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
-gem 'simple_form'
-gem 'haml-rails'
-gem 'bootstrap-sass', '~> 3.3.6'
+gem "fog-aws"
+gem 'acts-as-taggable-on'
+gem 'awesome_nested_set'
+gem 'awesome_print'
+gem 'bootstrap-sass', '~> 3.3.7'
 gem 'carrierwave'
 gem 'carrierwave_direct'
-gem "fog-aws"
-gem 'mini_magick'
-gem 'awesome_nested_set'
-gem 'sorcery'
-gem 'kaminari'
-gem 'sidekiq'
+gem 'coffee-rails', '~> 4.2' # Use CoffeeScript for .coffee assets and views
+gem 'dotenv-rails'
 gem 'font-awesome-sass'
-gem 'acts-as-taggable-on'
+gem 'font-awesome-sass'
+gem 'haml-rails'
+gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jquery-rails' # Use jquery as the JavaScript library
+gem 'kaminari'
+gem 'letsencrypt_plugin'
+gem 'mini_magick'
+gem 'paper_trail'
+gem 'pg'
+gem 'puma', '~> 3.0' # Use Puma as the app server
+gem 'rails', '~> 5.0.0'
+gem 'redis', '~> 3.0' # Use Redis adapter to run Action Cable in production
+gem 'roo' # read excel files
+gem 'sass-rails', '~> 5.0' # Use SCSS for stylesheets
+gem 'shippo', '~> 3.0.0' # Every app needs a shipping hippo.
+gem 'sidekiq'
 gem 'elevatezoom-rails'
 
-# For reading/writing files
-gem 'roo'
-gem 'write_xlsx'
-
-# Javascript
-gem 'sprockets-es6'
+gem 'simple_form'
+gem 'sorcery'
+gem 'sprockets-es6' # Javascript
+gem 'stripe' # Credit card processing
+gem 'turbolinks', '~> 5' # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
+gem 'uglifier', '>= 1.3.0' # Use Uglifier as compressor for JavaScript assets
+gem 'whenever', require: false
+gem 'exception_notification'
+gem 'write_xlsx' # write excel files
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platform: :mri
+  gem 'byebug', platform: :mri # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'factory_girl_rails'
 end
 
 group :production do
@@ -82,6 +66,7 @@ group :development do
   gem 'rack-livereload'
   gem 'guard'
   gem 'guard-livereload'
+  gem 'guard-minitest'
 end
 
 group :test do

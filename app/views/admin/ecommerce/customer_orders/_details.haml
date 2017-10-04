@@ -1,0 +1,59 @@
+%h2 Order Audit Trail and Technical Details
+
+#accordion.panel-group
+  - if @order.include_note?
+    .panel.panel-default
+      .panel-heading
+        %h4.panel-title
+          %span.glyphicon.glyphicon-plus
+          %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseOne"}
+            Note from customer
+      #collapseOne.panel-collapse.collapse
+        .panel-body
+          = @order.note_content
+
+  .panel.panel-default
+    .panel-heading
+      %h4.panel-title
+        %span.glyphicon.glyphicon-plus
+        %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseTwo"}
+          Order Changes
+    #collapseOne.panel-collapse.collapse
+      .panel-body
+        = render "versions", versions: @order.versions
+
+  - if @order.charge.present?
+    .panel.panel-default
+      .panel-heading
+        %h4.panel-title
+          %span.glyphicon.glyphicon-plus
+          %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseThree"}
+            Charge Changes
+      #collapseTwo.panel-collapse.collapse
+        .panel-body
+          = render "versions", versions: @order.charge.versions
+
+  .panel.panel-default
+    .panel-heading
+      %h4.panel-title
+        %span.glyphicon.glyphicon-plus
+        %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseFour"}
+          Raw Data
+    #collapseThree.panel-collapse.collapse
+      .panel-body
+        = render "raw_data", order: @order
+
+:javascript
+  $(document).ready(function(){
+    // Add minus icon for collapse element which is open by default
+    $(".collapse.in").each(function(){
+      $(this).siblings(".panel-heading").find(".glyphicon").addClass("glyphicon-minus").removeClass("glyphicon-plus");
+    });
+
+    // Toggle plus minus icon on show hide of collapse element
+    $(".collapse").on('show.bs.collapse', function(){
+      $(this).parent().find(".glyphicon").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+    }).on('hide.bs.collapse', function(){
+      $(this).parent().find(".glyphicon").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+    });
+  });

@@ -1,10 +1,15 @@
 class Gift < ApplicationRecord
-  
   acts_as_taggable
-  
+
   VALID_TAG_REGEXP = /^[a-z0-9][a-z0-9_]*$/i
 
+  validates :name, presence: true
+  validates :wrapt_sku, presence: true
   validate :validate_tag
+  validate :_has_boxes
+  validate :_has_products
+  validate :_has_price
+  validate :_has_weight
 
   has_many :gift_products, inverse_of: :gift, dependent: :destroy
   has_many :products, through: :gift_products
@@ -13,31 +18,44 @@ class Gift < ApplicationRecord
   has_many :uploaded_gift_images, class_name: 'GiftImages::Uploaded'
   has_many :gift_images_from_products, class_name: 'GiftImages::FromProduct'
 
+  has_many :gift_parcels, dependent: :destroy
+  has_many :pretty_parcels, -> { joins(:parcel).where(parcels: { usage: 'pretty' }) }, class_name: 'GiftParcel'
+  has_many :shipping_parcels, -> { joins(:parcel).where(parcels: { usage: 'shipping' }) }, class_name: 'GiftParcel'
+  define_method(:pretty_parcel) { pretty_parcels.first&.parcel }
+  define_method(:shipping_parcel) { shipping_parcels.first&.parcel }
+
   has_one :primary_gift_image, -> {where primary: true}, class_name: 'GiftImage'
 
   belongs_to :source_product, class_name: 'Product', required: false
 
   belongs_to :product_category, required: true
   belongs_to :product_subcategory, required: true, class_name: 'ProductCategory'
-  
+
   has_one :calculated_gift_field
+  delegate :cost, :price, :weight_in_pounds, :units_available, to: :calculated_gift_field
 
   before_save :generate_wrapt_sku, if: :sku_needs_updating?
 
-  # These are implemented as not null in the database
-  # so we can treat them as not null for sorting purposese
-  # and nullable for display purposes
-  DEFAULT_DATE_AVAILABLE = Date.new(1900, 1, 1)
-  DEFAULT_DATE_DISCONTINUED = Date.new(2999, 12, 31)
+  before_destroy -> { raise "Cannot destroy" unless deleteable? }
+
+  accepts_nested_attributes_for :pretty_parcels
+  accepts_nested_attributes_for :shipping_parcels
+
+  scope :available, -> { where(available: true) }
 
   def self.search search_params
-    self.all.merge(GiftSearch.new(search_params).to_scope)        
+    self.all.merge(GiftSearch.new(search_params).to_scope)
   end
 
-  def available?
-    date_available <= Date.today && date_discontinued >= Date.today
+  def deleteable?
+    LineItem.where(orderable: self).none?
   end
-  
+
+  def vendor
+    # Assumption is that all the products of a gift are the same vendor
+    products.first.vendor
+  end
+
   def experience?
     product_subcategory.wrapt_sku_code == ProductCategory::EXPERIENCE_GIFT_CODE
   end
@@ -54,14 +72,6 @@ class Gift < ApplicationRecord
     title
   end
 
-  def display_date_available format = '%B %-d, %Y'
-    (date_available == DEFAULT_DATE_AVAILABLE) ? '' : date_available.strftime(format)
-  end
-
-  def display_date_discontinued format = '%B %-d, %Y'
-    (date_discontinued == DEFAULT_DATE_DISCONTINUED) ? '' : date_discontinued.strftime(format)
-  end
-
   def cost
     calculated_gift_field&.cost
   end
@@ -74,7 +84,31 @@ class Gift < ApplicationRecord
     tag_list.each do |tag|
       errors.add(:tag_list, "-#{tag}- tag names can only contain alphanumeric characters or underscore") unless tag =~ VALID_TAG_REGEXP
     end
-  end  
+  end
+
+  def _has_boxes
+    return if pretty_parcel.present? && shipping_parcel.present?
+
+    errors.add(:base, "Must have a gift box and shipping box")
+  end
+
+  def _has_products
+    return if products.present?
+
+    errors.add(:base, "Must have at least one product")
+  end
+
+  def _has_weight
+    return if weight_in_pounds > 0.0
+
+    errors.add(:base, "Must have a weight")
+  end
+
+  def _has_price
+    return if selling_price > 0.0
+
+    errors.add(:base, "Must have a price")
+  end
 
   private def sku_prefix
     segments = []
@@ -142,7 +176,7 @@ class Gift < ApplicationRecord
   # These associations are not used directly in this direction by the application
   # they're only here to allow foreign keys to be cleaned up via dependent destroy
   ################################################################################
-  
+
   has_many :gift_recommendations, dependent: :destroy
   # not sure why the association below exists?
   #has_many :survey_responses, dependent: :destroy

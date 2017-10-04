@@ -1,9 +1,14 @@
 class Product < ApplicationRecord
+  validates :price, numericality: { greater_than: 0.00 }
+  validates :description, length: { minimum: 10 }
+  validates :units_available, numericality: { only_integer: true }
+  validates :wrapt_cost, numericality: {  greater_than: 0.00 }
+
   belongs_to :product_category, required: true
   belongs_to :product_subcategory, required: true, class_name: 'ProductCategory'
 
   has_many :gift_products, inverse_of: :product, dependent: :destroy
-  has_many :gifts, through: :gift_products
+  has_many :gifts, through: :gift_products, dependent: :destroy
 
   has_many :product_images, -> {order :sort_order}, inverse_of: :product, dependent: :destroy
   has_one :primary_product_image, -> {where primary: true}, class_name: 'ProductImage'
@@ -19,8 +24,14 @@ class Product < ApplicationRecord
   before_save :set_dependent_skus_need_regeneration, if: :vendor_id_changed?
   after_save :regenerate_dependent_skus!, if: :dependent_skus_need_regeneration
 
+  before_destroy -> { raise "Cannot destroy" unless deleteable? }
+
   def self.search search_params
-    self.all.merge(ProductSearch.new(search_params).to_scope)        
+    self.all.merge(ProductSearch.new(search_params).to_scope)
+  end
+
+  def deleteable?
+    LineItem.where(orderable: self).none?
   end
 
   private def sku_prefix
@@ -74,5 +85,4 @@ class Product < ApplicationRecord
       end
     end
   end
-
 end

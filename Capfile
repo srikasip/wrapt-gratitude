@@ -4,6 +4,9 @@ require 'capistrano/setup'
 # Include default deployment tasks
 require 'capistrano/deploy'
 
+require 'capistrano/scm/git'
+install_plugin Capistrano::SCM::Git
+
 # Include tasks from other gems included in your Gemfile
 #
 # For documentation on these, see for example:
@@ -25,6 +28,10 @@ require 'capistrano/passenger'
 
 require 'capistrano/sidekiq'
 require 'capistrano/sidekiq/monit'
+require "whenever/capistrano"
+
+require 'dotenv'
+Dotenv.load('.env', '.env.local', '.env.development')
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob('lib/capistrano/tasks/*.cap').each { |r| import r }

@@ -1,0 +1,25 @@
+.container
+  = render 'header'
+  .row
+    .col-xs-12.col-md-10.col-md-offset-1
+      .co-container
+        %h3.light Shipping Information
+        = simple_form_for @customer_order, url: url_for, method: :patch do |f|
+          .co-toggle
+            = psuedo_wrapt_radio_toggle([['Ship to me', :ship_to_me], ["Ship to #{@profile.name}", :ship_to_giftee]], :toggle_address_choice, :ship_to_me)
+          .row
+            .col-xs-12.col-md-10
+              = f.input :ship_street1, label: 'Street Address'
+            .col-xs-12.col-md-2
+              = f.input :ship_street2, label: 'Apt / Suite #'
+          .row
+            .col-xs-12.col-md-8
+              = f.input :ship_city, label: 'City'
+            .col-xs-12.col-md-2
+              = f.input :ship_state, label: 'State'
+            .col-xs-12.col-md-2
+              = f.input :ship_zip, label: 'Zip Code'
+          %button.btn.btn-primary{type: 'submit'}
+            = "Next <svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
+
+  = render "debug", customer_order: @customer_order

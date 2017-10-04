@@ -1,12 +1,11 @@
 Rails.application.routes.draw do
-
   root to: 'home#show'
-  
+
   if Rails.env.development?
     get 'terms-of-service', to: 'static_pages#terms_of_service', as: :terms_of_service
     get 'privacy-policy', to: 'static_pages#privacy_policy', as: :privacy_policy
   end
-  
+
   get 'science-of-gifting', to: 'static_pages#science_of_gifting', as: :science_of_gifting
 
   resources :invitation_requests, only: :create
@@ -16,7 +15,7 @@ Rails.application.routes.draw do
   # for MVP1A they can be accessed via notification link or logged in user
   ##########################
   concern :profile_builder do
-    resources :profiles, only: [:new, :create] do
+    resources :profiles, only: [:index, :new, :create] do
       resources :surveys, only: :show, controller: 'survey_responses' do
         resources :questions, only: [:show, :update], controller: 'survey_question_responses'
         resource :completion, only: [:show, :create], controller: 'survey_response_completions'
@@ -27,7 +26,7 @@ Rails.application.routes.draw do
   concerns :profile_builder
   resources :invitations, only: :show, concerns: :profile_builder
 
-  resources :profiles, only: :none do
+  resources :profiles, only: [:new, :create] do
     resources :gift_recommendations, only: :index
     resources :gift_selections, only: [:create, :destroy]
     resources :giftee_invitations, only: [:new, :create]
@@ -41,13 +40,13 @@ Rails.application.routes.draw do
 
   resources :profile_recipient_reviews, only: :show
   resources :funds, only: :index
-  
+
   # removed pt story #149729697
   # resources :mvp1b_user_surveys, only: [:show, :new, :create]
-  
+
   get 'testing/survey_complete', to: 'survey_response_completions#show'
   get 'testing/gift_recommendations', to: 'gift_recommendations#index'
-    
+
 
   #####################################################
 
@@ -62,6 +61,28 @@ Rails.application.routes.draw do
   # My Account Area
   ###################################
   resource :my_account, only: [:show, :edit, :update]
+
+  ###################################
+  ### Checkout and shopping cart
+  ###################################
+  namespace :ecommerce do
+    VALID_STEPS = ['gift-wrapt', 'address', 'shipping', 'payment', 'review']
+    VALID_STEPS.each do |step|
+      action = step.tr('-', '_')
+      get "checkout/#{step}" => "checkout#edit_#{action}"
+      patch "checkout/#{step}" => "checkout#save_#{action}"
+    end
+    get "checkout/finalize" => "checkout#finalize"
+
+    resources :vendor_confirmations, only: [:show, :update] do
+      member do
+        get :details
+      end
+      collection do
+        get :error
+      end
+    end
+  end
 
   ###################################
   ### Admin
@@ -86,7 +107,7 @@ Rails.application.routes.draw do
 
     resources :vendors
     resources :survey_responses, only: [:show]
-    
+
     resources :product_categories, except: :show do
       resource :subcategories, controller: 'product_subcategories', only: :show
     end
@@ -127,11 +148,31 @@ Rails.application.routes.draw do
       resource :section_ordering, only: :create, controller: 'survey_section_orderings'
       resource :publishing, only: [:create], controller: 'survey_publishings'
     end
-    
+
     resources :reports, only: :index
     resources :mvp1b_user_surveys, only: :index
     resources :top_gifts_reports, only: :index
     resources :survey_response_reports, only: :index
+
+    namespace :ecommerce do
+      get '/' => 'dashboard#index'
+      get '/stats' => 'dashboard#stats'
+      resources :inventory_items, only: [:index] do
+        collection do
+          get :upload, action: 'upload_form'
+          put :upload
+          get :download
+        end
+      end
+      resources :billings, only: [:index]
+      resources :customer_orders, only: [:index, :show, :destroy, :create]
+      resources :purchase_orders, only: [:index, :show] do
+        member do
+          put :resend_notification
+        end
+      end
+      post 'webhooks/tracking' => 'webhooks#tracking'
+    end
 
   end
 
@@ -151,6 +192,8 @@ Rails.application.routes.draw do
   constraints lambda {|request| SidekiqDashboardAuthentication.authenticated? request} do
     mount Sidekiq::Web => '/sidekiq'
   end
+
+  mount LetsencryptPlugin::Engine, at: '/'  # It must be at root level
 
   # Serve websocket cable requests in-process
   mount ActionCable.server => '/cable'

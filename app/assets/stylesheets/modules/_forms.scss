@@ -1,5 +1,36 @@
 @import "helpers";
 
+.wrapt-styled-checkbox {
+  padding-left: 30px;
+  position: relative;
+  line-height: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  @include akkurat-light;
+  // input {
+  //   display: none;
+  // }
+  span {
+    position: absolute;
+    left: 0px;
+    display: block;
+    border: 1px solid #c4c4c4;
+    width: 20px;
+    height: 20px;
+  }
+  span.checked::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    right: 2px;
+    bottom: 2px;
+    display: block;
+    // transition: all 1s;
+    background-color: $blue-001;
+  }
+}
+
 label {
   color: $gray-008;
   font-weight: normal;

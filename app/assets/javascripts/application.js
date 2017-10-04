@@ -23,6 +23,7 @@
 //= require jquery.fileupload
 //= require cable
 //= require jquery.elevatezoom
+//= require d3.min
 
 // Application Code
 //= require app/init

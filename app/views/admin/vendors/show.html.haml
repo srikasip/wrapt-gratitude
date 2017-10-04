@@ -5,17 +5,46 @@
       = link_to 'Edit', edit_admin_vendor_path(@vendor), class: 'btn btn-default btn-xs'
 
 %p
-  %b Address:
-  = @vendor.address
-%p
   %b Contact name:
   = @vendor.contact_name
+
+%p
+  %b Address Line 1
+  = @vendor.street1
+
+%p
+  %b Address Line 2
+  = @vendor.street2
+
+%p
+  %b Address Line 3
+  = @vendor.street3
+
+%p
+  %b City
+  = @vendor.city
+
+%p
+  %b State
+  = @vendor.state
+
+%p
+  %b Zipcode
+  = @vendor.zip
+
+%p
+  %b Country
+  = @vendor.country
+
 %p
   %b Email:
   = @vendor.email
 %p
   %b Phone:
   = @vendor.phone
+%p
+  %b Markup:
+  = number_to_currency(@vendor.purchase_order_markup_in_dollars)
 %p
   %b Notes:
   = @vendor.notes

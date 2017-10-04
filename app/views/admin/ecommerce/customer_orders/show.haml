@@ -1,0 +1,127 @@
+.row
+  .col-sm-12
+    = link_to '« Back to Customer Orders', admin_ecommerce_customer_orders_path
+    %h1
+      Customer Order
+      = @order.order_number
+      = link_to 'Cancel Order', admin_ecommerce_customer_order_path(@order), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+
+.row
+  .col-sm-4
+    %p
+      %b Ship To:
+      %br
+      :ruby
+        address_lines = [
+          @order.recipient_name,
+          @order.ship_street1,
+          @order.ship_street2,
+          @order.ship_street3,
+          "#{@order.ship_city}, #{@order.ship_state} #{@order.ship_zip}",
+          @order.ship_country
+        ].select(&:present?)
+      - address_lines.each do |line|
+        = line
+        %br
+  .col-sm-4
+    %p
+      %strong Customer Name:
+      = link_to edit_admin_user_path(@order.user) do
+        =@order.user.full_name
+      %br
+      %strong Customer Email:
+      =@order.user.email
+  .col-sm-4
+    %p
+      %strong Order Status:
+      - style = "color: red" if @order.status == 'failed'
+      %span{style: "#{style}"}= @order.status
+      %br
+      %strong Gift wrapt:
+      = @order.gift_wrapt? ? 'Yes' : 'No'
+      %br
+      %strong Include a note:
+      = @order.include_note? ? 'Yes' : 'No'
+      %br
+      - if @order.include_note?
+        %strong From:
+        = @order.note_from
+        %br
+        %strong To:
+        = @order.note_to
+
+.row
+  .col-sm-12
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Item
+          %th SKU
+          %th Vendor
+          %th Purchase Order
+          %th.text-center Vendor<br>Okay
+          %th.text-right Quantity
+          %th.text-right Price Each
+          %th.text-right Total Price
+
+      %tbody
+        - @order.line_items.each do |line_item|
+          %tr
+            %td
+              = link_to admin_gift_path(line_item.orderable) do
+                %i= line_item.name
+            %td= line_item.orderable.wrapt_sku
+            %td
+              = link_to line_item.vendor_name, admin_vendor_path(line_item.vendor)
+            %td
+              :ruby
+                purchase_orders = PurchaseOrder.where({
+                  customer_order: @order,
+                  vendor: line_item.vendor,
+                  gift: line_item.orderable
+                })
+              - purchase_orders.each do |po|
+                = link_to po.order_number, admin_ecommerce_purchase_order_path(po)
+                %br
+            %td.text-center
+              - purchase_orders.each do |po|
+                - if po.vendor_accepted?
+                  %span.glyphicon.glyphicon-ok{style: 'color: green'}
+                - else
+                  %span.glyphicon.glyphicon-remove{style: 'color: red'}
+                %br
+
+            %td.text-right= line_item.quantity
+            %td.text-right= number_to_currency(line_item.price_per_each_in_dollars)
+            %td.text-right
+              %i= number_to_currency(line_item.total_price_in_dollars)
+
+        %tr{style: 'border-top-style: double'}
+          %td
+            %i Sub-total
+          %td{colspan: 6}
+          %td.text-right
+            %b= number_to_currency(@order.subtotal_in_dollars)
+
+        %tr
+          %td
+            %i Shipping
+          %td{colspan: 6}
+          %td.text-right
+            %i= number_to_currency(@order.shipping_in_dollars)
+
+        %tr
+          %td
+            %i Taxes
+          %td{colspan: 6}
+          %td.text-right
+            %i= number_to_currency(@order.taxes_in_dollars)
+
+        %tr{style: 'border-top-style: double'}
+          %td
+            %i Total
+          %td{colspan: 6}
+          %td.text-right
+            %b= number_to_currency(@order.total_to_charge_in_dollars)
+
+=render 'details'
