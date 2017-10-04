@@ -103,8 +103,7 @@ class CustomerPurchase::ShippingService
   def shipping_choices_for_view
     [
       ['Fastest', 'fastest'],
-      ['Least Expensive', 'cheapest'],
-      ['Best Value', 'bestvalue']
+      ['Least Expensive', 'cheapest']
     ]
   end
 
