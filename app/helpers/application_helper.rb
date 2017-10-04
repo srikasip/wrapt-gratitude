@@ -207,4 +207,23 @@ module ApplicationHelper
     end
   end
 
+  # this is a psuedo version of a simple form input
+  def psuedo_wrapt_radio_toggle(collection, attr_name, selected)
+    content_tag :div, class: 'j-wrapt-radio-toggle form-group' do
+      collection.each do |c|
+        s = selected == c.last
+        concat psuedo_wrapt_radio_toggle_label(c, attr_name, s)
+      end
+    end
+  end
+
+  def psuedo_wrapt_radio_toggle_label(collection_item, attr_name, selected)
+    label_key = "#{attr_name.to_s}_#{collection_item.last.to_s}".to_sym
+    label_class = selected ? 'selected' : ''
+    content_tag :label, for: label_key, class: label_class do
+      concat collection_item.first
+      concat content_tag :input, '', type: 'radio', value: collection_item.last, name: attr_name, id: label_key, checked: selected, style: 'display:none;', onChange: 'App.RadioToggle(this);'
+    end
+  end
+
 end

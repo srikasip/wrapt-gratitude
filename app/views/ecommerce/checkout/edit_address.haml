@@ -3,15 +3,10 @@
   .row
     .col-xs-12.col-md-10.col-md-offset-1
       .co-container
-        %h2.light Shipping Information
+        %h3.light Shipping Information
         = simple_form_for @customer_order, url: url_for, method: :patch do |f|
-          %label
-            = radio_button_tag :toggle_address_choice, :ship_to_me
-            Ship to me
-          |
-          %label
-            = radio_button_tag :toggle_address_choice, :ship_to_giftee
-            Ship to #{@profile.name}
+          .co-toggle
+            = psuedo_wrapt_radio_toggle([['Ship to me', :ship_to_me], ["Ship to #{@profile.name}", :ship_to_giftee]], :toggle_address_choice, :ship_to_me)
           .row
             .col-xs-12.col-md-10
               = f.input :ship_street1, label: 'Street Address'

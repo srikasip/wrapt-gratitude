@@ -33,3 +33,36 @@
     bottom: -28px;
   }
 }
+
+.co-toggle label {
+  border: 1px solid #CCCCCC;
+  padding: 16px 24px;
+  cursor: pointer;
+  text-transform: uppercase;
+  @include akkurat-light;
+  font-size: 14px;
+  letter-spacing: 1px;
+  transition: all 0.5s;
+}
+
+.co-toggle label:not(:last-child) {
+  border-right: none;
+}
+
+.co-toggle label.selected {
+  background-color: rgba(241, 226, 176, 0.5);
+  @include akkurat-bold;
+}
+
+.co-add-a-note {
+  margin-bottom: 40px;
+  h4, .form-group {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: middle;
+    margin-bottom: 0px;
+  }
+  h4 {
+    margin: 0px 40px 0px 0px;
+  }
+}
