@@ -74,7 +74,7 @@ module Recommender
     end
 
     def build_gift_scope
-      @gift_scope = Gift.available.all
+      @gift_scope = Gift.can_be_sold
       filters.each do |filter|
         @gift_scope = if filter.exclusive_scope?
           @gift_scope.where("gifts.id not in (#{filter.gift_scope.to_sql})")
