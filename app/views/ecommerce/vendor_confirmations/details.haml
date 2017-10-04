@@ -2,9 +2,9 @@ Thanks. Here are the details.
 
 = render "order_details"
 
+Ship To: #{@purchase_order.shipment.address_to}
+
 - if @purchase_order.shipping_label.present?
-  %h3
-    Ship to: #{@purchase_order.customer_order.note_to}
 
   = link_to @purchase_order.shipping_label.url, target: '_blank' do
     Shipping Label
