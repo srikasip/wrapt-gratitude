@@ -60,7 +60,6 @@ class Ecommerce::CheckoutController < ApplicationController
   end
 
   def edit_shipping
-    flash.now[:notice] = "Always pick USPS while we're developing a solution to reconciling shippo choices across all purchase orders"
     @checkout_step = :shipping
     _load_progress_bar
     @shipping_choices = @customer_purchase.shipping_choices_for_view
