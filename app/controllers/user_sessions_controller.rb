@@ -33,7 +33,6 @@ class UserSessionsController < ApplicationController
       root_path
     end
   end
-  
 
   private def user_session_params
     params.require(:user_session).permit(
@@ -42,7 +41,5 @@ class UserSessionsController < ApplicationController
       :remember
     )
   end
-  
-  
 
 end

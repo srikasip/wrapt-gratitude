@@ -1,18 +1,41 @@
 class ProfilesController < ApplicationController
   include RequiresLoginOrInvitation
+  include FeatureFlagsHelper
 
   helper SurveyQuestionResponsesHelper
   helper HeroBackgroundHelper
   helper CarouselHelper
+  helper FeatureFlagsHelper
 
   before_filter :set_survey
 
+  skip_before_action :require_login_or_invitation, only: [:create_with_auto_user_create]
+
   def login_required?
-    true
+    require_invites? || (action_name != 'create_with_auto_user_create')
   end
 
   def index
     @profiles = current_user.owned_profiles
+  end
+
+  def create_with_auto_user_create
+    if current_user
+      # Already have a user.
+      create
+    elsif require_invites?
+      redirect_to root_path
+    else
+      user = User.new(email: SecureRandom.hex(16)+"@_PLACEHOLDER_")
+      user.source = 'auto_create_on_quiz_taking'
+      password = SecureRandom.hex(16)
+      user.password = password
+      user.save!
+
+      auto_login(user)
+
+      create
+    end
   end
 
   def new

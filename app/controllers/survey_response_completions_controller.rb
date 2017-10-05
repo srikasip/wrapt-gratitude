@@ -4,6 +4,7 @@ class SurveyResponseCompletionsController < ApplicationController
   before_action :set_profile
   before_action :set_survey_response
   before_action :testing_redirect, only: :show
+  before_action :hide_dummy_email
 
   def login_required?
     false
@@ -40,16 +41,16 @@ class SurveyResponseCompletionsController < ApplicationController
       :user_password
     )
   end
- 
+
   private
-  
+
   def testing_redirect
     if params[:profile_id].present? && current_user.unmoderated_testing_platform?
       # go directly to pretty url for loop11 testing (do not collect $200)
       redirect_to testing_survey_complete_path
     end
   end
-   
+
   def set_profile
     profile_id = params[:profile_id] || session[:profile_id]
     @profile = current_user.owned_profiles.find profile_id
@@ -61,5 +62,9 @@ class SurveyResponseCompletionsController < ApplicationController
     @survey_response = @profile.survey_responses.find survey_id
     session[:survey_id] = @survey_response.id
   end
-  
+
+  def hide_dummy_email
+    current_user.email = nil if current_user.email.include?('_PLACEHOLDER_')
+  end
+
 end

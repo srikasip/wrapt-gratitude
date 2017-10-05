@@ -1,7 +1,7 @@
 .container
   .row
     .col-xs-12.text-center
-      %h1.about-page__header.fancy 
+      %h1.about-page__header.fancy
         The Science of Gifting
       %p.about-page__tagline= content_with_citation(@tagline[:content], @tagline[:citations])
   .sg-boxes__container
@@ -39,13 +39,9 @@
         .row
           .col-xs-12.col-sm-10.col-sm-offset-1
             .sg-question
-              -# TODO: add correct url here
-              = simple_form_for @question_response, url: '#', html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
+              = simple_form_for @question_response, url: profiles_path, html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
                 - if current_user&.admin?
                   = hidden_field_tag :survey_id, @survey.id
                 = render response_fields_partial, form: form, label: @question_response.survey_question.prompt
-                .sqr-submit__container.text-right#js-sqr-submit__container
-                  %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}
-                    Start Quiz
         .text-center
           = embedded_svg('icon-gift-better-gift-wrapt', class: "landing-bottom__icon-gift-better-gift-wrapt mt6")

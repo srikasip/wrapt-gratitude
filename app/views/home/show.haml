@@ -8,14 +8,16 @@
         - if current_user&.admin?
           %p In MVP1a, when we invite people for testing, they will be taken to a special landing page.
           %p
-            = link_to 'Beta Testing Landing Page: Start a New Quiz', new_profile_path
+            = link_to 'Start a New Quiz', new_profile_path
             - test_surveys = Survey.where(test_mode: true)
             - if test_surveys.any?
               %p Select a quiz that is currently in test mode:
               %ul
                 - test_surveys.each do |test_survey|
                   %li= link_to test_survey.title, new_profile_path(survey_id: test_survey.id)
-        - else
+        - elsif current_user.present?
+          = link_to 'Start a New Quiz', new_profile_path
+        - elsif require_invites?
           .sqr-progress.sqr-progress--one-question-only
           = simple_form_for @invitation_request, html: {class: 'sqr-form new-invite-request'} do |form|
             .form-inputs
@@ -25,6 +27,11 @@
             .form-actions.pull-right
               = form.submit 'Submit', class: 'btn btn-primary'
             .clearfix
+        - else
+          = simple_form_for @question_response, url: create_with_auto_user_create_profiles_path, html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
+            - if current_user&.admin?
+              = hidden_field_tag :survey_id, @survey.id
+            = render response_fields_partial, form: form, label: @question_response.survey_question.prompt
 
 - content_for :after_wrapper do
   = render 'home/how_wrapt_works'
@@ -46,4 +53,3 @@
   - content_for :page_js do
     :javascript
       new App.PjaxModalLoader(#{password_reset_path(params[:password_reset_token]).to_json})
-      
