@@ -4,7 +4,6 @@ class SurveyResponseCompletionsController < ApplicationController
   before_action :set_profile
   before_action :set_survey_response
   before_action :testing_redirect, only: :show
-  before_action :hide_dummy_email
 
   def login_required?
     false
@@ -13,6 +12,7 @@ class SurveyResponseCompletionsController < ApplicationController
   def show
     @render_loading_spinner = true
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
+    current_user.email = nil if current_user.email.include?('PLACEHOLDER')
   end
 
   def create
@@ -63,9 +63,4 @@ class SurveyResponseCompletionsController < ApplicationController
     @survey_response = @profile.survey_responses.find survey_id
     session[:survey_id] = @survey_response.id
   end
-
-  def hide_dummy_email
-    current_user.email = nil if current_user.email.include?('PLACEHOLDER')
-  end
-
 end

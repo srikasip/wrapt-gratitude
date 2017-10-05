@@ -13,6 +13,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :source, presence: true, inclusion: SOURCES
   validates :beta_round, presence: true, inclusion: BETA_ROUNDS
+  validates :email, format: { with: /\w+@\w+\.\w+/, message: 'must be well-formed' }
 
   ###########################
   ### Callbacks
@@ -24,6 +25,7 @@ class User < ApplicationRecord
   ### Associations
   ###########################
 
+  has_many :customer_orders
   has_many :owned_profiles, class_name: 'Profile', foreign_key: :owner_id, dependent: :destroy
   belongs_to :last_viewed_profile, class_name: 'Profile'
   belongs_to :recipient_referring_profile, class_name: 'Profile'

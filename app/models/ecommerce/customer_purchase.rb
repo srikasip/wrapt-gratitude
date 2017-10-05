@@ -110,7 +110,7 @@ class CustomerPurchase
       if po.vendor_rejected?
         raise 'maybe catch purchase orders *transitioning* to cancelled and email on that hook'
         po.update_attribute(:status, CANCELLED)
-        co.update_attribute(:status, PARTIALLY_CANCELLED)
+        customer_order.update_attribute(:status, PARTIALLY_CANCELLED)
       elsif po.vendor_accepted?
         po.update_attribute(:status, PROCESSING)
       else
@@ -119,7 +119,7 @@ class CustomerPurchase
     end
 
     if all_vendors_accepted?
-      co.update_attribute(:status, PROCESSING)
+      customer_order.update_attribute(:status, PROCESSING)
     end
 
     if okay_to_charge?
@@ -130,7 +130,9 @@ class CustomerPurchase
     elsif should_partially_cancel?
       partially_cancel_order!
     else
-      Rails.logger.info "CANNOT Charge cart ID #{cart_id}. There remains un-acknowledged vendor purchase orders"
+      Rails.logger.info(<<~EOS)
+        CANNOT Charge cart ID #{cart_id}. There all only un-acknowledged vendor purchase orders
+      EOS
       :dont_know_yet
     end
   end
@@ -171,7 +173,7 @@ class CustomerPurchase
   end
 
   def all_vendors_accepted?
-    purchase_orders.okay_to_fulfill == purchase_orders.count
+    purchase_orders.okay_to_fulfill.count == purchase_orders.count
   end
 
   private
