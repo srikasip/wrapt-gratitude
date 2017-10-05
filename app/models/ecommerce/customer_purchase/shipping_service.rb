@@ -120,7 +120,7 @@ class CustomerPurchase::ShippingService
   def pick_shipping!(shipping_choice, after_hook: -> {} )
     _sanity_check!
 
-    if shipping_choices_for_view.map(&:last).exclude?(shipping_choice)
+    if shipping_choices_for_view.none? { |x| x.value == shipping_choice }
       raise InternalConsistencyError, "You picked an unknown or invalid shipping choice"
     end
 
