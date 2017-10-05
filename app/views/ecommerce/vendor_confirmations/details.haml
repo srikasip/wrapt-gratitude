@@ -1,16 +1,21 @@
-Thanks. Here are the details.
+.container
+  .row
+    .col-xs-12
+      Thanks. Here are the details.
 
-= render "order_details"
+  = render "order_details"
 
-Ship To: #{@purchase_order.shipment.address_to}
+  .row
+    .col-xs-12
+      Ship To: #{@purchase_order.shipment.address_to}
 
-- if @purchase_order.shipping_label.present?
+      - if @purchase_order.shipping_label.present?
 
-  = link_to @purchase_order.shipping_label.url, target: '_blank' do
-    Shipping Label
+        = link_to @purchase_order.shipping_label.url, target: '_blank' do
+          Shipping Label
 
-- else
-  %p
-    The shipping label isn't quite ready yet, but
-    = link_to 'click here', url_for
-    to check again.  It shouldn't take more than a few moments.
+      - else
+        %p
+          The shipping label isn't quite ready yet, but
+          = link_to 'click here', url_for
+          to check again.  It shouldn't take more than a few moments.

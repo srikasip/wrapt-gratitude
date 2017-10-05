@@ -1,4 +1,6 @@
 class CustomerPurchase::ShippingService
+  include ActionView::Helpers::NumberHelper
+
   attr_accessor :cart_id, :customer_order
 
   def initialize(cart_id:, customer_order:nil)
@@ -63,48 +65,56 @@ class CustomerPurchase::ShippingService
   end
 
   # Aggregate all the purchase orders together
-  #def shipping_choices
-  #  return @shipping_choices unless @shipping_choices.nil?
-  #
-  #  @shipping_choices = {}
-  #
-  #  self.customer_order.purchase_orders.each do |po|
-  #    po.shipment.rates.each do |rate|
-  #      token = rate.dig('servicelevel', 'token')
-  #      name = rate.dig('servicelevel', 'name')
-  #
-  #      @shipping_choices[token] ||= {}
-  #
-  #      @shipping_choices[token]['name'] = name
-  #
-  #      fields_to_copy = [
-  #        'duration_terms',
-  #        'estimated_days',
-  #        'provider_image_200',
-  #        'provider_image_75'
-  #      ]
-  #
-  #      fields_to_copy.each do |field|
-  #        @shipping_choices[token][field] = rate[field]
-  #      end
-  #
-  #      @shipping_choices[token]['amount_in_dollars'] ||= 0.0
-  #      @shipping_choices[token]['amount_in_dollars'] += rate['amount'].to_f
-  #    end
-  #  end
-  #
-  #  @shipping_choices
-  #end
+  def shipping_choices
+    return @shipping_choices unless @shipping_choices.nil?
+
+    @shipping_choices = {
+      fastest: OpenStruct.new({
+          label: 'Fastest',
+          value: 'fastest',
+          estimated_days: 1,
+          amount_in_dollars: 0.0
+        }),
+      cheapest: OpenStruct.new({
+          label: 'Least Expensive',
+          value: 'cheapest',
+          estimated_days: 1,
+          amount_in_dollars: 0.0
+        })
+    }
+
+    self.customer_order.purchase_orders.each do |po|
+      rates = po.shipment.rates
+      vendor = po.vendor
+
+      @shipping_choices.each_key do |shipping_choice|
+        rate = CustomerPurchase::ShippingService.find_rate(rates: rates, shipping_choice: shipping_choice, vendor: vendor)
+
+        @shipping_choices[shipping_choice]
+
+        if rate['estimated_days'] > @shipping_choices[shipping_choice].estimated_days
+          @shipping_choices[shipping_choice].estimated_days = rate['estimated_days']
+        end
+
+        @shipping_choices[shipping_choice].amount_in_dollars += rate['amount'].to_f
+      end
+    end
+
+    @shipping_choices.each_key do |shipping_choice|
+      @shipping_choices[shipping_choice].annotated_label = "#{@shipping_choices[shipping_choice].label}: #{number_to_currency(@shipping_choices[shipping_choice].amount_in_dollars)}
+      in approximately #{@shipping_choices[shipping_choice].estimated_days} days"
+    end
+
+    @shipping_choices
+  end
 
   def things_look_shipable?
-    true
+    shipping_choices.values.map(&:amount_in_dollars).all? { |x| x > 1 }
   end
 
   def shipping_choices_for_view
-    [
-      ['Fastest', 'fastest'],
-      ['Least Expensive', 'cheapest']
-    ]
+    # TOOD: if both choices are same price, don't give a choice
+    shipping_choices.values
   end
 
   def pick_shipping!(shipping_choice, after_hook: -> {} )
