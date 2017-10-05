@@ -34,6 +34,7 @@ class Ecommerce::CheckoutController < ApplicationController
       redirect_to action: :edit_address
     else
       flash.now[:notice] = "There was a problem saving your response."
+      _load_progress_bar
       render :edit_gift_wrapt
     end
   end
@@ -51,6 +52,7 @@ class Ecommerce::CheckoutController < ApplicationController
       redirect_to action: :edit_shipping
     else
       flash.now[:notice] = "Please make sure you've specified an address to continue."
+      _load_progress_bar
       render :edit_address
     end
   end
@@ -69,6 +71,7 @@ class Ecommerce::CheckoutController < ApplicationController
     else
       flash.now[:notice] = "There was a problem saving your response."
       @shipping_choices = @customer_purchase.shipping_choices_for_view
+      _load_progress_bar
       render :edit_shipping
     end
   end

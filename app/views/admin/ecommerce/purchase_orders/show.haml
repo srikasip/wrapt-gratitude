@@ -13,7 +13,7 @@
       = link_to @order.customer_order.order_number, admin_ecommerce_customer_order_path(@order.customer_order)
 
 .row
-  .col-sm-4
+  .col-sm-3
     %p
       %b Ship From:
       %br
@@ -30,7 +30,7 @@
         = line
         %br
 
-  .col-sm-4
+  .col-sm-3
     %p
       %b Ship To:
       %br
@@ -47,8 +47,13 @@
         = line
         %br
 
+  .col-sm-3
+    %p
+      %strong Status:
+      = @order.status.titleize
+
   - if @shipping_label.present?
-    .col-sm-4
+    .col-sm-3
       %p
         %strong Shipping Information:
         %br
@@ -69,7 +74,7 @@
         %strong Tracking Updated At:
         = format_date(@shipping_label.tracking_updated_at)
   - else
-    .col-sm-4
+    .col-sm-3
       %p
         %strong Vendor Confirmation:
         = @order.vendor_acknowledgement_status

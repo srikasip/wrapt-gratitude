@@ -3,7 +3,6 @@ module ChargeConstants
 
   MIN_CHARGE = 5 # usd (dollars)
 
-  InternalConsistencyError = Class.new(StandardError)
   RechargeError = Class.new(StandardError)
 
   VALID_STATES = [

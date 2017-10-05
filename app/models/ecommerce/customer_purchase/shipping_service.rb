@@ -40,7 +40,7 @@ class CustomerPurchase::ShippingService
         state:   co.ship_state,
         zip:     co.ship_zip,
         country: co.ship_country,
-        phone:   co.user.email,
+        #phone:   co.user.phone,
         email:   co.user.email
       }
 
@@ -109,7 +109,8 @@ class CustomerPurchase::ShippingService
   end
 
   def things_look_shipable?
-    shipping_choices.values.map(&:amount_in_dollars).all? { |x| x > 1 }
+    @shipments_okay &&
+      shipping_choices.values.map(&:amount_in_dollars).all? { |x| x > 1 }
   end
 
   def shipping_choices_for_view

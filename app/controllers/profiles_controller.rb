@@ -26,7 +26,7 @@ class ProfilesController < ApplicationController
     elsif require_invites?
       redirect_to root_path
     else
-      user = User.new(email: SecureRandom.hex(16)+"@_PLACEHOLDER_")
+      user = User.new(email: SecureRandom.hex(16)+"@PLACEHOLDER.com")
       user.source = 'auto_create_on_quiz_taking'
       password = SecureRandom.hex(16)
       user.password = password

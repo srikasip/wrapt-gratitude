@@ -65,7 +65,7 @@ class SurveyResponseCompletionsController < ApplicationController
   end
 
   def hide_dummy_email
-    current_user.email = nil if current_user.email.include?('_PLACEHOLDER_')
+    current_user.email = nil if current_user.email.include?('PLACEHOLDER')
   end
 
 end
