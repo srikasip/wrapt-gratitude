@@ -21,7 +21,15 @@ App.StyledCheckbox = (input) => {
 }
 
 App.NoteBehavior = (object, attr, value, container_selector, checked) => {
-  var inputName = object+'['+attr+']'
+  App.ConditionalVisibilityBehavior(object, attr, value, container_selector, checked)
+}
+
+App.SelectAddressVisibilityBehavior = (object, attr, value, container_selector, checked) => {
+  App.ConditionalVisibilityBehavior(object, attr, value, container_selector, checked)
+}
+
+App.ConditionalVisibilityBehavior = (object, attr, value, container_selector, checked) => {
+  var inputName = object === '' ? attr : object+'['+attr+']'
   var input = $('[name="'+inputName+'"]')
   $(input).change(function() {
     var checkedCondition = checked === $(this).is(':checked') 
@@ -32,3 +40,7 @@ App.NoteBehavior = (object, attr, value, container_selector, checked) => {
     }
   })
 }
+
+
+
+
