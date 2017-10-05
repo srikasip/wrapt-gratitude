@@ -18,7 +18,7 @@
         %span.glyphicon.glyphicon-plus
         %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseTwo"}
           Order Changes
-    #collapseOne.panel-collapse.collapse
+    #collapseTwo.panel-collapse.collapse
       .panel-body
         = render "versions", versions: @order.versions
 
@@ -29,7 +29,7 @@
           %span.glyphicon.glyphicon-plus
           %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseThree"}
             Charge Changes
-      #collapseTwo.panel-collapse.collapse
+      #collapseThree.panel-collapse.collapse
         .panel-body
           = render "versions", versions: @order.charge.versions
 
@@ -39,7 +39,7 @@
         %span.glyphicon.glyphicon-plus
         %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseFour"}
           Raw Data
-    #collapseThree.panel-collapse.collapse
+    #collapseFour.panel-collapse.collapse
       .panel-body
         = render "raw_data", order: @order
 

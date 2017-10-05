@@ -6,7 +6,7 @@
         %h2.light Shipping Information
 
         = simple_form_for @customer_order, url: url_for, method: :patch do |f|
-          = f.input :shipping_choice, collection: @shipping_choices
+          = f.input :shipping_choice, as: :radio_buttons, collection: @shipping_choices, label_method: :annotated_label, value_method: :value
           %button.btn.btn-primary{type: 'submit'}
             = "Next <svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
 

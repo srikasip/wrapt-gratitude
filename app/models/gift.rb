@@ -42,6 +42,8 @@ class Gift < ApplicationRecord
   accepts_nested_attributes_for :shipping_parcels
 
   scope :available, -> { where(available: true) }
+  scope :with_units_for_sale, -> { joins(:calculated_gift_field).where('calculated_gift_fields.units_available > 0') }
+  scope :can_be_sold, -> { available.with_units_for_sale }
 
   def self.search search_params
     self.all.merge(GiftSearch.new(search_params).to_scope)

@@ -18,11 +18,15 @@
 
     %h3 Note Information
 
-    %strong To:
-    = @customer_order.note_to
-    %br
-    %strong From:
+    %strong Gifter:
     = @customer_order.note_from
+    %br
+    %strong Giftee:
+    = @customer_order.note_to
     %br
     %strong Note:
     = @customer_order.note_content
+
+    %h3 Shipping
+    = @purchase_order.shipping_rate['provider']
+    = @purchase_order.shipping_rate.dig('servicelevel', 'name')
