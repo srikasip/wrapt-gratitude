@@ -11,6 +11,7 @@ class SurveyResponseCompletionsController < ApplicationController
   end
 
   def show
+    @render_loading_spinner = true
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
   end
 
@@ -27,7 +28,7 @@ class SurveyResponseCompletionsController < ApplicationController
       job.perform(@survey_response)
       redirect_to profile_gift_recommendations_path(@profile)
     else
-      flash.alert = 'Oops! Looks like we need a bit more info.'
+      flash.now['alert'] = 'Oops! Looks like we need a bit more info.'
       render :show
     end
   end
