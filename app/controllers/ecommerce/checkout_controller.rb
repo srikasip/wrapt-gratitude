@@ -3,14 +3,10 @@ class Ecommerce::CheckoutController < ApplicationController
 
   before_action :_load_service_object, except: [:edit_gift_wrapt]
 
+  before_action -> { @hide_gift_basket = true }
+
   def edit_gift_wrapt
     @checkout_step = :gift_wrapt
-
-    flash.now[:notice] = <<~EOS
-      You're getting a new shopping cart each time you visit this page. Todd
-      needs to know how completed orders and multiple profiles all interact
-      with respect to your shopping cart being cleared out.
-    EOS
 
     session[:cart_id] = SecureRandom.hex(16)
 
@@ -38,6 +34,7 @@ class Ecommerce::CheckoutController < ApplicationController
       redirect_to action: :edit_address
     else
       flash.now[:notice] = "There was a problem saving your response."
+      _load_progress_bar
       render :edit_gift_wrapt
     end
   end
@@ -55,6 +52,7 @@ class Ecommerce::CheckoutController < ApplicationController
       redirect_to action: :edit_shipping
     else
       flash.now[:notice] = "Please make sure you've specified an address to continue."
+      _load_progress_bar
       render :edit_address
     end
   end
@@ -73,6 +71,7 @@ class Ecommerce::CheckoutController < ApplicationController
     else
       flash.now[:notice] = "There was a problem saving your response."
       @shipping_choices = @customer_purchase.shipping_choices_for_view
+      _load_progress_bar
       render :edit_shipping
     end
   end
