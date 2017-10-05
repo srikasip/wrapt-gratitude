@@ -40,6 +40,7 @@ class PurchaseOrder < ApplicationRecord
   delegate :name, to: :vendor, prefix: true
   delegate :cart_id, :status, :recipient_name, :ship_street1, :ship_street2, :ship_street3, :ship_city, :ship_state, :ship_zip, :ship_country, to: :customer_order
   delegate :tracking_url, :tracking_number, to: :shipping_label, allow_nil: true
+  delegate :shipping_choice, to: :customer_order
 
   scope :okay_to_fulfill, -> { where(vendor_acknowledgement_status: FULFILL) }
   scope :do_not_fulfill, -> {  where(vendor_acknowledgement_status: DO_NOT_FULFILL) }
@@ -83,5 +84,14 @@ class PurchaseOrder < ApplicationRecord
 
   def handling_cost_in_dollars
     self.handling_cost_in_cents / 100.0
+  end
+
+  def shipping_rate
+    @shipping_rate ||=
+      CustomerPurchase::ShippingService.find_rate({
+        rates: self.shipment.rates,
+        shipping_choice: shipping_choice,
+        vendor: self.vendor
+      })
   end
 end
