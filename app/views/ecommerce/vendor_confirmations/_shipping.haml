@@ -1,22 +1,27 @@
 %h3 Shipping Details
 
-%p
-  = @purchase_order.shipping_rate['provider']
-  = @purchase_order.shipping_rate.dig('servicelevel', 'name')
-  - if @purchase_order.shipping_label.present?
-    = link_to @purchase_order.shipping_label.url, target: '_blank' do
-      [Download Shipping Label]
-  - else
+.row
+  .col-xs-6
     %p
-      The shipping label isn't quite ready yet, but
-      = link_to 'click here', url_for
-      to check again.  It shouldn't take more than a few moments.
+      %strong Via:
+      = @purchase_order.shipping_rate['provider']
+      = @purchase_order.shipping_rate.dig('servicelevel', 'name')
+      %br
+      %strong Box:
+      = @purchase_order.shipping_parcel.description
+      %br
+      - if @purchase_order.shipping_label.present?
+        = link_to @purchase_order.shipping_label.url, target: '_blank' do
+          [Download Shipping Label]
+      - else
+        %p
+          The shipping label isn't quite ready yet, but
+          = link_to 'click here', url_for
+          to check again.  It shouldn't take more than a few moments.
 
-- if @purchase_order.fulfill?
-  %p
-    Ship To:
-    %br
-    =formatted_address_from_hash(@purchase_order.shipment.address_to)
-
-- else
-
+  - if @purchase_order.fulfill?
+    .col-xs-6
+      %p
+        %strong Ship To:
+        %br
+        =formatted_address_from_hash(@purchase_order.shipment.address_to)
