@@ -86,6 +86,10 @@ class PurchaseOrder < ApplicationRecord
     self.handling_cost_in_cents / 100.0
   end
 
+  def fulfill?
+    self.vendor_acknowledgement_status == 'fulfill'
+  end
+
   def shipping_rate
     @shipping_rate ||=
       CustomerPurchase::ShippingService.find_rate({

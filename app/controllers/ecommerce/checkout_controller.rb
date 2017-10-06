@@ -53,7 +53,7 @@ class Ecommerce::CheckoutController < ApplicationController
     @checkout_step = :shipping
     @customer_purchase.set_address!(params)
 
-    if false #@customer_purchase.things_look_shipable?
+    if @customer_purchase.things_look_shipable?
       redirect_to action: :edit_shipping
     else
       flash.now[:notice] = "Please make sure you've specified an address to continue."

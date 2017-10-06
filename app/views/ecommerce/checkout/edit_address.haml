@@ -12,7 +12,7 @@
             - @saved_addresses.each_with_index do |address, index|
               - street2 = address.street2.present? ? "</br>#{address.street2}" : ""
               - label = "#{address.street1} #{street2} </br> #{address.city}, #{address.state} #{address.zip}"
-              - input_data = {street1: address.street1, street2: address.street2, city: address.city, state: address.state, zip: address.zip, behavior: 'fill_form'}
+              - input_data = {ship_street1: address.street1, ship_street2: address.street2, ship_city: address.city, ship_state: address.state, ship_zip: address.zip, behavior: 'fill_form'}
               = wrapt_styled_radio_button(address.id, :saved_address, index==0, {label: label, data: input_data})
             = wrapt_styled_radio_button('new_address', :saved_address, !@saved_addresses.any?, {label: 'New Address'})
           .j-address{style: (@saved_addresses.any? ? 'display:none;' : '')}
