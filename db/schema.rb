@@ -10,11 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171002133537) do
+ActiveRecord::Schema.define(version: 20171006145514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+
+  create_table "addresses", force: :cascade do |t|
+    t.string   "street1"
+    t.string   "street2"
+    t.string   "street3"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip"
+    t.string   "addressable_type"
+    t.integer  "addressable_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["addressable_id", "addressable_type"], name: "index_addresses_on_addressable_id_and_addressable_type", using: :btree
+  end
 
   create_table "charges", force: :cascade do |t|
     t.integer  "customer_order_id"

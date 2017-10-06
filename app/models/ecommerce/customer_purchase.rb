@@ -59,16 +59,32 @@ class CustomerPurchase
 
     permitted_fields = required_fields.to_a + ['ship_street2', 'ship_country']
 
-    whitelisted_params = params.require(:customer_order).permit(*permitted_fields)
+    # used for saving the address if new (future work)
+    #address_for = params['toggle_address_choice']
 
-    if whitelisted_params.blank? || whitelisted_params.keys.to_set.intersection(required_fields) != required_fields
-      raise InternalConsistencyError, "Your shipping destination fields aren't complete enough."
+    whitelisted_params = nil
+
+    if params['saved_address'] != 'new_address'
+      address = Address.find(params['saved_address'])
+      whitelisted_params = {
+        ship_street1: address.street1,
+        ship_street2: address.street2,
+        ship_city: address.city,
+        ship_state: address.state,
+        ship_zip: address.zip
+      }
+    else
+      whitelisted_params = params.require(:customer_order).permit(*permitted_fields)
+
+      if whitelisted_params.blank? || whitelisted_params.keys.to_set.intersection(required_fields) != required_fields
+        raise InternalConsistencyError, "Your shipping destination fields aren't complete enough."
+      end
     end
 
     _safely do
       self.customer_order.assign_attributes(whitelisted_params)
       self.customer_order.save!
-      self.shipping_service.init_shipments!
+#      self.shipping_service.init_shipments!
     end
   end
 

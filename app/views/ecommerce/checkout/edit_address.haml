@@ -9,13 +9,11 @@
             = wrapt_radio_toggle([['Ship to me', :ship_to_me], ["Ship to #{@profile.name}", :ship_to_giftee]], :toggle_address_choice, :ship_to_me)
           .co-select-my-address.j-select-my-address.form-group.clearfix
             %h4.light Select Address
-            -# PLACEHOLDER saved addresses
-            -# JS object/attr_names variables may need to be updated below with real values
-            - @saved_addresses.each do |address|
-              - street2 = address.ship_street2.present? ? "</br>#{address.ship_street2}" : ""
-              - label = "#{address.ship_street1} #{street2} </br> #{address.ship_city}, #{address.ship_state} #{address.ship_zip}"
-              - input_data = {street1: address.ship_street1, street2: address.ship_street2, city: address.ship_city, state: address.ship_state, zip: address.ship_zip, behavior: 'fill_form'}
-              = wrapt_styled_radio_button(address.id, :saved_address, address.default, {label: label, data: input_data})
+            - @saved_addresses.each_with_index do |address, index|
+              - street2 = address.street2.present? ? "</br>#{address.street2}" : ""
+              - label = "#{address.street1} #{street2} </br> #{address.city}, #{address.state} #{address.zip}"
+              - input_data = {street1: address.street1, street2: address.street2, city: address.city, state: address.state, zip: address.zip, behavior: 'fill_form'}
+              = wrapt_styled_radio_button(address.id, :saved_address, index==0, {label: label, data: input_data})
             = wrapt_styled_radio_button('new_address', :saved_address, !@saved_addresses.any?, {label: 'New Address'})
           .j-address{style: (@saved_addresses.any? ? 'display:none;' : '')}
             .row
