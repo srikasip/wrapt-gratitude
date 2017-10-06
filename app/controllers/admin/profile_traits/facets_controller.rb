@@ -21,7 +21,7 @@ module Admin
       @profile_traits_facet = @topic.facets.new(profile_traits_facet_params)
 
       if @profile_traits_facet.save
-        redirect_to admin_profile_traits_topic_facets_path(@topic), notice: 'Facet was successfully created.'
+        redirect_to admin_giftee_traits_topic_facets_path(@topic), notice: 'Facet was successfully created.'
       else
         render :new
       end
@@ -29,7 +29,7 @@ module Admin
 
     def update
       if @profile_traits_facet.update(profile_traits_facet_params)
-        redirect_to admin_profile_traits_topic_facets_path(@topic), notice: 'Facet was successfully updated.'
+        redirect_to admin_giftee_traits_topic_facets_path(@topic), notice: 'Facet was successfully updated.'
       else
         render :edit
       end
@@ -37,7 +37,7 @@ module Admin
 
     def destroy
       @profile_traits_facet.destroy
-      redirect_to admin_profile_traits_topic_facets_path(@topic), notice: 'Facet was successfully destroyed.'
+      redirect_to admin_giftee_traits_topic_facets_path(@topic), notice: 'Facet was successfully destroyed.'
     end
 
     private

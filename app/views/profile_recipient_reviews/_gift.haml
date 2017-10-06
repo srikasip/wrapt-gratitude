@@ -21,7 +21,7 @@
     .gr-carousel__gift-actions.pa2
       %div
         - recipient_gift_selection = RecipientGiftSelection.new(gift: gift, profile: @profile)
-        = form_for recipient_gift_selection, url: profile_recipient_gift_selections_path(@profile.recipient_access_token), html: {data: {remote: true}} do |form|
+        = form_for recipient_gift_selection, url: giftee_recipient_gift_selections_path(@profile.recipient_access_token), html: {data: {remote: true}} do |form|
           = form.hidden_field :gift_id
           %h3.gr-carousel__price
             = number_to_currency gift.selling_price

@@ -26,7 +26,7 @@ class SurveyResponseCompletionsController < ApplicationController
       @survey_response.update_attribute :completed_at, Time.now
       job = GenerateRecommendationsJob.new
       job.perform(@survey_response)
-      redirect_to profile_gift_recommendations_path(@profile)
+      redirect_to giftee_gift_recommendations_path(@profile)
     else
       flash.now['alert'] = 'Oops! Looks like we need a bit more info.'
       render :show
@@ -46,16 +46,16 @@ class SurveyResponseCompletionsController < ApplicationController
   private
 
   def testing_redirect
-    if params[:profile_id].present? && current_user.unmoderated_testing_platform?
+    if params[:giftee_id].present? && current_user.unmoderated_testing_platform?
       # go directly to pretty url for loop11 testing (do not collect $200)
       redirect_to testing_survey_complete_path
     end
   end
 
   def set_profile
-    profile_id = params[:profile_id] || session[:profile_id]
-    @profile = current_user.owned_profiles.find profile_id
-    session[:profile_id] = @profile.id
+    giftee_id = params[:giftee_id] || session[:giftee_id]
+    @profile = current_user.owned_profiles.find giftee_id
+    session[:giftee_id] = @profile.id
   end
 
   def set_survey_response
