@@ -165,6 +165,8 @@ class CustomerPurchase
       EOS
       :dont_know_yet
     end
+
+    self.shipping_service.purchase_shipping_labels!
   end
 
   def cancel_order!
@@ -209,12 +211,9 @@ class CustomerPurchase
   private
 
   def _unconditional_charge!
-    Rails.logger.info "Charging cart ID #{cart_id}. Also adjusting inventory and buying shipping labels"
+    Rails.logger.info "Charging cart ID #{cart_id}. Also adjusting inventory."
     charging_service.charge!({
-      before_hook: -> { _adjust_inventory! },
-      after_hook: -> {
-        self.shipping_service.purchase_shipping_labels!
-      }
+      before_hook: -> { _adjust_inventory! }
     })
   end
 
