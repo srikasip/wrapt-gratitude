@@ -110,6 +110,8 @@ module ApplicationHelper
   end
 
   def enable_gift_basket?
+    return false if @hide_gift_basket
+
     current_user && gift_basket_profile && !gift_basket_profile.new_record? && gift_basket_profile.gift_recommendations.any?
   end
 

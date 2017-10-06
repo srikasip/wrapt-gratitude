@@ -10,7 +10,9 @@ class SurveyResponseCompletionsController < ApplicationController
   end
 
   def show
+    @render_loading_spinner = true
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
+    current_user.email = nil if current_user.email.include?('PLACEHOLDER')
   end
 
   def create
@@ -26,7 +28,7 @@ class SurveyResponseCompletionsController < ApplicationController
       job.perform(@survey_response)
       redirect_to profile_gift_recommendations_path(@profile)
     else
-      flash.alert = 'Oops! Looks like we need a bit more info.'
+      flash.now['alert'] = 'Oops! Looks like we need a bit more info.'
       render :show
     end
   end
@@ -40,16 +42,16 @@ class SurveyResponseCompletionsController < ApplicationController
       :user_password
     )
   end
- 
+
   private
-  
+
   def testing_redirect
     if params[:profile_id].present? && current_user.unmoderated_testing_platform?
       # go directly to pretty url for loop11 testing (do not collect $200)
       redirect_to testing_survey_complete_path
     end
   end
-   
+
   def set_profile
     profile_id = params[:profile_id] || session[:profile_id]
     @profile = current_user.owned_profiles.find profile_id
@@ -61,5 +63,4 @@ class SurveyResponseCompletionsController < ApplicationController
     @survey_response = @profile.survey_responses.find survey_id
     session[:survey_id] = @survey_response.id
   end
-  
 end

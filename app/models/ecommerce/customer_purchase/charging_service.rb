@@ -36,8 +36,6 @@ class CustomerPurchase::ChargingService
       }
     })
 
-    self.customer_order.update_attribute(:status, CustomerOrder::SUBMITTED)
-
     self.our_charge.save!
   end
 

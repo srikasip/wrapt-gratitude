@@ -1,8 +1,7 @@
 .top-navigation__container.container
   %nav.top-navigation__nav
     .top-navigation__brand{class: ("active" if active_top_nav_section == 'home_pages')}
-      - home_link_url = current_user&.admin? ? root_path : '#'
-      = link_to home_link_url, class: ' top-navigation__brand-link' do
+      = link_to root_path, class: ' top-navigation__brand-link' do
         %span Wrapt
         =embedded_svg('wrapt-logo-tm', class: "navbar-brand__icon-wrapt-logo")
     = top_nav_toggle(:in)

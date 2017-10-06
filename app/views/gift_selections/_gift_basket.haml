@@ -2,7 +2,13 @@
 
 .gift-basket{data: {behavior: 'gift-basket-container', profile_id: profile.id, channel_name: 'GiftSelectionsChannel'}}
   .gift-basket__inner-wrap
-    = link_to "< Back to Shopping", '#', data: {behavior: 'close-gift-basket'}, class: 'gift-basket__header small', onClick: "ga('send', 'event', 'basket', 'open-close', 'close');"
+    - if url_for == profile_gift_recommendations_path(profile)
+      -# slide the cart out if we're on the shopping page
+      = link_to "< Back to Shopping", '#', data: {behavior: 'close-gift-basket'}, class: 'gift-basket__header small', onClick: "ga('send', 'event', 'basket', 'open-close', 'close');"
+    - else
+      -# Otherwise, simply go to the shopping page.
+      = link_to "< Back to Shopping", profile_gift_recommendations_path(profile), class: 'gift-basket__header small', onClick: "ga('send', 'event', 'basket', 'open-close', 'close');"
+
     .gift-basket__main
       %div{data: {behavior: 'gift-basket-gifts'}}
         = render 'gift_selections/index', profile: profile

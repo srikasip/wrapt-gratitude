@@ -1,11 +1,12 @@
 class StaticPagesController < ApplicationController
-  
+
   helper SurveyQuestionResponsesHelper
+  helper FeatureFlagsHelper
 
   def science_of_gifting
     @boxes = [
-      {id: 'shoe', title: "The Shoe Doesn't Fit.", content: "We have a hard time putting ourselves in other people's shoes", citations: [1, 4]}, 
-      {id: 'ball', title: "You're not a crystal ball", content: "We are bad at predicting what gifts people will appreciate the most", citations: [5]}, 
+      {id: 'shoe', title: "The Shoe Doesn't Fit.", content: "We have a hard time putting ourselves in other people's shoes", citations: [1, 4]},
+      {id: 'ball', title: "You're not a crystal ball", content: "We are bad at predicting what gifts people will appreciate the most", citations: [5]},
       {id: 'bag', title: "Doesn't everyone like what i like?", content: "We tend to think our inner circle has the same interests that we do", citations: [1]}
     ]
     @tagline = {content: "We buy gifts because we care. But we often worry we will choose the wrong gift, disappointing the very person we were hoping to delight.", citations: [1, 2, 3]}
@@ -25,7 +26,7 @@ class StaticPagesController < ApplicationController
       {text: "Fuchs, C., M. Schreier, and S.M. van Osselaer, The Handmade Effect: What's Love Got to Do with It? Journal of marketing, 2015. 79(2): p. 98-110. [pdf]", short_text: 'Fuchs, C., M. Schreier, and S.M. van Osselaer, (2015)', link: 'https://www.researchgate.net/profile/Stijn_Van_Osselaer/publication/273529358_The_Handmade_Effect_What%27s_Love_Got_to_Do_with_It/links/55cb517208aeb975674c5f58/The-Handmade-Effect-Whats-Love-Got-to-Do-with-It.pdf'}
     ]
     @survey ||= Survey.published.first
-    @profile = current_user.owned_profiles.new
+
     first_question = if @survey.sections.any?
       @survey.sections.first.questions.first
     else

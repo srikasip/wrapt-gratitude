@@ -26,10 +26,12 @@ class Shipment < ApplicationRecord
       :parcels      => self.parcel,
       :async        => false
     )
+  rescue Shippo::Exceptions::APIServerError => e
+    self.api_response = JSON.parse(e.response.body) rescue {msg: e.message}
   end
 
   def rates
-    self.api_response['rates']
+    self.api_response['rates'] || []
   end
 
   private def _cache_the_results
