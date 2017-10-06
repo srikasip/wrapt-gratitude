@@ -66,3 +66,20 @@
     margin: 0px 40px 0px 0px;
   }
 }
+
+.co-select-my-address,
+.co-select-shipping {
+  label {
+    width: 33%;
+    margin-right: 40px;
+    float: left;
+    @include akkurat-light;
+  }
+  label small {
+    color: $gray-006;
+    margin-top: -4px;
+    font-size: 12px;
+    display: block;
+    @include akkurat-light;
+  }
+}

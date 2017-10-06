@@ -102,7 +102,7 @@ class CustomerPurchase::ShippingService
 
     @shipping_choices.each_key do |shipping_choice|
       @shipping_choices[shipping_choice].annotated_label = "#{@shipping_choices[shipping_choice].label}: #{number_to_currency(@shipping_choices[shipping_choice].amount_in_dollars)}
-      in approximately #{@shipping_choices[shipping_choice].estimated_days} days"
+      </br><small>in approximately #{@shipping_choices[shipping_choice].estimated_days} days</small>"
     end
 
     @shipping_choices

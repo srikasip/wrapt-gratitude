@@ -45,6 +45,17 @@ class Ecommerce::CheckoutController < ApplicationController
   def edit_address
     @checkout_step = :shipping
     _load_progress_bar
+    # PLACEHOLDER - replace with account saved addresses
+    # using to build UI 
+    Struct.new('Address', :id, :ship_street1, :ship_street2, :ship_city, :ship_state, :ship_zip, :default)
+    @saved_addresses = [Struct::Address.new(1, '123 West 45 North', '', 'Brattleboro', 'VT', '05301', true)]
+    @default_address = @saved_addresses[0]
+    # assuming we want this to be set to the default address
+    @customer_order.ship_street1 = @default_address.ship_street1
+    @customer_order.ship_street2 = @default_address.ship_street2
+    @customer_order.ship_city = @default_address.ship_city
+    @customer_order.ship_state = @default_address.ship_state
+    @customer_order.ship_zip = @default_address.ship_zip
   end
 
   def save_address

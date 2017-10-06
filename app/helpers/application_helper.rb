@@ -207,22 +207,32 @@ module ApplicationHelper
     end
   end
 
-  # this is a psuedo version of a simple form input
-  def psuedo_wrapt_radio_toggle(collection, attr_name, selected)
-    content_tag :div, class: 'j-wrapt-radio-toggle form-group' do
+  # this is a no object version of a simple form custom inputs
+
+  def wrapt_radio_toggle(collection, attr_name, selected, options={})
+    wrapper_class = "j-wrapt-radio-toggle form-group #{options[:wrapper_class]}"
+    content_tag :div, class: wrapper_class do
       collection.each do |c|
         s = selected == c.last
-        concat psuedo_wrapt_radio_toggle_label(c, attr_name, s)
+        concat wrapt_radio_toggle_label_input(c, attr_name, s, options)
       end
     end
   end
 
-  def psuedo_wrapt_radio_toggle_label(collection_item, attr_name, selected)
+  def wrapt_radio_toggle_label_input(collection_item, attr_name, selected, options={})
     label_key = "#{attr_name.to_s}_#{collection_item.last.to_s}".to_sym
     label_class = selected ? 'selected' : ''
     content_tag :label, for: label_key, class: label_class do
       concat collection_item.first
-      concat content_tag :input, '', type: 'radio', value: collection_item.last, name: attr_name, id: label_key, checked: selected, style: 'display:none;', onChange: 'App.RadioToggle(this);'
+      concat radio_button_tag attr_name, collection_item.last, selected, style: 'display:none;', onChange: 'App.RadioToggle(this);', class: options[:input_class]
+    end
+  end
+
+  def wrapt_styled_radio_button(value, attr_name, selected, options={})
+    content_tag :label, for: "#{attr_name}_#{value}", class: 'wrapt-styled-radio-button j-wrapt-styled-radio-button' do
+      concat content_tag :span, '', class: (selected ? 'checked' : '')
+      concat (options[:label] || attr_name.humanize).html_safe 
+      concat radio_button_tag attr_name, value, selected, style: 'display:none;', onChange: 'App.StyledRadioButton(this);', class: options[:input_class], data: options[:data]
     end
   end
 
