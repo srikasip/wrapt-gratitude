@@ -8,8 +8,8 @@ module Admin
 
       def stats
         @vendors = Vendor.all
-        @gifts = Gift.available.preload(:calculated_gift_field).all
-        @products = Product.preload(:product_category).all
+        @gifts = Gift.available.preload(:calculated_gift_field)
+        @products = Product.preload(:product_category)
       end
     end
   end
