@@ -45,7 +45,7 @@ module Admin
         source_product: @product
       }
     end
-    
+
 
   end
 end
