@@ -3,7 +3,7 @@
 App.Admin.ProductSubcategoryLoader = class ProductSubcategoryLoader {
   constructor(options = {}) {
     this.prompt = (options.prompt || "");
-    this.formElement = $('[data-behavior~=form-loads-subcategories]')[0];
+    this.formElement = $(options.formSelector || '[data-behavior~=form-loads-subcategories]')[0];
     this.productCategoryInput = $(this.formElement).find('[data-behavior~=product-category-input]')[0]
     this.productSubCategoryInput = $(this.formElement).find('[data-behavior~=product-subcategory-input]')[0]
 
