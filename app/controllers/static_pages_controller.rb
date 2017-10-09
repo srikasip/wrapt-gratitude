@@ -1,4 +1,5 @@
 class StaticPagesController < ApplicationController
+  include FeatureFlagsHelper
 
   helper SurveyQuestionResponsesHelper
   helper FeatureFlagsHelper
