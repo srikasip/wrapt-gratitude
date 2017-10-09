@@ -260,6 +260,40 @@ ALTER SEQUENCE charges_id_seq OWNED BY charges.id;
 
 
 --
+-- Name: comments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE comments (
+    id integer NOT NULL,
+    commentable_id integer NOT NULL,
+    commentable_type character varying NOT NULL,
+    content text NOT NULL,
+    users_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE comments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE comments_id_seq OWNED BY comments.id;
+
+
+--
 -- Name: conditional_question_options; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2179,6 +2213,13 @@ ALTER TABLE ONLY charges ALTER COLUMN id SET DEFAULT nextval('charges_id_seq'::r
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY comments ALTER COLUMN id SET DEFAULT nextval('comments_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY conditional_question_options ALTER COLUMN id SET DEFAULT nextval('conditional_question_options_id_seq'::regclass);
 
 
@@ -2568,6 +2609,14 @@ ALTER TABLE ONLY ar_internal_metadata
 
 ALTER TABLE ONLY charges
     ADD CONSTRAINT charges_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY comments
+    ADD CONSTRAINT comments_pkey PRIMARY KEY (id);
 
 
 --
@@ -3021,6 +3070,20 @@ CREATE INDEX index_addresses_on_addressable_id_and_addressable_type ON addresses
 --
 
 CREATE INDEX index_charges_on_customer_order_id ON charges USING btree (customer_order_id);
+
+
+--
+-- Name: index_comments_on_commentable_id_and_commentable_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_comments_on_commentable_id_and_commentable_type ON comments USING btree (commentable_id, commentable_type);
+
+
+--
+-- Name: index_comments_on_users_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_comments_on_users_id ON comments USING btree (users_id);
 
 
 --
@@ -3848,6 +3911,14 @@ ALTER TABLE ONLY product_images
 
 
 --
+-- Name: fk_rails_1e28850acb; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY comments
+    ADD CONSTRAINT fk_rails_1e28850acb FOREIGN KEY (users_id) REFERENCES users(id);
+
+
+--
 -- Name: fk_rails_24f7836d52; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4420,6 +4491,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170929204015'),
 ('20171002133537'),
 ('20171006145514'),
-('20171009202508');
+('20171009202508'),
+('20171009204601');
 
 

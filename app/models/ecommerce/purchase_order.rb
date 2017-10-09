@@ -14,6 +14,7 @@ class PurchaseOrder < ApplicationRecord
     "other"
   ]
 
+  has_many :comments, as: :commentable, dependent: :destroy
   has_many :line_items, as: :order, dependent: :destroy
 
   has_one :shipment, dependent: :destroy

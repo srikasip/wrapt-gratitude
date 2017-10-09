@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171009202508) do
+ActiveRecord::Schema.define(version: 20171009204601) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,17 @@ ActiveRecord::Schema.define(version: 20171009202508) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.index ["customer_order_id"], name: "index_charges_on_customer_order_id", using: :btree
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.integer  "commentable_id",   null: false
+    t.string   "commentable_type", null: false
+    t.text     "content",          null: false
+    t.integer  "user_id",          null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["commentable_id", "commentable_type"], name: "index_comments_on_commentable_id_and_commentable_type", using: :btree
+    t.index ["user_id"], name: "index_comments_on_user_id", using: :btree
   end
 
   create_table "conditional_question_options", force: :cascade do |t|
@@ -777,6 +788,7 @@ ActiveRecord::Schema.define(version: 20171009202508) do
   end
 
   add_foreign_key "charges", "customer_orders"
+  add_foreign_key "comments", "users"
   add_foreign_key "conditional_question_options", "survey_question_options"
   add_foreign_key "conditional_question_options", "survey_questions"
   add_foreign_key "customer_orders", "profiles"
