@@ -201,4 +201,7 @@ Rails.application.routes.draw do
   # Serve websocket cable requests in-process
   mount ActionCable.server => '/cable'
 
+  get 'health-check' => 'health_check#index'
+  get 'exception-check' => 'health_check#exception'
+
 end
