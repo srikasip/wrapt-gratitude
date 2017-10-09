@@ -2,7 +2,10 @@
 
 module OrderFactory
   def self.create_order!
-    if ENV['ALLOW_BOGUS_ORDER_CREATION']=='true'
+    raise "NEVER ON PRODUCTION" if Rails.env.production?
+
+    # Fill in problems so we can make some something happen
+    if Rails.env.development? || Rails.env.test?
       Product.where('weight_in_pounds is null or weight_in_pounds <= 0').update_all('weight_in_pounds=5')
 
       Vendor.where("street1 = 'unknown'").update_all(<<~SQL)
