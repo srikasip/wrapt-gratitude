@@ -1,6 +1,10 @@
 .row
   .col-xs-12
-    %h3 Purchase Order
+    %h3
+      Packing List for
+      = @purchase_order.order_number
+    %h5
+      = @purchase_order.gift.title
 
     %table.table.table-striped
       %thead
@@ -15,18 +19,33 @@
             %td= product.description
             %td= product.vendor_sku
             %td= line_item.quantity
+        %tr
+          %td
+            - wrapt_parcel = @purchase_order.gift.pretty_parcel
+            = wrapt_parcel.description
+          %td
+          %td 1
+        - if @customer_order.include_note?
+          %tr
+            %td Hand written note
+            %td
+            %td 1
 
-    %h3 Note Information
 
-    %strong Gifter:
-    = @customer_order.note_from
-    %br
-    %strong Giftee:
-    = @customer_order.note_to
-    %br
-    %strong Note:
-    = @customer_order.note_content
+.row
+  - if @customer_order.include_note?
+    .col-xs-6
+      %h3 Note Details
 
-    %h3 Shipping
-    = @purchase_order.shipping_rate['provider']
-    = @purchase_order.shipping_rate.dig('servicelevel', 'name')
+      %strong Gifter:
+      = @customer_order.note_from
+      %br
+      %strong Giftee:
+      = @customer_order.note_to
+      %br
+      %strong Content:
+      %p.sg-box__content
+        = @customer_order.note_content
+
+  .col-xs-6
+    = render "shipping"

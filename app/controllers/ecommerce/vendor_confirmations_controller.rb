@@ -32,11 +32,11 @@ module Ecommerce
     def load_purchase_order
       @purchase_order = PurchaseOrder.find_by(vendor_token: params[:id])
 
-      if @purchase_order.present?
+      if @purchase_order.present? && @purchase_order.shipment.present?
         @customer_order = @purchase_order.customer_order
+      else
+        redirect_to(action: :error)
       end
-
-      redirect_to(action: :error) unless @purchase_order
     end
 
     def check_if_order_can_change

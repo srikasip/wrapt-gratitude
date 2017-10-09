@@ -26,6 +26,8 @@ class CustomerPurchase
     self.purchase_orders  = self.customer_order.purchase_orders if self.customer_order.present?
     self.charging_service = ChargingService.new(cart_id: cart_id)
     self.shipping_service = ShippingService.new(cart_id: cart_id, customer_order: customer_order)
+    self.customer       ||= self.customer_order.user
+    self.profile        ||= self.customer_order.profile
   end
 
   def generate_order!
@@ -59,16 +61,44 @@ class CustomerPurchase
 
     permitted_fields = required_fields.to_a + ['ship_street2', 'ship_country']
 
-    whitelisted_params = params.require(:customer_order).permit(*permitted_fields)
+    whitelisted_params = nil
 
-    if whitelisted_params.blank? || whitelisted_params.keys.to_set.intersection(required_fields) != required_fields
-      raise InternalConsistencyError, "Your shipping destination fields aren't complete enough."
+    if params['saved_address'] != 'new_address' && params[:customer_order][:ship_street1].blank?
+      address = Address.find(params['saved_address'])
+      whitelisted_params = {
+        ship_street1: address.street1,
+        ship_street2: address.street2,
+        ship_city: address.city,
+        ship_state: address.state,
+        ship_zip: address.zip
+      }
+    else
+      whitelisted_params = params.require(:customer_order).permit(*permitted_fields)
+
+      if whitelisted_params.blank? || whitelisted_params.keys.to_set.intersection(required_fields) != required_fields
+        raise InternalConsistencyError, "Your shipping destination fields aren't complete enough."
+      end
+
+      params_to_save = {
+        street1: whitelisted_params[:ship_street1],
+        street2: whitelisted_params[:ship_street2],
+        city: whitelisted_params[:ship_city],
+        state: whitelisted_params[:ship_state],
+        zip: whitelisted_params[:ship_zip]
+      }
+
+      if params['toggle_address_choice'] == 'ship_to_giftee'
+        self.profile.addresses.create(params_to_save)
+      else
+        self.customer.addresses.create(params_to_save)
+      end
     end
 
     _safely do
       self.customer_order.assign_attributes(whitelisted_params)
-      self.customer_order.save!
-      self.shipping_service.init_shipments!
+      if self.customer_order.save
+        self.shipping_service.init_shipments!
+      end
     end
   end
 
@@ -135,6 +165,8 @@ class CustomerPurchase
       EOS
       :dont_know_yet
     end
+
+    self.shipping_service.purchase_shipping_labels!
   end
 
   def cancel_order!
@@ -179,12 +211,9 @@ class CustomerPurchase
   private
 
   def _unconditional_charge!
-    Rails.logger.info "Charging cart ID #{cart_id}. Also adjusting inventory and buying shipping labels"
+    Rails.logger.info "Charging cart ID #{cart_id}. Also adjusting inventory."
     charging_service.charge!({
-      before_hook: -> { _adjust_inventory! },
-      after_hook: -> {
-        self.shipping_service.purchase_shipping_labels!
-      }
+      before_hook: -> { _adjust_inventory! }
     })
   end
 

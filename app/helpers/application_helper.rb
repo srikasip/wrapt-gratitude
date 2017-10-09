@@ -209,6 +209,18 @@ module ApplicationHelper
     end
   end
 
+  def formatted_address_from_hash(address_hash)
+    ah = OpenStruct.new(address_hash)
+
+    (
+    [ah.street1, ah.street2, ah.street3].compact.join("<br>") +
+      [ah.city+',', ah.state, ah.zip].join(' ') +
+      "<br>" +
+      ah.country + "<br>" +
+      ah.email
+    ).html_safe
+  end
+
   # this is a no object version of a simple form custom inputs
 
   def wrapt_radio_toggle(collection, attr_name, selected, options={})
@@ -233,7 +245,7 @@ module ApplicationHelper
   def wrapt_styled_radio_button(value, attr_name, selected, options={})
     content_tag :label, for: "#{attr_name}_#{value}", class: 'wrapt-styled-radio-button j-wrapt-styled-radio-button' do
       concat content_tag :span, '', class: (selected ? 'checked' : '')
-      concat (options[:label] || attr_name.humanize).html_safe 
+      concat (options[:label] || attr_name.humanize).html_safe
       concat radio_button_tag attr_name, value, selected, style: 'display:none;', onChange: 'App.StyledRadioButton(this);', class: options[:input_class], data: options[:data]
     end
   end

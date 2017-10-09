@@ -164,6 +164,9 @@ class CustomerPurchase::ShippingService
     shipping_choice = self.customer_order.shipping_choice
 
     self.customer_order.purchase_orders.each do |po|
+      # Don't even try if the vendor hasn't acknowledged with the affirmative.
+      next if !po.fulfill?
+
       rate = CustomerPurchase::ShippingService.find_rate(rates: po.shipment.rates, shipping_choice: shipping_choice, vendor: po.vendor)
       shipment = po.shipment
 
@@ -177,6 +180,11 @@ class CustomerPurchase::ShippingService
         purchase_order: po,
         customer_order: self.customer_order
       }).first_or_initialize
+
+      # Don't redo a successfully created label
+      if shipping_label.persisted? && shipping_label.success?
+        next
+      end
 
       shipping_label.shippo_object_id = rate['object_id']
       shipping_label.carrier = rate['provider']
