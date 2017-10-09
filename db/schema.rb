@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171006145514) do
+ActiveRecord::Schema.define(version: 20171009202508) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -220,6 +220,7 @@ ActiveRecord::Schema.define(version: 20171006145514) do
     t.boolean  "calculate_weight_from_products",                          default: true,  null: false
     t.decimal  "weight_in_pounds"
     t.boolean  "available",                                               default: true,  null: false
+    t.integer  "insurance_in_dollars"
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
     t.index ["wrapt_sku"], name: "index_gifts_on_wrapt_sku", using: :btree
   end
@@ -451,14 +452,16 @@ ActiveRecord::Schema.define(version: 20171006145514) do
   create_table "shipments", force: :cascade do |t|
     t.integer  "customer_order_id"
     t.integer  "purchase_order_id"
-    t.string   "cart_id",           null: false
+    t.string   "cart_id",                       null: false
     t.jsonb    "address_from"
     t.jsonb    "address_to"
     t.jsonb    "parcel"
     t.jsonb    "api_response"
     t.boolean  "success"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "insurance_in_dollars"
+    t.string   "description_of_what_to_insure"
     t.index ["customer_order_id"], name: "index_shipments_on_customer_order_id", using: :btree
     t.index ["purchase_order_id"], name: "index_shipments_on_purchase_order_id", using: :btree
   end

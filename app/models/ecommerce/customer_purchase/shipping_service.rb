@@ -53,6 +53,11 @@ class CustomerPurchase::ShippingService
         raise InternalConsistencyError, "need a box!"
       end
 
+      if purchase_order.gift.insurance_in_dollars.to_i > 0
+        shipment.insurance_in_dollars = gift.insurance_in_dollars
+        shipment.description_of_what_to_insure = gift.name
+      end
+
       shipment.parcel = parcel
       shipment.api_response = nil
       shipment.run!

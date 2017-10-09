@@ -11,10 +11,16 @@
           .input-group-addon $
           = f.input_field :selling_price, class: 'form-control', disabled: @gift.calculate_price_from_products?, value: number_with_precision(f.object.selling_price, precision: 2)
         = f.input :calculate_price_from_products, label: 'Auto-Calculate Price from Products'
+
+        = f.input :insurance_in_dollars, wrapper: :vertical_input_group, label: 'Insurarnce to buy when shipping' do
+          .input-group-addon $
+          = f.input_field :insurance_in_dollars, class: 'form-control', value: number_with_precision(f.object.insurance_in_dollars, precision: 2)
+
         = f.input :cost, wrapper: :vertical_input_group do
           .input-group-addon $
           = f.input_field :cost, class: 'form-control', disabled: @gift.calculate_cost_from_products?, value: number_with_precision(f.object.cost, precision: 2)
         = f.input :calculate_cost_from_products, label: 'Auto-Calculate Cost from Products'
+
         %h3 Category
         = f.association :product_category, as: :select, collection: ProductCategory.categories, input_html: {data: {behavior: 'product-category-input'}}
         = f.association :product_subcategory, as: :select, collection: (@gift.product_category&.children || []), input_html: {data: {behavior: 'product-subcategory-input'}}

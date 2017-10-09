@@ -65,6 +65,44 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: addresses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE addresses (
+    id integer NOT NULL,
+    street1 character varying,
+    street2 character varying,
+    street3 character varying,
+    city character varying,
+    state character varying,
+    zip character varying,
+    addressable_type character varying,
+    addressable_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: addresses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE addresses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: addresses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE addresses_id_seq OWNED BY addresses.id;
+
+
+--
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -110,7 +148,8 @@ CREATE TABLE gifts (
     featured boolean DEFAULT false NOT NULL,
     calculate_weight_from_products boolean DEFAULT true NOT NULL,
     weight_in_pounds numeric,
-    available boolean DEFAULT true NOT NULL
+    available boolean DEFAULT true NOT NULL,
+    insurance_in_dollars integer
 );
 
 
@@ -261,7 +300,7 @@ CREATE TABLE customer_orders (
     user_id integer NOT NULL,
     profile_id integer NOT NULL,
     cart_id character varying NOT NULL,
-    shippo_token_choice character varying,
+    shipping_choice character varying,
     order_number character varying NOT NULL,
     status character varying NOT NULL,
     recipient_name character varying NOT NULL,
@@ -280,7 +319,14 @@ CREATE TABLE customer_orders (
     total_to_charge_in_cents integer DEFAULT 0 NOT NULL,
     created_on date NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    gift_wrapt boolean DEFAULT true NOT NULL,
+    include_note boolean DEFAULT false NOT NULL,
+    note_from character varying,
+    note_to character varying,
+    note_content text,
+    handling_cost_in_cents integer DEFAULT 0 NOT NULL,
+    handling_in_cents integer DEFAULT 0 NOT NULL
 );
 
 
@@ -756,7 +802,14 @@ CREATE TABLE parcels (
     weight_in_pounds numeric NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    active boolean DEFAULT true NOT NULL
+    active boolean DEFAULT true NOT NULL,
+    case_pack integer,
+    color character varying,
+    source character varying,
+    stock_number character varying,
+    usage character varying DEFAULT 'pretty'::character varying NOT NULL,
+    code character varying,
+    shippo_template_name character varying
 );
 
 
@@ -870,6 +923,19 @@ CREATE SEQUENCE products_id_seq
 --
 
 ALTER SEQUENCE products_id_seq OWNED BY products.id;
+
+
+--
+-- Name: products_view; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW products_view AS
+ SELECT products.title AS "Product Title",
+    products.wrapt_sku AS "Wrapt Product SKU",
+    products.wrapt_cost AS "Wrapt Cost",
+    products.vendor_retail_price AS "Vendor Retail Price",
+    products.units_available AS "Units Available"
+   FROM products;
 
 
 --
@@ -1087,7 +1153,13 @@ CREATE TABLE purchase_orders (
     created_on date NOT NULL,
     total_due_in_cents numeric,
     shipping_in_cents numeric,
-    shipping_cost_in_cents numeric
+    shipping_cost_in_cents numeric,
+    vendor_token character varying NOT NULL,
+    vendor_acknowledgement_status character varying,
+    vendor_acknowledgement_reason character varying,
+    handling_cost_in_cents integer DEFAULT 0 NOT NULL,
+    handling_in_cents integer DEFAULT 0 NOT NULL,
+    status character varying DEFAULT 'initialized'::character varying NOT NULL
 );
 
 
@@ -1232,7 +1304,9 @@ CREATE TABLE shipments (
     api_response jsonb,
     success boolean,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    insurance_in_dollars integer,
+    description_of_what_to_insure character varying
 );
 
 
@@ -1263,7 +1337,8 @@ CREATE TABLE shipping_carriers (
     id integer NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    shippo_provider_name character varying NOT NULL
 );
 
 
@@ -1308,7 +1383,9 @@ CREATE TABLE shipping_labels (
     eta timestamp without time zone,
     tracking_status character varying,
     tracking_updated_at timestamp without time zone,
-    tracking_payload jsonb
+    tracking_payload jsonb,
+    carrier character varying NOT NULL,
+    service_level character varying NOT NULL
 );
 
 
@@ -1329,6 +1406,41 @@ CREATE SEQUENCE shipping_labels_id_seq
 --
 
 ALTER SEQUENCE shipping_labels_id_seq OWNED BY shipping_labels.id;
+
+
+--
+-- Name: shipping_service_levels; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE shipping_service_levels (
+    id integer NOT NULL,
+    shipping_carrier_id integer NOT NULL,
+    name character varying NOT NULL,
+    shippo_token character varying NOT NULL,
+    estimated_days integer NOT NULL,
+    terms character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: shipping_service_levels_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE shipping_service_levels_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: shipping_service_levels_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE shipping_service_levels_id_seq OWNED BY shipping_service_levels.id;
 
 
 --
@@ -1937,6 +2049,38 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
+-- Name: vendor_service_levels; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE vendor_service_levels (
+    id integer NOT NULL,
+    vendor_id integer NOT NULL,
+    shipping_service_level_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: vendor_service_levels_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE vendor_service_levels_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: vendor_service_levels_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE vendor_service_levels_id_seq OWNED BY vendor_service_levels.id;
+
+
+--
 -- Name: vendors; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1957,7 +2101,8 @@ CREATE TABLE vendors (
     zip character varying DEFAULT 'unknown'::character varying NOT NULL,
     country character varying DEFAULT 'unknown'::character varying NOT NULL,
     street2 character varying,
-    street3 character varying
+    street3 character varying,
+    purchase_order_markup_in_cents integer DEFAULT 800 NOT NULL
 );
 
 
@@ -2014,6 +2159,13 @@ CREATE SEQUENCE versions_id_seq
 --
 
 ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY addresses ALTER COLUMN id SET DEFAULT nextval('addresses_id_seq'::regclass);
 
 
 --
@@ -2251,6 +2403,13 @@ ALTER TABLE ONLY shipping_labels ALTER COLUMN id SET DEFAULT nextval('shipping_l
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY shipping_service_levels ALTER COLUMN id SET DEFAULT nextval('shipping_service_levels_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY survey_question_options ALTER COLUMN id SET DEFAULT nextval('survey_question_options_id_seq'::regclass);
 
 
@@ -2370,6 +2529,13 @@ ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regcl
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY vendor_service_levels ALTER COLUMN id SET DEFAULT nextval('vendor_service_levels_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY vendors ALTER COLUMN id SET DEFAULT nextval('vendors_id_seq'::regclass);
 
 
@@ -2378,6 +2544,14 @@ ALTER TABLE ONLY vendors ALTER COLUMN id SET DEFAULT nextval('vendors_id_seq'::r
 --
 
 ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq'::regclass);
+
+
+--
+-- Name: addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY addresses
+    ADD CONSTRAINT addresses_pkey PRIMARY KEY (id);
 
 
 --
@@ -2661,6 +2835,14 @@ ALTER TABLE ONLY shipping_labels
 
 
 --
+-- Name: shipping_service_levels_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY shipping_service_levels
+    ADD CONSTRAINT shipping_service_levels_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: survey_question_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2797,6 +2979,14 @@ ALTER TABLE ONLY users
 
 
 --
+-- Name: vendor_service_levels_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY vendor_service_levels
+    ADD CONSTRAINT vendor_service_levels_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: vendors_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2817,6 +3007,13 @@ ALTER TABLE ONLY versions
 --
 
 CREATE INDEX eval_rec_survey_response ON evaluation_recommendations USING btree (profile_set_survey_response_id);
+
+
+--
+-- Name: index_addresses_on_addressable_id_and_addressable_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_addresses_on_addressable_id_and_addressable_type ON addresses USING btree (addressable_id, addressable_type);
 
 
 --
@@ -3177,6 +3374,13 @@ CREATE INDEX index_purchase_orders_on_vendor_id ON purchase_orders USING btree (
 
 
 --
+-- Name: index_purchase_orders_on_vendor_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_purchase_orders_on_vendor_token ON purchase_orders USING btree (vendor_token);
+
+
+--
 -- Name: index_question_response_on_survey_response_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3254,6 +3458,20 @@ CREATE INDEX index_shipments_on_purchase_order_id ON shipments USING btree (purc
 
 
 --
+-- Name: index_shipping_carriers_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_shipping_carriers_on_name ON shipping_carriers USING btree (name);
+
+
+--
+-- Name: index_shipping_carriers_on_shippo_provider_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_shipping_carriers_on_shippo_provider_name ON shipping_carriers USING btree (shippo_provider_name);
+
+
+--
 -- Name: index_shipping_labels_on_customer_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3272,6 +3490,20 @@ CREATE INDEX index_shipping_labels_on_purchase_order_id ON shipping_labels USING
 --
 
 CREATE INDEX index_shipping_labels_on_shipment_id ON shipping_labels USING btree (shipment_id);
+
+
+--
+-- Name: index_shipping_service_levels_on_shipping_carrier_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_shipping_service_levels_on_shipping_carrier_id ON shipping_service_levels USING btree (shipping_carrier_id);
+
+
+--
+-- Name: index_shipping_service_levels_on_shippo_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_shipping_service_levels_on_shippo_token ON shipping_service_levels USING btree (shippo_token);
 
 
 --
@@ -3513,6 +3745,20 @@ CREATE INDEX index_users_on_reset_password_token ON users USING btree (reset_pas
 
 
 --
+-- Name: index_vendor_service_levels_on_shipping_service_level_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vendor_service_levels_on_shipping_service_level_id ON vendor_service_levels USING btree (shipping_service_level_id);
+
+
+--
+-- Name: index_vendor_service_levels_on_vendor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vendor_service_levels_on_vendor_id ON vendor_service_levels USING btree (vendor_id);
+
+
+--
 -- Name: index_vendors_on_wrapt_sku_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3555,11 +3801,18 @@ CREATE INDEX taggings_idy ON taggings USING btree (taggable_id, taggable_type, t
 
 
 --
--- Name: fk_rails_0d540f40de; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: vsl_vendor_id_ssl_id_unq_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY evaluation_recommendations
-    ADD CONSTRAINT fk_rails_0d540f40de FOREIGN KEY (profile_set_survey_response_id) REFERENCES profile_set_survey_responses(id);
+CREATE UNIQUE INDEX vsl_vendor_id_ssl_id_unq_idx ON vendor_service_levels USING btree (vendor_id, shipping_service_level_id);
+
+
+--
+-- Name: fk_rails_08b5eb134b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY vendor_service_levels
+    ADD CONSTRAINT fk_rails_08b5eb134b FOREIGN KEY (vendor_id) REFERENCES vendors(id);
 
 
 --
@@ -3592,14 +3845,6 @@ ALTER TABLE ONLY gift_likes
 
 ALTER TABLE ONLY product_images
     ADD CONSTRAINT fk_rails_1c991d3be6 FOREIGN KEY (product_id) REFERENCES products(id);
-
-
---
--- Name: fk_rails_233ae6f0fa; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY evaluation_recommendations
-    ADD CONSTRAINT fk_rails_233ae6f0fa FOREIGN KEY (gift_id) REFERENCES gifts(id);
 
 
 --
@@ -3699,14 +3944,6 @@ ALTER TABLE ONLY purchase_orders
 
 
 --
--- Name: fk_rails_5cd633a5f0; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY gift_question_impacts
-    ADD CONSTRAINT fk_rails_5cd633a5f0 FOREIGN KEY (training_set_id) REFERENCES training_sets(id);
-
-
---
 -- Name: fk_rails_609fa5239b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3723,19 +3960,19 @@ ALTER TABLE ONLY shipping_labels
 
 
 --
+-- Name: fk_rails_6898e966b4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY shipping_service_levels
+    ADD CONSTRAINT fk_rails_6898e966b4 FOREIGN KEY (shipping_carrier_id) REFERENCES shipping_carriers(id);
+
+
+--
 -- Name: fk_rails_6a62b14582; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY trait_response_impacts
     ADD CONSTRAINT fk_rails_6a62b14582 FOREIGN KEY (survey_question_option_id) REFERENCES survey_question_options(id);
-
-
---
--- Name: fk_rails_6ad12784ff; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY gift_question_impacts
-    ADD CONSTRAINT fk_rails_6ad12784ff FOREIGN KEY (survey_question_id) REFERENCES survey_questions(id);
 
 
 --
@@ -3776,6 +4013,14 @@ ALTER TABLE ONLY profiles
 
 ALTER TABLE ONLY trait_response_impacts
     ADD CONSTRAINT fk_rails_7aca7ad7a9 FOREIGN KEY (profile_traits_tag_id) REFERENCES profile_traits_tags(id);
+
+
+--
+-- Name: fk_rails_7efc7bb3c9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY vendor_service_levels
+    ADD CONSTRAINT fk_rails_7efc7bb3c9 FOREIGN KEY (shipping_service_level_id) REFERENCES shipping_service_levels(id);
 
 
 --
@@ -3875,14 +4120,6 @@ ALTER TABLE ONLY gift_products
 
 
 --
--- Name: fk_rails_b48a03c485; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY training_set_response_impacts
-    ADD CONSTRAINT fk_rails_b48a03c485 FOREIGN KEY (gift_question_impact_id) REFERENCES gift_question_impacts(id);
-
-
---
 -- Name: fk_rails_bc25ee4e95; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3931,14 +4168,6 @@ ALTER TABLE ONLY trait_training_set_questions
 
 
 --
--- Name: fk_rails_cf3fbfffed; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY gift_question_impacts
-    ADD CONSTRAINT fk_rails_cf3fbfffed FOREIGN KEY (gift_id) REFERENCES gifts(id);
-
-
---
 -- Name: fk_rails_d66b19ca6c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3976,14 +4205,6 @@ ALTER TABLE ONLY products
 
 ALTER TABLE ONLY gifts
     ADD CONSTRAINT fk_rails_f2f2f307d2 FOREIGN KEY (product_category_id) REFERENCES product_categories(id);
-
-
---
--- Name: fk_rails_f2f9a0258f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY evaluation_recommendations
-    ADD CONSTRAINT fk_rails_f2f9a0258f FOREIGN KEY (training_set_evaluation_id) REFERENCES training_set_evaluations(id);
 
 
 --
@@ -4189,6 +4410,16 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170925171024'),
 ('20170925184052'),
 ('20170925193704'),
-('20170925200227');
+('20170925200227'),
+('20170926134941'),
+('20170926182243'),
+('20170927182417'),
+('20170927203446'),
+('20170929125823'),
+('20170929155100'),
+('20170929204015'),
+('20171002133537'),
+('20171006145514'),
+('20171009202508');
 
 
