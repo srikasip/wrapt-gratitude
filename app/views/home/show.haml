@@ -5,44 +5,20 @@
   .container
     .row
       .hero-overrun.col-sm-10.col-sm-offset-1
-        - if current_user&.admin?
-          %p In MVP1a, when we invite people for testing, they will be taken to a special landing page.
-          %p
-            = link_to 'Beta Testing Landing Page: Start a New Quiz', new_profile_path
-            - test_surveys = Survey.where(test_mode: true)
-            - if test_surveys.any?
-              %p Select a quiz that is currently in test mode:
-              %ul
-                - test_surveys.each do |test_survey|
-                  %li= link_to test_survey.title, new_profile_path(survey_id: test_survey.id)
+        - if require_invites? && current_user.blank?
+          = render "shared/invitation_request"
         - else
-          .sqr-progress.sqr-progress--one-question-only
-          = simple_form_for @invitation_request, html: {class: 'sqr-form new-invite-request'} do |form|
-            .form-inputs
-              = form.input :email, label: 'What is your email address?', required: false, hint: "We’ll send you an invite to try Wrapt"
-              = form.input :how_found, as: :wrapt_radio_as_buttons, collection: InvitationRequest::HOW_FOUNDS, label: 'How did you hear about us?'
-
-            .form-actions.pull-right
-              = form.submit 'Submit', class: 'btn btn-primary'
-            .clearfix
+          - url = current_user.present? ? profiles_path : create_with_auto_user_create_profiles_path
+          = simple_form_for @question_response, url: url, html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
+            - if current_user&.admin?
+              = hidden_field_tag :survey_id, @survey.id
+            = render response_fields_partial, form: form, label: @question_response.survey_question.prompt
 
 - content_for :after_wrapper do
   = render 'home/how_wrapt_works'
   = render 'home/wrapt_stories'
 
-
-- content_for :page_js do
-  :javascript
-    $(document).ready(function() {
-      $('.j-radio-as-button').change(function() {
-        $('.j-radio-as-button__label').removeClass('selected');
-        var label = $(this).parents('.j-radio-as-button__label');
-        label.addClass('selected');
-      });
-    });
-
 - if params[:password_reset_token]
   - content_for :page_js do
     :javascript
       new App.PjaxModalLoader(#{password_reset_path(params[:password_reset_token]).to_json})
-      

@@ -13,7 +13,7 @@ module ApplicationHelper
   end
 
   def active_top_nav_section
-    controller_name
+    @active_top_nav_section || controller_name
   end
 
   def top_nav_links
@@ -110,6 +110,8 @@ module ApplicationHelper
   end
 
   def enable_gift_basket?
+    return false if @hide_gift_basket
+
     current_user && gift_basket_profile && !gift_basket_profile.new_record? && gift_basket_profile.gift_recommendations.any?
   end
 
@@ -157,6 +159,95 @@ module ApplicationHelper
     end
   end
 
+  def format_date date
+    return 'N/A' if date.nil?
+    date.strftime("%b %e, %Y")
+  end
 
+  def content_quote(quote)
+    content_tag :div, class: quote[:container] do
+      concat content_tag :p, quote[:content].html_safe
+      concat content_tag :small, quote[:credit].html_safe
+    end
+  end
+
+  def content_section(content)
+    content_tag :div, class: content[:container] do
+      if content[:header].present?
+        concat content_tag :h4, content_with_citation(content[:header][:text], content[:header][:citations]), class: 'about-page__header'
+      end
+      concat content_section_text(content[:content], content[:citations])
+    end
+  end
+
+  def content_section_text(content, citations)
+    content_tag :p do
+      content.each_with_index do |c, index|
+        cits = citations[index] || []
+        concat content_with_citation(c, cits)
+      end
+    end
+  end
+
+  def content_with_citation(content, citations)
+    content_tag :span do
+      concat "#{content} ".html_safe
+      citations.each_with_index do |cit, index|
+        concat content_tag :sup, citation_link(index, citations)
+      end
+    end
+  end
+
+  def citation_link(index, citations)
+    cit = citations[index]
+    if index == citations.size - 1
+      link_to cit, "#citation-0#{cit}"
+    else
+      succeed ',' do
+        link_to cit, "#citation-0#{cit}"
+      end
+    end
+  end
+
+  def formatted_address_from_hash(address_hash)
+    ah = OpenStruct.new(address_hash)
+
+    (
+    [ah.street1, ah.street2, ah.street3].compact.join("<br>") +
+      [ah.city+',', ah.state, ah.zip].join(' ') +
+      "<br>" +
+      ah.country + "<br>" +
+      ah.email
+    ).html_safe
+  end
+
+  # this is a no object version of a simple form custom inputs
+
+  def wrapt_radio_toggle(collection, attr_name, selected, options={})
+    wrapper_class = "j-wrapt-radio-toggle form-group #{options[:wrapper_class]}"
+    content_tag :div, class: wrapper_class do
+      collection.each do |c|
+        s = selected == c.last
+        concat wrapt_radio_toggle_label_input(c, attr_name, s, options)
+      end
+    end
+  end
+
+  def wrapt_radio_toggle_label_input(collection_item, attr_name, selected, options={})
+    label_key = "#{attr_name.to_s}_#{collection_item.last.to_s}".to_sym
+    label_class = selected ? 'selected' : ''
+    content_tag :label, for: label_key, class: label_class do
+      concat collection_item.first
+      concat radio_button_tag attr_name, collection_item.last, selected, style: 'display:none;', onChange: 'App.RadioToggle(this);', class: options[:input_class]
+    end
+  end
+
+  def wrapt_styled_radio_button(value, attr_name, selected, options={})
+    content_tag :label, for: "#{attr_name}_#{value}", class: 'wrapt-styled-radio-button j-wrapt-styled-radio-button' do
+      concat content_tag :span, '', class: (selected ? 'checked' : '')
+      concat (options[:label] || attr_name.humanize).html_safe
+      concat radio_button_tag attr_name, value, selected, style: 'display:none;', onChange: 'App.StyledRadioButton(this);', class: options[:input_class], data: options[:data]
+    end
+  end
 
 end

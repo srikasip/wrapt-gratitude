@@ -1,0 +1,87 @@
+= render "admin/ecommerce/styles"
+
+.row.admin__intro
+  .col-sm-12
+    %h1
+      Customer Orders
+      - if ENV['ALLOW_BOGUS_ORDER_CREATION']=='true'
+        = link_to admin_ecommerce_customer_orders_path, method: 'post', class: 'btn btn-warning btn-xs' do
+          %i.glyphicon.glyphicon-plus
+          Create a Random Test Order
+
+.row.admin__search
+  .col-sm-12
+    = form_tag(admin_ecommerce_customer_orders_path, method: 'GET', class: 'form-inline') do
+
+      .form-group.multi-choice-flex
+        - CustomerOrder::VALID_ORDER_STATUSES.each do |status|
+          %label{for: "search_status_#{status}"}
+            = check_box_tag "search[status][#{status}]", "on", params[:search][:status][status]=='on'
+            = status.titleize
+      .form-group{style: 'margin-top: 10px'}
+        = search_field_tag 'search[order_number]', :order_number, placeholder: 'Order Number', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:order_number]
+        = date_field_tag 'search[created_on]', :created_on, placeholder: 'Date Created', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:created_on]
+        = search_field_tag 'search[email]', :email, placeholder: 'Email', class: 'form-control', style: 'min-width: 300px;', value: params[:search][:email]
+
+        %button.btn.btn-primary
+          %i.glyphicon.glyphicon-search
+          Search
+        = link_to 'Clear Search (Show All)', admin_ecommerce_customer_orders_path, class: 'btn btn-default'
+
+.row
+  .col-sm-12
+    %table.table.index-table
+      %thead
+        %tr
+          %th Order Number
+          %th Date Created
+          %th Customer Email
+          %th Status
+          %th.text-right Amount
+          %th
+
+      %tbody
+        - @orders.each do |order|
+          - this_cycle_class = cycle('even-order', 'odd-order')
+          - order.line_items.each do |line_item|
+            %tr{class: this_cycle_class}
+              %td
+              %td{colspan: 3}
+                %i
+                  = line_item.name
+                  &times;
+                  = line_item.quantity
+                  at
+                  = number_to_currency(line_item.price_per_each_in_dollars)
+                  each
+              %td.text-right
+                %i= number_to_currency(line_item.total_price_in_dollars)
+              %td
+          %tr{class: this_cycle_class}
+            %td
+            %td{colspan: 3}
+              %i
+                Shipping
+            %td.text-right
+              %i= number_to_currency(order.shipping_in_dollars)
+            %td
+          %tr{class: this_cycle_class}
+            %td
+            %td{colspan: 3}
+              %i
+                Taxes
+            %td.text-right
+              %i= number_to_currency(order.taxes_in_dollars)
+            %td
+          %tr{class: this_cycle_class, style: 'border-bottom-style: double'}
+            %td= order.order_number
+            %td= format_date(order.created_on)
+            %td= order.user_email
+            %td= order.status.titleize
+            %td.text-right
+              %b= number_to_currency(order.total_to_charge_in_dollars)
+            %td.admin-index-table--buttons-cell
+              = link_to 'View', url_for(action: :show, id: order.id), class: 'btn btn-default btn-xs'
+              = link_to 'Cancel Order', admin_ecommerce_customer_order_path(order), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+
+    %p=paginate @orders

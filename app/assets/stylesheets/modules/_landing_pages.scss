@@ -139,9 +139,7 @@
 }
 
 .hero-overrun {
-  background-color: #fff;
-  padding: 40px;
-  box-shadow: 0 2px 4px 4px rgba(0, 0, 0, 0.08), 0 2px 12px 12px rgba(0, 0, 0, 0.05);
+  @include shadowed-hero-box();
   margin-top: -80px;
 }
 

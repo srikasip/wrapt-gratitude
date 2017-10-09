@@ -1,0 +1,7 @@
+Review.
+
+= simple_form_for @customer_order, url: url_for, method: :patch do |f|
+  %button.btn.btn-primary{type: 'submit'}
+    = "Finalize Order<svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
+
+= render "debug", customer_order: @customer_order

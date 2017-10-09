@@ -1,4 +1,9 @@
 - image_url = locals[:image_url]
-.gr-image-carousel__image{style: "background-image: url(#{image_url})", data: {image_title: locals[:image_text]}, class: "orientation-#{locals[:image_orientation]}"}
+- zoom_url = locals[:zoom_url]
+- index = locals[:index]
+- parent_slide_index = locals[:parent_slide_index]
+- id = (index == 0 && parent_slide_index == 0) ? 'active-zoom' : ''
+.gr-image-carousel__image{style: "background-image: url(#{image_url})", data: {image_title: locals[:image_text], zoom_image: image_path(zoom_url)}, class: "orientation-#{locals[:image_orientation]}", id: id}
+
 
     

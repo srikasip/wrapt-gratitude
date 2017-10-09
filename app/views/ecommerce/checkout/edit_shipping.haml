@@ -1,0 +1,15 @@
+.container
+  = render 'header'
+  .row
+    .col-xs-12.col-md-10.col-md-offset-1
+      .co-container
+        %h2.light Shipping Information
+
+        = simple_form_for @customer_order, url: url_for, method: :patch do |f|
+          .co-select-shipping.clearfix
+            = f.input :shipping_choice, as: :wrapt_styled_radio_buttons, collection: @shipping_choices.map{|sc| [sc.annotated_label, sc.value]}, label: false
+
+          %button.btn.btn-primary{type: 'submit'}
+            = "Next <svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
+
+  = render "debug", customer_order: @customer_order

@@ -1,0 +1,17 @@
+.sqr-progress.sqr-progress--one-question-only
+= simple_form_for InvitationRequest.new, html: {class: 'sqr-form new-invite-request'} do |form|
+  .form-inputs
+    = form.input :email, label: 'What is your email address?', required: false, hint: "We’ll send you an invite to try Wrapt"
+    = form.input :how_found, as: :wrapt_radio_as_buttons, collection: InvitationRequest::HOW_FOUNDS, label: 'How did you hear about us?'
+  .form-actions.pull-right
+    = form.submit 'Submit', class: 'btn btn-primary'
+  .clearfix
+  - content_for :page_js do
+    :javascript
+      $(document).ready(function() {
+        $('.j-radio-as-button').change(function() {
+          $('.j-radio-as-button__label').removeClass('selected');
+          var label = $(this).parents('.j-radio-as-button__label');
+          label.addClass('selected');
+        });
+      });

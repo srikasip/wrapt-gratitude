@@ -1,0 +1,85 @@
+@import "helpers";
+
+#co-progress-bar {
+  position: relative;
+}
+
+#co-progress-bar a {
+  position: absolute;
+  display: inline-block;
+  width: 25%;
+  height: 60px;
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: transparent;
+  }
+}
+
+.co-progress-bar__disabled {
+  cursor: not-allowed;
+}
+
+.co-container {
+  @include shadowed-box__gray;
+  background-color: #FFFFFF;
+  padding: 32px;
+  margin: 40px 0px;
+  position: relative;
+
+  button[type="submit"] {
+    position: absolute;
+    right: 32px;
+    bottom: -28px;
+  }
+}
+
+.co-toggle label {
+  border: 1px solid #CCCCCC;
+  padding: 16px 24px;
+  cursor: pointer;
+  text-transform: uppercase;
+  @include akkurat-light;
+  font-size: 14px;
+  letter-spacing: 1px;
+  transition: all 0.5s;
+}
+
+.co-toggle label:not(:last-child) {
+  border-right: none;
+}
+
+.co-toggle label.selected {
+  background-color: rgba(241, 226, 176, 0.5);
+  @include akkurat-bold;
+}
+
+.co-add-a-note {
+  margin-bottom: 40px;
+  h4, .form-group {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: middle;
+    margin-bottom: 0px;
+  }
+  h4 {
+    margin: 0px 40px 0px 0px;
+  }
+}
+
+.co-select-my-address,
+.co-select-shipping {
+  label {
+    width: 33%;
+    margin-right: 40px;
+    float: left;
+    @include akkurat-light;
+  }
+  label small {
+    color: $gray-006;
+    margin-top: -4px;
+    font-size: 12px;
+    display: block;
+    @include akkurat-light;
+  }
+}

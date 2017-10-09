@@ -15,4 +15,8 @@ every 1.days, at: '2:00am', roles: :staging_cron do
   rake "db:clone_production"
 end
 
+every 4.days, roles: :cron do
+  rake "letsencrypt_plugin"
+end
+
 # Learn more: http://github.com/javan/whenever

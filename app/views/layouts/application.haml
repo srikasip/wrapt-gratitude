@@ -16,6 +16,8 @@
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
 
+    %script(type="text/javascript" src="https://js.stripe.com/v3/")
+
     = render 'layouts/favicons'
     = render 'layouts/social_tags'
   %body{class: body_classes}

@@ -15,10 +15,14 @@ module Admin
     end
 
     def new
-      @gift = Gift.new date_available: Date.today, product_category: Gift.default_product_category
+      @gift = Gift.new product_category: Gift.default_product_category
+      @gift.pretty_parcels.build
+      @gift.shipping_parcels.build
     end
 
     def edit
+      @gift.shipping_parcels.empty? and @gift.shipping_parcels.build
+      @gift.pretty_parcels.empty? and @gift.pretty_parcels.build
     end
 
     def create
@@ -43,31 +47,32 @@ module Admin
       redirect_to admin_gifts_url(context_params), notice: "#{@gift.title} has been deleted."
     end
 
-    
+
     private def set_gift
       @gift = Gift.find(params[:id])
     end
 
     private def gift_params
-      result = params.require(:gift).permit(:title,
+      params.require(:gift).permit(:title,
         :description,
         :selling_price,
         :cost,
         :wrapt_sku,
-        :date_available,
-        :date_discontinued,
+        :available,
         :calculate_cost_from_products,
         :calculate_price_from_products,
         :product_category_id,
         :product_subcategory_id,
         :featured,
-        :tag_list
-        )
+        :tag_list,
+        :shipping_parcels_attributes => [:id, :parcel_id, :gift_id],
+        :gift_parcels_attributes => [:id, :parcel_id, :gift_id]
+      )
     end
 
     def gift_search_params
       params_base = params[:gift_search] || ActionController::Parameters.new
-      params_base.permit(:keyword, :product_category_id, :product_subcategory_id, :min_price, :max_price, :tags, :vendor_id)
+      params_base.permit(:keyword, :product_category_id, :product_subcategory_id, :min_price, :max_price, :tags, :vendor_id, :available)
     end
     helper_method :gift_search_params
 

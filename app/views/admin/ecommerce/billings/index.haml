@@ -1,0 +1,97 @@
+= render "admin/ecommerce/styles"
+
+.row.admin__intro
+  .col-sm-12
+    %h1
+      Billing Reports
+
+.row.admin__search
+  .col-sm-12
+    = form_tag(admin_ecommerce_billings_path, method: 'GET', class: 'form-inline') do
+
+      .form-group.multi-choice-flex
+        - CustomerOrder::VALID_ORDER_STATUSES.each do |status|
+          %label{for: "search_status_#{status}"}
+            = check_box_tag "search[status][#{status}]", "on", params[:search][:status][status]=='on'
+            = status.titleize
+      .form-group{style: 'margin-top: 10px'}
+        Vendor
+        = select_tag('search[vendor_id]', content_tag(:option,'select one...',:value=>"")+options_from_collection_for_select(Vendor.all, :id, :name, params[:search][:vendor_id]), placeholder: 'Vendor', class: 'form-control', style: 'min-width: 200px;')
+        from
+        = date_field_tag 'search[date_range_start]', :date_range_start, placeholder: 'Date Created', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:date_range_start]
+        to
+        = date_field_tag 'search[date_range_end]', :date_range_end, placeholder: 'Date Created', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:date_range_end]
+
+        %button.btn.btn-primary{name: 'content_type', value: 'html'}
+          %i.glyphicon.glyphicon-search
+          Generate
+        %button.btn.btn-primary{name: 'content_type', value: 'csv'}
+          %i.glyphicon.glyphicon-arrow-down
+          Download
+        = link_to 'Clear Fields (Show All)', admin_ecommerce_billings_path, class: 'btn btn-default'
+
+= page_entries_info @purchase_orders
+
+- if @purchase_orders.any?
+  .row
+    .col-sm-12
+      %table.table.index-table
+        %thead
+          %tr
+            %th PO Number
+            %th CO Number
+            %th Date
+            %th Status
+            %th Wrapt SKU
+            %th Vendor SKU
+            %th Description
+            %th.text-right Wrapt Cost
+            %th.text-right Handling
+
+        %tbody
+          :ruby
+            sum_wrapt_cost = 0.0
+            sum_shipping_cost = 0.0
+            sum_shipping_charged = 0.0
+          - @purchase_orders.each do |po|
+            - this_cycle_class = cycle('even-order', 'odd-order')
+            - po.line_items.each do |line_item|
+              :ruby
+                product = line_item.orderable
+                customer_order = po.customer_order
+                sum_wrapt_cost += product.wrapt_cost
+                sum_shipping_cost +=  po.shipping_cost_in_dollars_for(product)
+                sum_shipping_charged += po.shipping_in_dollars_for(product)
+              %tr{class: this_cycle_class}
+                %td
+                  = link_to admin_ecommerce_purchase_order_path(po) do
+                    = po.order_number
+                %td
+                  = link_to admin_ecommerce_customer_order_path(customer_order) do
+                    = customer_order.order_number
+                %td= format_date(po.created_on)
+                %td= customer_order.status
+                %td= product.wrapt_sku
+                %td= product.vendor_sku.presence || 'N/A'
+                %td
+                  = link_to admin_product_path(product) do
+                    = truncate(product.description, length: 60)
+                %td.text-right= number_to_currency(product.wrapt_cost)
+                %td.text-right= number_to_currency(po.handling_cost_in_dollars)
+
+          %tr{style: 'border-top-style: double'}
+            - if @purchase_orders.total_pages == 1
+              %td{colspan: 6}
+              %td.text-right
+                %strong Sum
+              %td.text-right
+                %strong= number_to_currency(sum_wrapt_cost)
+              %td.text-right
+                %strong= number_to_currency(sum_shipping_cost)
+              %td.text-right
+                %strong= number_to_currency(sum_shipping_charged)
+            - else
+              %td{colspan: 7}
+              %td.text-right{colspan: 3} Filter report further for sums
+
+  = paginate @purchase_orders

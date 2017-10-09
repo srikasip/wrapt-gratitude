@@ -19,6 +19,9 @@ module WraptGratitude
       generate.jbuilder false
     end
 
+    # Want to organize files but not namespace all the models there.
+    config.autoload_paths << "#{Rails.root}/app/models/ecommerce"
+
     config.action_controller.include_all_helpers = false
 
     Rails.application.config.assets.precompile += ['admin.js', 'admin.css']

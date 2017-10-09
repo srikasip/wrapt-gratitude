@@ -1,0 +1,2 @@
+This directory is added to the autoload path. There isn't any namespacing which
+seemed like it would just get in the way.

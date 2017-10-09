@@ -1,14 +1,41 @@
 class ProfilesController < ApplicationController
-
   include RequiresLoginOrInvitation
+  include FeatureFlagsHelper
+
   helper SurveyQuestionResponsesHelper
   helper HeroBackgroundHelper
   helper CarouselHelper
-  
+  helper FeatureFlagsHelper
+
   before_filter :set_survey
 
+  skip_before_action :require_login_or_invitation, only: [:create_with_auto_user_create]
+
   def login_required?
-    false
+    require_invites? || (action_name != 'create_with_auto_user_create')
+  end
+
+  def index
+    @profiles = current_user.owned_profiles
+  end
+
+  def create_with_auto_user_create
+    if current_user
+      # Already have a user.
+      create
+    elsif require_invites?
+      redirect_to root_path
+    else
+      user = User.new(email: SecureRandom.hex(16)+"@PLACEHOLDER.com")
+      user.source = 'auto_create_on_quiz_taking'
+      password = SecureRandom.hex(16)
+      user.password = password
+      user.save!
+
+      auto_login(user)
+
+      create
+    end
   end
 
   def new
@@ -23,6 +50,7 @@ class ProfilesController < ApplicationController
 
   def create
     @profile = current_user.owned_profiles.new
+    @profile.name = 'Unknown'
     if @profile.save
       @survey_response = @profile.survey_responses.create survey: @survey
       @survey_response.ordered_question_responses.first.update question_response_params.merge(answered_at: Time.now)
@@ -31,7 +59,7 @@ class ProfilesController < ApplicationController
       render :new
     end
   end
-  
+
   private def set_survey
     if current_user&.admin? && params[:survey_id]
       @survey = Survey.where(id: params[:survey_id], test_mode: true).first
@@ -57,9 +85,4 @@ class ProfilesController < ApplicationController
       survey_question_option_ids: []
     )
   end
-  
-
-  
-  
-
 end

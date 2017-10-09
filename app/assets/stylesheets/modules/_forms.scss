@@ -1,5 +1,49 @@
 @import "helpers";
 
+// START styles for custom simple for inputs (no object versions too see application_helper)
+.wrapt-styled-radio-button,
+.wrapt-styled-checkbox {
+  position: relative;
+  cursor: pointer;
+  padding-left: 30px;
+  span {
+    position: absolute;
+    left: 0px;
+    display: block;
+    border: 1px solid #c4c4c4;
+    width: 20px;
+    height: 20px;
+  }
+  span.checked::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    right: 2px;
+    bottom: 2px;
+    display: block;
+    background-color: $blue-001;
+  }
+}
+
+.wrapt-styled-radio-button {
+  line-height: 25px;
+  span {
+    border-radius: 50%;
+    top: 3px;
+  }
+  span.checked::before {
+    border-radius: 50%;
+  }
+}
+
+.wrapt-styled-checkbox {
+  line-height: 20px;
+  font-size: 14px;
+  @include akkurat-light;
+}
+// END styles for custom simple for inputs (no object versions too see application_helper)
+
 label {
   color: $gray-008;
   font-weight: normal;
