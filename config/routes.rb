@@ -177,7 +177,7 @@ Rails.application.routes.draw do
       post 'webhooks/tracking' => 'webhooks#tracking'
     end
 
-    resources :comments, only: [:create, :destroy]
+    resources :comments, only: [:create]
   end
 
   ####################
