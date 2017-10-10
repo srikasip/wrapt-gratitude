@@ -1,5 +1,6 @@
 class CustomerPurchase::ShippingService
   include ActionView::Helpers::NumberHelper
+  include OrderStatuses
 
   attr_accessor :cart_id, :customer_order
 
@@ -53,8 +54,14 @@ class CustomerPurchase::ShippingService
         raise InternalConsistencyError, "need a box!"
       end
 
+      if purchase_order.gift.insurance_in_dollars.to_i > 0
+        shipment.insurance_in_dollars = gift.insurance_in_dollars
+        shipment.description_of_what_to_insure = gift.name
+      end
+
       shipment.parcel = parcel
       shipment.api_response = nil
+      shipment.customer_order = customer_order
       shipment.run!
       shipment.save!
 
@@ -114,7 +121,7 @@ class CustomerPurchase::ShippingService
   end
 
   def shipping_choices_for_view
-    # TOOD: if both choices are same price, don't give a choice
+    # TODO: if both choices are same price, don't give a choice
     shipping_choices.values
   end
 
@@ -206,8 +213,18 @@ class CustomerPurchase::ShippingService
       tracking_payload: data
     })
 
-    raise "WIP"
-    _update_the_customer_order_and_or_purchase_order_statuses!
+    if shipping_label.shipped?
+      purchase_order = shipping_label.purchase_order
+      purchase_order.status = SHIPPED
+      purchase_order.save!
+
+      if customer_order.purchase_orders.all?(&:shipped?)
+        customer_order.status = SHIPPED
+        customer_order.save!
+      end
+
+      CustomerOrderMailer.order_shipped(purchase_order.id).deliver_later
+    end
   end
 
   private

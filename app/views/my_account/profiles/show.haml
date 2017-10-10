@@ -5,22 +5,22 @@
 
       %h2
         General Information
-        = link_to 'Edit', edit_my_account_path, class: 'btn btn-sm btn-default'
+        = link_to 'Edit', edit_my_account_profile_path, class: 'btn btn-sm btn-default'
 
   .row
     .col-sm-3
       %p
-        %b= @user.first_name
+        %b= current_user.first_name
         %br
         First Name
     .col-sm-3
       %p
-        %b= @user.last_name
+        %b= current_user.last_name
         %br
         Last Name
     .col-sm-3
       %p
-        %b= @user.email
+        %b= current_user.email
         %br
         Email Address
     .col-sm-3

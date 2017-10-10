@@ -5,7 +5,7 @@
   .container
     .row
       .hero-overrun.col-sm-10.col-sm-offset-1
-        = simple_form_for @question_response, url: with_invitation_scope(profiles_path), html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
+        = simple_form_for @question_response, url: with_invitation_scope(giftees_path), html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
           - if current_user&.admin?
             = hidden_field_tag :survey_id, @survey.id
           = render response_fields_partial, form: form, label: @question_response.survey_question.prompt

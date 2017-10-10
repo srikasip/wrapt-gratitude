@@ -26,6 +26,7 @@ class User < ApplicationRecord
   ###########################
 
   has_many :addresses, as: :addressable
+  has_many :comments, as: :commentable
   has_many :customer_orders
   has_many :owned_profiles, class_name: 'Profile', foreign_key: :owner_id, dependent: :destroy
   belongs_to :last_viewed_profile, class_name: 'Profile'

@@ -52,6 +52,10 @@ module Ecommerce
         permitted[:vendor_acknowledgement_reason] = nil
       end
 
+      if permitted[:vendor_acknowledgement_reason] == 'other'
+        permitted[:vendor_acknowledgement_reason] = params[:purchase_order][:other_reason]
+      end
+
       permitted
     end
   end

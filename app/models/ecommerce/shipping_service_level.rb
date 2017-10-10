@@ -6,4 +6,16 @@ class ShippingServiceLevel < ApplicationRecord
   validates :name, presence: true
   validates :shippo_token, presence: true
   validates :terms, presence: true
+
+  def carrier_name
+    shipping_carrier.name
+  end
+
+  def full_name
+    carrier_name + " " + name
+  end
+
+  def self.active
+    all
+  end
 end

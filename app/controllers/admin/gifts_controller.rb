@@ -65,6 +65,7 @@ module Admin
         :product_subcategory_id,
         :featured,
         :tag_list,
+        :insurance_in_dollars,
         :shipping_parcels_attributes => [:id, :parcel_id, :gift_id],
         :gift_parcels_attributes => [:id, :parcel_id, :gift_id]
       )

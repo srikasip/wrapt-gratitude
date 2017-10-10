@@ -19,7 +19,7 @@ module Admin
       @profile_traits_topic = ::ProfileTraits::Topic.new(profile_traits_topic_params)
 
       if @profile_traits_topic.save
-        redirect_to admin_profile_traits_topics_path, notice: 'Topic was successfully created.'
+        redirect_to admin_giftee_traits_topics_path, notice: 'Topic was successfully created.'
       else
         render :new
       end
@@ -27,7 +27,7 @@ module Admin
 
     def update
       if @profile_traits_topic.update(profile_traits_topic_params)
-        redirect_to admin_profile_traits_topics_path, notice: 'Topic was successfully updated.'
+        redirect_to admin_giftee_traits_topics_path, notice: 'Topic was successfully updated.'
       else
         render :edit
       end
@@ -35,7 +35,7 @@ module Admin
 
     def destroy
       @profile_traits_topic.destroy
-      redirect_to admin_profile_traits_topics_url, notice: 'Topic was successfully destroyed.'
+      redirect_to admin_giftee_traits_topics_url, notice: 'Topic was successfully destroyed.'
     end
 
     private

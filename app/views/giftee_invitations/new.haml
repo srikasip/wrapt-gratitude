@@ -5,7 +5,7 @@
   We will invite her to Wrapt and
   ask for her feedback on our recommendations. This will help us learn!
 
-= simple_form_for @profile, url: profile_giftee_invitations_path(@profile), data: {submits_to_pjax_modal: true}, method: :post do |form|
+= simple_form_for @profile, url: giftee_giftee_invitations_path(@profile), data: {submits_to_pjax_modal: true}, method: :post do |form|
   = form.input :email, label: 'Email Address'
 
   = form.submit "Send Email", class: 'btn btn-primary btn-full-width', onClick: "ga('send', 'event', 'basket', 'share with giftee', 'step 2 - send');"
