@@ -205,4 +205,5 @@ Rails.application.routes.draw do
   get 'health-check' => 'health_check#index'
   get 'exception-check' => 'health_check#exception'
 
+  get '*args' => 'static_pages#page_404'
 end

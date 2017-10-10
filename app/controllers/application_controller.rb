@@ -14,6 +14,15 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  rescue_from Exception do |exception|
+    ExceptionNotifier.notify_exception(exception,
+      env: request.env,
+      data: {:message => "was doing something wrong"}
+    )
+
+    render 'static_pages/page_500'
+  end
+
   # TODO redefine in subclasses as needed
   def login_required?
     true
