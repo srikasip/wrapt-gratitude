@@ -1,7 +1,4 @@
-class MyAccountsController < ApplicationController
-  before_action :set_user
-
-
+class MyAccount::ProfilesController < MyAccount::BaseController
   def show
   end
 
@@ -9,9 +6,9 @@ class MyAccountsController < ApplicationController
   end
 
   def update
-    if @user.update user_params
+    if current_user.update user_params
       flash.notice = "We've updated your profile."
-      redirect_to my_account_path
+      redirect_to my_account_profile_path
     else
       render :edit
     end
@@ -25,10 +22,4 @@ class MyAccountsController < ApplicationController
       :password
     )
   end
-  
-
-  private def set_user
-    @user = current_user
-  end
-  
 end

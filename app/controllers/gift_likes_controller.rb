@@ -1,5 +1,4 @@
 class GiftLikesController < ApplicationController
-
   before_action :load_profile
   helper GiftRecommendationsHelper
 

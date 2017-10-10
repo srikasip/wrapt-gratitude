@@ -1,0 +1,50 @@
+.container
+  .row
+    .col-xs-12
+      %h4
+        Order History
+        %form#js-filter
+          %select{name: 'search[filter]'}
+            :ruby
+              options = [
+                ['All Orders', 'all'],
+                ['Open Orders', 'open'],
+                ['Completed Orders', 'completed']
+              ]
+            = options_for_select options, params.dig(:search, :filter)
+  .row
+    .col-xs-12
+      %table.table
+        %thead
+          %tr
+            %th Order Date
+            %th Order #
+            %th Giftee
+            %th Shipped to
+            %th Status
+            %th
+        %tbody
+          - @orders.each do |order|
+            %tr
+              %td= format_date(order.submitted_on)
+              %td
+                = link_to my_account_order_path(order) do
+                  = order.order_number
+              %td= order.profile.name
+              %td= order.shipped_to_name
+              %td= status_to_human(order)
+              %td
+                = link_to 'View Detail', my_account_order_path(order)
+                %br
+                - order.shipping_labels.each do |shipping_label|
+                  = link_to 'Track Package', shipping_label.tracking_url, target: '_blank'
+                  %br
+
+
+= content_for :page_js do
+  :javascript
+    $('document').ready(function() {
+      $('#js-filter').change(function(e) {
+        $(this).submit();
+      });
+    })

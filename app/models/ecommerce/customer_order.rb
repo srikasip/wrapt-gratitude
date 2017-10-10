@@ -12,6 +12,8 @@ class CustomerOrder < ApplicationRecord
   before_validation -> { self.order_number ||= "WRAPT-#{InternalOrderNumber.next_val_humanized}" }
   before_validation -> { self.status ||= INITIALIZED }
 
+  before_save :_set_submitted_date
+
   validates :status, inclusion: { in: VALID_ORDER_STATUSES }
   validates :order_number, presence: true
   validates :ship_zip, length: { minimum: 5 }, allow_blank: true
@@ -38,4 +40,18 @@ class CustomerOrder < ApplicationRecord
   define_method(:shipping_in_dollars)        { self.shipping_in_cents / 100.0 }
   define_method(:taxes_in_dollars)           { self.taxes_in_cents / 100.0 }
   define_method(:subtotal_in_dollars)        { self.subtotal_in_cents / 100.0 }
+
+  def _set_submitted_date
+    if self.status_changed?(to: SUBMITTED)
+      self.submitted_on = Date.today
+    end
+  end
+
+  def shipped_to_name
+    return nil if shipments.length == 0
+
+    names = shipments.map { |x| x.address_to['name'] }.uniq
+    raise "what?" if names.length != 1
+    names.first
+  end
 end

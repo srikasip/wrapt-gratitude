@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171009204601) do
+ActiveRecord::Schema.define(version: 20171010203718) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,6 +107,7 @@ ActiveRecord::Schema.define(version: 20171009204601) do
     t.text     "note_content"
     t.integer  "handling_cost_in_cents",   default: 0,     null: false
     t.integer  "handling_in_cents",        default: 0,     null: false
+    t.date     "submitted_on"
     t.index ["profile_id"], name: "index_customer_orders_on_profile_id", using: :btree
     t.index ["user_id"], name: "index_customer_orders_on_user_id", using: :btree
   end
@@ -506,6 +507,8 @@ ActiveRecord::Schema.define(version: 20171009204601) do
     t.jsonb    "tracking_payload"
     t.string   "carrier",             null: false
     t.string   "service_level",       null: false
+    t.date     "shipped_on"
+    t.date     "delivered_on"
     t.index ["customer_order_id"], name: "index_shipping_labels_on_customer_order_id", using: :btree
     t.index ["purchase_order_id"], name: "index_shipping_labels_on_purchase_order_id", using: :btree
     t.index ["shipment_id"], name: "index_shipping_labels_on_shipment_id", using: :btree

@@ -61,6 +61,7 @@ class CustomerPurchase::ShippingService
 
       shipment.parcel = parcel
       shipment.api_response = nil
+      shipment.customer_order = customer_order
       shipment.run!
       shipment.save!
 

@@ -63,7 +63,16 @@ Rails.application.routes.draw do
   ###################################
   # My Account Area
   ###################################
-  resource :my_account, only: [:show, :edit, :update]
+  #namespace :my_account, path: 'my-account' do
+  resource :my_account, path: 'my-account', module: 'my_account' do
+    resources :giftees, only: [ :index ]
+    resource :profile, only: [ :show, :edit, :update ]
+    resources :orders, only: [ :index, :show ]
+    resources :billing, only: [:index] do
+      resources :addresses
+    end
+    resources :preferences, only: [ :index ]
+  end
 
   ###################################
   ### Checkout and shopping cart

@@ -40,6 +40,11 @@ module OrderFactory
     )
 
     profile = Profile.order('random()').first
+
+    if ENV['USER'] == 'blackman'
+      profile = User.find_by(email: 'tblackman@greenriver.com').owned_profiles.sample
+    end
+
     customer = profile.owner
 
     gifts = Gift.order('random()').first(3)
