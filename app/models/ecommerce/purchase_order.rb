@@ -23,6 +23,7 @@ class PurchaseOrder < ApplicationRecord
   belongs_to :customer_order
   belongs_to :vendor
   belongs_to :gift
+  delegate :name, to: :gift, prefix: true
 
   #has_one :gift_parcel, primary_key: 'gift_id', foreign_key: 'gift_id'
   #has_one :parcel, through: :gift_parcel
