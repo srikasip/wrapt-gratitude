@@ -3,7 +3,8 @@ class Gift < ApplicationRecord
 
   VALID_TAG_REGEXP = /^[a-z0-9][a-z0-9_]*$/i
 
-  validates :name, presence: true
+  validates :title, presence: true
+  validates :description, presence: true
   validates :wrapt_sku, presence: true
   validate :validate_tag
   validate :_has_boxes
@@ -32,7 +33,7 @@ class Gift < ApplicationRecord
   belongs_to :product_subcategory, required: true, class_name: 'ProductCategory'
 
   has_one :calculated_gift_field
-  delegate :cost, :price, :weight_in_pounds, :units_available, to: :calculated_gift_field
+  delegate :cost, :price, :weight_in_pounds, :units_available, to: :calculated_gift_field, allow_nil: true
 
   before_save :generate_wrapt_sku, if: :sku_needs_updating?
 
@@ -101,12 +102,14 @@ class Gift < ApplicationRecord
   end
 
   def _has_weight
+    return if calculate_weight_from_products
     return if weight_in_pounds.to_f > 0.0
 
     errors.add(:base, "Must have a weight")
   end
 
   def _has_price
+    return if calculate_price_from_products
     return if selling_price.to_f > 0.0
 
     errors.add(:base, "Must have a price")

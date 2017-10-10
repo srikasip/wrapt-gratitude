@@ -121,7 +121,9 @@ class CustomerPurchase
     _sanity_check!
     charging_service.authorize!({
       after_hook: -> {
-        self.customer_order.update_attribute(:status, SUBMITTED)
+        self.customer_order.status = SUBMITTED
+        self.customer_order.save!
+
         self.customer_order.purchase_orders.update_all(status: SUBMITTED)
         _email_vendors_the_acknowledgement_link!
         _email_customer_that_order_was_received!

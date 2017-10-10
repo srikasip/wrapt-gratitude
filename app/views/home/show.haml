@@ -8,7 +8,7 @@
         - if require_invites? && current_user.blank?
           = render "shared/invitation_request"
         - else
-          - url = current_user.present? ? profiles_path : create_with_auto_user_create_profiles_path
+          - url = current_user.present? ? giftees_path : create_with_auto_user_create_giftees_path
           = simple_form_for @question_response, url: url, html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
             - if current_user&.admin?
               = hidden_field_tag :survey_id, @survey.id

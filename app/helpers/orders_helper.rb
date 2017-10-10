@@ -1,0 +1,26 @@
+module OrdersHelper
+  include OrderStatuses
+
+  def status_to_human customer_order
+    case customer_order.status
+    when SUBMITTED  then "Order Recieved"
+    when APPROVED   then "Processing"
+    when PROCESSING then "Processing"
+    when SHIPPED
+      words = customer_order.shipping_labels.map do |shipping_label|
+        "Shipped on #{shipping_label.shipped_on}"
+      end
+      words.join('<br>').html_safe
+    when RECEIVED
+      words = customer_order.shipping_labels.map do |shipping_label|
+        "Delivered on #{shipping_label.received_on}"
+      end
+      words.join('<br>').html_safe
+    when CANCELLED           then "Cancelled"
+    when PARTIALLY_CANCELLED then "Cancelled"
+    when FAILED              then "Cancelled"
+    else
+      "Unknown"
+    end
+  end
+end

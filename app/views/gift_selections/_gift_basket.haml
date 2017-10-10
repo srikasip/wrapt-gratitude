@@ -2,12 +2,12 @@
 
 .gift-basket{data: {behavior: 'gift-basket-container', profile_id: profile.id, channel_name: 'GiftSelectionsChannel'}}
   .gift-basket__inner-wrap
-    - if url_for == profile_gift_recommendations_path(profile)
+    - if url_for == giftee_gift_recommendations_path(profile)
       -# slide the cart out if we're on the shopping page
       = link_to "< Back to Shopping", '#', data: {behavior: 'close-gift-basket'}, class: 'gift-basket__header small', onClick: "ga('send', 'event', 'basket', 'open-close', 'close');"
     - else
       -# Otherwise, simply go to the shopping page.
-      = link_to "< Back to Shopping", profile_gift_recommendations_path(profile), class: 'gift-basket__header small', onClick: "ga('send', 'event', 'basket', 'open-close', 'close');"
+      = link_to "< Back to Shopping", giftee_gift_recommendations_path(profile), class: 'gift-basket__header small', onClick: "ga('send', 'event', 'basket', 'open-close', 'close');"
 
     .gift-basket__main
       %div{data: {behavior: 'gift-basket-gifts'}}
@@ -23,12 +23,9 @@
         %span.js-num-gifts-words
           = pluralize(profile.gift_selections.count, 'item')
         in your cart
-      -#  We're not fulfilling orders during this testing period. Thank you for
-      -#  taking Wrapt for a spin! We hope you like what you found.
 
-      -#= link_to 'SEND GIFT SELECTION NOTIFICATION', new_profile_giftee_invitation_path(profile), class: 'btn btn-primary btn-full-width btn-gift-basket-submit', data: {loads_in_pjax_modal: true, behavior: 'gift-basket-submit'}, onClick: "ga('send', 'event', 'basket', 'share with giftee', 'step 1 - button');"
       - if ENV.fetch('CHECKOUT_ENABLED') { 'false' } == 'true'
-        = link_to 'CHECK OUT', ecommerce_checkout_gift_wrapt_path(profile_id: profile.id), class: 'btn btn-primary btn-full-width btn-gift-basket-submit'
+        = link_to 'CHECK OUT', ecommerce_checkout_gift_wrapt_path(giftee_id: profile.id), class: 'btn btn-primary btn-full-width btn-gift-basket-submit'
       - else
         = link_to 'CHECK OUT COMING SOON', 'javascript:void(0)', class: 'btn btn-primary btn-full-width btn-gift-basket-submit'
 

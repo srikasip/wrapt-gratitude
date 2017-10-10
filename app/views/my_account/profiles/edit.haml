@@ -5,17 +5,16 @@
 
       %h2
         General Information
-        = link_to 'Cancel', my_account_path, class: 'btn btn-sm btn-default'
+        = link_to 'Cancel', my_account_profile_path, class: 'btn btn-sm btn-default'
 
   .row
     .col-sm-12
-      = simple_form_for @user, url: my_account_path do |form|
+      = simple_form_for current_user, url: my_account_profile_path do |form|
         .form-inputs
           = form.input :first_name
           = form.input :last_name
           = form.input :email, label: 'Email Address'
           = form.input :password
 
-     
         .form-actions
           = form.submit 'Update', class: 'btn btn-primary'

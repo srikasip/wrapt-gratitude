@@ -1,0 +1,15 @@
+Hello <%= @user.full_name %>,
+
+Your gift for <%= @customer_order.profile_name %> has shipped.
+
+<%= @purchase_order.gift_name %>
+
+(Shipping Address)
+
+<% if @customer_order.purchase_orders.count > 1 %>
+Each of our gifts comes from different artists. Therefore, you will receive
+a separate email for the other gift(s) you purchased just as soon as they
+ship.
+<% end %>
+
+See Order Details & Tracking here:

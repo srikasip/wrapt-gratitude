@@ -1,5 +1,5 @@
 - if gift_like = existing_gift_like(gift, profile)
-  = link_to profile_gift_like_path(profile, gift_like), method: :delete, remote: true, data: {type: 'html'}, class: 'liked', onClick: "ga('send', 'event', 'recommendation', 'like-dislike', 'remove_like');" do
+  = link_to giftee_gift_like_path(profile, gift_like), method: :delete, remote: true, data: {type: 'html'}, class: 'liked', onClick: "ga('send', 'event', 'recommendation', 'like-dislike', 'remove_like');" do
     = embedded_svg('icon-wrapt-heart', xlink_class: 'icon-liked-use', class: 'recommendation__icon-liked')
     .small-02 You Liked This
 - else
@@ -9,7 +9,7 @@
         =embedded_svg('icon-wrapt-heart', xlink_class: 'icon-like-use', class: 'recommendation__icon-like')
       %ul.dropdown-menu.dropdown-menu-right.pa1
         - GiftLike.reasons.keys.each do |reason_key|
-          %li= link_to like_reason_label(reason_key), profile_gift_likes_path(profile), method: :post, remote: true, data: {type: 'html', params: {gift_like: {gift_id: gift.id, reason: reason_key}}}, class: 'gift_like_reason', onClick: "ga('send', 'event', 'recommendation', 'like-dislike', 'like - #{reason_key}');"
+          %li= link_to like_reason_label(reason_key), giftee_gift_likes_path(profile), method: :post, remote: true, data: {type: 'html', params: {gift_like: {gift_id: gift.id, reason: reason_key}}}, class: 'gift_like_reason', onClick: "ga('send', 'event', 'recommendation', 'like-dislike', 'like - #{reason_key}');"
   - else
-    = link_to profile_gift_likes_path(profile), method: :post, remote: true, data: {type: 'html', params: {gift_like: {gift_id: gift.id}}}, onClick: "ga('send', 'event', 'recommendation', 'like-dislike', 'like');" do
+    = link_to giftee_gift_likes_path(profile), method: :post, remote: true, data: {type: 'html', params: {gift_like: {gift_id: gift.id}}}, onClick: "ga('send', 'event', 'recommendation', 'like-dislike', 'like');" do
       =embedded_svg('icon-like', xlink_class: 'icon-like-use', class: 'recommendation__icon-like')

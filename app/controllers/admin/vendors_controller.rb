@@ -56,7 +56,8 @@ module Admin
           :phone,
           :purchase_order_markup_in_dollars,
           :notes,
-          :wrapt_sku_code
+          :wrapt_sku_code,
+          :shipping_service_level_ids => []
       end
   end
 end

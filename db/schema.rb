@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171006145514) do
+ActiveRecord::Schema.define(version: 20171010203718) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,17 @@ ActiveRecord::Schema.define(version: 20171006145514) do
     t.index ["customer_order_id"], name: "index_charges_on_customer_order_id", using: :btree
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.integer  "commentable_id",   null: false
+    t.string   "commentable_type", null: false
+    t.text     "content",          null: false
+    t.integer  "user_id",          null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["commentable_id", "commentable_type"], name: "index_comments_on_commentable_id_and_commentable_type", using: :btree
+    t.index ["user_id"], name: "index_comments_on_user_id", using: :btree
+  end
+
   create_table "conditional_question_options", force: :cascade do |t|
     t.integer  "survey_question_id"
     t.integer  "survey_question_option_id"
@@ -96,6 +107,7 @@ ActiveRecord::Schema.define(version: 20171006145514) do
     t.text     "note_content"
     t.integer  "handling_cost_in_cents",   default: 0,     null: false
     t.integer  "handling_in_cents",        default: 0,     null: false
+    t.date     "submitted_on"
     t.index ["profile_id"], name: "index_customer_orders_on_profile_id", using: :btree
     t.index ["user_id"], name: "index_customer_orders_on_user_id", using: :btree
   end
@@ -220,6 +232,7 @@ ActiveRecord::Schema.define(version: 20171006145514) do
     t.boolean  "calculate_weight_from_products",                          default: true,  null: false
     t.decimal  "weight_in_pounds"
     t.boolean  "available",                                               default: true,  null: false
+    t.integer  "insurance_in_dollars"
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
     t.index ["wrapt_sku"], name: "index_gifts_on_wrapt_sku", using: :btree
   end
@@ -451,14 +464,16 @@ ActiveRecord::Schema.define(version: 20171006145514) do
   create_table "shipments", force: :cascade do |t|
     t.integer  "customer_order_id"
     t.integer  "purchase_order_id"
-    t.string   "cart_id",           null: false
+    t.string   "cart_id",                       null: false
     t.jsonb    "address_from"
     t.jsonb    "address_to"
     t.jsonb    "parcel"
     t.jsonb    "api_response"
     t.boolean  "success"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "insurance_in_dollars"
+    t.string   "description_of_what_to_insure"
     t.index ["customer_order_id"], name: "index_shipments_on_customer_order_id", using: :btree
     t.index ["purchase_order_id"], name: "index_shipments_on_purchase_order_id", using: :btree
   end
@@ -492,6 +507,8 @@ ActiveRecord::Schema.define(version: 20171006145514) do
     t.jsonb    "tracking_payload"
     t.string   "carrier",             null: false
     t.string   "service_level",       null: false
+    t.date     "shipped_on"
+    t.date     "delivered_on"
     t.index ["customer_order_id"], name: "index_shipping_labels_on_customer_order_id", using: :btree
     t.index ["purchase_order_id"], name: "index_shipping_labels_on_purchase_order_id", using: :btree
     t.index ["shipment_id"], name: "index_shipping_labels_on_shipment_id", using: :btree
@@ -774,6 +791,7 @@ ActiveRecord::Schema.define(version: 20171006145514) do
   end
 
   add_foreign_key "charges", "customer_orders"
+  add_foreign_key "comments", "users"
   add_foreign_key "conditional_question_options", "survey_question_options"
   add_foreign_key "conditional_question_options", "survey_questions"
   add_foreign_key "customer_orders", "profiles"

@@ -17,15 +17,9 @@ class Shipment < ApplicationRecord
   validates :address_to, presence: true
   validates :parcel, presence: true
 
-  before_save :_cache_the_results
-
   def run!
-    self.api_response = Shippo::Shipment.create(
-      :address_from => self.address_from,
-      :address_to   => self.address_to,
-      :parcels      => self.parcel,
-      :async        => false
-    )
+    self.api_response = Shippo::Shipment.create(shippo_payload)
+    _cache_the_results
   rescue Shippo::Exceptions::APIServerError => e
     self.api_response = JSON.parse(e.response.body) rescue {msg: e.message}
   end
@@ -37,5 +31,26 @@ class Shipment < ApplicationRecord
   private def _cache_the_results
     # The status field of success does not mean success. You must just see if we have any rates
     self.success = rates.present?
+  end
+
+  private def shippo_payload
+    payload = {
+      :address_from => self.address_from,
+      :address_to   => self.address_to,
+      :parcels      => self.parcel,
+      :async        => false
+    }
+
+    if insurance_in_dollars.to_f > 0 && description_of_what_to_insure.present?
+      payload[:extra] = {
+        insurance: {
+          amount: insurance_in_dollars,
+          currency: 'USD',
+          content: description_of_what_to_insure
+        }
+      }
+    end
+
+    payload
   end
 end

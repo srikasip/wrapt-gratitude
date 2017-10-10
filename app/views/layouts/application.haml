@@ -30,6 +30,8 @@
         -# .container.container--main
         = render 'layouts/alerts'
         = render 'breadcrumbs'
+        - if @show_account_sub_nav
+          = render 'my_account/sub_nav'
         = yield
     = yield :after_wrapper
 

@@ -10,7 +10,7 @@ class Ecommerce::CheckoutController < ApplicationController
 
     session[:cart_id] = SecureRandom.hex(16)
 
-    @profile = current_user.owned_profiles.find params[:profile_id]
+    @profile = current_user.owned_profiles.find params[:giftee_id]
 
     desired_gifts = @profile.gift_selections.map do |gs|
       ::DesiredGift.new(gs.gift, 1)

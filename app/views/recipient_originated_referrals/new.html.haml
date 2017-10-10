@@ -8,7 +8,7 @@
     &#8482;
   and the Science of Gifting
 
-= simple_form_for @recipient_originated_referral, url: profile_recipient_originated_referrals_path(@profile.recipient_access_token), data: {submits_to_pjax_modal: true}, method: :post do |form|
+= simple_form_for @recipient_originated_referral, url: giftee_recipient_originated_referrals_path(@profile.recipient_access_token), data: {submits_to_pjax_modal: true}, method: :post do |form|
   = form.input :emails, label: 'Email Addresses', hint: 'Comma separated multiple addresses', required: false
 
   = form.submit "Send Email", class: 'btn btn-primary btn-full-width', onClick: "ga('send', 'event', 'basket', 'share with friend', 'step 2 - send');"

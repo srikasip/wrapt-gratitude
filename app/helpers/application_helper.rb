@@ -20,7 +20,7 @@ module ApplicationHelper
     links = []
     if current_user && current_user.active?
       links << [admin_root_path, 'Admin', :default] if current_user.admin?
-      links << [my_account_path, 'My Account', :default]
+      links << [my_account_profile_path, 'My Account', :default]
     end
     links << [science_of_gifting_path, 'The Science', :default]
     links << ['#', 'Gift Basket', :gift_basket] if enable_gift_basket?

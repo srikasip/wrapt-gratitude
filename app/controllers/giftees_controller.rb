@@ -1,4 +1,4 @@
-class ProfilesController < ApplicationController
+class GifteesController < ApplicationController
   include RequiresLoginOrInvitation
   include FeatureFlagsHelper
 
@@ -54,7 +54,7 @@ class ProfilesController < ApplicationController
     if @profile.save
       @survey_response = @profile.survey_responses.create survey: @survey
       @survey_response.ordered_question_responses.first.update question_response_params.merge(answered_at: Time.now)
-      redirect_to with_invitation_scope(profile_survey_question_path(@profile, @survey_response, @survey_response.ordered_question_responses.first.next_response))
+      redirect_to with_invitation_scope(giftee_survey_question_path(@profile, @survey_response, @survey_response.ordered_question_responses.first.next_response))
     else
       render :new
     end
