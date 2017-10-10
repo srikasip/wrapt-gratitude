@@ -71,7 +71,8 @@
 .co-select-shipping {
   label {
     width: 33%;
-    margin-right: 40px;
+    padding-right: 40px;
+    margin-bottom: 40px;
     float: left;
     @include akkurat-light;
   }

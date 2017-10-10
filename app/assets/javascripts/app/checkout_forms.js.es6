@@ -12,7 +12,8 @@ App.RadioToggle = (input) => {
 
 App.StyledInputsBehavior = (input, container_selector) => {
   var container = $(input).parents(container_selector)
-  var psuedo = $(container).find('span')
+  // var psuedo = $(container).find('span')
+  var psuedo = $(container).find('a')
   if($(input).is(':checked')) {
     $(psuedo).addClass('checked')
   } else {
@@ -20,16 +21,37 @@ App.StyledInputsBehavior = (input, container_selector) => {
   }
 }
 
+App.StyledInputsABehavior = (ele, container_selector) => {
+  var container = $(ele).parents(container_selector)
+  var input = $(container).find('input')
+  if($(input).is(':checked')) {
+    $(input).prop('checked', false)
+  } else {
+    $(input).prop('checked', true)
+  }
+  $(input).trigger('change')
+}
+
 App.StyledCheckbox = (input) => {
   App.StyledInputsBehavior(input, '.j-wrapt-styled-checkbox')
+}
+
+App.StyledCheckboxA = (event, ele) => {
+  event.preventDefault()
+  App.StyledInputsABehavior(ele, '.j-wrapt-styled-checkbox')
 }
 
 App.StyledRadioButton = (input) => {
   var container_selector = '.j-wrapt-styled-radio-button'
   var inputName = $(input).attr('name')
   var inputs = $('[name="'+inputName+'"]')
-  inputs.parents(container_selector).find('span').removeClass('checked')
+  inputs.parents(container_selector).find('a').removeClass('checked')
   App.StyledInputsBehavior(input, container_selector)
+}
+
+App.StyledRadioButtonA = (event, ele) => {
+  event.preventDefault()
+  App.StyledInputsABehavior(ele, '.j-wrapt-styled-radio-button')
 }
 
 App.SlideOnValueChecked = (input, value, checked, container_selector) => {
@@ -49,6 +71,7 @@ App.SelectInputByName = (object, attr) => {
 
 App.DefaultCheckoutFormVisibilityBehavior = (object, attr, value, checked, container_selector) => {
   var input = App.SelectInputByName(object, attr)
+  console.log(input)
   $(input).change(function() {
     App.SlideOnValueChecked(this, value, checked, container_selector)
   })
@@ -60,6 +83,19 @@ App.NoteBehavior = (object, attr, value, checked, container_selector) => {
 
 App.ShowSelectAddress = (object, attr, value, checked, container_selector) => {
   App.DefaultCheckoutFormVisibilityBehavior(object, attr, value, checked, container_selector)
+}
+
+App.ShowBillingAddress = (object, attr, value, checked, container_selector) => {
+  App.DefaultCheckoutFormVisibilityBehavior(object, attr, value, checked, container_selector)
+  var input = App.SelectInputByName(object, attr)
+  var zip_input = $('[name="address-zip"]')
+  input.change(function() {
+    if($(this).is(':checked')) {
+      $(zip_input).val($(this).data('zip'))
+    } else {
+      $(zip_input).val('')
+    }
+  })
 }
 
 App.ShowAddressForm = (object, attr, value, checked, container_selector, new_address) => {

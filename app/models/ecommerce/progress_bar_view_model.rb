@@ -53,12 +53,11 @@ class ProgressBarViewModel
     not_complete = (required_fields.select do |field|
       @customer_order.send(field).nil?
     end.any?)
-    if step == :review || step == :payment
-      if @customer_purchase.charging_service.authed_or_charged?
-        not_complete = false
-      else
-        not_complete = true
-      end
+    if step == :payment
+      not_complete = !@customer_order.charge.present?
+    end
+    if step == :review
+      not_complete = true
     end
     !not_complete
   end
@@ -84,11 +83,7 @@ class ProgressBarViewModel
       disabled = false
     end
     if step == :review
-      if @customer_purchase.charging_service.authed_or_charged?
-        disabled = false
-      else
-        disabled = true
-      end
+      disabled = !@customer_order.charge.present?
     end
     disabled
   end

@@ -100,6 +100,7 @@ class Ecommerce::CheckoutController < ApplicationController
 
   def edit_review
     @checkout_step = :review
+    _load_progress_bar
   end
 
   def save_review

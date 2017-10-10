@@ -5,16 +5,16 @@
 .wrapt-styled-checkbox {
   position: relative;
   cursor: pointer;
-  padding-left: 30px;
-  span {
+  padding-left: 30px; 
+  a {
     position: absolute;
     left: 0px;
     display: block;
     border: 1px solid #c4c4c4;
     width: 20px;
     height: 20px;
-  }
-  span.checked::before {
+  } 
+  a.checked::before {
     content: '';
     position: absolute;
     left: 2px;
@@ -27,12 +27,12 @@
 }
 
 .wrapt-styled-radio-button {
-  line-height: 25px;
-  span {
+  line-height: 25px; 
+  a {
     border-radius: 50%;
     top: 3px;
   }
-  span.checked::before {
+  a.checked::before {
     border-radius: 50%;
   }
 }

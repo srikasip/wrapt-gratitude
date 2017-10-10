@@ -3,51 +3,61 @@
   .row
     .col-xs-12.col-md-10.col-md-offset-1
       .co-container
-        %h2.light Payment Information
+        %h3.light Payment Information
         = form_tag(url_for, method: :patch) do
-          .form-group.row
-            .col-xs-8
-              %label{for: 'cardholder-name'} Name On Card
-              %input#cardholder-name.name-on-card.field.form-control.string{name: 'cardholder-name'}
-              %small.form-text.text-muted e.g. Jane Doe
-            .col-xs-4
-              %label{for: 'js-postal-code'} Postal Code
-              %input#js-postal-code.field.form-control.string{name: 'address-zip'}
-              %small.form-text.text-muted e.g. 66212
-          .form-group.row
-            .col-xs-8
-              %label{for: 'js-card-number'}
-                <abbr title="required">*</abbr>
-                Card Number
-              #js-card-number.field.form-control.string.required
-              %small.form-text.text-muted e.g. 4242 4242 4242 4242
-            .col-xs-2
-              %label{for: 'js-cvc'}
-                <abbr title="required">*</abbr>
-                CVC
-              #js-cvc.field.form-control.string.required
-              %small.form-text.text-muted e.g. 123
-            .col-xs-2
-              %label{for: 'js-expiry-field'}
-                <abbr title="required">*</abbr>
-                Expiry
-              #js-expiry.field.form-control.string.required
-              %small.form-text.text-muted e.g. 11/19
-
+          .row
+            .col-xs-12
+              .form-group
+                %label{for: 'cardholder-name'} Name On Card
+                %input#cardholder-name.name-on-card.field.form-control.string{name: 'cardholder-name'}
+                -#%small.form-text.text-muted e.g. Jane Doe
+          .row
+            .col-xs-12.col-md-7
+              .form-group
+                %label{for: 'js-card-number'}
+                  <abbr title="required">*</abbr>
+                  Card Number
+                #js-card-number.field.form-control.string.required
+                -#%small.form-text.text-muted e.g. 4242 4242 4242 4242
+            .col-xs-12.col-md-3
+              .form-group
+                %label{for: 'js-expiry-field'}
+                  <abbr title="required">*</abbr>
+                  Expiration Date
+                #js-expiry.field.form-control.string.required
+                -#%small.form-text.text-muted e.g. 11/19
+            .col-xs-12.col-md-2
+              .form-group
+                %label{for: 'js-cvc'}
+                  <abbr title="required">*</abbr>
+                  CVC #
+                #js-cvc.field.form-control.string.required
+                -#%small.form-text.text-muted e.g. 123
+          .row
+            .col-xs-12
+              .form-group
+                = wrapt_styled_checkbox(true, 'same_billing_zip', true, {label: 'Billing Zip Code & Shipping Zip Code are the same.', data: {zip: @customer_order.ship_zip}})
+          .row.j-zip-code{style: 'display:none;'}
+            .col-xs-12.col-md-4
+              %h4.light Billing Information
+              .form-group
+                %label{for: 'js-postal-code'} Zip Code
+                %input#js-postal-code.field.form-control.string{name: 'address-zip', value: @customer_order.ship_zip}
+                -#%small.form-text.text-muted e.g. 66212
           .row
             .col-xs-12
               #js-stripe-errors
 
-          .row
-            .col-xs-12
-              .gi-submit.clearfix
-                %input.btn.btn-primary{value: 'next', type: :submit}
+          %button.btn.btn-primary{type: 'submit'}
+            = "Next <svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
 
 = content_for :page_js do
   :javascript
     $('document').ready(function() {
       var stripeCharger = new App.StripeCharger("#{ENV['STRIPE_PUBLISHABLE_KEY']}");
       stripeCharger.activate();
+
+      App.ShowBillingAddress('', 'same_billing_zip', 'true', false, '.j-zip-code')
     })
 
 = render "debug", customer_order: @customer_order
