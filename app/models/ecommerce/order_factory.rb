@@ -82,7 +82,7 @@ module OrderFactory
         ship_zip: '05301',
         ship_state: 'VT',
         ship_country: 'US',
-        phone:  '123-123-1234',
+        #phone:  '123-123-1234',
         email: 'example@example.com',
       }})
     )
@@ -91,11 +91,11 @@ module OrderFactory
     # across all the choices/vendors/pos to be consistent yet. usps options are always
     # choices, so they're safe.
     choices = customer_purchase.shipping_choices_for_view
-    picked_choice = choices.sample.last
+    picked_choice = choices.sample
 
     # A difference virtual page load in the shopping process
     customer_purchase = CustomerPurchase.new(cart_id: cart_id)
-    customer_purchase.pick_shipping!(picked_choice)
+    customer_purchase.pick_shipping!(picked_choice.value)
 
     # A difference virtual page load in the shopping process
     customer_purchase = CustomerPurchase.new(cart_id: cart_id)
