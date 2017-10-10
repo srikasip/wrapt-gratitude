@@ -4,7 +4,24 @@
     .col-xs-12.col-md-10.col-md-offset-1
       .co-container
         %h3.light Review Order
-
+        .row
+          .col-xs-12.col-md-9
+            .outline-container.form-group
+              - @customer_order.purchase_orders.each do |po|
+                .outline-container__section
+                  .row
+                    .col-xs-2
+                    .col-xs-10
+                      %h4.light= po.gift.title
+              .outline-container__section
+                .row
+                  .col-xs-12.col-md-6
+                    .co-detail
+                      .co-detail__label Shipping Address
+                      
+                  .col-xs-12.col-md-6
+                    .co-detail
+                      .co-detail__label Billing Address
         = simple_form_for @customer_order, url: url_for, method: :patch do |f|
           %button.btn.btn-primary{type: 'submit'}
             = "Finalize Order<svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe

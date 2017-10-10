@@ -1,0 +1,13 @@
+@import "helpers";
+
+.outline-container {
+  border: 2px solid $gray-004;
+}
+
+.outline-container__section {
+  padding: 16px;
+}
+
+.outline-container__section:not(:last-child) {
+  border-bottom: 2px solid $gray-004;
+}
