@@ -46,7 +46,7 @@ class Ecommerce::CheckoutController < ApplicationController
   end
 
   def _load_addresses
-    @saved_addresses = current_user.addresses + @profile.addresses
+    @saved_addresses = (current_user.addresses + [@profile.address]).compact
   end
 
   def save_address

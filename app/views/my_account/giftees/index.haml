@@ -1,0 +1,23 @@
+.container
+  .row
+    = paginate(@giftees)
+    - @giftees.each do |giftee|
+      .col-xs-6
+        = giftee.name
+        %br
+        = giftee.relationship
+        %br
+        Mailing Address
+        = format_address(object: giftee.address)
+        %br
+        = giftee.email
+        %br
+        Gifts Sent
+        = giftee.gifts_sent
+
+        - if @giftee.finished_surveys?
+          VIEW #{x} RECOMMENDATIONS
+        - else
+          cOMPLETE THE QUIZ
+
+
