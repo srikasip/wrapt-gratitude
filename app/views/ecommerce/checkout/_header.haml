@@ -4,7 +4,7 @@
     .col-xs-12.col-md-8.col-md-offset-2
       #co-progress-bar{style: 'height: 60px;'}
       
-- links = [ecommerce_checkout_gift_wrapt_path(profile_id: @profile.id), ecommerce_checkout_address_path, ecommerce_checkout_payment_path, ecommerce_checkout_review_path]
+- links = [ecommerce_checkout_gift_wrapt_path(giftee_id: @profile.id), ecommerce_checkout_address_path, ecommerce_checkout_payment_path, ecommerce_checkout_review_path]
 - content_for :page_js do
   :javascript
     $(document).ready(function() {

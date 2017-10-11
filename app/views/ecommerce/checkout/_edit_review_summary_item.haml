@@ -1,0 +1,9 @@
+.co-ro-summary__item.clearfix
+  %div= label
+  - if value_in_cents
+    - if co_attr
+      %div= number_to_currency @customer_order.send(co_attr)/100.0
+    - else
+      %div= number_to_currency value/100.0
+  - elsif value
+    %div= value

@@ -4,10 +4,24 @@
   border: 2px solid $gray-004;
 }
 
+.outline-container__blue {
+  background-color: $blue-010;
+}
+
+.outline-container__split {
+  width: 50%;
+  float:left;
+  text-align: left;
+  padding: 16px;
+  &:first-child {
+    border-right: 2px solid $gray-004;
+  }
+}
+
 .outline-container__section {
   padding: 16px;
 }
 
 .outline-container__section:not(:last-child) {
-  border-bottom: 2px solid $gray-004;
+  border-bottom: 1px solid $gray-004;
 }

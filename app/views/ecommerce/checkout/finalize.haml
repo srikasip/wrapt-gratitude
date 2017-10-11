@@ -1,1 +1,17 @@
-Done.
+.container
+  .row
+    .col-xs-12.col-md-10.col-md-offset-1
+      .co-container.text-center.co-confirmation-container
+        %h3.light Order Confirmation
+        %h4.light Order #: 4739210
+        .row
+          .col-xs-12.col-md-10.col-md-offset-1
+            .outline-container.clearfix.mb4
+              -# TODO real data needed @blackman
+              .outline-container__split
+                = render 'edit_review_detail_item', header: 'Expected Delivery', items: ['Sep 2-9, 2017']
+              .outline-container__split
+                = render 'edit_review_detail_item', header: 'Order Date', items: ['Aug 21, 2017']
+            %button.btn.btn-primary.mb6{onClick: 'alert("TODO");'} View Details
+
+  = render "debug", customer_order: @customer_order

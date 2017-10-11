@@ -54,4 +54,5 @@ class CustomerOrder < ApplicationRecord
     raise "what?" if names.length != 1
     names.first
   end
+
 end

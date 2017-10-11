@@ -1,29 +1,28 @@
 .container
   = render 'header'
+  -# TODO: double check these values with @blackman
   .row
     .col-xs-12.col-md-10.col-md-offset-1
-      .co-container
+      .co-container.co-ro-container
         %h3.light Review Order
         .row
-          .col-xs-12.col-md-9
+          .col-xs-12.col-md-8
             .outline-container.form-group
               - @customer_order.purchase_orders.each do |po|
                 .outline-container__section
-                  .row
-                    .col-xs-2
-                    .col-xs-10
-                      %h4.light= po.gift.title
+                  = render 'edit_review_gift', po: po
               .outline-container__section
-                .row
-                  .col-xs-12.col-md-6
-                    .co-detail
-                      .co-detail__label Shipping Address
-                      
-                  .col-xs-12.col-md-6
-                    .co-detail
-                      .co-detail__label Billing Address
+                = render 'edit_review_detail_items'
+          .col-xs-12.col-md-4
+            .outline-container.outline-container__blue.form-group.co-ro-summary
+              .outline-container__section
+                %h4.light Summary
+                = render 'edit_review_summary_items'
+              .outline-container__section.co-ro-summary__total.clearfix
+                %h4.light Total
+                %h5.light=number_to_currency @customer_order.total_to_charge_in_cents/100.0
         = simple_form_for @customer_order, url: url_for, method: :patch do |f|
-          %button.btn.btn-primary{type: 'submit'}
-            = "Finalize Order<svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
+          %button.btn.btn-primary.btn-block{type: 'submit'}
+            = "Complete Purchase".html_safe
 
-= render "debug", customer_order: @customer_order
+  = render "debug", customer_order: @customer_order
