@@ -6,5 +6,7 @@ class MyAccount::OrdersController < MyAccount::BaseController
   end
 
   def show
+    @order = current_user.customer_orders.find(params[:id])
+    @charge = @order.charge || Charge.new
   end
 end

@@ -131,10 +131,6 @@ class CustomerPurchase
     })
   end
 
-
-  # Just because a vendor just acknowledged doesn't mean the order is ready
-  # since all vendors need to acknowledge. One "cannot fulfill" cancels the whole
-  # order
   def update_from_vendor_responses!
     _sanity_check!
 

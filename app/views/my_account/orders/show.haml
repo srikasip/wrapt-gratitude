@@ -1,0 +1,52 @@
+.container
+  .row
+    .col-xs-12
+      %p
+        Order History » Order # #{@order.order_number}
+
+  .row
+    .col-xs-12
+      %p
+        Your gift to #{@order.profile_name}
+      - @order.line_items.each do |item|
+        - gift = item.orderable
+        %img{src: gift.primary_gift_image.image.url(:small), style: 'max-width: 200px'}
+        = gift.title
+        %br
+        = number_to_currency(item.price_per_each_in_dollars)
+        QTY: #{item.quantity}
+        - if @order.gift_wrapt
+          %br
+          Wrapt With Love
+          %span= @order.note_content
+
+  .row
+    .col-xs-8
+
+      Shipping Address
+      %br
+      = format_address(object: @order, prefix: 'ship')
+      %br
+      Billing Zip Code
+      %br
+      = @charge.bill_zip
+      %br
+      Shipping Method
+      %br
+      = @order.shipping_choice
+      = number_to_currency(@order.shipping_in_dollars)
+
+
+      Payment Info
+      = @charge.card_type
+      %br
+      * #{@charge.last_four}
+
+    .col-xs-4
+      Summary
+      Subtotal #{number_to_currency(@order.subtotal_in_dollars)}
+      Tax #{number_to_currency(@order.taxes_in_dollars)}
+      - if @order.gift_wrapt
+        Gift Wrapt .... Complimentary
+      Shipping #{number_to_currency(@order.shipping_in_dollars)}
+      Total #{number_to_currency(@order.total_to_charge_in_dollars)}

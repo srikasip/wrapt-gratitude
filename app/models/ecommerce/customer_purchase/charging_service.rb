@@ -9,8 +9,10 @@ class CustomerPurchase::ChargingService
     self.customer_order = customer_order || CustomerOrder.find_by(cart_id: self.cart_id)
   end
 
-  def init_our_charge_record!(stripe_token)
-    if stripe_token.blank?
+  def init_our_charge_record!(params)
+    whitelisted_params = params.permit(:stripeToken, "address-zip".to_sym)
+
+    if whitelisted_params[:stripeToken].blank?
       raise InternalConsistencyError, "You must have a stripe token to even think of charging a card"
     end
 
@@ -21,7 +23,7 @@ class CustomerPurchase::ChargingService
     customer_order.reload
 
     our_charge.assign_attributes({
-      token: stripe_token,
+      token: whitelisted_params[:stripeToken],
       customer_order: customer_order,
       status: INITIALIZED,
       amount_in_cents: customer_order.total_to_charge_in_cents,
@@ -33,7 +35,8 @@ class CustomerPurchase::ChargingService
         profile_id: customer_order.profile_id,
         gifts: customer_order.gifts.map(&:name).join('; '),
         customer_order_number: customer_order.order_number
-      }
+      },
+      bill_zip:  whitelisted_params['address-zip'.to_sym]
     })
 
     self.our_charge.save!
@@ -158,6 +161,8 @@ class CustomerPurchase::ChargingService
     self.our_charge.update_attributes({
       authed_at: Time.now,
       charge_id: self.stripe_charge.id,
+      last_four: self.stripe_charge[:source][:last4],
+      card_type: self.stripe_charge[:source][:brand],
       status: AUTH_SUCCEEDED
     })
 

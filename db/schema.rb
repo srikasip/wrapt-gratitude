@@ -10,21 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171010203718) do
+ActiveRecord::Schema.define(version: 20171011130706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
   create_table "addresses", force: :cascade do |t|
-    t.string   "street1",          null: false
+    t.string   "street1"
     t.string   "street2"
     t.string   "street3"
-    t.string   "city",             null: false
-    t.string   "state",            null: false
-    t.string   "zip",              null: false
-    t.string   "addressable_type", null: false
-    t.integer  "addressable_id",   null: false
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip"
+    t.string   "addressable_type"
+    t.integer  "addressable_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.index ["addressable_id", "addressable_type"], name: "index_addresses_on_addressable_id_and_addressable_type", using: :btree
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20171010203718) do
 
   create_table "charges", force: :cascade do |t|
     t.integer  "customer_order_id"
-    t.string   "cart_id",                    null: false
+    t.string   "cart_id",                              null: false
     t.string   "charge_id"
     t.string   "status"
     t.text     "description"
@@ -51,8 +51,11 @@ ActiveRecord::Schema.define(version: 20171010203718) do
     t.string   "http_status"
     t.integer  "amount_refunded_in_cents"
     t.datetime "authed_at"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.string   "bill_zip"
+    t.string   "last_four",                  limit: 4
+    t.string   "card_type"
     t.index ["customer_order_id"], name: "index_charges_on_customer_order_id", using: :btree
   end
 

@@ -23,4 +23,27 @@ module OrdersHelper
       "Unknown"
     end
   end
+
+  def format_address(object:, prefix:)
+    get = ->(x) {
+      msg = (prefix+"_"+x.to_s).to_sym
+
+      if object.respond_to?(msg)
+        object.send(msg)
+      else
+        nil
+      end
+    }
+
+    csz = "#{get.(:city)}, #{get.(:state)} #{get.(:zip)}"
+
+    [
+      get.(:street1),
+      get.(:street2),
+      get.(:street3),
+      csz,
+      get.(:country)
+    ].select(&:present?).join('<br>').html_safe
+  end
+
 end

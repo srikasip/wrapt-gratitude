@@ -1,4 +1,4 @@
-# Make a test order
+# Carry a test order from start to finish
 
 module OrderFactory
   def self.create_order!
@@ -30,14 +30,60 @@ module OrderFactory
       end
     end
 
-    stripe_token = Stripe::Token.create(
-      :card => {
-        :number => "4242424242424242",
-        :exp_month => 8,
-        :exp_year => 2018,
-        :cvc => "314"
-      },
-    )
+    good_cards = [
+      '4242424242424242', # Visa
+      '4000056655665556', # Visa (debit)
+      '5555555555554444', # Mastercard
+      '5200828282828210', # Mastercard (debit)
+      '5105105105105100', # Mastercard (prepaid)
+      '378282246310005',  # American Express
+      '371449635398431',  # American Express
+      '6011111111111117', # Discover
+      '6011000990139424', # Discover
+      '30569309025904',   # Diners Club
+      '38520000023237',   # Diners Club
+      '3530111333300000', # JCB
+    ]
+
+    failures = [
+      '4000000000000077', # Charge succeeds and funds will be added directly to your available balance (bypassing your pending balance).
+      '4000000000000093', # Charge succeeds and domestic pricing is used (other test cards use international pricing). This card is only significant in countries with split pricing.
+      '4000000000000010', # The address_line1_check and address_zip_check verifications fail. If your account is blocking payments that fail ZIP code validation, the charge is declined.
+      '4000000000000028', # Charge succeeds but the address_line1_check verification fails.
+      '4000000000000036', # The address_zip_check verification fails. If your account is blocking payments that fail ZIP code validation, the charge is declined.
+      '4000000000000044', # Charge succeeds but the address_zip_check and address_line1_check verifications are both unavailable.
+      '4000000000000101', # If a CVC number is provided, the cvc_check fails. If your account is blocking payments that fail CVC code validation, the charge is declined.
+      '4000000000000341', # Attaching this card to a Customer object succeeds, but attempts to charge the customer fail.
+      '4000000000009235', # Charge succeeds with a risk_level of elevated and placed into review.
+      '4000000000000002', # Charge is declined with a card_declined code.
+      '4100000000000019', # Results in a charge with a risk level of highest. The charge is blocked as it's considered fraudulent.
+      '4000000000000127', # Charge is declined with an incorrect_cvc code.
+      '4000000000000069', # Charge is declined with an expired_card code.
+      '4000000000000119', # Charge is declined with a processing_error code.
+      '4242424242424241', # Charge is declined with an incorrect_number code as the card number fails the Luhn check.
+    ]
+
+    # Fail 25% of the time for testing.
+    stripe_token = \
+      if Random.rand > 0.25
+        Stripe::Token.create(
+          :card => {
+            :number => good_cards.sample,
+            :exp_month => 8,
+            :exp_year => Date.today.year+1,
+            :cvc => "314"
+          },
+        )
+      else
+        Stripe::Token.create(
+          :card => {
+            :number => failures.sample,
+            :exp_month => 8,
+            :exp_year => Date.today.year+1,
+            :cvc => "314"
+          },
+        )
+      end
 
     profile = Profile.order('random()').first
 
@@ -104,7 +150,8 @@ module OrderFactory
 
     # A difference virtual page load in the shopping process
     customer_purchase = CustomerPurchase.new(cart_id: cart_id)
-    customer_purchase.init_our_charge_record!(stripe_token.id)
+    params = ActionController::Parameters.new({stripeToken: stripe_token.id, 'address-zip'.to_sym => '66212'})
+    customer_purchase.init_our_charge_record!(params)
 
     # A difference virtual page load in the shopping process
     customer_purchase = CustomerPurchase.new(cart_id: cart_id)

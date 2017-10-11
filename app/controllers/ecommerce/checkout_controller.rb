@@ -88,7 +88,7 @@ class Ecommerce::CheckoutController < ApplicationController
   end
 
   def save_payment
-    if @customer_purchase.init_our_charge_record!(params[:stripeToken])
+    if @customer_purchase.init_our_charge_record!(params)
       redirect_to action: :edit_review
     else
       flash.now[:notice] = "There was a problem saving your response."
