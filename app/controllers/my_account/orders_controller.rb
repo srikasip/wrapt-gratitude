@@ -1,5 +1,6 @@
 class MyAccount::OrdersController < MyAccount::BaseController
   helper :orders
+  helper :address
 
   def index
     @orders = UserOrderSearch.new(current_user, params).results
