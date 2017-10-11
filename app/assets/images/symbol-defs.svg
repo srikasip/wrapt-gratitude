@@ -78,6 +78,12 @@
 <path fill="none" stroke="#92a7ce" stroke-width="0.8723" stroke-miterlimit="10" stroke-linecap="butt" stroke-linejoin="miter" style="stroke: var(--color2, #92a7ce)" d="M0.434 0.434h186.825v31.132h-186.825v-31.132z"></path>
 <path fill="none" stroke="#92a7ce" stroke-width="0.9903" stroke-miterlimit="10" stroke-linecap="butt" stroke-linejoin="miter" style="stroke: var(--color2, #92a7ce)" d="M31.258 0.434v31.132"></path>
 </symbol>
-
+<symbol id="icon-page" viewBox="0 0 32 32">
+  <title>icon-page</title>
+  <path fill="currentColor" class="icon-page-path" d="M2.152 30.737c-0.491 0-0.889-0.398-0.889-0.889v-27.696c0-0.491 0.398-0.889 0.889-0.889h27.696c0.491 0 0.889 0.398 0.889 0.889v27.696c0 0.491-0.398 0.889-0.889 0.889h-27.696zM3.041 28.959h25.918v-25.918h-25.918v25.918z"></path>
+  <path fill="currentColor" class="icon-page-path" d="M9.544 11.556h12.912c0.491 0 0.889-0.398 0.889-0.889s-0.398-0.889-0.889-0.889h-12.912c-0.491 0-0.889 0.398-0.889 0.889s0.398 0.889 0.889 0.889z"></path>
+  <path fill="currentColor" class="icon-page-path" d="M9.544 22.222h12.912c0.491 0 0.889-0.398 0.889-0.889s-0.398-0.889-0.889-0.889h-12.912c-0.491 0-0.889 0.398-0.889 0.889s0.398 0.889 0.889 0.889z"></path>
+  <path fill="currentColor" class="icon-page-path" d="M9.544 16.889h12.912c0.491 0 0.889-0.398 0.889-0.889s-0.398-0.889-0.889-0.889h-12.912c-0.491 0-0.889 0.398-0.889 0.889s0.398 0.889 0.889 0.889z"></path>
+</symbol>
 </defs>
 </svg>
