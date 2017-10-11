@@ -1,4 +1,6 @@
 class MyAccount::GifteesController < MyAccount::BaseController
+  include PjaxModalController
+
   helper :address
 
   before_action :_load_giftee, only: [:edit, :update]
@@ -28,6 +30,6 @@ class MyAccount::GifteesController < MyAccount::BaseController
   end
 
   def _permitted_attributes
-    params.require(:profiles).permit(:first_name, :last_name, :email, :attributes_for_address => [:id, :street1, :city, :state, :zip])
+    params.require(:profile).permit(:first_name, :last_name, :email, :attributes_for_address => [:id, :street1, :city, :state, :zip])
   end
 end

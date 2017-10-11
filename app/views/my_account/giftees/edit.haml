@@ -1,0 +1,11 @@
+= simple_form_for @giftee, url: my_account_giftee_path(@giftee), html: { data: { 'submits-to-pjax-modal' => true }} do |f|
+  = f.input :name
+  = f.input :email
+  = f.simple_fields_for :address do |af|
+    = af.input :id, as: :hidden
+    = af.input :street1
+    = af.input :city
+    = af.input :state
+    = af.input :zip
+  = f.submit
+  =link_to 'Cancel Changes'

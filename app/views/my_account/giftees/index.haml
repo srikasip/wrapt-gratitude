@@ -7,6 +7,9 @@
         %br
         = giftee.relationship
         %br
+        = link_to edit_my_account_giftee_path(giftee), data: {loads_in_pjax_modal: true} do
+          Edit
+        %br
         Mailing Address
         = format_address(object: giftee.address)
         %br
