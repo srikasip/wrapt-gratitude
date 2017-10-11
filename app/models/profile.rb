@@ -7,7 +7,6 @@ class Profile < ApplicationRecord
   has_many :survey_responses, dependent: :destroy, inverse_of: :profile
   has_many :gift_selections, -> {order 'gift_selections.id'}, dependent: :destroy
 
-
   has_many :gift_likes, inverse_of: :profile, dependent: :destroy
   has_many :gift_dislikes, inverse_of: :profile, dependent: :destroy
   has_many :recipient_gift_likes, inverse_of: :profile, dependent: :destroy
@@ -17,6 +16,12 @@ class Profile < ApplicationRecord
   serialize :recommendation_stats, Hash
 
   before_create :generate_recipient_access_token
+
+  def last_survey
+    survey_responses.order('updated_at desc').first
+  end
+
+  delegate :first_unanswered_response, to: :last_survey, prefix: false
 
   def finished_surveys?
     self.survey_responses.all? { |x| x.completed_at.present? }

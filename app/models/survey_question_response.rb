@@ -17,6 +17,10 @@ class SurveyQuestionResponse < ApplicationRecord
   after_save :update_profile_relationship
   after_save :update_profile_name
 
+  def survey
+    survey_question.survey
+  end
+
   def survey_question_option_id
     survey_question_option_ids.first
   end
@@ -83,7 +87,7 @@ class SurveyQuestionResponse < ApplicationRecord
     end
     met
   end
-  
+
   def to_param
     [id, survey_question.code].
       map(&:to_s).
