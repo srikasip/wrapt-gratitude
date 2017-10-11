@@ -218,6 +218,10 @@ class CustomerPurchase::ShippingService
       purchase_order.status = SHIPPED
       purchase_order.save!
 
+      gift = purchase_order.gift
+      gift.gifts_sent += purchase_order.quantity
+      gift.save!
+
       if customer_order.purchase_orders.all?(&:shipped?)
         customer_order.status = SHIPPED
         customer_order.save!

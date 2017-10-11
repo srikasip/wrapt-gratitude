@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   # for MVP1A they can be accessed via notification link or logged in user
   ##########################
   concern :profile_builder do
-    resources :giftees, only: [:index, :new, :create] do
+    resources :profiles, only: [:index, :new, :create] do
       resources :surveys, only: :show, controller: 'survey_responses' do
         resources :questions, only: [:show, :update], controller: 'survey_question_responses'
         resource :completion, only: [:show, :create], controller: 'survey_response_completions'
@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   concerns :profile_builder
   resources :invitations, only: :show, concerns: :profile_builder
 
-  resources :giftees, only: [:new, :create] do
+  resources :profiles, only: [:new, :create] do
     collection do
       post :create_with_auto_user_create
     end
