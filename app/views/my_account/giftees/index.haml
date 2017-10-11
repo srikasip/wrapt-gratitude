@@ -15,9 +15,9 @@
         Gifts Sent
         = giftee.gifts_sent
 
-        - if @giftee.finished_surveys?
-          VIEW #{x} RECOMMENDATIONS
+        - if giftee.finished_surveys?
+          VIEW #{0} RECOMMENDATIONS
         - else
-          cOMPLETE THE QUIZ
+          COMPLETE THE QUIZ
 
 
