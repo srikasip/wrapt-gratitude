@@ -14,6 +14,7 @@
             = options_for_select options, params.dig(:search, :filter)
   .row
     .col-xs-12
+      = paginate(@orders)
       %table.table
         %thead
           %tr
