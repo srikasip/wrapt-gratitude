@@ -21,7 +21,7 @@ class ShippoTrackingWebhook < ShippoWebhook
   end
 
   def _process_data!
-    ShippingService.update_shipping_status!(data)
+    PurchaseService::ShippingService.update_shipping_status!(data)
   end
 
   def data
