@@ -16,7 +16,7 @@ class Ecommerce::CheckoutController < ApplicationController
       ::DesiredGift.new(gs.gift, 1)
     end
 
-    @customer_purchase = ::CustomerPurchase.new({
+    @customer_purchase = ::PurchaseService.new({
       cart_id: session[:cart_id],
       customer: current_user,
       desired_gifts: desired_gifts,
@@ -117,6 +117,7 @@ class Ecommerce::CheckoutController < ApplicationController
 
   def finalize
     @checkout_step = :finalize
+    @expected_delivery = @customer_purchase.expected_delivery.text
   end
 
   private
@@ -126,7 +127,7 @@ class Ecommerce::CheckoutController < ApplicationController
   end
 
   def _load_service_object
-    @customer_purchase = ::CustomerPurchase.new(cart_id: session[:cart_id])
+    @customer_purchase = ::PurchaseService.new(cart_id: session[:cart_id])
     @customer_order = @customer_purchase.customer_order
     @profile = @customer_order.profile
   end

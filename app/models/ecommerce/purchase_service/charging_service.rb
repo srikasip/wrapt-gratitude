@@ -1,4 +1,4 @@
-class CustomerPurchase::ChargingService
+class PurchaseService::ChargingService
   include ChargeConstants
 
   attr_accessor :cart_id, :customer_order, :our_charge, :stripe_charge

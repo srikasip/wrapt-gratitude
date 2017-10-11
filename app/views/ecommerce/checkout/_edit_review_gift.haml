@@ -8,4 +8,4 @@
         %h5.light= number_to_currency po.gift.selling_price
         %div
           - link_text = @customer_order.gift_wrapt? ? 'Wrapt with Love' : 'Not Gift Wrapt'
-          = link_to link_text, ecommerce_checkout_gift_wrapt_path(giftee_id: @profile.id)
+          = link_to link_text, 'javascript:void(0);'

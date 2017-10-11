@@ -1,6 +1,10 @@
-class CustomerPurchase::ShippingService
+class PurchaseService::ShippingService
   include ActionView::Helpers::NumberHelper
   include OrderStatuses
+
+  SHIPPING_MARKUP = 1.02
+  DAYS_FOR_VENDORS_TO_APPROVE = 1
+  SHIPPING_FUDGE_DAYS = 2
 
   attr_accessor :cart_id, :customer_order
 
@@ -95,7 +99,8 @@ class CustomerPurchase::ShippingService
       vendor = po.vendor
 
       @shipping_choices.each_key do |shipping_choice|
-        rate = CustomerPurchase::ShippingService.find_rate(rates: rates, shipping_choice: shipping_choice, vendor: vendor)
+        rate = PurchaseService::ShippingService.find_rate(rates: rates, shipping_choice: shipping_choice, vendor: vendor)
+        s_and_h = PurchaseService::ShippingService.get_shipping_and_handling_for_one_purchase_order(rate: rate, vendor: vendor)
 
         @shipping_choices[shipping_choice]
 
@@ -103,7 +108,7 @@ class CustomerPurchase::ShippingService
           @shipping_choices[shipping_choice].estimated_days = rate['estimated_days']
         end
 
-        @shipping_choices[shipping_choice].amount_in_dollars += rate['amount'].to_f
+        @shipping_choices[shipping_choice].amount_in_dollars += s_and_h.combined_handling_in_dollars
       end
     end
 
@@ -167,14 +172,56 @@ class CustomerPurchase::ShippingService
     picked_rate
   end
 
-  def purchase_shipping_labels!
-    shipping_choice = self.customer_order.shipping_choice
+  def self.get_shipping_and_handling_for_one_purchase_order(rate:, vendor:)
+    OpenStruct.new.tap do |result|
+      result.shipping_cost_in_cents = rate['amount'].to_f * 100
+      result.shipping_in_cents = (result.shipping_cost_in_cents * SHIPPING_MARKUP).round
+      result.handling_cost_in_cents = vendor.purchase_order_markup_in_cents
+      result.handling_in_cents = result.handling_cost_in_cents
+      result.combined_handling_in_cents = result.handling_in_cents + result.shipping_in_cents
+      result.combined_handling_in_dollars = (result.combined_handling_in_cents / 100.0).round(2)
+    end
+  end
 
-    self.customer_order.purchase_orders.each do |po|
+  # This is used before we've purchased the labels
+  def expected_delivery
+    estimated_days_min = 10
+    estimated_days_max = 1
+
+    _each_po_with_rate do |_, rate|
+      if rate['estimated_days'] > estimated_days_max
+        estimated_days_max = rate['estimated_days']
+      end
+
+      if rate['estimated_days'] < estimated_days_min
+        estimated_days_min = rate['estimated_days']
+      end
+    end
+
+    estimated_days_min += DAYS_FOR_VENDORS_TO_APPROVE
+    estimated_days_max += DAYS_FOR_VENDORS_TO_APPROVE + SHIPPING_FUDGE_DAYS
+
+    range = [customer_order.submitted_on + estimated_days_min, Date.today + estimated_days_max]
+
+    fmt = ->(d) { d.strftime('%b %d, %Y') }
+
+    text = \
+      if range[0].month == range[1].month
+        "#{range[0].strftime('%b')} #{range[0].day}-#{range[1].day}, #{range[0].year}"
+      elsif range[0].year != range[1].year
+        "#{fmt.(range[0])} to #{fmt.(range[1])}"
+      else
+        "#{range[0].strftime('%b')} #{range[0].day}-#{range[1].strftime('%b')} #{range[1].day}, #{range[0].year}"
+      end
+
+    OpenStruct.new(text: text, range: range)
+  end
+
+  def purchase_shipping_labels!
+    _each_po_with_rate do |po, rate|
       # Don't even try if the vendor hasn't acknowledged with the affirmative.
       next if !po.fulfill?
 
-      rate = CustomerPurchase::ShippingService.find_rate(rates: po.shipment.rates, shipping_choice: shipping_choice, vendor: po.vendor)
       shipment = po.shipment
 
       if Rails.env.production? && rate['test']
@@ -232,6 +279,15 @@ class CustomerPurchase::ShippingService
   end
 
   private
+
+  def _each_po_with_rate
+    shipping_choice = self.customer_order.shipping_choice
+
+    self.customer_order.purchase_orders.each do |po|
+      rate = PurchaseService::ShippingService.find_rate(rates: po.shipment.rates, shipping_choice: shipping_choice, vendor: po.vendor)
+      yield po, rate
+    end
+  end
 
   def _sanity_check!
     if ENV['SHIPPO_TOKEN'].blank?

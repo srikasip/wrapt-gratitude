@@ -34,12 +34,14 @@ class CustomerOrder < ApplicationRecord
   delegate :email, :name, to: :user, prefix: true
   delegate :name, to: :profile, prefix: true
 
-  define_method(:shipping_in_dollars)        { self.shipping_in_cents / 100.0 } # Amount charged to customer
-  define_method(:shipping_cost_in_dollars)   { self.shipping_cost_in_cents / 100.0 } # Wrapt's cost
-  define_method(:total_to_charge_in_dollars) { self.total_to_charge_in_cents / 100.0 }
-  define_method(:shipping_in_dollars)        { self.shipping_in_cents / 100.0 }
-  define_method(:taxes_in_dollars)           { self.taxes_in_cents / 100.0 }
-  define_method(:subtotal_in_dollars)        { self.subtotal_in_cents / 100.0 }
+  define_method(:subtotal_in_dollars)          { self.subtotal_in_cents / 100.0 } # gifts' amount, summed
+  define_method(:shipping_in_dollars)          { self.shipping_in_cents / 100.0 } # Shipping amount charged to customer
+  define_method(:shipping_cost_in_dollars)     { self.shipping_cost_in_cents / 100.0 } # Wrapt's cost
+  define_method(:taxes_in_dollars)             { self.taxes_in_cents / 100.0 } # duh, taxes.
+  define_method(:handling_in_dollars)          { self.handling_in_cents / 100.0 }
+  define_method(:handling_cost_in_dollars)     { self.handling_in_cents / 100.0 }
+  define_method(:combined_handling_in_dollars) { (self.shipping_in_cents + self.handling_in_cents) / 100.0 } # Simply shipping/handling by combining.
+  define_method(:total_to_charge_in_dollars)   { self.total_to_charge_in_cents / 100.0 }
 
   def _set_submitted_date
     if self.status_changed?(to: SUBMITTED)
@@ -54,5 +56,4 @@ class CustomerOrder < ApplicationRecord
     raise "what?" if names.length != 1
     names.first
   end
-
 end

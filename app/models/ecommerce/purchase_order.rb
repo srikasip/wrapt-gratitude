@@ -94,7 +94,7 @@ class PurchaseOrder < ApplicationRecord
 
   def shipping_rate
     @shipping_rate ||=
-      CustomerPurchase::ShippingService.find_rate({
+      PurchaseService::ShippingService.find_rate({
         rates: self.shipment.rates,
         shipping_choice: shipping_choice,
         vendor: self.vendor

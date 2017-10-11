@@ -97,12 +97,12 @@ module OrderFactory
 
     desired_gifts = gifts.map do |gift|
       # Can only buy one at a time right now given what I see in the mocks.
-      CustomerPurchase::DesiredGift.new(gift, 1)
+      PurchaseService::DesiredGift.new(gift, 1)
     end
 
     cart_id = SecureRandom.hex(10)
 
-    customer_purchase = CustomerPurchase.new({
+    customer_purchase = PurchaseService.new({
       cart_id: cart_id,
       customer: customer,
       profile: profile,
@@ -112,7 +112,7 @@ module OrderFactory
     order = customer_purchase.generate_order!
 
     # A different page in the shopping process
-    customer_purchase = CustomerPurchase.new(cart_id: cart_id)
+    customer_purchase = PurchaseService.new(cart_id: cart_id)
     customer_purchase.gift_wrapt!(
       ActionController::Parameters.new({ customer_order: {
         gift_wrapt: ['1', '0'].sample,
@@ -124,7 +124,7 @@ module OrderFactory
     )
 
     # A different page in the shopping process
-    customer_purchase = CustomerPurchase.new(cart_id: cart_id)
+    customer_purchase = PurchaseService.new(cart_id: cart_id)
     customer_purchase.set_address!(
       ActionController::Parameters.new({customer_order: {
         ship_street1: '319 Hague Rd',
@@ -145,16 +145,16 @@ module OrderFactory
     picked_choice = choices.sample
 
     # A difference virtual page load in the shopping process
-    customer_purchase = CustomerPurchase.new(cart_id: cart_id)
+    customer_purchase = PurchaseService.new(cart_id: cart_id)
     customer_purchase.pick_shipping!(picked_choice.value)
 
     # A difference virtual page load in the shopping process
-    customer_purchase = CustomerPurchase.new(cart_id: cart_id)
+    customer_purchase = PurchaseService.new(cart_id: cart_id)
     params = ActionController::Parameters.new({stripeToken: stripe_token.id, 'address-zip'.to_sym => '66212'})
     customer_purchase.init_our_charge_record!(params)
 
     # A difference virtual page load in the shopping process
-    customer_purchase = CustomerPurchase.new(cart_id: cart_id)
+    customer_purchase = PurchaseService.new(cart_id: cart_id)
     customer_purchase.authorize!
 
     # All the vendors acknowledge via emails and click-through to a page where they say it's okay.
@@ -165,7 +165,7 @@ module OrderFactory
     end
 
     # This happens when a vendor confirms they have inventory
-    customer_purchase = CustomerPurchase.new(cart_id: cart_id)
+    customer_purchase = PurchaseService.new(cart_id: cart_id)
     customer_purchase.update_from_vendor_responses!
 
     order

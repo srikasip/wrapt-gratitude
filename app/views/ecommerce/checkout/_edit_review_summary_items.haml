@@ -1,5 +1,5 @@
-= render 'edit_review_summary_item', label: 'Subtotal', co_attr: :subtotal_in_cents, value_in_cents: true, value: nil
-= render 'edit_review_summary_item', label: 'Tax', co_attr: :taxes_in_cents, value_in_cents: true, value: nil
+= render 'edit_review_summary_item', label: 'Subtotal', co_attr: :subtotal_in_dollars, value_in_dollars: true, value: nil
+= render 'edit_review_summary_item', label: 'Tax', co_attr: :taxes_in_dollars, value_in_dollars: true, value: nil
 - if @customer_order.gift_wrapt?
-  = render 'edit_review_summary_item', label: 'Gfit Wrapt', co_attr: nil, value_in_cents: false, value: 'Complimentary'
-= render 'edit_review_summary_item', label: 'Shipping', co_attr: nil, value_in_cents: true, value: @customer_order.shipping_cost_in_cents+@customer_order.handling_cost_in_cents
+  = render 'edit_review_summary_item', label: 'Gift Wrapt', co_attr: nil, value_in_dollars: false, value: 'Complimentary'
+= render 'edit_review_summary_item', label: 'Shipping', co_attr: nil, value_in_dollars: true, value: @customer_order.combined_handling_in_dollars

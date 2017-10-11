@@ -1,6 +1,5 @@
 .container
   = render 'header'
-  -# TODO: double check these values with @blackman
   .row
     .col-xs-12.col-md-10.col-md-offset-1
       .co-container.co-ro-container
@@ -20,7 +19,7 @@
                 = render 'edit_review_summary_items'
               .outline-container__section.co-ro-summary__total.clearfix
                 %h4.light Total
-                %h5.light=number_to_currency @customer_order.total_to_charge_in_cents/100.0
+                %h5.light=number_to_currency @customer_order.total_to_charge_in_dollars
         = simple_form_for @customer_order, url: url_for, method: :patch do |f|
           %button.btn.btn-primary.btn-block{type: 'submit'}
             = "Complete Purchase".html_safe

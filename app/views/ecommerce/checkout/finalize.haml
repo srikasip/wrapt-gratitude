@@ -3,16 +3,14 @@
     .col-xs-12.col-md-10.col-md-offset-1
       .co-container.text-center.co-confirmation-container
         %h3.light Order Confirmation
-        %h4.light Order #: 4739210
+        %h4.light Order # #{@customer_order.order_number}
         .row
           .col-xs-12.col-md-10.col-md-offset-1
             .outline-container.clearfix.mb4
-              -# TODO real data needed @blackman
               .outline-container__split
-                = render 'edit_review_detail_item', header: 'Expected Delivery', items: ['Sep 2-9, 2017']
+                = render 'edit_review_detail_item', header: 'Expected Delivery', items: [@expected_delivery]
               .outline-container__split
-                = render 'edit_review_detail_item', header: 'Order Date', items: ['Aug 21, 2017']
-            -# TODO Where does this go?
-            %button.btn.btn-primary.mb6{onClick: 'alert("TODO");'} View Details
+                = render 'edit_review_detail_item', header: 'Order Date', items: [format_date(@customer_order.submitted_on)]
+            %a.btn.btn-primary.mb6{href: my_account_order_path(@customer_order)} View Details
 
   = render "debug", customer_order: @customer_order

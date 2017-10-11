@@ -2,11 +2,9 @@
 # vendor purchase orders along with shipping, taxes, credit card charging, and
 # email messaging associated with these things.
 
-class CustomerPurchase
+class PurchaseService
   include ChargeConstants
   include OrderStatuses
-
-  SHIPPING_MARKUP = 1.05
 
   AbortOrderError = Class.new(StandardError)
 
@@ -130,6 +128,8 @@ class CustomerPurchase
       }
     })
   end
+
+  delegate :expected_delivery, to: :shipping_service
 
   def update_from_vendor_responses!
     _sanity_check!
@@ -330,21 +330,20 @@ class CustomerPurchase
     end
 
     co.purchase_orders.each do |po|
-      rate = ShippingService.find_rate(rates: po.shipment.rates, shipping_choice: shipping_choice, vendor: po.vendor)
+      vendor = po.vendor
+      rate = ShippingService.find_rate(rates: po.shipment.rates, shipping_choice: shipping_choice, vendor: vendor)
+      s_and_h = ShippingService.get_shipping_and_handling_for_one_purchase_order(rate: rate, vendor: vendor)
 
-      shipping_cost_in_cents = rate['amount'].to_f * 100
-      vendor_markup          = po.vendor.purchase_order_markup_in_cents
-
-      co.shipping_cost_in_cents += shipping_cost_in_cents
-      co.handling_cost_in_cents += vendor_markup
-      co.handling_in_cents      += vendor_markup
-      co.shipping_in_cents      += shipping_cost_in_cents * SHIPPING_MARKUP
+      co.shipping_cost_in_cents += s_and_h.shipping_cost_in_cents
+      co.handling_cost_in_cents += s_and_h.handling_cost_in_cents
+      co.handling_in_cents      += s_and_h.handling_in_cents
+      co.shipping_in_cents      += s_and_h.shipping_in_cents
 
       po.update_attributes({
-        shipping_cost_in_cents: shipping_cost_in_cents,
-        shipping_in_cents: shipping_cost_in_cents * SHIPPING_MARKUP,
-        handling_cost_in_cents: vendor_markup,
-        handling_in_cents: vendor_markup
+        shipping_cost_in_cents: s_and_h.shipping_cost_in_cents,
+        shipping_in_cents: s_and_h.shipping_in_cents,
+        handling_cost_in_cents: s_and_h.handling_cost_in_cents,
+        handling_in_cents: s_and_h.handling_in_cents
       })
     end
 
