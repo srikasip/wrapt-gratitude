@@ -101,12 +101,14 @@ class Gift < ApplicationRecord
   end
 
   def _has_weight
+    return if calculate_weight_from_products
     return if weight_in_pounds.to_f > 0.0
 
     errors.add(:base, "Must have a weight")
   end
 
   def _has_price
+    return if calculate_price_from_products
     return if selling_price.to_f > 0.0
 
     errors.add(:base, "Must have a price")
