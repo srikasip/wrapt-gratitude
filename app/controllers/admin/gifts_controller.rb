@@ -16,13 +16,11 @@ module Admin
 
     def new
       @gift = Gift.new product_category: Gift.default_product_category
-      @gift.pretty_parcels.build
-      @gift.shipping_parcels.build
+      _load_parcels
     end
 
     def edit
-      @gift.shipping_parcels.empty? and @gift.shipping_parcels.build
-      @gift.pretty_parcels.empty? and @gift.pretty_parcels.build
+      _load_parcels
     end
 
     def create
@@ -30,6 +28,8 @@ module Admin
       if @gift.save
         redirect_to admin_gift_products_path(@gift), notice: "#{@gift.title} has been created.  Now add some products."
       else
+        @error_message = @gift.errors.full_messages.join('. ')
+        _load_parcels
         render :new
       end
     end
@@ -38,6 +38,8 @@ module Admin
       if @gift.update(gift_params)
         redirect_to [:admin, @gift], notice: "#{@gift.title} has been updated."
       else
+        _load_parcels
+        @error_message = @gift.errors.full_messages.join('. ')
         render :edit
       end
     end
@@ -66,7 +68,7 @@ module Admin
         :featured,
         :tag_list,
         :shipping_parcels_attributes => [:id, :parcel_id, :gift_id],
-        :gift_parcels_attributes => [:id, :parcel_id, :gift_id]
+        :pretty_parcels_attributes => [:id, :parcel_id, :gift_id]
       )
     end
 
@@ -81,5 +83,9 @@ module Admin
     end
     helper_method :context_params
 
+    def _load_parcels
+      @gift.shipping_parcels.empty? and @gift.shipping_parcels.build
+      @gift.pretty_parcels.empty? and @gift.pretty_parcels.build
+    end
   end
 end
