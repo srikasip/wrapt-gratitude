@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171011143039) do
+ActiveRecord::Schema.define(version: 20171012175948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,6 +111,9 @@ ActiveRecord::Schema.define(version: 20171011143039) do
     t.integer  "handling_cost_in_cents",   default: 0,     null: false
     t.integer  "handling_in_cents",        default: 0,     null: false
     t.date     "submitted_on"
+    t.integer  "ship_to",                  default: 0
+    t.integer  "address_id"
+    t.index ["address_id"], name: "index_customer_orders_on_address_id", using: :btree
     t.index ["profile_id"], name: "index_customer_orders_on_profile_id", using: :btree
     t.index ["user_id"], name: "index_customer_orders_on_user_id", using: :btree
   end

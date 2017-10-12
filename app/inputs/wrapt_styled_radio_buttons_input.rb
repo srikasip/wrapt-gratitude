@@ -18,7 +18,11 @@ class WraptStyledRadioButtonsInput < SimpleForm::Inputs::CollectionInput
   end
 
   def checked?(value)
-    object.send(attribute_name) == value
+    if object.send(attribute_name).nil? && @options[:nil_checked].present?
+      value == @options[:nil_checked]
+    else 
+      object.send(attribute_name) == value
+    end
   end
 
 end

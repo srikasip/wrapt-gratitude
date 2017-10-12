@@ -46,7 +46,25 @@ class Ecommerce::CheckoutController < ApplicationController
   end
 
   def _load_addresses
-    @saved_addresses = (current_user.addresses + [@profile.address]).compact
+    @saved_addresses = current_user.addresses
+    @current_user_addresses = @saved_addresses
+    @giftee_addresses = @profile.addresses
+    
+    if @customer_order.ship_to_customer? && @customer_order.address.nil? && @customer_order.ship_street1.blank?
+      @customer_order.address = current_user.addresses.last
+    elsif @customer_order.address.present?
+      # make sure address id makes sense
+      addressable = @customer_order.ship_to_customer? ? @customer_order.user : @customer_order.profile
+      if addressable != @customer_order.address.addressable && !@customer_order.address.ship_address_is_equal_to_address?(@customer_order)
+        @customer_order.address = nil
+      end
+    end
+    @address_collection = @current_user_addresses.map do |address|
+      street2 = address.street2.present? ? "</br>#{address.street2}" : ""
+      label = "#{address.street1} #{street2} </br> #{address.city}, #{address.state} #{address.zip}"
+      [label, address.id]
+    end || []
+    @address_collection.push(['New Address', 'new_address'])
   end
 
   def save_address

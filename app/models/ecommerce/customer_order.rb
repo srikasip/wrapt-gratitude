@@ -2,6 +2,8 @@ class CustomerOrder < ApplicationRecord
   include ShippingComputer
   include OrderStatuses
 
+  enum ship_to: {ship_to_customer: 0, ship_to_giftee: 1}
+
   has_paper_trail(
     ignore: [:updated_at, :created_at, :id],
     meta: {
@@ -20,6 +22,7 @@ class CustomerOrder < ApplicationRecord
 
   belongs_to :profile
   belongs_to :user
+  belongs_to :address
 
   has_one :charge, dependent: :destroy
   has_many :comments, as: :commentable, dependent: :destroy

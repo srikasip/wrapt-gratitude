@@ -12,7 +12,6 @@ App.RadioToggle = (input) => {
 
 App.StyledInputsBehavior = (input, container_selector) => {
   var container = $(input).parents(container_selector)
-  // var psuedo = $(container).find('span')
   var psuedo = $(container).find('a')
   if($(input).is(':checked')) {
     $(psuedo).addClass('checked')
@@ -71,7 +70,6 @@ App.SelectInputByName = (object, attr) => {
 
 App.DefaultCheckoutFormVisibilityBehavior = (object, attr, value, checked, container_selector) => {
   var input = App.SelectInputByName(object, attr)
-  console.log(input)
   $(input).change(function() {
     App.SlideOnValueChecked(this, value, checked, container_selector)
   })
@@ -99,15 +97,15 @@ App.ShowBillingAddress = (object, attr, value, checked, container_selector) => {
 }
 
 App.ShowAddressForm = (object, attr, value, checked, container_selector, new_address) => {
+  new_address = '#'+object+'_address_id_'+new_address
   var input = App.SelectInputByName(object, attr)
   $(input).change(function() {
     if(value) {
       App.SlideOnValueChecked(this, value, checked, container_selector)
     } else {
-      var newAddressInput = $(new_address)
       if($(this).val() === 'ship_to_giftee') {
         $(container_selector).slideDown()
-      } else if($(this).val() === 'ship_to_me') {
+      } else if($(this).val() === 'ship_to_customer') {
         if($(new_address).is(':checked')) {
           $(container_selector).slideDown()
         } else {
@@ -118,34 +116,23 @@ App.ShowAddressForm = (object, attr, value, checked, container_selector, new_add
   })
 }
 
-App.FillForm = (object, attrs, empty, input) => {
+App.ClearInputs = (object, attrs) => {
   attrs.forEach(function(attr) {
-    var name = object+'['+attr+']'
-    if(input && !empty) {
-      var data_attr = attr.split('_')
-      data_attr = data_attr[data_attr.length-1]
-      $('[name="'+name+'"]').val($(input).data(data_attr))
-    } else {
-      $('[name="'+name+'"]').val('')
-    }
+    var input = '[name="'+object+'['+attr+']"]'
+    $(input).val('')
   })
 }
 
-App.FillAddressFormWithSavedAddress = (object, attrs, input_selector, toggle_selector) => {
-  $(input_selector).change(function() {
-    if($(this).is(':checked') && $(this).val() != 'new_address') {
-      App.FillForm(object, attrs, false, this)
-    } else if($(this).val() === 'new_address') {
-      App.FillForm(object, attrs, true, false)
-    }
-  })
+App.ClearForm = (object, attrs, toggle_selector, value) => {
   $(toggle_selector).change(function() {
-    if($(this).val() === 'ship_to_me' && $(this).is(':checked')) {
-      var checkedAddress = $(input_selector+':checked')
-      App.FillForm(object, attrs, false, checkedAddress)
-    } else if ($(this).val() === 'ship_to_giftee' && $(this).is(':checked')) {
-      App.FillForm(object, attrs, true, false)
+    if(value) {
+      if($(this).val() === value && $(this).is(':checked')) {
+        App.ClearInputs(object, attrs)
+      }
+    } else {
+      App.ClearInputs(object, attrs)
     }
+    
   })
 }
 

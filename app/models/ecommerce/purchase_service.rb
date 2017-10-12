@@ -57,13 +57,16 @@ class PurchaseService
 
     required_fields = ['ship_street1', 'ship_city', 'ship_zip', 'ship_state' ].to_set
 
-    permitted_fields = required_fields.to_a + ['ship_street2', 'ship_country']
+    permitted_fields = required_fields.to_a + ['ship_street2', 'ship_country', 'ship_to']
 
     whitelisted_params = nil
+    new_address = nil
 
-    if params['saved_address'] != 'new_address' && params[:customer_order][:ship_street1].blank?
-      address = Address.find(params['saved_address'])
+    if params['customer_order']['address_id'] != 'new_address' && params['customer_order']['ship_to'] == 'ship_to_customer'
+      address = self.customer.addresses.find(params['customer_order']['address_id'])
       whitelisted_params = {
+        ship_to: params['customer_order']['ship_to'],
+        address_id: address.id,
         ship_street1: address.street1,
         ship_street2: address.street2,
         ship_city: address.city,
@@ -85,15 +88,22 @@ class PurchaseService
         zip: whitelisted_params[:ship_zip]
       }
 
-      if params['toggle_address_choice'] == 'ship_to_giftee'
-        self.profile.addresses.create(params_to_save)
-      else
-        self.customer.addresses.create(params_to_save)
+      # Don't make a new one if there is already a matching address
+      matching_address_scope = params['customer_order']['ship_to'] == 'ship_to_giftee' ? self.profile.addresses : self.customer.addresses
+      matching_address = matching_address_scope.
+        where(params_to_save)
+      if matching_address.any?
+        new_address = matching_address.first
+      else 
+        new_address = matching_address_scope.create(params_to_save)
       end
     end
 
     _safely do
       self.customer_order.assign_attributes(whitelisted_params)
+      if new_address.present?
+        self.customer_order.address = new_address
+      end
       if self.customer_order.save
         self.shipping_service.init_shipments!
       end

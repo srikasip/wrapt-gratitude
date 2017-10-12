@@ -6,16 +6,11 @@
         %h3.light Shipping Information
         = simple_form_for @customer_order, url: url_for, method: :patch do |f|
           .co-toggle
-            = wrapt_radio_toggle([['Ship to me', :ship_to_me], ["Ship to #{@profile.name}", :ship_to_giftee]], :toggle_address_choice, :ship_to_me)
-          .co-select-my-address.j-select-my-address.form-group.clearfix
+            = f.input :ship_to, as: :wrapt_radio_toggle, collection: [['Ship to me', 'ship_to_customer'], ["Ship to #{@profile.name}", 'ship_to_giftee']], label: false
+          .co-select-my-address.j-select-my-address.clearfix{style: @customer_order.ship_to_customer? ? '' : 'display:none;'}
             %h4.light Select Address
-            - @saved_addresses.each_with_index do |address, index|
-              - street2 = address.street2.present? ? "</br>#{address.street2}" : ""
-              - label = "#{address.street1} #{street2} </br> #{address.city}, #{address.state} #{address.zip}"
-              -# input_data = {ship_street1: address.street1, ship_street2: address.street2, ship_city: address.city, ship_state: address.state, ship_zip: address.zip, behavior: 'fill_form'}
-              = wrapt_styled_radio_button(address.id, :saved_address, index==0, {label: label})
-            = wrapt_styled_radio_button('new_address', :saved_address, !@saved_addresses.any?, {label: 'New Address'})
-          .j-address{style: (@saved_addresses.any? ? 'display:none;' : '')}
+            = f.input :address_id, as: :wrapt_styled_radio_buttons, collection: @address_collection, label: false, nil_checked: 'new_address'
+          .j-address{style: (@saved_addresses.any? && @customer_order.ship_to_customer? ? 'display:none;' : '')}
             .row
               .col-xs-12.col-md-10
                 = f.input :ship_street1, label: 'Street Address'
@@ -36,18 +31,20 @@
 - content_for :page_js do
   :javascript
     $(document).ready(function() {
-      App.ShowSelectAddress('', 'toggle_address_choice', 'ship_to_me', true, '.j-select-my-address')
 
-      App.ShowAddressForm('', 'toggle_address_choice', false, true, '.j-address', '#saved_address_new_address')
+      App.ShowSelectAddress('customer_order', 'ship_to', 'ship_to_customer', true, '.j-select-my-address')
 
-      App.ShowAddressForm('', 'saved_address', 'new_address', true, '.j-address', '#saved_address_new_address')
+      App.ShowAddressForm('customer_order', 'ship_to', false, true, '.j-address', 'new_address')
 
-      //var input_names = [
-        //'ship_street1',
-        //'ship_street2',
-        //'ship_city',
-        //'ship_state',
-        //'ship_zip'
-      //]
-      //App.FillAddressFormWithSavedAddress('customer_order', input_names, '[name="saved_address"]', '[name="toggle_address_choice"]')
+      App.ShowAddressForm('customer_order', 'address_id', 'new_address', true, '.j-address', 'new_address')
+
+      var input_names = [
+        'ship_street1',
+        'ship_street2',
+        'ship_city',
+        'ship_state',
+        'ship_zip'
+      ]
+      App.ClearForm('customer_order', input_names, '[name="customer_order[ship_to]"]', false)
+      App.ClearForm('customer_order', input_names, '[name="customer_order[address_id]"]', 'new_address')
     })
