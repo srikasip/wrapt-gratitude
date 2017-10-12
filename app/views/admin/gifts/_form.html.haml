@@ -9,18 +9,22 @@
       .col-xs-3
         = f.input :selling_price, wrapper: :vertical_input_group, label: 'Selling Price' do
           .input-group-addon $
-          = f.input_field :selling_price, class: 'form-control', disabled: @gift.calculate_price_from_products?, value: number_with_precision(f.object.selling_price, precision: 2)
+          -# FIXME: use javascript to toggle disabled based on the checkbox for auto-calculation
+          -#= f.input_field :selling_price, class: 'form-control', disabled: @gift.calculate_price_from_products?, value: number_with_precision(f.object.selling_price, precision: 2)
+          = f.input_field :selling_price, class: 'form-control', value: number_with_precision(f.object.selling_price, precision: 2)
         = f.input :calculate_price_from_products, label: 'Auto-Calculate Price from Products'
 
         = f.input :cost, wrapper: :vertical_input_group do
           .input-group-addon $
-          = f.input_field :cost, class: 'form-control', disabled: @gift.calculate_cost_from_products?, value: number_with_precision(f.object.cost, precision: 2)
+          -#= f.input_field :cost, class: 'form-control', disabled: @gift.calculate_cost_from_products?, value: number_with_precision(f.object.cost, precision: 2)
+          = f.input_field :cost, class: 'form-control', value: number_with_precision(f.object.cost, precision: 2)
         = f.input :calculate_cost_from_products, label: 'Auto-Calculate Cost from Products'
 
         = f.input :weight_in_pounds, wrapper: :vertical_input_group do
           .input-group-addon lb
-          = f.input_field :weight_in_pounds, class: 'form-control', disabled: @gift.calculate_weight_from_products?, value: number_with_precision(f.object.weight_in_pounds, precision: 2)
-        = f.input :calculate_weight_from_products, label: 'Auto-Calculate weight from Products'
+          -#= f.input_field :weight_in_pounds, class: 'form-control', disabled: @gift.calculate_weight_from_products?, value: number_with_precision(f.object.weight_in_pounds, precision: 2)
+          = f.input_field :weight_in_pounds, class: 'form-control', value: number_with_precision(f.object.weight_in_pounds, precision: 2)
+        = f.input :calculate_weight_from_products, label: 'Auto-Calculate Weight from Products'
 
         %h3 Category
         = f.association :product_category, as: :select, collection: ProductCategory.categories, input_html: {data: {behavior: 'product-category-input'}}
