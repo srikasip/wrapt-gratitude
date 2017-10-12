@@ -264,8 +264,8 @@ class PurchaseService
           orderable: gift,
           quantity: dg.quantity,
           vendor: gift.vendor,
-          price_per_each_in_dollars: gift.price,
-          total_price_in_dollars: gift.price * dg.quantity
+          price_per_each_in_dollars: gift.selling_price,
+          total_price_in_dollars: gift.selling_price * dg.quantity
         })
     end
   end

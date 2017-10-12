@@ -1,4 +1,6 @@
 class PurchaseService::TaxService
+  attr_accessor :cart_id, :customer_order
+
   def initialize(cart_id:, customer_order:nil)
     self.cart_id        = cart_id
     self.customer_order = customer_order || CustomerOrder.find_by(cart_id: self.cart_id)
