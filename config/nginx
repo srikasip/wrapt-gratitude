@@ -4,6 +4,9 @@ server {
   listen 80;
   server_name www.wrapt.com wrapt.greenriver.com wrapt.com wrapt.us www.wrapt.us;
 
+  access_log /var/log/nginx/wrapt.production.access.log;
+  error_log /var/log/nginx/wrapt.production.error.log error;
+
   #if ( $host != 'www.wrapt.com' ) {
   #  rewrite ^/(.*)$ https://www.wrapt.com/$1 permanent;
   #}
@@ -31,6 +34,9 @@ server {
   if ( $host != 'www.wrapt.com' ) {
     rewrite ^/(.*)$ https://www.wrapt.com/$1 permanent;
   }
+
+  access_log /var/log/nginx/wrapt.production.access.log;
+  error_log /var/log/nginx/wrapt.production.error.log error;
 
   # certs sent to the client in SERVER HELLO are concatenated in ssl_certificate
   #ssl_certificate  /etc/ssl/certs/ssl-cert-snakeoil.pem;
