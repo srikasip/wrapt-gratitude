@@ -7,6 +7,9 @@
         %br
         = giftee.relationship
         %br
+        = link_to edit_my_account_giftee_path(giftee), data: {loads_in_pjax_modal: true} do
+          Edit
+        %br
         Mailing Address
         = format_address(object: giftee.address)
         %br
@@ -16,8 +19,10 @@
         = giftee.gifts_sent
 
         - if giftee.finished_surveys?
-          VIEW #{0} RECOMMENDATIONS
+          = link_to giftee_gift_recommendations_path(giftee) do
+            VIEW #{giftee.gift_recommendations.count} RECOMMENDATIONS
         - else
-          COMPLETE THE QUIZ
-
-
+          :ruby
+            question_response = giftee.first_unanswered_response
+          = link_to giftee_survey_question_path(giftee_id: giftee.id, survey_id: question_response.survey_response_id, id: question_response.to_param) do
+            COMPLETE THE QUIZ

@@ -1,5 +1,5 @@
 class SurveyResponse < ApplicationRecord
-  
+
   belongs_to :profile
   belongs_to :survey
   has_many :question_responses,
@@ -9,6 +9,7 @@ class SurveyResponse < ApplicationRecord
     dependent: :destroy
 
   scope :completed, -> { where.not(completed_at: nil) }
+  scope :incomplete, -> { where(completed_at: nil) }
 
   before_create :build_question_responses
   def build_question_responses
@@ -49,6 +50,12 @@ class SurveyResponse < ApplicationRecord
 
   def last_answered_response
     ordered_question_responses.select{|response| response.answered_at.present?}.last || ordered_question_responses.first
+  end
+
+  def first_unanswered_response
+    ordered_question_responses.find do |response|
+      response.answered_at.blank?
+    end
   end
 
   def giftee_name

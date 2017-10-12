@@ -165,20 +165,18 @@ class PurchaseService
       _remove_gifts_from_gift_basket!
     elsif should_cancel?
       cancel_order!
-    elsif should_partially_cancel?
-      partially_cancel_order!
     else
       Rails.logger.info(<<~EOS)
-        CANNOT Charge cart ID #{cart_id}. There all only un-acknowledged vendor purchase orders
+        Already charged or cannot cannot yet cancel for sure.  There are only
+        un-acknowledged vendor purchase orders left.
       EOS
-      :dont_know_yet
     end
 
     self.shipping_service.purchase_shipping_labels!
   end
 
   def cancel_order!
-    Rails.logger.info "canceling some or all of cart ID #{cart_id}. One or more vendors cannot fulfill"
+    Rails.logger.info "Canceling some or all of cart ID #{cart_id}. One or more vendors cannot fulfill."
     raise "WIP"
     _figure_which_pos_to_cancel
     _calculate_amount_to_refund
@@ -188,10 +186,6 @@ class PurchaseService
     _email_vendors_about_cancel
   end
 
-  def partially_cancel_order!
-    raise 'wip'
-  end
-
   def okay_to_charge?
     # The first vendor to accept, triggers a charge. In any other had or will
     # reject, we'll generate a refund.
@@ -199,17 +193,13 @@ class PurchaseService
   end
 
   def should_cancel?
-    purchase_orders.all?(&:vendor_rejected?)
+    any_rejections = purchase_orders.do_not_fulfill.any?
+
+    all_vendors_responded? && any_rejections
   end
 
   def all_vendors_responded?
     purchase_orders.acknowledged.count == purchase_orders.count
-  end
-
-  def should_partially_cancel?
-    any_rejections = purchase_orders.do_not_fulfill.any?
-
-    all_vendors_responded? && any_rejections
   end
 
   def all_vendors_accepted?
@@ -284,8 +274,8 @@ class PurchaseService
           orderable: gift,
           quantity: dg.quantity,
           vendor: gift.vendor,
-          price_per_each_in_dollars: gift.price,
-          total_price_in_dollars: gift.price * dg.quantity
+          price_per_each_in_dollars: gift.selling_price,
+          total_price_in_dollars: gift.selling_price * dg.quantity
         })
     end
   end
@@ -328,7 +318,7 @@ class PurchaseService
     shipping_choice = co.shipping_choice
 
     co.subtotal_in_cents        = 0
-    co.taxes_in_cents           = 0
+    co.taxes_in_cents           = TaxService.new(cart_id: self.cart_id).estimated_tax_in_cents
     co.handling_in_cents        = 0
     co.handling_cost_in_cents   = 0
     co.shipping_in_cents        = 0
@@ -356,9 +346,6 @@ class PurchaseService
         handling_in_cents: s_and_h.handling_in_cents
       })
     end
-
-    # TODO: Taxes when we know
-    co.taxes_in_cents = 0.0
 
     co.total_to_charge_in_cents = co.subtotal_in_cents + co.shipping_in_cents + co.handling_in_cents + co.taxes_in_cents
 
