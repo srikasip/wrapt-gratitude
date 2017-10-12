@@ -135,6 +135,7 @@ class PurchaseService
         self.customer_order.purchase_orders.update_all(status: SUBMITTED)
         _email_vendors_the_acknowledgement_link!
         _email_customer_that_order_was_received!
+        _remove_gifts_from_gift_basket!
       }
     })
   end
@@ -162,7 +163,6 @@ class PurchaseService
 
     if okay_to_charge?
       _unconditional_charge!
-      _remove_gifts_from_gift_basket!
     elsif should_cancel?
       cancel_order!
     else
