@@ -86,7 +86,6 @@ parcels = [
     active: true,
     code: 'shipping-a',
     description: 'Shipping Box: 12" x 12" x 8"',
-    shippo_template_name: 'USPS_MediumFlatRateBox2',
     weight_in_pounds: 10 * OUNZE_TO_POUNDS, # estimated
     height_in_inches: 8.00,
     length_in_inches: 12.00,
@@ -94,6 +93,22 @@ parcels = [
     usage: 'shipping'
   }
 ]
+
+# Cardboard estimate
+POUNDS_PER_SQUARE_INCH = 0.026 / (12 * 12)
+
+4.upto(14).each do |len|
+  parcels << {
+    active: true,
+    code: "shipping-cube-#{len}-inch",
+    description: "#{len}\"x#{len}\"x#{len}\"",
+    weight_in_pounds: (len * len * 6) * POUNDS_PER_SQUARE_INCH,
+    height_in_inches: len,
+    length_in_inches: len,
+    width_in_inches: len,
+    usage: 'shipping'
+  }
+end
 
 
 parcels.each do |data|
