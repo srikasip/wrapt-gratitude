@@ -15,9 +15,16 @@
     %p
       %b Title:
       = @gift.title
+
     %p
       %b Description:
       = @gift.description
+
+    %p
+      %b Tax Code:
+      = @gift.tax_code.code
+      (#{@gift.tax_code.name})
+
     %p
       %b Selling price:
       = number_to_currency(@gift.selling_price)

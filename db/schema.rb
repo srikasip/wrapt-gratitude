@@ -10,21 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171012175948) do
+ActiveRecord::Schema.define(version: 20171013142254) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
   create_table "addresses", force: :cascade do |t|
-    t.string   "street1",          null: false
+    t.string   "street1"
     t.string   "street2"
     t.string   "street3"
-    t.string   "city",             null: false
-    t.string   "state",            null: false
-    t.string   "zip",              null: false
-    t.string   "addressable_type", null: false
-    t.integer  "addressable_id",   null: false
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip"
+    t.string   "addressable_type"
+    t.integer  "addressable_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.index ["addressable_id", "addressable_type"], name: "index_addresses_on_addressable_id_and_addressable_type", using: :btree
@@ -239,7 +239,9 @@ ActiveRecord::Schema.define(version: 20171012175948) do
     t.decimal  "weight_in_pounds"
     t.boolean  "available",                                               default: true,  null: false
     t.integer  "insurance_in_dollars"
+    t.integer  "tax_code_id"
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
+    t.index ["tax_code_id"], name: "index_gifts_on_tax_code_id", using: :btree
     t.index ["wrapt_sku"], name: "index_gifts_on_wrapt_sku", using: :btree
   end
 
@@ -265,7 +267,6 @@ ActiveRecord::Schema.define(version: 20171012175948) do
     t.decimal  "total_price_in_dollars"
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
-    t.integer  "related_line_item_id"
     t.index ["vendor_id"], name: "index_line_items_on_vendor_id", using: :btree
   end
 
@@ -469,6 +470,19 @@ ActiveRecord::Schema.define(version: 20171012175948) do
     t.index ["profile_id"], name: "index_recipient_gift_selections_on_profile_id", using: :btree
   end
 
+  create_table "related_line_items", force: :cascade do |t|
+    t.integer  "purchase_order_id",           null: false
+    t.integer  "customer_order_id",           null: false
+    t.integer  "purchase_order_line_item_id", null: false
+    t.integer  "customer_order_line_item_id", null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.index ["customer_order_id"], name: "index_related_line_items_on_customer_order_id", using: :btree
+    t.index ["customer_order_line_item_id"], name: "index_related_line_items_on_customer_order_line_item_id", using: :btree
+    t.index ["purchase_order_id"], name: "index_related_line_items_on_purchase_order_id", using: :btree
+    t.index ["purchase_order_line_item_id"], name: "index_related_line_items_on_purchase_order_line_item_id", using: :btree
+  end
+
   create_table "shipments", force: :cascade do |t|
     t.integer  "customer_order_id"
     t.integer  "purchase_order_id"
@@ -667,6 +681,16 @@ ActiveRecord::Schema.define(version: 20171012175948) do
     t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
   end
 
+  create_table "tax_codes", force: :cascade do |t|
+    t.boolean  "active",      default: true, null: false
+    t.string   "name",                       null: false
+    t.text     "description",                null: false
+    t.string   "code",                       null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["code"], name: "index_tax_codes_on_code", unique: true, using: :btree
+  end
+
   create_table "training_set_evaluations", force: :cascade do |t|
     t.integer  "training_set_id"
     t.datetime "created_at",                                  null: false
@@ -819,6 +843,7 @@ ActiveRecord::Schema.define(version: 20171012175948) do
   add_foreign_key "gift_selections", "gifts"
   add_foreign_key "gift_selections", "profiles"
   add_foreign_key "gifts", "product_categories"
+  add_foreign_key "gifts", "tax_codes"
   add_foreign_key "line_items", "vendors"
   add_foreign_key "product_images", "products"
   add_foreign_key "products", "product_categories"
@@ -831,6 +856,10 @@ ActiveRecord::Schema.define(version: 20171012175948) do
   add_foreign_key "purchase_orders", "customer_orders"
   add_foreign_key "purchase_orders", "gifts"
   add_foreign_key "purchase_orders", "vendors"
+  add_foreign_key "related_line_items", "customer_orders"
+  add_foreign_key "related_line_items", "line_items", column: "customer_order_line_item_id", name: "co_line_item_fk"
+  add_foreign_key "related_line_items", "line_items", column: "purchase_order_line_item_id", name: "po_line_item_fk"
+  add_foreign_key "related_line_items", "purchase_orders"
   add_foreign_key "shipments", "customer_orders"
   add_foreign_key "shipments", "purchase_orders"
   add_foreign_key "shipping_labels", "customer_orders"

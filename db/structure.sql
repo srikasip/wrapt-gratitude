@@ -149,7 +149,8 @@ CREATE TABLE gifts (
     calculate_weight_from_products boolean DEFAULT true NOT NULL,
     weight_in_pounds numeric,
     available boolean DEFAULT true NOT NULL,
-    insurance_in_dollars integer
+    insurance_in_dollars integer,
+    tax_code_id integer
 );
 
 
@@ -236,7 +237,10 @@ CREATE TABLE charges (
     amount_refunded_in_cents integer,
     authed_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    bill_zip character varying,
+    last_four character varying(4),
+    card_type character varying
 );
 
 
@@ -268,7 +272,7 @@ CREATE TABLE comments (
     commentable_id integer NOT NULL,
     commentable_type character varying NOT NULL,
     content text NOT NULL,
-    users_id integer,
+    user_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -360,7 +364,10 @@ CREATE TABLE customer_orders (
     note_to character varying,
     note_content text,
     handling_cost_in_cents integer DEFAULT 0 NOT NULL,
-    handling_in_cents integer DEFAULT 0 NOT NULL
+    handling_in_cents integer DEFAULT 0 NOT NULL,
+    submitted_on date,
+    ship_to integer DEFAULT 0,
+    address_id integer
 );
 
 
@@ -755,8 +762,7 @@ CREATE TABLE line_items (
     quantity integer,
     total_price_in_dollars numeric,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    related_line_item_id integer
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1149,7 +1155,9 @@ CREATE TABLE profiles (
     recipient_access_token character varying,
     recipient_reviewed boolean DEFAULT false NOT NULL,
     recipient_invited_at timestamp without time zone,
-    recommendation_stats text
+    recommendation_stats text,
+    birthday date,
+    gifts_sent integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1315,6 +1323,40 @@ ALTER SEQUENCE recipient_gift_selections_id_seq OWNED BY recipient_gift_selectio
 
 
 --
+-- Name: related_line_items; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE related_line_items (
+    id integer NOT NULL,
+    purchase_order_id integer NOT NULL,
+    customer_order_id integer NOT NULL,
+    purchase_order_line_item_id integer NOT NULL,
+    customer_order_line_item_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: related_line_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE related_line_items_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: related_line_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE related_line_items_id_seq OWNED BY related_line_items.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1419,7 +1461,9 @@ CREATE TABLE shipping_labels (
     tracking_updated_at timestamp without time zone,
     tracking_payload jsonb,
     carrier character varying NOT NULL,
-    service_level character varying NOT NULL
+    service_level character varying NOT NULL,
+    shipped_on date,
+    delivered_on date
 );
 
 
@@ -1833,6 +1877,40 @@ CREATE SEQUENCE tags_id_seq
 --
 
 ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
+
+
+--
+-- Name: tax_codes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE tax_codes (
+    id integer NOT NULL,
+    active boolean DEFAULT true NOT NULL,
+    name character varying NOT NULL,
+    description text NOT NULL,
+    code character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: tax_codes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE tax_codes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tax_codes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE tax_codes_id_seq OWNED BY tax_codes.id;
 
 
 --
@@ -2423,6 +2501,13 @@ ALTER TABLE ONLY recipient_gift_selections ALTER COLUMN id SET DEFAULT nextval('
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY related_line_items ALTER COLUMN id SET DEFAULT nextval('related_line_items_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY shipments ALTER COLUMN id SET DEFAULT nextval('shipments_id_seq'::regclass);
 
 
@@ -2515,6 +2600,13 @@ ALTER TABLE ONLY taggings ALTER COLUMN id SET DEFAULT nextval('taggings_id_seq':
 --
 
 ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tax_codes ALTER COLUMN id SET DEFAULT nextval('tax_codes_id_seq'::regclass);
 
 
 --
@@ -2852,6 +2944,14 @@ ALTER TABLE ONLY recipient_gift_selections
 
 
 --
+-- Name: related_line_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY related_line_items
+    ADD CONSTRAINT related_line_items_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2972,6 +3072,14 @@ ALTER TABLE ONLY tags
 
 
 --
+-- Name: tax_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY tax_codes
+    ADD CONSTRAINT tax_codes_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: training_set_evaluations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3080,10 +3188,10 @@ CREATE INDEX index_comments_on_commentable_id_and_commentable_type ON comments U
 
 
 --
--- Name: index_comments_on_users_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_comments_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_comments_on_users_id ON comments USING btree (users_id);
+CREATE INDEX index_comments_on_user_id ON comments USING btree (user_id);
 
 
 --
@@ -3098,6 +3206,13 @@ CREATE INDEX index_conditional_question_options_on_survey_question_id ON conditi
 --
 
 CREATE INDEX index_conditional_question_options_on_survey_question_option_id ON conditional_question_options USING btree (survey_question_option_id);
+
+
+--
+-- Name: index_customer_orders_on_address_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_customer_orders_on_address_id ON customer_orders USING btree (address_id);
 
 
 --
@@ -3280,6 +3395,13 @@ CREATE INDEX index_gift_selections_on_profile_id ON gift_selections USING btree 
 --
 
 CREATE INDEX index_gifts_on_product_category_id ON gifts USING btree (product_category_id);
+
+
+--
+-- Name: index_gifts_on_tax_code_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_gifts_on_tax_code_id ON gifts USING btree (tax_code_id);
 
 
 --
@@ -3493,6 +3615,34 @@ CREATE INDEX index_recipient_gift_selections_on_profile_id ON recipient_gift_sel
 
 
 --
+-- Name: index_related_line_items_on_customer_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_related_line_items_on_customer_order_id ON related_line_items USING btree (customer_order_id);
+
+
+--
+-- Name: index_related_line_items_on_customer_order_line_item_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_related_line_items_on_customer_order_line_item_id ON related_line_items USING btree (customer_order_line_item_id);
+
+
+--
+-- Name: index_related_line_items_on_purchase_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_related_line_items_on_purchase_order_id ON related_line_items USING btree (purchase_order_id);
+
+
+--
+-- Name: index_related_line_items_on_purchase_order_line_item_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_related_line_items_on_purchase_order_line_item_id ON related_line_items USING btree (purchase_order_line_item_id);
+
+
+--
 -- Name: index_response_impacts_option_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3696,6 +3846,13 @@ CREATE UNIQUE INDEX index_tags_on_name ON tags USING btree (name);
 
 
 --
+-- Name: index_tax_codes_on_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_tax_codes_on_code ON tax_codes USING btree (code);
+
+
+--
 -- Name: index_training_set_evaluations_on_training_set_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3871,6 +4028,22 @@ CREATE UNIQUE INDEX vsl_vendor_id_ssl_id_unq_idx ON vendor_service_levels USING 
 
 
 --
+-- Name: co_line_item_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY related_line_items
+    ADD CONSTRAINT co_line_item_fk FOREIGN KEY (customer_order_line_item_id) REFERENCES line_items(id);
+
+
+--
+-- Name: fk_rails_03de2dc08c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY comments
+    ADD CONSTRAINT fk_rails_03de2dc08c FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: fk_rails_08b5eb134b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3911,14 +4084,6 @@ ALTER TABLE ONLY product_images
 
 
 --
--- Name: fk_rails_1e28850acb; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY comments
-    ADD CONSTRAINT fk_rails_1e28850acb FOREIGN KEY (users_id) REFERENCES users(id);
-
-
---
 -- Name: fk_rails_24f7836d52; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3951,6 +4116,14 @@ ALTER TABLE ONLY profile_set_survey_responses
 
 
 --
+-- Name: fk_rails_2d15ec75c8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY related_line_items
+    ADD CONSTRAINT fk_rails_2d15ec75c8 FOREIGN KEY (customer_order_id) REFERENCES customer_orders(id);
+
+
+--
 -- Name: fk_rails_3eeeba9af9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3972,6 +4145,14 @@ ALTER TABLE ONLY shipments
 
 ALTER TABLE ONLY survey_question_response_options
     ADD CONSTRAINT fk_rails_42747a8d20 FOREIGN KEY (survey_question_option_id) REFERENCES survey_question_options(id);
+
+
+--
+-- Name: fk_rails_496f838bc8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY gifts
+    ADD CONSTRAINT fk_rails_496f838bc8 FOREIGN KEY (tax_code_id) REFERENCES tax_codes(id);
 
 
 --
@@ -4028,6 +4209,14 @@ ALTER TABLE ONLY gift_recommendations
 
 ALTER TABLE ONLY shipping_labels
     ADD CONSTRAINT fk_rails_6739b67360 FOREIGN KEY (purchase_order_id) REFERENCES purchase_orders(id);
+
+
+--
+-- Name: fk_rails_688bc18e9b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY related_line_items
+    ADD CONSTRAINT fk_rails_688bc18e9b FOREIGN KEY (purchase_order_id) REFERENCES purchase_orders(id);
 
 
 --
@@ -4303,6 +4492,14 @@ ALTER TABLE ONLY conditional_question_options
 
 
 --
+-- Name: po_line_item_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY related_line_items
+    ADD CONSTRAINT po_line_item_fk FOREIGN KEY (purchase_order_line_item_id) REFERENCES line_items(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -4492,6 +4689,14 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171002133537'),
 ('20171006145514'),
 ('20171009202508'),
-('20171009204601');
+('20171009204601'),
+('20171010194934'),
+('20171010203718'),
+('20171011130706'),
+('20171011143039'),
+('20171012172305'),
+('20171012175948'),
+('20171012193235'),
+('20171013142254');
 
 
