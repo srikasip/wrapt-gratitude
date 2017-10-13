@@ -89,7 +89,7 @@ class Gift < ApplicationRecord
 
   def selling_price
     if calculate_price_from_products?
-      calculated_gift_field.price
+      calculated_gift_field&.price
     else
       read_attribute(:selling_price)
     end
@@ -97,7 +97,7 @@ class Gift < ApplicationRecord
 
   def weight_in_pounds
     if calculate_weight_from_products?
-      calculated_gift_field.weight_in_pounds
+      calculated_gift_field&.weight_in_pounds
     else
       read_attribute(:weight_in_pounds)
     end
