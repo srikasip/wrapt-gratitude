@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/yakloinsteak/AvaTax-REST-V2-Ruby-SDK.git
-  revision: b86abbde4af84579765bc4d312180dce69d4aeee
+  revision: 5f08dcd8e3a95c0d90fb397984b9d900d701a298
   branch: greenriver
   specs:
     avatax (17.9.0)
