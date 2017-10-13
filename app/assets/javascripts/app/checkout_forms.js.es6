@@ -147,6 +147,32 @@ App.ClearForm = (object, attrs, toggle_selector, value) => {
   })
 }
 
+App.EnableSubmitButton = (object, attrs) => {
+  attrs.forEach(function(attr) {
+    var input = '[name="'+object+'['+attr+']"]'
+    $(input).change(function() {
+      var form = $(this).parents('form')
+      var disabled = true
+      if($(this).val()) {
+        disabled = false
+        attrs.forEach(function(attr) {
+          var i = '[name="'+object+'['+attr+']"]'
+          if(!$(i).val()) {
+            disabled = true
+          }
+        })
+      }
+      var submit = $(form).find('[type="submit"]')
+      if(!disabled) {
+        $(submit).removeAttr('disabled')
+      } else {
+        $(submit).prop('disabled', true)
+      }
+      
+    })
+  })
+}
+
 
 
 
