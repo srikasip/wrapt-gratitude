@@ -16,11 +16,11 @@ module Admin
 
     def new
       @gift = Gift.new product_category: Gift.default_product_category
-      _load_parcels
+      _initialize_variables
     end
 
     def edit
-      _load_parcels
+      _initialize_variables
     end
 
     def create
@@ -29,7 +29,7 @@ module Admin
         redirect_to admin_gift_products_path(@gift), notice: "#{@gift.title} has been created.  Now add some products."
       else
         @error_message = @gift.errors.full_messages.join('. ')
-        _load_parcels
+        _initialize_variables
         render :new
       end
     end
@@ -38,7 +38,7 @@ module Admin
       if @gift.update(gift_params)
         redirect_to [:admin, @gift], notice: "#{@gift.title} has been updated."
       else
-        _load_parcels
+        _initialize_variables
         @error_message = @gift.errors.full_messages.join('. ')
         render :edit
       end
@@ -62,6 +62,7 @@ module Admin
         :weight_in_pounds,
         :wrapt_sku,
         :available,
+        :tax_code,
         :calculate_cost_from_products,
         :calculate_price_from_products,
         :calculate_weight_from_products,
@@ -86,9 +87,11 @@ module Admin
     end
     helper_method :context_params
 
-    def _load_parcels
+    def _initialize_variables
       @gift.shipping_parcels.empty? and @gift.shipping_parcels.build
       @gift.pretty_parcels.empty? and @gift.pretty_parcels.build
+
+      @tax_codes = TaxCode.active.all
     end
   end
 end

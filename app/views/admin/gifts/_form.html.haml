@@ -4,6 +4,7 @@
   .form-inputs
     = f.input :title
     = f.input :description
+    = f.input :tax_code_id, collection: @tax_codes, label_method: :name, value_method: :id
     = f.input :tag_list, label: "Tags", hint: "List tags names separated with a comma (ex: not_for_wife, outdoorsy, sophisticated)", as: :text
     .row
       .col-xs-3

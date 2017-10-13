@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'avatax', git: 'https://github.com/yakloinsteak/AvaTax-REST-V2-Ruby-SDK.git', branch: 'greenriver'
 gem "fog-aws"
 gem 'acts-as-taggable-on'
 gem 'awesome_nested_set'
