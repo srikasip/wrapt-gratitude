@@ -144,6 +144,10 @@ class PurchaseService::ShippingService
   end
 
   def self.find_rate(rates:, shipping_choice:, vendor:)
+    return nil if rates.empty?
+
+    normalized_shipping_choice = shipping_choice.to_s.upcase
+
     allowed_rates = rates.select do |rate|
       if vendor.shipping_service_levels.blank?
         # No choices mean all choices are okay
@@ -154,16 +158,18 @@ class PurchaseService::ShippingService
       end
     end
 
-    picked_rate = allowed_rates.find { |r| r['attributes'].include?(shipping_choice.upcase) }
-
-    if picked_rate.nil?
-      case shipping_choice.upcase
-      when 'FASTEST'
-        picked_rate = allowed_rates.sort_by { |r| r['estimated_days'].to_i }.first
+    picked_rate = \
+      if allowed_rates.present?
+        allowed_rates.find { |r| r['attributes'].include?(normalized_shipping_choice) }
       else
-        picked_rate = allowed_rates.sort_by { |r| r['amount'].to_f }.first
+        # No whitelisted rates, so just use them all, even though the vendor had a preference.
+        case normalized_shipping_choice
+        when 'FASTEST'
+          rates.sort_by { |r| r['estimated_days'].to_i }.first
+        else
+          rates.sort_by { |r| r['amount'].to_f }.first
+        end
       end
-    end
 
     if picked_rate.nil?
       raise InternalConsistencyError, "Unable to find a way to ship!"
@@ -311,8 +317,9 @@ class PurchaseService::ShippingService
     Shipment.transaction do
       yield
     end
-  rescue Shippo::Exceptions::APIServerError
-    self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
-    raise
+  #rescue Shippo::Exceptions::APIServerError, Shippo::Exceptions::ConnectionError => e
+  #  Rails.logger.fatal "[SHIPPO] #{e.message}"
+  #  self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
+  #  raise
   end
 end

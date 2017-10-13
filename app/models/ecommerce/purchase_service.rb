@@ -327,7 +327,6 @@ class PurchaseService
     shipping_choice = co.shipping_choice
 
     co.subtotal_in_cents        = 0
-    co.taxes_in_cents           = TaxService.new(cart_id: self.cart_id).estimated_tax_in_cents
     co.handling_in_cents        = 0
     co.handling_cost_in_cents   = 0
     co.shipping_in_cents        = 0
@@ -355,6 +354,10 @@ class PurchaseService
         handling_in_cents: s_and_h.handling_in_cents
       })
     end
+
+    tax_service = TaxService.new(cart_id: self.cart_id, customer_order: co)
+    tax_service.estimate!
+    co.taxes_in_cents = tax_service.tax_in_cents
 
     co.total_to_charge_in_cents = co.subtotal_in_cents + co.shipping_in_cents + co.handling_in_cents + co.taxes_in_cents
 
