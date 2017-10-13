@@ -88,6 +88,10 @@ class PurchaseOrder < ApplicationRecord
     self.handling_cost_in_cents / 100.0
   end
 
+  def shipping_cost_in_dollars
+    self.shipping_cost_in_cents / 100.0
+  end
+
   def fulfill?
     self.vendor_acknowledgement_status == 'fulfill'
   end
