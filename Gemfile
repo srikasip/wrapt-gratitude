@@ -11,7 +11,6 @@ gem 'carrierwave_direct'
 gem 'coffee-rails', '~> 4.2' # Use CoffeeScript for .coffee assets and views
 gem 'dotenv-rails'
 gem 'font-awesome-sass'
-gem 'font-awesome-sass'
 gem 'haml-rails'
 gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails' # Use jquery as the JavaScript library
@@ -75,6 +74,8 @@ group :test do
   gem "launchy"
   gem 'minitest-reporters'
   gem 'rspec-mocks'
+  gem 'rspec-rails'
+  gem 'guard-rspec'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

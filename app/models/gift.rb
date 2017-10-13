@@ -7,11 +7,11 @@ class Gift < ApplicationRecord
   validates :description, presence: true
   validates :wrapt_sku, presence: true
   validate :validate_tag
-  validate :_has_boxes
-  validate :_has_products
-  validate :_has_price
-  validate :_has_weight
-  validate :_has_cost
+  validate :_has_boxes, if: :available?
+  validate :_has_products, if: :available?
+  validate :_has_price, if: :available?
+  validate :_has_weight, if: :available?
+  validate :_has_cost , if: :available?
 
   has_many :gift_products, inverse_of: :gift, dependent: :destroy
   has_many :products, through: :gift_products
@@ -81,7 +81,7 @@ class Gift < ApplicationRecord
 
   def cost
     if calculate_cost_from_products?
-      calculated_gift_field.cost
+      calculated_gift_field&.cost
     else
       read_attribute(:cost)
     end
