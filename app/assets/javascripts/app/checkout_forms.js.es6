@@ -1,6 +1,7 @@
 App.RadioToggle = (input) => {
   var container = $(input).parents('.j-wrapt-radio-toggle')
   var inputs = container.find('input')
+  var labels = container.find('label')
   inputs.each(function(i) {
     if($(this).is(':checked')) {
       $(this).parents('label').addClass('selected')
@@ -8,6 +9,16 @@ App.RadioToggle = (input) => {
       $(this).parents('label').removeClass('selected')
     }
   })
+}
+
+App.RadioToggleLabel = (label, event) => {
+  if(event.keyCode == 13) {
+    var input = $(label).find('input')
+    if(!$(input).is(':checked')) {
+      $(input).prop('checked', true)
+      $(input).change()
+    }
+  }
 }
 
 App.StyledInputsBehavior = (input, container_selector) => {

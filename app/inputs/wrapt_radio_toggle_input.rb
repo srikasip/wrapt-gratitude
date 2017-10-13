@@ -12,7 +12,7 @@ class WraptRadioToggleInput < SimpleForm::Inputs::CollectionInput
   def button(collection_option)
     label_key = "#{attribute_name.to_s}_#{collection_option.last.to_s}".to_sym
     label_class = selected?(collection_option) ? 'selected' : ''
-    @builder.label label_key, class: label_class do
+    @builder.label label_key, class: label_class, tabindex: '0', onkeypress: 'App.RadioToggleLabel(this, event);' do
       template.concat collection_option.first
       template.concat @builder.radio_button attribute_name, collection_option.last, style: 'display:none;', onChange: 'App.RadioToggle(this);'
     end 
