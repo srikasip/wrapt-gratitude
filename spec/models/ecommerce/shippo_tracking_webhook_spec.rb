@@ -1,8 +1,8 @@
-require "test_helper"
+require "rails_helper"
 
-class ShippoTrackingWebhookTest < ActiveSupport::TestCase
-  def params
-    @params ||= {
+describe ShippoTrackingWebhook do
+  let(:params) do
+    {
       "test"=>true,
       "data"=>
       {
@@ -39,19 +39,20 @@ class ShippoTrackingWebhookTest < ActiveSupport::TestCase
     }
   end
 
-  test "basic functionality" do
+
+  it "should function" do
     FactoryGirl.create :customer_order, :with_shipping_label
 
     webhook = ShippoTrackingWebhook.new(params)
     webhook.run!
 
-    assert_equal 1, ShippingLabel.count
+    expect(ShippingLabel.count).to eq 1
 
     label = ShippingLabel.first
 
-    assert_equal label.eta, "2017-09-30T17:51:23.639"
-    assert_equal label.tracking_status, "UNKNOWN"
-    assert label.tracking_updated_at, "2017-09-25T17:51:23.648"
-    assert label.tracking_payload.present?
+    expect(label.eta).to eq "2017-09-30T17:51:23.639"
+    expect(label.tracking_status).to eq "UNKNOWN"
+    expect(label.tracking_updated_at).to eq "2017-09-25T17:51:23.648"
+    expect(label.tracking_payload).to be_present
   end
 end

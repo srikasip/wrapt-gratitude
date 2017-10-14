@@ -94,7 +94,7 @@ class PurchaseService
         where(params_to_save)
       if matching_address.any?
         new_address = matching_address.first
-      else 
+      else
         new_address = matching_address_scope.create(params_to_save)
       end
     end
@@ -135,6 +135,7 @@ class PurchaseService
         self.customer_order.purchase_orders.update_all(status: SUBMITTED)
         _email_vendors_the_acknowledgement_link!
         _email_customer_that_order_was_received!
+        _remove_gifts_from_gift_basket!
       }
     })
   end
@@ -162,7 +163,6 @@ class PurchaseService
 
     if okay_to_charge?
       _unconditional_charge!
-      _remove_gifts_from_gift_basket!
     elsif should_cancel?
       cancel_order!
     else
@@ -298,13 +298,22 @@ class PurchaseService
 
         purchase_order.line_items.destroy_all
 
+        co_line_item = self.customer_order.line_items.find_by(orderable: gift)
+
         gift.products.each do |product|
-          purchase_order.line_items.create!({
+          po_line_item = purchase_order.line_items.create!({
             orderable: product,
             quantity: 1,
             vendor: gift.vendor,
             price_per_each_in_dollars: product.wrapt_cost,
-            total_price_in_dollars: product.wrapt_cost
+            total_price_in_dollars: product.wrapt_cost,
+          })
+
+          RelatedLineItem.create!({
+            purchase_order: purchase_order,
+            customer_order: customer_order,
+            purchase_order_line_item: po_line_item,
+            customer_order_line_item: co_line_item
           })
         end
       end

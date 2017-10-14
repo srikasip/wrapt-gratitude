@@ -1,14 +1,17 @@
 # vim: syntax=nginx ts=4 sw=4 sts=4 sr noet
 
 server {
-  listen 80;
+  listen 80 default_server;
   server_name staging.wrapt.com staging.wrapt.greenriver.com;
+
+  access_log /var/log/nginx/wrapt.staging.access.log;
+  error_log /var/log/nginx/wrapt.staging.error.log error;
 
   if ( $host != 'staging.wrapt.com' ) {
     rewrite ^/(.*)$ https://staging.wrapt.com/$1 permanent;
   }
 
-  if ($request_uri !~ "^/.well-known/acme-challenge") {
+  if ($request_uri !~ "^/.well-known/acme-challenge|^/health-check") {
     return 301 https://$host$request_uri;
   }
 
@@ -24,9 +27,12 @@ server {
 
 # https://mozilla.github.io/server-side-tls/ssl-config-generator/
 server {
-  listen 443 ssl http2;
-  listen [::]:443 ssl http2;
+  listen 443 ssl http2 default_server;
+  listen [::]:443 ssl http2 default_server;
   server_name staging.wrapt.com;
+
+  access_log /var/log/nginx/wrapt.staging.access.log;
+  error_log /var/log/nginx/wrapt.staging.error.log error;
 
   # certs sent to the client in SERVER HELLO are concatenated in ssl_certificate
   #ssl_certificate  /etc/ssl/certs/ssl-cert-snakeoil.pem;
