@@ -59,7 +59,7 @@
   text-align: center;
 }
 .admin-index-table--image {
-  max-height: 100px;
+  width: 120px;
   float: left;
   margin-right: 20px;
 }
@@ -72,8 +72,17 @@
 }
 .admin-index-table--item-title {
   margin-top: 0;
+  font-weight: 600;
 }
 .admin-card-list__card {
   @extend .shadowed-box__01;
   padding: 18px 12px;
+}
+.admin-index-table--categories-cell {
+  vertical-align: top;
+  width: 260px;
+  padding-right: 24px;
+}
+.admin-index-table--item-description {
+  padding-left: 140px;
 }

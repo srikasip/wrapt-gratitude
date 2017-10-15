@@ -43,6 +43,16 @@
       %tbody
         - @orders.each do |order|
           - this_cycle_class = cycle('even-order', 'odd-order')
+          %tr{class: this_cycle_class, style: 'border-top-style: double'}
+            %td= order.order_number
+            %td= format_date(order.created_on)
+            %td= order.user_email
+            %td= order.status.titleize
+            %td.text-right
+              %b= number_to_currency(order.total_to_charge_in_dollars)
+            %td.admin-index-table--buttons-cell
+              = link_to 'View', url_for(action: :show, id: order.id), class: 'btn btn-default btn-xs'
+              = link_to 'Cancel Order', admin_ecommerce_customer_order_path(order), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
           - order.line_items.each do |line_item|
             %tr{class: this_cycle_class}
               %td
@@ -73,15 +83,6 @@
             %td.text-right
               %i= number_to_currency(order.taxes_in_dollars)
             %td
-          %tr{class: this_cycle_class, style: 'border-bottom-style: double'}
-            %td= order.order_number
-            %td= format_date(order.created_on)
-            %td= order.user_email
-            %td= order.status.titleize
-            %td.text-right
-              %b= number_to_currency(order.total_to_charge_in_dollars)
-            %td.admin-index-table--buttons-cell
-              = link_to 'View', url_for(action: :show, id: order.id), class: 'btn btn-default btn-xs'
-              = link_to 'Cancel Order', admin_ecommerce_customer_order_path(order), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+          
 
     %p=paginate @orders
