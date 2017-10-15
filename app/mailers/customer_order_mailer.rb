@@ -5,7 +5,7 @@ class CustomerOrderMailer < ApplicationMailer
 
     mail({
       to: @user.email,
-      subject: "Order Received"
+      subject: "We've got your Wrapt order"
     })
   end
 
