@@ -1,12 +1,9 @@
-.container
-  .row
-    .col-sm-12
-      = link_to 'giftees', my_account_giftees_path
-      |
-      = link_to 'profile', my_account_profile_path
-      |
-      = link_to 'orders', my_account_orders_path
-      |
-      = link_to 'billing', my_account_billing_index_path
-      |
-      = link_to 'preferences', my_account_preferences_path
+- links = [['giftees', my_account_giftees_path], ['profile', my_account_profile_path], ['orders', my_account_orders_path], ['billing', my_account_billing_index_path], ['preferences', my_account_preferences_path]]
+.container.ma-container
+  %h2.light My Account
+  .ma-subnav
+    .ma-subnav__row
+      - links.each do |link|
+        .ma-subnav__link
+          = link_to link[0], link[1]
+

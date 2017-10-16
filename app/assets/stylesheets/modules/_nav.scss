@@ -203,3 +203,56 @@
 .navbar-default .navbar-nav > li > a:active .gift-basket-count {
   color: $gray-008;
 }
+
+// My Account sub nav START
+
+.ma-container {
+  margin-top: 40px;
+}
+
+.ma-subnav {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.ma-subnav__row {
+  display: table-row;
+}
+
+.ma-subnav__link {
+  display: table-cell;
+  text-align: center;
+  text-transform: uppercase;
+  border-top: 1px solid $blue-006;
+  border-right: 1px solid $blue-006;
+  border-bottom: 1px solid $blue-006;
+  a {
+    border-bottom: 4px solid transparent;
+    display: block;
+    padding: 8px 16px;
+    color: $gray-006;
+    @include akkurat-regular;
+    letter-spacing: 1px;
+    font-size: 80%;
+  }
+  a:hover,
+  a:active,
+  a:focus {
+    border-bottom: 4px solid $blue-006;
+    text-decoration: none;
+    background-color: #FFFFFF;
+    color: #000000;
+  }
+}
+
+.ma-subnav__link:first-child {
+  border-left: 1px solid $blue-006;
+}
+
+
+// My Account sub nav END
+
+
+
