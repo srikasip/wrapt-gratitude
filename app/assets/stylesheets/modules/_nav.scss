@@ -210,15 +210,52 @@
   margin-top: 40px;
 }
 
+.ma-subnav-mobile-trigger {
+  @media(min-width: $screen-sm-min) {
+    display: none;
+  }
+  display: block;
+  background-color: #FFFFFF;
+  border: 1px solid $blue-006;
+  padding: 8px 16px;
+  text-transform: uppercase;
+  @include akkurat-bold;
+  letter-spacing: 1px;
+  font-size: 80%;
+  color: #000000;
+  margin-bottom: 6px;
+}
+
+.ma-subnav-mobile-trigger:active,
+.ma-subnav-mobile-trigger:focus,
+.ma-subnav-mobile-trigger:hover {
+  background-color: #FFFFFF;
+  text-decoration: none;
+  color: #000000;
+}
+
+.ma-subnav-mobile-trigger[aria-expanded="true"]:after {
+  content: 'x'
+}
+
 .ma-subnav {
-  display: table;
-  table-layout: fixed;
-  width: 100%;
-  margin-bottom: 40px;
+  @include shadowed-box__gray;
+  @media(min-width: $screen-sm-min) {
+    box-shadow: none;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    margin-bottom: 40px;
+    &.collapse.in {
+      display: table;
+    }
+  }
 }
 
 .ma-subnav__row {
-  display: table-row;
+  @media(min-width: $screen-sm-min) {
+    display: table-row;
+  }
 }
 
 .ma-subnav__link {
@@ -239,7 +276,8 @@
   }
   a:hover,
   a:active,
-  a:focus {
+  a:focus,
+  &.active a {
     border-bottom: 4px solid $blue-006;
     text-decoration: none;
     background-color: #FFFFFF;
@@ -249,7 +287,30 @@
 
 .ma-subnav__link:first-child {
   border-left: 1px solid $blue-006;
+  @media(max-width: $screen-xs-max) {
+    border-left: none;
+  }
 }
+
+@media(max-width: $screen-xs-max) {
+  .ma-subnav__link {
+    display: block;
+    text-align: left;
+    border: none;
+    background-color: #FFFFFF;
+    &.active {
+      display: none;
+      a,
+      a:hover,
+      a:active,
+      a:focus {
+        border:none;
+      }
+    }
+  }
+}
+
+
 
 
 // My Account sub nav END
