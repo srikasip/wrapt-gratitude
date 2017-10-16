@@ -18,7 +18,8 @@
         - if @order.gift_wrapt
           %br
           Wrapt With Love
-          %span= @order.note_content
+          -# Make sure to preserve whitespace
+          %div{style: 'white-space: pre;'}= @order.note_content
 
   .row
     .col-xs-8

@@ -14,6 +14,7 @@ module Tax
       # SalesOrders aren't for tax reporting. SalesInvoice can eventually be
       # reconciled and made an offical part of the tax history.
       transaction_type = self.estimate ? 'SalesOrder' : 'SalesInvoice'
+      user = customer_order.user
 
       {
         "companyCode": "DEFAULT",
@@ -41,13 +42,13 @@ module Tax
 
     def _lines
       customer_order.line_items.flat_map do |line_item|
-        po = line_item.related_line_item.purchase_order
+        po = line_item.related_line_items.first.order
         vendor = po.vendor
         gift = line_item.orderable
         [
           {
             "amount": po.shipping_cost_in_dollars,
-            "taxCode": TaxCode.shipping.code,
+            "taxCode": Tax::Code.shipping.code,
             "description": "shipping cost to wrapt",
             "addresses": {
               "shipFrom": {
@@ -61,7 +62,7 @@ module Tax
           },
           {
             "amount": line_item.total_price_in_dollars,
-            "taxCode": gift.tax_code.code,
+            "taxCode": (gift.tax_code&.code || Tax::Code.default.code),
             "description": gift.title,
             "Ref1": "Vendor: #{vendor.name}",
             "Ref2": "PO #{po.order_number}",
