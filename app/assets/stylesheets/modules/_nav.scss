@@ -223,7 +223,19 @@
   letter-spacing: 1px;
   font-size: 80%;
   color: #000000;
-  margin-bottom: 6px;
+  position: relative;
+  span {
+    display: none;
+    position: absolute;
+    right: 16px;
+  }
+  svg {
+    width: 10px;
+    height: 10px;
+    fill: $blue-002;
+    stroke: $blue-002;
+    color: $blue-002;
+  }
 }
 
 .ma-subnav-mobile-trigger:active,
@@ -234,12 +246,23 @@
   color: #000000;
 }
 
-.ma-subnav-mobile-trigger[aria-expanded="true"]:after {
-  content: 'x'
+.ma-subnav-mobile-trigger[aria-expanded="true"] {
+  margin-bottom: 6px;
+  span.open {
+    display: inline;
+  }
+}
+
+.ma-subnav-mobile-trigger[aria-expanded="false"] {
+  margin-bottom: 30px;
+  span.closed {
+    display: inline;
+  }
 }
 
 .ma-subnav {
   @include shadowed-box__gray;
+  margin-bottom: 20px;
   @media(min-width: $screen-sm-min) {
     box-shadow: none;
     display: table;

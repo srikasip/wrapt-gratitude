@@ -1,29 +1,37 @@
 .container
   .row
-    .col-sm-12
-      %h1 My Account
-
-      %h2
-        General Information
-        = link_to 'Edit', edit_my_account_profile_path, class: 'btn btn-sm btn-default'
-
+    .col-xs-12
+      .ma-title.clearfix
+        .ma-title__text.pull-left
+          %h5.light General Information
+        .ma-title__action.pull-right
+          = link_to 'Edit', edit_my_account_profile_path, class: 'btn btn-xs btn-default'
+  - user_info = [['First Name', current_user.first_name, 'col-xs-6'], ['Last Name', current_user.last_name, 'col-xs-6'], ['Email Address', current_user.email, 'col-xs-12'], ['Password', '********', 'col-xs-6']]
   .row
-    .col-sm-3
+    - user_info.each do |info|
+      .col-md-3{class: info[2]}
+        .ma-general-info__item
+          = info[1]
+          %br
+          %small= info[0]
+-#
+  .row
+    .col-xs-6.col-sm-3
       %p
         %b= current_user.first_name
         %br
         First Name
-    .col-sm-3
+    .col-xs-6.col-sm-3
       %p
         %b= current_user.last_name
         %br
         Last Name
-    .col-sm-3
+    .col-xs-12.col-sm-3
       %p
         %b= current_user.email
         %br
         Email Address
-    .col-sm-3
+    .col-xs-6.col-sm-3
       %p
         &nbsp;
         %br
