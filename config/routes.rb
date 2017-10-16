@@ -78,6 +78,7 @@ Rails.application.routes.draw do
   ### Checkout and shopping cart
   ###################################
   namespace :ecommerce do
+    patch "checkout/start/:giftee_id" => "checkout#start", as: 'checkout_start'
     VALID_STEPS = ['gift-wrapt', 'address', 'shipping', 'payment', 'review']
     VALID_STEPS.each do |step|
       action = step.tr('-', '_')
