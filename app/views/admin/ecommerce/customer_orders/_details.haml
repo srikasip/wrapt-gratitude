@@ -36,7 +36,7 @@
           %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseOne"}
             Note from customer
       #collapseOne.panel-collapse.collapse
-        .panel-body
+        .panel-body{style: 'white-space: pre;'}
           = @order.note_content
 
   .panel.panel-default
