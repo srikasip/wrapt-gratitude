@@ -23,8 +23,13 @@
                 = f.input :ship_state, label: 'State'
               .col-xs-12.col-md-2
                 = f.input :ship_zip, label: 'Zip Code'
-          %button.btn.btn-primary{type: 'submit', disabled: @customer_purchase.things_look_shipable? ? 'false' : 'true'}
-            = "Next <svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
+          - if @customer_order.address.present?
+            %button.btn.btn-primary{type: 'submit'}
+              = next_button_text
+          - else
+            %button.btn.btn-primary{type: 'submit', disabled: 'disabled'}
+              = next_button_text
+
 
   = render "debug", customer_order: @customer_order
 
@@ -48,5 +53,6 @@
       App.ClearForm('customer_order', input_names, '[name="customer_order[ship_to]"]', false)
       App.ClearForm('customer_order', input_names, '[name="customer_order[address_id]"]', 'new_address')
 
-      App.EnableSubmitButton('customer_order', ['ship_street1', 'ship_city', 'ship_state', 'ship_zip'])
+      App.AddressSubmitButton()
+      
     })

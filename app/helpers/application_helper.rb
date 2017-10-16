@@ -221,6 +221,10 @@ module ApplicationHelper
     ).html_safe
   end
 
+  def next_button_text
+    "Next <svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
+  end
+
   # this is a no object version of a simple form custom inputs
 
   def wrapt_radio_toggle(collection, attr_name, selected, options={})

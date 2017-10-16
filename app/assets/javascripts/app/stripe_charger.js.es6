@@ -30,10 +30,23 @@ App.StripeCharger = class StripeCharger {
     this.form = $(this.cardNumberSelector).closest('form');
     this.errorContainer = this.form.find(this.paymentErrorsSelector);
 
-    this.cardNumber.addEventListener('change', this.setOutcome);
-    this.cardExpiry.addEventListener('change', this.setOutcome);
-    this.cardCvc.addEventListener('change', this.setOutcome);
+    // this.cardNumber.addEventListener('change', this.setOutcome);
+    // this.cardExpiry.addEventListener('change', this.setOutcome);
+    // this.cardCvc.addEventListener('change', this.setOutcome);
 
+    this.cardNumber.addEventListener('change', (result) => {
+      this.setOutcome(result, this.cardNumberSelector)
+    });
+    this.cardExpiry.addEventListener('change', (result) => {
+      this.setOutcome(result, this.expirySelector)
+    });
+    this.cardCvc.addEventListener('change', (result) => {
+      this.setOutcome(result, this.cvcSelector)
+    });
+
+    this.form.find('input').change((event) => {
+      this.enableSubmitButton({error: false}, event.currentTarget)
+    })
     // Create a token or display an error the form is submitted.
     this.form.on('submit', (event) => { this.submitHandler(event) });
   }
@@ -76,16 +89,43 @@ App.StripeCharger = class StripeCharger {
     that.form.submit();
   }
 
-  setOutcome(result) {
-    var paymentErrorsSelector = '#js-stripe-errors';
-    var errorElement = document.querySelector(paymentErrorsSelector);
-
+  setOutcome(result, selector) {
     if (result.error) {
-      errorElement.textContent = result.error.message;
-      errorElement.classList.remove('invisible');
+      $(selector).css('border-color', '#EB6767')
+      $(selector).parents('.form-group').append('<small class="js-stripe-errors" style="color:#EB6767;">'+result.error.message+'</small>')
     } else {
-      errorElement.textContent = "";
-      errorElement.classList.add('invisible');
+      $(selector).css('border-color', '#c4c4c4')
+      $(selector).parents('.form-group').find('.js-stripe-errors').remove()
+    }
+    this.enableSubmitButton(result, selector)
+  }
+
+  enableSubmitButton(result, selector) {
+    var disabled = false
+    $('.StripeElement').each(function() {
+      if(!$(this).hasClass('StripeElement--complete')) {
+        if(!$(this).hasClass('StripeElement--focus')) {
+          disabled = true
+        } else {
+          if(!result.complete) {
+            disabled = true
+          }
+        }
+      }
+    })
+    if(!$('#js-postal-code').val()) {
+      if(!$('#same_billing_zip').is(':checked')) {
+        disabled = true
+      }
+    }
+    if(!$('#cardholder-name').val()) {
+      disabled = true
+    }
+    var submit = this.form.find('[type="submit"]')
+    if(disabled) {
+      $(submit).prop('disabled', true)
+    } else {
+      $(submit).removeAttr('disabled')
     }
   }
 }

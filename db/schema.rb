@@ -17,14 +17,14 @@ ActiveRecord::Schema.define(version: 20171013142254) do
   enable_extension "hstore"
 
   create_table "addresses", force: :cascade do |t|
-    t.string   "street1"
+    t.string   "street1",          null: false
     t.string   "street2"
     t.string   "street3"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zip"
-    t.string   "addressable_type"
-    t.integer  "addressable_id"
+    t.string   "city",             null: false
+    t.string   "state",            null: false
+    t.string   "zip",              null: false
+    t.string   "addressable_type", null: false
+    t.integer  "addressable_id",   null: false
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.index ["addressable_id", "addressable_type"], name: "index_addresses_on_addressable_id_and_addressable_type", using: :btree

@@ -102,8 +102,9 @@ App.ShowBillingAddress = (object, attr, value, checked, container_selector) => {
     if($(this).is(':checked')) {
       $(zip_input).val($(this).data('zip'))
     } else {
-      $(zip_input).val('')
+      $(zip_input).removeAttr('value')
     }
+    $(zip_input).change()
   })
 }
 
@@ -131,6 +132,7 @@ App.ClearInputs = (object, attrs) => {
   attrs.forEach(function(attr) {
     var input = '[name="'+object+'['+attr+']"]'
     $(input).val('')
+    $(input).change()
   })
 }
 
@@ -147,31 +149,56 @@ App.ClearForm = (object, attrs, toggle_selector, value) => {
   })
 }
 
-App.EnableSubmitButton = (object, attrs) => {
-  attrs.forEach(function(attr) {
-    var input = '[name="'+object+'['+attr+']"]'
-    $(input).change(function() {
-      var form = $(this).parents('form')
-      var disabled = true
-      if($(this).val()) {
-        disabled = false
-        attrs.forEach(function(attr) {
-          var i = '[name="'+object+'['+attr+']"]'
-          if(!$(i).val()) {
-            disabled = true
-          }
-        })
-      }
-      var submit = $(form).find('[type="submit"]')
-      if(!disabled) {
-        $(submit).removeAttr('disabled')
+App.EnableSubmit = (disabled) => {
+  var submit = $('form').find('[type="submit"]')
+  if(disabled) {
+    $(submit).prop('disabled', true)
+  } else {
+    $(submit).removeAttr('disabled')
+  }
+}
+
+App.AddressSubmitCheckShipAttrs = () => {
+  var shipAttrs = ['ship_street1','ship_city','ship_state','ship_zip']
+  var disabled = false
+  shipAttrs.forEach(function(attr) {
+    var i = '[name="customer_order['+attr+']"]'
+    if(!$(i).val()) {
+      disabled = true
+    }
+  })
+  return disabled
+}
+
+App.AddressSubmitButton = () => {
+  $('form').find('input').change(function() {
+    var disabled = false
+    var shipTo = $('form').find('input:checked[name="customer_order[ship_to]"]')
+    if($(shipTo).val() === 'ship_to_customer') {
+      var address = $('form').find('input:checked[name="customer_order[address_id]"]')
+      if($(address).val() === 'new_address') {
+        disabled = App.AddressSubmitCheckShipAttrs()
       } else {
-        $(submit).prop('disabled', true)
+        disabled = false
       }
-      
-    })
+    } else {
+      disabled = App.AddressSubmitCheckShipAttrs()
+    }
+    App.EnableSubmit(disabled)
   })
 }
+
+App.ShippingChoiceSubmitButton = () => {
+  $('form').find('input').change(function() {
+    var disabled = true
+    var shippingChoice = $('form').find('input:checked[name="customer_order[shipping_choice]"]')
+    if(shippingChoice.length > 0) {
+      disabled = false
+    }
+    App.EnableSubmit(disabled)
+  })
+}
+
 
 
 

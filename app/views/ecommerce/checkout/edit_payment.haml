@@ -10,7 +10,6 @@
               .form-group
                 %label{for: 'cardholder-name'} Name On Card
                 %input#cardholder-name.name-on-card.field.form-control.string{name: 'cardholder-name'}
-                -#%small.form-text.text-muted e.g. Jane Doe
           .row
             .col-xs-12.col-md-7
               .form-group
@@ -18,21 +17,18 @@
                   <abbr title="required">*</abbr>
                   Card Number
                 #js-card-number.field.form-control.string.required
-                -#%small.form-text.text-muted e.g. 4242 4242 4242 4242
             .col-xs-12.col-md-3
               .form-group
                 %label{for: 'js-expiry-field'}
                   <abbr title="required">*</abbr>
                   Expiration Date
                 #js-expiry.field.form-control.string.required
-                -#%small.form-text.text-muted e.g. 11/19
             .col-xs-12.col-md-2
               .form-group
                 %label{for: 'js-cvc'}
                   <abbr title="required">*</abbr>
                   CVC #
                 #js-cvc.field.form-control.string.required
-                -#%small.form-text.text-muted e.g. 123
           .row
             .col-xs-12
               .form-group
@@ -43,13 +39,11 @@
               .form-group
                 %label{for: 'js-postal-code'} Zip Code
                 %input#js-postal-code.field.form-control.string{name: 'address-zip', value: @customer_order.ship_zip}
-                -#%small.form-text.text-muted e.g. 66212
-          .row
-            .col-xs-12
-              #js-stripe-errors
 
-          %button.btn.btn-primary{type: 'submit'}
-            = "Next <svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
+          %button.btn.btn-primary{type: 'submit', disabled: true}
+            = next_button_text
+
+  = render "debug", customer_order: @customer_order
 
 = content_for :page_js do
   :javascript
@@ -60,4 +54,4 @@
       App.ShowBillingAddress('', 'same_billing_zip', 'true', false, '.j-zip-code')
     })
 
-= render "debug", customer_order: @customer_order
+
