@@ -1,32 +1,25 @@
 class Ecommerce::CheckoutController < ApplicationController
-  
   include PjaxModalController
 
   before_action -> { redirect_to :root }, if: -> { ENV.fetch('CHECKOUT_ENABLED') { 'false' } == 'false' }
 
-  before_action :_load_service_object, except: [:edit_gift_wrapt]
+  before_action :_load_service_object, except: [:start_checkout]
+
+  def start
+    profile = current_user.owned_profiles.find(params[:giftee_id])
+
+    customer_purchase = PurchaseService.find_existing_cart_or_initialize(profile: profile, user: current_user)
+
+    customer_purchase.generate_order!
+
+    session[:cart_id] = customer_purchase.cart_id
+
+    redirect_to action: :edit_gift_wrapt
+  end
 
   def edit_gift_wrapt
     @load_in_modal = pjax_request?
     @checkout_step = :gift_wrapt
-
-    session[:cart_id] = SecureRandom.hex(16)
-
-    @profile = current_user.owned_profiles.find params[:giftee_id]
-
-    desired_gifts = @profile.gift_selections.map do |gs|
-      ::DesiredGift.new(gs.gift, 1)
-    end
-
-    @customer_purchase = ::PurchaseService.new({
-      cart_id: session[:cart_id],
-      customer: current_user,
-      desired_gifts: desired_gifts,
-      profile: @profile,
-    })
-
-    @customer_order = @customer_purchase.generate_order!
-
     _load_progress_bar
   end
 
