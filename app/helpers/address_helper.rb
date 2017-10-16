@@ -5,7 +5,7 @@ module AddressHelper
         if prefix.nil? || prefix == ''
           x.to_sym
         else
-          (prefix+"_"+x.to_s).to_sym
+          (prefix.to_s+"_"+x.to_s).to_sym
         end
 
       if object.respond_to?(msg)

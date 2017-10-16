@@ -12,5 +12,6 @@ CarrierWave.configure do |config|
   # config.fog_directory  = "wrapt-gratitude-production"
   config.fog_public     = false # defaults to true
   config.fog_attributes = { 'Cache-Control' => "max-age=#{365.day.to_i}" }
+  config.fog_authenticated_url_expiration = 7.days.to_i
   config.max_file_size = 100.megabytes
 end
