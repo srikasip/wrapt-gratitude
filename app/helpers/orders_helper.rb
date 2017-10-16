@@ -23,4 +23,14 @@ module OrdersHelper
       "Unknown"
     end
   end
+
+  def shipping_choice_to_human shipping_choice
+    if shipping_choice == 'fastest'
+      'Fastest'
+    elsif shipping_choice == 'cheapest'
+      'Least Expensive'
+    else
+      shipping_choice.titleize
+    end
+  end
 end

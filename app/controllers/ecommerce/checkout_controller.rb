@@ -2,8 +2,9 @@ class Ecommerce::CheckoutController < ApplicationController
   include PjaxModalController
 
   before_action -> { redirect_to :root }, if: -> { ENV.fetch('CHECKOUT_ENABLED') { 'false' } == 'false' }
-
   before_action :_load_service_object, except: [:start_checkout]
+
+  helper :orders
 
   def start
     profile = current_user.owned_profiles.find(params[:giftee_id])

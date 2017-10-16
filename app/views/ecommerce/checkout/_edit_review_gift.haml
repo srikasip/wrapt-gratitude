@@ -2,10 +2,10 @@
   .col-xs-12
     .co-ro-item
       .co-ro-item__img
-        = image_tag po.gift.primary_gift_image_with_fallback.image_url(:small), class: 'img-responsive'
+        = image_tag gift.primary_gift_image_with_fallback.image_url(:small), class: 'img-responsive'
       .co-ro-item__details
-        %h4.light= po.gift.title
-        %h5.light= number_to_currency po.gift.selling_price
+        %h4.light= gift.title
+        %h5.light= number_to_currency gift.selling_price
         %div
           - link_text = @customer_order.gift_wrapt? ? 'Wrapt with Love' : 'Not Gift Wrapt'
           = link_to ecommerce_checkout_gift_wrapt_path(giftee_id: @customer_order.profile_id), data: {loads_in_pjax_modal: true}, class: 'wrapt-with-love-link' do
