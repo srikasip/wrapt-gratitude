@@ -427,7 +427,8 @@ class PurchaseService
     CustomerOrder.transaction do
       yield
     end
-  rescue Exception
+  rescue Exception => e
+    Rails.logger.fatal { "[PURCHASE_SERVICE] #{e.message}" }
     if self.customer_order.present? && self.customer_order.persisted?
       self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
     end
