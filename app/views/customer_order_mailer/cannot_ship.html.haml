@@ -1,16 +1,19 @@
--# TODO: Needs link to View More Gift Recommendations
 -# TODO: Needs action for if they want us to find out when another might be available (or remove that wording)
 %body{style: "background-color: #fff; font-family: Helvetica, Arial, sans-serif;"}
   %table{style: "background-color: #F2F5F9; max-width: 700px; margin: 0 auto;"}
     %tr
       %td{style: "padding: 40px;"}
         %h1{style: "font-size: 28px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; text-align: center; color: #4D4C4D; margin-bottom: 14px;"}
-          %img{src: "http://localhost:3000/email-signature-images/heart-24.png", style: "padding-right: 12px; vertical-align: middle;"}
+          %img{src: email_image_url("heart-24.png"), style: "padding-right: 12px; vertical-align: middle;"}
           We're sorry to say we have a problem with your order
         %p{style: "text-align: center; font-size: 16px; color: #444; font-weight: normal; line-height: 1.75;"}
-            Because our gifts are one-of-a-kind and often limited editions, we learned that your gift is currently out of stock. Would you like to review <name’s> other recommended gifts and choose from her personalized collection or would you prefer for us to contact the artist to see when another might be available?
-        = link_to "View More Gift Recommendations", style: "display: block; background-color: #ABBAD5; color: #333; text-transform: uppercase; font-size: 12px; letter-spacing: 1.4px; padding: 16px; text-align: center; text-decoration: none; line-height: 1;"
+          Because our gifts are one-of-a-kind and often limited editions, we
+          learned that your gift is currently out of stock. Would you like to
+          review #{@profile.name}’s other recommended gifts and choose from her
+          personalized collection or would you prefer for us to contact the
+          artist to see when another might be available?
+        = link_to "View More Gift Recommendations", giftee_gift_recommendations_url(@profile), style: "display: block; background-color: #ABBAD5; color: #333; text-transform: uppercase; font-size: 12px; letter-spacing: 1.4px; padding: 16px; text-align: center; text-decoration: none; line-height: 1;"
     %tr
       %td{style: "padding-bottom: 60px; text-align: center;"}
-        %img{src: "http://localhost:3000/email-signature-images/logo-with-love.png", style: "padding-right: 12px; vertical-align: middle;"}
+        %img{src: email_image_url("logo-with-love.png"), style: "padding-right: 12px; vertical-align: middle;"}
 
