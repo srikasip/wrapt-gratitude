@@ -9,46 +9,41 @@
     = link_to 'Export Gift Tags', admin_gift_tag_exports_path, class: 'btn btn-primary', method: :create
 
 .row.admin__search
-  .col-sm-12
-    = form_for  [:admin, @gift_search], url: admin_gifts_path, html: {method: 'GET', class: 'form-horizontal', data: {behavior: 'form-loads-subcategories'}} do |form|
+  = form_for  [:admin, @gift_search], url: admin_gifts_path, html: {method: 'GET', data: {behavior: 'form-loads-subcategories'}} do |form|
+    .col-sm-6
       .form-group
-        %label.col-sm-2.control-label Title or SKU
-        .col-sm-4
-          = form.search_field :keyword, placeholder: 'Title or SKU', class: 'form-control', style: 'min-width: 300px;'
+        %label.control-label Title or SKU
+        = form.search_field :keyword, placeholder: 'Title or SKU', class: 'form-control', style: 'min-width: 300px;'
       .form-group
-        %label.col-sm-2.control-label Tags
-        .col-sm-4
-          = form.search_field :tags, placeholder: 'Tags', class: 'form-control', style: 'min-width: 300px;'
+        %label.control-label Tags
+        = form.search_field :tags, placeholder: 'Tags', class: 'form-control', style: 'min-width: 300px;'
       .form-group
-        %label.col-sm-2.control-label Category
-        .col-sm-4
-          = form.collection_select :product_category_id, ProductCategory.categories, :id, :name, {prompt: 'Category'}, class: 'form-control', data: {behavior: 'product-category-input'}
-          = form.collection_select :product_subcategory_id, ProductCategory.subcategories.where(parent_id: @gift_search.product_category_id), :id, :name, {prompt: 'Sub-category'}, class: 'form-control', data: {behavior: 'product-subcategory-input'}
+        %label.control-label Category
+        = form.collection_select :product_category_id, ProductCategory.categories, :id, :name, {prompt: 'Category'}, class: 'form-control', data: {behavior: 'product-category-input'}, style: "margin-bottom: 6px;"
+        = form.collection_select :product_subcategory_id, ProductCategory.subcategories.where(parent_id: @gift_search.product_category_id), :id, :name, {prompt: 'Sub-category'}, class: 'form-control', data: {behavior: 'product-subcategory-input'}
+    .col-sm-6
       .form-group
-        %label.col-sm-2.control-label Vendor
-        .col-sm-4
-          = form.collection_select :vendor_id, Vendor.order(:name), :id, :name, {prompt: 'Vendor'}, class: 'form-control'
+        %label.control-label Vendor
+        = form.collection_select :vendor_id, Vendor.order(:name), :id, :name, {prompt: 'Vendor'}, class: 'form-control'
       .form-group
-        %label.col-sm-2.control-label Available to Customers
-        .col-sm-4
-          = form.collection_select :available, ['Either', 'Yes', 'No'], :to_s, :to_s, {}, class: 'form-control'
+        %label.control-label Available to Customers
+        = form.collection_select :available, ['Either Yes or No', 'Yes', 'No'], :to_s, :to_s, {}, class: 'form-control'
       .form-group
-        %label.col-sm-2.control-label Price Range
-        .col-sm-4
-          .input-group
-            .input-group-addon $
-            = form.text_field :min_price, placeholder: 'Min Price', class: 'form-control'
-            .input-group-addon .00
-          .input-group
-            .input-group-addon $
-            = form.text_field :max_price, placeholder: 'Max Price', class: 'form-control'
-            .input-group-addon .00
+        %label.control-label Price Range
+        .input-group{style: "margin-bottom: 6px;"}
+          .input-group-addon $
+          = form.text_field :min_price, placeholder: 'Min Price', class: 'form-control'
+          .input-group-addon .00
+        .input-group
+          .input-group-addon $
+          = form.text_field :max_price, placeholder: 'Max Price', class: 'form-control'
+          .input-group-addon .00
       .form-group
-        .col-sm-offset-2.col-sm-4
-          %button.btn.btn-primary
-            %i.glyphicon.glyphicon-search
-            Search
-          = link_to 'Clear Search (Show All)', admin_gifts_path, class: 'btn btn-default'
+        
+        %button.btn.btn-primary.pull-right{style: "margin-left: 6px;"}
+          %i.glyphicon.glyphicon-search
+          Search
+        = link_to 'Clear Search (Show All)', admin_gifts_path, class: 'btn btn-default pull-right'
 
 .row
   .col-sm-12
@@ -57,26 +52,35 @@
         %tr
           %th Gift
           %th
+          %th
 
       %tbody
         - @gifts.each do |gift|
           %tr
             %td
-              %h4.admin-index-table--item-title= gift.title
-              %p
+              %h4.admin-index-table--item-title
                 = gift.wrapt_sku
                 (#{number_to_currency gift.selling_price})
+                
+              %table
+                %tr
+                  %td.admin-index-table--categories-cell
+                    - if gift.product_category.present?
+                      %span.label.label-default= gift.product_category&.name
+                    - if gift.product_subcategory.present?
+                      %span.label.label-default= gift.product_subcategory&.name
+                    - if gift.featured?
+                      %span.label.label-default featured
+                    %br
+                    - gift.tags.each do |tag|
+                      %span.label.label-primary.label-inverse= tag.name
+            %td
               - if gift.primary_gift_image.present?
                 = image_tag gift.primary_gift_image.image_url(:small), class: 'admin-index-table--image'
+              %h4.admin-index-table--item-title= gift.title
               .admin-index-table--item-description= gift.description
-              - if gift.product_category.present?
-                %span.label.label-default= gift.product_category&.name
-              - if gift.product_subcategory.present?
-                %span.label.label-default= gift.product_subcategory&.name
-              - if gift.featured?
-                %span.label.label-default featured
-              - gift.tags.each do |tag|
-                %span.label.label-primary.label-inverse= tag.name
+                    
+
             %td.admin-index-table--buttons-cell(style="line-height: 24px; text-align: left;")
               = link_to 'View', [:admin, gift], class: 'btn btn-default btn-xs'
               = link_to 'Preview', admin_gift_preview_modal_path(gift), class: 'btn btn-default btn-xs', data: {loads_in_pjax_modal: true}

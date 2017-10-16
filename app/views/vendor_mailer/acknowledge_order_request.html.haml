@@ -1,30 +1,30 @@
-%p
-  Hello #{@vendor.name},
-
-%p
-  An order has come through on wrapt.com. Please follow
-  = link_to ecommerce_vendor_confirmation_url(@purchase_order.vendor_token)  do
-    this link
-  to tell us if you can or cannot fulfill this order. After all other vendors
-  and purchase orders associated with this customer's entire order are
-  verified, you will receive the information to complete fulfillment such as
-  shipping labels, a packling slip, etc.
-
-%table
-  %thead
+%body{style: "background-color: #fff; font-family: Helvetica, Arial, sans-serif;"}
+  %table{style: "background-color: #F2F5F9; max-width: 700px; margin: 0 auto;"}
     %tr
-      %th SKU
-      %th Description
-      %th Quantity
-  %tbody
-    - @purchase_order.line_items.each do |line_item|
-      - product = line_item.orderable
-      %tr
-        %td= product.vendor_sku
-        %td= product.description
-        %td= line_item.quantity
-
-%p
-  Thanks,
-  %br
-  The Wrapt Team
+      %td{style: "padding: 40px;"}
+        %h1{style: "font-size: 28px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; text-align: center; color: #4D4C4D; margin-bottom: 14px; line-height: 1.2;"}
+          Hello #{@vendor.name} ~
+          %br
+          %img{src: "http://localhost:3000/email-signature-images/heart-24.png", style: "padding-right: 12px; vertical-align: middle;"}
+          An order has been placed at Wrapt.com
+        %p{style: "text-align: center; font-size: 24px; color: #4D4C4D; font-weight: normal; line-height: 1.2;"}
+          Please follow
+          = link_to ecommerce_vendor_confirmation_url(@purchase_order.vendor_token)  do
+            this link
+          to tell us if you can fulfill this order. 
+        %p{style: "text-align: left; font-size: 18px; color: #4d4c4d; font-weight: normal; line-height: 1.1;"}
+          After all other vendors and purchase orders associated with this customer's entire order are verified, you will receive the information to complete fulfillment such as shipping labels, a packing slip, etc.
+        %table{style: "margin: 60px auto 40px; border: 1px solid #E2E2E2; max-width: 600px;"}
+          %tr
+            %th{style: "padding: 4px; text-align: left; vertical-align: top; font-weight: bold; color: #4D4C4D;"} SKU
+            %th{style: "padding: 4px; text-align: left; vertical-align: top; font-weight: bold; color: #4D4C4D;"} Description
+            %th{style: "padding: 4px; text-align: left; vertical-align: top; font-weight: bold; color: #4D4C4D;"} Quantity
+          - @purchase_order.line_items.each do |line_item|
+            - product = line_item.orderable
+            %tr
+              %td{style: "padding: 4px; text-align: left; vertical-align: top; font-weight: normal; color: #4D4C4D;"}= product.vendor_sku
+              %td{style: "padding: 4px; text-align: left; vertical-align: top; font-weight: normal; color: #4D4C4D;"}= product.description
+              %td{style: "padding: 4px; text-align: left; vertical-align: top; font-weight: normal; color: #4D4C4D;"}= line_item.quantity
+    %tr
+      %td{style: "padding-bottom: 60px; text-align: center;"}
+        %img{src: "http://localhost:3000/email-signature-images/logo-with-love.png", style: "padding-right: 12px; vertical-align: middle;"}
