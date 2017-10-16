@@ -3,8 +3,6 @@ class Ecommerce::CheckoutController < ApplicationController
 
   before_action :_load_service_object, except: [:edit_gift_wrapt]
 
-  before_action -> { @hide_gift_basket = true }
-
   def edit_gift_wrapt
     @checkout_step = :gift_wrapt
 
@@ -49,7 +47,7 @@ class Ecommerce::CheckoutController < ApplicationController
     @saved_addresses = current_user.addresses
     @current_user_addresses = @saved_addresses
     @giftee_addresses = @profile.addresses
-    
+
     if @customer_order.ship_to_customer? && @customer_order.address.nil? && @customer_order.ship_street1.blank?
       @customer_order.address = current_user.addresses.last
     elsif @customer_order.address.present?

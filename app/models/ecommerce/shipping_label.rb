@@ -26,8 +26,6 @@ class ShippingLabel < ApplicationRecord
   validates :tracking_number, presence: true, if: :success
   validates :url, presence: true, if: :success
 
-  before_save :_cache_the_results
-
   delegate :cart_id, to: :shipment, prefix: false
 
   def shipped?
@@ -41,6 +39,11 @@ class ShippingLabel < ApplicationRecord
       :label_file_type => "PDF",
       :async           => false
     )
+    _cache_the_results
+  rescue Shippo::Exceptions::APIServerError, Shippo::Exceptions::ConnectionError => e
+    Rails.logger.fatal "[SHIPPO] #{e.message}"
+    self.success = false
+    self.api_response = JSON.parse(e.response.body) rescue {msg: e.message}
   end
 
   private def _cache_the_results

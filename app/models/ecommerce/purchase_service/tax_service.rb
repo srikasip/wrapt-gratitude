@@ -1,20 +1,30 @@
 class PurchaseService::TaxService
-  attr_accessor :cart_id, :customer_order
+  attr_accessor :cart_id, :client, :customer_order, :tax_in_cents, :tax_in_dollars
 
-  def initialize(cart_id:, customer_order:nil)
+  def initialize(cart_id:nil, customer_order:nil)
+    if cart_id.nil? && customer_order.nil?
+      raise InternalConsistencyError, "You must provide some way of getting the customer order"
+    end
     self.cart_id        = cart_id
     self.customer_order = customer_order || CustomerOrder.find_by(cart_id: self.cart_id)
+    self.client = AvaTax::Client.new(:logger => true)
   end
 
-  def estimated_tax_in_cents
-    0.0
+  define_method(:estimate?) { @estimate }
+  define_method(:real?)     { !estimate?  }
+
+  def estimate!
+    @estimate = true
+    payload = Tax::TransactionPayload.new(customer_order)
+    payload.estimate = true
+    transaction = self.client.create_transaction(payload.to_hash)
+    self.tax_in_dollars = transaction.lines.sum { |x| x.taxableAmount }
+    self.tax_in_cents = self.tax_in_dollars * 100
   end
 
-  def estimated_tax_in_dollars
-    0.0
-  end
-
-  def submit_estimated_tax!
+  def reconcile!
+    @estimate = false
+    raise 'WIP'
     :no_op
   end
 
