@@ -8,4 +8,7 @@
         %h5.light= number_to_currency po.gift.selling_price
         %div
           - link_text = @customer_order.gift_wrapt? ? 'Wrapt with Love' : 'Not Gift Wrapt'
-          = link_to link_text, 'javascript:void(0);'
+          = link_to ecommerce_checkout_gift_wrapt_path(giftee_id: @customer_order.profile_id), data: {loads_in_pjax_modal: true}, class: 'wrapt-with-love-link' do
+            = link_text
+            - if @customer_order.gift_wrapt? && @customer_order.include_note?
+              = embedded_svg('icon-page', xlink_class: 'icon-page')

@@ -1,0 +1,23 @@
+%h3.light Gift Wrapt
+- form_data = @load_in_modal ? {submits_to_pjax_modal: true} : {}
+= simple_form_for @customer_order, url: url_for, method: :patch, data: form_data do |f|
+  .co-toggle
+    = f.input :gift_wrapt, as: :wrapt_radio_toggle, collection: [['Wrapt With Love', true], ['Do Not Gift Wrapt', false]], label: false
+  .j-co-gift-wrapt__note-1{style: f.object.gift_wrapt? ? '' : 'display: none;'}
+    .co-add-a-note
+      %h4.light Add a Note
+      -# FYI: this checkbox is checked on false!
+      = f.input :include_note, as: :wrapt_styled_checkbox, label: 'Do not include a note', checked_value: 0, unchecked_value: 1
+    .j-co-gift-wrapt__note-2{style: f.object.include_note? ? '' : 'display: none;'}
+      .row
+        .col-xs-12.col-md-6
+          = f.input :note_from, label: 'From'
+        .col-xs-12.col-md-6
+          = f.input :note_to, label: 'To'
+      = f.input :note_content, label: 'Your Note'
+  %button.btn.btn-primary{type: 'submit'}
+    -# this can be edited on the review order page (opens in modal)
+    - if @load_in_modal
+      Update
+    - else
+      = next_button_text

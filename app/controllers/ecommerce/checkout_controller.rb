@@ -1,4 +1,7 @@
 class Ecommerce::CheckoutController < ApplicationController
+  
+  include PjaxModalController
+
   before_action -> { redirect_to :root }, if: -> { ENV.fetch('CHECKOUT_ENABLED') { 'false' } == 'false' }
 
   before_action :_load_service_object, except: [:edit_gift_wrapt]
@@ -6,6 +9,7 @@ class Ecommerce::CheckoutController < ApplicationController
   before_action -> { @hide_gift_basket = true }
 
   def edit_gift_wrapt
+    @load_in_modal = pjax_request?
     @checkout_step = :gift_wrapt
 
     session[:cart_id] = SecureRandom.hex(16)
@@ -31,7 +35,12 @@ class Ecommerce::CheckoutController < ApplicationController
   def save_gift_wrapt
     @checkout_step = :gift_wrapt
     if @customer_purchase.gift_wrapt!(params)
-      redirect_to action: :edit_address
+      if pjax_request?
+        # loads in modal on order review page
+        redirect_to action: :edit_review
+      else
+        redirect_to action: :edit_address
+      end
     else
       flash.now[:notice] = "There was a problem saving your response."
       _load_progress_bar
