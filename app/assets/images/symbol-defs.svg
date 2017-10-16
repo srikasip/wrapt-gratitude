@@ -85,5 +85,9 @@
   <path fill="currentColor" class="icon-page-path" d="M9.544 22.222h12.912c0.491 0 0.889-0.398 0.889-0.889s-0.398-0.889-0.889-0.889h-12.912c-0.491 0-0.889 0.398-0.889 0.889s0.398 0.889 0.889 0.889z"></path>
   <path fill="currentColor" class="icon-page-path" d="M9.544 16.889h12.912c0.491 0 0.889-0.398 0.889-0.889s-0.398-0.889-0.889-0.889h-12.912c-0.491 0-0.889 0.398-0.889 0.889s0.398 0.889 0.889 0.889z"></path>
 </symbol>
+<symbol id="icon-arrow-down" viewBox="0 0 56 32">
+<title>arrow-down</title>
+<path d="M7.125 1.551l-4.166 4.318 25.431 24.537 24.547-25.441-4.318-4.166-20.381 21.123z"></path>
+</symbol>
 </defs>
 </svg>
