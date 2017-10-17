@@ -1,51 +1,60 @@
 .container
   .row
     .col-xs-12
-      %h4
-        Order History
-        %form#js-filter
-          %select{name: 'search[filter]'}
-            :ruby
-              options = [
-                ['All Orders', 'all'],
-                ['Open Orders', 'open'],
-                ['Completed Orders', 'completed']
-              ]
-            = options_for_select options, params.dig(:search, :filter)
+      .ma-title.clearfix
+        .ma-title__text.pull-left
+          %h5 Order History
+        .ma-title__action.pull-right
+          .wrapt-dropdown
+            = link_to '#my-account-orders__filters', role: 'button', data: {toggle: 'collapse'}, 'aria-expanded' => false, 'aria-controls' => 'my-account-orders__filters' do
+              = "#{params.dig(:search, :filter) || 'all'} orders"
+              = embedded_svg('icon-arrow-down')
+            .blue-dropdown__content.right.ma-filters#my-account-orders__filters.collapse
+              :ruby
+                options = [
+                  ['All Orders', 'all'],
+                  ['Open Orders', 'open'],
+                  ['Completed Orders', 'completed']
+                ]
+              - options.each do |option|
+                = link_to my_account_orders_path(search: {filter: option[1]}) do 
+                  = option[0]
   .row
     .col-xs-12
       = paginate(@orders)
-      %table.table
+      %table.ma-orders__table
         %thead
           %tr
             %th Order Date
             %th Order #
-            %th Giftee
-            %th Shipped to
+            %th.hidden-xs.hidden-sm Giftee
+            %th.hidden-xs.hidden-sm Shipped to
             %th Status
-            %th
+            %th{width: '20px'}
         %tbody
-          - @orders.each do |order|
+          - @orders.each_with_index do |order, index|
             %tr
               %td= format_date(order.submitted_on)
               %td
                 = link_to my_account_order_path(order) do
                   = order.order_number
-              %td= order.profile.name
-              %td= order.shipped_to_name
+              %td.hidden-xs.hidden-sm= order.profile.name
+              %td.hidden-xs.hidden-sm= order.shipped_to_name
               %td= status_to_human(order)
-              %td
-                = link_to 'View Detail', my_account_order_path(order)
-                %br
-                - order.shipping_labels.each do |shipping_label|
-                  = link_to 'Track Package', shipping_label.tracking_url, target: '_blank'
-                  %br
+              %td.text-right
+                .wrapt-dropdown
+                  = link_to "#my-account-order__#{index}", role: 'button', class: 'ma-order__trigger', data: {toggle: 'collapse'}, 'aria-expanded' => false, 'aria-controls' => "my-account-order__#{index}" do
+                    = embedded_svg('icon-arrow-down')
+                  .blue-dropdown__content.ma-order__toggle-content.right.collapse{id: "my-account-order__#{index}"}
+                    = link_to 'View Detail', my_account_order_path(order)
+                    - order.shipping_labels.each do |shipping_label|
+                      = link_to 'Track Package', shipping_label.tracking_url, target: '_blank'
 
 
 = content_for :page_js do
   :javascript
     $('document').ready(function() {
-      $('#js-filter').change(function(e) {
-        $(this).submit();
+      $('#js-filter input').change(function(e) {
+        $(this).parents('form').submit();
       });
     })

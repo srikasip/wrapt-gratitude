@@ -1,0 +1,39 @@
+@import "helpers";
+
+.wrapt-dropdown {
+  position: relative;
+}
+
+.blue-dropdown__content {
+  min-width: 200px;
+  background: $blue-005;
+  padding: 16px;
+  @include shadowed-box__gray;
+  position: absolute;
+  top: 30px;
+  z-index: $zindex-dropdown;
+  &.right {
+    right: -8px;
+  }
+  &.left {
+    left: -8px;
+  }
+}
+
+.blue-dropdown__content:before {
+  content: '';
+  @include triangle-up(8px, 8px, 10px, $blue-005);
+  position: absolute;
+  top: -5px;
+  @include shadowed-box__gray;
+}
+
+.blue-dropdown__content.right:before {
+  right: 4px;
+}
+
+.blue-dropdown__content.left:before {
+  left: 4px;
+}
+
+

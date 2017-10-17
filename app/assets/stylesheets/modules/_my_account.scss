@@ -23,9 +23,106 @@
   @include akkurat-regular;
   letter-spacing: 1px;
 }
+.ma-title__action a {
+  color: $gray-007;
+  text-transform: capitalize;
+  font-size: 80%;
+  @include akkurat-light;
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: transparent;
+    color: $gray-007;
+    text-decoration: none;
+  }
+  svg {
+    width: 10px;
+    height: 10px;
+    color: $gray-007;
+    fill: $gray-007;
+    stroke: $gray-007;
+    margin-left: 10px;
+  }
+}
 .ma-general-info__item {
   margin-bottom: 30px;
 }
 .ma-general-info__item small {
   color: $gray-007;
 }
+
+.ma-filters a,
+.ma-order__toggle-content a {
+  display: block;
+  margin-bottom: 8px;
+  @include akkurat-regular;
+  color: $gray-010;
+  font-size: 75%;
+  letter-spacing: 1px;
+  &:hover,
+  &:active,
+  &:focus {
+    color: $gray-007;
+    background-color: transparent;
+    text-decoration: none;
+  }
+}
+
+.ma-filters a:last-child,
+.ma-order__toggle-content a:last-child {
+  margin-bottom: 0px;
+}
+
+.ma-orders__table {
+  table-layout: fixed;
+  width: 100%;
+  font-size: 90%;
+  @include akkurat-light;
+  th {
+    color: $gray-007;
+  }
+  th, td {
+    padding: 0px 5px 10px;
+  }
+  tr td:first-child,
+  tr th:first-child {
+    padding-left: 0px;
+  }
+  tr td:last-child,
+  tr th:last-child {
+    padding-right: 0px;
+  }
+}
+
+.ma-order__trigger {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid $blue-006;
+  position: relative;
+  text-align: center;
+  svg {
+    position: relative;
+    top: -3px;
+    width: 10px;
+    height: 10px;
+    color: $blue-006;
+    fill: $blue-006;
+    stroke: $blue-006;
+  }
+}
+
+.ma-order__toggle-content {
+  text-align: left;
+  &.right {
+    right: -4px;
+  }
+  &.left {
+    left: -4px;
+  }
+}
+
+
+
+
+

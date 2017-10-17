@@ -139,3 +139,11 @@
   order: $val;
 }
 
+@mixin triangle-up($left, $right, $bottom, $color) {
+  width: 0;
+  height: 0;
+  border-left: $left solid transparent;
+  border-right: $right solid transparent;
+  border-bottom: $bottom solid $color;
+}
+
