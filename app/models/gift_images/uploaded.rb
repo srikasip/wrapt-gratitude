@@ -8,7 +8,7 @@ module GiftImages
     after_save :enqueue_processing, if: :key, unless: :image_processed?
 
     private def enqueue_processing
-      DirectUploadedImageProcessingJob.perform_later(self, key)
+      DirectUploadedImageProcessingJob.set(wait: 2.seconds).perform_later(self, key)
     end
 
     def image_owner
