@@ -4,7 +4,7 @@ end
 
 Sidekiq.configure_server do |config|
   # Uploaded images need to be processed faster than the default 15 second interval allows for.
-  config.average_scheduled_poll_interval = 2
+  config.average_scheduled_poll_interval = 1
 end
 
 Sidekiq.default_worker_options = {'backtrace' => true}
