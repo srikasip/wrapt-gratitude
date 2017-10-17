@@ -2,7 +2,11 @@
   .col-xs-12
     .co-ro-item
       .co-ro-item__img
-        = image_tag gift.primary_gift_image_with_fallback.image_url(:small), class: 'img-responsive'
+        - url = gift.primary_gift_image_with_fallback.image&.url(:small)
+        - if url.present?
+          = image_tag url, class: 'img-responsive'
+        - else
+          %img
       .co-ro-item__details
         %h4.light= gift.title
         %h5.light= number_to_currency gift.selling_price
