@@ -5,10 +5,10 @@ module GiftImages
 
     mount_uploader :image, ProductImageUploader
 
-    after_save :enqueue_processing, if: :key, unless: :image_processed?
+    after_commit :enqueue_processing, if: :key, unless: :image_processed?
 
     private def enqueue_processing
-      DirectUploadedImageProcessingJob.set(wait: 0.second).perform_later(self, key)
+      DirectUploadedImageProcessingJob.perform_later(self, key)
     end
 
     def image_owner
