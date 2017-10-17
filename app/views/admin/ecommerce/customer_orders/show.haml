@@ -5,6 +5,7 @@
       Customer Order
       = @order.order_number
       = link_to 'Cancel Order', admin_ecommerce_customer_order_path(@order), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+      = link_to 'Resend Customer Notification', send_customer_notification_admin_ecommerce_customer_order_path(@order), :method => :post, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-warning btn-xs'
 
 .row
   .col-sm-4

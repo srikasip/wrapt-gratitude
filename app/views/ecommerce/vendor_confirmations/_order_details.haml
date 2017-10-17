@@ -9,6 +9,7 @@
     %table.table.table-striped
       %thead
         %tr
+          %th
           %th Description
           %th SKU
           %th Quantity
@@ -16,10 +17,13 @@
         - @purchase_order.line_items.each do |line_item|
           - product = line_item.orderable
           %tr
+            %td
+              %img{src: product.primary_product_image.image.url(:small), style: 'max-width: 88px; padding-right: 4px;'}
             %td= product.description
             %td= product.vendor_sku
             %td= line_item.quantity
         %tr
+          %td
           %td
             - wrapt_parcel = @purchase_order.gift.pretty_parcel
             = wrapt_parcel.description
@@ -27,6 +31,7 @@
           %td 1
         - if @customer_order.include_note?
           %tr
+            %td
             %td Hand written note
             %td
             %td 1

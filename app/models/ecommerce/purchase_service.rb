@@ -28,6 +28,28 @@ class PurchaseService
     self.profile        ||= self.customer_order.profile
   end
 
+  def self.find_existing_cart_or_initialize(profile:,user:)
+    existing_order = user.customer_orders.for_profile(profile).initialized_only.newest
+
+    cart_id = \
+      if existing_order
+        existing_order.cart_id
+      else
+        profile.id.to_s+SecureRandom.hex(16)
+      end
+
+    desired_gifts = profile.gift_selections.map do |gs|
+      ::DesiredGift.new(gs.gift, 1)
+    end
+
+    ::PurchaseService.new({
+      cart_id: cart_id,
+      customer: user,
+      desired_gifts: desired_gifts,
+      profile: profile,
+    })
+  end
+
   def generate_order!
     _sanity_check!
 
@@ -405,7 +427,8 @@ class PurchaseService
     CustomerOrder.transaction do
       yield
     end
-  rescue Exception
+  rescue Exception => e
+    Rails.logger.fatal { "[PURCHASE_SERVICE] #{e.message}" }
     if self.customer_order.present? && self.customer_order.persisted?
       self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
     end

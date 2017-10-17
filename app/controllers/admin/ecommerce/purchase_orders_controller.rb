@@ -16,8 +16,19 @@ module Admin
         @shipping_label = @order.shipping_label
       end
 
-      def resend_notification
-        flash[:alert] = "Note: notification resending not yet implemented"
+      def send_vendor_notification
+        VendorMailer.acknowledge_order_request(params[:id]).deliver_later
+        redirect_back(fallback_location: admin_ecommerce_purchase_orders_path)
+      end
+
+      def cancel_order
+        flash[:alert] = "Note that this currenly only sends the cancellation email. THE ORDER WAS NOT CANCELLED."
+        CustomerOrderMailer.cannot_ship(params[:id]).deliver_later
+        redirect_back(fallback_location: admin_ecommerce_purchase_orders_path)
+      end
+
+      def send_order_shipped_notification
+        CustomerOrderMailer.order_shipped(params[:id]).deliver_later
         redirect_back(fallback_location: admin_ecommerce_purchase_orders_path)
       end
     end

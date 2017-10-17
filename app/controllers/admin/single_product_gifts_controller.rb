@@ -12,10 +12,10 @@ module Admin
         flash[:alert] = 'Sorry that product already has a single product gift.'
         redirect_to admin_products_path(context_params) #TODO preserve page + search
       else
-        @gift = @product.build_single_product_gift product_category: Gift.default_product_category
+        @gift = @product.build_single_product_gift
         @gift.pretty_parcels.build
         @gift.shipping_parcels.build
-        @sub_categories = Gift.default_product_category.children
+        @sub_categories = []
       end
     end
 

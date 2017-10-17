@@ -4,7 +4,10 @@
     %h1
       Purchase Order
       = @order.order_number
-      = link_to 'Resend notification to vendor', resend_notification_admin_ecommerce_purchase_order_path(@order), :method => :put, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-warning btn-xs'
+      = link_to 'Send PO notification to vendor', url_for(action: :send_vendor_notification), :method => :post, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-warning btn-xs'
+      = link_to 'Cancel order', url_for(action: :cancel_order), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+      = link_to 'Send order-shipped notification', url_for(action: :send_order_shipped_notification), :method => :post, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-warning btn-xs'
+
       = link_to 'View confirmation page for vendor', ecommerce_vendor_confirmation_path(id: @order.vendor_token), class: 'btn btn-default btn-xs'
       - if @shipping_label.present?
         = link_to 'View Shipping Label', @order.shipping_label.url, target: '_blank', class: 'btn btn-default btn-xs'

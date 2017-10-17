@@ -7,7 +7,8 @@
         .row
           .col-xs-12.col-md-8
             .outline-container.form-group
-              - @customer_order.purchase_orders.each do |po|
+              - @customer_order.line_items.each do |line_item|
+                - gift = line_item.orderable
                 .outline-container__section
                   = render 'edit_review_gift', gift: po.gift, customer_order: @customer_order, edit_gift_wrapt: true
               .outline-container__section

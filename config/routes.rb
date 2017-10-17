@@ -78,6 +78,7 @@ Rails.application.routes.draw do
   ### Checkout and shopping cart
   ###################################
   namespace :ecommerce do
+    patch "checkout/start/:giftee_id" => "checkout#start", as: 'checkout_start'
     VALID_STEPS = ['gift-wrapt', 'address', 'shipping', 'payment', 'review']
     VALID_STEPS.each do |step|
       action = step.tr('-', '_')
@@ -177,10 +178,16 @@ Rails.application.routes.draw do
         end
       end
       resources :billings, only: [:index]
-      resources :customer_orders, only: [:index, :show, :destroy, :create]
+      resources :customer_orders, only: [:index, :show, :destroy, :create] do
+        member do
+          post :send_customer_notification
+        end
+      end
       resources :purchase_orders, only: [:index, :show] do
         member do
-          put :resend_notification
+          post :send_vendor_notification
+          delete :cancel_order
+          post :send_order_shipped_notification
         end
       end
       post 'webhooks/tracking' => 'webhooks#tracking'

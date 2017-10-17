@@ -7,8 +7,8 @@
     = render 'ecommerce/checkout/edit_review_detail_item', header: 'Billing Zip Code', items: billing_address_items
 .row.mb1
   .col-xs-12.col-sm-6
-    - shipping_items = [customer_order.shipping_choice, number_to_currency(customer_order.shipping_in_dollars)]
-    = render 'ecommerce/checkout/edit_review_detail_item', header: 'Shipping Method', items: shipping_items
+    - words = shipping_choice_to_human(@customer_order.shipping_choice)
+    = render 'edit_review_detail_item', header: 'Shipping Method', items: [words]
   .col-xs-12.col-sm-6
     - payment_items = [customer_order.charge.card_type, "* #{customer_order.charge.last_four}"]
     = render 'ecommerce/checkout/edit_review_detail_item', header: 'Payment Info', items: payment_items

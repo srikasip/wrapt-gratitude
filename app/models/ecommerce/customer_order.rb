@@ -34,6 +34,9 @@ class CustomerOrder < ApplicationRecord
   has_many :shipping_labels
   has_many :purchase_orders, dependent: :destroy
 
+  scope :initialized_only, -> { where(status: ORDER_INITIALIZED) }
+  define_singleton_method(:newest) { order('updated_at desc').first }
+
   delegate :email, :name, to: :user, prefix: true
   delegate :name, to: :profile, prefix: true
 
