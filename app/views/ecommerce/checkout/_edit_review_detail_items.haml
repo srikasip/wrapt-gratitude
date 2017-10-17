@@ -1,6 +1,15 @@
-.row
+.row.mb2.mt1
   .col-xs-12.col-sm-6
-    - address_items = [@customer_order.recipient_name, @customer_order.ship_street1, @customer_order.ship_street2, "#{@customer_order.ship_city}, #{@customer_order.ship_state} #{@customer_order.ship_zip}"]
-    = render 'edit_review_detail_item', header: 'Shipping Address', items: address_items
+    - shipping_address_items = [customer_order.recipient_name, customer_order.ship_street1, customer_order.ship_street2, "#{customer_order.ship_city}, #{customer_order.ship_state} #{customer_order.ship_zip}"]
+    = render 'ecommerce/checkout/edit_review_detail_item', header: 'Shipping Address', items: shipping_address_items
   .col-xs-12.col-sm-6
-    = render 'edit_review_detail_item', header: 'Shipping Method', items: [@customer_order.shipping_choice.titleize]
+    - billing_address_items = [customer_order.charge.bill_zip]
+    = render 'ecommerce/checkout/edit_review_detail_item', header: 'Billing Zip Code', items: billing_address_items
+.row.mb1
+  .col-xs-12.col-sm-6
+    - shipping_items = [customer_order.shipping_choice, number_to_currency(customer_order.shipping_in_dollars)]
+    = render 'ecommerce/checkout/edit_review_detail_item', header: 'Shipping Method', items: shipping_items
+  .col-xs-12.col-sm-6
+    - payment_items = [customer_order.charge.card_type, "* #{customer_order.charge.last_four}"]
+    = render 'ecommerce/checkout/edit_review_detail_item', header: 'Payment Info', items: payment_items
+

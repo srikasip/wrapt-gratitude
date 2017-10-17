@@ -9,14 +9,14 @@
             .outline-container.form-group
               - @customer_order.purchase_orders.each do |po|
                 .outline-container__section
-                  = render 'edit_review_gift', po: po
+                  = render 'edit_review_gift', gift: po.gift, customer_order: @customer_order, edit_gift_wrapt: true
               .outline-container__section
-                = render 'edit_review_detail_items'
+                = render 'edit_review_detail_items', customer_order: @customer_order
           .col-xs-12.col-md-4
             .outline-container.outline-container__blue.form-group.co-ro-summary
               .outline-container__section
                 %h4.light Summary
-                = render 'edit_review_summary_items'
+                = render 'edit_review_summary_items', customer_order: @customer_order
               .outline-container__section.co-ro-summary__total.clearfix
                 %h4.light Total
                 %h5.light=number_to_currency @customer_order.total_to_charge_in_dollars

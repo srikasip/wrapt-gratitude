@@ -2,7 +2,7 @@
   %div= label
   - if value_in_dollars
     - if co_attr
-      %div= number_to_currency @customer_order.send(co_attr)
+      %div= number_to_currency customer_order.send(co_attr)
     - else
       %div= number_to_currency value
   - elsif value

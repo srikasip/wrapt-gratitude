@@ -1,53 +1,32 @@
 .container
   .row
     .col-xs-12
-      %p
-        Order History » Order # #{@order.order_number}
+      .ma-title.clearfix
+        .ma-title__text.pull-left
+          %h5
+            = link_to 'Order History', my_account_orders_path
+            = embedded_svg('icon-caret-right')
+            Order # #{@order.order_number}
+        .ma-title__action.pull-right
 
   .row
-    .col-xs-12
-      %p
-        Your gift to #{@order.profile_name}
-      - @order.line_items.each do |item|
-        - gift = item.orderable
-        %img{src: gift.primary_gift_image.image.url(:small), style: 'max-width: 200px'}
-        = gift.title
-        %br
-        = number_to_currency(item.price_per_each_in_dollars)
-        QTY: #{item.quantity}
-        - if @order.gift_wrapt
-          %br
-          Wrapt With Love
-          -# Make sure to preserve whitespace
-          %div{style: 'white-space: pre;'}= @order.note_content
-
-  .row
-    .col-xs-8
-
-      Shipping Address
-      %br
-      = format_address(object: @order, prefix: 'ship')
-      %br
-      Billing Zip Code
-      %br
-      = @charge.bill_zip
-      %br
-      Shipping Method
-      %br
-      = @order.shipping_choice
-      = number_to_currency(@order.shipping_in_dollars)
-
-
-      Payment Info
-      = @charge.card_type
-      %br
-      * #{@charge.last_four}
-
-    .col-xs-4
-      Summary
-      Subtotal #{number_to_currency(@order.subtotal_in_dollars)}
-      Tax #{number_to_currency(@order.taxes_in_dollars)}
-      - if @order.gift_wrapt
-        Gift Wrapt .... Complimentary
-      Shipping #{number_to_currency(@order.shipping_in_dollars)}
-      Total #{number_to_currency(@order.total_to_charge_in_dollars)}
+    .col-xs-12.col-md-10.col-md-offset-1
+      .outline-container.outline-container__light-fade.mb2
+        .outline-container__section.outline-container__header= "Your gift to #{@order.profile.name}"
+        - @order.line_items.each do |item|
+          - gift = item.orderable
+          .outline-container__section
+            = render 'ecommerce/checkout/edit_review_gift', gift: gift, customer_order: @order, edit_gift_wrapt: false
+      .row
+        .col-xs-12.col-md-8
+          .outline-container.outline-container__light-fade
+            .outline-container__section
+              = render 'ecommerce/checkout/edit_review_detail_items', customer_order: @order
+        .col-xs-12.col-md-4
+          .outline-container
+            .outline-container__section
+              %h4.light Summary
+              = render 'ecommerce/checkout/edit_review_summary_items', customer_order: @order
+            .outline-container__section.co-ro-summary__total.clearfix
+              %h4.light Total
+              %h5.light=number_to_currency @order.total_to_charge_in_dollars
