@@ -193,7 +193,7 @@ class Gift < ApplicationRecord
   end
 
   def primary_gift_image_with_fallback
-    primary_gift_image || gift_images.first
+    primary_gift_image || gift_images.first || GiftImage.new
   end
 
   def duplicate_single_product_gift

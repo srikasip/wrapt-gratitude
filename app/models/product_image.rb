@@ -8,7 +8,7 @@ class ProductImage < ApplicationRecord
   # product's gifts
   after_create :create_gift_images_from_products
 
-  after_save :enqueue_processing, if: :key, unless: :image_processed?
+  after_commit :enqueue_processing, if: :key, unless: :image_processed?
 
   has_many :gift_images_from_products,
     class_name: 'GiftImages::FromProduct',
@@ -48,6 +48,6 @@ class ProductImage < ApplicationRecord
   def to_partial_path
     'admin/product_images/product_image'
   end
-  
+
 
 end

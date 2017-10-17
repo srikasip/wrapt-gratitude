@@ -24,8 +24,8 @@ class PurchaseService
     self.purchase_orders  = self.customer_order.purchase_orders if self.customer_order.present?
     self.charging_service = ChargingService.new(cart_id: cart_id)
     self.shipping_service = ShippingService.new(cart_id: cart_id, customer_order: customer_order)
-    self.customer       ||= self.customer_order.user
-    self.profile        ||= self.customer_order.profile
+    self.customer       ||= self.customer_order&.user
+    self.profile        ||= self.customer_order&.profile
   end
 
   def self.find_existing_cart_or_initialize(profile:,user:)
