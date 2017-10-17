@@ -1,11 +1,5 @@
 .container
-  .row
-    .col-xs-12
-      .ma-title.clearfix
-        .ma-title__text.pull-left
-          %h5.light General Information
-        .ma-title__action.pull-right
-          = link_to 'Edit', edit_my_account_profile_path, class: 'btn btn-xs btn-default'
+  = render 'header'
   - user_info = [['First Name', current_user.first_name, 'col-xs-6'], ['Last Name', current_user.last_name, 'col-xs-6'], ['Email Address', current_user.email, 'col-xs-12'], ['Password', '********', 'col-xs-6']]
   .row
     - user_info.each do |info|
