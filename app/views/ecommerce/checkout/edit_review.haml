@@ -10,7 +10,7 @@
               - @customer_order.line_items.each do |line_item|
                 - gift = line_item.orderable
                 .outline-container__section
-                  = render 'edit_review_gift', gift: po.gift, customer_order: @customer_order, edit_gift_wrapt: true
+                  = render 'edit_review_gift', gift: gift, customer_order: @customer_order, edit_gift_wrapt: true
               .outline-container__section
                 = render 'edit_review_detail_items', customer_order: @customer_order
           .col-xs-12.col-md-4
