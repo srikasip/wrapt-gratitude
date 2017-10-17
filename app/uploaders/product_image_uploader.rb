@@ -10,7 +10,7 @@ class ProductImageUploader < DirectUploader
     %w(jpg jpeg gif png)
   end
 
-  fog_public true
+  #fog_public true
 
   process :store_dimensions
   private def store_dimensions

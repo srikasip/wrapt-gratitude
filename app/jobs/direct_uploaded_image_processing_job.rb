@@ -17,6 +17,4 @@ class DirectUploadedImageProcessingJob < ApplicationJob
   private def render_image_record image_record
     ApplicationController.renderer.render image_record
   end
-  
-
 end
