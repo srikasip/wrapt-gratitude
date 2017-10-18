@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171018224439) do
+ActiveRecord::Schema.define(version: 20171018230921) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,34 +80,34 @@ ActiveRecord::Schema.define(version: 20171018224439) do
   end
 
   create_table "customer_orders", force: :cascade do |t|
-    t.integer  "user_id",                                  null: false
-    t.integer  "profile_id",                               null: false
-    t.string   "cart_id",                                  null: false
+    t.integer  "user_id",                                 null: false
+    t.integer  "profile_id",                              null: false
+    t.string   "cart_id",                                 null: false
     t.string   "shipping_choice"
-    t.string   "order_number",                             null: false
-    t.string   "status",                                   null: false
-    t.string   "recipient_name",                           null: false
-    t.string   "ship_street1",                             null: false
+    t.string   "order_number",                            null: false
+    t.string   "status",                                  null: false
+    t.string   "recipient_name",                          null: false
+    t.string   "ship_street1",                            null: false
     t.string   "ship_street2"
     t.string   "ship_street3"
-    t.string   "ship_city",                                null: false
-    t.string   "ship_state",                               null: false
-    t.string   "ship_zip",                                 null: false
-    t.string   "ship_country",                             null: false
+    t.string   "ship_city",                               null: false
+    t.string   "ship_state",                              null: false
+    t.string   "ship_zip",                                null: false
+    t.string   "ship_country",                            null: false
     t.text     "notes"
-    t.integer  "subtotal_in_cents",        default: 0,     null: false
-    t.integer  "taxes_in_cents",           default: 0,     null: false
-    t.integer  "shipping_in_cents",        default: 0,     null: false
-    t.integer  "shipping_cost_in_cents",   default: 0,     null: false
-    t.integer  "total_to_charge_in_cents", default: 0,     null: false
-    t.date     "created_on",                               null: false
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
-    t.boolean  "gift_wrapt",               default: true,  null: false
-    t.boolean  "include_note",             default: false, null: false
+    t.integer  "subtotal_in_cents",        default: 0,    null: false
+    t.integer  "taxes_in_cents",           default: 0,    null: false
+    t.integer  "shipping_in_cents",        default: 0,    null: false
+    t.integer  "shipping_cost_in_cents",   default: 0,    null: false
+    t.integer  "total_to_charge_in_cents", default: 0,    null: false
+    t.date     "created_on",                              null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "gift_wrapt",               default: true, null: false
+    t.boolean  "include_note",             default: true, null: false
     t.text     "note_content"
-    t.integer  "handling_cost_in_cents",   default: 0,     null: false
-    t.integer  "handling_in_cents",        default: 0,     null: false
+    t.integer  "handling_cost_in_cents",   default: 0,    null: false
+    t.integer  "handling_in_cents",        default: 0,    null: false
     t.date     "submitted_on"
     t.integer  "ship_to",                  default: 0
     t.integer  "address_id"
