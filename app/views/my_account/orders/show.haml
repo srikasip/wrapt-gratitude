@@ -1,13 +1,5 @@
 .container
-  .row
-    .col-xs-12
-      .ma-title.clearfix
-        .ma-title__text.pull-left
-          %h5
-            = link_to 'Order History', my_account_orders_path
-            = embedded_svg('icon-caret-right')
-            Order # #{@order.order_number}
-        .ma-title__action.pull-right
+  = render 'header'
 
   .row
     .col-xs-12.col-md-10.col-md-offset-1

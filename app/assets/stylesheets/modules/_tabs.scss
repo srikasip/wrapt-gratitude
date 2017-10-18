@@ -1,0 +1,36 @@
+@import "helpers";
+
+.wrapt-styled-tabs-1-container {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.wrapt-styled-tabs-1 {
+  display: table-row;
+}
+
+.wrapt-styled-tabs-1__tab {
+  display: table-cell;
+  a {
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    @include akkurat-regular;
+    font-size: 12px;
+    padding: 8px;
+    color: $gray-006;
+  }
+}
+
+.wrapt-styled-tabs-1__tab.active a,
+.wrapt-styled-tabs-1__tab a:hover,
+.wrapt-styled-tabs-1__tab a:active,
+.wrapt-styled-tabs-1__tab a:focus {
+  border-bottom: 2px solid $blue-006;
+  background-color: transparent;
+  text-decoration: none;
+  color: $gray-008;
+  @include akkurat-bold;
+}

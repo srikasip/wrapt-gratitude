@@ -135,7 +135,12 @@ module ApplicationHelper
   end
 
   def body_classes
-    [controller_name, params[:action], signin_state_body_class]
+    if controller_path.split('/').first == 'my_account'
+      # there were conflicts with other profiles controllers
+      ["my_account_#{controller_name}", params[:action], signin_state_body_class]
+    else
+      [controller_name, params[:action], signin_state_body_class]
+    end
   end
 
   private def signin_state_body_class
@@ -260,6 +265,27 @@ module ApplicationHelper
       concat options[:label]
       concat check_box_tag attr_name, value, selected, {onChange: 'App.StyledCheckbox(this);', style: 'display:none;', data: options[:data]} 
     end
+  end
+
+  # bootstrap tabs with wrapt style
+  # currently only used on my account giftee page
+  # must add page_js App.WraptStyledTabs('.wrapt-styled-tabs-1', '.wrapt-styled-tabs-1__tab'); to work properly
+  
+  # wrapt styled tabs 1
+  def wrapt_styled_tabs_1(tabs)
+    content = capture_haml do
+      content_tag :div, class: 'wrapt-styled-tabs-1', role: 'tablist' do
+        tabs.each do |tab|
+          tab_classes = tab[:active] ? "wrapt-styled-tabs-1__tab active" : "wrapt-styled-tabs-1__tab"
+          concat content_tag :div, bootstrap_tab_link(tab[:text], tab[:tab_pane_id]), class: tab_classes, role: 'presentation'
+        end
+      end
+    end
+    content_tag :div, content, class: 'wrapt-styled-tabs-1-container'
+  end
+
+  def bootstrap_tab_link(tab_text, tab_pane_id)
+    link_to tab_text, "##{tab_pane_id}", role: 'tab', data: {toggle: 'tab'}, 'aria-controls' => tab_pane_id
   end
 
 end

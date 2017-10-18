@@ -8,6 +8,10 @@
   padding-left: 20px;
   padding-right: 20px;
 }
+.btn-narrower-xs {
+  padding: 5px 10px;
+  min-width: 0px;
+}
 .btn:focus,
 .btn.focus,
 .btn:active:focus,
@@ -88,6 +92,12 @@
   border-color: $orange-002;
   color: #fff;
 }
+.btn-upcase-gray {
+  text-transform: uppercase;
+  color: $gray-006;
+  letter-spacing: 1px;
+  @include akkurat-regular;
+}
 .btn-full-width {
   width: 100%;
 }
@@ -101,6 +111,9 @@
 .btn-group-xs > .btn {
   font-size: 11px;
   min-width: 80px;
+}
+.btn-xs.btn-narrower-xs {
+  min-width: 0px;
 }
 .landing-question .btn.btn-multiple-choice-option,
 .landing-question .btn.btn-multiple-choice-option:nth-child(5) {

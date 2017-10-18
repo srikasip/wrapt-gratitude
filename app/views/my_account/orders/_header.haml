@@ -1,0 +1,29 @@
+- if action_name == 'index'
+  - title_action = capture_haml do
+    .wrapt-dropdown
+      = link_to '#my-account-orders__filters', role: 'button', data: {toggle: 'collapse'}, class: 'ma-filter-toggle__link', 'aria-expanded' => false, 'aria-controls' => 'my-account-orders__filters' do
+        = "#{params.dig(:search, :filter) || 'all'} orders"
+        = embedded_svg('icon-arrow-down')
+      .blue-dropdown__content.right.ma-filters#my-account-orders__filters.collapse
+        :ruby
+          options = [
+            ['All Orders', 'all'],
+            ['Open Orders', 'open'],
+            ['Completed Orders', 'completed']
+          ]
+        - options.each do |option|
+          = link_to my_account_orders_path(search: {filter: option[1]}) do 
+            = option[0]
+  .row
+    .col-xs-12
+      = render 'my_account/page_header', title: 'Order History', title_action: title_action, page_header_action: nil
+
+- elsif action_name == 'show'
+  - title = capture_haml do
+    = link_to 'Order History', my_account_orders_path
+    = embedded_svg('icon-caret-right')
+    Order # #{@order.order_number}
+
+  .row
+    .col-xs-12
+      = render 'my_account/page_header', title: title, title_action: nil, page_header_action: nil

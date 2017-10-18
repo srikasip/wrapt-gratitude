@@ -1,24 +1,5 @@
 .container
-  .row
-    .col-xs-12
-      .ma-title.clearfix
-        .ma-title__text.pull-left
-          %h5 Order History
-        .ma-title__action.pull-right
-          .wrapt-dropdown
-            = link_to '#my-account-orders__filters', role: 'button', data: {toggle: 'collapse'}, 'aria-expanded' => false, 'aria-controls' => 'my-account-orders__filters' do
-              = "#{params.dig(:search, :filter) || 'all'} orders"
-              = embedded_svg('icon-arrow-down')
-            .blue-dropdown__content.right.ma-filters#my-account-orders__filters.collapse
-              :ruby
-                options = [
-                  ['All Orders', 'all'],
-                  ['Open Orders', 'open'],
-                  ['Completed Orders', 'completed']
-                ]
-              - options.each do |option|
-                = link_to my_account_orders_path(search: {filter: option[1]}) do 
-                  = option[0]
+  = render 'header'
   .row
     .col-xs-12
       = paginate(@orders)
@@ -49,12 +30,3 @@
                     = link_to 'View Detail', my_account_order_path(order)
                     - order.shipping_labels.each do |shipping_label|
                       = link_to 'Track Package', shipping_label.tracking_url, target: '_blank'
-
-
-= content_for :page_js do
-  :javascript
-    $('document').ready(function() {
-      $('#js-filter input').change(function(e) {
-        $(this).parents('form').submit();
-      });
-    })

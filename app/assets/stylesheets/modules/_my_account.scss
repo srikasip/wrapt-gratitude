@@ -1,12 +1,23 @@
 @import "helpers";
 
+.ma-page-header {
+  margin-bottom: 40px;
+}
+
+.ma-page-header__title {
+  padding-top: 12px;
+}
+
+.ma-page-header__action {
+  text-align: right;
+}
+
 .ma-title {
   display: inline-block;
   line-height: 23px;
   @media(max-width: $screen-xs-max) {
     display: block;
   }
-  margin-bottom: 30px;
 }
 
 .ma-title__text {
@@ -27,13 +38,7 @@
   }
 }
 
-.ma-title__action .btn {
-  text-transform: uppercase;
-  color: $gray-006;
-  @include akkurat-regular;
-  letter-spacing: 1px;
-}
-.ma-title__action a {
+.ma-filter-toggle__link {
   color: $gray-007;
   text-transform: capitalize;
   font-size: 80%;
@@ -130,6 +135,91 @@
   &.left {
     left: -4px;
   }
+}
+
+.ma-giftee-card {
+  margin-bottom: 30px;
+  background-color: #FFFFFF;
+  position: relative;
+}
+
+.ma-giftee-card__header {
+  padding: 16px;
+  padding-bottom: 0px;
+  @include shadowed-box__gray-small;
+  position: relative;
+  z-index: 2;
+}
+
+.ma-giftee__name {
+  font-size: 20px;
+  @include akkurat-regular;
+  line-height: 1.5;
+  padding: 16px;
+  small {
+    display: block;
+    font-size: 14px;
+    color: $gray-006;
+    @include akkurat-light;
+  }
+}
+
+.ma-giftee-card__action {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.ma-giftee-card__content {
+  @include shadowed-box__gray;
+  padding: 16px;
+  background-color: #FDFDFD;
+  position: relative;
+  z-index: 1;
+}
+
+.ma-giftee-details__table {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  min-height: 200px;
+  font-size: 13px;
+  .ma-gd__tr {
+    display: table-row;
+    @media(max-width: $screen-xs-max) {
+      display: block;
+      margin-bottom: 20px
+    }
+  }
+  .ma-gd__th,
+  .ma-gd__td {
+    display: table-cell;
+    @media(max-width: $screen-xs-max) {
+      display: block;
+    }
+  }
+  .ma-gd__td {
+    vertical-align: top;
+    padding: 10px;
+    @media(max-width: $screen-xs-max) {
+      padding: 0px 16px;
+    }
+  }
+  .ma-gd__th:first-child {
+    width: 140px;
+  }
+  .ma-gd__td:first-child {
+    color: $gray-006;
+  }
+  .ma-gd__td:last-child {
+    a {
+      color: $gray-005;
+    }
+  }
+}
+
+.ma-giftee-reminders {
+  min-height: 200px;
 }
 
 

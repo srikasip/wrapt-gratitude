@@ -1,0 +1,22 @@
+.ma-giftee-card
+  .ma-giftee-card__header
+    = link_to edit_my_account_giftee_path(giftee), data: {loads_in_pjax_modal: true}, class: 'btn btn-xs btn-default btn-narrower-xs btn-upcase-gray ma-giftee-card__action' do
+      Edit
+    .ma-giftee__name
+      = giftee.name
+      %small= giftee.relationship
+    - tabs = [{text: 'details', tab_pane_id: "ma-giftee-details__#{giftee.id}", active: true, tab_pane_partial: 'giftee_details'}, {text: 'reminders', tab_pane_id: "ma-giftee-reminders__#{giftee.id}", tab_pane_partial: 'giftee_reminders'}]
+    = wrapt_styled_tabs_1(tabs)
+  .ma-giftee-card__content
+    .tab-content.mb2
+      - tabs.each do |tab|
+        .tab-pane.fade{class: (tab[:active] ? 'in active' : ''), id: tab[:tab_pane_id]}
+          = render tab[:tab_pane_partial], giftee: giftee
+    - if giftee.finished_surveys?
+      = link_to giftee_gift_recommendations_path(giftee), class: 'btn btn-primary btn-block' do
+        VIEW #{giftee.gift_recommendations.count} RECOMMENDATIONS
+    - else
+      :ruby
+        question_response = giftee.first_unanswered_response
+      = link_to giftee_survey_question_path(giftee_id: giftee.id, survey_id: question_response.survey_response_id, id: question_response.to_param), class: 'btn btn-default btn-block' do
+        COMPLETE THE QUIZ
