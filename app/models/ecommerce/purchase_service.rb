@@ -64,7 +64,7 @@ class PurchaseService
   def gift_wrapt!(params)
     _sanity_check!
 
-    whitelisted_params = params.require(:customer_order).permit(:gift_wrapt, :include_note, :note_from, :note_to, :note_content)
+    whitelisted_params = params.require(:customer_order).permit(:gift_wrapt, :include_note, :note_content)
 
     _safely do
       self.customer_order.assign_attributes(whitelisted_params)
@@ -278,9 +278,7 @@ class PurchaseService
       ship_city:    '',
       ship_zip:     '',
       ship_state:   '',
-      ship_country: 'US',
-      note_from: self.customer.full_name,
-      note_to: profile.name
+      ship_country: 'US'
     })
 
     self.customer_order.save!

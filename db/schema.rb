@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171013142254) do
+ActiveRecord::Schema.define(version: 20171018224439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,8 +105,6 @@ ActiveRecord::Schema.define(version: 20171013142254) do
     t.datetime "updated_at",                               null: false
     t.boolean  "gift_wrapt",               default: true,  null: false
     t.boolean  "include_note",             default: false, null: false
-    t.string   "note_from"
-    t.string   "note_to"
     t.text     "note_content"
     t.integer  "handling_cost_in_cents",   default: 0,     null: false
     t.integer  "handling_in_cents",        default: 0,     null: false

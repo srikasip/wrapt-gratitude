@@ -10,11 +10,8 @@
       = f.input :include_note, as: :wrapt_styled_checkbox, label: 'Do not include a note', checked_value: 0, unchecked_value: 1
     .j-co-gift-wrapt__note-2{style: f.object.include_note? ? '' : 'display: none;'}
       .row
-        .col-xs-12.col-md-6
-          = f.input :note_from, label: 'From'
-        .col-xs-12.col-md-6
-          = f.input :note_to, label: 'To'
-      = f.input :note_content, label: 'Your Note'
+        .col-xs-12
+          = f.input :note_content, label: 'Your Note'
   %button.btn.btn-primary{type: 'submit'}
     -# this can be edited on the review order page (opens in modal)
     - if @load_in_modal

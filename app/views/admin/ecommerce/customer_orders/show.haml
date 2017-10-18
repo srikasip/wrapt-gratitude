@@ -43,13 +43,6 @@
       %br
       %strong Include a note:
       = @order.include_note? ? 'Yes' : 'No'
-      %br
-      - if @order.include_note?
-        %strong From:
-        = @order.note_from
-        %br
-        %strong To:
-        = @order.note_to
 
 .row
   .col-sm-12

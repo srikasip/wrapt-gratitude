@@ -3,7 +3,7 @@ class ProgressBarViewModel
   STEPS = {
     gift_wrapt: {
       required_fields: [:gift_wrapt, :include_note],
-      fields: [:gift_wrapt, :include_note, :note_from, :note_to, :note_content]
+      fields: [:gift_wrapt, :include_note, :note_content]
     },
     shipping: {
       required_fields: [:gift_wrapt, :include_note, :ship_street1, :ship_city, :ship_zip, :ship_state, :shipping_choice],
