@@ -141,6 +141,7 @@
   margin-bottom: 30px;
   background-color: #FFFFFF;
   position: relative;
+  @include shadowed-box__gray;
 }
 
 .ma-giftee-card__header {
@@ -171,7 +172,7 @@
 }
 
 .ma-giftee-card__content {
-  @include shadowed-box__gray;
+  // @include shadowed-box__gray;
   padding: 16px;
   background-color: #FDFDFD;
   position: relative;
