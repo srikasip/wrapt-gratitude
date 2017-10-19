@@ -14,16 +14,13 @@ class Tax::Transaction < ApplicationRecord
   validates :tax_in_dollars, numericality: { greater_than_or_equal_to: 0 }, if: :success?
   validates :transaction_code, presence: true, if: :success?
 
-  # TODO: see what exceptions can be thrown.
-  F = Class.new(StandardError)
-
   def estimate!
     payload_object = Tax::TransactionPayload.new(customer_order)
     payload_object.estimate = true
     self.api_request_payload = payload_object.to_hash
     self.api_response = client.create_transaction(payload_object.to_hash)
     _cache_estimation_results
-  rescue F => e
+  rescue Faraday::Error => e
     Rails.logger.fatal "[AVATAX][ESTIMATE] #{e.message}"
     self.success = false
   end
@@ -31,7 +28,7 @@ class Tax::Transaction < ApplicationRecord
   def reconcile!
     self.api_reconcile_response = client.commit_transaction('DEFAULT', self.transaction_code, {commit: true})
     _cache_reconciliation_results
-  rescue F => e
+  rescue Faraday::Error => e
     Rails.logger.fatal "[AVATAX][RECONCILE] #{e.message}"
     self.success = false
   end
