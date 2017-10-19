@@ -9,7 +9,7 @@ class Ecommerce::CheckoutController < ApplicationController
   def start
     profile = current_user.owned_profiles.find(params[:giftee_id])
 
-    customer_purchase = PurchaseService.find_existing_cart_or_initialize(profile: profile, user: current_user)
+    customer_purchase = ::PurchaseService.find_existing_cart_or_initialize(profile: profile, user: current_user)
 
     customer_purchase.generate_order!
 
