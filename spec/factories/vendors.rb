@@ -18,5 +18,10 @@ FactoryGirl.define do
     phone '123-123-1234'
     email { generate(:email) }
     name { generate(:vendor_name) }
+    street1 '14321 Norwood'
+    city 'Leawood'
+    state 'KS'
+    zip '66212'
+    country 'US'
   end
 end

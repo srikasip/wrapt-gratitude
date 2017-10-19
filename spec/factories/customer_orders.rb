@@ -20,6 +20,15 @@ FactoryGirl.define do
       FactoryGirl.create :purchase_order, customer_order: customer_order
     end
 
+    trait :with_one_gift do
+      after(:create) do |customer_order, evaluator|
+        customer_order.line_items.create({
+          orderable: FactoryGirl.create(:gift),
+          quantity: 1
+        })
+      end
+    end
+
     trait :with_shipping_label do
       after(:create) do |customer_order, evaluator|
         shipment = FactoryGirl.create :shipment, customer_order: customer_order, purchase_order: customer_order.purchase_orders.first, cart_id: customer_order.cart_id

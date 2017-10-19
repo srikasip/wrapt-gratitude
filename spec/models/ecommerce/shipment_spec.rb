@@ -1,8 +1,8 @@
-require 'test_helper'
+require 'rails_helper'
 
-class ShipmentTest < ActiveSupport::TestCase
-  def shipment
-    @shipment ||= Shipment.new({
+describe Shipment do
+  let(:shipment) do
+    Shipment.new({
       address_to: {
         street1: '319 Hague Rd',
         city: 'Dummerston',
@@ -30,24 +30,25 @@ class ShipmentTest < ActiveSupport::TestCase
         mass_unit: :lb
       }
     })
-
   end
 
-  def test_baseline
-    refute Shipment.new.success?
+  it "should have a baseline" do
+    expect(Shipment.new.success?).to be_falsey
   end
 
-  def test_without_insurance
-    shipment.run!
-    assert shipment.success?
-  end
+  if ENV['SHIPPO_RUN_SPECS']=='true'
+    it "should work without insurance" do
+      shipment.run!
+      expect(shipment.success?).to be_truthy
+    end
 
-  def test_with_insurance
-    shipment.insurance_in_dollars = 50
-    shipment.description_of_what_to_insure = 'necklace'
-    shipment.run!
-    assert shipment.success?
-    insurance = shipment.api_response.dig('extra', 'insurance', 'amount').to_i
-    assert_equal 50, insurance
+    it "should work with insurance" do
+      shipment.insurance_in_dollars = 50
+      shipment.description_of_what_to_insure = 'necklace'
+      shipment.run!
+      expect(shipment.success?).to be_truthy
+      insurance = shipment.api_response.dig('extra', 'insurance', 'amount').to_i
+      expect(insurance).to eq 50
+    end
   end
 end

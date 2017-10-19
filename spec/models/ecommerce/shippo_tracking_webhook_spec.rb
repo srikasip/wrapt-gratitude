@@ -4,8 +4,7 @@ describe ShippoTrackingWebhook do
   let(:params) do
     {
       "test"=>true,
-      "data"=>
-      {
+      "data"=> {
         "messages"=>[],
         "carrier"=>"usps",
         "tracking_number"=>"123",

@@ -12,6 +12,7 @@ FactoryGirl.define do
     wrapt_sku { generate(:wrapt_sku) }
     vendor
     weight_in_pounds 2
+    units_available 5
     product_category
     product_subcategory
   end

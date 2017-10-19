@@ -6,5 +6,7 @@ FactoryGirl.define do
   factory :shipping_label do
     shippo_object_id "x"*32
     cart_id { generate(:cart_id) }
+    carrier 'USPS'
+    service_level 'Priority Mail'
   end
 end
