@@ -257,13 +257,13 @@ class PurchaseService::ShippingService
   end
 
   def self.update_shipping_status!(shippo_data)
-    shipping_label = ShippingLabel.find_by(shippo_object_id: data.dig('tracking_status', 'object_id'))
+    shipping_label = ShippingLabel.find_by(shippo_object_id: shippo_data.dig('tracking_status', 'object_id'))
 
     shipping_label.update_attributes({
-      eta: data['eta'],
-      tracking_status: data.dig('tracking_status', 'status'),
-      tracking_updated_at: data.dig('tracking_status', 'status_date'),
-      tracking_payload: data
+      eta: shippo_data['eta'],
+      tracking_status: shippo_data.dig('tracking_status', 'status'),
+      tracking_updated_at: shippo_data.dig('tracking_status', 'status_date'),
+      tracking_payload: shippo_data
     })
 
     if shipping_label.shipped?

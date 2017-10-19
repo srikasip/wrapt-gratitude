@@ -8,6 +8,7 @@ module Tax
     def initialize(customer_order)
       self.customer_order = customer_order
       self.estimate = true
+      raise "Must have line items to compute taxes" unless _lines.present?
     end
 
     def to_hash
@@ -41,42 +42,43 @@ module Tax
     private
 
     def _lines
-      customer_order.line_items.flat_map do |line_item|
-        po = line_item.related_line_items.first.order
-        vendor = po.vendor
-        gift = line_item.orderable
-        [
-          {
-            "amount": po.shipping_cost_in_dollars,
-            "taxCode": Tax::Code.shipping.code,
-            "description": "shipping cost to wrapt",
-            "addresses": {
-              "shipFrom": {
-                "line1": vendor.street1,
-                "city": vendor.city,
-                "region": vendor.state,
-                "country": vendor.country,
-                "postalCode": vendor.zip
-              },
+      @_lines ||= \
+        customer_order.line_items.flat_map do |line_item|
+          po = line_item.related_line_items.first.order
+          vendor = po.vendor
+          gift = line_item.orderable
+          [
+            {
+              "amount": po.shipping_cost_in_dollars,
+              "taxCode": Tax::Code.shipping.code,
+              "description": "shipping cost to wrapt",
+              "addresses": {
+                "shipFrom": {
+                  "line1": vendor.street1,
+                  "city": vendor.city,
+                  "region": vendor.state,
+                  "country": vendor.country,
+                  "postalCode": vendor.zip
+                },
+              }
+            },
+            {
+              "amount": line_item.total_price_in_dollars,
+              "taxCode": (gift.tax_code&.code || Tax::Code.default.code),
+              "description": gift.title,
+              "Ref1": "Vendor: #{vendor.name}",
+              "Ref2": "PO #{po.order_number}",
+              "addresses": {
+                "shipFrom": {
+                  "line1": vendor.street1,
+                  "city": vendor.city,
+                  "region": vendor.state,
+                  "country": vendor.country,
+                  "postalCode": vendor.zip
+                },
+              }
             }
-          },
-          {
-            "amount": line_item.total_price_in_dollars,
-            "taxCode": (gift.tax_code&.code || Tax::Code.default.code),
-            "description": gift.title,
-            "Ref1": "Vendor: #{vendor.name}",
-            "Ref2": "PO #{po.order_number}",
-            "addresses": {
-              "shipFrom": {
-                "line1": vendor.street1,
-                "city": vendor.city,
-                "region": vendor.state,
-                "country": vendor.country,
-                "postalCode": vendor.zip
-              },
-            }
-          }
-        ]
+          ]
       end
     end
   end

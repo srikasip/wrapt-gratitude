@@ -1,36 +1,52 @@
 class PurchaseService::TaxService
   attr_accessor :cart_id, :client, :customer_order, :tax_in_cents, :tax_in_dollars
 
+  delegate :api_response, :success?, to: :our_transaction
+
   def initialize(cart_id:nil, customer_order:nil)
     if cart_id.nil? && customer_order.nil?
       raise InternalConsistencyError, "You must provide some way of getting the customer order"
     end
-    self.cart_id        = cart_id
-    self.customer_order = customer_order || CustomerOrder.find_by(cart_id: self.cart_id)
-    self.client = AvaTax::Client.new(:logger => true)
+    self.cart_id         = cart_id
+    self.customer_order  = customer_order || CustomerOrder.find_by(cart_id: self.cart_id)
+    self.cart_id       ||= customer_order.cart_id
+    self.client          = AvaTax::Client.new(:logger => true)
   end
 
-  define_method(:estimate?) { @estimate }
-  define_method(:real?)     { !estimate?  }
+  define_method(:real?)     { self.our_transaction.reconciled? }
+  define_method(:estimate?) { !real? }
 
   def estimate!
-    @estimate = true
-    payload = Tax::TransactionPayload.new(customer_order)
-    payload.estimate = true
-    transaction = self.client.create_transaction(payload.to_hash)
-    self.tax_in_dollars = transaction.lines.sum { |x| x.taxableAmount }
-    self.tax_in_cents = self.tax_in_dollars * 100
+    raise "Cannot estimate a reconciled transaction" if our_transaction.reconciled?
+
+    _safely do
+      our_transaction.estimate!
+      our_transaction.save!
+    end
   end
 
   def reconcile!
-    @estimate = false
-    raise 'WIP'
-    :no_op
+    raise "Cannot reconcile a reconciled transaction" if our_transaction.reconciled?
+
+    _safely do
+      our_transaction.reconcile!
+      our_transaction.save!
+    end
+  end
+
+  def our_transaction
+    @our_transaction ||=
+      Tax::Transaction.
+        where(cart_id: self.cart_id).
+        where(customer_order: self.customer_order).
+        first_or_initialize
   end
 
   private
 
   def _safely
-    yield
+    Tax::Transaction.transaction do
+      yield
+    end
   end
 end
