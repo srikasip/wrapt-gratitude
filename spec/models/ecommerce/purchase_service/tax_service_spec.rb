@@ -20,14 +20,17 @@ RSpec.describe PurchaseService::TaxService do
     expect(tax_service).to be_estimate
   end
 
-  #it "should estimate taxes" do
-  #  tax_service.estimate!
-  #end
+  it "should estimate taxes without crashing" do
+    VCR.use_cassette('estimate taxes') do
+      tax_service.estimate!
+    end
+  end
 
-  it "should estimate and reconcile taxes" do
-    tax_service.estimate!
-    #puts tax_service.api_response.ai
-    expect(tax_service.success?).to be_truthy
-    tax_service.reconcile!
+  it "should estimate and reconcile taxes without crashing" do
+    VCR.use_cassette('estimate and reconcile') do
+      tax_service.estimate!
+      expect(tax_service.success?).to be_truthy
+      tax_service.reconcile!
+    end
   end
 end

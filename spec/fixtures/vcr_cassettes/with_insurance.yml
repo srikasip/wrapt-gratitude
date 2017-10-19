@@ -1,0 +1,92 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.goshippo.com/shipments/
+    body:
+      encoding: UTF-8
+      string: '{"address_from":{"street1":"14321 Norwood","city":"Leawood","zip":"66212","state":"KS","country":"US","phone":"123-123-1234","email":"example@example.com"},"address_to":{"street1":"319
+        Hague Rd","city":"Dummerston","zip":"05301","state":"VT","country":"US","phone":"123-123-1234","email":"example@example.com"},"parcels":{"length":5,"width":1,"height":5.555,"distance_unit":"in","weight":2,"mass_unit":"lb"},"async":false,"extra":{"insurance":{"amount":50,"currency":"USD","content":"necklace"}}}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - rest-client/2.0.2 (linux-gnu x86_64) ruby/2.3.1p112
+      Content-Type:
+      - application/json
+      Authorization:
+      - ShippoToken shippo_test_053fc1790bfa4b94fa76b706b9ce85982da3b9fe
+      Shippo-Api-Version:
+      - ''
+      Content-Length:
+      - '496'
+  response:
+    status:
+      code: 201
+      message: CREATED
+    headers:
+      Allow:
+      - OPTIONS
+      Content-Encoding:
+      - gzip
+      Content-Language:
+      - en-us
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 19 Oct 2017 14:53:04 GMT
+      P3p:
+      - CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"
+      Server:
+      - nginx/1.10.1
+      Set-Cookie:
+      - sessionid=tasg8e8x2u8qdyfn38oqvedm1kabb74r; Domain=.goshippo.com; expires=Thu,
+        02-Nov-2017 14:53:04 GMT; httponly; Max-Age=1209600; Path=/
+      Vary:
+      - Accept-Language, Host, Cookie, Accept-Encoding
+      Content-Length:
+      - '1488'
+      Connection:
+      - keep-alive
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        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
+        FQAA
+    http_version: 
+  recorded_at: Thu, 19 Oct 2017 14:53:04 GMT
+recorded_with: VCR 3.0.3

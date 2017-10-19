@@ -36,13 +36,15 @@ describe Shipment do
     expect(Shipment.new.success?).to be_falsey
   end
 
-  if ENV['SHIPPO_RUN_SPECS']=='true'
-    it "should work without insurance" do
+  it "should work without insurance" do
+    VCR.use_cassette('without insurance') do
       shipment.run!
       expect(shipment.success?).to be_truthy
     end
+  end
 
-    it "should work with insurance" do
+  it "should work with insurance" do
+    VCR.use_cassette('with insurance') do
       shipment.insurance_in_dollars = 50
       shipment.description_of_what_to_insure = 'necklace'
       shipment.run!

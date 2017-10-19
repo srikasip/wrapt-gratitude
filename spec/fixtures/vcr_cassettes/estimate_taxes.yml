@@ -1,0 +1,70 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sandbox-rest.avatax.com/api/v2/transactions/create
+    body:
+      encoding: UTF-8
+      string: '{"companyCode":"DEFAULT","type":"SalesOrder","commit":"false","date":"2017-10-19","customerCode":"46","currency_code":"USD","ReferenceCode":"WRAPT-000-000-044","Email":"user2@example.com","addresses":{"shipTo":{"line1":"10109
+        Floyd","city":"Overland Park","region":"KS","country":"US","postalCode":"66212"}},"lines":[{"amount":0.0,"taxCode":"FR000000","description":"shipping
+        cost to wrapt","addresses":{"shipFrom":{"line1":"14321 Norwood","city":"Leawood","region":"KS","country":"US","postalCode":"66212"}}},{"amount":"10.0","taxCode":"P0000000","description":"title
+        2","Ref1":"Vendor: vendor2","Ref2":"PO PO-000-000-045","addresses":{"shipFrom":{"line1":"14321
+        Norwood","city":"Leawood","region":"KS","country":"US","postalCode":"66212"}}}]}'
+    headers:
+      Accept:
+      - application/json; charset=utf-8
+      User-Agent:
+      - AvaTax Ruby Gem 17.9.0
+      X-Avalara-Client:
+      - ";;RubySdk;17.9.0;"
+      Authorization:
+      - Basic dGJsYWNrbWFuQGdyZWVucml2ZXIuY29tOllDSzRsI0NQZCp1YkM4ekloQzI5
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 201
+      message: 
+    headers:
+      content-type:
+      - application/json; charset=utf-8
+      transfer-encoding:
+      - chunked
+      connection:
+      - keep-alive
+      date:
+      - Thu, 19 Oct 2017 14:51:49 GMT
+      location:
+      - "/api/v2/companies/0/transactions/0"
+      server:
+      - Kestrel
+      serverduration:
+      - '00:00:00.0650005'
+      databasecalls:
+      - '1'
+      databaseduration:
+      - '00:00:00.0009995'
+      serviceduration:
+      - '00:00:00.0620022'
+      x-powered-by:
+      - ASP.NET
+      x-cache:
+      - Miss from cloudfront
+      via:
+      - 1.1 b90b6784a39d061a6bbabe5f3c77f00d.cloudfront.net (CloudFront)
+      x-amz-cf-id:
+      - 8yHdwYJB_FIct8a7LxtGhuDIfbxBNqNsjHmR0paCSFQcP_-x8jd_aQ==
+    body:
+      encoding: UTF-8
+      string: '{"id":0,"code":"b6dd649d-cd83-46a3-ae5a-4c2860c63056","companyId":0,"date":"2017-10-19","paymentDate":"2017-10-19","status":"Temporary","type":"SalesOrder","customerVendorCode":"46","reconciled":false,"referenceCode":"WRAPT-000-000-044","totalAmount":10.0,"totalExempt":10.0,"totalTax":0.0,"totalTaxable":0.0,"totalTaxCalculated":0.0,"adjustmentReason":"NotAdjusted","locked":false,"version":1,"exchangeRateEffectiveDate":"2017-10-19","exchangeRate":1.0,"isSellerImporterOfRecord":false,"email":"user2@example.com","modifiedDate":"2017-10-19T14:51:49.0308213Z","modifiedUserId":302311,"taxDate":"0001-01-01T00:00:00","lines":[{"id":0,"transactionId":0,"lineNumber":"1","description":"shipping
+        cost to wrapt","discountAmount":0.0,"exemptAmount":0.0,"exemptCertId":0,"isItemTaxable":true,"lineAmount":0.0,"quantity":0.0,"reportingDate":"2017-10-19","tax":0.0,"taxableAmount":0.0,"taxCalculated":0.0,"taxCode":"FR000000","taxCodeId":8550,"taxDate":"2017-10-19","taxIncluded":false,"details":[{"id":0,"transactionLineId":0,"transactionId":0,"country":"US","region":"KS","exemptAmount":0.0,"jurisCode":"20","jurisName":"KANSAS","stateAssignedNo":"","jurisType":"STA","nonTaxableAmount":0.0,"rate":0.0,"tax":0.0,"taxableAmount":0.0,"taxType":"Sales","taxName":"KS
+        STATE TAX","taxAuthorityTypeId":45,"taxCalculated":0.0,"rateType":"General","rateTypeCode":"G"}]},{"id":0,"transactionId":0,"lineNumber":"2","description":"title
+        2","discountAmount":0.0,"exemptAmount":10.0,"exemptCertId":0,"isItemTaxable":true,"lineAmount":10.0,"quantity":0.0,"ref1":"Vendor:
+        vendor2","ref2":"PO PO-000-000-045","reportingDate":"2017-10-19","tax":0.0,"taxableAmount":0.0,"taxCalculated":0.0,"taxCode":"P0000000","taxCodeId":8087,"taxDate":"2017-10-19","taxIncluded":false,"details":[{"id":0,"transactionLineId":0,"transactionId":0,"country":"US","region":"KS","exemptAmount":0.0,"jurisCode":"20","jurisName":"KANSAS","stateAssignedNo":"","jurisType":"STA","nonTaxableAmount":10.0,"rate":0.0,"tax":0.0,"taxableAmount":0.0,"taxType":"Sales","taxName":"KS
+        STATE TAX","taxAuthorityTypeId":45,"taxCalculated":0.0,"rateType":"General","rateTypeCode":"G"}]}],"addresses":[{"id":0,"transactionId":0,"boundaryLevel":"Zip5","line1":"14321
+        Norwood","line2":"","line3":"","city":"Leawood","region":"KS","postalCode":"66212","country":"US","taxRegionId":2068003,"latitude":"38.957385","longitude":"-94.682091"},{"id":0,"transactionId":0,"boundaryLevel":"Zip5","line1":"10109
+        Floyd","line2":"","line3":"","city":"Overland Park","region":"KS","postalCode":"66212","country":"US","taxRegionId":0,"latitude":"0","longitude":"0"}],"summary":[{"country":"US","region":"KS","jurisType":"State","jurisCode":"20","jurisName":"KANSAS","taxAuthorityType":45,"stateAssignedNo":"","taxType":"Sales","taxName":"KS
+        STATE TAX","rateType":"General","taxable":0.0,"rate":0.0,"tax":0.0,"taxCalculated":0.0,"nonTaxable":10.0,"exemption":0.0}]}'
+    http_version: 
+  recorded_at: Thu, 19 Oct 2017 14:51:49 GMT
+recorded_with: VCR 3.0.3
