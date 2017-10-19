@@ -1,16 +1,46 @@
 .container
   .row
+    .col-xs-12
+      %h2.light.text-center.mb0 Order Confirmation
+  .row
     .col-xs-12.col-md-10.col-md-offset-1
       .co-container.text-center.co-confirmation-container
-        %h3.light Order Confirmation
-        %h4.light Order # #{@customer_order.order_number}
+        .mb4
+          %h3.light We've got your order!
+          %h4.light Order #: #{@customer_order.order_number}
         .row
           .col-xs-12.col-md-10.col-md-offset-1
-            .outline-container.clearfix.mb4
-              .outline-container__split
-                = render 'edit_review_detail_item', header: 'Expected Delivery', items: [@expected_delivery]
-              .outline-container__split
-                = render 'edit_review_detail_item', header: 'Order Date', items: [format_date(@customer_order.submitted_on)]
-            %a.btn.btn-primary.mb6{href: my_account_order_path(@customer_order)} View Details
+            - @customer_order.line_items.each do |line_item|
+              - gift = line_item.orderable
+              .outline-container.mb2.text-left
+                .outline-container__section
+                  .co-ro-item
+                    .co-ro-item__img
+                      - url = gift.primary_gift_image_with_fallback.image&.url(:small)
+                      - if url.present?
+                        = image_tag url, class: 'img-responsive'
+                      - else
+                        %img
+                    .co-ro-item__details
+                      %h4.display__inline-block.light= gift.title
+                      .pull-right
+                        .co-detail__label.text-right Status
+                        .co-detail__item.text-right= @customer_order.status.titleize
+            .outline-container__table.text-left.mb2
+              .outline-container__tr
+                .outline-container__td
+                  = render 'edit_review_detail_item', header: 'Order Date', items: [format_date(@customer_order.submitted_on)]
+                .outline-container__td
+                  = render 'edit_review_detail_item', header: 'Order Total', items: [number_to_currency(@customer_order.total_to_charge_in_dollars)]
+            .outline-container__table.text-left.mb4
+              .outline-container__tr
+                .outline-container__td
+                  - shipping_address_items = [@customer_order.recipient_name, @customer_order.ship_street1, @customer_order.ship_street2, "#{@customer_order.ship_city}, #{@customer_order.ship_state} #{@customer_order.ship_zip}"]
+                  = render 'edit_review_detail_item', header: 'Shipping to', items: shipping_address_items
+                .outline-container__td
+                  = render 'edit_review_detail_item', header: 'Expected Delivery', items: [@expected_delivery]
+            .row
+              .col-xs-12.col-sm-6.col-sm-offset-3
+                %a.btn.btn-primary.btn-block.uppercase.mb6{href: my_account_order_path(@customer_order)} View Details
 
   = render "debug", customer_order: @customer_order

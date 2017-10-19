@@ -1,5 +1,9 @@
 @import "helpers";
 
+.display__inline-block {
+  display: inline-block;
+}
+
 .bg-gray-001 {
   background-color: $gray-001;
 }

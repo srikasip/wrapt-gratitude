@@ -3,7 +3,7 @@
 .wrapt-with-love-link svg {
   width: 16px;
   height: 16px;
-  vertical-align: bottom;
+  vertical-align: text-top;
 }
 
 #co-progress-bar {
@@ -29,8 +29,9 @@
 .co-container {
   @include shadowed-box__gray;
   background-color: #FFFFFF;
-  padding: 32px;
-  margin: 40px 0px;
+  // padding: 32px;
+  padding: 50px 40px 84px;
+  margin: 63px 0px 40px;
   position: relative;
 
   button[type="submit"] {
@@ -38,6 +39,10 @@
     right: 32px;
     bottom: -28px;
   }
+}
+
+.checkout.edit_review .co-container {
+  padding: 50px 40px;
 }
 
 .co-ro-container {
@@ -53,7 +58,7 @@
   h4 {
     margin-bottom: 30px;
     font-size: 20px;
-    color: $gray-007;
+    // color: $gray-007;
   }
   button {
     text-transform: uppercase;
@@ -150,7 +155,7 @@
   width: 80%;
   overflow: hidden;
   vertical-align: middle;
-  line-height: 1.2;
+  // line-height: 1.2;
   @media(max-width: $screen-sm-max) {
     width: 56%
   }

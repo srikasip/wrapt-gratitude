@@ -13,13 +13,28 @@
   background-color: #FDFDFD;
 }
 
-.outline-container__split {
-  width: 50%;
-  float:left;
-  text-align: left;
-  padding: 16px;
-  &:first-child {
-    border-right: 2px solid $gray-004;
+.outline-container__table {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  @media(max-width: $screen-xs-max) {
+    display: block;
+  }
+}
+
+.outline-container__tr {
+  display: table-row;
+  @media(max-width: $screen-xs-max) {
+    display: block;
+  }
+}
+
+.outline-container__td {
+  display: table-cell;
+  border: 1px solid $gray-004;
+  padding: 12px 16px;
+  @media(max-width: $screen-xs-max) {
+    display: block;
   }
 }
 
