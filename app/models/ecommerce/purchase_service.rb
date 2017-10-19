@@ -119,6 +119,10 @@ class PurchaseService
       else
         new_address = matching_address_scope.create(params_to_save)
       end
+
+      if !new_address.valid?
+        self.customer_order.errors[:base] += new_address.errors.full_messages
+      end
     end
 
     _safely do

@@ -20,7 +20,7 @@
               .col-xs-12.col-md-8
                 = f.input :ship_city, label: 'City'
               .col-xs-12.col-md-2
-                = f.input :ship_state, label: 'State'
+                = f.input :ship_state, collection: UsaState.abbreviations, label: 'State'
               .col-xs-12.col-md-2
                 = f.input :ship_zip, label: 'Zip Code'
           - if @customer_order.address.present?
@@ -54,5 +54,5 @@
       App.ClearForm('customer_order', input_names, '[name="customer_order[address_id]"]', 'new_address')
 
       App.AddressSubmitButton()
-      
+
     })
