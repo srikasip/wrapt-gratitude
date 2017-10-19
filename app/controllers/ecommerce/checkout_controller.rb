@@ -1,5 +1,6 @@
 class Ecommerce::CheckoutController < ApplicationController
   include PjaxModalController
+  include AddressHelper
 
   before_action -> { redirect_to :root }, if: -> { ENV.fetch('CHECKOUT_ENABLED') { 'false' } == 'false' }
   before_action :_load_service_object, except: [:start]
@@ -48,7 +49,6 @@ class Ecommerce::CheckoutController < ApplicationController
 
   def _load_addresses
     @saved_addresses = current_user.addresses
-    @current_user_addresses = @saved_addresses
     @giftee_addresses = @profile.addresses
 
     if @customer_order.ship_to_customer? && @customer_order.address.nil? && @customer_order.ship_street1.blank?
@@ -60,10 +60,9 @@ class Ecommerce::CheckoutController < ApplicationController
         @customer_order.address = nil
       end
     end
-    @address_collection = @current_user_addresses.map do |address|
-      street2 = address.street2.present? ? "</br>#{address.street2}" : ""
-      label = "#{address.street1} #{street2} </br> #{address.city}, #{address.state} #{address.zip}"
-      [label, address.id]
+
+    @address_collection = @saved_addresses.map do |address|
+      [ format_address(object: address), address.id]
     end || []
     @address_collection.push(['New Address', 'new_address'])
   end
