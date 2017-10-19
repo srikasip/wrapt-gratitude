@@ -1,36 +1,7 @@
 require 'rails_helper'
 
 describe Shipment do
-  let(:shipment) do
-    Shipment.new({
-      address_to: {
-        street1: '319 Hague Rd',
-        city: 'Dummerston',
-        zip: '05301',
-        state: 'VT',
-        country: 'US',
-        phone:  '123-123-1234',
-        email: 'example@example.com',
-      },
-      address_from: {
-        street1: '14321 Norwood',
-        city: 'Leawood',
-        zip: '66212',
-        state: 'KS',
-        country: 'US',
-        phone:  '123-123-1234',
-        email: 'example@example.com',
-      },
-      parcel: {
-        length: 5,
-        width: 1,
-        height: 5.555,
-        distance_unit: :in,
-        weight:  2,
-        mass_unit: :lb
-      }
-    })
-  end
+  include ShippoShipments
 
   it "should have a baseline" do
     expect(Shipment.new.success?).to be_falsey
@@ -40,6 +11,14 @@ describe Shipment do
     VCR.use_cassette('without insurance') do
       shipment.run!
       expect(shipment.success?).to be_truthy
+    end
+  end
+
+  it "should provide some rates" do
+    VCR.use_cassette('without insurance') do
+      shipment.run!
+      expect(shipment.rates.length).to be >= 3
+      puts shipment.api_response['messages'].ai
     end
   end
 
