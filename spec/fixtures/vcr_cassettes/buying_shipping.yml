@@ -1,0 +1,151 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.goshippo.com/shipments/
+    body:
+      encoding: UTF-8
+      string: '{"address_from":{"name":"Kristy Blackman","street1":"14321 Norwood","city":"Leawood","zip":"66224","state":"KS","country":"US","phone":"913-123-1234","email":"example@example.com"},"address_to":{"name":"Todd
+        Blackman","street1":"319 Hague Rd","city":"Dummerston","zip":"05301","state":"VT","country":"US","phone":"802-123-1234","email":"example@example.com"},"parcels":{"length":4,"width":4,"height":4,"distance_unit":"in","weight":1.5,"mass_unit":"lb"},"async":false}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - rest-client/2.0.2 (linux-gnu x86_64) ruby/2.3.1p112
+      Content-Type:
+      - application/json
+      Authorization:
+      - ShippoToken shippo_test_053fc1790bfa4b94fa76b706b9ce85982da3b9fe
+      Shippo-Api-Version:
+      - ''
+      Content-Length:
+      - '468'
+  response:
+    status:
+      code: 201
+      message: CREATED
+    headers:
+      Allow:
+      - OPTIONS
+      Content-Encoding:
+      - gzip
+      Content-Language:
+      - en-us
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 19 Oct 2017 15:29:29 GMT
+      P3p:
+      - CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"
+      Server:
+      - nginx/1.10.1
+      Set-Cookie:
+      - sessionid=wcwaj3to1u3qu5z6qmuz5otf81ydu11m; Domain=.goshippo.com; expires=Thu,
+        02-Nov-2017 15:29:29 GMT; httponly; Max-Age=1209600; Path=/
+      Vary:
+      - Accept-Language, Host, Cookie, Accept-Encoding
+      Content-Length:
+      - '1185'
+      Connection:
+      - keep-alive
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIANnE6FkC/+2XXW7cNhDHr0LoOZZFUp9+SuK4SNG0Dbp2H1oEAkXO7rKR
+        KIGivHGCAL1G33KWHKUn6VCr/bKdxA6CtEBqBLA1nCGH85/fSHkTSGGtBlsK
+        KdvBuD44Ib+/eECCtvoDpCulBeFAoTVgEc2OaHREi3OanLDihOUhY/Fvwc57
+        6NQ9vPXoyCmPK8pzxqM4zjNeREwWOaU04UlSJMleQLsyYH2Mq2ohXzbCPFxY
+        AGP1JdhQto337Z1wg79GMLs4PT2bzbxRKGWh78u5RacT8uYwhTnLZQ4VU0WR
+        xJzllYwpZCzmslIQqdjvoPsSD+hqcIAhzg6ARiMa/xT8YHXvrsjjKSvv752F
+        ufKr66wwUVea9tBA/SPFMyn5qbWrtlV+7VLUGgupW1Ni1kM9qvLm7TaKHW7C
+        N49Su/HAZyA2W/lqrFMc6/Bad/4hTVGKdZaouR2DLkaHbtma0b+gnDL/b/SD
+        Rujam+GV8EV4OP3eFB2rg5lqBcZp4R3NUNdod9C7qVxv92Rw7U0RkqLgWH2s
+        eCbiqogLns4Fn3MqBcQq4Z8U4bxV6nMl4LQgT8ViAPLLF1HgydA0YHvXmgMR
+        fj3fEyFKeEQ/LkIesS8vQieshHoEfSvBLsNHz75/sofcJ/ineXYf/nl6k3/G
+        MhmlxVzQpIjzeYzw8TzlCqHkGePyvvw7wJqsbzPdH145Kzb61WAWbuk3icMI
+        f3zISqvrpiXoxdId2hRCLoyEcjB6XNKjuqutKw2TybUR2OUbt7qaWmqAUjRe
+        7F1ua6scrAUjr3b2BpzAWopNY9XaQKnxbtsBva+qf+6XumtQ+lJNUn5Mrw2I
+        Ftxgzf8T8V+biHLAIdH0pQJZCzve8AONi4twCO0n2CyKW962gPLN5zhWRMLi
+        VKSCVsAZo7lKsyrLs3u/baeuu+ubXDhndTVMVwm+ezQ7P5udB76Bt2gEnIf5
+        ejLuuEA1xrm09irrVo5Vvem7W5oiOtteog52bXo+27eVuhELKLPELy6d6/qT
+        42N/p6498o2iZdjzUDTidWvEqve3Pt7E9sdZcuw3DDuzuGVThqPgc3bFuINt
+        e7CXGic2XEI9krph7LnVrcUGJz9iK5KzV51HehyB7UvwbRQMfdeX3eRWwp4H
+        2HGSBIFvLWxJTBlbCWfHlTczX2jrhe7Lam8qqWHdouU2/mfsBePnH1FQ+8a4
+        Iq4lTds7chHOQuLF8BF9OI5FPB5Ls51h1z4+x3FbZbSKIjlPKIsTJUQWZzwr
+        ojxVhZDVPDhkyBM88Zn6u9wdDnYTjixVNEpYUiUVjWMWCR4XWVWwhALnAoqv
+        DMdjJAPfxxdnfu306dmj5x4V/Pt2atIwK+4IzXXXb5SZD7PyRRl5siFjpd1S
+        G0IfYPD7d60lnPjN3r+rRA+KtIaslmCBXLWDJR22FZaE4OUtHkuEUdOydn//
+        +VdPKtBmQXrsr/8cW/QmWxS/I0CmANWcxwqqKsoTrqIqSuk8p5J9XbYOySlC
+        Gt+RnOuu3xA5438byAyXpLuFnHG57HfLH8cnuz8+iA7zb5d8pOarNP2LW864
+        /mm+/0X3D1w7U1tQEQAA
+    http_version: 
+  recorded_at: Thu, 19 Oct 2017 15:29:29 GMT
+- request:
+    method: post
+    uri: https://api.goshippo.com/transactions/
+    body:
+      encoding: UTF-8
+      string: '{"rate":"ede0ff021a5246a6a1be32218d67b787","label_file_type":"PDF","async":false}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - rest-client/2.0.2 (linux-gnu x86_64) ruby/2.3.1p112
+      Content-Type:
+      - application/json
+      Authorization:
+      - ShippoToken shippo_test_053fc1790bfa4b94fa76b706b9ce85982da3b9fe
+      Shippo-Api-Version:
+      - ''
+      Content-Length:
+      - '81'
+  response:
+    status:
+      code: 201
+      message: CREATED
+    headers:
+      Allow:
+      - OPTIONS
+      Content-Encoding:
+      - gzip
+      Content-Language:
+      - en-us
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 19 Oct 2017 15:29:34 GMT
+      P3p:
+      - CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"
+      Server:
+      - nginx/1.10.1
+      Set-Cookie:
+      - sessionid=zt1yt5qxv5mwb3sh9rvoxitmgyk7mgm5; Domain=.goshippo.com; expires=Thu,
+        02-Nov-2017 15:29:34 GMT; httponly; Max-Age=1209600; Path=/
+      Vary:
+      - Accept-Language, Host, Cookie, Accept-Encoding
+      Content-Length:
+      - '530'
+      Connection:
+      - keep-alive
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAN7E6FkC/4VSXW/TMBT9K1Ml9kTT2PlwUqkaWVdV7UoBZWMDhCrHvskM
+        SRzZTsuY9t+x22qUByBvufece+45108DWXwDZjbaUAOD8dngY7ZaXA1enw1c
+        pdeulN9Op7M8d8UjmimwcO6a2EdkiPwhSm9QNMbpOEBeksafT9B9x/+ODr0o
+        iU7RYg8MKaA05EVAYh6SuEwYLhNCEkbLwk94cEKQuxaU45iipux7Q9s3lQJo
+        ldiC8phsHNaANhZjVA/2Tx3NAge/LH2MaITDmMYUFRBgjBIek4IkZM9Udqho
+        q03bN8VBKMXER6m1EkUhIf7Lh9AfhN8J3q6v1+/u1q4LhtpK29f1KbRX9aZT
+        civ4QeHBmE6PRyMjZa29XnfaGRlVcnTjKFPZlkI1GTNCthvRdr25kEpU++a6
+        byb/3rCmBdRO81RKP4iuk0MOtcvtcQhUG08HHm3oT9nS3WGD/93F63h5kYuq
+        tdYVTNB8zq4Wyy2u8uj9/eL2ktzzD5dhtFvOXgVX57MfnVCgJygK0jTGKQnP
+        s7s8Ywy0vobHBZ9k14tsOV9Np9HbT6vV3WIe4sxZsLs0oJigtbW/lYLB0c8x
+        2cZOoBW49L98dW9FHZJ9aRtqH6U7xcCN66hisI8DY8L8OC0pitIwKcOChUES
+        B7zESUBwwBy6EHVtr2bhT5b52EBrDkLPz78AMds3uFEDAAA=
+    http_version: 
+  recorded_at: Thu, 19 Oct 2017 15:29:34 GMT
+recorded_with: VCR 3.0.3

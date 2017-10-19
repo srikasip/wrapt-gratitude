@@ -10,7 +10,7 @@ class PurchaseService::ChargingService
   end
 
   def init_our_charge_record!(params)
-    whitelisted_params = params.permit(:stripeToken, "address-zip".to_sym)
+    whitelisted_params = params.permit(:stripeToken, "address-zip".to_sym, :brand, :last_four)
 
     if whitelisted_params[:stripeToken].blank?
       raise InternalConsistencyError, "You must have a stripe token to even think of charging a card"
@@ -24,6 +24,8 @@ class PurchaseService::ChargingService
 
     our_charge.assign_attributes({
       token: whitelisted_params[:stripeToken],
+      last_four: whitelisted_params[:last_four],
+      card_type: whitelisted_params[:brand],
       customer_order: customer_order,
       status: INITIALIZED,
       amount_in_cents: customer_order.total_to_charge_in_cents,
@@ -161,8 +163,6 @@ class PurchaseService::ChargingService
     self.our_charge.update_attributes({
       authed_at: Time.now,
       charge_id: self.stripe_charge.id,
-      last_four: self.stripe_charge[:source][:last4],
-      card_type: self.stripe_charge[:source][:brand],
       status: AUTH_SUCCEEDED
     })
 
