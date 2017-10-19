@@ -79,7 +79,8 @@ CREATE TABLE addresses (
     addressable_type character varying,
     addressable_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    country character varying DEFAULT 'US'::character varying NOT NULL
 );
 
 
@@ -4767,6 +4768,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171012175948'),
 ('20171012193235'),
 ('20171013142254'),
-('20171017185715');
+('20171017185715'),
+('20171019174656');
 
 

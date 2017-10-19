@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017185715) do
+ActiveRecord::Schema.define(version: 20171019174656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,8 +25,9 @@ ActiveRecord::Schema.define(version: 20171017185715) do
     t.string   "zip"
     t.string   "addressable_type"
     t.integer  "addressable_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "country",          default: "US", null: false
     t.index ["addressable_id", "addressable_type"], name: "index_addresses_on_addressable_id_and_addressable_type", using: :btree
   end
 
