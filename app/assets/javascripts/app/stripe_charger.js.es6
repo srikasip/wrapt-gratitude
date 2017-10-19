@@ -1,6 +1,7 @@
 // https://stripe.com/docs/stripe.js?
 // https://stripe.com/docs/elements/reference
 
+
 App.StripeCharger = class StripeCharger {
   constructor(stripePublishableKey) {
     var elements
@@ -79,12 +80,24 @@ App.StripeCharger = class StripeCharger {
 
   stripeTokenHandler(token, that) {
     // Insert the token ID into the form so it gets submitted to the server
-    var hiddenInput = $('<input>');
-    hiddenInput.attr('type', 'hidden');
-    hiddenInput.attr('name', 'stripeToken');
-    hiddenInput.attr('value', token.id);
+    var stripeToken = $('<input>');
+    stripeToken.attr('type', 'hidden');
+    stripeToken.attr('name', 'stripeToken');
+    stripeToken.attr('value', token.id);
 
-    that.form.append(hiddenInput);
+    var brand = $('<input>');
+    brand.attr('type', 'hidden');
+    brand.attr('name', 'brand');
+    brand.attr('value', token.card.brand);
+
+    var lastFour = $('<input>');
+    lastFour.attr('type', 'hidden');
+    lastFour.attr('name', 'last_four');
+    lastFour.attr('value', token.card.last4);
+
+    that.form.append(stripeToken);
+    that.form.append(brand);
+    that.form.append(lastFour);
     that.formReady = true;
     that.form.submit();
   }
