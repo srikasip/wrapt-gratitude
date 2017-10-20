@@ -32,9 +32,12 @@ class Gift < ApplicationRecord
 
   belongs_to :product_category, required: true
   belongs_to :product_subcategory, required: true, class_name: 'ProductCategory'
+  belongs_to :tax_code, class_name: 'Tax::Code'
 
   has_one :calculated_gift_field
   delegate :units_available, to: :calculated_gift_field, allow_nil: true
+
+  before_validation -> { self.tax_code ||= Tax::Code.default }
 
   before_save :generate_wrapt_sku, if: :sku_needs_updating?
 
@@ -190,7 +193,16 @@ class Gift < ApplicationRecord
   end
 
   def primary_gift_image_with_fallback
-    primary_gift_image || gift_images.first
+    primary_gift_image || gift_images.first || GiftImage.new
+  end
+
+  def recommendation_thumbnail
+    # only landscape images for recommendation thubnails
+    if primary_gift_image && primary_gift_image.orientation == 'landscape'
+      primary_gift_image
+    else
+      (gift_images.select{|image| image.orientation == 'landscape'} || []).first
+    end
   end
 
   def duplicate_single_product_gift

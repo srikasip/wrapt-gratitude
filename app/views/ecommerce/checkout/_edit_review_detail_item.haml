@@ -1,0 +1,5 @@
+.co-detail
+  .co-detail__label= header
+  - items.each do |item|
+    - if item.present?
+      .co-detail__item= item

@@ -24,9 +24,9 @@ class SurveyQuestionResponsesController < ApplicationController
         render :json => {question_response: @question_response}
       else
         if @question_response.next_response.present?
-          redirect_to with_invitation_scope(profile_survey_question_path(@profile, @survey_response, @question_response.next_response))
+          redirect_to with_invitation_scope(giftee_survey_question_path(@profile, @survey_response, @question_response.next_response))
         else
-          redirect_to with_invitation_scope(profile_survey_completion_path(@profile, @survey_response))
+          redirect_to with_invitation_scope(giftee_survey_completion_path(@profile, @survey_response))
         end
       end
     else
@@ -35,9 +35,9 @@ class SurveyQuestionResponsesController < ApplicationController
   end
 
   private def set_profile
-    profile_id = params[:profile_id] || session[:profile_id]
-    @profile = current_user.owned_profiles.find profile_id
-    session[:profile_id] = @profile.id
+    giftee_id = params[:giftee_id] || session[:giftee_id]
+    @profile = current_user.owned_profiles.find giftee_id
+    session[:giftee_id] = @profile.id
   end
 
   private def set_survey_response

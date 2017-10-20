@@ -6,14 +6,15 @@ module GiftRecommendationsHelper
         slide_partial: 'gift',
         slide_locals: {gift: gr.gift, gift_recommendation: gr},
         thumbnail_partial: 'thumbnail',
-        thumbnail_locals: {image: (gr.gift.primary_gift_image || gr.gift.gift_images.first), gift: gr.gift},
+        thumbnail_locals: {image: (gr.gift.recommendation_thumbnail), gift: gr.gift},
       }
     end
     {nav_partial: 'gift_nav', slides: gifts}
   end
 
   def load_gift_image_carousel_data(gift_images)
-    images = gift_images.map do |gift_image|
+    # only show portrait versions of photos
+    images = gift_images.select{|gift_image| gift_image.orientation == 'portrait'}.map do |gift_image|
       {
         slide_partial: 'gift_image',
         slide_locals: {

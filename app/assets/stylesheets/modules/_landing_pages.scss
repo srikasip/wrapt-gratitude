@@ -56,31 +56,27 @@
 }
 
 .home__hero {
-  // background-image: image-url('hero-image');
-  background-image: image-url('hero-image-v2');
   background-size: 100vw;
   background-repeat: no-repeat;
-  // background-position: left top;
   background-position: left 40%;
   border: none;
   margin-bottom: 24px;
   padding-top: 48px;
   position: relative;
   @media (max-width: $screen-xs-max) {
-    // margin-top: 10px;
     padding-top: 20px;
     background-size: cover;
     background-position: 55% 50%;
   }
-  // @media (min-width: $screen-sm-min) {
-
-  // }
-  // @media (max-width: $screen-md-min) {
-  //   background-position: left 40%;
-  // }
-  // @media (min-width: $screen-lg-min) {
-  //   background-position: left 40%;
-  // }
+  @media (max-width: $screen-sm-max) {
+    background-image: image-url('hero-image-v2-1536');
+  }
+  @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+    background-image: image-url('hero-image-v2-1984');
+  }
+  @media (min-width: $screen-lg-min) {
+    background-image: image-url('hero-image-v2');
+  }
 }
 
 

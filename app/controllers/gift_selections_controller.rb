@@ -26,7 +26,7 @@ class GiftSelectionsController < ApplicationController
   end
 
   private def set_profile
-    @profile = current_user.owned_profiles.find params[:profile_id]
+    @profile = current_user.owned_profiles.find params[:giftee_id]
   end
 
   private def broadcast_updated_gift_selections

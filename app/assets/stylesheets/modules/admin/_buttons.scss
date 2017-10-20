@@ -10,3 +10,10 @@ fieldset[disabled] .btn {
   opacity: 0.55;
   filter: alpha(opacity=55);
 }
+.label {
+  margin: 3px;
+  padding: 6px;
+  font-weight: 500;
+  font-size: 85%;
+  display: inline-block;
+}

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171006145514) do
+ActiveRecord::Schema.define(version: 20171019174656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,14 +25,15 @@ ActiveRecord::Schema.define(version: 20171006145514) do
     t.string   "zip"
     t.string   "addressable_type"
     t.integer  "addressable_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "country",          default: "US", null: false
     t.index ["addressable_id", "addressable_type"], name: "index_addresses_on_addressable_id_and_addressable_type", using: :btree
   end
 
   create_table "charges", force: :cascade do |t|
     t.integer  "customer_order_id"
-    t.string   "cart_id",                    null: false
+    t.string   "cart_id",                              null: false
     t.string   "charge_id"
     t.string   "status"
     t.text     "description"
@@ -51,9 +52,23 @@ ActiveRecord::Schema.define(version: 20171006145514) do
     t.string   "http_status"
     t.integer  "amount_refunded_in_cents"
     t.datetime "authed_at"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.string   "bill_zip"
+    t.string   "last_four",                  limit: 4
+    t.string   "card_type"
     t.index ["customer_order_id"], name: "index_charges_on_customer_order_id", using: :btree
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.integer  "commentable_id",   null: false
+    t.string   "commentable_type", null: false
+    t.text     "content",          null: false
+    t.integer  "user_id",          null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["commentable_id", "commentable_type"], name: "index_comments_on_commentable_id_and_commentable_type", using: :btree
+    t.index ["user_id"], name: "index_comments_on_user_id", using: :btree
   end
 
   create_table "conditional_question_options", force: :cascade do |t|
@@ -66,36 +81,38 @@ ActiveRecord::Schema.define(version: 20171006145514) do
   end
 
   create_table "customer_orders", force: :cascade do |t|
-    t.integer  "user_id",                                  null: false
-    t.integer  "profile_id",                               null: false
-    t.string   "cart_id",                                  null: false
+    t.integer  "user_id",                                 null: false
+    t.integer  "profile_id",                              null: false
+    t.string   "cart_id",                                 null: false
     t.string   "shipping_choice"
-    t.string   "order_number",                             null: false
-    t.string   "status",                                   null: false
-    t.string   "recipient_name",                           null: false
-    t.string   "ship_street1",                             null: false
+    t.string   "order_number",                            null: false
+    t.string   "status",                                  null: false
+    t.string   "recipient_name",                          null: false
+    t.string   "ship_street1",                            null: false
     t.string   "ship_street2"
     t.string   "ship_street3"
-    t.string   "ship_city",                                null: false
-    t.string   "ship_state",                               null: false
-    t.string   "ship_zip",                                 null: false
-    t.string   "ship_country",                             null: false
+    t.string   "ship_city",                               null: false
+    t.string   "ship_state",                              null: false
+    t.string   "ship_zip",                                null: false
+    t.string   "ship_country",                            null: false
     t.text     "notes"
-    t.integer  "subtotal_in_cents",        default: 0,     null: false
-    t.integer  "taxes_in_cents",           default: 0,     null: false
-    t.integer  "shipping_in_cents",        default: 0,     null: false
-    t.integer  "shipping_cost_in_cents",   default: 0,     null: false
-    t.integer  "total_to_charge_in_cents", default: 0,     null: false
-    t.date     "created_on",                               null: false
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
-    t.boolean  "gift_wrapt",               default: true,  null: false
-    t.boolean  "include_note",             default: false, null: false
-    t.string   "note_from"
-    t.string   "note_to"
+    t.integer  "subtotal_in_cents",        default: 0,    null: false
+    t.integer  "taxes_in_cents",           default: 0,    null: false
+    t.integer  "shipping_in_cents",        default: 0,    null: false
+    t.integer  "shipping_cost_in_cents",   default: 0,    null: false
+    t.integer  "total_to_charge_in_cents", default: 0,    null: false
+    t.date     "created_on",                              null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "gift_wrapt",               default: true, null: false
+    t.boolean  "include_note",             default: true, null: false
     t.text     "note_content"
-    t.integer  "handling_cost_in_cents",   default: 0,     null: false
-    t.integer  "handling_in_cents",        default: 0,     null: false
+    t.integer  "handling_cost_in_cents",   default: 0,    null: false
+    t.integer  "handling_in_cents",        default: 0,    null: false
+    t.date     "submitted_on"
+    t.integer  "ship_to",                  default: 0
+    t.integer  "address_id"
+    t.index ["address_id"], name: "index_customer_orders_on_address_id", using: :btree
     t.index ["profile_id"], name: "index_customer_orders_on_profile_id", using: :btree
     t.index ["user_id"], name: "index_customer_orders_on_user_id", using: :btree
   end
@@ -220,7 +237,10 @@ ActiveRecord::Schema.define(version: 20171006145514) do
     t.boolean  "calculate_weight_from_products",                          default: true,  null: false
     t.decimal  "weight_in_pounds"
     t.boolean  "available",                                               default: true,  null: false
+    t.integer  "insurance_in_dollars"
+    t.integer  "tax_code_id"
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
+    t.index ["tax_code_id"], name: "index_gifts_on_tax_code_id", using: :btree
     t.index ["wrapt_sku"], name: "index_gifts_on_wrapt_sku", using: :btree
   end
 
@@ -246,7 +266,6 @@ ActiveRecord::Schema.define(version: 20171006145514) do
     t.decimal  "total_price_in_dollars"
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
-    t.integer  "related_line_item_id"
     t.index ["vendor_id"], name: "index_line_items_on_vendor_id", using: :btree
   end
 
@@ -392,6 +411,8 @@ ActiveRecord::Schema.define(version: 20171006145514) do
     t.boolean  "recipient_reviewed",           default: false, null: false
     t.datetime "recipient_invited_at"
     t.text     "recommendation_stats"
+    t.date     "birthday"
+    t.integer  "gifts_sent",                   default: 0,     null: false
     t.index ["created_at"], name: "index_profiles_on_created_at", using: :btree
     t.index ["recipient_invited_at"], name: "index_profiles_on_recipient_invited_at", using: :btree
   end
@@ -448,17 +469,32 @@ ActiveRecord::Schema.define(version: 20171006145514) do
     t.index ["profile_id"], name: "index_recipient_gift_selections_on_profile_id", using: :btree
   end
 
+  create_table "related_line_items", force: :cascade do |t|
+    t.integer  "purchase_order_id",           null: false
+    t.integer  "customer_order_id",           null: false
+    t.integer  "purchase_order_line_item_id", null: false
+    t.integer  "customer_order_line_item_id", null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.index ["customer_order_id"], name: "index_related_line_items_on_customer_order_id", using: :btree
+    t.index ["customer_order_line_item_id"], name: "index_related_line_items_on_customer_order_line_item_id", using: :btree
+    t.index ["purchase_order_id"], name: "index_related_line_items_on_purchase_order_id", using: :btree
+    t.index ["purchase_order_line_item_id"], name: "index_related_line_items_on_purchase_order_line_item_id", using: :btree
+  end
+
   create_table "shipments", force: :cascade do |t|
     t.integer  "customer_order_id"
     t.integer  "purchase_order_id"
-    t.string   "cart_id",           null: false
+    t.string   "cart_id",                       null: false
     t.jsonb    "address_from"
     t.jsonb    "address_to"
     t.jsonb    "parcel"
     t.jsonb    "api_response"
     t.boolean  "success"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "insurance_in_dollars"
+    t.string   "description_of_what_to_insure"
     t.index ["customer_order_id"], name: "index_shipments_on_customer_order_id", using: :btree
     t.index ["purchase_order_id"], name: "index_shipments_on_purchase_order_id", using: :btree
   end
@@ -492,6 +528,8 @@ ActiveRecord::Schema.define(version: 20171006145514) do
     t.jsonb    "tracking_payload"
     t.string   "carrier",             null: false
     t.string   "service_level",       null: false
+    t.date     "shipped_on"
+    t.date     "delivered_on"
     t.index ["customer_order_id"], name: "index_shipping_labels_on_customer_order_id", using: :btree
     t.index ["purchase_order_id"], name: "index_shipping_labels_on_purchase_order_id", using: :btree
     t.index ["shipment_id"], name: "index_shipping_labels_on_shipment_id", using: :btree
@@ -642,6 +680,31 @@ ActiveRecord::Schema.define(version: 20171006145514) do
     t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
   end
 
+  create_table "tax_codes", force: :cascade do |t|
+    t.boolean  "active",      default: true, null: false
+    t.string   "name",                       null: false
+    t.text     "description",                null: false
+    t.string   "code",                       null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["code"], name: "index_tax_codes_on_code", unique: true, using: :btree
+  end
+
+  create_table "tax_transactions", force: :cascade do |t|
+    t.string   "cart_id",                                null: false
+    t.integer  "customer_order_id"
+    t.string   "transaction_code"
+    t.jsonb    "api_request_payload",                    null: false
+    t.jsonb    "api_response",                           null: false
+    t.jsonb    "api_reconcile_response"
+    t.boolean  "reconciled",             default: false, null: false
+    t.boolean  "success",                default: false, null: false
+    t.decimal  "tax_in_dollars",         default: "0.0", null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.index ["customer_order_id"], name: "index_tax_transactions_on_customer_order_id", using: :btree
+  end
+
   create_table "training_set_evaluations", force: :cascade do |t|
     t.integer  "training_set_id"
     t.datetime "created_at",                                  null: false
@@ -774,6 +837,7 @@ ActiveRecord::Schema.define(version: 20171006145514) do
   end
 
   add_foreign_key "charges", "customer_orders"
+  add_foreign_key "comments", "users"
   add_foreign_key "conditional_question_options", "survey_question_options"
   add_foreign_key "conditional_question_options", "survey_questions"
   add_foreign_key "customer_orders", "profiles"
@@ -793,6 +857,7 @@ ActiveRecord::Schema.define(version: 20171006145514) do
   add_foreign_key "gift_selections", "gifts"
   add_foreign_key "gift_selections", "profiles"
   add_foreign_key "gifts", "product_categories"
+  add_foreign_key "gifts", "tax_codes"
   add_foreign_key "line_items", "vendors"
   add_foreign_key "product_images", "products"
   add_foreign_key "products", "product_categories"
@@ -805,6 +870,10 @@ ActiveRecord::Schema.define(version: 20171006145514) do
   add_foreign_key "purchase_orders", "customer_orders"
   add_foreign_key "purchase_orders", "gifts"
   add_foreign_key "purchase_orders", "vendors"
+  add_foreign_key "related_line_items", "customer_orders"
+  add_foreign_key "related_line_items", "line_items", column: "customer_order_line_item_id", name: "co_line_item_fk"
+  add_foreign_key "related_line_items", "line_items", column: "purchase_order_line_item_id", name: "po_line_item_fk"
+  add_foreign_key "related_line_items", "purchase_orders"
   add_foreign_key "shipments", "customer_orders"
   add_foreign_key "shipments", "purchase_orders"
   add_foreign_key "shipping_labels", "customer_orders"
@@ -817,6 +886,7 @@ ActiveRecord::Schema.define(version: 20171006145514) do
   add_foreign_key "survey_responses", "profiles"
   add_foreign_key "survey_responses", "surveys"
   add_foreign_key "survey_sections", "surveys"
+  add_foreign_key "tax_transactions", "customer_orders"
   add_foreign_key "training_set_evaluations", "training_sets"
   add_foreign_key "trait_response_impacts", "profile_traits_tags"
   add_foreign_key "trait_response_impacts", "survey_question_options"

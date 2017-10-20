@@ -1,0 +1,32 @@
+.container
+  = render 'header'
+  .row
+    .col-xs-12
+      = paginate(@orders)
+      %table.ma-orders__table
+        %thead
+          %tr
+            %th Order Date
+            %th Order #
+            %th.hidden-xs.hidden-sm Giftee
+            %th.hidden-xs.hidden-sm Shipped to
+            %th Status
+            %th{width: '20px'}
+        %tbody
+          - @orders.each_with_index do |order, index|
+            %tr
+              %td= format_date(order.submitted_on)
+              %td
+                = link_to my_account_order_path(order) do
+                  = order.order_number
+              %td.hidden-xs.hidden-sm= order.profile.name
+              %td.hidden-xs.hidden-sm= order.shipped_to_name
+              %td= status_to_human(order)
+              %td.text-right
+                .wrapt-dropdown
+                  = link_to "#my-account-order__#{index}", role: 'button', class: 'ma-order__trigger', data: {toggle: 'collapse'}, 'aria-expanded' => false, 'aria-controls' => "my-account-order__#{index}" do
+                    = embedded_svg('icon-arrow-down')
+                  .blue-dropdown__content.ma-order__toggle-content.right.collapse{id: "my-account-order__#{index}"}
+                    = link_to 'View Detail', my_account_order_path(order)
+                    - order.shipping_labels.each do |shipping_label|
+                      = link_to 'Track Package', shipping_label.tracking_url, target: '_blank'

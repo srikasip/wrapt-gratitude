@@ -1,5 +1,8 @@
 OUNZE_TO_POUNDS = 0.0625
 
+# Cardboard estimate
+POUNDS_PER_SQUARE_INCH = 0.026 / (12 * 12)
+
 parcels = [
   {
     active: true,
@@ -91,11 +94,19 @@ parcels = [
     length_in_inches: 12.00,
     width_in_inches: 12.00,
     usage: 'shipping'
+  },
+
+  {
+    active: true,
+    code: 'shipping-b',
+    description: '8"x6"x4"',
+    weight_in_pounds: (8.0*6.0*2 + 6*4*2 + 4*8*2) * POUNDS_PER_SQUARE_INCH,
+    height_in_inches: 8.00,
+    length_in_inches: 6.00,
+    width_in_inches: 4.00,
+    usage: 'shipping'
   }
 ]
-
-# Cardboard estimate
-POUNDS_PER_SQUARE_INCH = 0.026 / (12 * 12)
 
 4.upto(14).each do |len|
   parcels << {
@@ -109,7 +120,6 @@ POUNDS_PER_SQUARE_INCH = 0.026 / (12 * 12)
     usage: 'shipping'
   }
 end
-
 
 parcels.each do |data|
   parcel = Parcel.where(code: data[:code]).first_or_initialize

@@ -35,7 +35,7 @@ class SurveyQuestion < ApplicationRecord
   def type_label
     raise "Abstract Method"
   end
-  
+
   def system_type_label
     type_label.underscore.gsub(" ", "_")
   end
@@ -73,7 +73,7 @@ class SurveyQuestion < ApplicationRecord
   end
 
 
-  
+
 
   private def set_conditional_display
     @conditional_display = conditional_question_id?
@@ -89,7 +89,7 @@ class SurveyQuestion < ApplicationRecord
   end
 
   def first_in_section?
-    survey_section.questions.first == self    
+    survey_section.questions.first == self
   end
 
   def second_in_section?
@@ -112,7 +112,4 @@ class SurveyQuestion < ApplicationRecord
       errors.add :survey_section, 'Must be from this question\'s survey'
     end
   end
-  
-  
-
 end

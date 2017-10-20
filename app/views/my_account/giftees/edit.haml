@@ -1,0 +1,23 @@
+%h5 Edit Giftee
+= simple_form_for @giftee, url: my_account_giftee_path(@giftee), html: { data: { 'submits-to-pjax-modal' => true }} do |f|
+  .row
+    .col-xs-12
+      = f.input :name
+  .row
+    .col-xs-12
+      = f.input :email, label: 'Email Address'
+  .row
+    .col-xs-12
+      = f.simple_fields_for :address do |af|
+        = af.input :id, as: :hidden
+        = af.input :street1, label: 'Street Address'
+        .row
+          .col-xs-12.col-sm-6
+            = af.input :city
+          .col-xs-5.col-sm-2
+            = af.input :state
+          .col-xs-7.col-sm-4
+            = af.input :zip
+  = f.submit 'SAVE CHANGES', class: 'btn btn-block btn-primary'
+  .text-center.mt2
+    =link_to 'Cancel Changes', '#', data: {pjax_modal_close: true}

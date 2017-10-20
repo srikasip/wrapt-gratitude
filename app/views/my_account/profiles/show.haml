@@ -1,0 +1,10 @@
+.container
+  = render 'header'
+  - user_info = [['First Name', current_user.first_name, 'col-xs-6'], ['Last Name', current_user.last_name, 'col-xs-6'], ['Email Address', current_user.email, 'col-xs-12'], ['Password', '********', 'col-xs-6']]
+  .row
+    - user_info.each do |info|
+      .col-md-3{class: info[2]}
+        .ma-general-info__item
+          = info[1]
+          %br
+          %small= info[0]

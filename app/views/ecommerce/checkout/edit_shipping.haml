@@ -9,7 +9,17 @@
           .co-select-shipping.clearfix
             = f.input :shipping_choice, as: :wrapt_styled_radio_buttons, collection: @shipping_choices.map{|sc| [sc.annotated_label, sc.value]}, label: false
 
-          %button.btn.btn-primary{type: 'submit'}
-            = "Next <svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
+          - if @customer_order.shipping_choice.present?
+            %button.btn.btn-primary{type: 'submit'}
+              = next_button_text
+          - else
+            %button.btn.btn-primary{type: 'submit', disabled: 'disabled'}
+              = next_button_text
 
   = render "debug", customer_order: @customer_order
+
+- content_for :page_js do
+  :javascript
+    $(document).ready(function() {
+      App.ShippingChoiceSubmitButton()
+    })

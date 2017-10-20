@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   # for MVP1A they can be accessed via notification link or logged in user
   ##########################
   concern :profile_builder do
-    resources :profiles, only: [:index, :new, :create] do
+    resources :giftees, only: [:index, :new, :create] do
       resources :surveys, only: :show, controller: 'survey_responses' do
         resources :questions, only: [:show, :update], controller: 'survey_question_responses'
         resource :completion, only: [:show, :create], controller: 'survey_response_completions'
@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   concerns :profile_builder
   resources :invitations, only: :show, concerns: :profile_builder
 
-  resources :profiles, only: [:new, :create] do
+  resources :giftees, only: [:new, :create] do
     collection do
       post :create_with_auto_user_create
     end
@@ -63,12 +63,22 @@ Rails.application.routes.draw do
   ###################################
   # My Account Area
   ###################################
-  resource :my_account, only: [:show, :edit, :update]
+  #namespace :my_account, path: 'my-account' do
+  resource :my_account, path: 'my-account', module: 'my_account' do
+    resources :giftees, only: [ :index, :edit, :update ]
+    resource :profile, only: [ :show, :edit, :update ]
+    resources :orders, only: [ :index, :show ]
+    resources :billing, only: [:index] do
+      resources :addresses
+    end
+    resources :preferences, only: [ :index ]
+  end
 
   ###################################
   ### Checkout and shopping cart
   ###################################
   namespace :ecommerce do
+    patch "checkout/start/:giftee_id" => "checkout#start", as: 'checkout_start'
     VALID_STEPS = ['gift-wrapt', 'address', 'shipping', 'payment', 'review']
     VALID_STEPS.each do |step|
       action = step.tr('-', '_')
@@ -168,15 +178,22 @@ Rails.application.routes.draw do
         end
       end
       resources :billings, only: [:index]
-      resources :customer_orders, only: [:index, :show, :destroy, :create]
+      resources :customer_orders, only: [:index, :show, :destroy, :create] do
+        member do
+          post :send_customer_notification
+        end
+      end
       resources :purchase_orders, only: [:index, :show] do
         member do
-          put :resend_notification
+          post :send_vendor_notification
+          delete :cancel_order
+          post :send_order_shipped_notification
         end
       end
       post 'webhooks/tracking' => 'webhooks#tracking'
     end
 
+    resources :comments, only: [:create]
   end
 
   ####################
@@ -203,4 +220,6 @@ Rails.application.routes.draw do
 
   get 'health-check' => 'health_check#index'
   get 'exception-check' => 'health_check#exception'
+
+  get '*args' => 'static_pages#page_404'
 end

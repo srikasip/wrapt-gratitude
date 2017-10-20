@@ -10,4 +10,13 @@ module OrderStatuses
     PARTIALLY_CANCELLED = 'partially_cancelled', # Not available for purchase orders.
     FAILED              = 'failed',
   ]
+
+  COMPLETED_STATUSES = [
+    RECEIVED,
+    CANCELLED,
+    PARTIALLY_CANCELLED,
+    FAILED
+  ]
+
+  NOT_COMPLETED_STATUSES = VALID_ORDER_STATUSES - COMPLETED_STATUSES
 end

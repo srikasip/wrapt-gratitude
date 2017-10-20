@@ -1,4 +1,12 @@
 class ShippingLabel < ApplicationRecord
+  TRACKING_STATUSES = [
+    T_UNKNOWN   = 'unknown',   # The package has not been found via the carrier's tracking system, or it has been found but not yet scanned by the carrier.
+    T_TRANSIT   = 'transit',   # The package has been scanned by the carrier and is in transit.
+    T_DELIVERED = 'delivered', # The package has been successfully delivered.
+    T_RETURNED  = 'returned',  # The package is en route to be returned to the sender, or has been returned successfully.
+    T_FAILURE   = 'failure',   # The carrier indicated that there has been an issue with the delivery. This can happen for various reasons and depends on the carrier. This status does not indicate a technical, but a delivery issue.
+  ]
+
   has_paper_trail(
     ignore: [:updated_at, :created_at, :id],
     meta: {
@@ -18,9 +26,11 @@ class ShippingLabel < ApplicationRecord
   validates :tracking_number, presence: true, if: :success
   validates :url, presence: true, if: :success
 
-  before_save :_cache_the_results
-
   delegate :cart_id, to: :shipment, prefix: false
+
+  def shipped?
+    self.tracking_status == T_TRANSIT
+  end
 
   def run!
     # Purchase the desired rate.
@@ -29,6 +39,11 @@ class ShippingLabel < ApplicationRecord
       :label_file_type => "PDF",
       :async           => false
     )
+    _cache_the_results
+  rescue Shippo::Exceptions::APIServerError, Shippo::Exceptions::ConnectionError => e
+    Rails.logger.fatal "[SHIPPO] #{e.message}"
+    self.success = false
+    self.api_response = JSON.parse(e.response.body) rescue {msg: e.message}
   end
 
   private def _cache_the_results

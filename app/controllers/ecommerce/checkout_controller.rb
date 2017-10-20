@@ -1,37 +1,40 @@
 class Ecommerce::CheckoutController < ApplicationController
+  include PjaxModalController
+  include AddressHelper
+
   before_action -> { redirect_to :root }, if: -> { ENV.fetch('CHECKOUT_ENABLED') { 'false' } == 'false' }
+  before_action :_load_service_object, except: [:start]
+  before_action -> { @enable_chat = true }
 
-  before_action :_load_service_object, except: [:edit_gift_wrapt]
+  helper :orders
 
-  before_action -> { @hide_gift_basket = true }
+  def start
+    profile = current_user.owned_profiles.find(params[:giftee_id])
+
+    customer_purchase = ::PurchaseService.find_existing_cart_or_initialize(profile: profile, user: current_user)
+
+    customer_purchase.generate_order!
+
+    session[:cart_id] = customer_purchase.cart_id
+
+    redirect_to action: :edit_gift_wrapt
+  end
 
   def edit_gift_wrapt
+    @load_in_modal = pjax_request?
     @checkout_step = :gift_wrapt
-
-    session[:cart_id] = SecureRandom.hex(16)
-
-    @profile = current_user.owned_profiles.find params[:profile_id]
-
-    desired_gifts = @profile.gift_selections.map do |gs|
-      ::DesiredGift.new(gs.gift, 1)
-    end
-
-    @customer_purchase = ::CustomerPurchase.new({
-      cart_id: session[:cart_id],
-      customer: current_user,
-      desired_gifts: desired_gifts,
-      profile: @profile,
-    })
-
-    @customer_order = @customer_purchase.generate_order!
-
     _load_progress_bar
   end
 
   def save_gift_wrapt
     @checkout_step = :gift_wrapt
     if @customer_purchase.gift_wrapt!(params)
-      redirect_to action: :edit_address
+      if pjax_request?
+        # loads in modal on order review page
+        redirect_to action: :edit_review
+      else
+        redirect_to action: :edit_address
+      end
     else
       flash.now[:notice] = "There was a problem saving your response."
       _load_progress_bar
@@ -46,7 +49,23 @@ class Ecommerce::CheckoutController < ApplicationController
   end
 
   def _load_addresses
-    @saved_addresses = current_user.addresses + @profile.addresses
+    @saved_addresses = current_user.addresses
+    @giftee_addresses = @profile.addresses
+
+    if @customer_order.ship_to_customer? && @customer_order.address.nil? && @customer_order.ship_street1.blank?
+      @customer_order.address = current_user.addresses.last
+    elsif @customer_order.address.present?
+      # make sure address id makes sense
+      addressable = @customer_order.ship_to_customer? ? @customer_order.user : @customer_order.profile
+      if addressable != @customer_order.address.addressable && !@customer_order.address.ship_address_is_equal_to_address?(@customer_order)
+        @customer_order.address = nil
+      end
+    end
+
+    @address_collection = @saved_addresses.map do |address|
+      [ format_address(object: address), address.id]
+    end || []
+    @address_collection.push(['New Address', 'new_address'])
   end
 
   def save_address
@@ -56,7 +75,8 @@ class Ecommerce::CheckoutController < ApplicationController
     if @customer_purchase.things_look_shipable?
       redirect_to action: :edit_shipping
     else
-      flash.now[:notice] = "Please make sure you've specified an address to continue."
+      error_message = @customer_purchase.customer_order.errors.full_messages.join('. ')
+      flash.now[:notice] = "Please make sure you've specified an address to continue. #{error_message}"
       _load_addresses
       _load_progress_bar
       render :edit_address
@@ -88,7 +108,7 @@ class Ecommerce::CheckoutController < ApplicationController
   end
 
   def save_payment
-    if @customer_purchase.init_our_charge_record!(params[:stripeToken])
+    if @customer_purchase.init_our_charge_record!(params)
       redirect_to action: :edit_review
     else
       flash.now[:notice] = "There was a problem saving your response."
@@ -100,6 +120,7 @@ class Ecommerce::CheckoutController < ApplicationController
 
   def edit_review
     @checkout_step = :review
+    _load_progress_bar
   end
 
   def save_review
@@ -116,6 +137,7 @@ class Ecommerce::CheckoutController < ApplicationController
 
   def finalize
     @checkout_step = :finalize
+    @expected_delivery = @customer_purchase.expected_delivery.text
   end
 
   private
@@ -125,7 +147,7 @@ class Ecommerce::CheckoutController < ApplicationController
   end
 
   def _load_service_object
-    @customer_purchase = ::CustomerPurchase.new(cart_id: session[:cart_id])
+    @customer_purchase = ::PurchaseService.new(cart_id: session[:cart_id])
     @customer_order = @customer_purchase.customer_order
     @profile = @customer_order.profile
   end

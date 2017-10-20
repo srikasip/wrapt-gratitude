@@ -1,0 +1,6 @@
+- href = action_name == 'show' ? edit_my_account_profile_path : my_account_profile_path
+- text = action_name == 'show' ? 'Edit' : 'Cancel'
+- title_action = capture_haml do 
+  = link_to text, href, class: 'btn btn-xs btn-default btn-upcase-gray'
+
+= render 'my_account/page_header', title: 'General Information', title_action: title_action, page_header_action: nil

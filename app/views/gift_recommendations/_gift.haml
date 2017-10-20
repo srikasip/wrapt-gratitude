@@ -1,6 +1,7 @@
 - gift = locals[:gift]
 - gr = locals[:gift_recommendation]
 - index = locals[:index]
+
 .gr-carousel__gift.clearfix
   .gr-carousel__gift-image
     - gift_images = load_gift_image_carousel_data(gift.gift_images)
@@ -20,7 +21,7 @@
     .gr-carousel__gift-actions
       %div
         - gift_selection = GiftSelection.new(gift: gift, profile: @profile)
-        = form_for gift_selection, url: profile_gift_selections_path(@profile), html: {data: {remote: true}} do |form|
+        = form_for gift_selection, url: giftee_gift_selections_path(@profile), html: {data: {remote: true}} do |form|
           = form.hidden_field :gift_id
           %h3.gr-carousel__price
             = number_to_currency gift.selling_price

@@ -28,7 +28,7 @@ class UserSessionsController < ApplicationController
 
   private def default_location_for_user
     if user.last_viewed_profile.present?
-      profile_gift_recommendations_path(user.last_viewed_profile)
+      giftee_gift_recommendations_path(user.last_viewed_profile)
     else
       root_path
     end

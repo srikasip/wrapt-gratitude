@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'avatax', git: 'https://github.com/yakloinsteak/AvaTax-REST-V2-Ruby-SDK.git', branch: 'greenriver'
 gem "fog-aws"
 gem 'acts-as-taggable-on'
 gem 'awesome_nested_set'
@@ -9,7 +10,6 @@ gem 'carrierwave'
 gem 'carrierwave_direct'
 gem 'coffee-rails', '~> 4.2' # Use CoffeeScript for .coffee assets and views
 gem 'dotenv-rails'
-gem 'font-awesome-sass'
 gem 'font-awesome-sass'
 gem 'haml-rails'
 gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -72,8 +72,13 @@ end
 group :test do
   gem "capybara"
   gem "launchy"
+  gem 'faraday'
+  gem 'guard-rspec'
   gem 'minitest-reporters'
   gem 'rspec-mocks'
+  gem 'rspec-rails'
+  gem 'vcr'
+  gem 'webmock'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -14,6 +14,7 @@ class PurchaseOrder < ApplicationRecord
     "other"
   ]
 
+  has_many :comments, as: :commentable, dependent: :destroy
   has_many :line_items, as: :order, dependent: :destroy
 
   has_one :shipment, dependent: :destroy
@@ -22,6 +23,7 @@ class PurchaseOrder < ApplicationRecord
   belongs_to :customer_order
   belongs_to :vendor
   belongs_to :gift
+  delegate :name, to: :gift, prefix: true
 
   #has_one :gift_parcel, primary_key: 'gift_id', foreign_key: 'gift_id'
   #has_one :parcel, through: :gift_parcel
@@ -38,7 +40,7 @@ class PurchaseOrder < ApplicationRecord
   before_validation -> { self.vendor_token ||= self.vendor_id.to_s+'-'+self.order_number+'-'+SecureRandom.hex(16) }
 
   delegate :name, to: :vendor, prefix: true
-  delegate :cart_id, :status, :recipient_name, :ship_street1, :ship_street2, :ship_street3, :ship_city, :ship_state, :ship_zip, :ship_country, to: :customer_order
+  delegate :cart_id, :recipient_name, :ship_street1, :ship_street2, :ship_street3, :ship_city, :ship_state, :ship_zip, :ship_country, to: :customer_order
   delegate :tracking_url, :tracking_number, to: :shipping_label, allow_nil: true
   delegate :shipping_choice, to: :customer_order
 
@@ -79,11 +81,15 @@ class PurchaseOrder < ApplicationRecord
   end
 
   def total_due_in_dollars
-    self.total_due_in_cents / 100.0
+    self.total_due_in_cents.to_i / 100.0
   end
 
   def handling_cost_in_dollars
-    self.handling_cost_in_cents / 100.0
+    self.handling_cost_in_cents.to_i  / 100.0
+  end
+
+  def shipping_cost_in_dollars
+    self.shipping_cost_in_cents.to_i / 100.0
   end
 
   def fulfill?
@@ -92,7 +98,7 @@ class PurchaseOrder < ApplicationRecord
 
   def shipping_rate
     @shipping_rate ||=
-      CustomerPurchase::ShippingService.find_rate({
+      PurchaseService::ShippingService.find_rate({
         rates: self.shipment.rates,
         shipping_choice: shipping_choice,
         vendor: self.vendor

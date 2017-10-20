@@ -1,7 +1,29 @@
-Review.
+.container
+  = render 'header'
+  .row
+    .col-xs-12.col-md-10.col-md-offset-1
+      .co-container.co-ro-container
+        %h3.light Review Order
+        .row
+          .col-xs-12.col-md-8
+            .outline-container.form-group
+              - @customer_order.line_items.each do |line_item|
+                - gift = line_item.orderable
+                .outline-container__section
+                  = render 'edit_review_gift', gift: gift, customer_order: @customer_order, show_price: true, show_order_status: false
+              .outline-container__section
+                = render 'wrapt_with_love', customer_order: @customer_order, edit: true
+                = render 'edit_review_detail_items', customer_order: @customer_order
+          .col-xs-12.col-md-4
+            .outline-container.outline-container__blue.form-group.co-ro-summary
+              .outline-container__section
+                %h4.light Summary
+                = render 'edit_review_summary_items', customer_order: @customer_order
+              .outline-container__section.co-ro-summary__total.clearfix
+                %h4.light Total
+                %h5.light=number_to_currency @customer_order.total_to_charge_in_dollars
+        = simple_form_for @customer_order, url: url_for, method: :patch do |f|
+          %button.btn.btn-primary.btn-block{type: 'submit'}
+            = "Complete Purchase".html_safe
 
-= simple_form_for @customer_order, url: url_for, method: :patch do |f|
-  %button.btn.btn-primary{type: 'submit'}
-    = "Finalize Order<svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
-
-= render "debug", customer_order: @customer_order
+  = render "debug", customer_order: @customer_order

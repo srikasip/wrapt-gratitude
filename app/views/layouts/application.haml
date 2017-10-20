@@ -15,8 +15,8 @@
     = action_cable_meta_tag
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
-
     %script(type="text/javascript" src="https://js.stripe.com/v3/")
+    = render 'shared/happy_fox'
 
     = render 'layouts/favicons'
     = render 'layouts/social_tags'
@@ -30,6 +30,8 @@
         -# .container.container--main
         = render 'layouts/alerts'
         = render 'breadcrumbs'
+        - if @show_account_sub_nav
+          = render 'my_account/sub_nav'
         = yield
     = yield :after_wrapper
 
@@ -39,3 +41,9 @@
     = render 'pjax_modal_frame'
     = render_gift_basket if enable_gift_basket?
     = yield :page_js
+    - if enable_chat?
+      %script
+        window.show_chat = true;
+    - else
+      %script
+        window.show_chat = false;

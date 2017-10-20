@@ -1,0 +1,21 @@
+.row.mb2.mt1
+  .col-xs-12.col-sm-6
+    - shipping_address_items = [customer_order.recipient_name, customer_order.ship_street1, customer_order.ship_street2, "#{customer_order.ship_city}, #{customer_order.ship_state} #{customer_order.ship_zip}"]
+    = render 'ecommerce/checkout/edit_review_detail_item', header: 'Shipping Address', items: shipping_address_items
+  .col-xs-12.col-sm-6
+    - if customer_order.charge.present?
+      - billing_address_items = [customer_order.charge.bill_zip]
+    - else
+      - billing_address_items = ['N/A']  
+    = render 'ecommerce/checkout/edit_review_detail_item', header: 'Billing Zip Code', items: billing_address_items
+.row.mb1
+  .col-xs-12.col-sm-6
+    - words = shipping_choice_to_human(customer_order.shipping_choice)
+    = render 'ecommerce/checkout/edit_review_detail_item', header: 'Shipping Method', items: [words]
+  .col-xs-12.col-sm-6
+    - if customer_order.charge.present?
+      - payment_items = [customer_order.charge.card_type, "* #{customer_order.charge.last_four}"]
+    - else
+      - payment_items = ['N/A']
+    = render 'ecommerce/checkout/edit_review_detail_item', header: 'Payment Info', items: payment_items
+

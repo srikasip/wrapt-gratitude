@@ -4,6 +4,7 @@
   .form-inputs
     = f.input :title
     = f.input :description
+    = f.input :tax_code_id, collection: @tax_codes, label_method: :name, value_method: :id
     = f.input :tag_list, label: "Tags", hint: "List tags names separated with a comma (ex: not_for_wife, outdoorsy, sophisticated)", as: :text
     .row
       .col-xs-3
@@ -13,6 +14,10 @@
           -#= f.input_field :selling_price, class: 'form-control', disabled: @gift.calculate_price_from_products?, value: number_with_precision(f.object.selling_price, precision: 2)
           = f.input_field :selling_price, class: 'form-control', value: number_with_precision(f.object.selling_price, precision: 2)
         = f.input :calculate_price_from_products, label: 'Auto-Calculate Price from Products'
+
+        = f.input :insurance_in_dollars, wrapper: :vertical_input_group, label: 'Insurarnce to buy when shipping' do
+          .input-group-addon $
+          = f.input_field :insurance_in_dollars, class: 'form-control', value: number_with_precision(f.object.insurance_in_dollars, precision: 2)
 
         = f.input :cost, wrapper: :vertical_input_group do
           .input-group-addon $

@@ -5,49 +5,61 @@
       = link_to 'Edit', edit_admin_vendor_path(@vendor), class: 'btn btn-default btn-xs'
 
 %p
-  %b Contact name:
+  %strong Contact name:
   = @vendor.contact_name
 
 %p
-  %b Address Line 1
+  %strong Address Line 1
   = @vendor.street1
 
 %p
-  %b Address Line 2
+  %strong Address Line 2
   = @vendor.street2
 
 %p
-  %b Address Line 3
+  %strong Address Line 3
   = @vendor.street3
 
 %p
-  %b City
+  %strong City
   = @vendor.city
 
 %p
-  %b State
+  %strong State
   = @vendor.state
 
 %p
-  %b Zipcode
+  %strong Zipcode
   = @vendor.zip
 
 %p
-  %b Country
+  %strong Country
   = @vendor.country
 
 %p
-  %b Email:
+  %strong Email:
   = @vendor.email
+
 %p
-  %b Phone:
+  %strong Phone:
   = @vendor.phone
+
 %p
-  %b Markup:
+  %strong Allowed Shipping Levels:
+  %ul
+    - @vendor.shipping_service_levels.preload(:shipping_carrier).each do |shipping_level|
+      %li
+        = shipping_level.carrier_name
+        = shipping_level.name
+
+%p
+  %strong Markup:
   = number_to_currency(@vendor.purchase_order_markup_in_dollars)
+
 %p
-  %b Notes:
+  %strong Notes:
   = @vendor.notes
+
 %p
-  %b Wrapt SKU Code:
+  %strong Wrapt SKU Code:
   = @vendor.wrapt_sku_code

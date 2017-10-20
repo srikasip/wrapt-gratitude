@@ -1,0 +1,47 @@
+%body{style: "background-color: #fff; font-family: Helvetica, Arial, sans-serif;"}
+  %table{style: "background-color: #F2F5F9; max-width: 700px; margin: 0 auto;"}
+    %tr
+      %td{style: "padding: 40px;"}
+        %h1{style: "font-size: 28px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; text-align: center; color: #4D4C4D; margin-bottom: 14px; line-height: 1.2;"}
+          %img{src: email_image_url("heart-24.png"), style: "padding-right: 12px; vertical-align: middle;"}
+          Your gift for #{@customer_order.profile_name} has shipped.
+        - if @customer_order.purchase_orders.count > 1
+          %p{style: "text-align: center; font-size: 16px; color: #444; font-weight: normal; line-height: 1.75;"}
+            Each of our gifts comes from different artists. Therefore, you will
+            receive a separate email for the other gift(s) you purchased just
+            as soon as they ship.
+        %table{style: "margin: 60px auto 40px; border: 1px solid #E2E2E2; max-width: 600px;"}
+          %tr
+            %td{style: "padding: 12px 24px; text-align: left; vertical-align: top; width: 50%"}
+              %table{style: "border: none; margin: 0; padding:0"}
+                %tr
+                  %td{style: "text-align: left; vertical-align: middle; width: 88px;"}
+                    - url = @purchase_order.gift.primary_gift_image.image.url(:small)
+                    %img{src: url, style: "width: 88px"}
+                  %td{style: "text-align: left; vertical-align: middle; padding-left: 4px;"}
+                    %p{style: "padding-bottom: 0; font-size: 16px; font-weight: normal; font-family: Helvetica, Arial, sans-serif;  color: #4D4C4D;"}
+                      =@purchase_order.gift_name
+            %td{style: "padding: 12px 24px; text-align: right; vertical-align: top; width: 50%;"}
+              %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; text-transform: uppercase; color: #4D4C4D;"}
+                Status
+              %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; color: #767676;"}
+                Shipped
+        %table{style: "margin: 60px auto 40px; border: 1px solid #E2E2E2; max-width: 600px;"}
+          %tr
+            %td{style: "padding: 12px 24px; text-align: left; vertical-align: top; width: 50%"}
+              %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; text-transform: uppercase; color: #4D4C4D;"}
+                Shipping To
+              %p{style: "font-size: 13px; font-family: Helvetica, Arial, sans-serif; color: #767676; line-height: 1.1;"}
+                #{@customer_order.profile_name}
+                %br
+                = format_address(object: @customer_order, prefix: :ship)
+            %td{style: "padding: 12px 24px; text-align: left; vertical-align: top; width: 50%"}
+              %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; text-transform: uppercase; color: #4D4C4D;"}
+                Expected Delivery
+              %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; color: #767676;"}
+                = @expected_delivery
+                %br
+                = link_to 'Order Details & Tracking', my_account_order_url(@customer_order)
+    %tr
+      %td{style: "padding-bottom: 60px; text-align: center;"}
+        %img{src: email_image_url("logo-with-love.png"), style: "padding-right: 12px; vertical-align: middle;"}

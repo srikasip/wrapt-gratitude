@@ -8,7 +8,11 @@
     .gift-basket__gift.clearfix
       .gift-basket__gift__left
         .gift-basket__gift-image
-          = image_tag gift.primary_gift_image_with_fallback.image_url(:small)
+          - url = gift.primary_gift_image_with_fallback.image&.url(:small)
+          - if url.present?
+            = image_tag url
+          - else
+            %img
       .gift-basket__gift__right
         .gift-basket__gift-title.small
           = gift.title
@@ -17,5 +21,5 @@
         .gift-basket__price-count
           %span.gift-basket__gift-price.small
             = number_to_currency gift.selling_price
-      = link_to profile_gift_selection_path(profile, gift_selection), data: {remote: true, behavior: 'remove-gift-from-basket', method: :delete}, class: 'gift-basket__remove-gift-link', onClick: "ga('send', 'event', 'basket', 'remove from basket', '#{gift.title}');" do
+      = link_to giftee_gift_selection_path(profile, gift_selection), data: {remote: true, behavior: 'remove-gift-from-basket', method: :delete}, class: 'gift-basket__remove-gift-link', onClick: "ga('send', 'event', 'basket', 'remove from basket', '#{gift.title}');" do
         =embedded_svg('icon-close', class: 'remove-gift-link__icon-close')

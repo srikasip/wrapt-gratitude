@@ -1,0 +1,27 @@
+.ma-giftee-details__table
+  .ma-gd__tr
+    .ma-gd__th{width: '140px'}
+    .ma-gd__th
+  .ma-gd__tr
+    .ma-gd__td Email
+    .ma-gd__td
+      = giftee.email
+      - unless giftee.email
+        = link_to 'Add Email Address', edit_my_account_giftee_path(giftee), data: {loads_in_pjax_modal: true}
+  .ma-gd__tr
+    .ma-gd__td Mailing Address
+    .ma-gd__td
+      - if giftee.address.present?
+        = format_address(object: giftee.address)
+      - else
+        = link_to 'Add Mailing Address', edit_my_account_giftee_path(giftee), data: {loads_in_pjax_modal: true}
+  .ma-gd__tr
+    .ma-gd__td Birthdate
+    .ma-gd__td TODO
+  .ma-gd__tr
+    .ma-gd__td Gifts Sents
+    .ma-gd__td
+      = giftee.gifts_sent
+      - if giftee.gifts_sent > 0
+        = link_to 'See Gifts', 'javascript: alert("TODO");'
+

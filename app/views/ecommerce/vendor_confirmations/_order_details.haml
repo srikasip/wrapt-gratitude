@@ -9,6 +9,7 @@
     %table.table.table-striped
       %thead
         %tr
+          %th
           %th Description
           %th SKU
           %th Quantity
@@ -16,10 +17,17 @@
         - @purchase_order.line_items.each do |line_item|
           - product = line_item.orderable
           %tr
+            %td
+              - url = product.primary_product_image&.image&.url(:small)
+              - if url.present?
+                = image_tag url, class: 'img-responsive', style: 'max-width: 88px; padding-right: 4px;'
+              - else
+                %img
             %td= product.description
             %td= product.vendor_sku
             %td= line_item.quantity
         %tr
+          %td
           %td
             - wrapt_parcel = @purchase_order.gift.pretty_parcel
             = wrapt_parcel.description
@@ -27,6 +35,7 @@
           %td 1
         - if @customer_order.include_note?
           %tr
+            %td
             %td Hand written note
             %td
             %td 1
@@ -36,15 +45,8 @@
   - if @customer_order.include_note?
     .col-xs-6
       %h3 Note Details
-
-      %strong Gifter:
-      = @customer_order.note_from
-      %br
-      %strong Giftee:
-      = @customer_order.note_to
-      %br
       %strong Content:
-      %p.sg-box__content
+      %p.sg-box__content{style: 'white-space: pre; text-align: left;'}
         = @customer_order.note_content
 
   .col-xs-6

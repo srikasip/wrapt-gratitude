@@ -1,0 +1,24 @@
+.container
+  = render 'header'
+  .row
+    .col-xs-12.col-md-10.col-md-offset-1
+      .outline-container.outline-container__light-fade.mb2
+        .outline-container__section.outline-container__header= "Your gift to #{@order.profile.name}"
+        - @order.line_items.each do |item|
+          - gift = item.orderable
+          .outline-container__section
+            = render 'ecommerce/checkout/edit_review_gift', gift: gift, customer_order: @order, show_price: true, show_order_status: false
+      .row
+        .col-xs-12.col-md-8
+          .outline-container.outline-container__light-fade
+            .outline-container__section
+              = render 'ecommerce/checkout/wrapt_with_love', customer_order: @order, edit: false
+              = render 'ecommerce/checkout/edit_review_detail_items', customer_order: @order
+        .col-xs-12.col-md-4
+          .outline-container
+            .outline-container__section
+              %h4.light Summary
+              = render 'ecommerce/checkout/edit_review_summary_items', customer_order: @order
+            .outline-container__section.co-ro-summary__total.clearfix
+              %h4.light Total
+              %h5.light=number_to_currency @order.total_to_charge_in_dollars

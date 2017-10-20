@@ -1,0 +1,20 @@
+.row
+  .col-xs-12
+    .co-ro-item
+      .co-ro-item__img
+        - url = gift.primary_gift_image_with_fallback.image&.url(:small)
+        - if url.present?
+          = image_tag url, class: 'img-responsive'
+        - else
+          %img
+      .co-ro-item__details.clearfix
+        .pull-left
+          %h4.light= gift.title
+          - if show_price
+            %h5.light= number_to_currency gift.selling_price
+        - if show_order_status
+          .pull-right
+            .co-detail__label.text-right Status
+            .co-detail__item.text-right= customer_order.status.titleize
+
+        

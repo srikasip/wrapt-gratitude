@@ -1,4 +1,5 @@
 class GiftRecommendationsController < ApplicationController
+  before_action -> { @enable_chat = true }
 
   GIFT_RECOMMENDATION_LIMIT = 10
 
@@ -7,7 +8,7 @@ class GiftRecommendationsController < ApplicationController
   before_action :load_profile
   before_action :testing_redirect
   before_action :load_recommendations
-  
+
   def index
     current_user.update_attribute :last_viewed_profile_id, @profile.id
   end
@@ -15,13 +16,13 @@ class GiftRecommendationsController < ApplicationController
   private
 
   def load_profile
-    profile_id = params[:profile_id] || session[:profile_id]
-    @profile = current_user.owned_profiles.find(profile_id)
-    session[:profile_id] = @profile.id
+    giftee_id = params[:giftee_id] || session[:giftee_id]
+    @profile = current_user.owned_profiles.find(giftee_id)
+    session[:giftee_id] = @profile.id
   end
-  
+
   def testing_redirect
-    if params[:profile_id].present? && current_user.unmoderated_testing_platform?
+    if params[:giftee_id].present? && current_user.unmoderated_testing_platform?
       # send them to pretty url for loop11 testing
       redirect_to testing_gift_recommendations_path
     end

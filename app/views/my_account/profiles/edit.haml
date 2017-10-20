@@ -1,0 +1,17 @@
+.container
+  = render 'header'
+  .row
+    .col-sm-12
+      = simple_form_for current_user, url: my_account_profile_path do |form|
+        .row
+          .col-xs-12.col-md-6
+            = form.input :first_name, label: 'First Name'
+          .col-xs-12.col-md-6
+            = form.input :last_name, label: 'Last Name'
+        .row
+          .col-xs-12.col-md-6
+            = form.input :email, label: 'Email Address'
+          .col-xs-12.col-md-6
+            = form.input :password
+
+        = form.submit 'Update', class: 'btn btn-primary btn-block uppercase'

@@ -1,10 +1,17 @@
-<script>
-window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-ga('create', 'UA-91764940-1', 'auto');
-ga('set', 'userId', <%= current_user&.id || -1 %>); // Set the user ID using signed-in user_id.
-ga('set', 'dimension1', '<%= analytics_gifter_id || -1 %>'); // Gifter ID. Even if gifter value is same as userID (used above), we still want it as a dimension. If giftee, this is *their* gifter's ID.
-ga('set', 'dimension2', '<%= analytics_profile_id || -1 %>'); // Profile ID. If user is a giftee ID, this dimension gets set.
-ga('set', 'dimension3', '<%= analytics_role %>'); // Role. Value should be either: admin, tester, tester-loop11, guest (if not logged in)
-ga('send', 'pageview');
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
+<% if Rails.env.production? %>
+  <script>
+  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  ga('create', 'UA-91764940-1', 'auto');
+  ga('set', 'userId', <%= current_user&.id || -1 %>); // Set the user ID using signed-in user_id.
+  ga('set', 'dimension1', '<%= analytics_gifter_id || -1 %>'); // Gifter ID. Even if gifter value is same as userID (used above), we still want it as a dimension. If giftee, this is *their* gifter's ID.
+  ga('set', 'dimension2', '<%= analytics_profile_id || -1 %>'); // Profile ID. If user is a giftee ID, this dimension gets set.
+  ga('set', 'dimension3', '<%= analytics_role %>'); // Role. Value should be either: admin, tester, tester-loop11, guest (if not logged in)
+  ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+<% else %>
+  <% # on dev so we don't get js errors %>
+  <script>
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  </script>
+<% end %>

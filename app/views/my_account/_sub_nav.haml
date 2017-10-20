@@ -1,0 +1,16 @@
+-# [link_text, link_path, link_controller]
+- links = [['giftees', my_account_giftees_path, 'giftees'], ['profile', my_account_profile_path, 'profiles'], ['orders', my_account_orders_path, 'orders'], ['billing', my_account_billing_index_path, 'billing'], ['preferences', my_account_preferences_path, 'preferences']]
+.container.ma-container
+  %h2.light My Account
+  -# only visible on mobile to trigger nav open/closed
+  = link_to '#ma-collapse', data: {toggle: 'collapse'}, class: 'ma-subnav-mobile-trigger', 'aria-controls' => 'ma-collapse', 'aria-expanded' => false do
+    = links.select{|link| link[2] == controller_name}.first[0]
+    %span.closed= embedded_svg('icon-arrow-down')
+    %span.open= embedded_svg('icon-close')
+  .ma-subnav.collapse#ma-collapse
+    .ma-subnav__row
+      - links.each do |link|
+        .ma-subnav__link{class: controller_name == link[2] ? 'active' : ''}
+          = link_to link[0], link[1]
+
+
