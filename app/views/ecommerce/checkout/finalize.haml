@@ -14,18 +14,7 @@
               - gift = line_item.orderable
               .outline-container.mb2.text-left
                 .outline-container__section
-                  .co-ro-item
-                    .co-ro-item__img
-                      - url = gift.primary_gift_image_with_fallback.image&.url(:small)
-                      - if url.present?
-                        = image_tag url, class: 'img-responsive'
-                      - else
-                        %img
-                    .co-ro-item__details
-                      %h4.display__inline-block.light= gift.title
-                      .pull-right
-                        .co-detail__label.text-right Status
-                        .co-detail__item.text-right= @customer_order.status.titleize
+                  = render 'edit_review_gift', gift: gift, customer_order: @customer_order, show_price: false, show_order_status: true
             .outline-container__table.text-left.mb2
               .outline-container__tr
                 .outline-container__td

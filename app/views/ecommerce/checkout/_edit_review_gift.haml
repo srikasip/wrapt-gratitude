@@ -7,14 +7,14 @@
           = image_tag url, class: 'img-responsive'
         - else
           %img
-      .co-ro-item__details
-        %h4.light= gift.title
-        %h5.light= number_to_currency gift.selling_price
-        %div
-          - link_text = customer_order.gift_wrapt? ? 'Wrapt with Love' : 'Not Gift Wrapt'
-          - link_data = edit_gift_wrapt ? {loads_in_pjax_modal: true} : {}
-          - link_href = edit_gift_wrapt ? ecommerce_checkout_gift_wrapt_path(giftee_id: customer_order.profile_id) : "javascript:void(0);"
-          = link_to link_href, data: link_data, class: 'wrapt-with-love-link' do
-            = link_text
-            - if customer_order.gift_wrapt? && customer_order.include_note?
-              = embedded_svg('icon-page', xlink_class: 'icon-page')
+      .co-ro-item__details.clearfix
+        .pull-left
+          %h4.light= gift.title
+          - if show_price
+            %h5.light= number_to_currency gift.selling_price
+        - if show_order_status
+          .pull-right
+            .co-detail__label.text-right Status
+            .co-detail__item.text-right= customer_order.status.titleize
+
+        
