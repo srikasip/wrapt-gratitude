@@ -18,7 +18,12 @@ class CustomerOrder < ApplicationRecord
 
   validates :status, inclusion: { in: VALID_ORDER_STATUSES }
   validates :order_number, presence: true
-  validates :ship_zip, length: { minimum: 5 }, allow_blank: true
+
+  validates :ship_street1, length: { minimum: 3 }, allow_blank: true
+  validates :ship_city, presence: true, if: :ship_street1_present?
+  validates :ship_state, inclusion: { in: UsaState.abbreviations }, if: :ship_street1_present?
+  validates :ship_zip, length: { within: 5..10}, if: :ship_street1_present?
+  validates :ship_country, inclusion: { in: ['US'], message: 'only supports US right now' }, if: :ship_street1_present?
 
   belongs_to :profile
   belongs_to :user
@@ -39,6 +44,8 @@ class CustomerOrder < ApplicationRecord
 
   delegate :email, :name, to: :user, prefix: true
   delegate :name, to: :profile, prefix: true
+
+  define_method(:ship_street1_present?) { self.ship_street1.present?  }
 
   define_method(:subtotal_in_dollars)          { self.subtotal_in_cents / 100.0 } # gifts' amount, summed
   define_method(:shipping_in_dollars)          { self.shipping_in_cents / 100.0 } # Shipping amount charged to customer

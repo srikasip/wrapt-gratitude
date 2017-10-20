@@ -20,4 +20,17 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    models:
+      customer_order:
+        one: order
+        other: orders
+    attributes:
+      customer_order:
+        ship_zip: Zip code
+        ship_street1: Street address
+        ship_street2: Second address line
+        ship_city: City
+        ship_state: State
+      address:
+        zip: Zip code
