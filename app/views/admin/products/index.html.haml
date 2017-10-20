@@ -45,7 +45,10 @@
                 %span.label.label-default= product.product_category&.name
               - if product.product_subcategory.present?
                 %span.label.label-default= product.product_subcategory&.name
-            %td.admin-index-table--sku-cell= product.wrapt_sku
+            %td.admin-index-table--sku-cell
+              = product.wrapt_sku
+              %br
+              %em= product.vendor.name
             %td
               %ul(style="padding-left: 20px;")
                 - product.gifts.each_with_index do |gift, i|
