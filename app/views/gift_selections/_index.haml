@@ -1,4 +1,4 @@
-%h3.gift-basket-gifts__heading Gift Basket
+%h3.gift-basket-gifts__heading #{profile.name}'s Gift Basket
 - selections = profile.gift_selections.preload(gift: :primary_gift_image)
 - if selections.length == 0
   %p Your Gift Basket is Empty
