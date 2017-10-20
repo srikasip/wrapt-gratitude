@@ -24,7 +24,7 @@ class GiftLikesController < ApplicationController
   end
 
   private def load_profile
-    @profile = Profile.find(params[:profile_id])
+    @profile = Profile.find(params[:giftee_id])
   end
 
 end
