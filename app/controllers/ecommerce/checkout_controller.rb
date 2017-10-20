@@ -4,6 +4,7 @@ class Ecommerce::CheckoutController < ApplicationController
 
   before_action -> { redirect_to :root }, if: -> { ENV.fetch('CHECKOUT_ENABLED') { 'false' } == 'false' }
   before_action :_load_service_object, except: [:start]
+  before_action -> { @enable_chat = true }
 
   helper :orders
 
