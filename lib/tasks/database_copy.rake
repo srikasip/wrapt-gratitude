@@ -55,6 +55,11 @@ namespace :db do
     puts "Running `#{cmd}`"
     system(cmd)
 
+    puts "Running db seed."
+    cmd = 'bundle exec rake db:seed'
+    puts "Running `#{cmd}`"
+    system(cmd)
+
     cmd = 'touch tmp/restart.txt'
     puts "Running `#{cmd}`"
     system(cmd)
