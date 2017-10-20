@@ -289,6 +289,7 @@ module ApplicationHelper
   end
 
   def enable_chat?
+    return false if ENV['DISABLE_CHAT']=='true'
     @enable_chat
   end
 end
