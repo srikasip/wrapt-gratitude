@@ -55,6 +55,11 @@ namespace :db do
     puts "Running `#{cmd}`"
     system(cmd)
 
+    puts "Running db seed."
+    cmd = 'bundle exec rake db:seed'
+    puts "Running `#{cmd}`"
+    system(cmd)
+
     cmd = 'touch tmp/restart.txt'
     puts "Running `#{cmd}`"
     system(cmd)
@@ -63,9 +68,18 @@ namespace :db do
   task :sync_s3 do
     raise "Nope" if Rails.env.production?
 
-    environment_to_go_to = Rails.env.staging? ? 'staging' : 'development'
-    cmd = "aws s3 sync --profile wrapt s3://wrapt-gratitude-production/ s3://wrapt-gratitude-#{environment_to_go_to}/"
-    puts "Running `#{cmd}`"
-    system(cmd)
+    if Rails.env.staging?
+      cmd = "aws s3 sync --profile wrapt s3://wrapt-gratitude-production/ s3://wrapt-gratitude-staging/"
+      puts "Running `#{cmd}`"
+      system(cmd)
+    else
+      cmd = "aws s3 sync --profile wrapt s3://wrapt-gratitude-production/ s3://wrapt-gratitude-development/development-#{`whoami`.chomp}/"
+      puts "Running `#{cmd}`"
+      system(cmd)
+
+      cmd = "aws s3 sync --profile wrapt s3://wrapt-gratitude-production/ s3://wrapt-gratitude-development/"
+      puts "Running `#{cmd}`"
+      system(cmd)
+    end
   end
 end
