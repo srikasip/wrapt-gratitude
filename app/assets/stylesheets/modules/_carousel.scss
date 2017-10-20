@@ -349,10 +349,12 @@ $gr-carousel-nav__width: 82.5px;
 }
 
 .gr-carousel__indicator:last-child .gr__indicator-thumbnail,
-.gr-carousel__indicator:nth-child(6) .gr__indicator-thumbnail {
-  
+.gr-carousel__indicator:nth-child(7) .gr__indicator-thumbnail {
   @media(min-width: $screen-xs-max) {
     margin-right: 0;
+  }
+  @media(max-width: $screen-sm-max) {
+    margin-right: 18px;
   }
 }
 .gr-carousel__indicator img {
@@ -668,10 +670,10 @@ a.liked:focus {
   background-repeat: no-repeat;
   background-position: center;
   background-color: $gray-009;
-  -webkit-background-size: contain;
-  -moz-background-size: contain;
-  -o-background-size: contain;
-  background-size: contain;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
   position: relative;
 }
 .gr-image-carousel__image.orientation-portrait {

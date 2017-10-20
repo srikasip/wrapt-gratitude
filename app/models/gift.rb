@@ -196,6 +196,15 @@ class Gift < ApplicationRecord
     primary_gift_image || gift_images.first || GiftImage.new
   end
 
+  def recommendation_thumbnail
+    # only landscape images for recommendation thubnails
+    if primary_gift_image && primary_gift_image.orientation == 'landscape'
+      primary_gift_image
+    else
+      (gift_images.select{|image| image.orientation == 'landscape'} || []).first
+    end
+  end
+
   def duplicate_single_product_gift
     if source_product_id.blank? && gift_products.size == 1
       gift_products.first.product.single_product_gift
