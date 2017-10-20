@@ -10,23 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171018230921) do
+ActiveRecord::Schema.define(version: 20171019174656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
   create_table "addresses", force: :cascade do |t|
-    t.string   "street1",          null: false
+    t.string   "street1"
     t.string   "street2"
     t.string   "street3"
-    t.string   "city",             null: false
-    t.string   "state",            null: false
-    t.string   "zip",              null: false
-    t.string   "addressable_type", null: false
-    t.integer  "addressable_id",   null: false
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip"
+    t.string   "addressable_type"
+    t.integer  "addressable_id"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "country",          default: "US", null: false
     t.index ["addressable_id", "addressable_type"], name: "index_addresses_on_addressable_id_and_addressable_type", using: :btree
   end
 
@@ -689,6 +690,21 @@ ActiveRecord::Schema.define(version: 20171018230921) do
     t.index ["code"], name: "index_tax_codes_on_code", unique: true, using: :btree
   end
 
+  create_table "tax_transactions", force: :cascade do |t|
+    t.string   "cart_id",                                null: false
+    t.integer  "customer_order_id"
+    t.string   "transaction_code"
+    t.jsonb    "api_request_payload",                    null: false
+    t.jsonb    "api_response",                           null: false
+    t.jsonb    "api_reconcile_response"
+    t.boolean  "reconciled",             default: false, null: false
+    t.boolean  "success",                default: false, null: false
+    t.decimal  "tax_in_dollars",         default: "0.0", null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.index ["customer_order_id"], name: "index_tax_transactions_on_customer_order_id", using: :btree
+  end
+
   create_table "training_set_evaluations", force: :cascade do |t|
     t.integer  "training_set_id"
     t.datetime "created_at",                                  null: false
@@ -870,6 +886,7 @@ ActiveRecord::Schema.define(version: 20171018230921) do
   add_foreign_key "survey_responses", "profiles"
   add_foreign_key "survey_responses", "surveys"
   add_foreign_key "survey_sections", "surveys"
+  add_foreign_key "tax_transactions", "customer_orders"
   add_foreign_key "training_set_evaluations", "training_sets"
   add_foreign_key "trait_response_impacts", "profile_traits_tags"
   add_foreign_key "trait_response_impacts", "survey_question_options"

@@ -79,7 +79,8 @@ CREATE TABLE addresses (
     addressable_type character varying,
     addressable_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    country character varying DEFAULT 'US'::character varying NOT NULL
 );
 
 
@@ -1914,6 +1915,45 @@ ALTER SEQUENCE tax_codes_id_seq OWNED BY tax_codes.id;
 
 
 --
+-- Name: tax_transactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE tax_transactions (
+    id integer NOT NULL,
+    cart_id character varying NOT NULL,
+    customer_order_id integer,
+    transaction_code character varying,
+    api_request_payload jsonb NOT NULL,
+    api_response jsonb NOT NULL,
+    api_reconcile_response jsonb,
+    reconciled boolean DEFAULT false NOT NULL,
+    success boolean DEFAULT false NOT NULL,
+    tax_in_dollars numeric DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: tax_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE tax_transactions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tax_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE tax_transactions_id_seq OWNED BY tax_transactions.id;
+
+
+--
 -- Name: training_set_evaluations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2613,6 +2653,13 @@ ALTER TABLE ONLY tax_codes ALTER COLUMN id SET DEFAULT nextval('tax_codes_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY tax_transactions ALTER COLUMN id SET DEFAULT nextval('tax_transactions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY training_set_evaluations ALTER COLUMN id SET DEFAULT nextval('training_set_evaluations_id_seq'::regclass);
 
 
@@ -3077,6 +3124,14 @@ ALTER TABLE ONLY tags
 
 ALTER TABLE ONLY tax_codes
     ADD CONSTRAINT tax_codes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tax_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY tax_transactions
+    ADD CONSTRAINT tax_transactions_pkey PRIMARY KEY (id);
 
 
 --
@@ -3853,6 +3908,13 @@ CREATE UNIQUE INDEX index_tax_codes_on_code ON tax_codes USING btree (code);
 
 
 --
+-- Name: index_tax_transactions_on_customer_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_tax_transactions_on_customer_order_id ON tax_transactions USING btree (customer_order_id);
+
+
+--
 -- Name: index_training_set_evaluations_on_training_set_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4121,6 +4183,14 @@ ALTER TABLE ONLY profile_set_survey_responses
 
 ALTER TABLE ONLY related_line_items
     ADD CONSTRAINT fk_rails_2d15ec75c8 FOREIGN KEY (customer_order_id) REFERENCES customer_orders(id);
+
+
+--
+-- Name: fk_rails_37436e80ae; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tax_transactions
+    ADD CONSTRAINT fk_rails_37436e80ae FOREIGN KEY (customer_order_id) REFERENCES customer_orders(id);
 
 
 --
@@ -4697,6 +4767,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171012172305'),
 ('20171012175948'),
 ('20171012193235'),
-('20171013142254');
+('20171013142254'),
+('20171017185715'),
+('20171019174656');
 
 

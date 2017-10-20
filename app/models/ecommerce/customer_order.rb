@@ -12,7 +12,7 @@ class CustomerOrder < ApplicationRecord
   )
 
   before_validation -> { self.order_number ||= "WRAPT-#{InternalOrderNumber.next_val_humanized}" }
-  before_validation -> { self.status ||= INITIALIZED }
+  before_validation -> { self.status ||= ORDER_INITIALIZED }
 
   before_save :_set_submitted_date
 

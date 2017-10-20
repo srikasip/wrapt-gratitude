@@ -28,3 +28,4 @@
 .env.local
 /.tags
 .DS_Store
+examples.txt
