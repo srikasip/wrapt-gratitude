@@ -1,6 +1,7 @@
 class GifteesController < ApplicationController
   include RequiresLoginOrInvitation
   include FeatureFlagsHelper
+  include InvitationsHelper
 
   helper SurveyQuestionResponsesHelper
   helper HeroBackgroundHelper
@@ -9,33 +10,14 @@ class GifteesController < ApplicationController
 
   before_filter :set_survey
 
-  skip_before_action :require_login_or_invitation, only: [:create_with_auto_user_create]
+  skip_before_action :require_login_or_invitation, only: [:create]
 
   def login_required?
-    require_invites? || (action_name != 'create_with_auto_user_create')
+    require_invites? || (action_name != 'create')
   end
 
   def index
     @profiles = current_user.owned_profiles
-  end
-
-  def create_with_auto_user_create
-    if current_user
-      # Already have a user.
-      create
-    elsif require_invites?
-      redirect_to root_path
-    else
-      user = User.new(email: SecureRandom.hex(16)+"@PLACEHOLDER.com")
-      user.source = 'auto_create_on_quiz_taking'
-      password = SecureRandom.hex(16)
-      user.password = password
-      user.save!
-
-      auto_login(user)
-
-      create
-    end
   end
 
   def new
@@ -49,14 +31,26 @@ class GifteesController < ApplicationController
   end
 
   def create
-    @profile = current_user.owned_profiles.new
-    @profile.name = 'Unknown'
-    if @profile.save
+    if current_user
+      @profile = current_user.owned_profiles.new
+      @profile.name = 'Unknown'
+      if @profile.save
+        @survey_response = @profile.survey_responses.create survey: @survey
+        @survey_response.ordered_question_responses.first.update question_response_params.merge(answered_at: Time.now)
+        redirect_to with_invitation_scope(giftee_survey_question_path(@profile, @survey_response, @survey_response.ordered_question_responses.first.next_response))
+      else
+        render :new
+      end
+    elsif require_invites?
+      redirect_to root_path
+    else
+      @profile = Profile.new
+      @profile.name = 'Unknown'
+      @profile.save!
       @survey_response = @profile.survey_responses.create survey: @survey
       @survey_response.ordered_question_responses.first.update question_response_params.merge(answered_at: Time.now)
-      redirect_to with_invitation_scope(giftee_survey_question_path(@profile, @survey_response, @survey_response.ordered_question_responses.first.next_response))
-    else
-      render :new
+
+      redirect_to giftee_survey_question_path(@profile, @survey_response, @survey_response.ordered_question_responses.first.next_response)
     end
   end
 

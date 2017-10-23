@@ -27,9 +27,6 @@ Rails.application.routes.draw do
   resources :invitations, only: :show, concerns: :profile_builder
 
   resources :giftees, only: [:new, :create] do
-    collection do
-      post :create_with_auto_user_create
-    end
     resources :gift_recommendations, only: :index
     resources :gift_selections, only: [:create, :destroy]
     resources :giftee_invitations, only: [:new, :create]
