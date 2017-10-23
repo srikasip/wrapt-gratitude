@@ -6,6 +6,17 @@
   .col-sm-12
     = link_to 'Add a Product', new_admin_product_path, class: 'btn btn-primary'
 
+    = link_to 'Export Products', admin_products_exports_path, class: 'btn btn-primary', method: :post, remote: true, id: 'js-export', 'data-turbolinks' => "false"
+
+    %span#js-waiting{style: 'display: none;'}= image_tag 'ajax-loader.gif'
+    - content_for :page_js do
+      :javascript
+        new App.Admin.FileExportsSubscription(#{current_user.id})
+
+        $('#js-export').click(function(){
+          $('#js-waiting').show();
+        })
+
 .row.admin__search
   .col-sm-12
     = form_for  [:admin, @product_search], url: admin_products_path, html: {method: 'GET', class: 'form-inline', data: {behavior: 'form-loads-subcategories'}} do |form|
