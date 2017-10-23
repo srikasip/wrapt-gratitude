@@ -137,11 +137,32 @@
   }
 }
 
+.ma-giftees {
+  @include flexbox();
+  @include flexwrap();
+}
+
 .ma-giftee-card {
   margin-bottom: 30px;
   background-color: #FFFFFF;
   position: relative;
   @include shadowed-box__gray;
+  width: 48%;
+  &:nth-child(odd) {
+    margin-right: 2%;
+    @media(max-width: $screen-xs-max) {
+      margin-right: 0px;
+    }
+  }
+  &:nth-child(even) {
+    margin-left: 2%;
+    @media(max-width: $screen-xs-max) {
+      margin-left: 0px;
+    }
+  }
+  @media(max-width: $screen-xs-max) {
+    width: 100%;
+  }
 }
 
 .ma-giftee-card__header {
@@ -172,7 +193,6 @@
 }
 
 .ma-giftee-card__content {
-  // @include shadowed-box__gray;
   padding: 16px;
   background-color: #FDFDFD;
   position: relative;

@@ -1,6 +1,6 @@
 class GiftRecommendationsController < ApplicationController
 
-  GIFT_RECOMMENDATION_LIMIT = 10
+  GIFT_RECOMMENDATION_LIMIT = 6
 
   helper CarouselHelper
 
@@ -29,7 +29,7 @@ class GiftRecommendationsController < ApplicationController
 
   def load_recommendations
     @gift_recommendations = @profile.gift_recommendations.preload(
-      gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field])
+      gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field]).take(GIFT_RECOMMENDATION_LIMIT)
   end
 
 end

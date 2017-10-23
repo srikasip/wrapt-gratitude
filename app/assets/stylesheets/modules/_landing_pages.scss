@@ -360,7 +360,9 @@ body.home,
 .home .top-navigation__container,
 .home .container,
 .profiles .container,
-.profiles .top-navigation__container {
+.profiles .top-navigation__container,
+.my_account .top-navigation__container,
+.my_account .container {
   width: 100%;
   @media (min-width: 1140px) {
     width: 1140px;

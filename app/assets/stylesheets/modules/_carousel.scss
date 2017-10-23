@@ -300,6 +300,9 @@ $gr-carousel-nav__width: 82.5px;
   background: rgba(51, 51, 51, 0.4);
   -webkit-transition: background 1s;
   transition: background 0.5s; 
+  // bug fix some indicator images are above overlay
+  // z index fixes
+  z-index: 2;
 }
 .gr-carousel__indicator:hover .gr__indicator-inactive-overlay ,
 .gr-carousel__indicator:focus .gr__indicator-inactive-overlay ,
@@ -458,8 +461,13 @@ $gr-carousel-nav__width: 82.5px;
 .gr-carousel__gift-content,
 .hgec-carousel__example-content {
   width: 55%;
+  height: 520px;
+  padding-bottom: 115px;
   @media(max-width: $screen-xs-max) {
     width: 100%;
+    height: auto;
+    position: static;
+    padding-bottom: 0px;
   }
 }
 
@@ -598,12 +606,19 @@ a.liked:focus {
   visibility: hidden;
 }
 
+.gr-carousel__gift-content {
+  position: relative;
+}
+
 .gr-carousel__gift-details {
   max-width: 430px;
   padding-right: 10px;
   padding-bottom: 72px;
+  max-height: 300px;
+  overflow: auto;
   @media(max-width: $screen-xs-max) {
     padding-bottom: 0px;
+    max-height: none;
   }
 }
 
@@ -613,10 +628,8 @@ a.liked:focus {
   right: 0px;
   left: 0px;
   @media(max-width: $screen-xs-max) {
-    // position: static;
-    right: 2.8rem;
-    left: 2.8rem;
-    bottom: 2.8rem;
+    position: static;
+    margin-bottom: 2.8rem;
   }
 }
 

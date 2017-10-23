@@ -6,13 +6,14 @@
   .gr-carousel__gift-image
     - gift_images = load_gift_image_carousel_data(gift.gift_images)
     = carousel(carousel: gift_images, unique_carousel_name: 'gr-image-carousel', slide_content_singular: 'image', container:'.gr-carousel', parent_slide_index: index)
-  .gr-carousel__gift-content.pb2.pl2.pt1.pr1
+  .gr-carousel__gift-content.pl2.pt1.pr1
     .pull-right.text-right.pb1
       .gr-carousel__like{data: {behavior: 'gift-like-wrapper'}}
         = render 'gift_like', gift: gift, profile: @profile
     %h3.carousel__gift-name= gift.name
     .gr-carousel__gift-details
-      %p.gift-description= gift.description
+      %p.gift-description
+        = gift.description
       - unless gift.single_product_gift?
         %h5.gift-inclusion-heading Included In Gift
         %ul

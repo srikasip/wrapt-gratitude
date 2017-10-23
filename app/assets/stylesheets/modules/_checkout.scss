@@ -29,15 +29,17 @@
 .co-container {
   @include shadowed-box__gray;
   background-color: #FFFFFF;
-  // padding: 32px;
   padding: 50px 40px 84px;
   margin: 63px 0px 40px;
   position: relative;
-
+  @media(max-width: $screen-xs-max) {
+    padding: 30px 20px 64px;
+  }
   button[type="submit"] {
     position: absolute;
     right: 32px;
     bottom: -28px;
+    text-transform: uppercase;
   }
 }
 
@@ -67,7 +69,20 @@
   }
 }
 
+.co-toggle .controls {
+  display: table;
+  @media(max-width: $screen-xs-max) {
+    table-layout: fixed;
+    width: 100%;
+  }
+}
+
+.j-wrapt-radio-toggle {
+  display: table-row;
+}
+
 .co-toggle label {
+  height: 100%;
   border: 1px solid #CCCCCC;
   padding: 16px 24px;
   cursor: pointer;
@@ -76,6 +91,13 @@
   font-size: 14px;
   letter-spacing: 1px;
   transition: all 0.5s;
+  // max-width: 50%;
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+  @media(max-width: $screen-xs-max) {
+    width: 50%;
+  }
 }
 
 .co-toggle label:not(:last-child) {
@@ -94,9 +116,15 @@
     overflow: hidden;
     vertical-align: middle;
     margin-bottom: 0px;
+    @media(max-width: $screen-xs-max) {
+      display: block;
+    }
   }
   h4 {
     margin: 0px 62px 0px 0px;
+    @media(max-width: $screen-xs-max) {
+      margin: 0px 0px 10px;
+    }
   }
 }
 
@@ -108,6 +136,10 @@
     margin-bottom: 40px;
     float: left;
     @include akkurat-light;
+    @media(max-width: $screen-xs-max) {
+      width: 100%;
+      margin-bottom: 20px;
+    }
   }
   label small {
     color: $gray-006;

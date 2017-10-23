@@ -197,12 +197,18 @@ class Gift < ApplicationRecord
   end
 
   def recommendation_thumbnail
-    # only landscape images for recommendation thubnails
+    # only landscape images for recommendation thumbnails
     if primary_gift_image && primary_gift_image.orientation == 'landscape'
-      primary_gift_image
+      thumbnail = primary_gift_image
     else
-      (gift_images.select{|image| image.orientation == 'landscape'} || []).first
+      # if primary_gift_image is not landscape find one that is
+      thumbnail = (gift_images.select{|image| image.orientation == 'landscape'} || []).first
+      if !thumbnail.present?
+        # if there are no landscape images just get an image
+        thumbnail = primary_gift_image_with_fallback
+      end
     end
+    thumbnail
   end
 
   def duplicate_single_product_gift
