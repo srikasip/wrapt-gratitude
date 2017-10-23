@@ -130,6 +130,9 @@ Rails.application.routes.draw do
       end
       resource :image_ordering, only: :create, controller: 'product_image_orderings'
       resource :single_product_gift, only: [:new, :create]
+      collection do
+        resources :exports, only: [:create], as: 'products_exports', controller: 'products_exports'
+      end
     end
     resources :gifts do
       resources :products, only: [:index, :create, :destroy], controller: 'gift_products'

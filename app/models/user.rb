@@ -32,6 +32,7 @@ class User < ApplicationRecord
       where(profile_id: p.id)
     end
   end
+  has_many :file_exports
   has_many :owned_profiles, class_name: 'Profile', foreign_key: :owner_id, dependent: :destroy
   belongs_to :last_viewed_profile, class_name: 'Profile'
   belongs_to :recipient_referring_profile, class_name: 'Profile'

@@ -169,6 +169,19 @@ module ApplicationHelper
     date.strftime("%b %e, %Y")
   end
 
+  def format_datetime datetime
+    return 'N/A' if datetime.nil?
+
+    in_zone = datetime.in_time_zone('EST')
+    format  = "%b %e, %Y %l:%M %p"
+
+    if datetime.dst?
+      in_zone.strftime(format)
+    else
+      (in_zone + 1.hour).strftime(format)
+    end
+  end
+
   def content_quote(quote)
     content_tag :div, class: quote[:container] do
       concat content_tag :p, quote[:content].html_safe
