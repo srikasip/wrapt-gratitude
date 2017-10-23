@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171019174656) do
+ActiveRecord::Schema.define(version: 20171023134641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,6 +128,17 @@ ActiveRecord::Schema.define(version: 20171019174656) do
     t.index ["gift_id"], name: "index_evaluation_recommendations_on_gift_id", using: :btree
     t.index ["profile_set_survey_response_id"], name: "eval_rec_survey_response", using: :btree
     t.index ["training_set_evaluation_id"], name: "index_evaluation_recommendations_on_training_set_evaluation_id", using: :btree
+  end
+
+  create_table "file_exports", force: :cascade do |t|
+    t.string   "asset",      null: false
+    t.string   "asset_type", null: false
+    t.integer  "user_id",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["asset_type"], name: "index_file_exports_on_asset_type", using: :btree
+    t.index ["created_at"], name: "index_file_exports_on_created_at", using: :btree
+    t.index ["user_id"], name: "index_file_exports_on_user_id", using: :btree
   end
 
   create_table "gift_dislikes", force: :cascade do |t|
@@ -842,6 +853,7 @@ ActiveRecord::Schema.define(version: 20171019174656) do
   add_foreign_key "conditional_question_options", "survey_questions"
   add_foreign_key "customer_orders", "profiles"
   add_foreign_key "customer_orders", "users"
+  add_foreign_key "file_exports", "users"
   add_foreign_key "gift_dislikes", "gifts"
   add_foreign_key "gift_dislikes", "profiles"
   add_foreign_key "gift_images", "gifts"
