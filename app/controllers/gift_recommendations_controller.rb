@@ -1,4 +1,5 @@
 class GiftRecommendationsController < ApplicationController
+  before_action -> { @enable_chat = true }
 
   GIFT_RECOMMENDATION_LIMIT = 6
 

@@ -4,6 +4,7 @@ class Ecommerce::CheckoutController < ApplicationController
 
   before_action -> { redirect_to :root }, if: -> { ENV.fetch('CHECKOUT_ENABLED') { 'false' } == 'false' }
   before_action :_load_service_object, except: [:start]
+  before_action -> { @enable_chat = true }
 
   helper :orders
 
@@ -74,7 +75,8 @@ class Ecommerce::CheckoutController < ApplicationController
     if @customer_purchase.things_look_shipable?
       redirect_to action: :edit_shipping
     else
-      flash.now[:notice] = "Please make sure you've specified an address to continue."
+      error_message = @customer_purchase.customer_order.errors.full_messages.join('. ')
+      flash.now[:notice] = "Please make sure you've specified an address to continue. #{error_message}"
       _load_addresses
       _load_progress_bar
       render :edit_address

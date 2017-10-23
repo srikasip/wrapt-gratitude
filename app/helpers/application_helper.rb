@@ -263,14 +263,14 @@ module ApplicationHelper
     content_tag :label, for: attr_name, class: "wrapt-styled-checkbox j-wrapt-styled-checkbox" do
       concat link_to '', '#', class: (selected ? 'checked' : ''), onClick: 'App.StyledCheckboxA(event, this)'
       concat options[:label]
-      concat check_box_tag attr_name, value, selected, {onChange: 'App.StyledCheckbox(this);', style: 'display:none;', data: options[:data]} 
+      concat check_box_tag attr_name, value, selected, {onChange: 'App.StyledCheckbox(this);', style: 'display:none;', data: options[:data]}
     end
   end
 
   # bootstrap tabs with wrapt style
   # currently only used on my account giftee page
   # must add page_js App.WraptStyledTabs('.wrapt-styled-tabs-1', '.wrapt-styled-tabs-1__tab'); to work properly
-  
+
   # wrapt styled tabs 1
   def wrapt_styled_tabs_1(tabs)
     content = capture_haml do
@@ -288,4 +288,8 @@ module ApplicationHelper
     link_to tab_text, "##{tab_pane_id}", role: 'tab', data: {toggle: 'tab'}, 'aria-controls' => tab_pane_id
   end
 
+  def enable_chat?
+    return false if ENV['DISABLE_CHAT']=='true'
+    @enable_chat
+  end
 end

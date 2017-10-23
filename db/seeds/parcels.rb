@@ -121,7 +121,6 @@ parcels = [
   }
 end
 
-
 parcels.each do |data|
   parcel = Parcel.where(code: data[:code]).first_or_initialize
   parcel.assign_attributes(data)

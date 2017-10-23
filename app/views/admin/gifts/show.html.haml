@@ -22,8 +22,8 @@
 
     %p
       %b Tax Code:
-      = @gift.tax_code.code
-      (#{@gift.tax_code.name})
+      = @gift.tax_code&.code
+      (#{@gift.tax_code&.name})
 
     %p
       %b Selling price:
@@ -64,7 +64,7 @@
             %tr
               %td
                 - if product.primary_product_image&.image?
-                  = image_tag product.primary_product_image.image_url(:small), class: "admin-index-table--image"
+                  = image_tag product.primary_product_image.image_url(:small), class: "admin-index-table--image", alt: 'product image'
               %td= link_to product.title, admin_product_path(product)
               %td= product.wrapt_sku
               %td= number_to_currency(product.price)
@@ -77,4 +77,4 @@
     - else
       - @gift.gift_images.each do |gift_image|
         %p
-          = image_tag gift_image.image_url(:small)
+          = image_tag gift_image.image_url(:small), alt: 'gift image'
