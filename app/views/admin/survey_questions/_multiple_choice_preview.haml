@@ -12,11 +12,13 @@
             - if option.image?
               %br
               = image_tag option.image_url(:small), class: 'mb4'
-      
+
 
       - if @survey_question.include_other_option?
-        - option = @survey_question.other_option
-        - index = @survey_question.options.standard.length
+        :ruby
+          option = @survey_question.other_option
+          option ||= @survey_question.create_other_option
+          index = @survey_question.options.standard.length
         %span{class: (@survey_question.multiple_option_responses? ? 'checkbox' : 'radio')}
           %label
             - if @survey_question.multiple_option_responses?

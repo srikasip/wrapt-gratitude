@@ -13,6 +13,7 @@
     - @question_response.survey_question.options.each do |option|
       = link_to option.text, '#', class: 'btn btn-default btn-multiple-choice-option', data: {behavior: 'option-button', option_id: option.id}
 
+
 = form.input :other_option_text, as: :string, label: false, wrapper_html: { data: {behavior: 'other-text-input-wrapper'}, style: other_optional_text_init_style(@question_response)}, input_html: {data: {behavior: 'other-text-input'}}
 
 .sqr-option-explanations.pa1
