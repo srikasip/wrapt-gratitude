@@ -50,22 +50,25 @@
             %td
               = gift.errors.full_messages.join('. ')
 
-- if @products.length > 0
-  %h2 Products With Problems
+- if params[:show_products] != 'yes'
+  = link_to 'Show product problems', url_for(show_products: 'yes')
+- if params[:show_products] == 'yes'
+  - if @products.length > 0
+    %h2 Products With Problems
 
-  %table.table.table-striped
-    %thead
-      %tr
-        %th ID
-        %th Description
-        %th Errors
-    %tbody
-      - @products.each do |product|
-        - unless product.valid?
-          %tr
-            %td
-              = link_to admin_product_path(product) do
-                = product.id
-            %td= product.description
-            %td
-              = product.errors.full_messages.join('. ')
+    %table.table.table-striped
+      %thead
+        %tr
+          %th ID
+          %th Description
+          %th Errors
+      %tbody
+        - @products.each do |product|
+          - unless product.valid?
+            %tr
+              %td
+                = link_to admin_product_path(product) do
+                  = product.id
+              %td= product.description
+              %td
+                = product.errors.full_messages.join('. ')

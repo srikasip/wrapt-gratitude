@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171024170923) do
+ActiveRecord::Schema.define(version: 20171024191429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -250,6 +250,7 @@ ActiveRecord::Schema.define(version: 20171024170923) do
     t.boolean  "available",                                               default: true,  null: false
     t.integer  "insurance_in_dollars"
     t.integer  "tax_code_id"
+    t.boolean  "can_be_sold",                                             default: false, null: false
     t.index ["product_category_id"], name: "index_gifts_on_product_category_id", using: :btree
     t.index ["tax_code_id"], name: "index_gifts_on_tax_code_id", using: :btree
     t.index ["wrapt_sku"], name: "index_gifts_on_wrapt_sku", using: :btree
