@@ -6,7 +6,7 @@ class MyAccount::GifteesController < MyAccount::BaseController
   before_action :_load_giftee, only: [:edit, :update]
 
   def index
-    @giftees = current_user.owned_profiles.page(params[:page])
+    @giftees = current_user.owned_profiles.well_ordered.page(params[:page])
   end
 
   def edit

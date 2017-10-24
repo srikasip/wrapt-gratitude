@@ -24,6 +24,8 @@ class Profile < ApplicationRecord
 
   accepts_nested_attributes_for :address
 
+  scope :well_ordered, -> { order('name asc') }
+
   def last_survey
     survey_responses.order('updated_at desc').first
   end
