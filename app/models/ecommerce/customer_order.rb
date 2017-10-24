@@ -38,6 +38,7 @@ class CustomerOrder < ApplicationRecord
   has_many :shipments
   has_many :shipping_labels
   has_many :purchase_orders, dependent: :destroy
+  has_many :tax_transactions, class_name: 'Tax::Transaction'
 
   scope :initialized_only, -> { where(status: ORDER_INITIALIZED) }
   define_singleton_method(:newest) { order('updated_at desc').first }
