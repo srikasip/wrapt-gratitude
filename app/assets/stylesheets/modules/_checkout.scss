@@ -42,6 +42,9 @@
     text-transform: uppercase;
   }
 }
+.modal .co-container {
+  margin-top: 0;
+}
 
 .checkout.edit_review .co-container {
   padding: 50px 40px;
@@ -242,5 +245,8 @@
 .co-paragraph {
   margin-top: -20px;
   margin-bottom: 40px;
+}
+.customer_order_note_content textarea {
+  min-height: 120px;
 }
 
