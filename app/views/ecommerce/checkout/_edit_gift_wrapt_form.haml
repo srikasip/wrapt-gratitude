@@ -1,8 +1,12 @@
-%h3.light Gift Wrapt
+%h3.light 
+  Gift Wrapt
+  -# %span.small (Complimentary)
 - form_data = @load_in_modal ? {submits_to_pjax_modal: true} : {}
-= simple_form_for @customer_order, url: url_for, method: :patch, data: form_data do |f|
+= simple_form_for @customer_order, url: url_for, method: :patch, class: 'co-wrapt-form',data: form_data do |f|
   .co-toggle
     = f.input :gift_wrapt, as: :wrapt_radio_toggle, collection: [['Wrapt With Love', true], ['Do Not Gift Wrapt', false]], label: false
+  %p.co-paragraph
+    Gift wrapping is complimentary.
   .j-co-gift-wrapt__note-1{style: f.object.gift_wrapt? ? '' : 'display: none;'}
     .co-add-a-note
       %h4.light 
