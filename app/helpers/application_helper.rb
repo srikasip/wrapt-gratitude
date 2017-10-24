@@ -92,7 +92,7 @@ module ApplicationHelper
   end
 
   def gift_basket_profile
-    @profile ||= current_user&.mvp_profile
+    @profile ||= current_user&.last_viewed_profile
   end
 
   def gift_basket_count
