@@ -14,6 +14,11 @@ App.GiftBasket = class GiftBasket {
     this.subtotal = $('.js-subtotal');
     this.num_gifts_words = $('.js-num-gifts-words');
     this.checkout_button = $('#js-checkout');
+
+    if (this.gift_list.length === undefined) {
+      this.checkout_button.hide();
+    }
+
     App.giftBasketInstance = this;
   }
 
@@ -93,6 +98,4 @@ App.GiftBasket = class GiftBasket {
       return true;
     })
   }
-
-
 }

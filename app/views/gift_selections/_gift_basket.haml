@@ -25,8 +25,7 @@
         in your cart
 
       - if ENV.fetch('CHECKOUT_ENABLED') { 'false' } == 'true'
-        - if profile.gift_selections.count > 0
-          = link_to 'CHECK OUT', ecommerce_checkout_start_path(giftee_id: profile.id), class: 'btn btn-primary btn-full-width btn-gift-basket-submit', id: 'js-checkout', method: :patch
+        = link_to 'CHECK OUT', ecommerce_checkout_start_path(giftee_id: profile.id), class: 'btn btn-primary btn-full-width btn-gift-basket-submit', id: 'js-checkout', method: :patch
       - else
         = link_to 'CHECK OUT COMING SOON', 'javascript:void(0)', class: 'btn btn-primary btn-full-width btn-gift-basket-submit'
 
