@@ -32,4 +32,4 @@
 
 - content_for :page_js do
   :javascript
-    new App.GiftBasket()
+    new App.GiftBasket({num_gifts: #{profile.gift_selections.count}})
