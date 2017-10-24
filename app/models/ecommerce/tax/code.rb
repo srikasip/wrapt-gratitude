@@ -5,7 +5,7 @@ module Tax
     scope :active, -> { where(active: true) }
 
     def self.default
-      @default ||= find_by(name: 'Generic')
+      @default ||= find_by(name: 'Wrapt Gift')
     end
 
     def self.shipping

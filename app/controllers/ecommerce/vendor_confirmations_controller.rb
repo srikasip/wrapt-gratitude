@@ -30,7 +30,7 @@ module Ecommerce
     end
 
     def load_purchase_order
-      @purchase_order = PurchaseOrder.find_by(vendor_token: params[:id])
+      @purchase_order = ::PurchaseOrder.find_by(vendor_token: params[:id])
 
       if @purchase_order.present? && @purchase_order.shipment.present?
         @customer_order = @purchase_order.customer_order
@@ -48,7 +48,7 @@ module Ecommerce
     def po_attributes
       permitted = params.require(:purchase_order).permit(:vendor_acknowledgement_status, :vendor_acknowledgement_reason)
 
-      if permitted[:vendor_acknowledgement_status] == PurchaseOrder::FULFILL
+      if permitted[:vendor_acknowledgement_status] == ::PurchaseOrder::FULFILL
         permitted[:vendor_acknowledgement_reason] = nil
       end
 

@@ -1,5 +1,6 @@
 module RequiresLoginOrInvitation
   extend ActiveSupport::Concern
+  include FeatureFlagsHelper
 
   included do
     before_action :require_login_or_invitation
@@ -25,14 +26,6 @@ module RequiresLoginOrInvitation
 
   def current_user
     super || @user_from_invitation
-  end
-
-  def with_invitation_scope path
-    if params[:invitation_id]
-      "/invitations/#{params[:invitation_id]}#{path}"
-    else
-      path
-    end
   end
 
   private def authentication_from_invitation_only?

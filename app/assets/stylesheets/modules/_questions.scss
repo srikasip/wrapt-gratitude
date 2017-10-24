@@ -2,7 +2,7 @@
 
 .sqr-container {
   max-width: 945px;
-  margin: 0 auto;
+  margin: 10px auto 0;
   @media(max-width: $screen-xs-max) {
     width: 90%;
   }

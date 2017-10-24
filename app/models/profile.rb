@@ -1,3 +1,6 @@
+# Alas, this is a giftee, not a profile. Do not confuse this with the concept
+# of an account profile (i.e. the normal usage of profile).
+
 class Profile < ApplicationRecord
   validates :name, presence: true
 
@@ -18,6 +21,10 @@ class Profile < ApplicationRecord
   serialize :recommendation_stats, Hash
 
   before_create :generate_recipient_access_token
+
+  accepts_nested_attributes_for :address
+
+  scope :well_ordered, -> { order('name asc') }
 
   def last_survey
     survey_responses.order('updated_at desc').first

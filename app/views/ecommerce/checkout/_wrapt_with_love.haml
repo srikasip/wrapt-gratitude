@@ -6,8 +6,8 @@
     - link_href = ecommerce_checkout_gift_wrapt_path(giftee_id: customer_order.profile_id) 
   - else
     - link_text = 'Wrapt with Love'
-    - link_data = {toggle: 'modal'}
-    - if customer_order.include_note? && customer_order.gift_wrapt? && customer_order.note_content
+    - link_data = {toggle: 'collapse'}
+    - if customer_order.include_note? && customer_order.gift_wrapt?
       - link_href = '#wrapt-with-love__note'
     - else
       - link_href = 'javascript:void(0);'
@@ -19,13 +19,13 @@
         - if customer_order.gift_wrapt? && customer_order.include_note?
           = embedded_svg('icon-page', xlink_class: 'icon-page')
 
-- if !edit && customer_order.include_note? && customer_order.gift_wrapt? && customer_order.note_content
-  .modal.fade#wrapt-with-love__note
-    .modal-dialog
-      .modal-content
-        .modal-header 
-          %button.close.pull-right{data: {dismiss: 'modal'}, 'aria-label' => 'close'}
-            =embedded_svg('icon-close', class: 'modal__icon-close')
-          %h4.light Your Note
-        .modal-body
-          = customer_order.note_content
+- if !edit && customer_order.include_note? && customer_order.gift_wrapt?
+  .collapse#wrapt-with-love__note.pa1
+    .co-detail__label Your Note:
+    .co-detail__item
+      - if customer_order.note_content.present?
+        %p= customer_order.note_content
+      - else
+        %p
+          %em No content
+

@@ -27,9 +27,6 @@ Rails.application.routes.draw do
   resources :invitations, only: :show, concerns: :profile_builder
 
   resources :giftees, only: [:new, :create] do
-    collection do
-      post :create_with_auto_user_create
-    end
     resources :gift_recommendations, only: :index
     resources :gift_selections, only: [:create, :destroy]
     resources :giftee_invitations, only: [:new, :create]
@@ -130,6 +127,9 @@ Rails.application.routes.draw do
       end
       resource :image_ordering, only: :create, controller: 'product_image_orderings'
       resource :single_product_gift, only: [:new, :create]
+      collection do
+        resources :exports, only: [:create], as: 'products_exports', controller: 'products_exports'
+      end
     end
     resources :gifts do
       resources :products, only: [:index, :create, :destroy], controller: 'gift_products'

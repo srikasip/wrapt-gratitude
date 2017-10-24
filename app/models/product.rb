@@ -2,6 +2,7 @@ class Product < ApplicationRecord
   validates :price, numericality: { greater_than: 0.00 }
   validates :description, length: { minimum: 10 }
   validates :units_available, numericality: { only_integer: true }
+  validates :weight_in_pounds, numericality: { greater_than: 0.00 }
   validates :wrapt_cost, numericality: {  greater_than: 0.00 }
 
   belongs_to :product_category, required: true

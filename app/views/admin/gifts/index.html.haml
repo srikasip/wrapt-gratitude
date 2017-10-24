@@ -39,7 +39,7 @@
           = form.text_field :max_price, placeholder: 'Max Price', class: 'form-control'
           .input-group-addon .00
       .form-group
-        
+
         %button.btn.btn-primary.pull-right{style: "margin-left: 6px;"}
           %i.glyphicon.glyphicon-search
           Search
@@ -61,7 +61,7 @@
               %h4.admin-index-table--item-title
                 = gift.wrapt_sku
                 (#{number_to_currency gift.selling_price})
-                
+
               %table
                 %tr
                   %td.admin-index-table--categories-cell
@@ -71,15 +71,19 @@
                       %span.label.label-default= gift.product_subcategory&.name
                     - if gift.featured?
                       %span.label.label-default featured
-                    %br
-                    - gift.tags.each do |tag|
-                      %span.label.label-primary.label-inverse= tag.name
             %td
               - if gift.primary_gift_image.present?
                 = image_tag gift.primary_gift_image.image_url(:small), class: 'admin-index-table--image'
-              %h4.admin-index-table--item-title= gift.title
-              .admin-index-table--item-description= gift.description
-                    
+              %h4.admin-index-table--item-title
+                = gift.title
+                %em{style: 'font-weight: normal;'} (#{gift.vendor.name})
+              .admin-index-table--item-description
+                = gift.description
+                - if gift.tags.any?
+                  %br
+                  - gift.tags.sort_by(&:name).each do |tag|
+                    %span.label.label-primary.label-inverse= tag.name
+
 
             %td.admin-index-table--buttons-cell(style="line-height: 24px; text-align: left;")
               = link_to 'View', [:admin, gift], class: 'btn btn-default btn-xs'

@@ -92,7 +92,7 @@ module ApplicationHelper
   end
 
   def gift_basket_profile
-    @profile ||= current_user&.mvp_profile
+    @profile ||= current_user&.last_viewed_profile
   end
 
   def gift_basket_count
@@ -137,7 +137,7 @@ module ApplicationHelper
   def body_classes
     if controller_path.split('/').first == 'my_account'
       # there were conflicts with other profiles controllers
-      ["my_account_#{controller_name}", params[:action], signin_state_body_class]
+      ["my_account_#{controller_name} my_account", params[:action], signin_state_body_class]
     else
       [controller_name, params[:action], signin_state_body_class]
     end
@@ -167,6 +167,19 @@ module ApplicationHelper
   def format_date date
     return 'N/A' if date.nil?
     date.strftime("%b %e, %Y")
+  end
+
+  def format_datetime datetime
+    return 'N/A' if datetime.nil?
+
+    in_zone = datetime.in_time_zone('EST')
+    format  = "%b %e, %Y %l:%M %p"
+
+    if datetime.dst?
+      in_zone.strftime(format)
+    else
+      (in_zone + 1.hour).strftime(format)
+    end
   end
 
   def content_quote(quote)
@@ -227,7 +240,7 @@ module ApplicationHelper
   end
 
   def next_button_text
-    "Next <svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
+    "NEXT <svg class='btn__icon-caret-right'><use xlink:href='#icon-caret-right'></use></svg>".html_safe
   end
 
   # this is a no object version of a simple form custom inputs

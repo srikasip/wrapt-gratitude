@@ -70,14 +70,14 @@ SET default_with_oids = false;
 
 CREATE TABLE addresses (
     id integer NOT NULL,
-    street1 character varying,
+    street1 character varying NOT NULL,
     street2 character varying,
     street3 character varying,
-    city character varying,
-    state character varying,
-    zip character varying,
-    addressable_type character varying,
-    addressable_id integer,
+    city character varying NOT NULL,
+    state character varying NOT NULL,
+    zip character varying NOT NULL,
+    addressable_type character varying NOT NULL,
+    addressable_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     country character varying DEFAULT 'US'::character varying NOT NULL
@@ -151,7 +151,8 @@ CREATE TABLE gifts (
     weight_in_pounds numeric,
     available boolean DEFAULT true NOT NULL,
     insurance_in_dollars integer,
-    tax_code_id integer
+    tax_code_id integer,
+    can_be_sold boolean DEFAULT false NOT NULL
 );
 
 
@@ -360,9 +361,7 @@ CREATE TABLE customer_orders (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     gift_wrapt boolean DEFAULT true NOT NULL,
-    include_note boolean DEFAULT false NOT NULL,
-    note_from character varying,
-    note_to character varying,
+    include_note boolean DEFAULT true NOT NULL,
     note_content text,
     handling_cost_in_cents integer DEFAULT 0 NOT NULL,
     handling_in_cents integer DEFAULT 0 NOT NULL,
@@ -424,6 +423,39 @@ CREATE SEQUENCE evaluation_recommendations_id_seq
 --
 
 ALTER SEQUENCE evaluation_recommendations_id_seq OWNED BY evaluation_recommendations.id;
+
+
+--
+-- Name: file_exports; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE file_exports (
+    id integer NOT NULL,
+    asset character varying NOT NULL,
+    asset_type character varying NOT NULL,
+    user_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: file_exports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE file_exports_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: file_exports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE file_exports_id_seq OWNED BY file_exports.id;
 
 
 --
@@ -2359,6 +2391,13 @@ ALTER TABLE ONLY evaluation_recommendations ALTER COLUMN id SET DEFAULT nextval(
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY file_exports ALTER COLUMN id SET DEFAULT nextval('file_exports_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY gift_dislikes ALTER COLUMN id SET DEFAULT nextval('gift_dislikes_id_seq'::regclass);
 
 
@@ -2780,6 +2819,14 @@ ALTER TABLE ONLY customer_orders
 
 ALTER TABLE ONLY evaluation_recommendations
     ADD CONSTRAINT evaluation_recommendations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: file_exports_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY file_exports
+    ADD CONSTRAINT file_exports_pkey PRIMARY KEY (id);
 
 
 --
@@ -3296,6 +3343,27 @@ CREATE INDEX index_evaluation_recommendations_on_gift_id ON evaluation_recommend
 --
 
 CREATE INDEX index_evaluation_recommendations_on_training_set_evaluation_id ON evaluation_recommendations USING btree (training_set_evaluation_id);
+
+
+--
+-- Name: index_file_exports_on_asset_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_file_exports_on_asset_type ON file_exports USING btree (asset_type);
+
+
+--
+-- Name: index_file_exports_on_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_file_exports_on_created_at ON file_exports USING btree (created_at);
+
+
+--
+-- Name: index_file_exports_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_file_exports_on_user_id ON file_exports USING btree (user_id);
 
 
 --
@@ -4258,6 +4326,14 @@ ALTER TABLE ONLY gift_selections
 
 
 --
+-- Name: fk_rails_576b1d535d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY file_exports
+    ADD CONSTRAINT fk_rails_576b1d535d FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: fk_rails_5c1abd7a16; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4769,6 +4845,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171012193235'),
 ('20171013142254'),
 ('20171017185715'),
-('20171019174656');
+('20171018224439'),
+('20171018230921'),
+('20171019174656'),
+('20171023134641'),
+('20171024170923'),
+('20171024191429');
 
 

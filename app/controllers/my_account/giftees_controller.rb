@@ -6,10 +6,11 @@ class MyAccount::GifteesController < MyAccount::BaseController
   before_action :_load_giftee, only: [:edit, :update]
 
   def index
-    @giftees = current_user.owned_profiles.page(params[:page])
+    @giftees = current_user.owned_profiles.well_ordered.page(params[:page])
   end
 
   def edit
+    @giftee.address || @giftee.build_address
   end
 
   def update
@@ -30,6 +31,6 @@ class MyAccount::GifteesController < MyAccount::BaseController
   end
 
   def _permitted_attributes
-    params.require(:profile).permit(:first_name, :last_name, :email, :attributes_for_address => [:id, :street1, :city, :state, :zip])
+    params.require(:profile).permit(:name, :first_name, :last_name, :email, :address_attributes => [:id, :street1, :city, :state, :zip])
   end
 end

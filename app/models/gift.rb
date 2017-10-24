@@ -40,6 +40,7 @@ class Gift < ApplicationRecord
   before_validation -> { self.tax_code ||= Tax::Code.default }
 
   before_save :generate_wrapt_sku, if: :sku_needs_updating?
+  before_save :set_can_be_sold_flag
 
   before_destroy -> { raise "Cannot destroy" unless deleteable? }
 
@@ -48,7 +49,11 @@ class Gift < ApplicationRecord
 
   scope :available, -> { where(available: true) }
   scope :with_units_for_sale, -> { joins(:calculated_gift_field).where('calculated_gift_fields.units_available > 0') }
-  scope :can_be_sold, -> { available.with_units_for_sale }
+  scope :can_be_sold, -> { where(can_be_sold: true) }
+
+  def set_can_be_sold_flag
+    self.can_be_sold = available? && units_available > 0
+  end
 
   def self.search search_params
     self.all.merge(GiftSearch.new(search_params).to_scope)
@@ -122,22 +127,31 @@ class Gift < ApplicationRecord
   end
 
   def _has_weight
-    return if calculate_weight_from_products
-    return if read_attribute(:weight_in_pounds).to_f > 0.0
+    if calculate_weight_from_products && self.products.all?{ |x| x.weight_in_pounds.to_f > 0.0 }
+      return
+    elsif read_attribute(:weight_in_pounds).to_f > 0.0
+      return
+    end
 
     errors.add(:base, "Must have a weight")
   end
 
   def _has_price
-    return if calculate_price_from_products
-    return if read_attribute(:selling_price).to_f > 0.0
+    if calculate_price_from_products && self.products.all? { |x| x.price.to_f > 0.0 }
+      return
+    elsif read_attribute(:selling_price).to_f > 0.0
+     return
+    end
 
     errors.add(:base, "Must have a selling price")
   end
 
   def _has_cost
-    return if calculate_cost_from_products
-    return if read_attribute(:cost).to_f > 0.0
+    if calculate_cost_from_products && self.products.all? { |x| x.wrapt_cost.to_f > 0.0 }
+      return
+    elsif read_attribute(:cost).to_f > 0.0
+      return
+    end
 
     errors.add(:base, "Must have a cost")
   end
@@ -197,12 +211,18 @@ class Gift < ApplicationRecord
   end
 
   def recommendation_thumbnail
-    # only landscape images for recommendation thubnails
+    # only landscape images for recommendation thumbnails
     if primary_gift_image && primary_gift_image.orientation == 'landscape'
-      primary_gift_image
+      thumbnail = primary_gift_image
     else
-      (gift_images.select{|image| image.orientation == 'landscape'} || []).first
+      # if primary_gift_image is not landscape find one that is
+      thumbnail = (gift_images.select{|image| image.orientation == 'landscape'} || []).first
+      if !thumbnail.present?
+        # if there are no landscape images just get an image
+        thumbnail = primary_gift_image_with_fallback
+      end
     end
+    thumbnail
   end
 
   def duplicate_single_product_gift

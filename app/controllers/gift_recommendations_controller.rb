@@ -1,7 +1,7 @@
 class GiftRecommendationsController < ApplicationController
   before_action -> { @enable_chat = true }
 
-  GIFT_RECOMMENDATION_LIMIT = 10
+  GIFT_RECOMMENDATION_LIMIT = 6
 
   helper CarouselHelper
 
@@ -29,8 +29,11 @@ class GiftRecommendationsController < ApplicationController
   end
 
   def load_recommendations
-    @gift_recommendations = @profile.gift_recommendations.preload(
-      gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field])
+    @gift_recommendations = @profile.
+       gift_recommendations.
+       where(gift_id: Gift.select(:id).can_be_sold).
+       preload(gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field]).
+       take(GIFT_RECOMMENDATION_LIMIT)
   end
 
 end

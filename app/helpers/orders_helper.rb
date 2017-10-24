@@ -3,6 +3,7 @@ module OrdersHelper
 
   def status_to_human customer_order
     case customer_order.status
+    when ORDER_INITIALIZED then "Order Pending"
     when SUBMITTED  then "Order Recieved"
     when APPROVED   then "Processing"
     when PROCESSING then "Processing"

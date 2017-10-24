@@ -85,11 +85,12 @@
           @clickable = false
           if $(element).hasClass('next')
             @_load_next()
+            
           else
             @_load_prev()
+          
           @_slide(directionClassOut, directionClassIn)
-          @_update_small_indicator_text(@next.data('title'))
-          @_reset_zoom()
+          
 
     _indicator_click_handler: ->
       @indicators.each (i, indicator) =>
@@ -109,8 +110,6 @@
                 directionClassOut = 'slideOutRight'
                 directionClassIn = 'slideInRight'
               @_slide(directionClassOut, directionClassIn)
-              @_update_small_indicator_text($(indicator).find('img').attr('alt'))
-              @_reset_zoom()
 
     _update_indicators: ->
       @indicators.each (i, indicator) =>
@@ -119,8 +118,10 @@
       $(@carousel).find(@indicator_container + '[data-position="' + active_position + '"]').addClass('active')
 
     _slide: (directionClassOut, directionClassIn) ->
+      @_reset_zoom(@next)
       @_slide_out(directionClassOut)
       @_slide_in(directionClassIn)
+
 
     _slide_out: (directionClass) ->
       $(@active).addClass(directionClass)
@@ -178,40 +179,33 @@
       @_reset_slides()
       @_set_height()
       @_init_slides(false)
-      if @zoom_element_selector
-        @_remove_zoom()
-        @_set_zoom('#active-zoom')
+      if @reset_zoom_on_resize
+        @_load_active()
+        @_reset_zoom(@active)
 
     _resize_carousel: () ->
       $(window).resize @_debounce(@_perform_resize, 1000)
 
-    _remove_zoom: ->
-      $('.zoomContainer').remove()
-      $('.gr-image-carousel__image').removeData('elevateZoom')
 
-    _reset_zoom: ->
+    _reset_zoom: (ele)->
       # reset zoom element to active element
-      # http://www.elevateweb.co.uk/image-zoom/examples
       if @zoom_element_selector
-        # $('.zoomContainer').remove()
-        # $('#active-zoom').removeData('elevateZoom')
-        # $('#active-zoom').removeAttr('id')
-        @_remove_zoom()
-        $('.gr-image-carousel__image').removeAttr('id')
-
-        activeImage = $(@next).find(@zoom_element_selector)
-        $(activeImage).attr('id', 'active-zoom')
-        # $(activeImage).elevateZoom()
-        @_set_zoom(activeImage)
+        $('.zoomContainer').remove()
+        $('.gr-image-carousel__image').removeData('elevateZoom')
+        @_set_zoom(ele)
 
     _set_zoom: (ele)->
-      width = $(window).width()
-      if width > 768
-        $(ele).elevateZoom()
-      else
-        $(ele).elevateZoom({
-          zoomType: 'inner'
-        })
+      # http://www.elevateweb.co.uk/image-zoom/examples
+      if @zoom_element_selector
+        ele = ele.find(@zoom_element_selector)
+        console.log(ele)
+        width = $(window).width()
+        if width > 768
+          @elevateZoom = $(ele).elevateZoom()
+        else
+          @elevateZoom = $(ele).elevateZoom({
+            zoomType: 'inner'
+          })
 
   class ImageCarousel extends Carousel
 
@@ -238,8 +232,12 @@
     _init: ->
       @_resize_carousel()
       @_small_indicator_scroll_click_handler()
-      @_set_zoom('#active-zoom')
+      
       @zoom_element_selector = '.gr-image-carousel__image-container.active .gr-image-carousel__image'
+      @reset_zoom_on_resize = true
+      @_load_active()
+      @_set_zoom(@active)
+      
 
     _load_group_positions: ()->
       total_groups = Math.ceil(@indicators.length/5)
@@ -301,6 +299,7 @@
       @slides.each (i, item) =>
         if $(item).height() > @carouselHeight
           @carouselHeight = $(item).height()
+        console.log(@carouselHeight)
       $(@carousel).css('height', @carouselHeight + 'px')
       $(@container).css('height', @carouselHeight + 'px')
 
@@ -339,8 +338,8 @@
   $('.hgec-carousel').each (i, carousel) ->
     new ExampleCarousel(carousel)
 
-  $('.gr-carousel').each (i, carousel) ->
-    new ItemCarousel(carousel)
-
   $('.gr-image-carousel').each (i, carousel) ->
     new ImageCarousel(carousel)
+
+  $('.gr-carousel').each (i, carousel) ->
+    new ItemCarousel(carousel)

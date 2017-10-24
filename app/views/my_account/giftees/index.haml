@@ -1,13 +1,15 @@
 .container
   = render 'header'
   .row
-    - @giftees.each do |giftee|
-      .col-xs-12.col-md-6
-        = render 'giftee', giftee: giftee
+    .col-xs-12
+      .ma-giftees
+        - @giftees.each do |giftee|
+          = render 'giftee', giftee: giftee
+  .row
     .col-xs-12.visible-xs
       = link_to 'New Giftee', 'javascript:alert("TODO");', class: 'btn btn-sm btn-primary uppercase btn-block'
   .row
-    .col-xs-12.col-md-6
+    .col-xs-12
       = paginate(@giftees)
 = content_tag :page_js do
   :javascript

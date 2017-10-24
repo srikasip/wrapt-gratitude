@@ -1,4 +1,4 @@
 %span.gr__indicator-thumbnail
   %span.gr__indicator-inactive-overlay
-  - if locals[:image] && locals[:image].orientation == 'landscape'
+  - if locals[:image]
     = image_tag locals[:image]&.image_url(:small), alt: locals[:gift].title, class: "orientation-#{locals[:image].orientation}", onClick: "ga('send', 'event', 'recommendation', 'navigation', 'gift thumbnail');"

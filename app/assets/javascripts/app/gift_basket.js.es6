@@ -14,6 +14,13 @@ App.GiftBasket = class GiftBasket {
     this.subtotal = $('.js-subtotal');
     this.num_gifts_words = $('.js-num-gifts-words');
     this.checkout_button = $('#js-checkout');
+
+    if (options.num_gifts == 0) {
+      this.checkout_button.hide();
+    } else {
+      this.checkout_button.show();
+    }
+
     App.giftBasketInstance = this;
   }
 
@@ -61,7 +68,7 @@ App.GiftBasket = class GiftBasket {
           $(`[data-behavior~=add-to-gift-basket-wrapper][data-gift-id=${data.updated_gift_id}]`).html(data.add_button_html);
           this.subtotal.html(data.subtotal);
           this.num_gifts_words.html(data.num_gifts_words);
-          console.log(data.gift_basket_count);
+          console.log(`basket has ${data.gift_basket_count}`);
           if ( data.gift_basket_count == 0 ) {
             this.checkout_button.hide();
           } else {
@@ -93,6 +100,4 @@ App.GiftBasket = class GiftBasket {
       return true;
     })
   }
-
-
 }
