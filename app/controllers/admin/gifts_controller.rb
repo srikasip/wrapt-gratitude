@@ -62,7 +62,7 @@ module Admin
         :weight_in_pounds,
         :wrapt_sku,
         :available,
-        :tax_code,
+        :tax_code_id,
         :calculate_cost_from_products,
         :calculate_price_from_products,
         :calculate_weight_from_products,
