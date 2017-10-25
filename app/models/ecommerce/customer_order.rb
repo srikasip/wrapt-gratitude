@@ -57,6 +57,9 @@ class CustomerOrder < ApplicationRecord
   define_method(:combined_handling_in_dollars) { (self.shipping_in_cents + self.handling_in_cents) / 100.0 } # Simply shipping/handling by combining.
   define_method(:total_to_charge_in_dollars)   { self.total_to_charge_in_cents / 100.0 }
 
+  define_method(:to_service)                   { PurchaseService.new(cart_id: self.cart_id) }
+
+
   def _set_submitted_date
     if self.status_changed?(to: SUBMITTED)
       self.submitted_on = Date.today
