@@ -20,6 +20,7 @@ class User < ApplicationRecord
   ###########################
   before_validation :set_beta_round, on: :create
   before_save :set_source
+  before_save -> { self.email = self.email.downcase }
 
   ###########################
   ### Associations

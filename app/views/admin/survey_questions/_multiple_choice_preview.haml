@@ -11,8 +11,7 @@
             = option.text
             - if option.image?
               %br
-              = image_tag option.image_url(:small), class: 'mb4'
-
+              = image_tag option.image_url(:small), class: 'mb4', alt: ''
 
       - if @survey_question.include_other_option?
         :ruby

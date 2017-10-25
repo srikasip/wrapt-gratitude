@@ -73,7 +73,7 @@
                       %span.label.label-default featured
             %td
               - if gift.primary_gift_image.present?
-                = image_tag gift.primary_gift_image.image_url(:small), class: 'admin-index-table--image'
+                = image_tag gift.primary_gift_image.image_url(:small), class: 'admin-index-table--image', alt: gift.title
               %h4.admin-index-table--item-title
                 = gift.title
                 %em{style: 'font-weight: normal;'} (#{gift.vendor.name})

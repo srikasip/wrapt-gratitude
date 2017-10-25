@@ -8,7 +8,7 @@
     .gift-basket__gift.clearfix
       .gift-basket__gift__left
         .gift-basket__gift-image
-          = image_tag gift.primary_gift_image_with_fallback.image_url(:small)
+          = image_tag gift.primary_gift_image_with_fallback.image_url(:small), alt: gift.title
       .gift-basket__gift__right
         .gift-basket__gift-title.small
           = gift.title

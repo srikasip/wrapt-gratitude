@@ -40,7 +40,7 @@ class Tax::Transaction < ApplicationRecord
     if api_response['error'].present?
       self.success = false
     else
-      self.tax_in_dollars = api_response['lines'].sum { |x| x['taxableAmount'].to_f }
+      self.tax_in_dollars = api_response['lines'].sum { |x| x['taxCalculated'].to_f }
       self.transaction_code = api_response['code']
       self.success = true
     end

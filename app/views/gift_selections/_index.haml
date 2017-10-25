@@ -10,9 +10,9 @@
         .gift-basket__gift-image
           - url = gift.primary_gift_image_with_fallback.image&.url(:small)
           - if url.present?
-            = image_tag url
+            = image_tag url, alt: gift.title
           - else
-            %img
+            %img{alt: gift.title}
       .gift-basket__gift__right
         .gift-basket__gift-title.small
           = gift.title

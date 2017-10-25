@@ -4,9 +4,9 @@
       .co-ro-item__img
         - url = gift.primary_gift_image_with_fallback.image&.url(:small)
         - if url.present?
-          = image_tag url, class: 'img-responsive'
+          = image_tag url, class: 'img-responsive', alt: gift.title
         - else
-          %img
+          %img{alt: gift.title}
       .co-ro-item__details.clearfix
         .pull-left
           %h4.light= gift.title
@@ -17,4 +17,3 @@
             .co-detail__label.text-right Status
             .co-detail__item.text-right= customer_order.status.titleize
 
-        

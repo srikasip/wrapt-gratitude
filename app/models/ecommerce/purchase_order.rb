@@ -49,8 +49,10 @@ class PurchaseOrder < ApplicationRecord
   scope :acknowledged, -> {  where(vendor_acknowledgement_status: [FULFILL, DO_NOT_FULFILL]) }
   scope :unacknowledged, -> {  where(vendor_acknowledgement_status: nil) }
 
+  define_method(:to_service) { PurchaseService.new(cart_id: self.cart_id) }
+
   def can_change_acknowledgements?
-    self.status == CustomerOrder::SUBMITTED
+    self.status.in? [ SUBMITTED, ORDER_INITIALIZED ]
   end
 
   def vendor_accepted?

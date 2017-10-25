@@ -52,7 +52,7 @@ class Gift < ApplicationRecord
   scope :can_be_sold, -> { where(can_be_sold: true) }
 
   def set_can_be_sold_flag
-    self.can_be_sold = available? && units_available > 0
+    self.can_be_sold = available? && units_available.to_i > 0
   end
 
   def self.search search_params

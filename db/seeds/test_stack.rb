@@ -1,4 +1,4 @@
-vendor = Vendor.where(name: 'Test').first_or_initialize
+vendor = Vendor.where(name: 'Green River').first_or_initialize
 vendor.assign_attributes({
   :contact_name                   => "Todd Blackman",
   :email                          => "tblackman@greenriver.com",
@@ -17,7 +17,7 @@ vendor.save!
 
 product = vendor.products.where(title: 'Test Product').first_or_initialize
 product.assign_attributes({
-  :description            => "Origami model",
+  :description            => "Test product",
   :price                  => 1.00,
   :vendor_retail_price    => 5.00,
   :wrapt_cost             => 0.50,
@@ -27,7 +27,7 @@ product.assign_attributes({
   :notes                  => "Test product. Do not delete. This is used to test shipping and credit card charging.",
   :product_category_id    => 5,
   :product_subcategory_id => 29,
-  :weight_in_pounds       => 0.05
+  :weight_in_pounds       => 0.50
 })
 product.save!
 
@@ -48,3 +48,15 @@ gift.assign_attributes({
   :tax_code_id                    => 1
 })
 gift.save!
+
+gp = gift.gift_products.first_or_initialize
+gp.product = product
+gp.save!
+
+pretty = gift.pretty_parcels.first_or_initialize
+pretty.parcel = Parcel.find_by(code: "A")
+pretty.save!
+
+ship = gift.shipping_parcels.first_or_initialize
+ship.parcel = Parcel.find_by(code: "usps-flat-rate-small")
+ship.save!
