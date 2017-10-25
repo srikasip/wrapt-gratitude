@@ -48,6 +48,7 @@ module Admin
       if @product.update(product_params)
         redirect_to admin_product_path(@product), notice: 'Product was successfully updated.'
       else
+        #flash.now[:alert] = "#{@product.errors.full_messages.join('. ')}"
         render :edit
       end
     end
@@ -78,6 +79,7 @@ module Admin
           :remove_image,
           :vendor_retail_price,
           :wrapt_cost,
+          :weight_in_pounds,
           :units_available,
           :vendor_id,
           :source_vendor_id,

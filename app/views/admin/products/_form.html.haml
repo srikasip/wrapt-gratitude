@@ -6,7 +6,7 @@
     = f.input :description
     = f.association :vendor
     = f.association :source_vendor
-    
+
     .row
       .col-xs-3
         = f.input :price, wrapper: :vertical_input_group do
@@ -18,6 +18,9 @@
         = f.input :wrapt_cost, label: 'Wrapt Cost', wrapper: :vertical_input_group do
           .input-group-addon $
           = f.input_field :wrapt_cost, class: 'form-control', value: number_with_precision(f.object.wrapt_cost, precision: 2)
+        = f.input :weight_in_pounds, label: 'Weight', wrapper: :vertical_input_group do
+          .input-group-addon lb
+          = f.input_field :weight_in_pounds, class: 'form-control', value: number_with_precision(f.object.weight_in_pounds, precision: 2)
         = f.input :units_available,label: 'Units Available'
     .row
       .col-xs-4

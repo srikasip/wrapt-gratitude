@@ -29,6 +29,11 @@
       = number_to_currency @product.wrapt_cost
 
     %p
+      %b Weight:
+      = @product.weight_in_pounds
+      lbs
+
+    %p
       %b Units Available:
       = number_with_delimiter @product.units_available
 
@@ -61,5 +66,3 @@
     - @product.product_images.each do |product_image|
       %p
         = image_tag product_image.image_url(:small), alt: @product.title
-
-
