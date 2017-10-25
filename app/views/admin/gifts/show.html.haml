@@ -77,4 +77,4 @@
     - else
       - @gift.gift_images.each do |gift_image|
         %p
-          = image_tag gift_image.image_url(:small), alt: gift.title
+          = image_tag gift_image.image_url(:small), alt: @gift.title
