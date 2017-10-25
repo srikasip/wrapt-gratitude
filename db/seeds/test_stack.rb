@@ -1,4 +1,4 @@
-vendor = Vendor.where(name: 'Test').first_or_initialize
+vendor = Vendor.where(name: 'Green River').first_or_initialize
 vendor.assign_attributes({
   :contact_name                   => "Todd Blackman",
   :email                          => "tblackman@greenriver.com",
