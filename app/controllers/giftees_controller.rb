@@ -13,7 +13,7 @@ class GifteesController < ApplicationController
   skip_before_action :require_login_or_invitation, only: [:create]
 
   def login_required?
-    require_invites? || (action_name != 'create')
+    false
   end
 
   def index
@@ -31,8 +31,10 @@ class GifteesController < ApplicationController
   end
 
   def create
-    if current_user
-      @profile = current_user.owned_profiles.new
+    user = fetch_user_from_session_or_invite
+
+    if user
+      @profile = user.owned_profiles.new
       @profile.name = 'Unknown'
       if @profile.save
         @survey_response = @profile.survey_responses.create survey: @survey
@@ -52,6 +54,16 @@ class GifteesController < ApplicationController
 
       redirect_to giftee_survey_question_path(@profile, @survey_response, @survey_response.ordered_question_responses.first.next_response)
     end
+  end
+
+  private def fetch_user_from_session_or_invite
+    invitation_id = params[:invitation_id] || session[:invitation_id]
+    if invitation_id.present?
+      @invitation_user = User.find_by_activation_token invitation_id
+      session[:invitation_id] = @invitation_user.activation_token
+    end
+
+    user = @invitation_user || current_user
   end
 
   private def set_survey
