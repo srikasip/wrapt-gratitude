@@ -106,6 +106,13 @@
 
         %tr
           %td
+            %i Handling
+          %td{colspan: 6}
+          %td.text-right
+            %i= number_to_currency(@order.handling_in_dollars)
+
+        %tr
+          %td
             %i Taxes
           %td{colspan: 6}
           %td.text-right
