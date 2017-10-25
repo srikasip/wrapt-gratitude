@@ -1,5 +1,5 @@
 - if gift_image.image_processed?
-  = image_tag gift_image.image_url(:small)
+  = image_tag gift_image.image_url(:small), alt: gift.title
 - else
   .admin__image-loading-wrapper
     = image_tag 'ajax-loader.gif'

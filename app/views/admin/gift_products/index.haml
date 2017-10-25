@@ -22,7 +22,7 @@
           %th
           %th Title
           %th SKU
-          %th Units Available 
+          %th Units Available
           %th
         %tbody
           - @gift.gift_products.preload(product: :primary_product_image).each do |gift_product|
@@ -30,7 +30,7 @@
             %tr
               %td.admin__gift-available-products
                 - if product.primary_product_image.present?
-                  = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image'
+                  = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image', alt: product.title
               %td= link_to product.title, admin_product_path(product)
               %td= product.wrapt_sku
               %td= number_with_delimiter product.units_available
@@ -56,14 +56,14 @@
           %th
           %th Title
           %th SKU
-          %th Units Available 
+          %th Units Available
           %th
         %tbody
           - @available_products.each do |product|
             %tr
               %td.admin-index-table--image-cell
                 - if product.primary_product_image.present?
-                  = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image'
+                  = image_tag product.primary_product_image.image_url(:small), class: 'admin-index-table--image', alt: product.title
               %td= link_to product.title, admin_product_path(product)
               %td= product.wrapt_sku
               %td= number_with_delimiter product.units_available

@@ -59,7 +59,7 @@
         .admin__image-cell
           .admin__image-cell-inner
             - if product_image.image_processed?
-              = image_tag product_image.image_url(:small)
+              = image_tag product_image.image_url(:small), alt: product_image.product&.title
             - else
               .admin__image-loading-wrapper
                 = image_tag 'ajax-loader.gif'

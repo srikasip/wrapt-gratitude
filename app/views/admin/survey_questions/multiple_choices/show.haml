@@ -14,7 +14,7 @@
           = option.text
           - if option.image?
             %br
-            = image_tag option.image_url(:small)
+            = image_tag option.image_url(:small), alt: ''
           %br
           %br
           = link_to 'Edit', edit_admin_survey_multiple_choice_question_option_path(@survey, @survey_question, option), class: 'btn btn-primary btn-xs'

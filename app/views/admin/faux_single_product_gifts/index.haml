@@ -20,7 +20,7 @@
             %td.admin-index-table--image-cell
               - if gift.primary_gift_image.present?
                 = link_to admin_gift_path(gift) do
-                  = image_tag gift.primary_gift_image.image_url(:small), class: 'admin-index-table--image'
+                  = image_tag gift.primary_gift_image.image_url(:small), class: 'admin-index-table--image', alt: gift.title
             %td
               %h4.admin-index-table--item-title= link_to gift.title, admin_gift_path(gift)
               .admin-index-table--item-description= gift.description

@@ -9,7 +9,7 @@
     %span.glyphicon.glyphicon-remove(aria-hidden="true")
   - if option.image?
     %br
-    = image_tag option.image_url(:small) 
+    = image_tag option.image_url(:small), alt: ''
 
 - content_for :page_js do
   :javascript
