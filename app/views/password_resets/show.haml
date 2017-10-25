@@ -1,19 +1,22 @@
+.container
+  .row
+    .col-xs-12
+      %h1 Reset Your Password
 
-%h1 Reset Your Password
+.container
+  .row
+    .col-xs-12
+      = simple_form_for @password_reset, html: {data: {submits_to_pjax_modal: true}} do |form|
+        .form-inputs
+          = form.input :password, required: false, label: 'Enter your new password'
 
-= simple_form_for @password_reset, html: {data: {submits_to_pjax_modal: true}} do |form|
-  .form-inputs
-    = form.input :password, required: false, label: 'Enter your new password'
+        .text-right.lost-password-container{style: 'max-width: 2000px;'}
+          %p.text-right= link_to 'Return to Sign In'
+        .clearfix
 
-  .text-right.lost-password-container
-    %p= link_to 'Return to Sign In'
-  .clearfix
+        .form-actions
+          = form.submit 'Reset Password', class: 'btn btn-primary btn-full-width'
 
-  .form-actions
-    = form.submit 'Reset Password', class: 'btn btn-primary btn-full-width'
-      
-      
-
-= content_for :page_js do
-  :javascript
-    new App.PasswordRevealer()
+      = content_for :page_js do
+        :javascript
+          new App.PasswordRevealer()
