@@ -20,11 +20,11 @@ module OrderFactory
 
     customer = profile.owner
 
-    gifts = Gift.where(title: 'Test Gift', available: false)
+    gift = Gift.find_by(title: 'Test Gift', available: false)
 
-    desired_gifts = gifts.map do |gift|
-      PurchaseService::DesiredGift.new(gift, 1)
-    end
+    gift.products.first.update_attribute(:units_available, 1)
+
+    desired_gifts = [ PurchaseService::DesiredGift.new(gift, 1) ]
 
     cart_id = SecureRandom.hex(10)
     puts "cart_id = #{cart_id}"

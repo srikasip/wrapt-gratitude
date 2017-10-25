@@ -408,7 +408,7 @@ class PurchaseService
 
   def can_fulfill?
     self.desired_gifts.all? do |dg|
-      dg.gift.units_available > dg.quantity
+      dg.gift.units_available >= dg.quantity
     end
   end
 
