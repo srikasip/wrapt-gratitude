@@ -77,6 +77,8 @@ module OrderFactory
     customer_purchase = PurchaseService.new(cart_id: cart_id)
     customer_purchase.authorize!
 
+    order.reload
+
     puts order.ai
 
     order

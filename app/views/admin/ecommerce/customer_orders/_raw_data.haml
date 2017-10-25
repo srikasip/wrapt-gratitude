@@ -6,4 +6,6 @@
 
 %h3 Shipping Labels
 - order.purchase_orders.each do |po|
+  %h4= po.order_number
+  %pre= po.shipment.ai(plain: true)
   %pre= po.shipping_label.ai(plain: true)

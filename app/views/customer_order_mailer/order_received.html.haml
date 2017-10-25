@@ -15,7 +15,7 @@
                   - gift = line_item.orderable
                   %tr
                     %td{style: "text-align: left; vertical-align: middle; width: 88px;"}
-                      - url = gift.primary_gift_image.image.url(:small)
+                      - url = gift.primary_gift_image&.image&.url(:small).to_s
                       %img{src: url, style: "width: 88px", alt: gift.title}
                     %td{style: "text-align: left; vertical-align: middle; padding-left: 4px;"}
                       %p{style: "padding-bottom: 0; font-size: 16px; font-weight: normal; font-family: Helvetica, Arial, sans-serif;  color: #4D4C4D;"}
