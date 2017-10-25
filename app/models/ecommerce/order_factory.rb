@@ -1,6 +1,87 @@
 # Carry a test order from start to finish
 
 module OrderFactory
+
+  # This is designed to allow a real order on production, but for a dummy gift.
+  # Real shipping labels, credit cards, and taxes are involved.
+  # OrderFactory.production_test_order!
+  def self.production_test_order!
+    stripe_token = Stripe::Token.create(
+      :card => {
+        :number => ENV.fetch('REAL_CC') {'4242424242424242'},
+        :exp_month => 8,
+        :exp_year => 2018,
+        :cvc => ENV.fetch('REAL_CVC') { '123' }
+      },
+    )
+
+    # Megan is giftee.
+    profile = User.find_by(email: 'tblackman@greenriver.com').owned_profiles.find(415)
+
+    customer = profile.owner
+
+    gifts = Gift.where(title: 'Test Gift', available: false)
+
+    desired_gifts = gifts.map do |gift|
+      PurchaseService::DesiredGift.new(gift, 1)
+    end
+
+    cart_id = SecureRandom.hex(10)
+    puts "cart_id = #{cart_id}"
+
+    customer_purchase = PurchaseService.new({
+      cart_id: cart_id,
+      customer: customer,
+      profile: profile,
+      desired_gifts: desired_gifts,
+    })
+
+    order = customer_purchase.generate_order!
+
+    # A different page in the shopping process
+    customer_purchase = PurchaseService.new(cart_id: cart_id)
+    customer_purchase.gift_wrapt!(
+      ActionController::Parameters.new({ customer_order: {
+        gift_wrapt: ['1', '0'].sample,
+        include_note: '1',
+        note_content: "Vivamus magna justo, lacinia eget consectetur sed,\nconvallis at tellus. Pellentesque in ipsum id orci porta dapibus.\n Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.\n Vestibulum ante ipsum primis in faucibus orci luctus et ultrices\n posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel,\n ullamcorper sit amet ligula. Curabitur arcu erat, accumsan id\n imperdiet et, porttitor at sem. Praesent sapien massa, convallis a\n pellentesque nec, egestas non nisi. Lorem ipsum dolor sit amet,\n consectetur adipiscing elit. Curabitur non nulla sit amet nisl tempus\n convallis quis ac lectus. Vivamus suscipit tortor eget felis porttitor\n volutpat. Praesent sapien massa, convallis a pellentesque nec, egestas\n non nisi.  Sed porttitor lectus nibh. Praesent sapien massa, convallis\n a pellentesque nec, egestas non nisi. Curabitur arcu erat, accumsan id\n imperdiet et, porttitor at sem. Vestibulum ac diam sit amet quam\n vehicula elementum sed sit amet dui. Nulla porttitor accumsan\n tincidunt. Cras ultricies ligula sed magna dictum porta. Vivamus\n suscipit tortor eget felis porttitor volutpat. Donec sollicitudin\n molestie malesuada. Lorem ipsum dolor sit amet, consectetur adipiscing\n elit. Donec rutrum congue leo eget malesuada."
+      }})
+    )
+
+    # A different page in the shopping process
+    customer_purchase = PurchaseService.new(cart_id: cart_id)
+    customer_purchase.set_address!(
+      ActionController::Parameters.new({customer_order: {
+        ship_street1: '4194 West 25 North',
+        ship_street2: '',
+        ship_city: 'Cedar City',
+        ship_state: 'UT',
+        ship_zip: '84720',
+        ship_country: 'US',
+        email: 'meborn@greenriver.com',
+      }})
+    )
+
+    _ = customer_purchase.shipping_choices_for_view
+
+    # A difference virtual page load in the shopping process
+    customer_purchase = PurchaseService.new(cart_id: cart_id)
+    customer_purchase.pick_shipping!('cheapest')
+
+    # A different virtual page load in the shopping process
+    customer_purchase = PurchaseService.new(cart_id: cart_id)
+    params = ActionController::Parameters.new({stripeToken: stripe_token.id, 'address-zip'.to_sym => '05301'})
+    customer_purchase.init_our_charge_record!(params)
+
+    # A different virtual page load in the shopping process
+    customer_purchase = PurchaseService.new(cart_id: cart_id)
+    customer_purchase.authorize!
+
+    puts order.ai
+
+    order
+  end
+
   def self.create_order!
     raise "NEVER ON PRODUCTION" if Rails.env.production?
 
@@ -142,16 +223,16 @@ module OrderFactory
     choices = customer_purchase.shipping_choices_for_view
     picked_choice = choices.sample
 
-    # A difference virtual page load in the shopping process
+    # A different virtual page load in the shopping process
     customer_purchase = PurchaseService.new(cart_id: cart_id)
     customer_purchase.pick_shipping!(picked_choice.value)
 
-    # A difference virtual page load in the shopping process
+    # A different virtual page load in the shopping process
     customer_purchase = PurchaseService.new(cart_id: cart_id)
     params = ActionController::Parameters.new({stripeToken: stripe_token.id, 'address-zip'.to_sym => '66212'})
     customer_purchase.init_our_charge_record!(params)
 
-    # A difference virtual page load in the shopping process
+    # A different virtual page load in the shopping process
     customer_purchase = PurchaseService.new(cart_id: cart_id)
     customer_purchase.authorize!
 
