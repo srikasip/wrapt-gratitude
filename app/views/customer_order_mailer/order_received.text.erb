@@ -1,3 +1,30 @@
 Hello <%=@user.full_name %>,
 
-Your order has been received.
+We're getting your Wrapt order ready to ship.
+
+Order Number: <%=@customer_order.order_number %>
+
+<% @customer_order.line_items.each do |line_item| %>
+  <% gift = line_item.orderable %>
+    <%= gift.title %>
+<% end %>
+
+Status: 
+<%= status_to_human(@customer_order) %>
+
+Order Date:
+<%= format_date(@customer_order.submitted_on) %>
+
+Order Total:
+<%= number_to_currency(@customer_order.total_to_charge_in_dollars) %>
+
+Shipping To:
+<%= @customer_order.recipient_name %>
+<%= format_address(object: @customer_order, prefix: :ship) %>
+
+Expected Delivery:
+<%= @expected_delivery %>
+
+Sincerely,
+Team Wrapt
+

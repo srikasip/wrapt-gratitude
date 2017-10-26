@@ -32,7 +32,7 @@
                 Order Date
               %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; color: #767676;"}
                 = format_date(@customer_order.submitted_on)
-            %td{style: "padding: 12px 24px; text-align: left; vertical-align: top; width: 50%"}
+            %td{style: "padding: 12px 24px; text-align: right; vertical-align: top; width: 50%"}
               %p{style: "padding-bottom: 6px; font-size: 13px; font-family: Helvetica, Arial, sans-serif; text-transform: uppercase; color: #4D4C4D;"}
                 Order Total
               %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; color: #767676;"}
@@ -46,7 +46,7 @@
                 = @customer_order.recipient_name
                 %br
                 = format_address(object: @customer_order, prefix: :ship)
-            %td{style: "padding: 12px 24px; text-align: left; vertical-align: top; width: 50%"}
+            %td{style: "padding: 12px 24px; text-align: right; vertical-align: top; width: 50%"}
               %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; text-transform: uppercase; color: #4D4C4D;"}
                 Expected Delivery
               %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; color: #767676;"}
