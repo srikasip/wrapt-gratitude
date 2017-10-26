@@ -28,9 +28,8 @@ class ShippingLabel < ApplicationRecord
 
   delegate :cart_id, to: :shipment, prefix: false
 
-  def shipped?
-    self.tracking_status == T_TRANSIT
-  end
+  define_method(:shipped?)   { self.tracking_status == T_TRANSIT }
+  define_method(:delivered?) { self.tracking_status == T_DELIVERED }
 
   def run!
     # Purchase the desired rate.
