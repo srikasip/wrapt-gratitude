@@ -9,7 +9,7 @@ module Admin
         Rails.logger.debug { "Body: #{request.body.read}" }
         Rails.logger.info { "Params: #{params.to_unsafe_h.inspect}" }
 
-        webhook = ShippoTrackingWebhook.new(params.to_unsafe_h['webhook'])
+        webhook = ShippoTrackingWebhook.new(params.to_unsafe_h)
         webhook.run!
 
         head :ok

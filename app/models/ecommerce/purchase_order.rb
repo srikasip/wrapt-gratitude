@@ -43,6 +43,7 @@ class PurchaseOrder < ApplicationRecord
   delegate :cart_id, :recipient_name, :ship_street1, :ship_street2, :ship_street3, :ship_city, :ship_state, :ship_zip, :ship_country, to: :customer_order
   delegate :tracking_url, :tracking_number, to: :shipping_label, allow_nil: true
   delegate :shipping_choice, to: :customer_order
+  delegate :profile, to: :customer_order, prefix: false
 
   scope :okay_to_fulfill, -> { where(vendor_acknowledgement_status: FULFILL) }
   scope :do_not_fulfill, -> {  where(vendor_acknowledgement_status: DO_NOT_FULFILL) }
@@ -50,6 +51,10 @@ class PurchaseOrder < ApplicationRecord
   scope :unacknowledged, -> {  where(vendor_acknowledgement_status: nil) }
 
   define_method(:to_service) { PurchaseService.new(cart_id: self.cart_id) }
+
+  def shipped_or_better?
+    self.status.in?(SHIPPED_OR_BETTER)
+  end
 
   def can_change_acknowledgements?
     self.status.in? [ SUBMITTED, ORDER_INITIALIZED ]
