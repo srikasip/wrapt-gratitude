@@ -20,7 +20,7 @@ class Tax::Transaction < ApplicationRecord
     self.api_request_payload = payload_object.to_hash
     self.api_response = client.create_transaction(payload_object.to_hash)
     _cache_estimation_results
-  rescue Faraday::Error => e
+  rescue Faraday::Error, NoMethodError => e
     Rails.logger.fatal "[AVATAX][ESTIMATE] #{e.message}"
     self.success = false
   end
