@@ -191,6 +191,10 @@ class PurchaseService::ShippingService
 
   # This is used before we've purchased the labels
   def expected_delivery
+    if customer_order.submitted_on.blank?
+      return OpenStruct.new(text: "soon", range: [])
+    end
+
     estimated_days_min = 10
     estimated_days_max = 1
 
