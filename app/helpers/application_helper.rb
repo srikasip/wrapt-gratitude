@@ -169,17 +169,22 @@ module ApplicationHelper
     date.strftime("%b %e, %Y")
   end
 
-  def format_datetime datetime
+  def format_datetime datetime, with_zone: false
     return 'N/A' if datetime.nil?
 
     in_zone = datetime.in_time_zone('EST')
     format  = "%b %e, %Y %l:%M %p"
 
-    if datetime.dst?
-      in_zone.strftime(format)
-    else
-      (in_zone + 1.hour).strftime(format)
-    end
+    result = \
+      if datetime.dst?
+        in_zone.strftime(format)
+      else
+        (in_zone + 1.hour).strftime(format)
+      end
+
+    result += " Eastern" if with_zone
+
+    result
   end
 
   def content_quote(quote)

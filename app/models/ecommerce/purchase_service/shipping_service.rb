@@ -259,12 +259,20 @@ class PurchaseService::ShippingService
   def self.update_shipping_status!(shippo_data, do_gift_count_update: true)
     shipping_label = ShippingLabel.find_by(tracking_number: shippo_data.dig('tracking_number'))
 
-    shipping_label.update_attributes({
+    shipping_label.assign_attributes({
       eta: shippo_data['eta'],
       tracking_status: shippo_data.dig('tracking_status', 'status'),
       tracking_updated_at: shippo_data.dig('tracking_status', 'status_date'),
       tracking_payload: shippo_data
     })
+
+    if shipping_label.shipped?
+      shipping_label.shipped_on ||= shipping_label.updated_at
+    elsif shipping_label.delivered?
+      shipping_label.delivered_on ||= shipping_label.updated_at
+    end
+
+    shipping_label.save!
 
     if shipping_label.shipped?
       purchase_order = shipping_label.purchase_order
