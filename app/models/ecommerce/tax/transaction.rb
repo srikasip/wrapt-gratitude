@@ -23,6 +23,7 @@ class Tax::Transaction < ApplicationRecord
   rescue Faraday::Error, NoMethodError => e
     Rails.logger.fatal "[AVATAX][ESTIMATE] #{e.message}"
     self.success = false
+    self.api_response ||= { msg: e.message }
   end
 
   def reconcile!

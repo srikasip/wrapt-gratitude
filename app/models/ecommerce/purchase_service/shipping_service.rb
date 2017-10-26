@@ -332,9 +332,5 @@ class PurchaseService::ShippingService
     Shipment.transaction do
       yield
     end
-  #rescue Shippo::Exceptions::APIServerError, Shippo::Exceptions::ConnectionError => e
-  #  Rails.logger.fatal "[SHIPPO] #{e.message}"
-  #  self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
-  #  raise
   end
 end

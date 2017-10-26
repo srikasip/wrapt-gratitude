@@ -26,4 +26,8 @@ class Charge < ApplicationRecord
   def auth_success?
     self.status.in? AUTHED_OKAY_STATES
   end
+
+  def bad_state?
+    !self.status.in?(AUTHED_OKAY_STATES+[INITIALIZED])
+  end
 end
