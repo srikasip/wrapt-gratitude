@@ -3,7 +3,7 @@
     .top-navigation__brand{class: ("active" if active_top_nav_section == 'home_pages')}
       = link_to root_path, class: ' top-navigation__brand-link' do
         %span Wrapt
-        =embedded_svg('wrapt-logo-tm', class: "navbar-brand__icon-wrapt-logo")
+        =embedded_svg('wrapt-logo', class: "navbar-brand__icon-wrapt-logo")
     = top_nav_toggle(:in)
     .top-navigation__menu.navbar-right.tnm__closed
       = top_nav_toggle(:out)
