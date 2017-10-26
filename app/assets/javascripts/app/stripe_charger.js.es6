@@ -45,8 +45,14 @@ App.StripeCharger = class StripeCharger {
       this.setOutcome(result, this.cvcSelector)
     });
 
-    this.form.find('input').change((event) => {
-      this.enableSubmitButton({error: false}, event.currentTarget)
+    this.form.find(this.postalCodeSelector).on('keyup', (event) => {
+      this.enableSubmitButton({error: false})
+    })
+    this.form.find(this.postalCodeSelector).on('change', (event) => {
+      this.enableSubmitButton({error: false})
+    })
+    this.form.find('input[type="checkbox"]').on('change', (event) => {
+      this.enableSubmitButton({error: false})
     })
     // Create a token or display an error the form is submitted.
     this.form.on('submit', (event) => { this.submitHandler(event) });
@@ -110,10 +116,10 @@ App.StripeCharger = class StripeCharger {
       $(selector).css('border-color', '#c4c4c4')
       $(selector).parents('.form-group').find('.js-stripe-errors').remove()
     }
-    this.enableSubmitButton(result, selector)
+    this.enableSubmitButton(result)
   }
 
-  enableSubmitButton(result, selector) {
+  enableSubmitButton(result) {
     var disabled = false
     $('.StripeElement').each(function() {
       if(!$(this).hasClass('StripeElement--complete')) {

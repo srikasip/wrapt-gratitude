@@ -10,7 +10,7 @@
           .co-select-my-address.j-select-my-address.clearfix{style: @customer_order.ship_to_customer? ? '' : 'display:none;'}
             %h4.light Select Address
             = f.input :address_id, as: :wrapt_styled_radio_buttons, collection: @address_collection, label: false, nil_checked: 'new_address'
-          .j-address{style: (@saved_addresses.any? && @customer_order.ship_to_customer? ? 'display:none;' : '')}
+          .j-address{style: (@saved_addresses.any? && @customer_order.ship_to_customer? && @customer_order.address_id.present? ? 'display:none;' : '')}
             .row
               .col-xs-12.col-md-10
                 = f.input :ship_street1, label: 'Street Address'
@@ -29,7 +29,6 @@
           - else
             %button.btn.btn-primary{type: 'submit', disabled: 'disabled'}
               = next_button_text
-
 
   = render "debug", customer_order: @customer_order
 

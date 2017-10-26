@@ -97,12 +97,12 @@ App.ShowSelectAddress = (object, attr, value, checked, container_selector) => {
 App.ShowBillingAddress = (object, attr, value, checked, container_selector) => {
   App.DefaultCheckoutFormVisibilityBehavior(object, attr, value, checked, container_selector)
   var input = App.SelectInputByName(object, attr)
-  var zip_input = $('[name="address-zip"]')
+  var zip_input = App.SelectInputByName('', 'address-zip')
   input.change(function() {
     if($(this).is(':checked')) {
       $(zip_input).val($(this).data('zip'))
     } else {
-      $(zip_input).removeAttr('value')
+      $(zip_input).val('')
     }
     $(zip_input).change()
   })
@@ -171,10 +171,10 @@ App.AddressSubmitCheckShipAttrs = () => {
 }
 
 App.AddressSubmitButton = () => {
-  $('form').find('input').change(function() {
+  var validate = function() {
     var disabled = false
     var shipTo = $('form').find('input:checked[name="customer_order[ship_to]"]')
-    if($(shipTo).val() === 'ship_to_customer') {
+    if(shipTo.val() === 'ship_to_customer') {
       var address = $('form').find('input:checked[name="customer_order[address_id]"]')
       if($(address).val() === 'new_address') {
         disabled = App.AddressSubmitCheckShipAttrs()
@@ -185,7 +185,10 @@ App.AddressSubmitButton = () => {
       disabled = App.AddressSubmitCheckShipAttrs()
     }
     App.EnableSubmit(disabled)
-  })
+  }
+  $('form input[type="text"]').on('keyup', function() {validate()})
+  $('form select').on('change', function() {validate()})
+  $('form input[type="radio"]').on('change', function() {validate()})
 }
 
 App.ShippingChoiceSubmitButton = () => {
