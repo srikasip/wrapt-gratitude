@@ -62,7 +62,7 @@ Rails.application.routes.draw do
   ###################################
   #namespace :my_account, path: 'my-account' do
   resource :my_account, path: 'my-account', module: 'my_account' do
-    resources :giftees, only: [ :index, :edit, :update ]
+    resources :giftees, only: [ :new, :index, :edit, :update ]
     resource :profile, only: [ :show, :edit, :update ]
     resources :orders, only: [ :index, :show ]
     resources :billing, only: [:index] do

@@ -10,5 +10,10 @@ describe PurchaseService::ShippingService do
     ShippingLabel.update_all(tracking_number: '92055901755477000032739723')
 
     PurchaseService::ShippingService.update_shipping_status!(payload.dig('data'), do_gift_count_update: false)
+
+    shipping_label = ShippingLabel.first
+
+    expect(shipping_label.shipped_on.to_s).to eq('2017-10-26')
+    expect(shipping_label.delivered_on).to be_nil
   end
 end
