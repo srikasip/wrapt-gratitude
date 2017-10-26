@@ -51,11 +51,23 @@ class PurchaseService::ChargingService
       before_hook.call
       _do_stripe_auth!
       _verify_consistency!(captured: false)
-      _save_auth_results!
-      after_hook.call
+
+      if self.stripe_charge.outcome.type == 'authorized'
+        _save_auth_results!
+        after_hook.call
+      else
+        self.our_charge.update_attributes({
+          status: DECLINED,
+          error_message: "Do not honor card. outcome type was not authorized"
+        })
+      end
     end
 
     self.our_charge
+  end
+
+  def card_authorized?
+    self.our_charge.status == AUTH_SUCCEEDED
   end
 
   def charge!(before_hook: ->{}, after_hook: ->{})
@@ -146,10 +158,6 @@ class PurchaseService::ChargingService
       raise InternalConsistencyError, "unexpected paid=#{self.stripe_charge.paid.to_json}"
     end
 
-    unless self.stripe_charge.outcome.type == 'authorized'
-      raise InternalConsistencyError, "This should have been authorized"
-    end
-
     unless self.stripe_charge.id
       raise InternalConsistencyError, "missing id"
     end
@@ -163,7 +171,12 @@ class PurchaseService::ChargingService
     self.our_charge.update_attributes({
       authed_at: Time.now,
       charge_id: self.stripe_charge.id,
-      status: AUTH_SUCCEEDED
+      status: AUTH_SUCCEEDED,
+      error_code: nil,
+      error_param: nil,
+      decline_code: nil,
+      error_type: nil,
+      http_status: "200",
     })
 
     self.customer_order.update_attribute(:status, CustomerOrder::SUBMITTED)

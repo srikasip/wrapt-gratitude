@@ -39,7 +39,7 @@ class ShippingLabel < ApplicationRecord
       :async           => false
     )
     _cache_the_results
-  rescue Shippo::Exceptions::APIServerError, Shippo::Exceptions::ConnectionError => e
+  rescue Shippo::Exceptions::Error, Shippo::Exceptions::ConnectionError => e
     Rails.logger.fatal "[SHIPPO] #{e.message}"
     self.success = false
     self.api_response = JSON.parse(e.response.body) rescue {msg: e.message}

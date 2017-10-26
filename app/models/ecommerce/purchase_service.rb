@@ -167,6 +167,8 @@ class PurchaseService
     })
   end
 
+  delegate :card_authorized?, to: :charging_service
+
   delegate :expected_delivery, to: :shipping_service
 
   def update_from_vendor_responses!

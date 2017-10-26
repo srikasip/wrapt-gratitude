@@ -31,7 +31,7 @@ module OrdersHelper
     elsif shipping_choice == 'cheapest'
       'Least Expensive'
     else
-      shipping_choice.titleize
+      shipping_choice&.titleize
     end
   end
 end
