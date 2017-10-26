@@ -11,12 +11,10 @@ class ShippoTrackingWebhook < ShippoWebhook
       raise "Must have some data to process a webhook."
     elsif webhook_params['test'] && Rails.env.production?
       raise "Trying to use shippo in testing mode, but we're in production."
-    elsif webhook_params.dig('data', 'tracking_status', 'object_id').blank?
-      raise "Cannot continue without a shippo object ID"
+    elsif webhook_params.dig('data', 'tracking_number').blank?
+      raise "Cannot continue without a tracking number"
     elsif webhook_params.dig('data', 'tracking_status', 'status').blank?
       raise "Cannot continue without a status"
-    elsif ShippingLabel.where(shippo_object_id: webhook_params.dig('data', 'tracking_status', 'object_id')).none?
-      raise "Cannot find shipment #{webhook_params.dig('data', 'tracking_status', 'object_id')}."
     end
   end
 

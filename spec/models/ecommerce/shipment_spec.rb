@@ -18,7 +18,6 @@ describe Shipment do
     VCR.use_cassette('without insurance') do
       shipment.run!
       expect(shipment.rates.length).to be >= 3
-      puts shipment.api_response['messages'].ai
     end
   end
 
