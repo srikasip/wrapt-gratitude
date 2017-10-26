@@ -1,5 +1,5 @@
 %body{style: "background-color: #fff; font-family: Helvetica, Arial, sans-serif;"}
-  %table{style: "background-color: #F2F5F9; max-width: 700px; margin: 0 auto;"}
+  %table{style: "background-color: #F2F5F9; max-width: 700px; min-width: 90%; margin: 0 auto;"}
     %tr
       %td{style: "padding: 40px;"}
         %h1{style: "font-size: 28px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; text-align: center; color: #4D4C4D; margin-bottom: 14px;"}
@@ -7,7 +7,7 @@
           We're getting your Wrapt order ready to ship
         %p{style: "text-align: center; font-size: 24px; color: #4D4C4D; font-weight: normal; line-height: 1.75;"}
           Order Number: #{@customer_order.order_number}
-        %table{style: "margin: 60px auto 40px; border: 1px solid #E2E2E2; max-width: 600px;"}
+        %table{style: "margin: 60px auto 40px; border: 1px solid #E2E2E2; max-width: 600px; min-width: 80%"}
           %tr
             %td{style: "padding: 12px 24px; text-align: left; vertical-align: top; width: 50%"}
               %table{style: "border: none; margin: 0; padding:0"}
@@ -25,19 +25,19 @@
                 Status
               %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; color: #767676;"}
                 = status_to_human(@customer_order)
-        %table{style: "margin: 60px auto 40px; border: 1px solid #E2E2E2; max-width: 600px;"}
+        %table{style: "margin: 60px auto 40px; border: 1px solid #E2E2E2; max-width: 600px; min-width: 80%"}
           %tr
             %td{style: "padding: 12px 24px; text-align: left; vertical-align: top; width: 50%"}
               %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; text-transform: uppercase; color: #4D4C4D;"}
                 Order Date
               %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; color: #767676;"}
                 = format_date(@customer_order.submitted_on)
-            %td{style: "padding: 12px 24px; text-align: left; vertical-align: top; width: 50%"}
+            %td{style: "padding: 12px 24px; text-align: right; vertical-align: top; width: 50%"}
               %p{style: "padding-bottom: 6px; font-size: 13px; font-family: Helvetica, Arial, sans-serif; text-transform: uppercase; color: #4D4C4D;"}
                 Order Total
               %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; color: #767676;"}
                 = number_to_currency(@customer_order.total_to_charge_in_dollars)
-        %table{style: "margin: 60px auto 40px; border: 1px solid #E2E2E2; max-width: 600px;"}
+        %table{style: "margin: 60px auto 40px; border: 1px solid #E2E2E2; max-width: 600px; min-width: 80%"}
           %tr
             %td{style: "padding: 12px 24px; text-align: left; vertical-align: top; width: 50%"}
               %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; text-transform: uppercase; color: #4D4C4D;"}
@@ -46,7 +46,7 @@
                 = @customer_order.recipient_name
                 %br
                 = format_address(object: @customer_order, prefix: :ship)
-            %td{style: "padding: 12px 24px; text-align: left; vertical-align: top; width: 50%"}
+            %td{style: "padding: 12px 24px; text-align: right; vertical-align: top; width: 50%"}
               %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; text-transform: uppercase; color: #4D4C4D;"}
                 Expected Delivery
               %p{style: "padding-bottom: 0; font-size: 13px; font-family: Helvetica, Arial, sans-serif; color: #767676;"}

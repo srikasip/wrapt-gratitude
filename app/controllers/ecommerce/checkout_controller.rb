@@ -126,12 +126,13 @@ class Ecommerce::CheckoutController < ApplicationController
   def save_review
     @checkout_step = :review
 
-    if @customer_purchase.authorize!
+    @customer_purchase.authorize!
+
+    if @customer_purchase.card_authorized?
       redirect_to action: :finalize
     else
-      # Shouldn't ever happen
-      flash.now[:notice] = "There was a problem saving your response."
-      render :edit_review
+      flash[:notice] = "There was a problem authorizing your card. Please try again."
+      redirect_to action: :edit_payment
     end
   end
 

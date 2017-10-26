@@ -47,7 +47,14 @@
             %td= order.order_number
             %td= format_date(order.created_on)
             %td= order.user_email
-            %td= order.status.titleize
+            %td
+              = order.status.titleize
+              - if order.bad_charge?
+                %br
+                %span{style: 'color: red;'} Credit card problem
+              - if order.bad_tax_transaction?
+                %br
+                %span{style: 'color: red;'} Tax calculation problem
             %td.text-right
               %b= number_to_currency(order.total_to_charge_in_dollars)
             %td.admin-index-table--buttons-cell
@@ -83,6 +90,6 @@
             %td.text-right
               %i= number_to_currency(order.taxes_in_dollars)
             %td
-          
+
 
     %p=paginate @orders

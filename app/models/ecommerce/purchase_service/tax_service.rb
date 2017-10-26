@@ -34,6 +34,12 @@ class PurchaseService::TaxService
     end
   end
 
+  # If you cancel or partially cancel an order and we've reconciled already,
+  # we'll need to update avalara.
+  def adjust!
+    raise "not implemented yet"
+  end
+
   def our_transaction
     @our_transaction ||=
       Tax::Transaction.

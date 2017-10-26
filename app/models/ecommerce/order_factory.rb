@@ -238,6 +238,10 @@ module OrderFactory
     customer_purchase = PurchaseService.new(cart_id: cart_id)
     customer_purchase.authorize!
 
+    unless customer_purchase.card_authorized?
+      raise "A card auth failed due to a declined card"
+    end
+
     # All the vendors acknowledge via emails and click-through to a page where they say it's okay.
     # This simulates that 99.5% of the time, a purchase order will be fulfillable.
     order.purchase_orders.each do |po|

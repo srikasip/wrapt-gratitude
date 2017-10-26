@@ -1,9 +1,11 @@
+:ruby
+  style = markout ? 'text-decoration: line-through;' : ''
 .co-ro-summary__item.clearfix
   %div= label
   - if value_in_dollars
     - if co_attr
-      %div= number_to_currency customer_order.send(co_attr)
+      %div{style: style}= number_with_precision(customer_order.send(co_attr), precision: 2)
     - else
-      %div= number_to_currency value
+      %div{style: style}= number_with_precision(value, precision: 2)
   - elsif value
-    %div= value
+    %div{style: style}= value

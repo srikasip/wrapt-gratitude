@@ -1,0 +1,5 @@
+.container
+  .row
+    .col-xs-6
+      = simple_form_for @question_response, url: giftees_path, html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
+        = render response_fields_partial, form: form, label: @question_response.survey_question.prompt

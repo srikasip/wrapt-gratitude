@@ -1,5 +1,17 @@
-.content
+.container
   .row
     .col-xs-12.text-center
-      %p
-        Sorry, that page could not be found.
+      %h2.about-page__header.fancy
+        Sigh.
+      %p.about-page__tagline
+        We're having trouble finding the page you were looking for.
+  .row.sg-boxes
+    .col-xs-12.col-md-4.col-md-offset-4.sg-box
+      .sg-box__content
+        #ball.sg-box__ill
+        %h5 While we search in our crystal ball...
+        %p
+          %span
+            Would you like to
+            =succeed '?' do
+              =link_to 'read about our makers and try our gifter\'s quiz', science_of_gifting_path
