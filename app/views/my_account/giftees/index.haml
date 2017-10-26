@@ -7,7 +7,7 @@
           = render 'giftee', giftee: giftee
   .row
     .col-xs-12.visible-xs
-      = link_to 'New Giftee', 'javascript:alert("TODO");', class: 'btn btn-sm btn-primary uppercase btn-block'
+      = link_to 'New Giftee', new_my_account_giftee_path, class: 'btn btn-sm btn-primary uppercase btn-block', data: {loads_in_pjax_modal: true}
   .row
     .col-xs-12
       = paginate(@giftees)
