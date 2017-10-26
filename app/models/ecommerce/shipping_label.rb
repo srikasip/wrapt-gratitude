@@ -1,10 +1,10 @@
 class ShippingLabel < ApplicationRecord
   TRACKING_STATUSES = [
-    T_UNKNOWN   = 'unknown',   # The package has not been found via the carrier's tracking system, or it has been found but not yet scanned by the carrier.
-    T_TRANSIT   = 'transit',   # The package has been scanned by the carrier and is in transit.
-    T_DELIVERED = 'delivered', # The package has been successfully delivered.
-    T_RETURNED  = 'returned',  # The package is en route to be returned to the sender, or has been returned successfully.
-    T_FAILURE   = 'failure',   # The carrier indicated that there has been an issue with the delivery. This can happen for various reasons and depends on the carrier. This status does not indicate a technical, but a delivery issue.
+    T_UNKNOWN   = 'UNKNOWN',   # The package has not been found via the carrier's tracking system, or it has been found but not yet scanned by the carrier.
+    T_TRANSIT   = 'TRANSIT',   # The package has been scanned by the carrier and is in transit.
+    T_DELIVERED = 'DELIVERED', # The package has been successfully delivered.
+    T_RETURNED  = 'RETURNED',  # The package is en route to be returned to the sender, or has been returned successfully.
+    T_FAILURE   = 'FAILURE',   # The carrier indicated that there has been an issue with the delivery. This can happen for various reasons and depends on the carrier. This status does not indicate a technical, but a delivery issue.
   ]
 
   has_paper_trail(
