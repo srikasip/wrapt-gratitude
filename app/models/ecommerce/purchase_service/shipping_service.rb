@@ -256,7 +256,7 @@ class PurchaseService::ShippingService
     end
   end
 
-  def self.update_shipping_status!(shippo_data)
+  def self.update_shipping_status!(shippo_data, do_gift_count_update: true)
     shipping_label = ShippingLabel.find_by(tracking_number: shippo_data.dig('tracking_number'))
 
     shipping_label.update_attributes({
@@ -272,10 +272,17 @@ class PurchaseService::ShippingService
       purchase_order.save!
 
       gift = purchase_order.gift
-      gift.gifts_sent += purchase_order.quantity
-      gift.save!
+      giftee = purchase_order.profile
+      customer_order = purchase_order.customer_order
 
-      if customer_order.purchase_orders.all?(&:shipped?)
+      if do_gift_count_update
+        rli = purchase_order.line_items.flat_map(&:related_line_items)
+        gifts_sent = rli.sum(&:quantity)
+        giftee.gifts_sent += gifts_sent
+        gift.save!
+      end
+
+      if customer_order.purchase_orders.all?(&:shipped_or_better?)
         customer_order.status = SHIPPED
         customer_order.save!
       end
