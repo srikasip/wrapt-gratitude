@@ -61,7 +61,7 @@
         %strong Shipping Information:
         %br
         %strong ETA:
-        =@shipping_label.eta || 'N/A'
+        =format_datetime(@shipping_label.eta, with_zone:true) || 'N/A'
         %br
         %strong Carrier:
         =@shipping_label.carrier
@@ -76,6 +76,12 @@
         %br
         %strong Tracking Updated At:
         = format_date(@shipping_label.tracking_updated_at)
+        %br
+        %strong Shipped On:
+        = format_date(@shipping_label.shipped_on)
+        %br
+        %strong Delivered On:
+        = format_date(@shipping_label.delivered_on)
   - else
     .col-sm-3
       %p

@@ -2,8 +2,19 @@ class MyAccount::GifteesController < MyAccount::BaseController
   include PjaxModalController
 
   helper :address
+  helper :survey_question_responses
 
   before_action :_load_giftee, only: [:edit, :update]
+
+  def new
+    @survey ||= Survey.published.first
+    first_question = if @survey.sections.any?
+      @survey.sections.first.questions.first
+    else
+      @survey.questions.first
+    end
+    @question_response = SurveyQuestionResponse.new survey_question: first_question
+  end
 
   def index
     @giftees = current_user.owned_profiles.well_ordered.page(params[:page])

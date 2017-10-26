@@ -59,6 +59,9 @@ class CustomerOrder < ApplicationRecord
 
   define_method(:to_service)                   { PurchaseService.new(cart_id: self.cart_id) }
 
+  define_method(:uncharged_gift_wrapt_fee_in_dollars)         { line_items.sum(&:quantity) * 8 }
+  define_singleton_method(:uncharged_curation_fee_in_dollars) { 15 }
+
 
   def _set_submitted_date
     if self.status_changed?(to: SUBMITTED)

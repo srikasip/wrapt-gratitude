@@ -16,7 +16,7 @@
               %table{style: "border: none; margin: 0; padding:0"}
                 %tr
                   %td{style: "text-align: left; vertical-align: middle; width: 88px;"}
-                    - url = @purchase_order.gift.primary_gift_image.image.url(:small)
+                    - url = @purchase_order.gift.primary_gift_image&.image&.url(:small)
                     %img{src: url, style: "width: 88px", alt: @purchase_order.gift_name}
                   %td{style: "text-align: left; vertical-align: middle; padding-left: 4px;"}
                     %p{style: "padding-bottom: 0; font-size: 16px; font-weight: normal; font-family: Helvetica, Arial, sans-serif;  color: #4D4C4D;"}

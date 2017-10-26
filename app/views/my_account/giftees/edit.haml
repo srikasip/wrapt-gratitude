@@ -15,7 +15,7 @@
           .col-xs-12.col-sm-6
             = af.input :city
           .col-xs-5.col-sm-2
-            = af.input :state
+            = af.input :state, collection: UsaState.abbreviations
           .col-xs-7.col-sm-4
             = af.input :zip
   = f.submit 'SAVE CHANGES', class: 'btn btn-block btn-primary'

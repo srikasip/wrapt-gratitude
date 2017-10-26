@@ -10,7 +10,7 @@ class PurchaseService
 
   attr_accessor :cart_id, :customer, :desired_gifts, :customer_order,
     :profile, :shipping_label,
-    :purchase_orders, :charging_service, :shipping_service
+    :purchase_orders, :charging_service, :shipping_service, :tax_service
 
   delegate :our_charge, to: :charging_service, prefix: false
 
@@ -26,6 +26,7 @@ class PurchaseService
     self.shipping_service = ShippingService.new(cart_id: cart_id, customer_order: customer_order)
     self.customer       ||= self.customer_order&.user
     self.profile        ||= self.customer_order&.profile
+    self.tax_service      = TaxService.new(cart_id: self.cart_id, customer_order: self.customer_order)
   end
 
   def self.find_existing_cart_or_initialize(profile:,user:)
@@ -237,7 +238,8 @@ class PurchaseService
   def _unconditional_charge!
     Rails.logger.info "Charging cart ID #{cart_id}. Also adjusting inventory."
     charging_service.charge!({
-      before_hook: -> { _adjust_inventory! }
+      before_hook: -> { _adjust_inventory! },
+      after_hook: -> { self.tax_service.reconcile! }
     })
   end
 
@@ -379,9 +381,9 @@ class PurchaseService
       })
     end
 
-    tax_service = TaxService.new(cart_id: self.cart_id, customer_order: co)
-    tax_service.estimate!
-    co.taxes_in_cents = tax_service.tax_in_cents
+    self.tax_service = TaxService.new(cart_id: self.cart_id, customer_order: co)
+    self.tax_service.estimate!
+    co.taxes_in_cents = self.tax_service.tax_in_cents
 
     co.total_to_charge_in_cents = co.subtotal_in_cents + co.shipping_in_cents + co.handling_in_cents + co.taxes_in_cents
 

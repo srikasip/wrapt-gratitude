@@ -41,6 +41,7 @@ describe ShippoTrackingWebhook do
 
   it "should function" do
     FactoryGirl.create :customer_order, :with_shipping_label
+    ShippingLabel.update_all(tracking_number: '123')
 
     webhook = ShippoTrackingWebhook.new(params)
     webhook.run!

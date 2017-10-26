@@ -12,8 +12,7 @@
         = link_to my_account_giftees_path() do
           = option[0]
 - page_header_action = capture_haml do
-  = link_to 'New Giftee', 'javascript:alert("TODO");', class: 'btn btn-sm btn-primary uppercase hidden-xs'
-
+  = link_to 'New Giftee', new_my_account_giftee_path, class: 'btn btn-sm btn-primary uppercase hidden-xs', data: {loads_in_pjax_modal: true}
 .row
   .col-xs-12
     = render 'my_account/page_header', title: 'My Giftees', title_action: title_action, page_header_action: page_header_action

@@ -15,6 +15,9 @@ vendor.assign_attributes({
 })
 vendor.save!
 
+cat = ProductCategory.first
+subcat = cat.children.first
+
 product = vendor.products.where(title: 'Test Product').first_or_initialize
 product.assign_attributes({
   :description            => "Test product",
@@ -25,8 +28,8 @@ product.assign_attributes({
   :units_available        => 2,
   :vendor_sku             => "GR01",
   :notes                  => "Test product. Do not delete. This is used to test shipping and credit card charging.",
-  :product_category_id    => 5,
-  :product_subcategory_id => 29,
+  :product_category_id    => cat.id,
+  :product_subcategory_id => subcat.id,
   :weight_in_pounds       => 0.50
 })
 product.save!
@@ -36,8 +39,8 @@ gift.assign_attributes({
   :description                    => "Test gift. Do not delete. This is used to test shipping and credit card charging.",
   :calculate_cost_from_products   => true,
   :calculate_price_from_products  => true,
-  :product_category_id            => 5,
-  :product_subcategory_id         => 29,
+  :product_category_id            => cat.id,
+  :product_subcategory_id         => subcat.id,
   :source_product                 => product,
   :featured                       => false,
   :calculate_weight_from_products => true,
