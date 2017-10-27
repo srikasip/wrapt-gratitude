@@ -53,6 +53,12 @@ class ProgressBarViewModel
     not_complete = (required_fields.select do |field|
       @customer_order.send(field).nil?
     end.any?)
+    if step == :gift_wrapt
+      if @current_step != :shipping
+        has_address = @customer_order.ship_street1.present? || @customer_order.address_id.present?
+        not_complete = !has_address
+      end
+    end
     if step == :payment
       not_complete = !@customer_order.charge.present?
     end
@@ -81,6 +87,12 @@ class ProgressBarViewModel
       end.any?
     else
       disabled = false
+    end
+    if step == :shipping && !step_complete?(:gift_wrapt)
+      disabled = true
+      if step_active?(step)
+        disabled = false
+      end
     end
     if step == :review
       disabled = !@customer_order.charge.present?
