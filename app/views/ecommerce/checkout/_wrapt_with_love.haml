@@ -22,7 +22,7 @@
 - if !edit && customer_order.include_note? && customer_order.gift_wrapt?
   .collapse#wrapt-with-love__note.pa1
     .co-detail__label Your Note:
-    .co-detail__item
+    .co-detail__item{style: 'white-space: pre;'}
       - if customer_order.note_content.present?
         %p= customer_order.note_content
       - else
