@@ -4,7 +4,8 @@ Your gift for <%= @customer_order.profile_name %> has shipped.
 
 <%= @purchase_order.gift_name %>
 
-(Shipping Address)
+<%= @customer_order.recipient_name %>
+<%= format_address(object: @customer_order, prefix: :ship) %>
 
 <% if @customer_order.purchase_orders.count > 1 %>
 Each of our gifts comes from different artists. Therefore, you will receive
@@ -13,3 +14,4 @@ ship.
 <% end %>
 
 See Order Details & Tracking here:
+<%= my_account_order_url(@customer_order) %>

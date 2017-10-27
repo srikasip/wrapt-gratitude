@@ -17,19 +17,16 @@ module ChargeConstants
     DECLINED                  = 'declined',
 
     AUTH_SUCCEEDED            = 'auth_succeeded',
-    CHARGE_SUCCEEDED          = 'charge_succeeded',
-    EMAILED_SUCCESS           = 'emailed_success',
+    CHARGE_SUCCEEDED          = 'charge_succeeded'
   ]
 
   AUTHED_OKAY_STATES = [
     AUTH_SUCCEEDED,
-    CHARGE_SUCCEEDED,
-    EMAILED_SUCCESS
+    CHARGE_SUCCEEDED
   ]
 
   CHARGED_STATES = [
-    CHARGE_SUCCEEDED,
-    EMAILED_SUCCESS
+    CHARGE_SUCCEEDED
   ]
 
   GOOD_STRIPE_STATUSES = [

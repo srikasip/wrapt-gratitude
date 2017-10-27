@@ -4,8 +4,7 @@ An order has come through on wrapt.com. Please follow this link:
 
 <%= ecommerce_vendor_confirmation_url(@purchase_order.vendor_token) %>
 
-to tell us if you can or cannot fulfill this order. Shipping information can be
-found there, too.
+to review, confirm availability, accept the order, and get a shipping label.
 
 <% @purchase_order.line_items.each do |line_item| %>
   <% product = line_item.orderable %>
