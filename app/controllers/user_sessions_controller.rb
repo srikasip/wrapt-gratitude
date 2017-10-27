@@ -13,7 +13,7 @@ class UserSessionsController < ApplicationController
       if params[:return_to].present?
         redirect_to params[:return_to]
       else
-        redirect_back fallback: default_location_for_user(user)
+        redirect_back fallback_location: default_location_for_user(user)
       end
     else
       @user_session.errors.add :password, 'Sorry, that password isn\'t correct'
@@ -39,11 +39,15 @@ class UserSessionsController < ApplicationController
   end
 
   private def user_session_params
-    params.require(:user_session).permit(
-      :email,
-      :password,
-      :remember
-    )
+    begin
+      params.require(:user_session).permit(
+        :email,
+        :password,
+        :remember
+      )
+    rescue ActionController::ParameterMissing #, Exception
+      flash.now[:alert] = 'Sorry, but there was a problem with your browser'
+      return {email: '', password: ''}
+    end
   end
-
 end
