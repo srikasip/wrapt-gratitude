@@ -2,7 +2,7 @@
 - gr = locals[:gift_recommendation]
 .gr-carousel__gift.clearfix
   .gr-carousel__gift-image
-    - gift_images = load_gift_image_carousel_data(gift.gift_images)
+    - gift_images = load_gift_image_carousel_data(gift.carousel_images)
     = carousel(carousel: gift_images, unique_carousel_name: 'gr-image-carousel', slide_content_singular: 'image', container:'.gr-carousel')
   .gr-carousel__gift-content.pb2.pl2.pt1.pr1
     .pull-right.text-right.pb1
