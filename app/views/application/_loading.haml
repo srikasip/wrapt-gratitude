@@ -1,13 +1,4 @@
-.app-loading__container
+.app-loading__container{style: hidden ? 'display:none' : ''}
   = image_tag 'icons/loading.gif'
 
-= content_for :page_js do
-  :javascript
-    $(document).ready(function() {
-      var loading = $('.app-loading__container');
-      setTimeout(function() {
-        loading.fadeOut('slow', function() {
-          $(this).addClass('hidden');
-        });
-      }, 5000)
-    });
+  

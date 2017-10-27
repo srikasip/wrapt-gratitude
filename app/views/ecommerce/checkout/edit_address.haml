@@ -31,10 +31,14 @@
               = next_button_text
 
   = render "debug", customer_order: @customer_order
-
+= render 'application/loading', hidden: true
 - content_for :page_js do
   :javascript
     $(document).ready(function() {
+
+      $('form').on('submit', function(e) {
+        $('.app-loading__container').show();
+      })
 
       App.ShowSelectAddress('customer_order', 'ship_to', 'ship_to_customer', true, '.j-select-my-address')
 

@@ -30,7 +30,17 @@
           = form.submit 'View Gift Recommendations'.upcase, class: 'btn btn-primary btn-sm btn-full-width'
 
 - if @render_loading_spinner
-  = render 'application/loading'
+  = render 'application/loading', hidden: false
+  = content_for :page_js do
+    :javascript
+      $(document).ready(function() {
+        var loading = $('.app-loading__container');
+        setTimeout(function() {
+          loading.fadeOut('slow', function() {
+            $(this).addClass('hidden');
+          });
+        }, 5000)
+      });
 = content_for :page_js do
   :javascript
     new App.PasswordRevealer()
