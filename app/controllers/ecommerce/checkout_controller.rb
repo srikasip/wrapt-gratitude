@@ -136,6 +136,11 @@ class Ecommerce::CheckoutController < ApplicationController
 
   def edit_review
     @checkout_step = :review
+
+    if @customer_purchase.need_shipping_calculated
+      @shipping_recalculated = true
+      @customer_purchase.update_order_totals!
+    end
     _load_progress_bar
   end
 

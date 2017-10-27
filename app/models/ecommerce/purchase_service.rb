@@ -170,7 +170,7 @@ class PurchaseService
     self.shipping_service.pick_shipping!(shippo_token)
 
     _safely do
-      _update_order_totals!
+      update_order_totals!
     end
   end
 
@@ -259,6 +259,52 @@ class PurchaseService
     purchase_orders.okay_to_fulfill.count == purchase_orders.count
   end
 
+  delegate :need_shipping_calculated, to: :customer_order
+
+  def update_order_totals!
+    co = self.customer_order
+    shipping_choice = co.shipping_choice
+
+    co.subtotal_in_cents        = 0
+    co.handling_in_cents        = 0
+    co.handling_cost_in_cents   = 0
+    co.shipping_in_cents        = 0
+    co.shipping_cost_in_cents   = 0
+    co.total_to_charge_in_cents = 0
+
+    co.line_items.each do |line_item|
+      co.subtotal_in_cents += line_item.total_price_in_dollars * 100
+    end
+
+    co.purchase_orders.each do |po|
+      vendor = po.vendor
+      rate = ShippingService.find_rate(rates: po.shipment.rates, shipping_choice: shipping_choice, vendor: vendor)
+      s_and_h = ShippingService.get_shipping_and_handling_for_one_purchase_order(rate: rate, vendor: vendor)
+
+      co.need_shipping_calculated = false
+
+      co.shipping_cost_in_cents += s_and_h.shipping_cost_in_cents
+      co.handling_cost_in_cents += s_and_h.handling_cost_in_cents
+      co.handling_in_cents      += s_and_h.handling_in_cents
+      co.shipping_in_cents      += s_and_h.shipping_in_cents
+
+      po.update_attributes({
+        shipping_cost_in_cents: s_and_h.shipping_cost_in_cents,
+        shipping_in_cents: s_and_h.shipping_in_cents,
+        handling_cost_in_cents: s_and_h.handling_cost_in_cents,
+        handling_in_cents: s_and_h.handling_in_cents
+      })
+    end
+
+    self.tax_service = TaxService.new(cart_id: self.cart_id, customer_order: co)
+    self.tax_service.estimate!
+    co.taxes_in_cents = self.tax_service.tax_in_cents
+
+    co.total_to_charge_in_cents = co.subtotal_in_cents + co.shipping_in_cents + co.handling_in_cents + co.taxes_in_cents
+
+    co.save!
+  end
+
   private
 
   def _unconditional_charge!
@@ -311,7 +357,8 @@ class PurchaseService
       ship_city:    '',
       ship_zip:     '',
       ship_state:   '',
-      ship_country: 'US'
+      ship_country: 'US',
+      need_shipping_calculated: true
     })
 
     self.customer_order.save!
@@ -373,48 +420,6 @@ class PurchaseService
     end
 
     self.customer_order.purchase_orders.reload
-  end
-
-  def _update_order_totals!
-    co = self.customer_order
-    shipping_choice = co.shipping_choice
-
-    co.subtotal_in_cents        = 0
-    co.handling_in_cents        = 0
-    co.handling_cost_in_cents   = 0
-    co.shipping_in_cents        = 0
-    co.shipping_cost_in_cents   = 0
-    co.total_to_charge_in_cents = 0
-
-    co.line_items.each do |line_item|
-      co.subtotal_in_cents += line_item.total_price_in_dollars * 100
-    end
-
-    co.purchase_orders.each do |po|
-      vendor = po.vendor
-      rate = ShippingService.find_rate(rates: po.shipment.rates, shipping_choice: shipping_choice, vendor: vendor)
-      s_and_h = ShippingService.get_shipping_and_handling_for_one_purchase_order(rate: rate, vendor: vendor)
-
-      co.shipping_cost_in_cents += s_and_h.shipping_cost_in_cents
-      co.handling_cost_in_cents += s_and_h.handling_cost_in_cents
-      co.handling_in_cents      += s_and_h.handling_in_cents
-      co.shipping_in_cents      += s_and_h.shipping_in_cents
-
-      po.update_attributes({
-        shipping_cost_in_cents: s_and_h.shipping_cost_in_cents,
-        shipping_in_cents: s_and_h.shipping_in_cents,
-        handling_cost_in_cents: s_and_h.handling_cost_in_cents,
-        handling_in_cents: s_and_h.handling_in_cents
-      })
-    end
-
-    self.tax_service = TaxService.new(cart_id: self.cart_id, customer_order: co)
-    self.tax_service.estimate!
-    co.taxes_in_cents = self.tax_service.tax_in_cents
-
-    co.total_to_charge_in_cents = co.subtotal_in_cents + co.shipping_in_cents + co.handling_in_cents + co.taxes_in_cents
-
-    co.save!
   end
 
   def _email_vendors_the_acknowledgement_link!
