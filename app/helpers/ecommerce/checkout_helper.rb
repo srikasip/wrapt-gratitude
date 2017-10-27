@@ -1,10 +1,10 @@
 module Ecommerce::CheckoutHelper
 
   def show_top_nav?
-    false
+    action_name == 'finalize'
   end
 
   def show_checkout_nav?
-    true
+    action_name != 'finalize'
   end
 end
