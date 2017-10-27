@@ -16,6 +16,13 @@
   stroke-width: 20px;
   stroke: $blue-001;
 }
+.navbar-static-top__icon-caret-right {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  stroke: $gray-008;
+  margin-left: 10px;
+}
 a:hover .navbar-static-top__icon-circle,
 a:active .navbar-static-top__icon-circle {
   display: inline-block;

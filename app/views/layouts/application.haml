@@ -32,7 +32,9 @@
         = render 'breadcrumbs'
         - if @show_account_sub_nav
           = render 'my_account/sub_nav'
-        = yield
+      - if show_checkout_nav?
+        = render 'ecommerce/checkout/nav'
+      = yield
     = yield :after_wrapper
 
     %footer.footer
