@@ -45,14 +45,22 @@ class SurveyQuestionResponsesController < ApplicationController
     giftee_id = params[:giftee_id] || session[:giftee_id]
 
     if current_user.present?
-      @profile = current_user.owned_profiles.find giftee_id
+      @profile = current_user.owned_profiles.find_by(id: giftee_id)
     end
 
     # If you started a quiz anonymously, this is how you find the profile. A
-    # twist is that if you log instead of creating an account at the end, we
+    # twist is that if you log in instead of creating an account at the end, we
     # have an anonymous profile, yet we can't use current_user.owned_profiles
     # because it hasn't been associated yet with the user.
     @profile ||= Profile.where(owner_id: nil).find giftee_id
+
+    # Maybe you started a giftee anonymously and logged in mid-quiz. We need to
+    # connect the anonymous giftee to your account. Yes, it's possible to steal
+    # an anonymous giftee somebody else started, but so what?
+    if current_user.present? && @profile.owner.nil?
+      @profile.owner = current_user
+      @profile.save!
+    end
 
     session[:giftee_id] = @profile.id
   end

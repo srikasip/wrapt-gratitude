@@ -21,6 +21,10 @@ class SurveyResponseCompletionsController < ApplicationController
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
   end
 
+  def create_via_redirect
+    create
+  end
+
   def create
     user = \
       if require_invites?

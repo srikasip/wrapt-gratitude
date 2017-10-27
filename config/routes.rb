@@ -18,7 +18,11 @@ Rails.application.routes.draw do
     resources :giftees, only: [:index, :new, :create] do
       resources :surveys, only: :show, controller: 'survey_responses' do
         resources :questions, only: [:show, :update], controller: 'survey_question_responses'
-        resource :completion, only: [:show, :create], controller: 'survey_response_completions'
+        resource :completion, only: [:show, :create], controller: 'survey_response_completions' do
+          collection do
+            get :create_via_redirect
+          end
+        end
       end
     end
   end
