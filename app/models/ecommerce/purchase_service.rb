@@ -75,6 +75,18 @@ class PurchaseService
     @result
   end
 
+  def set_giftee_name!(params)
+    whitelisted_params = params.require(:customer_order).permit(profile: [:first_name, :last_name])['profile']
+
+    unless self.profile.update_attributes(whitelisted_params)
+      return false
+    end
+
+    if self.customer_order.shipping_to_giftee?
+      self.customer_order.update_attribute(:recipient_name, profile.name)
+    end
+  end
+
   def set_address!(params)
     _sanity_check!
 
@@ -84,6 +96,18 @@ class PurchaseService
 
     whitelisted_params = nil
     new_address = nil
+
+    if params['customer_order']['ship_to'] == 'ship_to_giftee'
+      self.customer_order.update_attributes({
+        recipient_name: self.profile.name,
+        shipping_to_giftee: true
+      })
+    else
+      self.customer_order.update_attributes({
+        recipient_name: self.customer.full_name,
+        shipping_to_giftee: false
+      })
+    end
 
     if params['customer_order']['address_id'] != 'new_address' && params['customer_order']['ship_to'] == 'ship_to_customer'
       address = self.customer.addresses.find(params['customer_order']['address_id'])
@@ -281,6 +305,7 @@ class PurchaseService
       user: self.customer,
       profile: self.profile,
       status: ORDER_INITIALIZED,
+      shipping_to_giftee: true,
       recipient_name: profile.name,
       ship_street1: '',
       ship_city:    '',

@@ -37,7 +37,7 @@ class PurchaseService::ShippingService
 
       co = self.customer_order
       shipment.address_to = {
-        name: co.profile.name,
+        name: co.recipient_name,
         street1: co.ship_street1,
         street2: co.ship_street2,
         street3: co.ship_street3,

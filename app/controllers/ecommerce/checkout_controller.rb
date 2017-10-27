@@ -33,12 +33,28 @@ class Ecommerce::CheckoutController < ApplicationController
         # loads in modal on order review page
         redirect_to action: :edit_review
       else
-        redirect_to action: :edit_address
+        redirect_to action: :edit_giftee_name
       end
     else
       flash.now[:notice] = "There was a problem saving your response."
       _load_progress_bar
       render :edit_gift_wrapt
+    end
+  end
+
+  def edit_giftee_name
+    @checkout_step = :shipping
+    _load_progress_bar
+  end
+
+  def save_giftee_name
+    @checkout_step = :shipping
+    if @customer_purchase.set_giftee_name!(params)
+      redirect_to action: :edit_address
+    else
+      flash.now[:notice] = "There was a problem saving your response."
+      _load_progress_bar
+      render :edit_giftee_name
     end
   end
 

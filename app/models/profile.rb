@@ -2,7 +2,7 @@
 # of an account profile (i.e. the normal usage of profile).
 
 class Profile < ApplicationRecord
-  validates :name, presence: true
+  validates :first_name, presence: true
 
   belongs_to :owner, class_name: 'User'
   has_many :addresses, as: :addressable
@@ -24,10 +24,14 @@ class Profile < ApplicationRecord
 
   accepts_nested_attributes_for :address
 
-  scope :well_ordered, -> { order('name asc') }
+  scope :well_ordered, -> { order('first_name asc, last_name asc') }
 
   def last_survey
     survey_responses.order('updated_at desc').first
+  end
+
+  def name
+    ([first_name, last_name].compact.join " ").strip
   end
 
   delegate :first_unanswered_response, to: :last_survey, prefix: false

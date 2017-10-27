@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171025173604) do
+ActiveRecord::Schema.define(version: 20171027164553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 20171025173604) do
     t.date     "submitted_on"
     t.integer  "ship_to",                  default: 0
     t.integer  "address_id"
+    t.boolean  "shipping_to_giftee",       default: true, null: false
     t.index ["address_id"], name: "index_customer_orders_on_address_id", using: :btree
     t.index ["profile_id"], name: "index_customer_orders_on_profile_id", using: :btree
     t.index ["user_id"], name: "index_customer_orders_on_user_id", using: :btree
@@ -412,7 +413,7 @@ ActiveRecord::Schema.define(version: 20171025173604) do
 
   create_table "profiles", force: :cascade do |t|
     t.string   "email"
-    t.string   "name"
+    t.string   "first_name"
     t.integer  "owner_id"
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
@@ -425,6 +426,7 @@ ActiveRecord::Schema.define(version: 20171025173604) do
     t.text     "recommendation_stats"
     t.date     "birthday"
     t.integer  "gifts_sent",                   default: 0,     null: false
+    t.string   "last_name",                    default: ""
     t.index ["created_at"], name: "index_profiles_on_created_at", using: :btree
     t.index ["recipient_invited_at"], name: "index_profiles_on_recipient_invited_at", using: :btree
   end
