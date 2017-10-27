@@ -16,7 +16,6 @@ class Tax::Transaction < ApplicationRecord
 
   def estimate!
     payload_object = Tax::TransactionPayload.new(customer_order)
-    payload_object.estimate = true
     self.api_request_payload = payload_object.to_hash
     self.api_response = client.create_transaction(payload_object.to_hash)
     _cache_estimation_results
@@ -48,7 +47,7 @@ class Tax::Transaction < ApplicationRecord
   end
 
   private def _cache_reconciliation_results
-    if api_response['error'].present?
+    if api_reconcile_response['error'].present?
       self.success = false
     else
       self.reconciled = true
