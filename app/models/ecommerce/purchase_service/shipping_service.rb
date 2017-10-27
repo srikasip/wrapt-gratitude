@@ -271,14 +271,16 @@ class PurchaseService::ShippingService
     })
 
     if shipping_label.shipped?
-      shipping_label.shipped_on ||= shipping_label.updated_at
+      shipping_label.shipped_on ||= shipping_label.tracking_updated_at
     elsif shipping_label.delivered?
-      shipping_label.delivered_on ||= shipping_label.updated_at
+      shipping_label.delivered_on ||= shipping_label.tracking_updated_at
     end
+
+    just_shipped = shipping_label.shipped_on_changed?(from: nil)
 
     shipping_label.save!
 
-    if shipping_label.shipped?
+    if just_shipped
       purchase_order = shipping_label.purchase_order
       purchase_order.status = SHIPPED
       purchase_order.save!
@@ -287,6 +289,7 @@ class PurchaseService::ShippingService
       giftee = purchase_order.profile
       customer_order = purchase_order.customer_order
 
+      # if statement just to ease testing. Too painful to set up
       if do_gift_count_update
         rli = purchase_order.line_items.flat_map(&:related_line_items)
         gifts_sent = rli.sum(&:quantity)
