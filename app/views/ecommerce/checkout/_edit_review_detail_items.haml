@@ -16,7 +16,7 @@
       words << number_to_currency(customer_order.combined_handling_in_dollars)
     = render 'ecommerce/checkout/edit_review_detail_item', header: 'Shipping Method', items: [words]
     - if @shipping_recalculated
-      %span.text-warning
+      %span{style: 'color: #F79970;'}
         Shipping was recalculated when the shipping address changed.
       = link_to "CHANGE SHIPPING", ecommerce_checkout_address_path
 
