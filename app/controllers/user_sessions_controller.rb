@@ -10,7 +10,11 @@ class UserSessionsController < ApplicationController
   def create
     @user_session = UserSession.new user_session_params.merge(controller: self)
     if login(@user_session.email.downcase, @user_session.password, @user_session.remember)
-      redirect_to params[:return_to] || default_location_for_user(user)
+      if params[:return_to].present?
+        redirect_to params[:return_to]
+      else
+        redirect_back fallback: default_location_for_user(user)
+      end
     else
       @user_session.errors.add :password, 'Sorry, that password isn\'t correct'
       render :new

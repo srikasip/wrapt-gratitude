@@ -1,20 +1,20 @@
 module Tax
   class TransactionPayload
-    attr_accessor :customer_order, :estimate
+    attr_accessor :customer_order
 
     delegate :user, to: :customer_order, prefix: false
     delegate :purchase_orders, to: :customer_order, prefix: false
 
     def initialize(customer_order)
       self.customer_order = customer_order
-      self.estimate = true
       raise "Must have line items to compute taxes" unless _lines.present?
     end
 
     def to_hash
       # SalesOrders aren't for tax reporting. SalesInvoice can eventually be
       # reconciled and made an offical part of the tax history.
-      transaction_type = self.estimate ? 'SalesOrder' : 'SalesInvoice'
+      transaction_type = 'SalesInvoice'
+
       user = customer_order.user
 
       {
@@ -51,7 +51,7 @@ module Tax
             {
               "amount": po.shipping_cost_in_dollars,
               "taxCode": Tax::Code.shipping.code,
-              "description": "shipping cost to wrapt",
+              "description": "Shipping cost to wrapt",
               "addresses": {
                 "shipFrom": {
                   "line1": vendor.street1,
