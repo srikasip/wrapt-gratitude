@@ -1,7 +1,8 @@
 module ApplicationHelper
 
-  def load_home_page_carousel_data
-    examples = GiftExamples.new().examples.map do |example|
+  def load_home_page_carousel_data(stories_to_show)
+    # examples = GiftExamples.new().examples.map do |example|
+    examples = GiftExamples.new().send(stories_to_show).map do |example|
       {
         slide_partial: 'home/wrapt_story',
         slide_locals: example,

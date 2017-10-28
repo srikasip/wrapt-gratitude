@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   end
 
   get 'science-of-gifting', to: 'static_pages#science_of_gifting', as: :science_of_gifting
+  get 'rewrapt', to: 'static_pages#rewrapt', as: :rewrapt
 
   resources :invitation_requests, only: :create
 

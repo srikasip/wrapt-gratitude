@@ -66,7 +66,8 @@ sup:last-child {
 }
 
 .sg-content,
-.sg-quote {
+.sg-quote,
+.rewrapt-content {
   color: $gray-007;
   text-align: center;
   margin: 0px auto;
@@ -84,6 +85,26 @@ sup:last-child {
   }
   p:last-child {
     margin-bottom: 0px;
+  }
+}
+
+.rewrapt-content {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.rewrapt-carousel__row {
+  border-bottom: 2px solid #e2e2e2;
+  margin-top: 60px; 
+  margin-bottom: 180px;
+  padding-bottom: 300px;
+}
+
+.rewrapt-carousel {
+  // padding-bottom: 20px;
+  // margin-bottom: 115px;
+  .wrapt-carousel__indicators {
+    max-width: 632px;
   }
 }
 

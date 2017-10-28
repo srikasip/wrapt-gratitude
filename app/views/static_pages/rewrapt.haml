@@ -1,0 +1,29 @@
+.container
+  .row
+    .col-xs-12.text-center
+      %h1.about-page__header.fancy
+        ReWrapt
+      %p.about-page__tagline
+        Did you ever get a gift that was made extra special by the little story behind it?
+  .row
+    .col-xs-12.col-md-10.col-md-offset-1.text-center
+      .rewrapt-content
+        %p
+          We call this ReWrapt – a new way of thinking about what makes a gift not just good, but great. Sometimes it’s the story of the Maker, the materials or the artisan craft that inspires us and makes it a very special gift. 
+        %p
+          Each item in the Wrapt collection is chosen with this in mind. 
+        %p
+          We talk to artists, makers and social entrepreneurs whose gifts offer stories that deem them Wrapt ‘worthy’ or full of  little nuggets of awesomeness. 
+        %p
+          We hope you (and your giftees) agree. Let us know!  (info@wrapt.com)
+  .row.rewrapt-carousel__row
+    .col-xs-12
+      .rewrapt-carousel
+        = carousel(carousel: load_home_page_carousel_data(:rewrapt_stories), unique_carousel_name: 'hgec-carousel', slide_content_singular: 'example')
+
+= render 'start_quiz'
+
+- content_for :page_js do
+  = render '/application/carousel_js'
+
+
