@@ -1,9 +1,6 @@
 class GiftExamples
 
-  # attr_accessor :examples
-
   def initialize
-    # @examples = [EXAMPLE_1, EXAMPLE_2, EXAMPLE_3]
   end
 
   def home_page_stories
@@ -30,8 +27,10 @@ class GiftExamples
   
   }
 
+  # file size too big
   EXAMPLE_2 = {
-    image: 'gift-example__ford.jpg',
+    # image: 'gift-example__ford.jpg',
+    image: '',
     title: 'Kristin Ford Jewelry',
     tagline: 'Kristin Ford believes in the energetic and healing power of gemstones.',
     details: [
@@ -40,9 +39,9 @@ class GiftExamples
       "A portion of all sales is donated locally, nationally and internationally."
     ],
     labels: [
-      {icon: 'icon-source-usa', text: 'made in US'},
+      {icon: 'icon-source-handmade', text: 'handmade'},
       {icon: 'icon-source-integrity', text: 'made with integrity'},
-      {icon: 'icon-source-sustainable', text: 'sustainable'}
+      {icon: 'icon-source-usa', text: 'made in US'}
     ]
   }
 
@@ -86,8 +85,8 @@ class GiftExamples
     ],
     labels: [
       {icon: 'icon-source-organic', text: 'organic'},
-      {icon: 'icon-source-women-girls', text: 'supporting women & girls'},
-      {icon: 'icon-source-sustainable', text: 'sustainable'}
+      {icon: 'icon-source-sustainable', text: 'sustainable'},
+      {icon: 'icon-source-fair-trade', text: 'Fair Trade'}
     ]
   }
 
@@ -106,8 +105,10 @@ class GiftExamples
     ]
   }
 
+  # file size too big
   EXAMPLE_7 = {
-    image: 'gift-example__indigo.jpg',
+    # image: 'gift-example__indigo.jpg',
+    image: '',
     title: 'Indigo Handloom',
     tagline: 'Indigo Handloom scarves are made from 100% certified organic, non- GMO cotton.',
     details: [
@@ -115,9 +116,9 @@ class GiftExamples
       "Indigo Handloom has worked with more than 500 weavers to preserve this ancient art form, enabling weavers to provide for their families with fair wages, good working conditions and zero tolerance for child labor. "
     ],
     labels: [
-      {icon: 'icon-source-organic', text: 'organic'},
-      {icon: 'icon-source-women-girls', text: 'supporting women & girls'},
-      {icon: 'icon-source-ancient-tradition', text: 'ancient art form'}
+      {icon: 'icon-source-sustainable', text: 'sustainable'},
+      {icon: 'icon-source-fair-trade', text: 'Fair Trade'},
+      {icon: 'icon-source-women-girls', text: 'supporting women & girls'}
     ]
   }
 

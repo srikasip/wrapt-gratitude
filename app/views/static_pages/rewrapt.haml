@@ -15,7 +15,10 @@
         %p
           We talk to artists, makers and social entrepreneurs whose gifts offer stories that deem them Wrapt ‘worthy’ or full of  little nuggets of awesomeness. 
         %p
-          We hope you (and your giftees) agree. Let us know!  (info@wrapt.com)
+          We hope you 
+          = current_user.present? ? (link_to '(and your giftees)', my_account_giftees_path) : '(and your giftees)'
+          agree. 
+          = mail_to 'info@wrapt.com', 'Let us know!'
   .row.rewrapt-carousel__row
     .col-xs-12
       .rewrapt-carousel

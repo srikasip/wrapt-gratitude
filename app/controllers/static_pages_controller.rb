@@ -5,7 +5,7 @@ class StaticPagesController < ApplicationController
   helper FeatureFlagsHelper
   helper CarouselHelper
 
-  before_action :load_survey, only: [:science_of_gifting, :rewrapt]
+  before_action :load_survey, only: [:science_of_gifting, :rewrapt, :about]
 
   def science_of_gifting
     @boxes = [

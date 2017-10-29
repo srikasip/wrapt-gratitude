@@ -1,8 +1,7 @@
 module ApplicationHelper
 
   def load_home_page_carousel_data(stories_to_show)
-    # examples = GiftExamples.new().examples.map do |example|
-    examples = GiftExamples.new().send(stories_to_show).map do |example|
+    examples = GiftExamples.new.send(stories_to_show).map do |example|
       {
         slide_partial: 'home/wrapt_story',
         slide_locals: example,
@@ -24,6 +23,8 @@ module ApplicationHelper
       links << [my_account_profile_path, 'My Account', :default]
     end
     links << [science_of_gifting_path, 'The Science', :default]
+    links << [rewrapt_path, 'ReWrapt', :default]
+    links << [about_path, 'About', :default]
     links << ['#', 'Gift Basket', :gift_basket] if enable_gift_basket?
     if current_user
       links << [user_session_path, 'Sign Out', :default]

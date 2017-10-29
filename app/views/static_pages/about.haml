@@ -1,0 +1,42 @@
+.container
+  .row
+    .col-xs-12.col-md-10.col-md-offset-1.text-center
+      %h1.about-page__header.fancy
+        About Wrapt
+  .about-content
+    .row
+      .col-xs-12.col-md-10.col-md-offset-1
+        .about-page__note
+          %p.about-page__tagline We're a little old fashioned.
+          %p 
+            We think the best gifts come from the 
+            = embedded_svg('icon-wrapt-heart', class: 'icon')
+            = "."
+          %p 
+            That’s why we created Wrapt, so we could help more people send gifts from the 
+            = embedded_svg('icon-wrapt-heart', class: 'icon')
+            ="."
+          %p 
+            A Wrapt gift means someone thought about you, what makes you special and chose a gift to reflect who you are.
+          %p 
+            Our gifts are handmade with 
+            = embedded_svg('icon-wrapt-heart', class: 'icon') 
+            by artists who are passionate about their work 
+            = link_to '(see more at wrapt.com/rewrapt).', rewrapt_path
+          %p 
+            We hope you love your Wrapt gift as much as we enjoyed sending it to you.
+          %p 
+            With 
+            = embedded_svg('icon-wrapt-heart', class: 'icon')
+            , Wrapt
+    .row
+      .col-xs-12.col-md-10.col-md-offset-1
+        .row
+          .col-xs-12.col-sm-6.about-page__mv
+            %h4.about-page__header Our Mission
+            %p to promote positive connection between people through authentic gift-giving.
+          .col-xs-12.col-sm-6.about-page__mv
+            %h4.about-page__header Our Vision
+            %p to create a socially conscious brand that connects people with love.
+
+= render 'start_quiz'
