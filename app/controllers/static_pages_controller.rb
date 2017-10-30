@@ -43,6 +43,10 @@ class StaticPagesController < ApplicationController
   end
 
   def page_404
+    respond_to do |f|
+      f.html
+      f.xml { render(xml: {status: 404, message: 'Page not found'}) }
+    end
   end
 
   def login_required?
