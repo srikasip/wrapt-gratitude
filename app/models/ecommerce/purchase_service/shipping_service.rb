@@ -290,14 +290,15 @@ class PurchaseService::ShippingService
 
     shipping_label.save!
 
+    purchase_order = shipping_label.purchase_order
+    customer_order = purchase_order.customer_order
+
     if just_shipped
-      purchase_order = shipping_label.purchase_order
       purchase_order.status = SHIPPED
       purchase_order.save!
 
       gift = purchase_order.gift
       giftee = purchase_order.profile
-      customer_order = purchase_order.customer_order
 
       # if statement just to ease testing. Too painful to set up
       if do_gift_count_update
@@ -314,9 +315,13 @@ class PurchaseService::ShippingService
 
       CustomerOrderMailer.order_shipped(purchase_order.id).deliver_later
     elsif just_delivered
-      purchase_order = shipping_label.purchase_order
       purchase_order.status = RECEIVED
       purchase_order.save!
+
+      if customer_order.purchase_orders.all?(&:received?)
+        customer_order.status = RECEIVED
+        customer_order.save!
+      end
     end
   end
 

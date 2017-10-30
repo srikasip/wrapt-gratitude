@@ -14,7 +14,7 @@ module OrdersHelper
       words.join('<br>').html_safe
     when RECEIVED
       words = customer_order.shipping_labels.map do |shipping_label|
-        "Delivered on #{format_date(shipping_label.received_on)}"
+        "Delivered on #{format_date(shipping_label.delivered_on)}"
       end
       words.join('<br>').html_safe
     when CANCELLED           then "Cancelled"
