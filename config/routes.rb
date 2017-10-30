@@ -136,6 +136,9 @@ Rails.application.routes.draw do
       end
     end
     resources :gifts do
+      member do
+        post :add_to_recommendations
+      end
       resources :products, only: [:index, :create, :destroy], controller: 'gift_products'
       resources :images, only: [:index, :new, :create, :destroy], controller: 'gift_images' do
         member { post 'make_primary' }
