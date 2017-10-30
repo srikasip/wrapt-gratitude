@@ -101,7 +101,7 @@ module OrderFactory
 
       Product.where('units_available < 3').update_all('units_available = 10')
 
-      Profile.where('name is null').update_all("name = 'Karen'")
+      Profile.where('first_name is null').update_all("first_name = 'Karen'")
 
       Gift.preload(:gift_parcels => :gift).find_each do |gift|
         if gift.pretty_parcel.blank?
@@ -239,7 +239,7 @@ module OrderFactory
     customer_purchase.authorize!
 
     unless customer_purchase.card_authorized?
-      raise "A card auth failed due to a declined card"
+      return
     end
 
     # All the vendors acknowledge via emails and click-through to a page where they say it's okay.
