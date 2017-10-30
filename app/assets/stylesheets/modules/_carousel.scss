@@ -362,17 +362,33 @@ $gr-carousel-nav__width: 82.5px;
   }
 }
 
+.gr-carousel__indicator {
+  @media(max-width: $screen-xs-max) {
+    position: relative;
+  }
+}
+
 .gr-carousel__indicator img {
   width: 100%;
   vertical-align: top;
   @media(max-width: $screen-xs-max) {
     min-width: 120px;
+    position: absolute;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
   }
 }
 .gr-carousel__indicator img.orientation-portrait {
   -webkit-transform: translateY(-25%);
   -ms-transform: translateY(-25%);
   transform: translateY(-25%);
+  @media(max-width: $screen-xs-max) {
+    -webkit-transform: translateX(-50%) translateY(-25%);
+    -ms-transform: translateX(-50%) translateY(-25%);
+    transform: translateX(-50%) translateY(-25%);
+  }
 }
 
 .gr-carousel__sm-nav-link {
