@@ -15,7 +15,7 @@ class GiftExamples
   EXAMPLE_1 = {
     image: 'gift-example__lesouk.jpg',
     title: 'Le Souk Ceramique',
-    tagline: 'Handmade dishes and olive wood products, keeping alive an ancient Mediterranean tradition alive.',
+    tagline: 'Handmade dishes and olive wood products, keeping an ancient Mediterranean tradition alive.',
     details: [
       'Established by an American after living in Tunisia for decades, today Le Souk is a joint venture that supports 60 extended families that are able to live on fair wages, send their children to school and continue their craft.'
     ],
@@ -27,10 +27,8 @@ class GiftExamples
   
   }
 
-  # file size too big
   EXAMPLE_2 = {
-    # image: 'gift-example__ford.jpg',
-    image: '',
+    image: 'gift-example__ford.jpg',
     title: 'Kristin Ford Jewelry',
     tagline: 'Kristin Ford believes in the energetic and healing power of gemstones.',
     details: [
@@ -50,7 +48,7 @@ class GiftExamples
     title: 'DutchBow',
     tagline: 'The designer gets much of her design inspiration from her global travels, making her pieces in the US.',
     details: [
-      "Ariane Harris started Dutch Bow out of the need to be creative while staying at home raising my two sons, Dutch and Bowie. Today, they share a play/work space filled with creative pursuits.",
+      "Ariane Harris started Dutch Bow out of the need to be creative while staying at home raising her two sons, Dutch and Bowie. Today, they share a play/work space filled with creative pursuits.",
       "Having lived and traveled all over Europe and spent time in Morocco, Turkey and Mexico, the designer spots global fashion trends and incorporates them into her pieces."
     ],
     labels: [
@@ -63,10 +61,10 @@ class GiftExamples
   EXAMPLE_4 = {
     image: 'gift-example__chickahisa.jpg',
     title: 'Chikihisa Studio',
-    tagline: 'showcasing the \'beauty of imperfection\'',
+    tagline: 'Showcasing the \'beauty of imperfection\'',
     details: [
-      "Ann Chikahisa never planned on becoming a jewelry designer until she took a metal-smithing class that inspired her and gave her the confidence to start a whole new direction in life..",
-      "Based in Seattle, Ann’s mission today is to bring more style and the beauty of to life by showcasing organic shapes, textures and what she calls, \'the beauty of imperfection\'."
+      "Ann Chikahisa never planned on becoming a jewelry designer until she took a metal-smithing class that inspired her and gave her the confidence to start a whole new direction in life.",
+      "Based in Seattle, Ann’s mission today is to bring more style and beauty to life by showcasing organic shapes, textures and what she calls, \'the beauty of imperfection.\'"
     ],
     labels: [
       {icon: 'icon-source-handmade', text: 'handmade'},
@@ -80,7 +78,7 @@ class GiftExamples
     title: 'Elements Truffles',
     tagline: 'Handcrafted, organic, made in the US, and supporting children and education.',
     details: [
-      "Elements Truffles are artisanal chocolates designed with Ayurveda super foods  to be kind to your body, mind, taste buds and the environment.",
+      "Elements Truffles are artisanal chocolates designed with Ayurveda super foods to be kind to your body, mind, taste buds, and the environment.",
       "Elements  also commits 25% of its profits to Care for Children, an organization that supports the education of under-privileged children in tribal areas of India. For more details visit www.careforchildren.org."
     ],
     labels: [
@@ -95,8 +93,8 @@ class GiftExamples
     title: 'Aria, by Lucia',
     tagline: 'Handcrafted in the Pacific Northwest and made with the finest natural botanicals and essential oils',
     details: [
-      "The Founder and maker of Aria by Lucia, gets her inspiration from operatic singing and music. Her passion is to combine fragrance notes that tell a story, the way an aria tells a story through song.  Harmonizing these scents to radiate beauty and grace is a powerful motivation for her as a maker.",
-      "Aria is handcrafted on Whidbey Island in in the Pacific Northwest. The products are rich in the finest natural botanicals and skin care ingredients, along with aromas and scents from pure essential oils."
+      "The Founder and maker of Aria by Lucia gets her inspiration from operatic singing and music. Her passion is to combine fragrance notes that tell a story, the way an aria tells a story through song.  Harmonizing these scents to radiate beauty and grace is a powerful motivation for her as a maker.",
+      "Aria is handcrafted on Whidbey Island in the Pacific Northwest. The products are rich in the finest natural botanicals and skin care ingredients, along with aromas and scents from pure essential oils."
     ],
     labels: [
       {icon: 'icon-source-handmade', text: 'handmade'},
@@ -105,14 +103,12 @@ class GiftExamples
     ]
   }
 
-  # file size too big
   EXAMPLE_7 = {
-    # image: 'gift-example__indigo.jpg',
-    image: '',
+    image: 'gift-example__indigo.jpg',
     title: 'Indigo Handloom',
     tagline: 'Indigo Handloom scarves are made from 100% certified organic, non- GMO cotton.',
     details: [
-      "Each scarf is completely hand woven (without electricity!) through the traditional textile art of khadi, which is practiced in rural india.  Using natural and low-impact dyes, organic fibers are then woven on looms, supporting hundreds of weavers and their families.",
+      "Each scarf is completely hand woven (without electricity!) through the traditional textile art of khadi, which is practiced in rural india.  Using natural and low-impact dyes, organic fibers are woven on looms, supporting hundreds of weavers and their families.",
       "Indigo Handloom has worked with more than 500 weavers to preserve this ancient art form, enabling weavers to provide for their families with fair wages, good working conditions and zero tolerance for child labor. "
     ],
     labels: [
