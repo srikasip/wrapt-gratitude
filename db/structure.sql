@@ -1237,7 +1237,8 @@ CREATE TABLE purchase_orders (
     vendor_acknowledgement_reason character varying,
     handling_cost_in_cents integer DEFAULT 0 NOT NULL,
     handling_in_cents integer DEFAULT 0 NOT NULL,
-    status character varying DEFAULT 'initialized'::character varying NOT NULL
+    status character varying DEFAULT 'initialized'::character varying NOT NULL,
+    shipping_parcel_id integer
 );
 
 
@@ -4858,6 +4859,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171025173604'),
 ('20171027154654'),
 ('20171027164553'),
-('20171027184052');
+('20171027184052'),
+('20171030153140');
 
 
