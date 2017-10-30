@@ -17,7 +17,7 @@ class Gift < ApplicationRecord
   has_many :products, through: :gift_products
 
   has_many :gift_images, -> {order :sort_order}, inverse_of: :gift, dependent: :destroy
-  
+
   def carousel_images
     # PT story #152292601
     # we want the first image in the carousel to be the primary image
@@ -36,7 +36,7 @@ class Gift < ApplicationRecord
     else
       first_landscape = gift_images.select{|gi| gi.orientation == 'landscape'}.first
       thumb = first_landscape || primary
-    end    
+    end
   end
 
   has_many :uploaded_gift_images, class_name: 'GiftImages::Uploaded'
@@ -49,7 +49,7 @@ class Gift < ApplicationRecord
   define_method(:shipping_parcel) { shipping_parcels.first&.parcel }
 
   # TODO bug ?
-  # when a new product is added to the gift 
+  # when a new product is added to the gift
   # the product primary image gets set as a primary image for a gift
   # this can cause a gift to have more than one primary image.
   # take the first one in the sort order for now.
@@ -154,9 +154,9 @@ class Gift < ApplicationRecord
   end
 
   def _has_weight
-    if calculate_weight_from_products && self.products.all?{ |x| x.weight_in_pounds.to_f > 0.0 }
+    if calculate_weight_from_products && self.products.all? { |x| x.weight_in_pounds.to_f > 0.0 }
       return
-    elsif read_attribute(:weight_in_pounds).to_f > 0.0
+    elsif !calculate_weight_from_products && read_attribute(:weight_in_pounds).to_f > 0.0
       return
     end
 
@@ -166,8 +166,8 @@ class Gift < ApplicationRecord
   def _has_price
     if calculate_price_from_products && self.products.all? { |x| x.price.to_f > 0.0 }
       return
-    elsif read_attribute(:selling_price).to_f > 0.0
-     return
+    elsif !calculate_price_from_products && read_attribute(:selling_price).to_f > 0.0
+      return
     end
 
     errors.add(:base, "Must have a selling price")
@@ -176,7 +176,7 @@ class Gift < ApplicationRecord
   def _has_cost
     if calculate_cost_from_products && self.products.all? { |x| x.wrapt_cost.to_f > 0.0 }
       return
-    elsif read_attribute(:cost).to_f > 0.0
+    elsif !calculate_cost_from_products && read_attribute(:cost).to_f > 0.0
       return
     end
 

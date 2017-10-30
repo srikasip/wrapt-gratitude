@@ -1,4 +1,6 @@
-- if @vendors.length > 0
+%h1 Problems
+
+- if @vendors.map(&:valid?).select { |x| !x }.length > 0
   %h2 Vendors With Missing Information
 
   %table.table.table-striped
@@ -30,7 +32,7 @@
             %td
               = vendor.errors.full_messages.join('. ')
 
-- if @gifts.map(&:valid?).select { |x| !x }.length > 0
+- if @gifts.map { |g| !g.valid? }.length > 0
   %h2 Gifts With Problems
 
   %table.table.table-striped
