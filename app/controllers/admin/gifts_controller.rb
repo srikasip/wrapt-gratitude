@@ -51,7 +51,7 @@ module Admin
       giftee = user.owned_profiles.find(good_params[:profile_id])
 
       recommendation = giftee.gift_recommendations.where(gift: @gift, profile: giftee).first_or_initialize
-
+      recommendation.position = -1
       recommendation.save!
 
       flash[:notice] = 'The gift was added to their recommendations'
