@@ -24,7 +24,7 @@ module ApplicationHelper
     end
     links << [science_of_gifting_path, 'The Science', :default]
     links << [rewrapt_path, 'ReWrapt', :default]
-    links << [about_path, 'About', :default]
+    # links << [about_path, 'About', :default]
     links << ['#', 'Gift Basket', :gift_basket] if enable_gift_basket?
     if current_user
       links << [user_session_path, 'Sign Out', :default]
