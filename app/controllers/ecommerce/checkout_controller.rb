@@ -3,7 +3,7 @@ class Ecommerce::CheckoutController < ApplicationController
   include AddressHelper
   include FeatureFlagsHelper
 
-  before_action -> { redirect_to :root }, if: -> { checkout_enabled? }
+  before_action -> { redirect_to :root }, unless: -> { checkout_enabled? }
   before_action :_load_service_object, except: [:start]
   before_action -> { @enable_chat = true }
 

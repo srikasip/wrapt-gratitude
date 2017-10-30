@@ -57,7 +57,7 @@
     %p
       - if @gift.can_be_sold
         = form_tag(url_for(action: :add_to_recommendations), method: :post) do
-          %button.btn.btn-success
+          %button.btn.btn-success.btn-sm
             Add this gift
           to
           = collection_select 'gift_recommendation', 'profile_id', current_user.owned_profiles, :id, :name
