@@ -13,7 +13,7 @@ class PurchaseService::ShippingService
     self.customer_order = customer_order || CustomerOrder.find_by(cart_id: self.cart_id)
   end
 
-  def init_shipments!
+  def init_shipments!(purchase_orders: nil)
     @shipments_okay = true
 
     if customer_order.ship_street1.blank? ||
@@ -26,7 +26,9 @@ class PurchaseService::ShippingService
       return
     end
 
-    self.customer_order.purchase_orders.each do |purchase_order|
+    purchase_orders ||= self.customer_order.purchase_orders
+
+    purchase_orders.each do |purchase_order|
       shipment = Shipment.where(cart_id: self.cart_id, purchase_order: purchase_order).first_or_initialize
 
       shipment.address_from =
@@ -303,6 +305,17 @@ class PurchaseService::ShippingService
       end
 
       CustomerOrderMailer.order_shipped(purchase_order.id).deliver_later
+    end
+  end
+
+  # Vendor can overule the shipping box we have in our database and
+  # pick one from a list
+  def force_shipping_parcel!(purchase_order:, parcel:)
+    _safely do
+      purchase_order.forced_shipping_parcel = parcel
+      purchase_order.save!
+
+      init_shipments!(purchase_orders: [purchase_order])
     end
   end
 

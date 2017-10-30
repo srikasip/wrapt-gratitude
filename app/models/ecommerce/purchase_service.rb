@@ -305,6 +305,8 @@ class PurchaseService
     co.save!
   end
 
+  delegate :force_shipping_parcel!, to: :shipping_service
+
   private
 
   def _unconditional_charge!

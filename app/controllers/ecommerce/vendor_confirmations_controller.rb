@@ -23,6 +23,18 @@ module Ecommerce
     def details
     end
 
+    def change_shipping_box
+      service = @purchase_order.to_service
+      parcel  = Parcel.active.find_by(id: params[:parcel][:id])
+
+      service.force_shipping_parcel!({
+        purchase_order: @purchase_order,
+        parcel: parcel
+      })
+
+      redirect_back(fallback_location: url_for(action: :show))
+    end
+
     private
 
     def login_required?

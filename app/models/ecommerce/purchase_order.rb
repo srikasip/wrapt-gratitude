@@ -23,13 +23,11 @@ class PurchaseOrder < ApplicationRecord
   belongs_to :customer_order
   belongs_to :vendor
   belongs_to :gift
-  delegate :name, to: :gift, prefix: true
 
-  #has_one :gift_parcel, primary_key: 'gift_id', foreign_key: 'gift_id'
-  #has_one :parcel, through: :gift_parcel
   has_many :pretty_parcels, through: :gift
   has_many :shipping_parcels, through: :gift
-  delegate :pretty_parcel, :shipping_parcel, to: :gift, prefix: false
+  # Vendors can change the box before they acknowledge an order if needed.
+  belongs_to :forced_shipping_parcel, class_name: 'Parcel', foreign_key: :shipping_parcel_id
 
   validates :order_number, presence: true
   validates :vendor_token, uniqueness: true
@@ -39,34 +37,29 @@ class PurchaseOrder < ApplicationRecord
   before_validation -> { self.order_number ||= "PO-#{InternalOrderNumber.next_val_humanized}" }
   before_validation -> { self.vendor_token ||= self.vendor_id.to_s+'-'+self.order_number+'-'+SecureRandom.hex(16) }
 
-  delegate :name, to: :vendor, prefix: true
   delegate :cart_id, :recipient_name, :ship_street1, :ship_street2, :ship_street3, :ship_city, :ship_state, :ship_zip, :ship_country, to: :customer_order
-  delegate :tracking_url, :tracking_number, to: :shipping_label, allow_nil: true
-  delegate :shipping_choice, to: :customer_order
+  delegate :name, to: :gift, prefix: true
+  delegate :name, to: :vendor, prefix: true
+  delegate :pretty_parcel, to: :gift, prefix: false
   delegate :profile, to: :customer_order, prefix: false
+  delegate :shipping_choice, to: :customer_order
+  delegate :tracking_url, :tracking_number, to: :shipping_label, allow_nil: true
 
+  scope :acknowledged,    -> { where(vendor_acknowledgement_status: [FULFILL, DO_NOT_FULFILL]) }
+  scope :do_not_fulfill,  -> { where(vendor_acknowledgement_status: DO_NOT_FULFILL) }
   scope :okay_to_fulfill, -> { where(vendor_acknowledgement_status: FULFILL) }
-  scope :do_not_fulfill, -> {  where(vendor_acknowledgement_status: DO_NOT_FULFILL) }
-  scope :acknowledged, -> {  where(vendor_acknowledgement_status: [FULFILL, DO_NOT_FULFILL]) }
-  scope :unacknowledged, -> {  where(vendor_acknowledgement_status: nil) }
+  scope :unacknowledged,  -> { where(vendor_acknowledgement_status: nil) }
 
-  define_method(:to_service) { PurchaseService.new(cart_id: self.cart_id) }
-
-  def shipped_or_better?
-    self.status.in?(SHIPPED_OR_BETTER)
-  end
-
-  def can_change_acknowledgements?
-    self.status.in? [ SUBMITTED, ORDER_INITIALIZED ]
-  end
-
-  def vendor_accepted?
-    self.vendor_acknowledgement_status == FULFILL
-  end
-
-  def vendor_rejected?
-    self.vendor_acknowledgement_status == DO_NOT_FULFILL
-  end
+  define_method(:to_service)                   { PurchaseService.new(cart_id: self.cart_id) }
+  define_method(:shipping_parcel)              { forced_shipping_parcel || gift.shipping_parcel }
+  define_method(:shipped_or_better?)           { self.status.in?(SHIPPED_OR_BETTER) }
+  define_method(:can_change_acknowledgements?) { self.status.in? [ SUBMITTED, ORDER_INITIALIZED ] }
+  define_method(:vendor_accepted?)             { self.vendor_acknowledgement_status == FULFILL }
+  define_method(:vendor_rejected?)             { self.vendor_acknowledgement_status == DO_NOT_FULFILL }
+  define_method(:total_due_in_dollars)         { self.total_due_in_cents.to_i / 100.0 }
+  define_method(:handling_cost_in_dollars)     { self.handling_cost_in_cents.to_i / 100.0 }
+  define_method(:shipping_cost_in_dollars)     { self.shipping_cost_in_cents.to_i / 100.0 }
+  define_method(:fulfill?)                     { self.vendor_acknowledgement_status == 'fulfill' }
 
   def shippo_parcel_hash
     return unless shipping_parcel.present?
@@ -85,22 +78,6 @@ class PurchaseOrder < ApplicationRecord
 
       result[:weight] = result[:weight].round(2)
     end
-  end
-
-  def total_due_in_dollars
-    self.total_due_in_cents.to_i / 100.0
-  end
-
-  def handling_cost_in_dollars
-    self.handling_cost_in_cents.to_i  / 100.0
-  end
-
-  def shipping_cost_in_dollars
-    self.shipping_cost_in_cents.to_i / 100.0
-  end
-
-  def fulfill?
-    self.vendor_acknowledgement_status == 'fulfill'
   end
 
   def shipping_rate
