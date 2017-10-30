@@ -286,6 +286,7 @@ class PurchaseService::ShippingService
     end
 
     just_shipped = shipping_label.shipped_on_changed?(from: nil)
+    just_delivered = shipping_label.delivered_on_changed?(from: nil)
 
     shipping_label.save!
 
@@ -312,6 +313,10 @@ class PurchaseService::ShippingService
       end
 
       CustomerOrderMailer.order_shipped(purchase_order.id).deliver_later
+    elsif just_delivered
+      purchase_order = shipping_label.purchase_order
+      purchase_order.status = RECEIVED
+      purchase_order.save!
     end
   end
 
