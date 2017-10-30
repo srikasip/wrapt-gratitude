@@ -41,6 +41,7 @@ class StaticPagesController < ApplicationController
     respond_to do |f|
       f.html
       f.xml { render(xml: {status: 404, message: 'Page not found'}) }
+      f.png { send_file('public/email-signature-images/logo.png') }
     end
   end
 
