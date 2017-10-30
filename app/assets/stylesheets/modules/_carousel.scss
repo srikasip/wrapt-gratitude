@@ -341,8 +341,9 @@ $gr-carousel-nav__width: 82.5px;
     margin: 0px;
     width: 16%;
     margin-right: 4%;
-    height: auto;
-    height: 60px;
+    // height: auto;
+    // height: 60px;
+    height: 65px;
   }
 }
 
@@ -360,9 +361,13 @@ $gr-carousel-nav__width: 82.5px;
     margin-right: 18px;
   }
 }
+
 .gr-carousel__indicator img {
   width: 100%;
   vertical-align: top;
+  @media(max-width: $screen-xs-max) {
+    min-width: 120px;
+  }
 }
 .gr-carousel__indicator img.orientation-portrait {
   -webkit-transform: translateY(-25%);
