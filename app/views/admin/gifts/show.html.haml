@@ -5,17 +5,8 @@
       = link_to 'Edit', edit_admin_gift_path(@gift), class: 'btn btn-default btn-xs'
       = link_to 'Delete', admin_gift_path(@gift), :method => :delete, :data => { :confirm => 'Are you sure you want to delete this gift?' }, class: 'btn btn-danger btn-xs'
 
-    %p
-      %span.label.label-default= @gift.product_category&.name
-      %span.label.label-default= @gift.product_subcategory&.name
-      - @gift.tags.each do |tag|
-        %span.label.label-primary.label-inverse= tag.name
-
-
-    %p
-      %b Title:
-      = @gift.title
-
+.row
+  .col-sm-6
     %p
       %b Description:
       = @gift.description
@@ -28,15 +19,19 @@
     %p
       %b Selling price:
       = number_to_currency(@gift.selling_price)
+
     %p
       %b Cost:
       = number_to_currency(@gift.cost)
+
     %p
       %b Wrapt sku:
       = @gift.wrapt_sku
+
     %p
       %b Units Available:
       = @gift.units_available
+
     %p
       %b Available to Customers?
       = @gift.available?
@@ -49,6 +44,34 @@
       %b Shipping Box:
       = @gift.shipping_parcel&.description
 
+  .col-sm-6
+    %p
+      %span.label.label-default= @gift.product_category&.name
+      %span.label.label-default= @gift.product_subcategory&.name
+      %br
+      - @gift.tags.each do |tag|
+        %span.label.label-primary.label-inverse= tag.name
+
+    %hr
+
+    %p
+      - if @gift.can_be_sold
+        = form_tag(url_for(action: :add_to_recommendations), method: :post) do
+          %button.btn.btn-success.btn-sm
+            Add this gift
+          to
+          = collection_select 'gift_recommendation', 'profile_id', current_user.owned_profiles, :id, :name
+          's
+          gift recommendations
+          in
+          %select{name: 'gift_recommendation[user_id]'}
+            %option{value: current_user.id}= current_user.full_name + "'s"
+
+          account.
+
+
+.row
+  .col-sm-12
     %h3 Products
     - if @gift.products.none?
       %p

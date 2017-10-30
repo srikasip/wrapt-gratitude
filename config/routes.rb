@@ -82,7 +82,7 @@ Rails.application.routes.draw do
   ###################################
   namespace :ecommerce do
     patch "checkout/start/:giftee_id" => "checkout#start", as: 'checkout_start'
-    VALID_STEPS = ['gift-wrapt', 'address', 'shipping', 'payment', 'review']
+    VALID_STEPS = ['gift-wrapt', 'giftee-name', 'address', 'shipping', 'payment', 'review']
     VALID_STEPS.each do |step|
       action = step.tr('-', '_')
       get "checkout/#{step}" => "checkout#edit_#{action}"
@@ -138,6 +138,9 @@ Rails.application.routes.draw do
       end
     end
     resources :gifts do
+      member do
+        post :add_to_recommendations
+      end
       resources :products, only: [:index, :create, :destroy], controller: 'gift_products'
       resources :images, only: [:index, :new, :create, :destroy], controller: 'gift_images' do
         member { post 'make_primary' }

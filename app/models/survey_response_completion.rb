@@ -33,7 +33,8 @@ class SurveyResponseCompletion
       if save_result && !user.active?
         user.activate!
       end
-      return true
+
+      return save_result
     else
       return false
     end

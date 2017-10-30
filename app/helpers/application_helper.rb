@@ -29,7 +29,11 @@ module ApplicationHelper
     if current_user
       links << [user_session_path, 'Sign Out', :default]
     else
-      links << [new_user_session_path, 'Sign In', :default]
+      if @sign_in_return_to
+        links << [new_user_session_path(return_to: @sign_in_return_to), 'Sign In', :default]
+      else
+        links << [new_user_session_path, 'Sign In', :default]
+      end
     end
     links
   end

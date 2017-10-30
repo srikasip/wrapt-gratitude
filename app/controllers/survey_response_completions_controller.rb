@@ -19,6 +19,7 @@ class SurveyResponseCompletionsController < ApplicationController
   def show
     @render_loading_spinner = true
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
+    @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
   end
 
   def create_via_redirect
@@ -46,7 +47,12 @@ class SurveyResponseCompletionsController < ApplicationController
       job.perform(@survey_response)
       redirect_to giftee_gift_recommendations_path(@profile)
     else
-      flash.now['alert'] = 'Oops! Looks like we need a bit more info.'
+      if User.where(email: user.email).any?
+        flash.now['alert'] = 'Oops! Looks like that account already exists. Try signing in.'
+      else
+        flash.now['alert'] = 'Oops! Looks like we need a bit more info.'
+      end
+      @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
       render :show
     end
   end

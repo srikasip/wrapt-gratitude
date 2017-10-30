@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   before_action :require_login, if: :login_required?
   before_action :set_signed_authentication_cookie
 
+  helper :feature_flags
+
   if ENV['BASIC_AUTH_USERNAME'].present? && ENV['BASIC_AUTH_PASSWORD'].present?
     before_action :_basic_auth
 

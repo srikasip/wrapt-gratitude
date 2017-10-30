@@ -213,31 +213,37 @@ class PurchaseService::ChargingService
     })
 
     self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
+    _email_error
   rescue Stripe::RateLimitError => e
     self.our_charge.update_attributes({
       status: RATE_LIMIT_FAIL,
       error_message: e.message
     })
     self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
+    _email_error
   rescue Stripe::InvalidRequestError => e
     self.our_charge.update_attributes({
       status: INVALID_REQUEST_FAIL,
       error_message: e.message
     })
     self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
+    _email_error
   rescue Stripe::AuthenticationError => e
     self.our_charge.update_attributes({
       status: AUTHENTICATION_FAIL,
       error_message: e.message
     })
     self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
+    _email_error
   rescue Stripe::APIConnectionError => e
     self.our_charge.update_attributes({
       status: API_CONNECTION_FAIL,
       error_message: e.message
     })
     self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
+    _email_error
   rescue RechargeError => e
+    _email_error
     raise
   rescue Exception => e
     if self.our_charge.present?
@@ -249,6 +255,14 @@ class PurchaseService::ChargingService
     if self.customer_order.present? && self.customer_order.persisted?
       self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
     end
+    _email_error
     raise
+  end
+
+  def _email_error
+    begin
+      AdminMailer.api_error(model_class: self.our_charge.class.name, model_id: self.our_charge.id, message: self.our_charge.error_message).deliver_later
+    rescue Exception
+    end
   end
 end

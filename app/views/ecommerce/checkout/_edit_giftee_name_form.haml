@@ -1,0 +1,15 @@
+%h3.light
+  Shipping Information
+
+%p
+  What is your giftee's full name?
+
+= simple_form_for @customer_order, url: url_for, method: :patch, class: 'co-wrapt-form' do |f|
+  = f.simple_fields_for @customer_order.profile do |pf|
+    .row
+      .col-xs-12.col-md-6
+        = pf.input :first_name, label: 'First Name'
+      .col-xs-12.col-md-6
+        = pf.input :last_name, label: 'Last Name'
+  %button.btn.btn-primary{type: 'submit'}
+    = next_button_text

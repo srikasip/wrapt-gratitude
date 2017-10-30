@@ -1,8 +1,9 @@
 class Ecommerce::CheckoutController < ApplicationController
   include PjaxModalController
   include AddressHelper
+  include FeatureFlagsHelper
 
-  before_action -> { redirect_to :root }, if: -> { ENV.fetch('CHECKOUT_ENABLED') { 'false' } == 'false' }
+  before_action -> { redirect_to :root }, unless: -> { checkout_enabled? }
   before_action :_load_service_object, except: [:start]
   before_action -> { @enable_chat = true }
 
@@ -33,12 +34,28 @@ class Ecommerce::CheckoutController < ApplicationController
         # loads in modal on order review page
         redirect_to action: :edit_review
       else
-        redirect_to action: :edit_address
+        redirect_to action: :edit_giftee_name
       end
     else
       flash.now[:notice] = "There was a problem saving your response."
       _load_progress_bar
       render :edit_gift_wrapt
+    end
+  end
+
+  def edit_giftee_name
+    @checkout_step = :shipping
+    _load_progress_bar
+  end
+
+  def save_giftee_name
+    @checkout_step = :shipping
+    if @customer_purchase.set_giftee_name!(params)
+      redirect_to action: :edit_address
+    else
+      flash.now[:notice] = "There was a problem saving your response."
+      _load_progress_bar
+      render :edit_giftee_name
     end
   end
 
@@ -120,6 +137,11 @@ class Ecommerce::CheckoutController < ApplicationController
 
   def edit_review
     @checkout_step = :review
+
+    if @customer_purchase.need_shipping_calculated
+      @shipping_recalculated = true
+      @customer_purchase.update_order_totals!
+    end
     _load_progress_bar
   end
 
