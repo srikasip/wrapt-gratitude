@@ -65,26 +65,6 @@ class Ecommerce::CheckoutController < ApplicationController
     _load_progress_bar
   end
 
-  def _load_addresses
-    @saved_addresses = current_user.addresses
-    @giftee_addresses = @profile.addresses
-
-    if @customer_order.ship_to_customer? && @customer_order.address.nil? && @customer_order.ship_street1.blank?
-      @customer_order.address = current_user.addresses.last
-    elsif @customer_order.address.present?
-      # make sure address id makes sense
-      addressable = @customer_order.ship_to_customer? ? @customer_order.user : @customer_order.profile
-      if addressable != @customer_order.address.addressable && !@customer_order.address.ship_address_is_equal_to_address?(@customer_order)
-        @customer_order.address = nil
-      end
-    end
-
-    @address_collection = @saved_addresses.map do |address|
-      [ format_address(object: address), address.id]
-    end || []
-    @address_collection.push(['New Address', 'new_address'])
-  end
-
   def save_address
     @checkout_step = :shipping
     @customer_purchase.set_address!(params)
@@ -173,5 +153,25 @@ class Ecommerce::CheckoutController < ApplicationController
     @customer_purchase = ::PurchaseService.new(cart_id: session[:cart_id])
     @customer_order = @customer_purchase.customer_order
     @profile = @customer_order.profile
+  end
+
+  def _load_addresses
+    @saved_addresses = current_user.addresses
+    @giftee_addresses = @profile.addresses
+
+    if @customer_order.ship_to_customer? && @customer_order.address.nil? && @customer_order.ship_street1.blank?
+      @customer_order.address = current_user.addresses.last
+    elsif @customer_order.address.present?
+      # make sure address id makes sense
+      addressable = @customer_order.ship_to_customer? ? @customer_order.user : @customer_order.profile
+      if addressable != @customer_order.address.addressable && !@customer_order.address.ship_address_is_equal_to_address?(@customer_order)
+        @customer_order.address = nil
+      end
+    end
+
+    @address_collection = @saved_addresses.map do |address|
+      [ format_address(object: address), address.id]
+    end || []
+    @address_collection.push(['New Address', 'new_address'])
   end
 end

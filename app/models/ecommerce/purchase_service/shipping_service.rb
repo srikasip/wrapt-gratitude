@@ -69,6 +69,13 @@ class PurchaseService::ShippingService
       shipment.api_response = nil
       shipment.customer_order = customer_order
       shipment.run!
+
+      # This should do something, but doesn't appear to while in test mode
+      # Garbage addresses will look successful at this point in the code unless
+      # they're completely missing.
+      # address = Shippo::Address.get(object_id)
+      # address.validate
+
       shipment.save!
 
       if !shipment.success?

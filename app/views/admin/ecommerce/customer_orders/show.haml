@@ -35,9 +35,8 @@
       =@order.user.email
   .col-sm-4
     %p
-      %strong Order Status:
-      - style = "color: red" if @order.status == 'failed'
-      %span{style: "#{style}"}= @order.status
+      %b Status:
+      = render 'status', order: @order
       %br
       %strong Gift wrapt:
       = @order.gift_wrapt? ? 'Yes' : 'No'

@@ -62,9 +62,9 @@ class CustomerOrder < ApplicationRecord
   define_method(:uncharged_gift_wrapt_fee_in_dollars)         { line_items.sum(&:quantity) * 8 }
   define_singleton_method(:uncharged_curation_fee_in_dollars) { 15 }
 
-  define_method(:bad_charge?) { self&.charge&.bad_state? }
-  define_method(:bad_tax_transaction?) { !self&.tax_transactions&.first&.success? }
-
+  define_method(:bad_charge?) { self.charge&.bad_state? }
+  define_method(:bad_tax_transaction?) { !self.tax_transactions&.first&.success? }
+  define_method(:bad_labels?) { !self.shipping_labels.all?(&:success?) }
 
   def _set_submitted_date
     if self.status_changed?(to: SUBMITTED)
