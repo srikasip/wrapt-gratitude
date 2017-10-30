@@ -1,0 +1,10 @@
+= order.status.titleize
+- if order.bad_charge?
+  %br
+  %span{style: 'color: red;'} Credit card problem
+- if order.bad_tax_transaction?
+  %br
+  %span{style: 'color: red;'} Tax calculation problem
+- if order.bad_labels?
+  %br
+  %span{style: 'color: red;'} Shipping label problem

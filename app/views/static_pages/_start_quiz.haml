@@ -1,0 +1,20 @@
+- content_for :after_wrapper do
+  .wrapper--full-bleed__bg-02.mb1
+    .container
+      .sg-question__container
+        .row
+          .col-xs-12
+            %h2.about-page__header Are you Ready to Gift Better?
+        .row
+          .col-xs-12.col-sm-10.col-sm-offset-1
+            .sg-question
+              - if require_invites? && current_user.blank?
+                = render "shared/invitation_request"
+              - else
+                - url = giftees_path
+                = simple_form_for @question_response, url: url, html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
+                  - if current_user&.admin?
+                    = hidden_field_tag :survey_id, @survey.id
+                  = render response_fields_partial, form: form, label: @question_response.survey_question.prompt
+        .text-center
+          = embedded_svg('icon-gift-better-gift-wrapt', class: "landing-bottom__icon-gift-better-gift-wrapt mt6")

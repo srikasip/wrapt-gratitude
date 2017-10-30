@@ -7,7 +7,7 @@
           %p.home__about-intro.text-center 
             Inspiring stories of the Makers behind our gifts.
         .home__gift-examples-carousel
-          = carousel(carousel: load_home_page_carousel_data, unique_carousel_name: 'hgec-carousel', slide_content_singular: 'example')
+          = carousel(carousel: load_home_page_carousel_data(stories), unique_carousel_name: 'hgec-carousel', slide_content_singular: 'example')
 
 .text-center
   = embedded_svg('icon-gift-better-gift-wrapt', class: "landing-bottom__icon-gift-better-gift-wrapt mt4")

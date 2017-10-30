@@ -14,10 +14,20 @@
         = link_to @purchase_order.shipping_label.url, target: '_blank' do
           [Download Shipping Label]
       - else
-        %p
-          The shipping label isn't quite ready yet, but
-          = link_to 'click here', url_for
-          to check again.  It shouldn't take more than a few moments.
+        = form_tag url_for(action: :change_shipping_box),method: :patch do
+          Change the shipping box to
+          = collection_select :parcel, :id, Parcel.shipping, :id, :description, selected: @purchase_order.shipping_parcel.id
+          :javascript
+            $('#parcel_id').change(function() {
+              $(this).closest('form').submit();
+            })
+
+        - if @purchase_order.vendor_acknowledgement_status.present?
+          %br
+          %p
+            The shipping label isn't quite ready yet, but
+            = link_to 'click here', url_for
+            to check again.  It shouldn't take more than a few moments.
 
   - if @purchase_order.fulfill?
     .col-xs-6

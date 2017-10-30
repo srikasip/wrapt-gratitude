@@ -10,7 +10,11 @@ class UserSessionsController < ApplicationController
   def create
     @user_session = UserSession.new user_session_params.merge(controller: self)
     if login(@user_session.email.downcase, @user_session.password, @user_session.remember)
-      redirect_to params[:return_to] || default_location_for_user(user)
+      if params[:return_to].present?
+        redirect_to params[:return_to]
+      else
+        redirect_back fallback_location: default_location_for_user(current_user)
+      end
     else
       @user_session.errors.add :password, 'Sorry, that password isn\'t correct'
       render :new
@@ -26,7 +30,7 @@ class UserSessionsController < ApplicationController
     false
   end
 
-  private def default_location_for_user
+  private def default_location_for_user user
     if user.last_viewed_profile.present?
       giftee_gift_recommendations_path(user.last_viewed_profile)
     else
@@ -35,11 +39,32 @@ class UserSessionsController < ApplicationController
   end
 
   private def user_session_params
-    params.require(:user_session).permit(
-      :email,
-      :password,
-      :remember
-    )
-  end
+    begin
+      params.require(:user_session).permit(
+        :email,
+        :password,
+        :remember
+      )
+    rescue ActionController::ParameterMissing
+      flash.now[:alert] = 'Sorry, but there was a problem with your browser'
 
+      # IE11 gives us the form data in multipart format, but it doesn't make it
+      # into the params variable.
+      email = password = ''
+      begin
+        request.body.rewind
+        scanner = StringScanner.new(request.body.read)
+        scanner.skip_until(/user_session.email."\r\n\r\n/)
+        email = scanner.scan_until(/\r\n/).chomp
+        #puts "VOO: #{email}"
+        scanner.skip_until(/user_session.password."\r\n\r\n/)
+        password = scanner.scan_until(/\r\n/).chomp
+        #puts "FOO: #{password}"
+      rescue Exception
+        # In case this is borked, just move on with a failed login I guess
+      end
+
+      return {email: email, password: password}
+    end
+  end
 end

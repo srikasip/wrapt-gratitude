@@ -4,6 +4,9 @@
 %h3 Charge
 %pre= order.charge.ai(plain: true)
 
+%h3 Taxes
+%pre= order.tax_transactions.ai(plain: true)
+
 %h3 Shipping Labels
 - order.purchase_orders.each do |po|
   %h4= po.order_number

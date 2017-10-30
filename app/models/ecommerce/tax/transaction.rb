@@ -1,3 +1,9 @@
+=begin
+https://help.avalara.com/Frequently_Asked_Questions/001/How_do_I_drop-ship_with_Avalara%3F?origin=deflection
+https://developer.avalara.com/api-reference/avatax/rest/v2/
+https://taxcode.avatax.avalara.com/
+=end
+
 class Tax::Transaction < ApplicationRecord
   has_paper_trail(
     ignore: [:updated_at, :created_at, :id],
@@ -16,12 +22,12 @@ class Tax::Transaction < ApplicationRecord
 
   def estimate!
     payload_object = Tax::TransactionPayload.new(customer_order)
-    payload_object.estimate = true
     self.api_request_payload = payload_object.to_hash
     self.api_response = client.create_transaction(payload_object.to_hash)
     _cache_estimation_results
   rescue Faraday::Error, NoMethodError => e
     Rails.logger.fatal "[AVATAX][ESTIMATE] #{e.message}"
+    _email_error(e.message)
     self.success = false
     self.api_response ||= { msg: e.message }
   end
@@ -31,6 +37,7 @@ class Tax::Transaction < ApplicationRecord
     _cache_reconciliation_results
   rescue Faraday::Error => e
     Rails.logger.fatal "[AVATAX][RECONCILE] #{e.message}"
+    _email_error(e.message)
     self.success = false
   end
 
@@ -40,6 +47,7 @@ class Tax::Transaction < ApplicationRecord
   private def _cache_estimation_results
     if api_response['error'].present?
       self.success = false
+      _email_error(api_response['error'])
     else
       self.tax_in_dollars = api_response['lines'].sum { |x| x['taxCalculated'].to_f }
       self.transaction_code = api_response['code']
@@ -48,11 +56,20 @@ class Tax::Transaction < ApplicationRecord
   end
 
   private def _cache_reconciliation_results
-    if api_response['error'].present?
+    if api_reconcile_response['error'].present?
       self.success = false
+      _email_error(api_response['error'])
     else
       self.reconciled = true
       self.success = true
+    end
+  end
+
+  def _email_error(message)
+    begin
+      self.save
+      AdminMailer.api_error(model_class: self.class.name, model_id: self.id, message: message).deliver_later
+    rescue Exception
     end
   end
 end

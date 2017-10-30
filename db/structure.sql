@@ -367,7 +367,9 @@ CREATE TABLE customer_orders (
     handling_in_cents integer DEFAULT 0 NOT NULL,
     submitted_on date,
     ship_to integer DEFAULT 0,
-    address_id integer
+    address_id integer,
+    shipping_to_giftee boolean DEFAULT true NOT NULL,
+    need_shipping_calculated boolean DEFAULT true NOT NULL
 );
 
 
@@ -1178,7 +1180,7 @@ ALTER SEQUENCE profile_traits_topics_id_seq OWNED BY profile_traits_topics.id;
 CREATE TABLE profiles (
     id integer NOT NULL,
     email character varying,
-    name character varying,
+    first_name character varying,
     owner_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -1190,7 +1192,8 @@ CREATE TABLE profiles (
     recipient_invited_at timestamp without time zone,
     recommendation_stats text,
     birthday date,
-    gifts_sent integer DEFAULT 0 NOT NULL
+    gifts_sent integer DEFAULT 0 NOT NULL,
+    last_name character varying DEFAULT ''::character varying
 );
 
 
@@ -1234,7 +1237,8 @@ CREATE TABLE purchase_orders (
     vendor_acknowledgement_reason character varying,
     handling_cost_in_cents integer DEFAULT 0 NOT NULL,
     handling_in_cents integer DEFAULT 0 NOT NULL,
-    status character varying DEFAULT 'initialized'::character varying NOT NULL
+    status character varying DEFAULT 'initialized'::character varying NOT NULL,
+    shipping_parcel_id integer
 );
 
 
@@ -4852,6 +4856,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171024170923'),
 ('20171024191429'),
 ('20171025170555'),
-('20171025173604');
+('20171025173604'),
+('20171027154654'),
+('20171027164553'),
+('20171027184052'),
+('20171030153140');
 
 

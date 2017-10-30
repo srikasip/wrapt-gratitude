@@ -35,5 +35,4 @@ class GiftRecommendationsController < ApplicationController
        preload(gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field]).
        take(GIFT_RECOMMENDATION_LIMIT)
   end
-
 end

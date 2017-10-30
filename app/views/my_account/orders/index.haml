@@ -29,4 +29,5 @@
                   .blue-dropdown__content.ma-order__toggle-content.right.collapse{id: "my-account-order__#{index}"}
                     = link_to 'View Detail', my_account_order_path(order)
                     - order.shipping_labels.each do |shipping_label|
-                      = link_to 'Track Package', shipping_label.tracking_url, target: '_blank'
+                      - if shipping_label.tracking_url.present?
+                        = link_to 'Track Package', shipping_label.tracking_url, target: '_blank'

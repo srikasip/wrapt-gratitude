@@ -1,8 +1,9 @@
 class Ecommerce::CheckoutController < ApplicationController
   include PjaxModalController
   include AddressHelper
+  include FeatureFlagsHelper
 
-  before_action -> { redirect_to :root }, if: -> { ENV.fetch('CHECKOUT_ENABLED') { 'false' } == 'false' }
+  before_action -> { redirect_to :root }, unless: -> { checkout_enabled? }
   before_action :_load_service_object, except: [:start]
   before_action -> { @enable_chat = true }
 
@@ -33,7 +34,7 @@ class Ecommerce::CheckoutController < ApplicationController
         # loads in modal on order review page
         redirect_to action: :edit_review
       else
-        redirect_to action: :edit_address
+        redirect_to action: :edit_giftee_name
       end
     else
       flash.now[:notice] = "There was a problem saving your response."
@@ -42,30 +43,26 @@ class Ecommerce::CheckoutController < ApplicationController
     end
   end
 
+  def edit_giftee_name
+    @checkout_step = :shipping
+    _load_progress_bar
+  end
+
+  def save_giftee_name
+    @checkout_step = :shipping
+    if @customer_purchase.set_giftee_name!(params)
+      redirect_to action: :edit_address
+    else
+      flash.now[:notice] = "There was a problem saving your response."
+      _load_progress_bar
+      render :edit_giftee_name
+    end
+  end
+
   def edit_address
     @checkout_step = :shipping
     _load_addresses
     _load_progress_bar
-  end
-
-  def _load_addresses
-    @saved_addresses = current_user.addresses
-    @giftee_addresses = @profile.addresses
-
-    if @customer_order.ship_to_customer? && @customer_order.address.nil? && @customer_order.ship_street1.blank?
-      @customer_order.address = current_user.addresses.last
-    elsif @customer_order.address.present?
-      # make sure address id makes sense
-      addressable = @customer_order.ship_to_customer? ? @customer_order.user : @customer_order.profile
-      if addressable != @customer_order.address.addressable && !@customer_order.address.ship_address_is_equal_to_address?(@customer_order)
-        @customer_order.address = nil
-      end
-    end
-
-    @address_collection = @saved_addresses.map do |address|
-      [ format_address(object: address), address.id]
-    end || []
-    @address_collection.push(['New Address', 'new_address'])
   end
 
   def save_address
@@ -120,6 +117,11 @@ class Ecommerce::CheckoutController < ApplicationController
 
   def edit_review
     @checkout_step = :review
+
+    if @customer_purchase.need_shipping_calculated
+      @shipping_recalculated = true
+      @customer_purchase.update_order_totals!
+    end
     _load_progress_bar
   end
 
@@ -151,5 +153,25 @@ class Ecommerce::CheckoutController < ApplicationController
     @customer_purchase = ::PurchaseService.new(cart_id: session[:cart_id])
     @customer_order = @customer_purchase.customer_order
     @profile = @customer_order.profile
+  end
+
+  def _load_addresses
+    @saved_addresses = current_user.addresses
+    @giftee_addresses = @profile.addresses
+
+    if @customer_order.ship_to_customer? && @customer_order.address.nil? && @customer_order.ship_street1.blank?
+      @customer_order.address = current_user.addresses.last
+    elsif @customer_order.address.present?
+      # make sure address id makes sense
+      addressable = @customer_order.ship_to_customer? ? @customer_order.user : @customer_order.profile
+      if addressable != @customer_order.address.addressable && !@customer_order.address.ship_address_is_equal_to_address?(@customer_order)
+        @customer_order.address = nil
+      end
+    end
+
+    @address_collection = @saved_addresses.map do |address|
+      [ format_address(object: address), address.id]
+    end || []
+    @address_collection.push(['New Address', 'new_address'])
   end
 end

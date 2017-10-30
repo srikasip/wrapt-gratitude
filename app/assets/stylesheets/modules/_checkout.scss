@@ -1,5 +1,13 @@
 @import "helpers";
 
+.co-nav {
+  background-color: $blue-005;
+  min-height: 55px;
+  text-align: right;
+  line-height: 55px;
+  margin-bottom: 60px;
+}
+
 .wrapt-with-love-link svg {
   width: 16px;
   height: 16px;

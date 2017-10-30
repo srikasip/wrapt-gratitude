@@ -41,6 +41,13 @@ class ShippingLabel < ApplicationRecord
     _cache_the_results
   rescue Shippo::Exceptions::Error, Shippo::Exceptions::ConnectionError => e
     Rails.logger.fatal "[SHIPPO] #{e.message}"
+
+    begin
+      self.save
+      AdminMailer.api_error(model_class: self.class.name, model_id: self.id, message: e.message).deliver_later
+    rescue Exception
+    end
+
     self.success = false
     self.api_response = JSON.parse(e.response.body) rescue {msg: e.message}
   end

@@ -6,7 +6,7 @@ module ProfileRecipientReviewsHelper
         slide_partial: 'gift',
         slide_locals: {gift: gr.gift, gift_recommendation: gr},
         thumbnail_partial: 'thumbnail',
-        thumbnail_locals: {image: (gr.gift.primary_gift_image || gr.gift.gift_images.first), gift: gr.gift},
+        thumbnail_locals: {image: gr.gift.carousel_thumb, gift: gr.gift},
       }
     end
     {nav_partial: 'gift_nav', slides: gifts}

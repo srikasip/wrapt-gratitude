@@ -111,7 +111,7 @@ class SurveyQuestionResponse < ApplicationRecord
       survey_response.respond_to?(:profile) &&
       name = text_response
       then
-      survey_response.profile.update_attribute :name, name
+      survey_response.profile.update_attribute :first_name, name
     end
   end
 

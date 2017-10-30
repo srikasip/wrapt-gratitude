@@ -17,6 +17,28 @@ class Gift < ApplicationRecord
   has_many :products, through: :gift_products
 
   has_many :gift_images, -> {order :sort_order}, inverse_of: :gift, dependent: :destroy
+
+  def carousel_images
+    # PT story #152292601
+    # we want the first image in the carousel to be the primary image
+    # primary then sort order
+    gift_images.sort_by {|image| image == primary_gift_image ? 0 : 1}
+  end
+
+  def carousel_thumb
+    # PT story #152292601
+    # try to find a primary image that is landscape
+    # if none find the first landscape in sort_order
+    # if no landscape use primary image portrait
+    primary = primary_gift_image
+    if primary.orientation == 'landscape'
+      thumb = primary
+    else
+      first_landscape = gift_images.select{|gi| gi.orientation == 'landscape'}.first
+      thumb = first_landscape || primary
+    end
+  end
+
   has_many :uploaded_gift_images, class_name: 'GiftImages::Uploaded'
   has_many :gift_images_from_products, class_name: 'GiftImages::FromProduct'
 
@@ -26,7 +48,12 @@ class Gift < ApplicationRecord
   define_method(:pretty_parcel) { pretty_parcels.first&.parcel }
   define_method(:shipping_parcel) { shipping_parcels.first&.parcel }
 
-  has_one :primary_gift_image, -> {where primary: true}, class_name: 'GiftImage'
+  # TODO bug ?
+  # when a new product is added to the gift
+  # the product primary image gets set as a primary image for a gift
+  # this can cause a gift to have more than one primary image.
+  # take the first one in the sort order for now.
+  has_one :primary_gift_image, -> {where(primary: true).order(:sort_order)}, class_name: 'GiftImage'
 
   belongs_to :source_product, class_name: 'Product', required: false
 
@@ -127,9 +154,9 @@ class Gift < ApplicationRecord
   end
 
   def _has_weight
-    if calculate_weight_from_products && self.products.all?{ |x| x.weight_in_pounds.to_f > 0.0 }
+    if calculate_weight_from_products && self.products.all? { |x| x.weight_in_pounds.to_f > 0.0 }
       return
-    elsif read_attribute(:weight_in_pounds).to_f > 0.0
+    elsif !calculate_weight_from_products && read_attribute(:weight_in_pounds).to_f > 0.0
       return
     end
 
@@ -139,8 +166,8 @@ class Gift < ApplicationRecord
   def _has_price
     if calculate_price_from_products && self.products.all? { |x| x.price.to_f > 0.0 }
       return
-    elsif read_attribute(:selling_price).to_f > 0.0
-     return
+    elsif !calculate_price_from_products && read_attribute(:selling_price).to_f > 0.0
+      return
     end
 
     errors.add(:base, "Must have a selling price")
@@ -149,7 +176,7 @@ class Gift < ApplicationRecord
   def _has_cost
     if calculate_cost_from_products && self.products.all? { |x| x.wrapt_cost.to_f > 0.0 }
       return
-    elsif read_attribute(:cost).to_f > 0.0
+    elsif !calculate_cost_from_products && read_attribute(:cost).to_f > 0.0
       return
     end
 
@@ -208,21 +235,6 @@ class Gift < ApplicationRecord
 
   def primary_gift_image_with_fallback
     primary_gift_image || gift_images.first || GiftImage.new
-  end
-
-  def recommendation_thumbnail
-    # only landscape images for recommendation thumbnails
-    if primary_gift_image && primary_gift_image.orientation == 'landscape'
-      thumbnail = primary_gift_image
-    else
-      # if primary_gift_image is not landscape find one that is
-      thumbnail = (gift_images.select{|image| image.orientation == 'landscape'} || []).first
-      if !thumbnail.present?
-        # if there are no landscape images just get an image
-        thumbnail = primary_gift_image_with_fallback
-      end
-    end
-    thumbnail
   end
 
   def duplicate_single_product_gift

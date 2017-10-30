@@ -1,10 +1,11 @@
 FactoryGirl.define do
   sequence :name do |n|
-    "Person #{n}"
+    "Name#{n}"
   end
 
   factory :profile do
-    name { generate(:name) }
+    first_name { generate(:name) }
+    last_name { generate(:name) }
     association :owner
 
     trait :with_gift_selections do

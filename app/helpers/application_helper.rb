@@ -1,7 +1,7 @@
 module ApplicationHelper
 
-  def load_home_page_carousel_data
-    examples = GiftExamples.new().examples.map do |example|
+  def load_home_page_carousel_data(stories_to_show)
+    examples = GiftExamples.new.send(stories_to_show).map do |example|
       {
         slide_partial: 'home/wrapt_story',
         slide_locals: example,
@@ -23,11 +23,17 @@ module ApplicationHelper
       links << [my_account_profile_path, 'My Account', :default]
     end
     links << [science_of_gifting_path, 'The Science', :default]
+    links << [rewrapt_path, 'ReWrapt', :default]
+    # links << [about_path, 'About', :default]
     links << ['#', 'Gift Basket', :gift_basket] if enable_gift_basket?
     if current_user
       links << [user_session_path, 'Sign Out', :default]
     else
-      links << [new_user_session_path, 'Sign In', :default]
+      if @sign_in_return_to
+        links << [new_user_session_path(return_to: @sign_in_return_to), 'Sign In', :default]
+      else
+        links << [new_user_session_path, 'Sign In', :default]
+      end
     end
     links
   end
@@ -58,15 +64,24 @@ module ApplicationHelper
     top_nav_link(content)
   end
 
-  def top_nav_link_gift_basket(path, text)
+  def top_nav_link_gift_basket(path, text, options={})
     a_data = {behavior: 'open-gift-basket', toggle: "fade out", target: '.top-navigation__menu'}
     a_onClick = "ga('send', 'event', 'basket', 'open-close', 'open');"
-    count_data = {behavior: 'gift-basket-count'}
-    count_classes = gift_basket_empty? ? 'gift-basket-count empty' : 'gift-basket-count'
+    unless options[:hide_count]
+      count_data = {behavior: 'gift-basket-count'}
+      count_classes = gift_basket_empty? ? 'gift-basket-count empty' : 'gift-basket-count'
+    end
     content = link_to path, data: a_data, onClick: a_onClick do
-      concat embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
+      unless options[:hide_circle_icon]
+        concat embedded_svg('icon-circle', class: "icon navbar-static-top__icon-circle")
+      end
       concat " #{text}"
-      concat content_tag :span, gift_basket_count, data: count_data, class: count_classes
+      unless options[:hide_count]
+        concat content_tag :span, gift_basket_count, data: count_data, class: count_classes
+      end
+      if options[:include_back_icon]
+        concat embedded_svg('icon-caret-right', class: "icon navbar-static-top__icon-caret-right")
+      end
     end
     top_nav_link(content)
   end
@@ -89,6 +104,11 @@ module ApplicationHelper
   # override in specific helpers as needed
   def show_top_nav?
     true
+  end
+
+  # override in specific helpers as needed
+  def show_checkout_nav?
+    false
   end
 
   def gift_basket_profile

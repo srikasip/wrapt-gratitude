@@ -1,8 +1,10 @@
 %h5 Edit Giftee
 = simple_form_for @giftee, url: my_account_giftee_path(@giftee), html: { data: { 'submits-to-pjax-modal' => true }} do |f|
   .row
-    .col-xs-12
-      = f.input :name
+    .col-xs-6
+      = f.input :first_name, label: 'First Name'
+    .col-xs-6
+      = f.input :last_name, label: 'Last Name'
   .row
     .col-xs-12
       = f.input :email, label: 'Email Address'

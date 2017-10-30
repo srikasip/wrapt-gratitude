@@ -15,6 +15,7 @@ class Vendor < ApplicationRecord
   validates :phone, presence: true
   validates :email, presence: true
   validates :purchase_order_markup_in_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validate :_has_shipping_service_levels
 
   before_validation :upcase_wrapt_sku_code
 
@@ -53,4 +54,9 @@ class Vendor < ApplicationRecord
     end
   end
 
+  private def _has_shipping_service_levels
+    return if shipping_service_levels.length > 0
+
+    errors[:base] << "Vendor needs shipping choices"
+  end
 end

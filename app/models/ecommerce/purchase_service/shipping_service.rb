@@ -13,7 +13,7 @@ class PurchaseService::ShippingService
     self.customer_order = customer_order || CustomerOrder.find_by(cart_id: self.cart_id)
   end
 
-  def init_shipments!
+  def init_shipments!(purchase_orders: nil)
     @shipments_okay = true
 
     if customer_order.ship_street1.blank? ||
@@ -26,7 +26,9 @@ class PurchaseService::ShippingService
       return
     end
 
-    self.customer_order.purchase_orders.each do |purchase_order|
+    purchase_orders ||= self.customer_order.purchase_orders
+
+    purchase_orders.each do |purchase_order|
       shipment = Shipment.where(cart_id: self.cart_id, purchase_order: purchase_order).first_or_initialize
 
       shipment.address_from =
@@ -37,7 +39,7 @@ class PurchaseService::ShippingService
 
       co = self.customer_order
       shipment.address_to = {
-        name: co.profile.name,
+        name: co.recipient_name,
         street1: co.ship_street1,
         street2: co.ship_street2,
         street3: co.ship_street3,
@@ -67,6 +69,13 @@ class PurchaseService::ShippingService
       shipment.api_response = nil
       shipment.customer_order = customer_order
       shipment.run!
+
+      # This should do something, but doesn't appear to while in test mode
+      # Garbage addresses will look successful at this point in the code unless
+      # they're completely missing.
+      # address = Shippo::Address.get(object_id)
+      # address.validate
+
       shipment.save!
 
       if !shipment.success?
@@ -271,14 +280,16 @@ class PurchaseService::ShippingService
     })
 
     if shipping_label.shipped?
-      shipping_label.shipped_on ||= shipping_label.updated_at
+      shipping_label.shipped_on ||= shipping_label.tracking_updated_at
     elsif shipping_label.delivered?
-      shipping_label.delivered_on ||= shipping_label.updated_at
+      shipping_label.delivered_on ||= shipping_label.tracking_updated_at
     end
+
+    just_shipped = shipping_label.shipped_on_changed?(from: nil)
 
     shipping_label.save!
 
-    if shipping_label.shipped?
+    if just_shipped
       purchase_order = shipping_label.purchase_order
       purchase_order.status = SHIPPED
       purchase_order.save!
@@ -287,6 +298,7 @@ class PurchaseService::ShippingService
       giftee = purchase_order.profile
       customer_order = purchase_order.customer_order
 
+      # if statement just to ease testing. Too painful to set up
       if do_gift_count_update
         rli = purchase_order.line_items.flat_map(&:related_line_items)
         gifts_sent = rli.sum(&:quantity)
@@ -300,6 +312,17 @@ class PurchaseService::ShippingService
       end
 
       CustomerOrderMailer.order_shipped(purchase_order.id).deliver_later
+    end
+  end
+
+  # Vendor can overule the shipping box we have in our database and
+  # pick one from a list
+  def force_shipping_parcel!(purchase_order:, parcel:)
+    _safely do
+      purchase_order.forced_shipping_parcel = parcel
+      purchase_order.save!
+
+      init_shipments!(purchase_orders: [purchase_order])
     end
   end
 

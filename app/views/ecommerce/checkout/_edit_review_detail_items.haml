@@ -6,12 +6,20 @@
     - if customer_order.charge.present?
       - billing_address_items = [customer_order.charge.bill_zip]
     - else
-      - billing_address_items = ['N/A']  
+      - billing_address_items = ['N/A']
     = render 'ecommerce/checkout/edit_review_detail_item', header: 'Billing Zip Code', items: billing_address_items
 .row.mb1
   .col-xs-12.col-sm-6
-    - words = shipping_choice_to_human(customer_order.shipping_choice)
+    :ruby
+      words = shipping_choice_to_human(customer_order.shipping_choice)
+      words << " "
+      words << number_to_currency(customer_order.combined_handling_in_dollars)
     = render 'ecommerce/checkout/edit_review_detail_item', header: 'Shipping Method', items: [words]
+    - if @shipping_recalculated
+      %span{style: 'color: #F79970;'}
+        Shipping was recalculated when the shipping address changed.
+      = link_to "CHANGE SHIPPING", ecommerce_checkout_address_path
+
   .col-xs-12.col-sm-6
     - if customer_order.charge.present?
       - payment_items = [customer_order.charge.card_type, "* #{customer_order.charge.last_four}"]

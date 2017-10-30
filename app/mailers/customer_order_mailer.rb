@@ -4,6 +4,10 @@ class CustomerOrderMailer < ApplicationMailer
   helper :application
   helper :orders
 
+  if ENV['ECOMMERCE_BCC']
+    default bcc: ENV['ECOMMERCE_BCC'].split(';')
+  end
+
   def order_received(customer_order_id)
     @customer_order = CustomerOrder.find(customer_order_id)
     @user = @customer_order.user

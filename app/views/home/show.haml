@@ -15,7 +15,7 @@
 
 - content_for :after_wrapper do
   = render 'home/how_wrapt_works'
-  = render 'home/wrapt_stories'
+  = render 'home/wrapt_stories', stories: :home_page_stories
 
 - if params[:password_reset_token]
   - content_for :page_js do

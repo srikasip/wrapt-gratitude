@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   end
 
   get 'science-of-gifting', to: 'static_pages#science_of_gifting', as: :science_of_gifting
+  get 'rewrapt', to: 'static_pages#rewrapt', as: :rewrapt
+  get 'about', to: 'static_pages#about', as: :about
 
   resources :invitation_requests, only: :create
 
@@ -18,7 +20,11 @@ Rails.application.routes.draw do
     resources :giftees, only: [:index, :new, :create] do
       resources :surveys, only: :show, controller: 'survey_responses' do
         resources :questions, only: [:show, :update], controller: 'survey_question_responses'
-        resource :completion, only: [:show, :create], controller: 'survey_response_completions'
+        resource :completion, only: [:show, :create], controller: 'survey_response_completions' do
+          collection do
+            get :create_via_redirect
+          end
+        end
       end
     end
   end
@@ -76,7 +82,7 @@ Rails.application.routes.draw do
   ###################################
   namespace :ecommerce do
     patch "checkout/start/:giftee_id" => "checkout#start", as: 'checkout_start'
-    VALID_STEPS = ['gift-wrapt', 'address', 'shipping', 'payment', 'review']
+    VALID_STEPS = ['gift-wrapt', 'giftee-name', 'address', 'shipping', 'payment', 'review']
     VALID_STEPS.each do |step|
       action = step.tr('-', '_')
       get "checkout/#{step}" => "checkout#edit_#{action}"
@@ -87,6 +93,7 @@ Rails.application.routes.draw do
     resources :vendor_confirmations, only: [:show, :update] do
       member do
         get :details
+        patch :change_shipping_box
       end
       collection do
         get :error
@@ -132,6 +139,9 @@ Rails.application.routes.draw do
       end
     end
     resources :gifts do
+      member do
+        post :add_to_recommendations
+      end
       resources :products, only: [:index, :create, :destroy], controller: 'gift_products'
       resources :images, only: [:index, :new, :create, :destroy], controller: 'gift_images' do
         member { post 'make_primary' }

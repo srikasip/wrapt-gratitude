@@ -35,7 +35,7 @@ class GifteesController < ApplicationController
 
     if user
       @profile = user.owned_profiles.new
-      @profile.name = 'Unknown'
+      @profile.first_name = 'Unknown'
       if @profile.save
         @survey_response = @profile.survey_responses.create survey: @survey
         @survey_response.ordered_question_responses.first.update question_response_params.merge(answered_at: Time.now)
@@ -47,7 +47,7 @@ class GifteesController < ApplicationController
       redirect_to root_path
     else
       @profile = Profile.new
-      @profile.name = 'Unknown'
+      @profile.first_name = 'Unknown'
       @profile.save!
       @survey_response = @profile.survey_responses.create survey: @survey
       @survey_response.ordered_question_responses.first.update question_response_params.merge(answered_at: Time.now)

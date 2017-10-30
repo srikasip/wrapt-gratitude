@@ -13,7 +13,7 @@ module Admin
             slide_partial: 'gift',
             slide_locals: {gift: @gift},
             thumbnail_partial: 'thumbnail',
-            thumbnail_locals: {image: (@gift.primary_gift_image || @gift.gift_images.first)},
+            thumbnail_locals: {image: @gift.carousel_thumb},
           }
         ]
       }

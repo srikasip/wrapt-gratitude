@@ -3,6 +3,9 @@ class StaticPagesController < ApplicationController
 
   helper SurveyQuestionResponsesHelper
   helper FeatureFlagsHelper
+  helper CarouselHelper
+
+  before_action :load_survey, only: [:science_of_gifting, :rewrapt, :about]
 
   def science_of_gifting
     @boxes = [
@@ -26,14 +29,6 @@ class StaticPagesController < ApplicationController
       {text: 'Ruth, J.A., C.C. Otnes, and F.F. Brunel, Gift receipt and the reformulation of interpersonal relationships. Journal of Consumer Research, 1999. 25(4): p. 385-402. [pdf]', short_text: 'Ruth, J.A., C.C. Otnes, and F.F. Brunel, (1999),', link: 'https://www.researchgate.net/profile/Julie_Ruth/publication/24099017_Gift_Receipt_and_the_Reformulation_of_Interpersonal_Relationships/links/02e7e51e934068390c000000.pdf'},
       {text: "Fuchs, C., M. Schreier, and S.M. van Osselaer, The Handmade Effect: What's Love Got to Do with It? Journal of marketing, 2015. 79(2): p. 98-110. [pdf]", short_text: 'Fuchs, C., M. Schreier, and S.M. van Osselaer, (2015)', link: 'https://www.researchgate.net/profile/Stijn_Van_Osselaer/publication/273529358_The_Handmade_Effect_What%27s_Love_Got_to_Do_with_It/links/55cb517208aeb975674c5f58/The-Handmade-Effect-Whats-Love-Got-to-Do-with-It.pdf'}
     ]
-    @survey ||= Survey.published.first
-
-    first_question = if @survey.sections.any?
-      @survey.sections.first.questions.first
-    else
-      @survey.questions.first
-    end
-    @question_response = SurveyQuestionResponse.new survey_question: first_question
   end
 
   def terms_of_service
@@ -43,9 +38,26 @@ class StaticPagesController < ApplicationController
   end
 
   def page_404
+    respond_to do |f|
+      f.html
+      f.xml { render(xml: {status: 404, message: 'Page not found'}) }
+    end
   end
 
   def login_required?
     false
+  end
+
+  private
+
+  def load_survey
+    @survey ||= Survey.published.first
+
+    first_question = if @survey.sections.any?
+      @survey.sections.first.questions.first
+    else
+      @survey.questions.first
+    end
+    @question_response = SurveyQuestionResponse.new survey_question: first_question
   end
 end
