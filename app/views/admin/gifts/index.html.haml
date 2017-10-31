@@ -7,6 +7,8 @@
     = link_to 'Add a Gift', new_admin_gift_path, class: 'btn btn-primary'
     = link_to 'Unintended Single Product Gifts', admin_faux_single_product_gifts_path, class: 'btn btn-primary'
     = link_to 'Export Gift Tags', admin_gift_tag_exports_path, class: 'btn btn-primary', method: :create
+    - if greenriver_person?
+      = link_to 'Import Gift Tags', new_admin_gift_tag_import_path, class: 'btn btn-primary'
 
 .row.admin__search
   = form_for  [:admin, @gift_search], url: admin_gifts_path, html: {method: 'GET', data: {behavior: 'form-loads-subcategories'}} do |form|
