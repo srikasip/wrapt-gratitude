@@ -157,6 +157,8 @@ class PurchaseService::ShippingService
 
     normalized_shipping_choice = shipping_choice.to_s.upcase
 
+    # Either allow all rates or whitelisted ones. If a vendor has one or more
+    # selected, it's a whitelist, otherwise all are allowed.
     allowed_rates = rates.select do |rate|
       if vendor.shipping_service_levels.blank?
         # No choices mean all choices are okay
@@ -167,17 +169,21 @@ class PurchaseService::ShippingService
       end
     end
 
-    picked_rate = \
+    # If the whitelist yields no rates, fall back to the entire set.
+    rates_to_search = \
       if allowed_rates.present?
-        allowed_rates.find { |r| r['attributes'].include?(normalized_shipping_choice) }
+        allowed_rates
       else
-        # No whitelisted rates, so just use them all, even though the vendor had a preference.
-        case normalized_shipping_choice
-        when 'FASTEST'
-          rates.sort_by { |r| r['estimated_days'].to_i }.first
-        else
-          rates.sort_by { |r| r['amount'].to_f }.first
-        end
+        rates
+      end
+
+    picked_rate = \
+      # No whitelisted rates, so just use them all, even though the vendor had a preference.
+      case normalized_shipping_choice
+      when 'FASTEST'
+        rates_to_search.sort_by { |r| r['estimated_days'].to_i }.first
+      else
+        rates_to_search.sort_by { |r| r['amount'].to_f }.first
       end
 
     if picked_rate.nil?
@@ -189,11 +195,11 @@ class PurchaseService::ShippingService
 
   def self.get_shipping_and_handling_for_one_purchase_order(rate:, vendor:)
     OpenStruct.new.tap do |result|
-      result.shipping_cost_in_cents = rate['amount'].to_f * 100
-      result.shipping_in_cents = (result.shipping_cost_in_cents * SHIPPING_MARKUP).round
-      result.handling_cost_in_cents = vendor.purchase_order_markup_in_cents
-      result.handling_in_cents = result.handling_cost_in_cents
-      result.combined_handling_in_cents = result.handling_in_cents + result.shipping_in_cents
+      result.shipping_cost_in_cents       = rate['amount'].to_f * 100
+      result.shipping_in_cents            = (result.shipping_cost_in_cents * SHIPPING_MARKUP).round
+      result.handling_cost_in_cents       = vendor.purchase_order_markup_in_cents
+      result.handling_in_cents            = result.handling_cost_in_cents
+      result.combined_handling_in_cents   = result.handling_in_cents + result.shipping_in_cents
       result.combined_handling_in_dollars = (result.combined_handling_in_cents / 100.0).round(2)
     end
   end
