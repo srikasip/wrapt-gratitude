@@ -60,10 +60,12 @@ class GifteesController < ApplicationController
     invitation_id = params[:invitation_id] || session[:invitation_id]
     if invitation_id.present?
       @invitation_user = User.find_by_activation_token invitation_id
-      session[:invitation_id] = @invitation_user.activation_token
+      if @invitation_user.present?
+        session[:invitation_id] = @invitation_user.activation_token
+      end
     end
 
-    user = @invitation_user || current_user
+    @invitation_user || current_user
   end
 
   private def set_survey
