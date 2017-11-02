@@ -1,13 +1,13 @@
 .container
   = simple_form_for @purchase_order, url: url_for, method: :put do |f|
     .row
-      .col-xs-5
+      .col-xs-12.col-sm-5
         = f.input :vendor_acknowledgement_status, collection: [ ['I have all products and will ship them to the customer in the boxes listed below', PurchaseOrder::FULFILL], ['I cannot fulfill this order', PurchaseOrder::DO_NOT_FULFILL] ], label: 'Status', hint: 'Update shipping box (if needed) before clicking acknowledge.'
 
-      .col-xs-5
+      .col-xs-12.col-sm-5
         = f.input :vendor_acknowledgement_reason, collection: PurchaseOrder::NO_FULFILL_REASONS, label: 'Reason', hint: 'only fill out if you cannot fulfill the order'
 
-      .col-xs-2
+      .col-xs-12.col-sm-2
         &nbsp;
         %button.btn.btn-xs.btn-warning Acknowledge
 
