@@ -106,7 +106,7 @@ class GiftExamples
   EXAMPLE_7 = {
     image: 'gift-example__indigo.jpg',
     title: 'Indigo Handloom',
-    tagline: 'Indigo Handloom scarves are made from 100% certified organic, non- GMO cotton.',
+    tagline: 'Wrap yourself in a luxurious scarf made on the handloom in the ancient khadi tradition.',
     details: [
       "Each scarf is completely hand woven (without electricity!) through the traditional textile art of khadi, which is practiced in rural india.  Using natural and low-impact dyes, organic fibers are woven on looms, supporting hundreds of weavers and their families.",
       "Indigo Handloom has worked with more than 500 weavers to preserve this ancient art form, enabling weavers to provide for their families with fair wages, good working conditions and zero tolerance for child labor. "
