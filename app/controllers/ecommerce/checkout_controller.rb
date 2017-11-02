@@ -150,6 +150,14 @@ class Ecommerce::CheckoutController < ApplicationController
   end
 
   def _load_service_object
+    if params[:cart_id].present?
+      session[:cart_id] = params[:cart_id]
+    end
+
+    if session[:cart_id].blank?
+      redirect_to :root
+    end
+
     @customer_purchase = ::PurchaseService.new(cart_id: session[:cart_id])
     @customer_order = @customer_purchase.customer_order
     @profile = @customer_order.profile
