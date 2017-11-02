@@ -9,7 +9,6 @@ class PurchaseOrder < ApplicationRecord
     "don't have one or more products in inventory",
     "can't use the shipping carrier",
     "one or more products discontinued",
-    "did not receive shipping label",
     "don't have proper boxes",
     "other"
   ]
