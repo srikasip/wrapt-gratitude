@@ -162,7 +162,7 @@ class Ecommerce::CheckoutController < ApplicationController
     @customer_order = @customer_purchase.customer_order
 
     # Shouldn't be messing with orders that have been submitted
-    if !@customer_purchase.in_progress?
+    if !@customer_purchase.in_progress? && params[:action] != 'finalize'
       flash[:alert] = "That order has already been submitted."
       redirect_to :root
     end
