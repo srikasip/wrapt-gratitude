@@ -51,6 +51,10 @@ class PurchaseService
     })
   end
 
+  def in_progress?
+    self.customer_order.status == INITIALIZED
+  end
+
   def generate_order!
     _sanity_check!
 

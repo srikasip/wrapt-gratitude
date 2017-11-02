@@ -160,6 +160,13 @@ class Ecommerce::CheckoutController < ApplicationController
 
     @customer_purchase = ::PurchaseService.new(cart_id: session[:cart_id])
     @customer_order = @customer_purchase.customer_order
+
+    # Shouldn't be messing with orders that have been submitted
+    if !@customer_purchase.in_progress?
+      flash[:alert] = "That order has already been submitted."
+      redirect_to :root
+    end
+
     @profile = @customer_order.profile
   end
 
