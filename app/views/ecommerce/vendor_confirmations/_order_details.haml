@@ -43,11 +43,11 @@
 
 .row
   - if @customer_order.include_note?
-    .col-xs-6
+    .col-xs-12.col-sm-6
       %h3 Note Details
       %strong Content:
       %p.sg-box__content{style: 'white-space: pre; text-align: left;'}
         = @customer_order.note_content
 
-  .col-xs-6
+  .col-xs-12.col-sm-6
     = render "shipping"
