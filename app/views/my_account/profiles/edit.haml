@@ -13,5 +13,10 @@
             = form.input :email, label: 'Email Address'
           .col-xs-12.col-md-6
             = form.input :password
+        .row
+          .col-xs-12.col-md-12
+            .form-group
+              - label = 'Please send me occasional updates, such as when there are new Wrapt makers and quiz questions'
+              = wrapt_styled_checkbox('1', 'user[wants_newsletter]', form.object.wants_newsletter, {label: label, data: {}})
 
         = form.submit 'Update', class: 'btn btn-primary btn-block uppercase'

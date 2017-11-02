@@ -299,6 +299,8 @@ module ApplicationHelper
 
   def wrapt_styled_checkbox(value, attr_name, selected, options={})
     content_tag :label, for: attr_name, class: "wrapt-styled-checkbox j-wrapt-styled-checkbox" do
+      concat hidden_field_tag attr_name, '0'
+
       concat link_to '', '#', class: (selected ? 'checked' : ''), onClick: 'App.StyledCheckboxA(event, this)'
       concat options[:label]
       concat check_box_tag attr_name, value, selected, {onChange: 'App.StyledCheckbox(this);', style: 'display:none;', data: options[:data]}

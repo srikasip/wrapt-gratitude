@@ -21,6 +21,8 @@ class SurveyResponseCompletion
     :password,
     :password=,
     :active?,
+    :wants_newsletter=,
+    :wants_newsletter,
     to: :user,
     prefix: true,
     allow_nil: true
