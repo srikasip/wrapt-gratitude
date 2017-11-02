@@ -19,7 +19,8 @@ class MyAccount::ProfilesController < MyAccount::BaseController
       :first_name,
       :last_name,
       :email,
-      :password
+      :password,
+      :wants_newsletter
     )
   end
 end

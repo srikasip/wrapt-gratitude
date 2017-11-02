@@ -27,6 +27,11 @@
                 = form.input :user_email, label: 'Email Address'
               .col-sm-6
                 = form.input :user_password, label: 'Password', value: ''
+            .row
+              .col-xs-12.col-md-12
+                .form-group
+                  - label = 'Please send me occasional updates, such as when there are new Wrapt makers and quiz questions'
+                  = wrapt_styled_checkbox('1', 'survey_response_completion[user_wants_newsletter]', true, {label: label, data: {}})
 
           = form.submit 'View Gift Recommendations'.upcase, class: 'btn btn-primary btn-sm btn-full-width'
 

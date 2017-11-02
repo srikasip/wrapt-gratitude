@@ -63,7 +63,8 @@ class SurveyResponseCompletionsController < ApplicationController
       :user_first_name,
       :user_last_name,
       :user_email,
-      :user_password
+      :user_password,
+      :user_wants_newsletter
     )
   end
 

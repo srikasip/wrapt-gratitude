@@ -1,7 +1,7 @@
 module Admin
   class UsersController < BaseController
     before_filter :find_user, only: [:edit, :update, :destroy, :resend_invitation]
-  
+
     def index
       @user_search = UserSearch.new(user_search_params)
       @users = User
@@ -55,6 +55,11 @@ module Admin
       end
     end
 
+    def export
+      now = Time.zone.now.to_s(:iso8601)
+      send_data UserExport.csv, filename: "user.export.#{now}.csv"
+    end
+
     def destroy
       @user.destroy
       flash[:notice] = "Deleted account for #{@user.full_name}."
@@ -68,8 +73,7 @@ module Admin
       flash[:notice] = "Sent an account invitation to #{@user.full_name}."
       redirect_to :back
     end
-    
-  
+
     private def user_params
       params.require(:user).permit(
         :first_name,
@@ -79,7 +83,7 @@ module Admin
         :unmoderated_testing_platform
       )
     end
-    
+
 
     private def find_user
       @user = User.find(params[:id]) if params[:id]

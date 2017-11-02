@@ -113,6 +113,7 @@ Rails.application.routes.draw do
       end
       collection do
         get :pending_invites
+        get :export
       end
     end
     resources :user_imports, only: [:new, :create]

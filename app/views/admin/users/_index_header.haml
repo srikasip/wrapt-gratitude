@@ -7,6 +7,7 @@
     = link_to 'Invite One User', new_admin_user_path, class: 'btn btn-primary'
     = link_to 'Import Multiple Users', new_admin_user_import_path, class: 'btn btn-primary'
     = link_to 'Invitation Requests', admin_invitation_requests_path, class: 'btn btn-primary'
+    = link_to 'Export CSV', export_admin_users_path(format: :csv), class: 'btn btn-primary'
 
 .row.admin__search
   .col-sm-12
@@ -19,7 +20,7 @@
           %i.glyphicon.glyphicon-search
           Search
         = link_to 'Clear Search (Show All)', admin_users_path, class: 'btn btn-default'
-        
+
 :ruby
   tabs = []
   tabs << {label: 'Active Users', action_name: 'index'}
@@ -29,6 +30,6 @@
   - tabs.each do |tab|
     %li{class: tab[:action_name] == action_name ? 'active' : '', role: 'presentation'}
       %a{href: url_for({user_search: @user_search.to_params}.merge(action: tab[:action_name])), role: 'tab'}= tab[:label]
-  
 
-        
+
+
