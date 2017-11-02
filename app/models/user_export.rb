@@ -3,7 +3,7 @@ class UserExport
   def self.csv
     CSV.generate do |csv|
       csv << ['First Name', 'Last Name', 'Email Address', 'Newsletter Sign-up']
-      User.where("email not like '%greenriver%'").find_each do |user|
+      User.where("email not like '%greenriver%'").order('email').find_each do |user|
         csv << [
           user.first_name,
           user.last_name,
