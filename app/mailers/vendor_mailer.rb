@@ -1,4 +1,6 @@
 class VendorMailer < ApplicationMailer
+  default from: 'Wrapt Orders <orders@wrapt.com>'
+
   if ENV['ECOMMERCE_BCC']
     default bcc: ENV['ECOMMERCE_BCC'].split(';')
   end
