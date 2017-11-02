@@ -45,10 +45,10 @@ class GiftExamples
 
   EXAMPLE_3 = {
     image: 'gift-example__dutch-bow.jpg',
-    title: 'DutchBow',
+    title: 'Dutch+Bow',
     tagline: 'The designer gets much of her design inspiration from her global travels, making her pieces in the US.',
     details: [
-      "Ariane Harris started Dutch Bow out of the need to be creative while staying at home raising her two sons, Dutch and Bowie. Today, they share a play/work space filled with creative pursuits.",
+      "Ariane Harris started Dutch+Bow out of the need to be creative while staying at home raising her two sons, Dutch and Bowie. Today, they share a play/work space filled with creative pursuits.",
       "Having lived and traveled all over Europe and spent time in Morocco, Turkey and Mexico, the designer spots global fashion trends and incorporates them into her pieces."
     ],
     labels: [
