@@ -1,13 +1,14 @@
 .container
   = render 'header'
   .row
+    .col-xs-12.visible-xs.mb3
+      = link_to 'New Giftee', new_my_account_giftee_path, class: 'btn btn-sm btn-primary uppercase btn-block', style: 'margin-top: -18px;', data: {loads_in_pjax_modal: true}
+  .row
     .col-xs-12
       .ma-giftees
         - @giftees.each do |giftee|
           = render 'giftee', giftee: giftee
-  .row
-    .col-xs-12.visible-xs
-      = link_to 'New Giftee', new_my_account_giftee_path, class: 'btn btn-sm btn-primary uppercase btn-block', data: {loads_in_pjax_modal: true}
+  
   .row
     .col-xs-12
       = paginate(@giftees)
