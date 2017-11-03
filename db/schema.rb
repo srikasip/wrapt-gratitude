@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171102152112) do
+ActiveRecord::Schema.define(version: 20171103135433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 20171102152112) do
     t.integer  "address_id"
     t.boolean  "shipping_to_giftee",       default: true, null: false
     t.boolean  "need_shipping_calculated", default: true, null: false
+    t.string   "note_envelope_text"
     t.index ["address_id"], name: "index_customer_orders_on_address_id", using: :btree
     t.index ["profile_id"], name: "index_customer_orders_on_profile_id", using: :btree
     t.index ["user_id"], name: "index_customer_orders_on_user_id", using: :btree

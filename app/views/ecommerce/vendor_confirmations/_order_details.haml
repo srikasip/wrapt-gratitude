@@ -9,25 +9,29 @@
     %table.table.table-striped
       %thead
         %tr
-          %th
+          %th.hidden-xs
           %th Description
           %th SKU
-          %th Quantity
+          %th
+            .hidden-xs Quantity
+            .visible-xs-inline Qty
+
       %tbody
         - @purchase_order.line_items.each do |line_item|
           - product = line_item.orderable
           %tr
+            %td.hidden-xs
+              = render "product_image", product: product
             %td
-              - url = product.primary_product_image&.image&.url(:small)
-              - if url.present?
-                = image_tag url, class: 'img-responsive', style: 'max-width: 88px; padding-right: 4px;', alt: product.title
-              - else
-                %img
-            %td= product.description
-            %td= product.vendor_sku
+              = product.description
+            %td
+              = product.vendor_sku
+              .visible-xs-block
+                = render "product_image", product: product
+
             %td= line_item.quantity
         %tr
-          %td
+          %td.hidden-xs
           %td
             - wrapt_parcel = @purchase_order.gift.pretty_parcel
             = wrapt_parcel.description
@@ -35,7 +39,7 @@
           %td 1
         - if @customer_order.include_note?
           %tr
-            %td
+            %td.hidden-xs
             %td Hand written note
             %td
             %td 1
@@ -43,11 +47,15 @@
 
 .row
   - if @customer_order.include_note?
-    .col-xs-6
+    .col-xs-12.col-sm-6
       %h3 Note Details
       %strong Content:
       %p.sg-box__content{style: 'white-space: pre; text-align: left;'}
         = @customer_order.note_content
 
-  .col-xs-6
+      %strong Envelope Text:
+      %p.sg-box__content{style: 'white-space: pre; text-align: left;'}
+        = @customer_order.note_envelope_text
+
+  .col-xs-12.col-sm-6
     = render "shipping"

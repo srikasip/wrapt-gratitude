@@ -65,7 +65,7 @@ class PurchaseService
   def gift_wrapt!(params)
     _sanity_check!
 
-    whitelisted_params = params.require(:customer_order).permit(:gift_wrapt, :include_note, :note_content)
+    whitelisted_params = params.require(:customer_order).permit(:gift_wrapt, :include_note, :note_content, :note_envelope_text)
 
     _safely do
       self.customer_order.assign_attributes(whitelisted_params)
