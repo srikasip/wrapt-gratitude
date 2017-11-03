@@ -17,8 +17,9 @@ module Tax
 
       user = customer_order.user
 
+
       {
-        "companyCode": "DEFAULT",
+        "companyCode": COMPANY,
         "type": transaction_type,
         "commit": 'false',
         "date": Date.today.to_s,

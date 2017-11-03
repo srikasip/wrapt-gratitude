@@ -33,7 +33,7 @@ class Tax::Transaction < ApplicationRecord
   end
 
   def reconcile!
-    self.api_reconcile_response = client.commit_transaction('DEFAULT', self.transaction_code, {commit: true})
+    self.api_reconcile_response = client.commit_transaction(Tax::COMPANY, self.transaction_code, {commit: true})
     _cache_reconciliation_results
   rescue Faraday::Error, Exception => e
     Rails.logger.fatal "[AVATAX][RECONCILE] #{e.message}"
