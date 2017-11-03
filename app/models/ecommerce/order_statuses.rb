@@ -2,7 +2,7 @@ module OrderStatuses
   VALID_ORDER_STATUSES = [
     ORDER_INITIALIZED   = 'initialized',
     SUBMITTED           = 'submitted',
-    APPROVED            = 'approved',    # Vendors acknowedged they can fulfill order
+    APPROVED            = 'approved',    # Vendors acknowledged they can fulfill order
     PROCESSING          = 'processing',
     SHIPPED             = 'shipped',
     RECEIVED            = 'received',

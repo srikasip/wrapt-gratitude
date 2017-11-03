@@ -7,6 +7,7 @@ class CustomerOrderMailer < ApplicationMailer
   if ENV['ECOMMERCE_BCC']
     default bcc: ENV['ECOMMERCE_BCC'].split(';')
   end
+  default from: 'Wrapt Orders <orders@wrapt.com>'
 
   def order_received(customer_order_id)
     @customer_order = CustomerOrder.find(customer_order_id)

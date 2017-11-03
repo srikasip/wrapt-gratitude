@@ -14,7 +14,12 @@ module RequiresLoginOrInvitation
     invitation_id = params[:invitation_id] || session[:invitation_id]
     if invitation_id.present?
       user = User.find_by_activation_token invitation_id
-      session[:invitation_id] = user.activation_token
+      if user.present?
+        session[:invitation_id] = user.activation_token
+      else
+        flash[:alert] = "That invitation doesn't exist"
+        redirect_to :root
+      end
     end
 
     if user
@@ -34,6 +39,5 @@ module RequiresLoginOrInvitation
     current_user
     @current_user.blank? && current_user
   end
-
 
 end
