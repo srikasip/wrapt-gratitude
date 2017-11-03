@@ -88,9 +88,14 @@ class SurveyResponseCompletionsController < ApplicationController
     # twist is that if you log instead of creating an account at the end, we
     # have an anonymous profile, yet we can't use current_user.owned_profiles
     # because it hasn't been associated yet with the user.
-    @profile ||= Profile.where(owner_id: nil).find giftee_id
+    @profile ||= Profile.where(owner_id: nil).find_by(id: giftee_id)
 
-    session[:giftee_id] = @profile.id
+    if @profile.present?
+      session[:giftee_id] = @profile.id
+    else
+      flash[:alert] = 'Giftee not found'
+      redirect_to :root
+    end
   end
 
   def set_survey_response
