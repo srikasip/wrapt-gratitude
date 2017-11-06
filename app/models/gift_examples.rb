@@ -8,7 +8,7 @@ class GiftExamples
   end
 
   def rewrapt_stories
-    [EXAMPLE_1, EXAMPLE_2, EXAMPLE_3, EXAMPLE_4, EXAMPLE_5, EXAMPLE_6, EXAMPLE_7]
+    [EXAMPLE_1, EXAMPLE_2, EXAMPLE_3, EXAMPLE_4, EXAMPLE_5, EXAMPLE_6, EXAMPLE_7, EXAMPLE_8]
   end
 
 
@@ -115,6 +115,21 @@ class GiftExamples
       {icon: 'icon-source-sustainable', text: 'sustainable'},
       {icon: 'icon-source-fair-trade', text: 'Fair Trade'},
       {icon: 'icon-source-women-girls', text: 'supporting women & girls'}
+    ]
+  }
+
+  EXAMPLE_8 = {
+    image: 'gift-example__giraffehome.jpg',
+    title: 'Giraffe Home',
+    tagline: 'Bringing together beauty and justice',
+    details: [
+      "Situated on Vashon Island in the Pacific Northwest, Pricilla Schleigh’s store is the conduit for bringing together artisan crafts from more than 55 countries, representing the work of 10,000 people.",
+      "The Giraffe collection showcases items of great design that are fair trade, made with cultural integrity, and are earth friendly. For more info, https://giraffehome.com "
+    ],
+    labels: [
+      {icon: 'icon-source-fair-trade', text: 'Fair Trade'},
+      {icon: 'icon-source-handmade', text: 'handmade'},
+      {icon: 'icon-source-sustainable', text: 'sustainable'}
     ]
   }
 
