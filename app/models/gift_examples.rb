@@ -8,7 +8,7 @@ class GiftExamples
   end
 
   def rewrapt_stories
-    [EXAMPLE_1, EXAMPLE_2, EXAMPLE_3, EXAMPLE_4, EXAMPLE_5, EXAMPLE_6, EXAMPLE_7]
+    [EXAMPLE_1, EXAMPLE_2, EXAMPLE_3, EXAMPLE_4, EXAMPLE_5, EXAMPLE_6, EXAMPLE_7, EXAMPLE_8]
   end
 
 
@@ -45,10 +45,10 @@ class GiftExamples
 
   EXAMPLE_3 = {
     image: 'gift-example__dutch-bow.jpg',
-    title: 'DutchBow',
+    title: 'Dutch+Bow',
     tagline: 'The designer gets much of her design inspiration from her global travels, making her pieces in the US.',
     details: [
-      "Ariane Harris started Dutch Bow out of the need to be creative while staying at home raising her two sons, Dutch and Bowie. Today, they share a play/work space filled with creative pursuits.",
+      "Ariane Harris started Dutch+Bow out of the need to be creative while staying at home raising her two sons, Dutch and Bowie. Today, they share a play/work space filled with creative pursuits.",
       "Having lived and traveled all over Europe and spent time in Morocco, Turkey and Mexico, the designer spots global fashion trends and incorporates them into her pieces."
     ],
     labels: [
@@ -106,7 +106,7 @@ class GiftExamples
   EXAMPLE_7 = {
     image: 'gift-example__indigo.jpg',
     title: 'Indigo Handloom',
-    tagline: 'Indigo Handloom scarves are made from 100% certified organic, non- GMO cotton.',
+    tagline: 'Wrap yourself in a luxurious scarf made on the handloom in the ancient khadi tradition.',
     details: [
       "Each scarf is completely hand woven (without electricity!) through the traditional textile art of khadi, which is practiced in rural india.  Using natural and low-impact dyes, organic fibers are woven on looms, supporting hundreds of weavers and their families.",
       "Indigo Handloom has worked with more than 500 weavers to preserve this ancient art form, enabling weavers to provide for their families with fair wages, good working conditions and zero tolerance for child labor. "
@@ -115,6 +115,21 @@ class GiftExamples
       {icon: 'icon-source-sustainable', text: 'sustainable'},
       {icon: 'icon-source-fair-trade', text: 'Fair Trade'},
       {icon: 'icon-source-women-girls', text: 'supporting women & girls'}
+    ]
+  }
+
+  EXAMPLE_8 = {
+    image: 'gift-example__giraffehome.jpg',
+    title: 'Giraffe Home',
+    tagline: 'Bringing together beauty and justice',
+    details: [
+      "Situated on Vashon Island in the Pacific Northwest, Pricilla Schleigh’s store is the conduit for bringing together artisan crafts from more than 55 countries, representing the work of 10,000 people.",
+      "The Giraffe collection showcases items of great design that are fair trade, made with cultural integrity, and are earth friendly. For more info, https://giraffehome.com "
+    ],
+    labels: [
+      {icon: 'icon-source-fair-trade', text: 'Fair Trade'},
+      {icon: 'icon-source-handmade', text: 'handmade'},
+      {icon: 'icon-source-sustainable', text: 'sustainable'}
     ]
   }
 

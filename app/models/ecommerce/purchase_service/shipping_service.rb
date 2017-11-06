@@ -35,7 +35,9 @@ class PurchaseService::ShippingService
         purchase_order.
           vendor.
           attributes.
-          keep_if { |key| key.in?(["name", "street1", "street2", "street3", "city", "state", "zip", "country", "phone", "email"]) }
+          keep_if { |key| key.in?(["street1", "street2", "street3", "city", "state", "zip", "country", "phone", "email"]) }
+
+      shipment.address_from['name'] = 'Wrapt'
 
       co = self.customer_order
       shipment.address_to = {

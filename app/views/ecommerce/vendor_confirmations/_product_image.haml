@@ -1,0 +1,5 @@
+- url = product.primary_product_image&.image&.url(:small)
+- if url.present?
+  = image_tag url, class: 'img-responsive', style: 'max-width: 88px; padding-right: 4px;', alt: product.title
+- else
+  %img

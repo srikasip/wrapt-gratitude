@@ -105,9 +105,11 @@ sup:last-child {
     margin-bottom: 10px;
   }
   .icon {
-    width: 14px;
-    height: 14px;
+    width: 22px;
+    height: 22px;
     fill: $blue-005;
+    margin-left: 1px;
+    vertical-align: middle;
   }
 }
 
