@@ -19,6 +19,7 @@ module RequiresLoginOrInvitation
       else
         flash[:alert] = "That invitation doesn't exist"
         redirect_to :root
+        return
       end
     end
 
