@@ -13,7 +13,9 @@
       - if @purchase_order.shipping_label.present?
         = link_to @purchase_order.shipping_label.url, target: '_blank' do
           [Download Shipping Label]
-      - else
+      - elsif @purchase_order.cancelled?
+        %strong Order rejected by vendor
+      - elsif params[:action] != 'details'
         = form_tag url_for(action: :change_shipping_box),method: :patch do
           Change the shipping box to
           = collection_select :parcel, :id, Parcel.shipping, :id, :description, selected: @purchase_order.shipping_parcel.id

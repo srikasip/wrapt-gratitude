@@ -51,8 +51,6 @@ class PurchaseOrder < ApplicationRecord
 
   define_method(:to_service)                   { PurchaseService.new(cart_id: self.cart_id) }
   define_method(:shipping_parcel)              { forced_shipping_parcel || gift.shipping_parcel }
-  define_method(:shipped_or_better?)           { self.status.in?(SHIPPED_OR_BETTER) }
-  define_method(:received?)                    { self.status == RECEIVED }
   define_method(:can_change_acknowledgements?) { self.status.in? [ SUBMITTED, ORDER_INITIALIZED ] }
   define_method(:vendor_accepted?)             { self.vendor_acknowledgement_status == FULFILL }
   define_method(:vendor_rejected?)             { self.vendor_acknowledgement_status == DO_NOT_FULFILL }

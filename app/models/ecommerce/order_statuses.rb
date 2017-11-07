@@ -21,4 +21,8 @@ module OrderStatuses
   SHIPPED_OR_BETTER = [SHIPPED, RECEIVED]
 
   NOT_COMPLETED_STATUSES = VALID_ORDER_STATUSES - COMPLETED_STATUSES
+
+  define_method(:shipped_or_better?) { self.status.in?(SHIPPED_OR_BETTER) }
+  define_method(:received?)          { self.status == RECEIVED }
+  define_method(:cancelled?)         { self.status == CANCELLED }
 end

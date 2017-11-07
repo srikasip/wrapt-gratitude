@@ -204,7 +204,6 @@ class PurchaseService
 
     purchase_orders.each do |po|
       if po.vendor_rejected?
-        raise 'maybe catch purchase orders *transitioning* to cancelled and email on that hook'
         po.update_attribute(:status, CANCELLED)
         customer_order.update_attribute(:status, PARTIALLY_CANCELLED)
       elsif po.vendor_accepted?
@@ -216,6 +215,8 @@ class PurchaseService
 
     if all_vendors_accepted?
       customer_order.update_attribute(:status, PROCESSING)
+    elsif all_vendors_cancelled?
+      customer_order.update_attribute(:status, CANCELLED)
     end
 
     if okay_to_charge?
@@ -234,7 +235,7 @@ class PurchaseService
 
   def cancel_order!
     Rails.logger.info "Canceling some or all of cart ID #{cart_id}. One or more vendors cannot fulfill."
-    raise "WIP"
+    return
     _figure_which_pos_to_cancel
     _calculate_amount_to_refund
     self.charging_service.refund(x)
@@ -261,6 +262,10 @@ class PurchaseService
 
   def all_vendors_accepted?
     purchase_orders.okay_to_fulfill.count == purchase_orders.count
+  end
+
+  def all_vendors_cancelled?
+    purchase_orders.all?(&:cancelled?)
   end
 
   delegate :need_shipping_calculated, to: :customer_order
