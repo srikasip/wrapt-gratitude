@@ -93,7 +93,8 @@ parcels = [
     height_in_inches: 8.00,
     length_in_inches: 12.00,
     width_in_inches: 12.00,
-    usage: 'shipping'
+    usage: 'shipping',
+    shippo_template_name: nil
   },
 
   {
@@ -104,7 +105,8 @@ parcels = [
     height_in_inches: 8.00,
     length_in_inches: 6.00,
     width_in_inches: 4.00,
-    usage: 'shipping'
+    usage: 'shipping',
+    shippo_template_name: nil
   }
 ]
 
@@ -117,7 +119,8 @@ parcels = [
     height_in_inches: len,
     length_in_inches: len,
     width_in_inches: len,
-    usage: 'shipping'
+    usage: 'shipping',
+    shippo_template_name: nil
   }
 end
 
