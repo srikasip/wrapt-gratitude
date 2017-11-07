@@ -32,7 +32,7 @@ class Product < ApplicationRecord
   end
 
   def deleteable?
-    LineItem.where(orderable: self).none?
+    Ec::LineItem.where(orderable: self).none?
   end
 
   private def sku_prefix

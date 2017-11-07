@@ -42,9 +42,9 @@ class Gift < ApplicationRecord
   has_many :uploaded_gift_images, class_name: 'GiftImages::Uploaded'
   has_many :gift_images_from_products, class_name: 'GiftImages::FromProduct'
 
-  has_many :gift_parcels, dependent: :destroy
-  has_many :pretty_parcels, -> { joins(:parcel).where(parcels: { usage: 'pretty' }) }, class_name: 'GiftParcel'
-  has_many :shipping_parcels, -> { joins(:parcel).where(parcels: { usage: 'shipping' }) }, class_name: 'GiftParcel'
+  has_many :gift_parcels, dependent: :destroy, class_name: 'Ec::GiftParcel'
+  has_many :pretty_parcels, -> { joins(:parcel).where(parcels: { usage: 'pretty' }) }, class_name: 'Ec::GiftParcel'
+  has_many :shipping_parcels, -> { joins(:parcel).where(parcels: { usage: 'shipping' }) }, class_name: 'Ec::GiftParcel'
   define_method(:pretty_parcel) { pretty_parcels.first&.parcel }
   define_method(:shipping_parcel) { shipping_parcels.first&.parcel }
 

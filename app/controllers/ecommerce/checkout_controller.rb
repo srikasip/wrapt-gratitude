@@ -12,7 +12,7 @@ class Ecommerce::CheckoutController < ApplicationController
   def start
     profile = current_user.owned_profiles.find(params[:giftee_id])
 
-    customer_purchase = ::PurchaseService.find_existing_cart_or_initialize(profile: profile, user: current_user)
+    customer_purchase = Ec::PurchaseService.find_existing_cart_or_initialize(profile: profile, user: current_user)
 
     customer_purchase.generate_order!
 
@@ -146,7 +146,7 @@ class Ecommerce::CheckoutController < ApplicationController
   private
 
   def _load_progress_bar
-    @pb = ::ProgressBarViewModel.new(@customer_order, @customer_purchase, @checkout_step)
+    @pb = Ec::ProgressBarViewModel.new(@customer_order, @customer_purchase, @checkout_step)
   end
 
   def _load_service_object
@@ -158,7 +158,7 @@ class Ecommerce::CheckoutController < ApplicationController
       redirect_to :root
     end
 
-    @customer_purchase = ::PurchaseService.new(cart_id: session[:cart_id])
+    @customer_purchase = Ec::PurchaseService.new(cart_id: session[:cart_id])
     @customer_order = @customer_purchase.customer_order
 
     # Shouldn't be messing with orders that have been submitted
