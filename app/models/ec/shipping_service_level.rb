@@ -16,6 +16,16 @@ module Ec
       carrier_name + " " + name
     end
 
+    def shipping_parcels
+      starting_set = shipping_carrier.shipping_parcels
+
+      if shippo_token != 'usps_priority'
+        starting_set.where('shippo_template_name is null')
+      else
+        starting_set
+      end
+    end
+
     def self.active
       all
     end

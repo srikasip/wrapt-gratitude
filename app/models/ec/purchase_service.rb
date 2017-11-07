@@ -141,7 +141,7 @@ module Ec
         }
 
         # Don't make a new one if there is already a matching address
-        matching_address_scope = params['customer_order']['ship_to'] == 'ship_to_giftee' ? self.profile.addresses : self.customer.addresses
+        matching_address_scope = params['ec_customer_order']['ship_to'] == 'ship_to_giftee' ? self.profile.addresses : self.customer.addresses
         matching_address = matching_address_scope.
           where(params_to_save)
         if matching_address.any?
@@ -315,7 +315,7 @@ module Ec
       co.save!
     end
 
-    delegate :force_shipping_parcel!, to: :shipping_service
+    delegate :force_shipping!, to: :shipping_service
 
     private
 

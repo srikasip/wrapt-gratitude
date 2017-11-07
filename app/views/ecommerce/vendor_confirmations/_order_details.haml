@@ -50,7 +50,7 @@
     .col-xs-12.col-sm-6
       %h3 Note Details
       %strong Content:
-      %p.sg-box__content{style: 'white-space: pre; text-align: left;'}
+      %p.sg-box__content{style: 'white-space: pre; text-align: left; overflow: auto'}
         = @customer_order.note_content
 
       %strong Envelope Text:

@@ -26,8 +26,10 @@ module Ec
 
     has_many :pretty_parcels, through: :gift
     has_many :shipping_parcels, through: :gift
-    # Vendors can change the box before they acknowledge an order if needed.
-    belongs_to :forced_shipping_parcel, class_name: 'Parcel', foreign_key: :shipping_parcel_id
+    # Vendors can change things before they acknowledge an order if needed.
+    belongs_to :forced_shipping_carrier, class_name: 'Ec::ShippingCarrier', foreign_key: :shipping_carrier_id
+    belongs_to :forced_shipping_service_level, class_name: 'Ec::ShippingServiceLevel', foreign_key: :shipping_service_level_id
+    belongs_to :forced_shipping_parcel, class_name: 'Ec::Parcel', foreign_key: :shipping_parcel_id
 
     validates :order_number, presence: true
     validates :vendor_token, uniqueness: true
@@ -50,6 +52,8 @@ module Ec
     scope :unacknowledged,  -> { where(vendor_acknowledgement_status: nil) }
 
     define_method(:to_service)                   { PurchaseService.new(cart_id: self.cart_id) }
+    define_method(:shipping_carrier)             { forced_shipping_carrier || ShippingCarrier.find_by(shippo_provider_name: shipping_rate['provider']) }
+    define_method(:shipping_service_level)       { forced_shipping_service_level || ShippingServiceLevel.find_by(shippo_token: shipping_rate.dig('servicelevel', 'token')) }
     define_method(:shipping_parcel)              { forced_shipping_parcel || gift.shipping_parcel }
     define_method(:can_change_acknowledgements?) { self.status.in? [ SUBMITTED, ORDER_INITIALIZED ] }
     define_method(:vendor_accepted?)             { self.vendor_acknowledgement_status == FULFILL }
@@ -58,6 +62,9 @@ module Ec
     define_method(:handling_cost_in_dollars)     { self.handling_cost_in_cents.to_i / 100.0 }
     define_method(:shipping_cost_in_dollars)     { self.shipping_cost_in_cents.to_i / 100.0 }
     define_method(:fulfill?)                     { self.vendor_acknowledgement_status == 'fulfill' }
+
+    delegate :name, to: :shipping_carrier, prefix: true
+    delegate :name, to: :shipping_service_level, prefix: true
 
     def shippo_parcel_hash
       return unless shipping_parcel.present?

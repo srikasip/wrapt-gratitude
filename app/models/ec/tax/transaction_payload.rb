@@ -18,7 +18,6 @@ module Ec
 
         user = customer_order.user
 
-
         {
           "companyCode": COMPANY,
           "type": transaction_type,

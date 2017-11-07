@@ -93,7 +93,7 @@ Rails.application.routes.draw do
     resources :vendor_confirmations, only: [:show, :update] do
       member do
         get :details
-        patch :change_shipping_box
+        patch :change_shipping
       end
       collection do
         get :error

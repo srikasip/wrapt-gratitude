@@ -13,7 +13,7 @@ module Admin
 
       if ENV['ALLOW_BOGUS_ORDER_CREATION']=='true'
         def create
-          order = Ec::OrderFactory.create_order!
+          order = Ec::OrderFactory.create_order!(auto_ack: false)
           flash[:notice] = "Created order #{order.order_number}."
           redirect_to action: :index
         end

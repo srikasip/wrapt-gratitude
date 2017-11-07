@@ -85,7 +85,7 @@ module Ec
       order
     end
 
-    def self.create_order!
+    def self.create_order!(auto_ack:)
       raise "NEVER ON PRODUCTION" if Rails.env.production?
 
       # Fill in problems so we can make some something happen
@@ -181,7 +181,7 @@ module Ec
 
       desired_gifts = gifts.map do |gift|
         # Can only buy one at a time right now given what I see in the mocks.
-        PurchaseService::DesiredGift.new(gift, 1)
+        DesiredGift.new(gift, 1)
       end
 
       cart_id = SecureRandom.hex(10)
@@ -198,7 +198,7 @@ module Ec
       # A different page in the shopping process
       customer_purchase = PurchaseService.new(cart_id: cart_id)
       customer_purchase.gift_wrapt!(
-        ActionController::Parameters.new({ customer_order: {
+        ActionController::Parameters.new({ ec_customer_order: {
           gift_wrapt: ['1', '0'].sample,
           include_note: ['1', '0'].sample,
           note_content: "Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Pellentesque in ipsum id orci porta dapibus. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Vivamus suscipit tortor eget felis porttitor volutpat. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.  Sed porttitor lectus nibh. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Nulla porttitor accumsan tincidunt. Cras ultricies ligula sed magna dictum porta. Vivamus suscipit tortor eget felis porttitor volutpat. Donec sollicitudin molestie malesuada. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rutrum congue leo eget malesuada."
@@ -208,7 +208,7 @@ module Ec
       # A different page in the shopping process
       customer_purchase = PurchaseService.new(cart_id: cart_id)
       customer_purchase.set_address!(
-        ActionController::Parameters.new({customer_order: {
+        ActionController::Parameters.new({ec_customer_order: {
           ship_street1: '319 Hague Rd',
           ship_street2: '',
           ship_city: 'Dummerston',
@@ -245,9 +245,11 @@ module Ec
 
       # All the vendors acknowledge via emails and click-through to a page where they say it's okay.
       # This simulates that 99.5% of the time, a purchase order will be fulfillable.
-      order.purchase_orders.each do |po|
-        po.vendor_acknowledgement_status = Random.rand > 0.005 ? PurchaseOrder::FULFILL : PurchaseOrder::DO_NOT_FULFILL
-        po.save!
+      if auto_ack
+        order.purchase_orders.each do |po|
+          po.vendor_acknowledgement_status = Random.rand > 0.005 ? PurchaseOrder::FULFILL : PurchaseOrder::DO_NOT_FULFILL
+          po.save!
+        end
       end
 
       # This happens when a vendor confirms they have inventory

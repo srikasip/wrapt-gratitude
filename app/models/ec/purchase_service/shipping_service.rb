@@ -268,9 +268,15 @@ module Ec
           next
         end
 
-        shipping_label.shippo_object_id = rate['object_id']
-        shipping_label.carrier = rate['provider']
-        shipping_label.service_level = rate.dig('servicelevel', 'name')
+        if po.forced_shipping_service_level.present?
+          shipping_label.carrier = po.forced_shipping_carrier.name
+          shipping_label.service_level = po.forced_shipping_service_level.name
+          shipping_label.shippo_object_id = po.rates.find { |r| r.dig('servicelevel', 'name') == po.forced_shipping_service_level.name }[:object_id]
+        else
+          shipping_label.shippo_object_id = rate['object_id']
+          shipping_label.carrier = rate['provider']
+          shipping_label.service_level = rate.dig('servicelevel', 'name')
+        end
 
         shipping_label.run!
 
@@ -336,9 +342,25 @@ module Ec
 
     # Vendor can overule the shipping box we have in our database and
     # pick one from a list
-    def force_shipping_parcel!(purchase_order:, parcel:)
+    def force_shipping!(purchase_order:, shipping_carrier_id:, shipping_service_level_id:, parcel_id:)
       _safely do
-        purchase_order.forced_shipping_parcel = parcel
+        shipping_carrier       = ShippingCarrier.active.find_by(id: shipping_carrier_id)
+        shipping_service_level = shipping_carrier.shipping_service_levels.active.find_by(id: shipping_service_level_id)
+
+        if shipping_service_level.blank?
+          shipping_service_level = shipping_carrier.shipping_service_levels.active.first
+        end
+
+        parcel = shipping_service_level.shipping_parcels.active.find_by(id: parcel_id)
+
+        if parcel.blank?
+          parcel = shipping_service_level.shipping_parcels.active.first
+        end
+
+        purchase_order.forced_shipping_carrier       = shipping_carrier
+        purchase_order.forced_shipping_service_level = shipping_service_level
+        purchase_order.forced_shipping_parcel        = parcel
+
         purchase_order.save!
 
         init_shipments!(purchase_orders: [purchase_order])

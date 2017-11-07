@@ -59,12 +59,12 @@ class Gift < ApplicationRecord
 
   belongs_to :product_category, required: true
   belongs_to :product_subcategory, required: true, class_name: 'ProductCategory'
-  belongs_to :tax_code, class_name: 'Tax::Code'
+  belongs_to :tax_code, class_name: 'Ec::Tax::Code'
 
   has_one :calculated_gift_field
   delegate :units_available, to: :calculated_gift_field, allow_nil: true
 
-  before_validation -> { self.tax_code ||= Tax::Code.default }
+  before_validation -> { self.tax_code ||= Ec::Tax::Code.default }
 
   before_save :generate_wrapt_sku, if: :sku_needs_updating?
   before_save :set_can_be_sold_flag
