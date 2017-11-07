@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171103135433) do
+ActiveRecord::Schema.define(version: 20171107182856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 20171103135433) do
     t.boolean  "need_shipping_calculated", default: true, null: false
     t.string   "note_envelope_text"
     t.index ["address_id"], name: "index_customer_orders_on_address_id", using: :btree
+    t.index ["order_number"], name: "index_customer_orders_on_order_number", unique: true, using: :btree
     t.index ["profile_id"], name: "index_customer_orders_on_profile_id", using: :btree
     t.index ["user_id"], name: "index_customer_orders_on_user_id", using: :btree
   end
@@ -453,6 +454,7 @@ ActiveRecord::Schema.define(version: 20171103135433) do
     t.integer  "shipping_parcel_id"
     t.index ["customer_order_id"], name: "index_purchase_orders_on_customer_order_id", using: :btree
     t.index ["gift_id"], name: "index_purchase_orders_on_gift_id", using: :btree
+    t.index ["order_number"], name: "index_purchase_orders_on_order_number", unique: true, using: :btree
     t.index ["vendor_id"], name: "index_purchase_orders_on_vendor_id", using: :btree
     t.index ["vendor_token"], name: "index_purchase_orders_on_vendor_token", unique: true, using: :btree
   end
