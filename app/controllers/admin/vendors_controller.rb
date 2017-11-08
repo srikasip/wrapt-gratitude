@@ -47,6 +47,8 @@ module Admin
       def vendor_params
         params.require(:vendor).permit :name,
           :street1,
+          :street2,
+          :street3,
           :city,
           :state,
           :zip,
