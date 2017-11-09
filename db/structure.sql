@@ -369,7 +369,8 @@ CREATE TABLE customer_orders (
     ship_to integer DEFAULT 0,
     address_id integer,
     shipping_to_giftee boolean DEFAULT true NOT NULL,
-    need_shipping_calculated boolean DEFAULT true NOT NULL
+    need_shipping_calculated boolean DEFAULT true NOT NULL,
+    note_envelope_text character varying
 );
 
 
@@ -1535,7 +1536,8 @@ CREATE TABLE shipping_service_levels (
     estimated_days integer NOT NULL,
     terms character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    active boolean DEFAULT true NOT NULL
 );
 
 
@@ -2213,7 +2215,8 @@ CREATE TABLE users (
     beta_round character varying,
     recipient_referring_profile_id integer,
     unmoderated_testing_platform boolean DEFAULT false NOT NULL,
-    activation_token_generated_at timestamp without time zone
+    activation_token_generated_at timestamp without time zone,
+    wants_newsletter boolean DEFAULT false NOT NULL
 );
 
 
@@ -4860,6 +4863,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171027154654'),
 ('20171027164553'),
 ('20171027184052'),
-('20171030153140');
+('20171030153140'),
+('20171102152112'),
+('20171103135433'),
+('20171109225034');
 
 

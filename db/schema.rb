@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171103135433) do
+ActiveRecord::Schema.define(version: 20171109225034) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -553,13 +553,14 @@ ActiveRecord::Schema.define(version: 20171103135433) do
   end
 
   create_table "shipping_service_levels", force: :cascade do |t|
-    t.integer  "shipping_carrier_id", null: false
-    t.string   "name",                null: false
-    t.string   "shippo_token",        null: false
-    t.integer  "estimated_days",      null: false
-    t.string   "terms",               null: false
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.integer  "shipping_carrier_id",                null: false
+    t.string   "name",                               null: false
+    t.string   "shippo_token",                       null: false
+    t.integer  "estimated_days",                     null: false
+    t.string   "terms",                              null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.boolean  "active",              default: true, null: false
     t.index ["shipping_carrier_id"], name: "index_shipping_service_levels_on_shipping_carrier_id", using: :btree
     t.index ["shippo_token"], name: "index_shipping_service_levels_on_shippo_token", using: :btree
   end

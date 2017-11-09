@@ -177,6 +177,12 @@ class PurchaseService::ShippingService
         rates
       end
 
+    # Now remove any blacklisted ones:
+    blacklist = ShippingServiceLevel.inactive.map(&:shippo_token)
+    rates_to_search = rates_to_search.reject do |rate|
+      rate.dig('servicelevel', 'token').in?(blacklist)
+    end
+
     picked_rate = \
       # No whitelisted rates, so just use them all, even though the vendor had a preference.
       case normalized_shipping_choice

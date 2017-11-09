@@ -34,12 +34,28 @@ describe PurchaseService::ShippingService do
     PurchaseService::ShippingService.update_shipping_status!(payload.dig('data'), do_gift_count_update: false)
   end
 
-  it "should sort rates" do
+  it "should get fastest rate" do
     fastest = PurchaseService::ShippingService.find_rate(rates: rates, shipping_choice: 'FASTEST', vendor: vendor)
-    cheapest = PurchaseService::ShippingService.find_rate(rates: rates, shipping_choice: 'CHEAPEST', vendor: vendor)
 
     # The test data has a tie for fastest and this is the cheapest
     expect(fastest.dig('servicelevel', 'token')).to eq("fedex_priority_overnight")
+  end
+
+  it "should get fastest rate that's not blacklisted" do
+    ShippingServiceLevel.find_by(shippo_token: "fedex_priority_overnight").update_attribute(:active, false)
+    ShippingServiceLevel.find_by(shippo_token: "fedex_first_overnight").update_attribute(:active, false)
+
+    fastest = PurchaseService::ShippingService.find_rate(rates: rates, shipping_choice: 'FASTEST', vendor: vendor)
+
+    # The test data has a tie for fastest and this is the cheapest
+    expect(fastest.dig('servicelevel', 'token')).to_not eq("fedex_priority_overnight")
+    expect(fastest.dig('servicelevel', 'token')).to_not eq("fedex_first_overnight")
+
+    expect(fastest.dig('servicelevel', 'token')).to eq("fedex_ground")
+  end
+
+  it "should get cheapest rate" do
+    cheapest = PurchaseService::ShippingService.find_rate(rates: rates, shipping_choice: 'CHEAPEST', vendor: vendor)
 
     # The test data has a tie for cheapest at $8.09 but USPS priority is the faster of the two
     expect(cheapest.dig('servicelevel', 'token')).to eq("usps_priority")

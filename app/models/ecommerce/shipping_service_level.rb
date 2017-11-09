@@ -15,7 +15,6 @@ class ShippingServiceLevel < ApplicationRecord
     carrier_name + " " + name
   end
 
-  def self.active
-    all
-  end
+  scope :active, -> { where(active: true) }
+  scope :inactive, -> { where(active: false) }
 end
