@@ -131,3 +131,8 @@
           %td
           %td.text-right
             %b= number_to_currency(@order.total_due_in_dollars)
+
+- if params['debug'].present?
+  = render 'debug'
+- else
+  = link_to "Show shipping rates if available", url_for(debug: 'true')

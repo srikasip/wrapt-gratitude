@@ -1,0 +1,40 @@
+:ruby
+  shipment = @order.shipment
+
+
+- if shipment.present?
+  - chossen_rate = PurchaseService::ShippingService.find_rate(rates: shipment.rates, shipping_choice: @order.customer_order.shipping_choice, vendor: @order.vendor)
+  - messages = shipment.api_response['messages']
+
+  %h3 Shippo Messages
+  %ul
+    - messages.each do |msg|
+      %li
+        %strong= msg['source']
+        %br
+        = msg['text']
+
+
+  - rates = shipment.rates.sort_by { |r| r['amount'].to_f }.sort_by { |r| r['provider'] }
+  %h3 Rates Available
+  %table.table
+    %thead
+      %tr
+        %th
+        %th{style: 'text-align: right'} Amount
+        %th Service
+        %th Days
+    %tbody
+      - rates.each do |rate|
+        %tr
+          %td
+            - if rate.dig('servicelevel', 'token') == chossen_rate.dig('servicelevel', 'token')
+              * Chossen rate
+          %td{style: 'text-align: right'}
+            = number_to_currency(rate['amount'])
+          %td
+            %strong= rate['provider']
+            = rate['servicelevel']['name']
+          %td= rate['estimated_days']
+
+  %pre=shipment.ai(plain: true)
