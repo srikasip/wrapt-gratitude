@@ -2,7 +2,7 @@ class PurchaseService::ShippingService
   include ActionView::Helpers::NumberHelper
   include OrderStatuses
 
-  SHIPPING_MARKUP = 1.02
+  SHIPPING_MARKUP = 1.00
   DAYS_FOR_VENDORS_TO_APPROVE = 1
   SHIPPING_FUDGE_DAYS = 2
 
