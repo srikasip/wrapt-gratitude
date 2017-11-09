@@ -13,6 +13,7 @@ vendor.assign_attributes({
   :street2                        => 'Suite 103',
   :purchase_order_markup_in_cents => 5
 })
+vendor.shipping_service_level_ids = ShippingServiceLevel.all.map(&:id)
 vendor.save!
 
 cat = ProductCategory.first

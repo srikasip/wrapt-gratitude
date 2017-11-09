@@ -113,8 +113,6 @@ class PurchaseService::ShippingService
         rate = PurchaseService::ShippingService.find_rate(rates: rates, shipping_choice: shipping_choice, vendor: vendor)
         s_and_h = PurchaseService::ShippingService.get_shipping_and_handling_for_one_purchase_order(rate: rate, vendor: vendor)
 
-        @shipping_choices[shipping_choice]
-
         if rate['estimated_days'] > @shipping_choices[shipping_choice].estimated_days
           @shipping_choices[shipping_choice].estimated_days = rate['estimated_days']
         end
@@ -183,9 +181,15 @@ class PurchaseService::ShippingService
       # No whitelisted rates, so just use them all, even though the vendor had a preference.
       case normalized_shipping_choice
       when 'FASTEST'
-        rates_to_search.sort_by { |r| r['estimated_days'].to_i }.first
+        rates_to_search.
+          sort_by { |r| r['amount'].to_f }. # pre-sort to get cheapest ones first to break a tie in next line
+          sort_by { |r| r['estimated_days'].to_i }. # smallest number of days
+          first
       else
-        rates_to_search.sort_by { |r| r['amount'].to_f }.first
+        rates_to_search.
+          sort_by { |r| r['estimated_days'].to_i }. # pre sort to get fastest to break a tie in next line
+          sort_by { |r| r['amount'].to_f }. # smallest cost
+          first
       end
 
     if picked_rate.nil?
