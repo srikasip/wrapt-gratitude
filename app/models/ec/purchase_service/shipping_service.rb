@@ -168,7 +168,7 @@ module Ec
           true
         else
           # Limit choices to those allowed for this vendor
-          vendor.shipping_service_levels.map(&:shippo_token).include?(rate.dig('servicelevel', 'name'))
+          vendor.shipping_service_levels.map(&:shippo_token).include?(rate.dig('servicelevel', 'token'))
         end
       end
 
