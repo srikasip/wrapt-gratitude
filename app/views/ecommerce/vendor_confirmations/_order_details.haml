@@ -50,12 +50,12 @@
     .col-xs-12.col-sm-6
       %h3 Note Details
       %strong Content:
-      %p.sg-box__content{style: 'white-space: pre; text-align: left;'}
-        = @customer_order.note_content
+      %p.sg-box__content{style: 'text-align: left;'}
+        != @customer_order.note_content.to_s.gsub(/\n/, '<br>')
 
       %strong Envelope Text:
-      %p.sg-box__content{style: 'white-space: pre; text-align: left;'}
-        = @customer_order.note_envelope_text
+      %p.sg-box__content{style: 'text-align: left;'}
+        != @customer_order.note_envelope_text.to_s.gsub(/\n/, '<br>')
 
   .col-xs-12.col-sm-6
     = render "shipping"
