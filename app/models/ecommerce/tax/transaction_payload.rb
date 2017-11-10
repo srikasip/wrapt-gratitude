@@ -17,7 +17,6 @@ module Tax
 
       user = customer_order.user
 
-
       {
         "companyCode": COMPANY,
         "type": transaction_type,
@@ -27,15 +26,7 @@ module Tax
         "currency_code": 'USD',
         "ReferenceCode": customer_order.order_number,
         "Email": user.email,
-        "addresses": {
-          "shipTo": {
-            "line1": customer_order.ship_street1,
-            "city": customer_order.ship_city,
-            "region": customer_order.ship_state,
-            "country": customer_order.ship_country,
-            "postalCode": customer_order.ship_zip
-          }
-        },
+         #"addresses": { },
         "lines": _lines
       }
     end
@@ -61,6 +52,13 @@ module Tax
                   "country": vendor.country,
                   "postalCode": vendor.zip
                 },
+                "shipTo": {
+                  "line1": customer_order.ship_street1,
+                  "city": customer_order.ship_city,
+                  "region": customer_order.ship_state,
+                  "country": customer_order.ship_country,
+                  "postalCode": customer_order.ship_zip
+                }
               }
             },
             {
@@ -77,6 +75,13 @@ module Tax
                   "country": vendor.country,
                   "postalCode": vendor.zip
                 },
+                "shipTo": {
+                  "line1": customer_order.ship_street1,
+                  "city": customer_order.ship_city,
+                  "region": customer_order.ship_state,
+                  "country": customer_order.ship_country,
+                  "postalCode": customer_order.ship_zip
+                }
               }
             }
           ]
