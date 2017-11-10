@@ -30,6 +30,8 @@
             The shipping label isn't quite ready yet, but
             = link_to 'click here', url_for
             to check again.  It shouldn't take more than a few moments.
+      - else
+        = link_to 'click here to check for the shipping label', url_for
 
   - if @purchase_order.fulfill?
     .col-xs-6
