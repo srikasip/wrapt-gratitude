@@ -33,7 +33,6 @@ class PurchaseOrder < ApplicationRecord
   validates :status, inclusion: { in: VALID_ORDER_STATUSES }
   validates :status, exclusion: { in: [PARTIALLY_CANCELLED] }
 
-  before_validation -> { self.order_number ||= "PO-#{InternalOrderNumber.next_val_humanized}" }
   before_validation -> { self.vendor_token ||= self.vendor_id.to_s+'-'+self.order_number+'-'+SecureRandom.hex(16) }
 
   delegate :cart_id, :recipient_name, :ship_street1, :ship_street2, :ship_street3, :ship_city, :ship_state, :ship_zip, :ship_country, to: :customer_order

@@ -358,7 +358,10 @@ class PurchaseService
   def _init_order!
     self.customer_order = CustomerOrder.where(cart_id: self.cart_id).first_or_initialize
 
+    order_number = InternalOrderNumber.next_customer_order_number
+
     self.customer_order.assign_attributes({
+      order_number: order_number,
       user: self.customer,
       profile: self.profile,
       status: ORDER_INITIALIZED,
@@ -394,12 +397,18 @@ class PurchaseService
   def _init_purchase_orders!
     self.customer_order.purchase_orders.destroy_all
 
+    po_index = -1
+
     self.desired_gifts.each do |dg|
       gift = dg.gift
 
       # One purchase order per individual gift.
       dg.quantity.times do
+        po_index += 1
+        purchase_order_number = InternalOrderNumber.make_purchase_order_number(self.customer_order.order_number, po_index)
+
         purchase_order = PurchaseOrder.create!({
+          order_number: purchase_order_number,
           customer_order: self.customer_order,
           vendor: gift.vendor,
           gift: gift,
