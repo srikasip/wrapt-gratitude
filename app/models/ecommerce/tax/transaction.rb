@@ -22,7 +22,9 @@ class Tax::Transaction < ApplicationRecord
 
   def estimate!
     payload_object = Tax::TransactionPayload.new(customer_order)
+    payload_object.estimate = true
     self.api_request_payload = payload_object.to_hash
+    self.is_estimate = true
     self.api_response = client.create_transaction(payload_object.to_hash)
     _cache_estimation_results
   rescue Faraday::Error, NoMethodError, Exception => e
@@ -33,13 +35,28 @@ class Tax::Transaction < ApplicationRecord
   end
 
   def reconcile!
-    self.api_reconcile_response = client.commit_transaction(Tax::COMPANY, self.transaction_code, {commit: true})
-    _cache_reconciliation_results
-  rescue Faraday::Error, Exception => e
+    payload_object = Tax::TransactionPayload.new(customer_order)
+    payload_object.estimate = false
+    self.api_request_payload = payload_object.to_hash
+    self.is_estimate = false
+    self.api_response = client.create_transaction(payload_object.to_hash)
+    _cache_estimation_results
+  rescue Faraday::Error, NoMethodError, Exception => e
     Rails.logger.fatal "[AVATAX][RECONCILE] #{e.message}"
     _email_error(e.message)
     self.success = false
+    self.api_response ||= { msg: e.message }
   end
+
+  #def reconcile!
+  #  self.is_estimate = false
+  #  self.api_reconcile_response = client.commit_transaction(Tax::COMPANY, self.transaction_code, {commit: true})
+  #  _cache_reconciliation_results
+  #rescue Faraday::Error, Exception => e
+  #  Rails.logger.fatal "[AVATAX][RECONCILE] #{e.message}"
+  #  _email_error(e.message)
+  #  self.success = false
+  #end
 
   define_method(:tax_in_cents) { self.tax_in_dollars * 100 }
   define_method(:client) { @client ||= AvaTax::Client.new(:logger => true) }

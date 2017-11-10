@@ -38,6 +38,7 @@ class PurchaseService::ShippingService
           keep_if { |key| key.in?(["street1", "street2", "street3", "city", "state", "zip", "country", "phone", "email"]) }
 
       shipment.address_from['name'] = 'Wrapt'
+      shipment.address_from['email'] = shipment.address_from['email'].split(VendorMailer::EMAIL_DELIMITER_REGEX).first
 
       co = self.customer_order
       shipment.address_to = {
