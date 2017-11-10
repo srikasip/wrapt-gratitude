@@ -255,12 +255,24 @@ class PurchaseService::ShippingService
     OpenStruct.new(text: text, range: range)
   end
 
-  def purchase_shipping_labels!
+  def purchase_shipping_labels!(iter: 0)
+    raise "Shouldn't need to recurse more than once" if iter > 1
+
     _each_po_with_rate do |po, rate|
       # Don't even try if the vendor hasn't acknowledged with the affirmative.
       next if !po.fulfill?
 
       shipment = po.shipment
+
+      # Shippo shipments are essentially quotes of shipping rates, and they
+      # expire in 24 hours. This is logically just getting a quote for the same
+      # rates.
+      if shipment.too_old_for_label_creation?
+        shipment.run!
+        shipment.save!
+        purchase_shipping_labels!(iter: iter+1)
+        return
+      end
 
       if Rails.env.production? && rate['test']
         raise InternalConsistencyError, "You should have real shipping labels on production"

@@ -17,6 +17,16 @@ class Shipment < ApplicationRecord
   validates :address_to, presence: true
   validates :parcel, presence: true
 
+  def too_old_for_label_creation?
+    Time.now > (object_created_at + 24.hours)
+  end
+
+  def object_created_at
+    Time.parse(self.api_response['object_created'])
+  rescue
+    self.created_at
+  end
+
   def run!
     self.api_response = Shippo::Shipment.create(shippo_payload)
     _cache_the_results

@@ -60,4 +60,8 @@ describe PurchaseService::ShippingService do
     # The test data has a tie for cheapest at $8.09 but USPS priority is the faster of the two
     expect(cheapest.dig('servicelevel', 'token')).to eq("usps_priority")
   end
+
+  it "should requote old shipping quotes when getting label" do
+    fail('wip: write a test')
+  end
 end
