@@ -32,8 +32,10 @@
                 .form-group
                   - label = 'Please send me occasional updates, such as when there are new Wrapt makers and quiz questions'
                   = wrapt_styled_checkbox('1', 'survey_response_completion[user_wants_newsletter]', true, {label: label, data: {}})
-
-          = form.submit 'View Gift Recommendations'.upcase, class: 'btn btn-primary btn-sm btn-full-width'
+          - if current_user&.active?
+            = form.submit 'View Gift Recommendations'.upcase.html_safe, class: 'btn btn-primary btn-sm center-block'
+          - else
+            = form.submit 'Create Profile &amp; View Gift Recommendations'.upcase.html_safe, class: 'btn btn-primary btn-sm center-block'
 
 - if @render_loading_spinner
   = render 'application/loading', hidden: false
