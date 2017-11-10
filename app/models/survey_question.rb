@@ -66,7 +66,8 @@ class SurveyQuestion < ApplicationRecord
     result = string
     if relationship_question = survey.relationship_question
       if relationship_response = survey_response.question_responses.where(survey_question: relationship_question).first&.survey_question_options&.first&.text&.downcase.presence
-        result = result.gsub /<relationship>/i, relationship_response
+        word = relationship_response == 'other' ? 'giftee' : relationship_response
+        result = result.gsub /<relationship>/i, word
       end
     end
     return result
