@@ -30,12 +30,12 @@ class PurchaseService::ShippingService
 
     purchase_orders.each do |purchase_order|
       shipment = Shipment.where(cart_id: self.cart_id, purchase_order: purchase_order).first_or_initialize
+      vendor = purchase_order.vendor
 
       shipment.address_from =
-        purchase_order.
-          vendor.
-          attributes.
-          keep_if { |key| key.in?(["street1", "street2", "street3", "city", "state", "zip", "country", "phone", "email"]) }
+        vendor.
+        attributes.
+        keep_if { |key| key.in?(["street1", "street2", "street3", "city", "state", "zip", "country", "phone", "email"]) }
 
       shipment.address_from['name'] = 'Wrapt'
       shipment.address_from['email'] = shipment.address_from['email'].split(VendorMailer::EMAIL_DELIMITER_REGEX).first
@@ -50,7 +50,7 @@ class PurchaseService::ShippingService
         state:   co.ship_state,
         zip:     co.ship_zip,
         country: co.ship_country,
-        #phone:   co.user.phone,
+        phone:   vendor.phone, # should be receipient's phone (or at least user's phone), but we aren't storing that yet.
         email:   co.user.email
       }
 
