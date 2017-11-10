@@ -452,13 +452,9 @@ ActiveRecord::Schema.define(version: 20171110145908) do
     t.integer  "handling_in_cents",             default: 0,             null: false
     t.string   "status",                        default: "initialized", null: false
     t.integer  "shipping_parcel_id"
-    t.integer  "shipping_carrier_id"
-    t.integer  "shipping_service_level_id"
     t.index ["customer_order_id"], name: "index_purchase_orders_on_customer_order_id", using: :btree
     t.index ["gift_id"], name: "index_purchase_orders_on_gift_id", using: :btree
     t.index ["order_number"], name: "index_purchase_orders_on_order_number", unique: true, using: :btree
-    t.index ["shipping_carrier_id"], name: "index_purchase_orders_on_shipping_carrier_id", using: :btree
-    t.index ["shipping_service_level_id"], name: "index_purchase_orders_on_shipping_service_level_id", using: :btree
     t.index ["vendor_id"], name: "index_purchase_orders_on_vendor_id", using: :btree
     t.index ["vendor_token"], name: "index_purchase_orders_on_vendor_token", unique: true, using: :btree
   end
@@ -523,11 +519,10 @@ ActiveRecord::Schema.define(version: 20171110145908) do
   end
 
   create_table "shipping_carriers", force: :cascade do |t|
-    t.string   "name",                                null: false
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.string   "shippo_provider_name",                null: false
-    t.boolean  "active",               default: true, null: false
+    t.string   "name",                 null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.string   "shippo_provider_name", null: false
     t.index ["name"], name: "index_shipping_carriers_on_name", unique: true, using: :btree
     t.index ["shippo_provider_name"], name: "index_shipping_carriers_on_shippo_provider_name", unique: true, using: :btree
   end
@@ -897,8 +892,6 @@ ActiveRecord::Schema.define(version: 20171110145908) do
   add_foreign_key "profiles", "users", column: "owner_id"
   add_foreign_key "purchase_orders", "customer_orders"
   add_foreign_key "purchase_orders", "gifts"
-  add_foreign_key "purchase_orders", "shipping_carriers"
-  add_foreign_key "purchase_orders", "shipping_service_levels"
   add_foreign_key "purchase_orders", "vendors"
   add_foreign_key "related_line_items", "customer_orders"
   add_foreign_key "related_line_items", "line_items", column: "customer_order_line_item_id", name: "co_line_item_fk"
