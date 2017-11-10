@@ -42,7 +42,9 @@ class BillingReport < Struct.new(:params)
   private
 
   def search_params
-    params[:search]
+    params.require(:search).permit(
+      :vendor_id, :date_range_start, :date_range_end, :status
+    )
   end
 
   def _generate_results!
