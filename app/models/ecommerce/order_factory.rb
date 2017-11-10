@@ -239,7 +239,7 @@ module OrderFactory
     customer_purchase.authorize!
 
     unless customer_purchase.card_authorized?
-      return
+      return order
     end
 
     # All the vendors acknowledge via emails and click-through to a page where they say it's okay.
