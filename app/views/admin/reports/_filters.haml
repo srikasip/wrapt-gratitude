@@ -1,0 +1,18 @@
+:ruby
+  week_options = (0..10).map do |weeks_ago|
+    begin_date = weeks_ago.weeks.ago.beginning_of_week.strftime('%B %d, %Y')
+    end_date = weeks_ago.weeks.ago.end_of_week.strftime('%B %d, %Y')
+    ["#{begin_date} - #{end_date}", weeks_ago]
+  end
+
+.row
+  .col-sm-12
+    .well
+      = form_tag url_for, method: :get, class: 'form-inline' do
+        .form-group
+          %label User activity for the week of:
+          = select_tag :weeks_ago, options_for_select(week_options, @weeks_ago), onchange: "this.form.submit();"
+
+        -#.form-group
+        -#  %label Giftee's ID:
+        -#  %input{name: :giftee_id}
