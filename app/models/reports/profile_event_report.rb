@@ -2,11 +2,12 @@ module Reports
   class ProfileEventReport
     attr_reader :begin_date, :end_date,
       :preloaded_questions, :preloaded_profiles, :preloaded_gifts,
-      :sorted_profile_ids, :events, :stats
-    
+      :sorted_profile_ids, :events, :stats, :giftee_id
+
     def initialize(params)
       @begin_date = params[:begin_date]
       @end_date = params[:end_date]
+      @giftee_id = params[:giftee_id]
       @preloaded_questions = {}
       @preloaded_profiles = {}
       @preloaded_gifts = {}
@@ -14,10 +15,10 @@ module Reports
       @events = {}
       @stats = {}
     end
-    
+
     def load_events
       @events = {}
-      
+
       load_profile_created_events
       load_question_answered_events
       load_survey_completed_events
@@ -29,11 +30,11 @@ module Reports
       load_recipient_gift_liked_events
       load_recipient_gift_disliked_events
       load_recipient_gift_selected_events
-      
+
       sort_events
-      sort_profile_ids
+      sort_and_filter_profile_ids
     end
-    
+
     def summary_report
       if @summary_report.blank?
         @summary_report = Reports::ProfileEventSummaryReport.new(self)
@@ -41,7 +42,7 @@ module Reports
       end
       @summary_report
     end
-    
+
     def generate_stats
       @stats = {
         profiles_created: 0,
@@ -66,12 +67,12 @@ module Reports
         both_recommended_gifts_liked: 0,
         both_recommended_gifts_disliked: 0,
       }
-      
+
       profile_gifts = {liked: [], disliked: [], selected: []}
       recipient_profile_gifts = {liked: [], disliked: [], selected: []}
       profile_recommended_gifts = {liked: [], disliked: [], selected: []}
       recipient_profile_recommended_gifts = {liked: [], disliked: [], selected: []}
-      
+
       events.values.flatten.each do |event|
         case event[:type]
         when 'profile_created'
@@ -100,33 +101,33 @@ module Reports
           @stats[:recipients_invited] += 1
         end
       end
-      
+
       @stats[:both_gifts_selected] = (profile_gifts[:selected] & recipient_profile_gifts[:selected]).size
       @stats[:both_gifts_liked] = (profile_gifts[:liked] & recipient_profile_gifts[:liked]).size
       @stats[:both_gifts_disliked] = (profile_gifts[:disliked] & recipient_profile_gifts[:disliked]).size
-      
+
       @stats
     end
-    
+
     def preload_models
       preload_profiles
       preload_questions
       preload_gifts
     end
-    
+
     protected
-    
+
     def parse_time(ts)
       tz = ActiveSupport::TimeZone["UTC"]
       tz.parse(ts).localtime
     end
-    
+
     def add_event(profile_id, type, ts, params = {})
       profile_events = (@events[profile_id] ||= [])
       profile_events << params.merge({profile_id: profile_id, type: type, ts: ts})
       params
     end
-    
+
     def sort_events
       events.values.each do |profile_events|
         profile_events.sort! do |a, b|
@@ -134,20 +135,29 @@ module Reports
         end
       end
     end
-    
-    def sort_profile_ids
-      @sorted_profile_ids = events.keys.sort do |a, b|
+
+    def sort_and_filter_profile_ids
+      filtered_profile_ids = \
+        if self.giftee_id.present?
+          events.keys.select do |event|
+            event == self.giftee_id.to_i
+          end
+      else
+        events.keys
+      end
+
+      @sorted_profile_ids = filtered_profile_ids.sort do |a, b|
         events[b].first[:ts] <=> events[a].first[:ts]
       end
     end
-    
+
     def preload_profiles
       @preloaded_profiles = {}
       ids = events.keys
       if ids.any?
         profiles = Profile.preload(:owner, {gift_recommendations: [:gift]}).where(id: ids)
         profiles.each do |profile|
-          @preloaded_profiles[profile.id] = profile 
+          @preloaded_profiles[profile.id] = profile
         end
       end
       @preloaded_profiles
@@ -159,7 +169,7 @@ module Reports
       if ids.any?
         questions = SurveyQuestion.preload(:survey).where(id: ids)
         questions.each do |question|
-          @preloaded_questions[question.id] = question 
+          @preloaded_questions[question.id] = question
         end
       end
       @preloaded_questions
@@ -171,7 +181,7 @@ module Reports
       if ids.any?
         gifts = Gift.where(id: ids)
         gifts.each do |gift|
-          @preloaded_gifts[gift.id] = gift 
+          @preloaded_gifts[gift.id] = gift
         end
       end
       @preloaded_gifts
@@ -224,14 +234,14 @@ module Reports
         add_event(row[0].to_i, 'survey_completed', parse_time(row[1]), {survey_id: row[2].to_i})
       end
     end
-    
+
     def load_gift_selected_events
       sql = %{select profile_id, created_at, gift_id from gift_selections where created_at #{date_range_sql}}
       Profile.connection.select_rows(sql).each do |row|
         add_event(row[0].to_i, 'gift_selected', parse_time(row[1]), {gift_id: row[2].to_i})
       end
     end
-    
+
     def load_gift_disliked_events
       reason_lookup = GiftDislike.reasons.invert
       sql = %{select profile_id, created_at, gift_id, reason from gift_dislikes where created_at #{date_range_sql}}
@@ -240,7 +250,7 @@ module Reports
         add_event(row[0].to_i, 'gift_disliked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
       end
     end
-    
+
     def load_gift_liked_events
       reason_lookup = GiftLike.reasons.invert
       sql = %{select profile_id, created_at, gift_id, reason from gift_likes where created_at #{date_range_sql}}
@@ -256,7 +266,7 @@ module Reports
         add_event(row[0].to_i, 'recipient_gift_selected', parse_time(row[1]), {gift_id: row[2].to_i})
       end
     end
-    
+
     def load_recipient_gift_disliked_events
       reason_lookup = RecipientGiftDislike.reasons.invert
       sql = %{select profile_id, created_at, gift_id, reason from recipient_gift_dislikes where created_at #{date_range_sql}}
@@ -265,7 +275,7 @@ module Reports
         add_event(row[0].to_i, 'recipient_gift_disliked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
       end
     end
-    
+
     def load_recipient_gift_liked_events
       reason_lookup = RecipientGiftLike.reasons.invert
       sql = %{select profile_id, created_at, gift_id, reason from recipient_gift_likes where created_at #{date_range_sql}}
@@ -274,11 +284,11 @@ module Reports
         add_event(row[0].to_i, 'recipient_gift_liked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
       end
     end
-    
+
     def date_range_sql
       "between '#{Profile.connection.quoted_date(begin_date)}' and '#{Profile.connection.quoted_date(end_date)}'"
     end
-    
+
   end
 end
 
