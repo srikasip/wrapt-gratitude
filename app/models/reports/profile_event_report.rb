@@ -117,6 +117,10 @@ module Reports
 
     protected
 
+    def profile_clause
+      @profile_clause ||= self.giftee_id.present? ? "profiles.id = #{self.giftee_id.to_i}" : 'true'
+    end
+
     def parse_time(ts)
       tz = ActiveSupport::TimeZone["UTC"]
       tz.parse(ts).localtime
@@ -188,20 +192,21 @@ module Reports
     end
 
     def load_profile_created_events
-      sql = %{select id, created_at from profiles where created_at #{date_range_sql}}
+      sql = %{select id, created_at from profiles where created_at #{date_range_sql} and #{profile_clause}}
       Profile.connection.select_rows(sql).each do |row|
         add_event(row[0].to_i, 'profile_created', parse_time(row[1]))
       end
     end
 
     def load_recipient_invited_events
-      sql = %{select id, recipient_invited_at from profiles where recipient_invited_at #{date_range_sql}}
+      sql = %{select id, recipient_invited_at from profiles where recipient_invited_at #{date_range_sql} and #{profile_clause}}
       Profile.connection.select_rows(sql).each do |row|
         add_event(row[0].to_i, 'recipient_invited', parse_time(row[1]))
       end
     end
 
     def load_question_answered_events
+      another_profile_clause = self.giftee_id.present? ? "sr.profile_id = #{self.giftee_id.to_i}" : "true"
       sql = %{
         select profile_id, survey_question_id, ts
         from (
@@ -210,6 +215,7 @@ module Reports
           from survey_question_responses as sqr
           join survey_responses as sr on sqr.survey_response_id = sr.id
           where sqr.answered_at #{date_range_sql}
+          and #{another_profile_clause}
         ) as t
         where rn = 1
       }
@@ -219,9 +225,10 @@ module Reports
     end
 
     def load_recommendations_generated_events
+      another_profile_clause = self.giftee_id.present? ? "gift_recommendations.profile_id = #{self.giftee_id.to_i}" : "true"
       sql = %{
         select profile_id, max(created_at) from gift_recommendations
-        where created_at #{date_range_sql} group by profile_id
+        where created_at #{date_range_sql} and #{another_profile_clause} group by profile_id
       }
       Profile.connection.select_rows(sql).each do |row|
         add_event(row[0].to_i, 'recommendations_generated', parse_time(row[1]))
@@ -229,14 +236,16 @@ module Reports
     end
 
     def load_survey_completed_events
-      sql = %{select profile_id, completed_at, id from survey_responses where completed_at #{date_range_sql}}
+      another_profile_clause = self.giftee_id.present? ? "survey_responses.profile_id = #{self.giftee_id.to_i}" : "true"
+      sql = %{select profile_id, completed_at, id from survey_responses where completed_at #{date_range_sql} and #{another_profile_clause}}
       Profile.connection.select_rows(sql).each do |row|
         add_event(row[0].to_i, 'survey_completed', parse_time(row[1]), {survey_id: row[2].to_i})
       end
     end
 
     def load_gift_selected_events
-      sql = %{select profile_id, created_at, gift_id from gift_selections where created_at #{date_range_sql}}
+      another_profile_clause = self.giftee_id.present? ? "gift_selections.profile_id = #{self.giftee_id.to_i}" : "true"
+      sql = %{select profile_id, created_at, gift_id from gift_selections where created_at #{date_range_sql} and #{another_profile_clause}}
       Profile.connection.select_rows(sql).each do |row|
         add_event(row[0].to_i, 'gift_selected', parse_time(row[1]), {gift_id: row[2].to_i})
       end
@@ -244,7 +253,8 @@ module Reports
 
     def load_gift_disliked_events
       reason_lookup = GiftDislike.reasons.invert
-      sql = %{select profile_id, created_at, gift_id, reason from gift_dislikes where created_at #{date_range_sql}}
+      another_profile_clause = self.giftee_id.present? ? "gift_dislikes.profile_id = #{self.giftee_id.to_i}" : "true"
+      sql = %{select profile_id, created_at, gift_id, reason from gift_dislikes where created_at #{date_range_sql} and #{another_profile_clause}}
       Profile.connection.select_rows(sql).each do |row|
         reason = reason_lookup[row[3].to_i] || ''
         add_event(row[0].to_i, 'gift_disliked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
@@ -253,7 +263,8 @@ module Reports
 
     def load_gift_liked_events
       reason_lookup = GiftLike.reasons.invert
-      sql = %{select profile_id, created_at, gift_id, reason from gift_likes where created_at #{date_range_sql}}
+      another_profile_clause = self.giftee_id.present? ? "gift_likes.profile_id = #{self.giftee_id.to_i}" : "true"
+      sql = %{select profile_id, created_at, gift_id, reason from gift_likes where created_at #{date_range_sql} and #{another_profile_clause}}
       Profile.connection.select_rows(sql).each do |row|
         reason = reason_lookup[row[3].to_i] || ''
         add_event(row[0].to_i, 'gift_liked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
@@ -261,7 +272,8 @@ module Reports
     end
 
     def load_recipient_gift_selected_events
-      sql = %{select profile_id, created_at, gift_id from recipient_gift_selections where created_at #{date_range_sql}}
+      another_profile_clause = self.giftee_id.present? ? "recipient_gift_selections.profile_id = #{self.giftee_id.to_i}" : "true"
+      sql = %{select profile_id, created_at, gift_id from recipient_gift_selections where created_at #{date_range_sql} and #{another_profile_clause}}
       Profile.connection.select_rows(sql).each do |row|
         add_event(row[0].to_i, 'recipient_gift_selected', parse_time(row[1]), {gift_id: row[2].to_i})
       end
@@ -269,7 +281,8 @@ module Reports
 
     def load_recipient_gift_disliked_events
       reason_lookup = RecipientGiftDislike.reasons.invert
-      sql = %{select profile_id, created_at, gift_id, reason from recipient_gift_dislikes where created_at #{date_range_sql}}
+      another_profile_clause = self.giftee_id.present? ? "recipient_gift_dislikes.profile_id = #{self.giftee_id.to_i}" : "true"
+      sql = %{select profile_id, created_at, gift_id, reason from recipient_gift_dislikes where created_at #{date_range_sql} and #{another_profile_clause}}
       Profile.connection.select_rows(sql).each do |row|
         reason = reason_lookup[row[3].to_i] || ''
         add_event(row[0].to_i, 'recipient_gift_disliked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
@@ -278,7 +291,8 @@ module Reports
 
     def load_recipient_gift_liked_events
       reason_lookup = RecipientGiftLike.reasons.invert
-      sql = %{select profile_id, created_at, gift_id, reason from recipient_gift_likes where created_at #{date_range_sql}}
+      another_profile_clause = self.giftee_id.present? ? "recipient_gift_likes.profile_id = #{self.giftee_id.to_i}" : "true"
+      sql = %{select profile_id, created_at, gift_id, reason from recipient_gift_likes where created_at #{date_range_sql} and #{another_profile_clause}}
       Profile.connection.select_rows(sql).each do |row|
         reason = reason_lookup[row[3].to_i] || ''
         add_event(row[0].to_i, 'recipient_gift_liked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
@@ -288,7 +302,6 @@ module Reports
     def date_range_sql
       "between '#{Profile.connection.quoted_date(begin_date)}' and '#{Profile.connection.quoted_date(end_date)}'"
     end
-
   end
 end
 
