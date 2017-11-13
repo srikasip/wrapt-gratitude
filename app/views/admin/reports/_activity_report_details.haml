@@ -10,7 +10,7 @@
             non_random_gifts = profile.gift_recommendations.reject(&:random?).map(&:gift)
           %tr.active
             %th{colspan: 3}
-              = profile.owner.email
+              = profile.owner&.email
               - if profile.name.present?
                 for #{profile.name} (#{profile.id})
               - if profile.email.present?
