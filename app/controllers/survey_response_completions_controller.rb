@@ -36,7 +36,7 @@ class SurveyResponseCompletionsController < ApplicationController
 
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: user
     @survey_response_completion.assign_attributes survey_response_completion_params
-    if params[:survey_response_completion][:user_terms_of_service_accepted] == '0'
+    if params.dig(:survey_response_completion, :user_terms_of_service_accepted) == '0'
       flash.now['alert'] = 'Oops! You forgot to accept our terms of service.'
       @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
       render :show
