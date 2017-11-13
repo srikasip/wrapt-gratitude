@@ -36,7 +36,11 @@ class SurveyResponseCompletionsController < ApplicationController
 
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: user
     @survey_response_completion.assign_attributes survey_response_completion_params
-    if @survey_response_completion.save
+    if params.dig(:survey_response_completion, :user_terms_of_service_accepted) == '0'
+      flash.now['alert'] = 'Oops! You forgot to accept our terms of service.'
+      @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
+      render :show
+    elsif @survey_response_completion.save
       if !require_invites? || authentication_from_invitation_only?
         auto_login(user)
       end
@@ -64,7 +68,8 @@ class SurveyResponseCompletionsController < ApplicationController
       :user_last_name,
       :user_email,
       :user_password,
-      :user_wants_newsletter
+      :user_wants_newsletter,
+      :user_terms_of_service_accepted
     )
   end
 

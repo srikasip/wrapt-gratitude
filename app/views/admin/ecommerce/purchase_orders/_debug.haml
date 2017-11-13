@@ -1,7 +1,6 @@
 :ruby
   shipment = @order.shipment
 
-
 - if shipment.present?
   - chossen_rate = PurchaseService::ShippingService.find_rate(rates: shipment.rates, shipping_choice: @order.customer_order.shipping_choice, vendor: @order.vendor)
   - messages = shipment.api_response['messages']

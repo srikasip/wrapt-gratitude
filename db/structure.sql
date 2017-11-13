@@ -1239,9 +1239,7 @@ CREATE TABLE purchase_orders (
     handling_cost_in_cents integer DEFAULT 0 NOT NULL,
     handling_in_cents integer DEFAULT 0 NOT NULL,
     status character varying DEFAULT 'initialized'::character varying NOT NULL,
-    shipping_parcel_id integer,
-    shipping_carrier_id integer,
-    shipping_service_level_id integer
+    shipping_parcel_id integer
 );
 
 
@@ -1454,8 +1452,7 @@ CREATE TABLE shipping_carriers (
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    shippo_provider_name character varying NOT NULL,
-    active boolean DEFAULT true NOT NULL
+    shippo_provider_name character varying NOT NULL
 );
 
 
@@ -2220,7 +2217,8 @@ CREATE TABLE users (
     recipient_referring_profile_id integer,
     unmoderated_testing_platform boolean DEFAULT false NOT NULL,
     activation_token_generated_at timestamp without time zone,
-    wants_newsletter boolean DEFAULT false NOT NULL
+    wants_newsletter boolean DEFAULT false NOT NULL,
+    terms_of_service_accepted boolean DEFAULT true NOT NULL
 );
 
 
@@ -3700,20 +3698,6 @@ CREATE UNIQUE INDEX index_purchase_orders_on_order_number ON purchase_orders USI
 
 
 --
--- Name: index_purchase_orders_on_shipping_carrier_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_purchase_orders_on_shipping_carrier_id ON purchase_orders USING btree (shipping_carrier_id);
-
-
---
--- Name: index_purchase_orders_on_shipping_service_level_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_purchase_orders_on_shipping_service_level_id ON purchase_orders USING btree (shipping_service_level_id);
-
-
---
 -- Name: index_purchase_orders_on_vendor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4269,14 +4253,6 @@ ALTER TABLE ONLY shipments
 
 
 --
--- Name: fk_rails_290bd234e9; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY purchase_orders
-    ADD CONSTRAINT fk_rails_290bd234e9 FOREIGN KEY (shipping_service_level_id) REFERENCES shipping_service_levels(id);
-
-
---
 -- Name: fk_rails_297dcce5fd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4629,14 +4605,6 @@ ALTER TABLE ONLY survey_responses
 
 
 --
--- Name: fk_rails_daf48c08d3; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY purchase_orders
-    ADD CONSTRAINT fk_rails_daf48c08d3 FOREIGN KEY (shipping_carrier_id) REFERENCES shipping_carriers(id);
-
-
---
 -- Name: fk_rails_dcc7f5b054; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4914,9 +4882,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171030153140'),
 ('20171102152112'),
 ('20171103135433'),
-('20171107135440'),
 ('20171107182856'),
 ('20171109225034'),
-('20171110145908');
+('20171110145908'),
+('20171110201138'),
+('20171113141028');
 
 

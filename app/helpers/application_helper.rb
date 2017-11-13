@@ -302,7 +302,7 @@ module ApplicationHelper
       concat hidden_field_tag attr_name, '0'
 
       concat link_to '', '#', class: (selected ? 'checked' : ''), onClick: 'App.StyledCheckboxA(event, this)'
-      concat options[:label]
+      concat options[:label].html_safe
       concat check_box_tag attr_name, value, selected, {onChange: 'App.StyledCheckbox(this);', style: 'display:none;', data: options[:data]}
     end
   end

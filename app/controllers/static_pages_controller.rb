@@ -1,5 +1,6 @@
 class StaticPagesController < ApplicationController
   include FeatureFlagsHelper
+   include PjaxModalController
 
   helper SurveyQuestionResponsesHelper
   helper FeatureFlagsHelper
@@ -32,6 +33,9 @@ class StaticPagesController < ApplicationController
   end
 
   def terms_of_service
+    if request.xhr?
+      render 'no_container_terms_of_service'
+    end
   end
 
   def privacy_policy
@@ -43,6 +47,7 @@ class StaticPagesController < ApplicationController
       f.xml { render(xml: {status: 404, message: 'Page not found'}) }
       f.json { render(json: {status: 404, message: 'Page not found'}) }
       f.png { send_file('public/email-signature-images/logo.png') }
+      f.jpeg { send_file('public/email-signature-images/logo.png') }
     end
   end
 
