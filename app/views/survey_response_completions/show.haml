@@ -32,6 +32,21 @@
                 .form-group
                   - label = 'Please send me occasional updates, such as when there are new Wrapt makers and quiz questions'
                   = wrapt_styled_checkbox('1', 'survey_response_completion[user_wants_newsletter]', true, {label: label, data: {}})
+            .row
+              .col-xs-12.col-md-12
+                .form-group
+                  :ruby
+                    data = {loads_in_pjax_modal: true, toggle: "fade out"}
+                    tos_link = link_to "Terms of Service", terms_of_service_path, class: 'clean', data: data
+                    label = "I agree to Wrapt's #{tos_link}"
+                    param_val = params.dig(:survey_response_completion, :user_terms_of_service_accepted)
+                    checked = \
+                    if param_val.nil?
+                      true
+                    else
+                       param_val=='1'
+                    end
+                  = wrapt_styled_checkbox('1', 'survey_response_completion[user_terms_of_service_accepted]', checked, {label: label, data: {}})
           - if current_user&.active?
             = form.submit 'View Gift Recommendations'.upcase.html_safe, class: 'btn btn-primary btn-sm center-block'
           - else

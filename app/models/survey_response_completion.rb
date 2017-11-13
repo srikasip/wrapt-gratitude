@@ -23,6 +23,8 @@ class SurveyResponseCompletion
     :active?,
     :wants_newsletter=,
     :wants_newsletter,
+    :terms_of_service_accepted=,
+    :terms_of_service_accepted,
     to: :user,
     prefix: true,
     allow_nil: true
