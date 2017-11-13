@@ -1,6 +1,6 @@
 module FeatureFlagsHelper
   def require_invites?
-    ENV.fetch('REQUIRE_INVITES') { 'true' } == 'true'
+    ENV.fetch('REQUIRE_INVITES') { 'true' } == 'false'
   end
 
   def checkout_enabled?
