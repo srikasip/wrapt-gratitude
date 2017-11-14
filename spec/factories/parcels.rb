@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :parcel do
+  factory :parcel, class: Ec::Parcel do
 
   end
 end

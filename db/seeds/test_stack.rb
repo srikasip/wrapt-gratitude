@@ -13,7 +13,7 @@ vendor.assign_attributes({
   :street2                        => 'Suite 103',
   :purchase_order_markup_in_cents => 5
 })
-vendor.shipping_service_level_ids = ShippingServiceLevel.all.map(&:id)
+vendor.shipping_service_level_ids = Ec::ShippingServiceLevel.all.map(&:id)
 vendor.save!
 
 cat = ProductCategory.first
@@ -58,9 +58,9 @@ gp.product = product
 gp.save!
 
 pretty = gift.pretty_parcels.first_or_initialize
-pretty.parcel = Parcel.find_by(code: "A")
+pretty.parcel = Ec::Parcel.find_by(code: "A")
 pretty.save!
 
 ship = gift.shipping_parcels.first_or_initialize
-ship.parcel = Parcel.find_by(code: "usps-flat-rate-small")
+ship.parcel = Ec::Parcel.find_by(code: "usps-flat-rate-small")
 ship.save!

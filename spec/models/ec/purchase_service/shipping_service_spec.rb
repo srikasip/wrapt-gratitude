@@ -21,7 +21,7 @@ describe Ec::PurchaseService::ShippingService do
     allow(CustomerOrderMailer).to receive('order_shipped').and_return(mailer_double)
     Ec::PurchaseService::ShippingService.update_shipping_status!(payload.dig('data'), do_gift_count_update: false)
 
-    shipping_label = ShippingLabel.first
+    shipping_label = Ec::ShippingLabel.first
 
     expect(shipping_label.shipped_on.to_s).to eq('2017-10-26')
     expect(shipping_label.delivered_on).to be_nil
@@ -35,17 +35,17 @@ describe Ec::PurchaseService::ShippingService do
   end
 
   it "should get fastest rate" do
-    fastest = PurchaseService::ShippingService.find_rate(rates: rates, shipping_choice: 'FASTEST', vendor: vendor)
+    fastest = Ec::PurchaseService::ShippingService.find_rate(rates: rates, shipping_choice: 'FASTEST', vendor: vendor)
 
     # The test data has a tie for fastest and this is the cheapest
     expect(fastest.dig('servicelevel', 'token')).to eq("fedex_priority_overnight")
   end
 
   it "should get fastest rate that's not blacklisted" do
-    ShippingServiceLevel.find_by(shippo_token: "fedex_priority_overnight").update_attribute(:active, false)
-    ShippingServiceLevel.find_by(shippo_token: "fedex_first_overnight").update_attribute(:active, false)
+    Ec::ShippingServiceLevel.find_by(shippo_token: "fedex_priority_overnight").update_attribute(:active, false)
+    Ec::ShippingServiceLevel.find_by(shippo_token: "fedex_first_overnight").update_attribute(:active, false)
 
-    fastest = PurchaseService::ShippingService.find_rate(rates: rates, shipping_choice: 'FASTEST', vendor: vendor)
+    fastest = Ec::PurchaseService::ShippingService.find_rate(rates: rates, shipping_choice: 'FASTEST', vendor: vendor)
 
     # The test data has a tie for fastest and this is the cheapest
     expect(fastest.dig('servicelevel', 'token')).to_not eq("fedex_priority_overnight")
@@ -55,13 +55,13 @@ describe Ec::PurchaseService::ShippingService do
   end
 
   it "should get cheapest rate" do
-    cheapest = PurchaseService::ShippingService.find_rate(rates: rates, shipping_choice: 'CHEAPEST', vendor: vendor)
+    cheapest = Ec::PurchaseService::ShippingService.find_rate(rates: rates, shipping_choice: 'CHEAPEST', vendor: vendor)
 
     # The test data has a tie for cheapest at $8.09 but USPS priority is the faster of the two
     expect(cheapest.dig('servicelevel', 'token')).to eq("usps_priority")
   end
 
   it "should requote old shipping quotes when getting label" do
-    fail('wip: write a test')
+    fail('WIP')
   end
 end
