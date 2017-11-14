@@ -48,7 +48,7 @@
           - events.each do |event|
             %tr
               %td
-              %td{style: 'width: 200px;'}= event[:ts].strftime('%m/%d/%Y %I:%M %p')
+              %td{style: 'width: 200px;'}= format_datetime(event[:ts])
               %td
                 - case event[:type]
                 - when 'question_answered'

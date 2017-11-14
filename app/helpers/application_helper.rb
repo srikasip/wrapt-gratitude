@@ -197,9 +197,9 @@ module ApplicationHelper
 
     result = \
       if datetime.dst?
-        in_zone.strftime(format)
-      else
         (in_zone + 1.hour).strftime(format)
+      else
+        in_zone.strftime(format)
       end
 
     result += " Eastern" if with_zone
