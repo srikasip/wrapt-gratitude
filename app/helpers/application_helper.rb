@@ -197,9 +197,9 @@ module ApplicationHelper
 
     result = \
       if datetime.dst?
-        in_zone.strftime(format)
-      else
         (in_zone + 1.hour).strftime(format)
+      else
+        in_zone.strftime(format)
       end
 
     result += " Eastern" if with_zone
@@ -302,7 +302,7 @@ module ApplicationHelper
       concat hidden_field_tag attr_name, '0'
 
       concat link_to '', '#', class: (selected ? 'checked' : ''), onClick: 'App.StyledCheckboxA(event, this)'
-      concat options[:label]
+      concat options[:label].html_safe
       concat check_box_tag attr_name, value, selected, {onChange: 'App.StyledCheckbox(this);', style: 'display:none;', data: options[:data]}
     end
   end

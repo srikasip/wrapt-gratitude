@@ -12,6 +12,9 @@
             - if current_user&.admin?
               = hidden_field_tag :survey_id, @survey.id
             = render response_fields_partial, form: form, label: @question_response.survey_question.prompt
+            .sqr-submit__container.text-right#js-sqr-submit__container
+              %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}
+                Next
 
 - content_for :after_wrapper do
   = render 'home/how_wrapt_works'

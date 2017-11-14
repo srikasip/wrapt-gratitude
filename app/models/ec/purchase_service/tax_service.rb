@@ -14,8 +14,8 @@ module Ec
       self.client          = AvaTax::Client.new(:logger => true)
     end
 
-    define_method(:real?)     { self.our_transaction.reconciled? }
-    define_method(:estimate?) { !real? }
+    define_method(:real?)     { !self.estimate? }
+    define_method(:estimate?) { self.our_transaction.is_estimate }
 
     def estimate!
       raise "Cannot estimate a reconciled transaction" if our_transaction.reconciled?

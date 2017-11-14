@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171107182856) do
+ActiveRecord::Schema.define(version: 20171113141028) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -727,6 +727,7 @@ ActiveRecord::Schema.define(version: 20171107182856) do
     t.decimal  "tax_in_dollars",         default: "0.0", null: false
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
+    t.boolean  "is_estimate",            default: false, null: false
     t.index ["customer_order_id"], name: "index_tax_transactions_on_customer_order_id", using: :btree
   end
 
@@ -812,6 +813,7 @@ ActiveRecord::Schema.define(version: 20171107182856) do
     t.boolean  "unmoderated_testing_platform",    default: false, null: false
     t.datetime "activation_token_generated_at"
     t.boolean  "wants_newsletter",                default: false, null: false
+    t.boolean  "terms_of_service_accepted",       default: true,  null: false
     t.index ["activation_token"], name: "index_users_on_activation_token", using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["recipient_referring_profile_id"], name: "index_users_on_recipient_referring_profile_id", using: :btree

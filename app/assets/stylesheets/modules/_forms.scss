@@ -5,7 +5,7 @@
 .wrapt-styled-checkbox {
   position: relative;
   cursor: pointer;
-  padding-left: 30px; 
+  padding-left: 30px;
   a {
     position: absolute;
     left: 0px;
@@ -13,7 +13,7 @@
     border: 1px solid #c4c4c4;
     width: 20px;
     height: 20px;
-  } 
+  }
   a.checked::before {
     content: '';
     position: absolute;
@@ -27,13 +27,26 @@
 }
 
 .wrapt-styled-radio-button {
-  line-height: 25px; 
+  line-height: 25px;
   a {
     border-radius: 50%;
     top: 3px;
   }
   a.checked::before {
     border-radius: 50%;
+  }
+}
+
+// Need to have "regular" links in addition to the "phoney" ones used to
+// facilitate the styled checkboxes
+.wrapt-styled-radio-button,
+.wrapt-styled-checkbox {
+  a.clean {
+    position: initial;
+    top: initial;
+    left: initial;
+    display: initial;
+    border: initial;
   }
 }
 
@@ -336,9 +349,9 @@ label {
 }
 
 // mvp1b user survey
-.mvp1b_user_surveys .radio input[type="radio"], 
-.mvp1b_user_surveys .radio-inline input[type="radio"], 
-.mvp1b_user_surveys .checkbox input[type="checkbox"], 
+.mvp1b_user_surveys .radio input[type="radio"],
+.mvp1b_user_surveys .radio-inline input[type="radio"],
+.mvp1b_user_surveys .checkbox input[type="checkbox"],
 .mvp1b_user_surveys .checkbox-inline input[type="checkbox"] {
   margin-top: 0;
 }

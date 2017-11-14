@@ -10,9 +10,9 @@
             non_random_gifts = profile.gift_recommendations.reject(&:random?).map(&:gift)
           %tr.active
             %th{colspan: 3}
-              = profile.owner.email
+              = profile.owner&.email
               - if profile.name.present?
-                for #{profile.name}
+                for #{profile.name} (#{profile.id})
               - if profile.email.present?
                 [#{profile.email}]
           :ruby
@@ -36,7 +36,7 @@
                 nil
               end
             end.compact.uniq
-            
+
             gifter_selected_gifts = events.map do |event|
               if event[:type] == 'gift_selected'
                 @report.preloaded_gifts[event[:gift_id]]
@@ -44,27 +44,27 @@
                 nil
               end
             end.compact.uniq
-            
+
           - events.each do |event|
             %tr
               %td
-              %td{style: 'width: 200px;'}= event[:ts].strftime('%m/%d/%Y %I:%M %p')
+              %td{style: 'width: 200px;'}= format_datetime(event[:ts])
               %td
                 - case event[:type]
-                - when 'question_answered' 
+                - when 'question_answered'
                   Last question answered:
                   - question = @report.preloaded_questions[event[:question_id]]
                   - if question.present?
                     '#{truncate(question.prompt, length: 80)}'
 
-                - when 'survey_completed' 
+                - when 'survey_completed'
                   Survey Completed
                   = link_to "[view responses]", admin_survey_response_path(event[:survey_id]), class: 'view-responses'
                   - question = @report.preloaded_questions[event[:question_id]]
                   - if question.present?
                     '#{truncate(question.prompt, length: 80)}'
-                    
-                - when 'gift_selected' 
+
+                - when 'gift_selected'
                   Gift added to basket:
                   - gift = @report.preloaded_gifts[event[:gift_id]]
                   - if gift.present?
@@ -73,23 +73,23 @@
                       %span.glyphicon.glyphicon-star
                     %span.glyphicon.glyphicon-gift
 
-                - when 'recipient_gift_selected' 
+                - when 'recipient_gift_selected'
                   Recipient add gift to basket:
                   - gift = @report.preloaded_gifts[event[:gift_id]]
                   - if gift.present?
                     '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
                     - if non_random_gifts.include?(gift)
                       %span.glyphicon.glyphicon-star
-                    - if gifter_selected_gifts.include?(gift) 
+                    - if gifter_selected_gifts.include?(gift)
                       %span.glyphicon.glyphicon-gift
-                    - elsif gifter_liked_gifts.include?(gift) 
+                    - elsif gifter_liked_gifts.include?(gift)
                       %span.glyphicon.glyphicon-thumbs-up
-                    - elsif gifter_disliked_gifts.include?(gift) 
+                    - elsif gifter_disliked_gifts.include?(gift)
                       %span.glyphicon.glyphicon-thumbs-down
                     %span.glyphicon.glyphicon-gift
 
-                    
-                - when 'gift_liked' 
+
+                - when 'gift_liked'
                   Liked gift
                   - reason_description = like_reason_label(event[:reason])
                   - if reason_description.present?
@@ -101,8 +101,8 @@
                     - if non_random_gifts.include?(gift)
                       %span.glyphicon.glyphicon-star
                     %span.glyphicon.glyphicon-thumbs-up
-                    
-                - when 'recipient_gift_liked' 
+
+                - when 'recipient_gift_liked'
                   Recipient Liked gift
                   - reason_description = ProfileRecipientReviewsHelper.like_reason_label(event[:reason])
                   - if reason_description.present?
@@ -113,15 +113,15 @@
                     '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
                     - if non_random_gifts.include?(gift)
                       %span.glyphicon.glyphicon-star
-                    - if gifter_selected_gifts.include?(gift) 
+                    - if gifter_selected_gifts.include?(gift)
                       %span.glyphicon.glyphicon-gift
-                    - elsif gifter_liked_gifts.include?(gift) 
+                    - elsif gifter_liked_gifts.include?(gift)
                       %span.glyphicon.glyphicon-thumbs-up
-                    - elsif gifter_disliked_gifts.include?(gift) 
+                    - elsif gifter_disliked_gifts.include?(gift)
                       %span.glyphicon.glyphicon-thumbs-down
                     %span.glyphicon.glyphicon-thumbs-up
-                    
-                - when 'gift_disliked' 
+
+                - when 'gift_disliked'
                   Disliked gift
                   - reason_description = ProfileRecipientReviewsHelper.dislike_reason_label(event[:reason])
                   - if reason_description.present?
@@ -134,7 +134,7 @@
                       %span.glyphicon.glyphicon-star
                     %span.glyphicon.glyphicon-thumbs-down
 
-                - when 'recipient_gift_disliked' 
+                - when 'recipient_gift_disliked'
                   Recipient Disiked gift
                   - reason_description = like_reason_label(event[:reason])
                   - if reason_description.present?
@@ -145,18 +145,18 @@
                     '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
                     - if non_random_gifts.include?(gift)
                       %span.glyphicon.glyphicon-star
-                    - if gifter_selected_gifts.include?(gift) 
+                    - if gifter_selected_gifts.include?(gift)
                       %span.glyphicon.glyphicon-gift
-                    - elsif gifter_liked_gifts.include?(gift) 
+                    - elsif gifter_liked_gifts.include?(gift)
                       %span.glyphicon.glyphicon-thumbs-up
-                    - elsif gifter_disliked_gifts.include?(gift) 
+                    - elsif gifter_disliked_gifts.include?(gift)
                       %span.glyphicon.glyphicon-thumbs-down
                     %span.glyphicon.glyphicon-thumbs-down
-                    
-                - when 'recipient_invited' 
+
+                - when 'recipient_invited'
                   Recipient invited
-                  
-                - when'recommendations_generated' 
+
+                - when'recommendations_generated'
                   Recommendations generated:
                   - recs = profile.gift_recommendations
                   %ol
@@ -166,14 +166,14 @@
                         - if !rec.random?
                           = "#{rec.score.round}" if rec.score.round > 1
                           %span.glyphicon.glyphicon-star
-                  
+
                   Parameters:
                   %ul
                     - stats = profile.recommendation_stats
                     - if stats[:filters].is_a?(Array)
                       - stats[:filters].each do |filter|
                         %li #{filter[:name]} Filter: #{filter[:description]}
-  
+
                     - if stats[:scorers].is_a?(Array)
                       - stats[:scorers].each do |scorer|
                         %li #{scorer[:name]} Scoring: #{scorer[:description]}
@@ -192,4 +192,4 @@
         )
         e.preventDefault()
         false
-        
+

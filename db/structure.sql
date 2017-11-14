@@ -1536,7 +1536,8 @@ CREATE TABLE shipping_service_levels (
     estimated_days integer NOT NULL,
     terms character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    active boolean DEFAULT true NOT NULL
 );
 
 
@@ -1967,7 +1968,8 @@ CREATE TABLE tax_transactions (
     success boolean DEFAULT false NOT NULL,
     tax_in_dollars numeric DEFAULT 0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    is_estimate boolean DEFAULT false NOT NULL
 );
 
 
@@ -2215,7 +2217,8 @@ CREATE TABLE users (
     recipient_referring_profile_id integer,
     unmoderated_testing_platform boolean DEFAULT false NOT NULL,
     activation_token_generated_at timestamp without time zone,
-    wants_newsletter boolean DEFAULT false NOT NULL
+    wants_newsletter boolean DEFAULT false NOT NULL,
+    terms_of_service_accepted boolean DEFAULT true NOT NULL
 );
 
 
@@ -3324,6 +3327,13 @@ CREATE INDEX index_customer_orders_on_address_id ON customer_orders USING btree 
 
 
 --
+-- Name: index_customer_orders_on_order_number; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_customer_orders_on_order_number ON customer_orders USING btree (order_number);
+
+
+--
 -- Name: index_customer_orders_on_profile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3678,6 +3688,13 @@ CREATE INDEX index_purchase_orders_on_customer_order_id ON purchase_orders USING
 --
 
 CREATE INDEX index_purchase_orders_on_gift_id ON purchase_orders USING btree (gift_id);
+
+
+--
+-- Name: index_purchase_orders_on_order_number; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_purchase_orders_on_order_number ON purchase_orders USING btree (order_number);
 
 
 --
@@ -4864,6 +4881,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171027184052'),
 ('20171030153140'),
 ('20171102152112'),
-('20171103135433');
+('20171103135433'),
+('20171107182856'),
+('20171109225034'),
+('20171110145908'),
+('20171110201138'),
+('20171113141028');
 
 

@@ -3,7 +3,6 @@ RSpec.configure do |c|
     category = ProductCategory.where(name: 'Test Gift', wrapt_sku_code: 'TST').first_or_initialize
     category.save!
 
-
     sub_category = ProductCategory.where(name: 'Test Gift Subcategory', wrapt_sku_code: 'TSS').first_or_initialize
     sub_category.save!
 

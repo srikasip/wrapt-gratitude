@@ -107,6 +107,18 @@ parcels = [
     width_in_inches: 4.00,
     usage: 'shipping',
     shippo_template_name: nil
+  },
+
+  {
+    active: true,
+    code: 'shipping-c',
+    description: '14" x 14" x 7"',
+    weight_in_pounds:  (14*14*2 + 14*7*4) * POUNDS_PER_SQUARE_INCH, # estimated
+    height_in_inches: 7.00,
+    length_in_inches: 14.00,
+    width_in_inches: 14.00,
+    usage: 'shipping',
+    shippo_template_name: nil
   }
 ]
 

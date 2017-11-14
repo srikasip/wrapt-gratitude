@@ -8,6 +8,9 @@ module Ec
     validates :shippo_token, presence: true
     validates :terms, presence: true
 
+    scope :active, -> { where(active: true) }
+    scope :inactive, -> { where(active: false) }
+
     def carrier_name
       shipping_carrier.name
     end

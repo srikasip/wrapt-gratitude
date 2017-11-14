@@ -1,6 +1,8 @@
 class VendorMailer < ApplicationMailer
   default from: 'Wrapt Orders <orders@wrapt.com>'
 
+  EMAIL_DELIMITER_REGEX = /\s*(,|;)\s*/
+
   if ENV['ECOMMERCE_BCC']
     default bcc: ENV['ECOMMERCE_BCC'].split(';')
   end
@@ -10,7 +12,7 @@ class VendorMailer < ApplicationMailer
     @vendor = @purchase_order.vendor
 
     mail({
-      to: @vendor.email,
+      to: @vendor.email.split(EMAIL_DELIMITER_REGEX),
       subject: "Order Placed"
     })
   end

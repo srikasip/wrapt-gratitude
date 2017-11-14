@@ -26,6 +26,16 @@ class Profile < ApplicationRecord
 
   scope :well_ordered, -> { order('first_name asc, last_name asc') }
 
+  def relationship
+    word = read_attribute(:relationship)
+
+    if word == 'Other'
+      survey_responses.first.question_responses.where("other_option_text != '' and other_option_text is not null").pluck(:other_option_text).first rescue 'Giftee'
+    else
+      word
+    end
+  end
+
   def last_survey
     survey_responses.order('updated_at desc').first
   end

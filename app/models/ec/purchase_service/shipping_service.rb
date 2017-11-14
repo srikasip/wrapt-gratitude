@@ -3,7 +3,7 @@ module Ec
     include ActionView::Helpers::NumberHelper
     include OrderStatuses
 
-    SHIPPING_MARKUP = 1.02
+    SHIPPING_MARKUP = 1.00
     DAYS_FOR_VENDORS_TO_APPROVE = 1
     SHIPPING_FUDGE_DAYS = 2
 
@@ -31,14 +31,15 @@ module Ec
 
       purchase_orders.each do |purchase_order|
         shipment = Shipment.where(cart_id: self.cart_id, purchase_order: purchase_order).first_or_initialize
+        vendor = purchase_order.vendor
 
         shipment.address_from =
-          purchase_order.
             vendor.
             attributes.
             keep_if { |key| key.in?(["street1", "street2", "street3", "city", "state", "zip", "country", "phone", "email"]) }
 
         shipment.address_from['name'] = 'Wrapt'
+        shipment.address_from['email'] = shipment.address_from['email'].split(VendorMailer::EMAIL_DELIMITER_REGEX).first
 
         co = self.customer_order
         shipment.address_to = {
@@ -50,7 +51,7 @@ module Ec
           state:   co.ship_state,
           zip:     co.ship_zip,
           country: co.ship_country,
-          #phone:   co.user.phone,
+          phone:   vendor.phone, # should be receipient's phone (or at least user's phone), but we aren't storing that yet.
           email:   co.user.email
         }
 
@@ -113,8 +114,6 @@ module Ec
         @shipping_choices.each_key do |shipping_choice|
           rate = PurchaseService::ShippingService.find_rate(rates: rates, shipping_choice: shipping_choice, vendor: vendor)
           s_and_h = PurchaseService::ShippingService.get_shipping_and_handling_for_one_purchase_order(rate: rate, vendor: vendor)
-
-          @shipping_choices[shipping_choice]
 
           if rate['estimated_days'] > @shipping_choices[shipping_choice].estimated_days
             @shipping_choices[shipping_choice].estimated_days = rate['estimated_days']
@@ -180,13 +179,25 @@ module Ec
           rates
         end
 
+      # Now remove any blacklisted ones:
+      blacklist = ShippingServiceLevel.inactive.map(&:shippo_token)
+      rates_to_search = rates_to_search.reject do |rate|
+        rate.dig('servicelevel', 'token').in?(blacklist)
+      end
+
       picked_rate = \
         # No whitelisted rates, so just use them all, even though the vendor had a preference.
         case normalized_shipping_choice
         when 'FASTEST'
-          rates_to_search.sort_by { |r| r['estimated_days'].to_i }.first
+          rates_to_search.
+            sort_by { |r| r['amount'].to_f }. # pre-sort to get cheapest ones first to break a tie in next line
+            sort_by { |r| r['estimated_days'].to_i }. # smallest number of days
+            first
         else
-          rates_to_search.sort_by { |r| r['amount'].to_f }.first
+          rates_to_search.
+            sort_by { |r| r['estimated_days'].to_i }. # pre sort to get fastest to break a tie in next line
+            sort_by { |r| r['amount'].to_f }. # smallest cost
+            first
         end
 
       if picked_rate.nil?
@@ -245,12 +256,24 @@ module Ec
       OpenStruct.new(text: text, range: range)
     end
 
-    def purchase_shipping_labels!
+    def purchase_shipping_labels!(iter: 0)
+      raise "Shouldn't need to recurse more than once" if iter > 1
+
       _each_po_with_rate do |po, rate|
         # Don't even try if the vendor hasn't acknowledged with the affirmative.
         next if !po.fulfill?
 
         shipment = po.shipment
+
+        # Shippo shipments are essentially quotes of shipping rates, and they
+        # expire in 24 hours. This is logically just getting a quote for the same
+        # rates.
+        if shipment.too_old_for_label_creation?
+          shipment.run!
+          shipment.save!
+          purchase_shipping_labels!(iter: iter+1)
+          return
+        end
 
         if Rails.env.production? && rate['test']
           raise InternalConsistencyError, "You should have real shipping labels on production"

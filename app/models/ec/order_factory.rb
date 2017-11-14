@@ -85,8 +85,10 @@ module Ec
       order
     end
 
-    def self.create_order!(auto_ack:)
+    def self.create_order!(auto_ack:, gifts:nil)
       raise "NEVER ON PRODUCTION" if Rails.env.production?
+
+      Vendor.update_all("email = 'apple@example.com,pickle@gmail.com ; fudge@foo.org ,  nobody@nowhere.net'")
 
       # Fill in problems so we can make some something happen
       if Rails.env.development? || Rails.env.test?
@@ -177,7 +179,9 @@ module Ec
 
       customer = profile.owner
 
-      gifts = Gift.order('random()').first(3)
+      if gifts.nil?
+        gifts = Gift.order('random()').first(2)
+      end
 
       desired_gifts = gifts.map do |gift|
         # Can only buy one at a time right now given what I see in the mocks.
@@ -209,13 +213,12 @@ module Ec
       customer_purchase = PurchaseService.new(cart_id: cart_id)
       customer_purchase.set_address!(
         ActionController::Parameters.new({ec_customer_order: {
-          ship_street1: '319 Hague Rd',
-          ship_street2: '',
-          ship_city: 'Dummerston',
-          ship_zip: '05301',
-          ship_state: 'VT',
+          ship_street1: '1990 M St NW',
+          ship_street2: '102',
+          ship_city: 'Washington',
+          ship_zip: '20036',
+          ship_state: 'DC',
           ship_country: 'US',
-          #phone:  '123-123-1234',
           email: 'example@example.com',
         }})
       )

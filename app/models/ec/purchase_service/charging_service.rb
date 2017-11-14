@@ -214,7 +214,11 @@ module Ec
       })
 
       self.customer_order.update_attribute(:status, CustomerOrder::FAILED)
-      _email_error
+    # See https://stripe.com/docs/api/python#authentication and scroll down to "CODES"
+    # These all appear like non-technical failures not worthy of emailing. In
+    # the future maybe it's worth it to do something different depending on the
+    # error code
+    #_email_error
     rescue Stripe::RateLimitError => e
       self.our_charge.update_attributes({
         status: RATE_LIMIT_FAIL,

@@ -1,21 +1,22 @@
 :ruby
   shipment = @order.shipment
 
-
 - if shipment.present?
   - chossen_rate = Ec::PurchaseService::ShippingService.find_rate(rates: shipment.rates, shipping_choice: @order.customer_order.shipping_choice, vendor: @order.vendor)
   - messages = shipment.api_response['messages']
 
-  %h3 Shippo Messages
-  %ul
-    - messages.each do |msg|
-      %li
-        %strong= msg['source']
-        %br
-        = msg['text']
+  - if messages.present?
+    %h3 Shippo Messages
+    %ul
+      - messages.each do |msg|
+        %li
+          %strong= msg['source']
+          %br
+          = msg['text']
 
 
   - rates = shipment.rates.sort_by { |r| r['amount'].to_f }.sort_by { |r| r['provider'] }
+  - blacklist = Ec::ShippingServiceLevel.inactive.pluck(:shippo_token)
   %h3 Rates Available
   %table.table
     %thead
@@ -30,6 +31,8 @@
           %td
             - if rate.dig('servicelevel', 'token') == chossen_rate.dig('servicelevel', 'token')
               * Chossen rate
+            - elsif blacklist.include?(rate.dig('servicelevel', 'token'))
+              Blacklisted
           %td{style: 'text-align: right'}
             = number_to_currency(rate['amount'])
           %td
