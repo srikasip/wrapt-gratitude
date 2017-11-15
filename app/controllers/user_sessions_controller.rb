@@ -16,8 +16,17 @@ class UserSessionsController < ApplicationController
         redirect_back fallback_location: default_location_for_user(current_user)
       end
     else
-      @user_session.errors.add :password, 'Sorry, that password isn\'t correct'
-      render :new
+      # make it easier for someone to recover thier password
+      # TODO: do we want to restrict this feature to activated users?
+      if (existing_user = User.find_by(email: @user_session.email.downcase))
+        @password_reset_request = PasswordResetRequest.new(email: existing_user.email)
+        @password_reset_request.save
+        flash.now['notice'] = "Sorry, that password isn\'t correct. We\'ve emailed you a link to reset your password or you can try again."
+        render :new
+      else
+        @user_session.errors.add :password, 'Sorry, that password isn\'t correct'
+        render :new
+      end
     end
   end
 
