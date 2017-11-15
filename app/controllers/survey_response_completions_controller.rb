@@ -27,6 +27,9 @@ class SurveyResponseCompletionsController < ApplicationController
   end
 
   def create
+    # stash a copy if these params we may end up editing them
+    srcp = survey_response_completion_params
+
     user = \
       if require_invites?
         current_user
@@ -34,8 +37,18 @@ class SurveyResponseCompletionsController < ApplicationController
         current_user || User.new(source: 'auto_create_on_quiz_taking')
       end
 
+    # check for an existing user who is forgetting that they are already logged in
+    if (existing_user = login(srcp[:user_email], srcp[:user_password]))
+      # use their existing info on file
+      # leaving the name alone
+      user = existing_user
+      srcp[:user_first_name] = user.first_name
+      srcp[:user_last_name] = user.last_name
+      # flash['alert'] = 'You have been signed in to your existing account and .'
+    end
+
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: user
-    @survey_response_completion.assign_attributes survey_response_completion_params
+    @survey_response_completion.assign_attributes srcp
     if params.dig(:survey_response_completion, :user_terms_of_service_accepted) == '0'
       flash.now['alert'] = 'Oops! You forgot to accept our terms of service.'
       @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
@@ -52,7 +65,7 @@ class SurveyResponseCompletionsController < ApplicationController
       redirect_to giftee_gift_recommendations_path(@profile)
     else
       if User.where(email: user.email).any?
-        flash.now['alert'] = 'Oops! Looks like that account already exists. Try signing in.'
+        flash.now['alert'] = %[Oops! Looks like that account already exists. Try #{view_context.link_to 'signing in', new_user_session_path}.]
       else
         flash.now['alert'] = 'Oops! Looks like we need a bit more info.'
       end
