@@ -10,7 +10,7 @@ class User < ApplicationRecord
   ### Validations
   ###########################
 
-  validates :email, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: {case_sensitive: false}
   validates :source, presence: true, inclusion: SOURCES
   validates :beta_round, presence: true, inclusion: BETA_ROUNDS
   validates :email, format: { with: /\w+@\w+\.\w+/, message: 'must be well-formed' }
@@ -20,7 +20,13 @@ class User < ApplicationRecord
   ###########################
   before_validation :set_beta_round, on: :create
   before_save :set_source
-  before_save -> { self.email = self.email.downcase }
+  before_validation -> {
+    # Normalize the stored email to lowercase so our unique database index is
+    # enforced case-insenstively like our rails validation intends.
+    # We do this before validation so the uniqueness validation is working with the same
+    # data as we send to the DB. That makes it a bit redundant with uniqueness: {case_sensitive: false}
+    self.email = self.email.downcase
+  }
 
   ###########################
   ### Associations
