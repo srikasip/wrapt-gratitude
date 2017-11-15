@@ -1,9 +1,9 @@
 .row
   .col-xs-12
-    %h1 Lost Password?
+    %h1 Need a new password?
 
     .center-block.mb4
-      %p.lead Enter your email address below and we will send you instructions for resetting your password.
+      %p.lead We'll send you a link right away so you can reset your password and get back to business!
 
     = simple_form_for @password_reset_request, html: {data: {submits_to_pjax_modal: true}} do |form|
       .form-inputs
