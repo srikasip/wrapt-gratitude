@@ -2,3 +2,7 @@
 @import "helpers/mixins";
 @import "helpers/margins_padding";
 @import "bootstrap/mixins";
+
+.display-inline-block {
+  display: inline-block;
+}

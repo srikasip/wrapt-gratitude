@@ -377,3 +377,17 @@ label {
   right: 20px;
   bottom: -28px;
 }
+.create-account {
+  display: inline;
+  @media (max-width: 500px) {
+    float: none;
+  }
+}
+.already-have-account {
+  display: inline-block;
+  margin-left: rem(18);
+  @media (max-width: 500px) {
+    display: block;
+    margin-left: 0;
+  }
+}
