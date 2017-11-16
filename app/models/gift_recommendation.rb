@@ -17,5 +17,15 @@ class GiftRecommendation < ApplicationRecord
   def random?
     score == 0
   end
+  
+  def normalize_expert_score
+    if added_by_expert?
+      self.expert_score = [[expert_score, 1.0].max, 10.0].min
+    else
+      self.expert_score = 0.0
+    end
+    true
+  end
+  before_save :normalize_expert_score
 
 end
