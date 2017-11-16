@@ -31,7 +31,7 @@ class GiftRecommendationsController < ApplicationController
   def load_recommendations
     @gift_recommendations = @profile.
        gift_recommendations.
-       where(gift_id: Gift.select(:id).can_be_sold).
+       where(gift_id: Gift.select(:id).can_be_sold, removed_by_expert: false).
        preload(gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field]).
        take(GIFT_RECOMMENDATION_LIMIT)
   end
