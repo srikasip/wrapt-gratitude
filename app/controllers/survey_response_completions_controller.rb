@@ -64,12 +64,21 @@ class SurveyResponseCompletionsController < ApplicationController
       job.perform(@survey_response)
       redirect_to giftee_gift_recommendations_path(@profile)
     else
-      if User.where(email: user.email).any?
-        flash.now['alert'] = %[Oops! Looks like that account already exists. Try #{view_context.link_to 'signing in', new_user_session_path}.]
+      @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
+      @existing_user = User.find_by(email: srcp[:user_email])
+      if @existing_user
+        # Make it easier for someone to recover thier password by:
+        # - prementively sending them a reset and also
+        PasswordResetRequest.new(email: @existing_user.email).save
+        # - preparing a friendly login modal form for them to try again
+        @user_session = UserSession.new(email: @existing_user.email)
+        # - resetting the create account for so it's less confusing
+        @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
+        # - not showing the spinner since we've already compiled the recommendations
+        @render_loading_spinner = false
       else
         flash.now['alert'] = 'Oops! Looks like we need a bit more info.'
       end
-      @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
       render :show
     end
   end
