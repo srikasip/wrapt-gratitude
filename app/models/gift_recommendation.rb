@@ -33,5 +33,12 @@ class GiftRecommendation < ApplicationRecord
     true
   end
   before_save :normalize_expert_score
+  
+  def self.select_for_display(gift_recommendations)
+    expert_picks = gift_recommendations.select(&:added_by_expert)
+    auto_picks = gift_recommendations - expert_picks
+    
+    expert_picks + auto_picks.take(MAX_SHOWN_TO_USER)
+  end
 
 end
