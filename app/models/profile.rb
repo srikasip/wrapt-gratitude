@@ -26,6 +26,17 @@ class Profile < ApplicationRecord
   accepts_nested_attributes_for :address
 
   scope :well_ordered, -> { order('first_name asc, last_name asc') }
+  
+  scope :unarchived, -> {where(archived_at: nil)}
+  scope :archived, -> {where.not(archived_at: nil)}
+  
+  def archived?
+    archived_at.present?
+  end
+
+  def unarchived?
+    archived_at.blank?
+  end
 
   def relationship
     word = read_attribute(:relationship)

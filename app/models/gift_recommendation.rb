@@ -4,7 +4,13 @@ class GiftRecommendation < ApplicationRecord
   belongs_to :profile
   belongs_to :gift
   
+  MAX_SHOWN_TO_USER = 6
+  
   delegate :featured?, :experience?, to: :gift
+  
+  def self.available
+    where(gift_id: Gift.select(:id).can_be_sold, removed_by_expert: false)
+  end
 
   def gift_dislike
     GiftDislike.where(profile: profile, gift: gift).first || GiftDislike.new(profile: profile, gift: gift)
