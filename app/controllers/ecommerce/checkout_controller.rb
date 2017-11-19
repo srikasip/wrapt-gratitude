@@ -155,7 +155,7 @@ class Ecommerce::CheckoutController < ApplicationController
     end
 
     if session[:cart_id].blank?
-      redirect_to :root
+      return redirect_to :root
     end
 
     @customer_purchase = ::PurchaseService.new(cart_id: session[:cart_id])
@@ -164,7 +164,7 @@ class Ecommerce::CheckoutController < ApplicationController
     # Shouldn't be messing with orders that have been submitted
     if !@customer_purchase.in_progress? && params[:action] != 'finalize'
       flash[:alert] = "That order has already been submitted."
-      redirect_to :root
+      return redirect_to :root
     end
 
     @profile = @customer_order.profile
