@@ -11,9 +11,9 @@
             .row
               .col-sm-12
                 .create-and-sign-in.mb2
-                  %h4.create-account Create Your Account
+                  %h4.create-account Save your login to see her gifts!
                   .already-have-account
-                    Already Have an Account?
+                    Already have an account?
                     - return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
                     = link_to new_user_session_path(return_to: return_to), data: {loads_in_pjax_modal: true, toggle: "fade out", target: '.top-navigation__menu'} do
                       Sign In
