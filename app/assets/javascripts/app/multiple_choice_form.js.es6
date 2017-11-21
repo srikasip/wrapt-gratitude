@@ -41,11 +41,13 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
     })
     this.buttons_selector.on('mouseenter', evt => {
       const clicked_button = evt.currentTarget
+      $(clicked_button).addClass('hover');
       const option_id = clicked_button.getAttribute('data-option-id');
       this.showOptionExplanation(option_id, 'show');
     })
     this.buttons_selector.on('mouseout', evt => {
       const clicked_button = evt.currentTarget
+      $(clicked_button).removeClass('hover');
       const option_id = clicked_button.getAttribute('data-option-id');
       this.showOptionExplanation(option_id, 'hide');
     })

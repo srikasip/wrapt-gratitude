@@ -9,7 +9,7 @@ module GiftRecommendationsHelper
         thumbnail_locals: {image: gr.gift.carousel_thumb, gift: gr.gift},
       }
     end
-    {nav_partial: 'gift_nav', slides: gifts}
+    {nav_partial: 'gift_nav', slides: gifts, small_nav_max_elements: 4}
   end
 
   def load_gift_image_carousel_data(gift_images)

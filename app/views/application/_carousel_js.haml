@@ -198,7 +198,6 @@
       # http://www.elevateweb.co.uk/image-zoom/examples
       if @zoom_element_selector
         ele = ele.find(@zoom_element_selector)
-        console.log(ele)
         width = $(window).width()
         if width > 768
           @elevateZoom = $(ele).elevateZoom()
@@ -240,11 +239,12 @@
       
 
     _load_group_positions: ()->
-      total_groups = Math.ceil(@indicators.length/5)
+      items_per_group = $(@carousel).data('small-nav-max-elements')
+      total_groups = Math.ceil(@indicators.length/items_per_group)
       positions = [1..@indicators.length]
       grouped_positions = []
       for i in [0...total_groups]
-        grouped_positions[i] = positions.slice(i*5, (i*5)+5)
+        grouped_positions[i] = positions.slice(i*items_per_group, (i*items_per_group)+items_per_group)
       grouped_positions
 
     _load_group_next: (nav) ->
@@ -257,10 +257,14 @@
       nextEle = $(@small_nav_scroll_selector+'.next')
       if $(nav).hasClass('next')
         $(prevEle).data('group', current)
+        $(prevEle).text("< Prev "+(grouped_positions[current-1] || []).length)
         $(nextEle).data('group', next+1)
+        $(nextEle).text("Next "+(grouped_positions[next] || []).length+" >")
       else
         $(prevEle).data('group', current-2)
+        $(prevEle).text("< Prev "+(grouped_positions[next-2] || []).length)
         $(nextEle).data('group', next+1)
+        $(nextEle).text("Next "+(grouped_positions[current-1] || []).length+" >")
       
       if $(prevEle).data('group') == 0
         $(prevEle).addClass('disabled')
@@ -299,7 +303,6 @@
       @slides.each (i, item) =>
         if $(item).height() > @carouselHeight
           @carouselHeight = $(item).height()
-        console.log(@carouselHeight)
       $(@carousel).css('height', @carouselHeight + 'px')
       $(@container).css('height', @carouselHeight + 'px')
 

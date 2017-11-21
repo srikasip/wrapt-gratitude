@@ -5,12 +5,15 @@ module CarouselHelper
     nav_partial = carousel[:nav_partial]
     if slides.present?
       classes = load_carousel_classes(unique_carousel_name, slide_content_singular, container)
+      if carousel[:small_nav_max_elements].present?
+        classes[:small_nav_max_elements] = carousel[:small_nav_max_elements]
+      end
       content_tag :div, id: id, class: "wrapt-carousel #{classes[:carousel]}", data: classes do
         unless slides.length == 1
           concat carousel_nav(nav_container_class: classes[:nav_container], nav_class: classes[:nav], nav_partial: nav_partial)
         end
         concat carousel_slide_container(slides: slides, slides_container: classes[:slides_container], slide_container: classes[:slide_container], parent_slide_index: parent_slide_index)
-        concat carousel_indicators(carousel_classes: classes, slides: slides, indicators: classes[:indicators_container], indicator: classes[:indicator_container])
+        concat carousel_indicators(carousel: carousel, carousel_classes: classes, slides: slides, indicators: classes[:indicators_container], indicator: classes[:indicator_container])
       end
     end
   end
@@ -30,11 +33,11 @@ module CarouselHelper
     }
   end
 
-  def carousel_indicators(carousel_classes: , slides: , indicators: '', indicator: '')
+  def carousel_indicators(carousel: {}, carousel_classes: , slides: , indicators: '', indicator: '')
     is_gr_carousel = carousel_classes[:carousel] == 'gr-carousel'
     content_tag :div, class: "wrapt-carousel__indicators #{indicators}" do
       if is_gr_carousel
-        concat carousel_small_indicator_nav(slides, carousel_classes)
+        concat carousel_small_indicator_nav(carousel, slides, carousel_classes)
       end
       slides.each_with_index do |slide, index|
         concat carousel_indicator(slide: slide, index: index, indicator: indicator, is_gr_carousel: is_gr_carousel)
@@ -42,12 +45,14 @@ module CarouselHelper
     end
   end
 
-  def carousel_small_indicator_nav(slides, carousel_classes)
+  def carousel_small_indicator_nav(carousel, slides, carousel_classes)
+    nav_max_ele = carousel[:small_nav_max_elements]
+    next_num = (slides.in_groups_of(nav_max_ele, false)[1] || []).size
     content_tag :div, class: 'visible-xs' do
-      concat link_to '< Prev 5', '#', class: "#{carousel_classes[:small_nav]} prev disabled", data: {group: 0}
+      concat link_to "< Prev 0", '#', class: "#{carousel_classes[:small_nav]} prev disabled", data: {group: 0}
       title = slides[0][:slide_locals][:gift].title
       concat content_tag :div, title, class: "#{carousel_classes[:small_nav_text]}"
-      concat link_to 'Next 1 >', '#', class: "#{carousel_classes[:small_nav]} next", data: {group: 2}
+      concat link_to "Next #{next_num} >", '#', class: "#{carousel_classes[:small_nav]} next", data: {group: 2}
     end
   end
 
