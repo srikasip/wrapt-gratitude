@@ -198,14 +198,24 @@ label.btn-multiple-choice-option {
     font-size: 14px;
   }
 }
-.btn.btn-multiple-choice-option:hover,
-.btn.btn-yes-no:hover,
+.btn.btn-multiple-choice-option:focus,
+label.btn-multiple-choice-option:focus,
 .btn.btn-multiple-choice-option:active,
-.btn.btn-yes-no:active,
-.btn.btn-multiple-choice-option.selected:hover,
-.btn.btn-yes-no.selected:hover,
-label.btn-multiple-choice-option:hover,
 label.btn-multiple-choice-option:active {
+  border: 1px solid darken($gray-005, 20%);
+}
+
+// don't use :hover on .btn.btn-multiple-choice-option
+// on mobile devices the :hover styles are activated after a click happens and don't go away until you click somewhere else
+// this can be confusing for users since our :hover/.selected styles are the same
+// makes the user think they can't unselect something.
+// multiple_choice_form.js handles adding/removing hover class
+.btn.btn-multiple-choice-option.hover,
+.btn.btn-multiple-choice-option.selected.hover,
+label.btn-multiple-choice-option:hover
+.btn.btn-yes-no:hover,
+.btn.btn-yes-no:active,
+.btn.btn-yes-no.selected:hover {
   background-color: rgba(242, 226, 170, .60);
   letter-spacing: 0;
 }
