@@ -382,15 +382,16 @@ label {
 }
 .create-account {
   display: inline;
-  @media (max-width: 500px) {
+  @media (max-width: 991px) {
     float: none;
   }
 }
 .already-have-account {
   display: inline-block;
   margin-left: rem(18);
-  @media (max-width: 500px) {
+  @media (max-width: 991px) {
     display: block;
     margin-left: 0;
+    margin-top: 18px;
   }
 }
