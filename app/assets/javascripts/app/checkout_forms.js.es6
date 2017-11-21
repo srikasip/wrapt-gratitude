@@ -23,7 +23,7 @@ App.RadioToggleLabel = (label, event) => {
 
 App.StyledInputsBehavior = (input, container_selector) => {
   var container = $(input).parents(container_selector)
-  var psuedo = $(container).find('a')
+  var psuedo = $(container).find('a[data-behavior="wrapted_styled_input"]')
   if($(input).is(':checked')) {
     $(psuedo).addClass('checked')
   } else {

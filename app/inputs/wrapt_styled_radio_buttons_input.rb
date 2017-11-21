@@ -11,7 +11,7 @@ class WraptStyledRadioButtonsInput < SimpleForm::Inputs::CollectionInput
 
   def radio_button(collection_option)
     template.content_tag :label, class: 'wrapt-styled-radio-button j-wrapt-styled-radio-button' do
-      template.concat content_tag :a, '', href: '#', class: (checked?(collection_option.last) ? 'checked' : ''), onClick: 'App.StyledRadioButtonA(event, this)'
+      template.concat content_tag :a, '', href: '#', class: (checked?(collection_option.last) ? 'checked' : ''), onClick: 'App.StyledRadioButtonA(event, this)', data: {behavior: 'wrapted_styled_input'}
       template.concat collection_option.first.html_safe
       template.concat @builder.radio_button attribute_name, collection_option.last,{onChange: 'App.StyledRadioButton(this);', checked: checked?(collection_option.last), style: 'display:none;'}
     end

@@ -17,6 +17,6 @@
           .col-xs-12.col-md-12
             .form-group
               - label = 'Please send me occasional updates, such as when there are new Wrapt makers and quiz questions'
-              = wrapt_styled_checkbox('1', 'user[wants_newsletter]', form.object.wants_newsletter, {label: label, data: {}})
+              = form.input :wants_newsletter, as: :wrapt_styled_checkbox, label: label
 
         = form.submit 'Update', class: 'btn btn-primary btn-block uppercase'
