@@ -365,6 +365,9 @@ $gr-carousel-nav__width: 82.5px;
 .gr-carousel__indicator {
   @media(max-width: $screen-xs-max) {
     position: relative;
+    &:nth-child(4n+1) {
+      margin-right: 20%;
+    }
   }
 }
 
