@@ -62,8 +62,11 @@ module Recommender
         available_gift_scores = @unsorted_gift_scores.dup
         available_gift_scores.sort!{|a, b| b[:score] <=> a[:score]}
 
-        vendor_category_counts = {}
+        vendor_counts = {}
+        category_counts = {}
         
+        # loop though the gifts adding only one gift from each vendor or category
+        # in each pass until they have all been added to the output array.
         while available_gift_scores.any?
           
           skip_vendor_ids = Set.new
@@ -73,11 +76,12 @@ module Recommender
             vendor_id = gift_score[:vendor_id]
             category_id = gift_score[:category_id]
             
-            vc_count = vendor_category_counts[[vendor_id, category_id]].to_i
+            vendor_count = vendor_counts[vendor_id].to_i
+            category_count = category_counts[category_id].to_i
             
             if skip_vendor_ids.include?(vendor_id) || skip_category_ids.include?(category_id)
-              # penalize similar gifts
-              gift_score[:adjusted_score] = gift_score[:score] - vc_count
+              # penalize gifts that are similar to those in the output array
+              gift_score[:adjusted_score] = gift_score[:score] - vendor_count - category_count
               # keep this gift in the available list for the next pass
               false
             else
@@ -85,11 +89,13 @@ module Recommender
               @gift_scores << gift_score
               skip_vendor_ids << vendor_id
               skip_category_ids << category_id
-              vendor_category_counts[[vendor_id, category_id]] = vc_count + 1
+              vendor_counts[vendor_id] = vendor_count + 1
+              category_counts[vendor_id] = category_count + 1
               true
             end
           end
           
+          # re-sort the list based on the adjusted scores before the next pass
           available_gift_scores.sort!{|a, b| b[:adjusted_score] <=> a[:adjusted_score]}
         end
       end
