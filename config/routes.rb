@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
   root to: 'home#show'
 
-  
+
   get 'terms-of-service', to: 'static_pages#terms_of_service', as: :terms_of_service
   get 'privacy-policy', to: 'static_pages#privacy_policy', as: :privacy_policy
   get 'returns-policy', to: 'static_pages#returns_policy', as: :returns_policy
-  
+
 
   get 'science-of-gifting', to: 'static_pages#science_of_gifting', as: :science_of_gifting
   get 'rewrapt', to: 'static_pages#rewrapt', as: :rewrapt
@@ -178,7 +178,7 @@ Rails.application.routes.draw do
     resources :mvp1b_user_surveys, only: :index
     resources :top_gifts_reports, only: :index
     resources :survey_response_reports, only: :index
-    
+
     resources :profile_gift_recommendations, only: :edit
     resources :gift_recommendations, only: [:create, :update]
 
@@ -205,6 +205,9 @@ Rails.application.routes.draw do
           post :send_order_shipped_notification
         end
       end
+
+      resources :promo_codes, path: 'promo-codes'
+
       post 'webhooks/tracking' => 'webhooks#tracking'
     end
 

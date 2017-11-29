@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171117140349) do
+ActiveRecord::Schema.define(version: 20171129154713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -437,6 +437,19 @@ ActiveRecord::Schema.define(version: 20171117140349) do
     t.datetime "archived_at"
     t.index ["created_at"], name: "index_profiles_on_created_at", using: :btree
     t.index ["recipient_invited_at"], name: "index_profiles_on_recipient_invited_at", using: :btree
+  end
+
+  create_table "promo_codes", force: :cascade do |t|
+    t.string   "value",                                  null: false
+    t.text     "description", default: "no description", null: false
+    t.date     "start_date",                             null: false
+    t.date     "end_date",                               null: false
+    t.integer  "amount",                                 null: false
+    t.string   "mode",                                   null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.index ["start_date", "end_date"], name: "index_promo_codes_on_start_date_and_end_date", using: :btree
+    t.index ["value"], name: "index_promo_codes_on_value", unique: true, using: :btree
   end
 
   create_table "purchase_orders", force: :cascade do |t|
