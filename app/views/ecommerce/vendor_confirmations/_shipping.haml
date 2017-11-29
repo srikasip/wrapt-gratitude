@@ -17,14 +17,15 @@
         %strong Order rejected by vendor
       - elsif params[:action] != 'details'
         = form_tag url_for(action: :change_shipping),method: :patch do
-          Change the carrier to
-          %br
-          = collection_select :shipping_carrier, :id, @shipping_carriers, :id, :name, selected: @purchase_order.shipping_carrier.id
-          %br
-          Change the service to
-          %br
-          = collection_select :shipping_service_level, :id, @shipping_service_levels, :id, :name, selected:  @purchase_order.shipping_service_level.id
-          %br
+          %div{style: 'display: none;'}
+            Change the carrier to
+            %br
+            = collection_select :shipping_carrier, :id, @shipping_carriers, :id, :name, selected: @purchase_order.shipping_carrier.id
+            %br
+            Change the service to
+            %br
+            = collection_select :shipping_service_level, :id, @shipping_service_levels, :id, :name, selected:  @purchase_order.shipping_service_level.id
+            %br
           Change the shipping box to
           %br
           = collection_select :parcel, :id, @shipping_parcels, :id, :description, selected: @purchase_order.shipping_parcel.id
