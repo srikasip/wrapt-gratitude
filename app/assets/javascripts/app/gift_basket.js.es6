@@ -74,6 +74,9 @@ App.GiftBasket = class GiftBasket {
           } else {
             this.checkout_button.show();
           }
+          if(data.open) {
+            this.open()
+          }
       }
     });
   }

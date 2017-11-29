@@ -158,14 +158,20 @@
 
                 - when'recommendations_generated'
                   Recommendations generated:
+                  = link_to "edit", edit_admin_profile_gift_recommendation_path(profile)
                   - recs = profile.gift_recommendations
                   %ol
                     - recs.each do |rec|
                       %li
+                        - if rec.removed_by_expert?
+                          %span.glyphicon.glyphicon-remove{title: 'removed by expert'}
                         '#{truncate(rec.gift.title, length: 60)}' (#{rec.gift.wrapt_sku})
-                        - if !rec.random?
-                          = "#{rec.score.round}" if rec.score.round > 1
-                          %span.glyphicon.glyphicon-star
+                        - if rec.added_by_expert?
+                          = "#{rec.expert_score.round}"
+                          %span.glyphicon.glyphicon-education{title: "added by expert (score: #{rec.expert_score.round})"}
+                        - elsif !rec.random?
+                          = "#{rec.score.round}"
+                          %span.glyphicon.glyphicon-star{title: "added by algorithm (score: #{rec.score.round})"}
 
                   Parameters:
                   %ul

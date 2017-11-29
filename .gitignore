@@ -30,3 +30,5 @@
 /.tags
 .DS_Store
 examples.txt
+
+.sass-cache

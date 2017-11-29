@@ -17,7 +17,7 @@ class MyAccount::GifteesController < MyAccount::BaseController
   end
 
   def index
-    @giftees = current_user.owned_profiles.well_ordered.page(params[:page])
+    @giftees = current_user.owned_profiles.preload(:gift_recommendations).unarchived.well_ordered.page(params[:page])
   end
 
   def edit

@@ -44,6 +44,10 @@ class SurveyResponseCompletion
     end
   end
 
+  def add_terms_of_service_error!
+    errors.add(:user_terms_of_service_accepted, :blank, message: 'Please accept our terms of servie.')
+  end
+
   def persisted?
     false
   end

@@ -1,0 +1,72 @@
+.row.admin__intro
+  .col-sm-12
+    %h1 Edit Profile Recommendations
+    
+.row
+  .col-sm-12
+    %h4
+      = @profile.owner&.email
+      - if @profile.name.present?
+        for #{@profile.name} (#{@profile.id})
+      - if @profile.email.present?
+        [#{@profile.email}]
+      - generated_at = @recommendations.map(&:created_at).min
+      - if generated_at.present?
+        = "on #{format_datetime(generated_at)}"
+.row
+  .col-sm-12
+    .well
+      = simple_form_for(@new_gift_recommendation, url: admin_gift_recommendations_path, method: 'post', html: {class: 'form-inline'}) do |f|
+        = f.hidden_field :profile_id
+        .form-group
+          %label SKU
+          = f.text_field :gift_id, size: 30
+        .form-group
+          %label Score
+          = f.select :expert_score, (1..10)
+        .form-group
+          = f.submit "Add Gift", class: 'btn btn-default'
+        
+.row
+  .col-sm-12
+    %table.table
+      %thead
+        %tr
+          %th Gift
+          %th Source
+          %th Remove?
+          %th Score
+      %tbody
+        - @recommendations.each do |rec|
+          - css_classes = []
+          - css_classes << 'active' if rec.removed_by_expert?
+          %tr{class: css_classes}
+            - gift = rec.gift
+            %td
+              = "#{gift.title} (#{gift.wrapt_sku})"
+              .save-notice
+            %td
+              - if rec.added_by_expert?
+                Expert
+              - else
+                Algorithm
+            %td
+              = simple_form_for(rec, url: admin_gift_recommendation_path(rec), method: 'patch') do |f|
+                = f.input :removed_by_expert, input_html: {class: 'js_auto_save', id: nil}
+            %td
+              - if rec.added_by_expert?
+                = simple_form_for(rec, url: admin_gift_recommendation_path(rec), method: 'patch') do |f|
+                  = f.input :expert_score, label: false, collection: 1..10, selected: rec.expert_score.to_i, input_html: {class: 'js_auto_save', id: nil}
+              - else
+                = rec.score.round
+          
+          
+= content_for :page_js do
+  :coffeescript
+    $ ->
+      $('.js_auto_save').change (e) ->
+        $('input').prop('disable', true)
+        $(@).closest('tr').after("<tr class='info'><td colspan='4' style='padding-right:40px;text-align:right;'>Saving changes...</td></tr>")
+        $(@).closest('form').submit()
+
+

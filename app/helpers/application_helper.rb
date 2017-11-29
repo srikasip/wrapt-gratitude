@@ -291,7 +291,7 @@ module ApplicationHelper
 
   def wrapt_styled_radio_button(value, attr_name, selected, options={})
     content_tag :label, for: "#{attr_name}_#{value}", class: 'wrapt-styled-radio-button j-wrapt-styled-radio-button' do
-      concat link_to '', '#', class: (selected ? 'checked' : ''), onClick: 'App.StyledRadioButtonA(event, this)'
+      concat link_to '', '#', class: (selected ? 'checked' : ''), onClick: 'App.StyledRadioButtonA(event, this)', data: {behavior: 'wrapted_styled_input'}
       concat (options[:label] || attr_name.humanize).html_safe
       concat radio_button_tag attr_name, value, selected, style: 'display:none;', onChange: 'App.StyledRadioButton(this);', class: options[:input_class], data: options[:data]
     end
@@ -299,9 +299,7 @@ module ApplicationHelper
 
   def wrapt_styled_checkbox(value, attr_name, selected, options={})
     content_tag :label, for: attr_name, class: "wrapt-styled-checkbox j-wrapt-styled-checkbox" do
-      concat hidden_field_tag attr_name, '0'
-
-      concat link_to '', '#', class: (selected ? 'checked' : ''), onClick: 'App.StyledCheckboxA(event, this)'
+      concat link_to '', '#', class: (selected ? 'checked' : ''), onClick: 'App.StyledCheckboxA(event, this)', data: {behavior: 'wrapted_styled_input'}
       concat options[:label].html_safe
       concat check_box_tag attr_name, value, selected, {onChange: 'App.StyledCheckbox(this);', style: 'display:none;', data: options[:data]}
     end

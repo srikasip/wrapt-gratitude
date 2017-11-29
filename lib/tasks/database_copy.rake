@@ -34,7 +34,7 @@ namespace :db do
     ActiveRecord::Base.connection.tables.each do |table_name|
       ActiveRecord::Base.connection.execute("drop table #{table_name} CASCADE")
     end
-    ActiveRecord::Base.connection.execute("drop sequence internal_order_numbers")
+    ActiveRecord::Base.connection.execute("drop sequence if exists internal_order_numbers")
 
     psql_path  = ENV.fetch('PSQL_PATH')               { '/usr/lib/postgresql/9.5/bin/psql' }
     db_config  = ActiveRecord::Base.connection_config

@@ -178,6 +178,9 @@ Rails.application.routes.draw do
     resources :mvp1b_user_surveys, only: :index
     resources :top_gifts_reports, only: :index
     resources :survey_response_reports, only: :index
+    
+    resources :profile_gift_recommendations, only: :edit
+    resources :gift_recommendations, only: [:create, :update]
 
     namespace :ecommerce do
       get '/' => 'dashboard#index'

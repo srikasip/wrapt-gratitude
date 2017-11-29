@@ -5,10 +5,11 @@ class Profile < ApplicationRecord
   validates :first_name, presence: true
 
   belongs_to :owner, class_name: 'User'
+  belongs_to :expert, class_name: 'User'
   has_many :addresses, as: :addressable
   # FIXME: which is the primary? That's incomplete.
   has_one :address, as: :addressable, class_name: "Address"
-  has_many :gift_recommendations, -> {order 'gift_recommendations.position, gift_recommendations.score desc, gift_recommendations.id'}, dependent: :destroy
+  has_many :gift_recommendations, -> {order 'gift_recommendations.expert_score desc, gift_recommendations.position, gift_recommendations.score desc, gift_recommendations.id'}, dependent: :destroy
   has_many :survey_responses, dependent: :destroy, inverse_of: :profile
   has_many :gift_selections, -> {order 'gift_selections.id'}, dependent: :destroy
 
@@ -25,6 +26,17 @@ class Profile < ApplicationRecord
   accepts_nested_attributes_for :address
 
   scope :well_ordered, -> { order('first_name asc, last_name asc') }
+  
+  scope :unarchived, -> {where(archived_at: nil)}
+  scope :archived, -> {where.not(archived_at: nil)}
+  
+  def archived?
+    archived_at.present?
+  end
+
+  def unarchived?
+    archived_at.blank?
+  end
 
   def relationship
     word = read_attribute(:relationship)

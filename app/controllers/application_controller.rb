@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
+  protect_from_forgery with: :reset_session
 
   before_action :require_login, if: :login_required?
   before_action :set_signed_authentication_cookie

@@ -14,7 +14,7 @@
           = render tab[:tab_pane_partial], giftee: giftee
     - if giftee.finished_surveys?
       = link_to giftee_gift_recommendations_path(giftee), class: 'btn btn-primary btn-block' do
-        VIEW #{giftee.gift_recommendations.count} RECOMMENDATIONS
+        VIEW #{GiftRecommendation.select_for_display(giftee.gift_recommendations).size} RECOMMENDATIONS
     - else
       :ruby
         question_response = giftee.first_unanswered_response

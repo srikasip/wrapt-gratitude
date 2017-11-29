@@ -10,13 +10,13 @@
   .j-co-gift-wrapt__note-1{style: f.object.gift_wrapt? ? '' : 'display: none;'}
     .co-add-a-note
       %h4.light
-        Add a Note for
+        Add a handwritten note for
         =@profile.name
       -# FYI: this checkbox is checked on false!
       = f.input :include_note, as: :wrapt_styled_checkbox, label: 'Do not include a note', checked_value: 0, unchecked_value: 1
     .j-co-gift-wrapt__note-2{style: f.object.include_note? ? '' : 'display: none;'}
       .row
-        .col-xs-8
+        .col-sm-8
           = f.input :note_envelope_text, label: 'What would you like the front of the note envelope to say?'
       .row
         .col-xs-12
