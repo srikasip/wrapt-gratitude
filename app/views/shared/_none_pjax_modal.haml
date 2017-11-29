@@ -1,0 +1,27 @@
+- title = content[:title]
+- body_partial = content[:body_content_partial]
+- footer = content[:footer_content_partial]
+- show_open = content[:open] || false
+#none-pjax-modal.modal.fade.in{tabindex: '-1', role: 'dialog', data: {show: 'true'}}
+  .modal-dialog{role: 'document'}
+    .modal-content
+      .modal-header
+        %button.close.pull-right{data: {dismiss: 'modal'}, 'aria-label'=>'Close', type: 'button'}=embedded_svg('icon-close', class: 'modal__icon-close')
+        - if title.present?
+          %h4.modal-title= title
+      .modal-body.clearfix
+        - if body_partial.present?
+          = render body_partial
+      - if footer.present?
+        .modal-footer
+          = render footer
+
+- if show_open
+  = content_for :page_js do
+    :javascript
+      $(document).ready(function() {
+        $('#none-pjax-modal').modal('show')
+        $('#none-pjax-modal').find('form').submit(function() {
+          $('#none-pjax-modal').modal('hide')
+        });
+      })
