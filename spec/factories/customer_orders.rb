@@ -3,7 +3,7 @@ FactoryGirl.define do
     SecureRandom.hex(16)
   end
 
-  factory :customer_order do
+  factory :customer_order, class: Ec::CustomerOrder do
     ship_street1 "10109 Floyd"
     ship_city "Overland Park"
     ship_state "KS"
@@ -12,6 +12,7 @@ FactoryGirl.define do
     recipient_name { generate(:name) }
 
     cart_id { SecureRandom.hex(3) }
+    order_number { Ec::InternalOrderNumber.next_val }
 
     association :user
     association :profile

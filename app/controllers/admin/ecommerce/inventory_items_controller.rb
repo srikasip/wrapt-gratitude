@@ -38,7 +38,7 @@ module Admin
 
       def _load_products
         params[:search] ||= {}
-        @products = InventorySearch.new(params).results
+        @products = Ec::InventorySearch.new(params).results
       end
     end
   end

@@ -4,23 +4,32 @@
   .col-xs-6
     %p
       %strong Via:
-      = @purchase_order.shipping_rate['provider']
-      = @purchase_order.shipping_rate.dig('servicelevel', 'name')
+      = @purchase_order.shipping_carrier_name
+      = @purchase_order.shipping_service_level_name
       %br
       %strong Box:
       = @purchase_order.shipping_parcel.description
       %br
-      - if @purchase_order.shipping_label.present?
+      - if @purchase_order.shipping_label&.url.present?
         = link_to @purchase_order.shipping_label.url, target: '_blank' do
           [Download Shipping Label]
       - elsif @purchase_order.cancelled?
         %strong Order rejected by vendor
       - elsif params[:action] != 'details'
-        = form_tag url_for(action: :change_shipping_box),method: :patch do
+        = form_tag url_for(action: :change_shipping),method: :patch do
+          Change the carrier to
+          %br
+          = collection_select :shipping_carrier, :id, @shipping_carriers, :id, :name, selected: @purchase_order.shipping_carrier.id
+          %br
+          Change the service to
+          %br
+          = collection_select :shipping_service_level, :id, @shipping_service_levels, :id, :name, selected:  @purchase_order.shipping_service_level.id
+          %br
           Change the shipping box to
-          = collection_select :parcel, :id, Parcel.shipping, :id, :description, selected: @purchase_order.shipping_parcel.id
+          %br
+          = collection_select :parcel, :id, @shipping_parcels, :id, :description, selected: @purchase_order.shipping_parcel.id
           :javascript
-            $('#parcel_id').change(function() {
+            $('#parcel_id, #shipping_carrier_id, #shipping_service_level_id').change(function() {
               $(this).closest('form').submit();
             })
 

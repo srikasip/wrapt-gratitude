@@ -10,7 +10,7 @@
     = form_tag(admin_ecommerce_billings_path, method: 'GET', class: 'form-inline') do
 
       .form-group.multi-choice-flex
-        - CustomerOrder::VALID_ORDER_STATUSES.each do |status|
+        - Ec::CustomerOrder::VALID_ORDER_STATUSES.each do |status|
           %label{for: "search_status_#{status}"}
             = check_box_tag "search[status][#{status}]", "on", params[:search][:status][status]=='on'
             = status.titleize

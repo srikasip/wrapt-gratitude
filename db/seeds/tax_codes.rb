@@ -7,7 +7,7 @@ tax_codes = [
 ]
 
 tax_codes.each do |data|
-  tax_code = Tax::Code.where(code: data[:code]).first_or_initialize
+  tax_code = Ec::Tax::Code.where(code: data[:code]).first_or_initialize
   tax_code.assign_attributes(data)
   tax_code.save!
 end

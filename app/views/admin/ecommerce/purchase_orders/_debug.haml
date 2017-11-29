@@ -2,7 +2,7 @@
   shipment = @order.shipment
 
 - if shipment.present?
-  - chossen_rate = PurchaseService::ShippingService.find_rate(rates: shipment.rates, shipping_choice: @order.customer_order.shipping_choice, vendor: @order.vendor)
+  - chossen_rate = Ec::PurchaseService::ShippingService.find_rate(rates: shipment.rates, shipping_choice: @order.customer_order.shipping_choice, vendor: @order.vendor)
   - messages = shipment.api_response['messages']
 
   - if messages.present?
@@ -16,7 +16,7 @@
 
 
   - rates = shipment.rates.sort_by { |r| r['amount'].to_f }.sort_by { |r| r['provider'] }
-  - blacklist = ShippingServiceLevel.inactive.pluck(:shippo_token)
+  - blacklist = Ec::ShippingServiceLevel.inactive.pluck(:shippo_token)
   %h3 Rates Available
   %table.table
     %thead

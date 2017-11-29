@@ -6,12 +6,12 @@ module Admin
       def index
         params[:search] ||= {}
         params[:search][:status] ||= {}
-        @order_search = PurchaseOrderSearch.new(params)
+        @order_search = Ec::PurchaseOrderSearch.new(params)
         @orders = @order_search.results
       end
 
       def show
-        @order = PurchaseOrder.find(params[:id])
+        @order = Ec::PurchaseOrder.find(params[:id])
         @vendor = @order.vendor
         @shipping_label = @order.shipping_label
       end
