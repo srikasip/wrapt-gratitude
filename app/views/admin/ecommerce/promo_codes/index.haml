@@ -6,7 +6,7 @@
 
 .row
   .col-sm-12
-    = link_to 'Add Promo', admin_ecommerce_promo_codes_path, method: :post, class: 'btn btn-primary pull-right'
+    = link_to 'Add Promo', new_admin_ecommerce_promo_code_path, class: 'btn btn-primary pull-right'
     .mb2
       - content_for(:promo_section_title) { 'Current Promotions' }
       = render 'list_promos', promo_codes: @promo_codes, pagination_param: :page

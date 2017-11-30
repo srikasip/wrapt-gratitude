@@ -4,8 +4,7 @@ class PromoCode < ApplicationRecord
     FIXED_MODE = 'fixed'
   ]
 
-  before_validation :_set_defaults
-  #before_validation -> { self.amount = self.amount.to_i }
+  before_validation :set_defaults
 
   validates :start_date, presence: true
   validates :end_date, presence: true
@@ -29,15 +28,14 @@ class PromoCode < ApplicationRecord
   define_method(:current?)            { start_date <= Date.today && Date.today <= end_date }
   define_method(:past?)               { end_date < Date.today }
 
-  private
-
-  def _set_defaults
+  def set_defaults
     self.start_date ||= Date.today
     self.end_date ||= Date.today + 1.week
     self.mode ||= PERCENT_MODE
     self.amount ||= 10
-    self.value ||= WordToken.sample + (Random.rand(1000)+1).to_s
   end
+
+  private
 
   def _sane_amounts
     if percent? && amount > 50

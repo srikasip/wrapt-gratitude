@@ -10,10 +10,21 @@ module Admin
         @past_promo_codes = PromoCode.well_sorted.past.page(params[:other_page])
       end
 
+      def new
+        @promo_code = PromoCode.new
+        @promo_code.set_defaults
+      end
+
       def create
-        PromoCode.create!
-        flash[:notice] = 'Promo code created'
-        redirect_to action: :index
+        @promo_code = PromoCode.new(_permitted_params)
+
+        if @promo_code.save
+          flash[:notice] = 'Promo code created'
+          redirect_to action: :index
+        else
+          flash.now[:alert] = 'There was an error'
+          render :new
+        end
       end
 
       def edit
