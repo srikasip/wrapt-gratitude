@@ -7,8 +7,15 @@ class HomeController < ApplicationController
   helper SurveyQuestionResponsesHelper
 
   def show
-    if current_user && current_user.last_viewed_profile.present? && !current_user.admin?
-      redirect_to giftee_gift_recommendations_path(current_user.last_viewed_profile) and return
+    if current_user && current_user.last_viewed_profile.present?
+      if session[:last_completed_survey_at].present?
+        completed_at = session[:last_completed_survey_at]
+        session.delete(:last_completed_survey_at)
+
+        if (Time.now - completed_at) < 10.minutes
+          redirect_to giftee_gift_recommendations_path(current_user.last_viewed_profile) and return
+        end
+      end
     end
 
     if !require_invites? || current_user.present?
