@@ -9,7 +9,7 @@ class HomeController < ApplicationController
   def show
     if current_user && current_user.last_viewed_profile.present?
       if session[:last_completed_survey_at].present?
-        completed_at = session[:last_completed_survey_at]
+        completed_at = Time.parse(session[:last_completed_survey_at]) rescue Time.parse('1985-01-01')
         session.delete(:last_completed_survey_at)
 
         if (Time.now - completed_at) < 10.minutes
