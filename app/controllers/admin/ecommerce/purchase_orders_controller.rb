@@ -22,8 +22,12 @@ module Admin
       end
 
       def cancel_order
-        flash[:alert] = "Note that this currenly only sends the cancellation email. THE ORDER WAS NOT CANCELLED."
-        CustomerOrderMailer.cannot_ship(params[:id]).deliver_later
+        flash[:alert] = "Cancelled"
+
+        order = Ec::PurchaseOrder.find(params[:id])
+        cancel_service = Ec::PurchaseService::CancelService.new(purchase_order: order)
+        cancel_service.run!
+
         redirect_back(fallback_location: admin_ecommerce_purchase_orders_path)
       end
 

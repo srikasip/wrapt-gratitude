@@ -2,6 +2,7 @@
 
 module Ec
   module OrderFactory
+    NUM_GIFTS = 4
 
     # This is designed to allow a real order on production, but for a dummy gift.
     # Real shipping labels, credit cards, and taxes are involved.
@@ -149,9 +150,9 @@ module Ec
         '4242424242424241', # Charge is declined with an incorrect_number code as the card number fails the Luhn check.
       ]
 
-      # Fail 25% of the time for testing.
+      # Fail some of the time for testing.
       stripe_token = \
-        if Random.rand > 0.25
+        if Random.rand > 0.05
           Stripe::Token.create(
             :card => {
               :number => good_cards.sample,
@@ -180,7 +181,7 @@ module Ec
       customer = profile.owner
 
       if gifts.nil?
-        gifts = Gift.order('random()').first(2)
+        gifts = Gift.order('random()').first(NUM_GIFTS)
       end
 
       desired_gifts = gifts.map do |gift|
@@ -243,7 +244,7 @@ module Ec
       customer_purchase.authorize!
 
       unless customer_purchase.card_authorized?
-        return
+        return order
       end
 
       # All the vendors acknowledge via emails and click-through to a page where they say it's okay.

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171130154255) do
+ActiveRecord::Schema.define(version: 20171204165151) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 20171130154255) do
     t.string   "bill_zip"
     t.string   "last_four",                  limit: 4
     t.string   "card_type"
+    t.jsonb    "refund_stack"
     t.index ["customer_order_id"], name: "index_charges_on_customer_order_id", using: :btree
   end
 
@@ -456,22 +457,25 @@ ActiveRecord::Schema.define(version: 20171130154255) do
     t.integer  "vendor_id"
     t.integer  "customer_order_id"
     t.integer  "gift_id"
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
-    t.string   "order_number",                                          null: false
-    t.date     "created_on",                                            null: false
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+    t.string   "order_number",                                              null: false
+    t.date     "created_on",                                                null: false
     t.decimal  "total_due_in_cents"
     t.decimal  "shipping_in_cents"
     t.decimal  "shipping_cost_in_cents"
-    t.string   "vendor_token",                                          null: false
+    t.string   "vendor_token",                                              null: false
     t.string   "vendor_acknowledgement_status"
     t.string   "vendor_acknowledgement_reason"
-    t.integer  "handling_cost_in_cents",        default: 0,             null: false
-    t.integer  "handling_in_cents",             default: 0,             null: false
-    t.string   "status",                        default: "initialized", null: false
+    t.integer  "handling_cost_in_cents",            default: 0,             null: false
+    t.integer  "handling_in_cents",                 default: 0,             null: false
+    t.string   "status",                            default: "initialized", null: false
     t.integer  "shipping_parcel_id"
     t.integer  "shipping_carrier_id"
     t.integer  "shipping_service_level_id"
+    t.datetime "customer_refunded_at"
+    t.integer  "gift_amount_for_customer_in_cents", default: 0,             null: false
+    t.integer  "tax_amount_for_customer_in_cents",  default: 0,             null: false
     t.index ["customer_order_id"], name: "index_purchase_orders_on_customer_order_id", using: :btree
     t.index ["gift_id"], name: "index_purchase_orders_on_gift_id", using: :btree
     t.index ["order_number"], name: "index_purchase_orders_on_order_number", unique: true, using: :btree
@@ -552,26 +556,28 @@ ActiveRecord::Schema.define(version: 20171130154255) do
 
   create_table "shipping_labels", force: :cascade do |t|
     t.integer  "shipment_id"
-    t.string   "cart_id",             null: false
+    t.string   "cart_id",                               null: false
     t.string   "tracking_number"
     t.jsonb    "api_response"
     t.boolean  "success"
     t.text     "url"
-    t.string   "shippo_object_id"
+    t.string   "shippo_rate_object_id"
     t.text     "error_messages"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-    t.integer  "purchase_order_id",   null: false
-    t.integer  "customer_order_id",   null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.integer  "purchase_order_id",                     null: false
+    t.integer  "customer_order_id",                     null: false
     t.string   "tracking_url"
     t.datetime "eta"
     t.string   "tracking_status"
     t.datetime "tracking_updated_at"
     t.jsonb    "tracking_payload"
-    t.string   "carrier",             null: false
-    t.string   "service_level",       null: false
+    t.string   "carrier",                               null: false
+    t.string   "service_level",                         null: false
     t.date     "shipped_on"
     t.date     "delivered_on"
+    t.boolean  "cancelled",             default: false, null: false
+    t.jsonb    "refund_api_response"
     t.index ["customer_order_id"], name: "index_shipping_labels_on_customer_order_id", using: :btree
     t.index ["purchase_order_id"], name: "index_shipping_labels_on_purchase_order_id", using: :btree
     t.index ["shipment_id"], name: "index_shipping_labels_on_shipment_id", using: :btree
@@ -734,18 +740,21 @@ ActiveRecord::Schema.define(version: 20171130154255) do
   end
 
   create_table "tax_transactions", force: :cascade do |t|
-    t.string   "cart_id",                                null: false
+    t.string   "cart_id",                                 null: false
     t.integer  "customer_order_id"
     t.string   "transaction_code"
-    t.jsonb    "api_request_payload",                    null: false
-    t.jsonb    "api_response",                           null: false
+    t.jsonb    "api_request_payload",                     null: false
+    t.jsonb    "api_estimation_response"
     t.jsonb    "api_reconcile_response"
-    t.boolean  "reconciled",             default: false, null: false
-    t.boolean  "success",                default: false, null: false
-    t.decimal  "tax_in_dollars",         default: "0.0", null: false
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
-    t.boolean  "is_estimate",            default: false, null: false
+    t.boolean  "reconciled",              default: false, null: false
+    t.boolean  "success",                 default: false, null: false
+    t.decimal  "tax_in_dollars",          default: "0.0", null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "is_estimate",             default: false, null: false
+    t.jsonb    "api_adjustment_response"
+    t.jsonb    "api_capture_response"
+    t.boolean  "captured",                default: false, null: false
     t.index ["customer_order_id"], name: "index_tax_transactions_on_customer_order_id", using: :btree
   end
 

@@ -5,7 +5,8 @@
       Purchase Order
       = @order.order_number
       = link_to 'Send PO notification to vendor', url_for(action: :send_vendor_notification), :method => :post, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-warning btn-xs'
-      = link_to 'Cancel order', url_for(action: :cancel_order), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+      - if @order.cancelable?
+        = link_to 'Cancel order', url_for(action: :cancel_order), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
       - if @order.shipping_label.present? || Rails.env.development?
         = link_to 'Send order-shipped notification', url_for(action: :send_order_shipped_notification), :method => :post, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-warning btn-xs'
 
@@ -55,34 +56,42 @@
     %p
       %strong Status:
       = @order.status.titleize
+      - if @order.customer_refunded_at.present?
+        %br
+        %strong Refunded At:
+        = format_datetime(@order.customer_refunded_at)
 
   - if @shipping_label.present?
     .col-sm-3
       %p
         %strong Shipping Information:
-        %br
-        %strong ETA:
-        =format_datetime(@shipping_label.eta, with_zone:true) || 'N/A'
-        %br
-        %strong Carrier:
-        =@shipping_label.carrier
-        =@shipping_label.service_level
-        %br
-        %strong Tracking Status:
-        =@shipping_label.tracking_status || 'N/A'
-        %br
-        %strong Tracking Link:
-        = link_to @shipping_label.tracking_url, target: '_blank' do
-          = @shipping_label.tracking_number
-        %br
-        %strong Tracking Updated At:
-        = format_date(@shipping_label.tracking_updated_at)
-        %br
-        %strong Shipped On:
-        = format_date(@shipping_label.shipped_on)
-        %br
-        %strong Delivered On:
-        = format_date(@shipping_label.delivered_on)
+        - if @shipping_label.cancelled?
+          %br
+          %span{style: 'color: red'} LABEL CANCELLED
+          - fade = true
+        .shipping-content{style: (fade ? 'background: #aaa; border-radius: 5px; padding: 5px' : '')}
+          %strong ETA:
+          =format_datetime(@shipping_label.eta, with_zone:true) || 'N/A'
+          %br
+          %strong Carrier:
+          =@shipping_label.carrier
+          =@shipping_label.service_level
+          %br
+          %strong Tracking Status:
+          =@shipping_label.tracking_status || 'N/A'
+          %br
+          %strong Tracking Link:
+          = link_to @shipping_label.tracking_url, target: '_blank' do
+            = @shipping_label.tracking_number
+          %br
+          %strong Tracking Updated At:
+          = format_date(@shipping_label.tracking_updated_at)
+          %br
+          %strong Shipped On:
+          = format_date(@shipping_label.shipped_on)
+          %br
+          %strong Delivered On:
+          = format_date(@shipping_label.delivered_on)
   - else
     .col-sm-3
       %p

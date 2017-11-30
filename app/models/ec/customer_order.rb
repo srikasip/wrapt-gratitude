@@ -67,9 +67,10 @@ module Ec
     define_method(:bad_tax_transaction?) { self.tax_transactions.present? && !self.tax_transactions&.all?(&:success?) }
     define_method(:bad_labels?) { !self.shipping_labels.all?(&:success?) }
 
-    def _set_submitted_date
-      if self.status_changed?(to: SUBMITTED)
-        self.submitted_on = Date.today
+    def non_cancelled_line_items
+      line_items.reject do |line_item|
+        purchase_order = line_item.related_order
+        purchase_order.cancelled?
       end
     end
 
@@ -79,6 +80,14 @@ module Ec
       names = shipments.map { |x| x.address_to['name'] }.uniq
       raise "what?" if names.length != 1
       names.first
+    end
+
+    private
+
+    def _set_submitted_date
+      if self.status_changed?(to: SUBMITTED)
+        self.submitted_on = Date.today
+      end
     end
   end
 end
