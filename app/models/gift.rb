@@ -87,7 +87,7 @@ class Gift < ApplicationRecord
   end
 
   def deleteable?
-    LineItem.where(orderable: self).none?
+    Ec::LineItem.where(orderable: self).none?
   end
 
   def vendor
