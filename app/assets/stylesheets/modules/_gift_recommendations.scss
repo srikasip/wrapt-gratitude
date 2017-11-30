@@ -2,6 +2,19 @@
 // also used on the recipient review page
 @import "helpers";
 
+.survey_response_completions .modal-dialog {
+  width: 90%;
+  max-width: 945px;
+  margin: 100px auto;
+  overflow: auto;
+  @media(max-width: $screen-xs-max) {
+    margin: 30px auto;
+  }
+  .lost-password-container {
+    max-width: 800px;
+  }
+}
+
 .recommendations-intro__next-step {
   background-color: rgba(170, 186, 213, 0.45);
   width: 500px;
