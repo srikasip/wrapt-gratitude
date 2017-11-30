@@ -89,7 +89,7 @@ class Ecommerce::CheckoutController < ApplicationController
   def save_shipping
     @checkout_step = :shipping
 
-    if @customer_purchase.pick_shipping!(params.dig(:customer_order, :shipping_choice))
+    if @customer_purchase.pick_shipping!(params.dig(:ec_customer_order, :shipping_choice))
       redirect_to action: :edit_payment
     else
       flash.now[:notice] = "There was a problem saving your response."
