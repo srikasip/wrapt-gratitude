@@ -58,7 +58,7 @@
 .home__hero {
   background-size: 100vw;
   background-repeat: no-repeat;
-  background-position: left 40%;
+  background-position: left 70%;
   border: none;
   margin-bottom: 24px;
   padding-top: 48px;
@@ -69,23 +69,25 @@
     background-position: 55% 50%;
   }
   @media (max-width: $screen-sm-max) {
-    background-image: image-url('hero-image-v2-1536');
+    // background-image: image-url('hero-image-v2-1536');
+    background-image: image-url('hero-image-v3');
   }
   @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
-    background-image: image-url('hero-image-v2-1984');
+    // background-image: image-url('hero-image-v2-1984');
+    background-image: image-url('hero-image-v3');
   }
   @media (min-width: $screen-lg-min) {
-    background-image: image-url('hero-image-v2');
+    // background-image: image-url('hero-image-v2');
+    background-image: image-url('hero-image-v3');
   }
 }
 
 
 .home__hero-text h1 {
   font-size: rem(40);
-  color: $gray-010;
-  -webkit-text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
-  -moz-text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
-  text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
   @media (max-width: $screen-xs-max) {
     margin-bottom: 500px;
   }
@@ -106,10 +108,9 @@
 .home__hero-text-secondary .home__hero-text-secondary__p {
   font-size: rem(28px);
   line-height: 1.5em;
-  color: $gray-010;
-  -webkit-text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
-  -moz-text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
-  text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
+  color: #fff;
+  font-weight: 500;
+  text-transform: uppercase;
   @media (max-width: $screen-xs-max) {
     @include akkurat-regular;
     font-size: rem(26px);
