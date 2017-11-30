@@ -16,6 +16,7 @@ module Ec
 
     has_many :comments, as: :commentable, dependent: :destroy
     has_many :line_items, as: :order, dependent: :destroy
+    has_many :related_line_items, dependent: :destroy
 
     has_one :shipment, dependent: :destroy
     has_one :shipping_label, through: :shipment

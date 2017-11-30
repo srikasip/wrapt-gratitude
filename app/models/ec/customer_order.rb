@@ -32,6 +32,7 @@ module Ec
     has_one :charge, dependent: :destroy
     has_many :comments, as: :commentable, dependent: :destroy
     has_many :line_items, as: :order, dependent: :destroy
+    has_many :related_line_items, dependent: :destroy
 
     has_many :gifts, through: :line_items, source_type: "Gift", source: :orderable
 
