@@ -40,6 +40,10 @@
             The shipping label isn't quite ready yet, but
             = link_to 'click here', url_for
             to check again.  It shouldn't take more than a few moments.
+      - elsif @purchase_order.shipping_label.present? && !@purchase_order.shipping_label.success
+        %p
+          Please contact Wrapt about the shipping label as there was a problem
+          generating one.
       - else
         = link_to 'click here to check for the shipping label', url_for
 
