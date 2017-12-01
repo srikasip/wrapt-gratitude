@@ -21,10 +21,13 @@ module ApplicationHelper
     if current_user && current_user.active?
       links << [admin_root_path, 'Admin', :default] if current_user.admin?
       links << [my_account_giftees_path, 'My Account', :default]
+      links << [my_account_giftees_path, 'My Giftees', :default]
     end
-    links << [science_of_gifting_path, 'The Science', :default]
-    links << [rewrapt_path, 'ReWrapt', :default]
-    links << [about_path, 'About', :default]
+    dropdown_links = []
+    dropdown_links << [science_of_gifting_path, ' The Science']
+    dropdown_links << [rewrapt_path, ' The Makers']
+    dropdown_links << [about_path, ' About']
+    links << ['#', 'About', :dropdown, dropdown_links]
     links << ['#', 'Gift Basket', :gift_basket] if enable_gift_basket?
     if current_user
       links << [user_session_path, 'Sign Out', :default]
@@ -36,6 +39,13 @@ module ApplicationHelper
       end
     end
     links
+  end
+
+  def top_nav_dropdown_link(path, text)
+    link_to path do
+      concat embedded_svg('icon-circle', class: 'icon navbar-static-top__icon-circle')
+      concat text
+    end
   end
 
   def top_nav_link(content)

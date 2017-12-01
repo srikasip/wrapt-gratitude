@@ -105,6 +105,7 @@
   @include akkurat-bold;
   color: $gray-008;
   padding: 0 15px;
+  position: relative;
   @media(max-width: $screen-xs-max) {
     display: block;
     text-align: center;
@@ -113,6 +114,46 @@
       margin-top: 40px;
     }
     svg{display:none;}
+  } 
+}
+
+.top-navigation__menu-item .dropdown-menu a {
+  font-size: 12px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  @include akkurat-bold;
+  color: $gray-008;
+}
+
+.top-navigation__menu-item .dropdown-menu a:hover,
+.top-navigation__menu-item .dropdown-menu a:active,
+.top-navigation__menu-item .dropdown-menu a:focus {
+  background-color: transparent;
+}
+
+.top-navigation__menu-item .dropdown-menu {
+  border: none;
+  box-shadow: 0 6px 16px 0 rgba(0,0,0,0.05);
+  min-width: 200px;
+  margin-top: 10px;
+  @media(max-width: $screen-xs-max) {
+    width: 100%;
+    text-align: center;
+  }
+  &:before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 8px solid #ffffff;
+    @media(max-width: $screen-xs-max) {
+      right: 50%;
+      margin-right: -6px;
+    }
   }
 }
 
