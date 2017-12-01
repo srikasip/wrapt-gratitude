@@ -106,7 +106,7 @@ module Admin
       @gift.shipping_parcels.empty? and @gift.shipping_parcels.build
       @gift.pretty_parcels.empty? and @gift.pretty_parcels.build
 
-      @tax_codes = Tax::Code.active.all
+      @tax_codes = Ec::Tax::Code.active.all
     end
   end
 end
