@@ -63,6 +63,7 @@ class SurveyResponseCompletionsController < ApplicationController
       @survey_response.update_attribute :completed_at, Time.now
       job = GenerateRecommendationsJob.new
       job.perform(@survey_response)
+      session[:last_completed_survey_at] = Time.now
       redirect_to giftee_gift_recommendations_path(@profile)
     else
       if User.where(email: user.email).any?

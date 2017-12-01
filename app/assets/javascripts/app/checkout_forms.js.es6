@@ -65,7 +65,7 @@ App.StyledRadioButtonA = (event, ele) => {
 }
 
 App.SlideOnValueChecked = (input, value, checked, container_selector) => {
-  var checkedCondition = checked === $(input).is(':checked') 
+  var checkedCondition = checked === $(input).is(':checked')
   if($(input).val() === value && checkedCondition) {
     $(container_selector).slideDown()
   } else {
@@ -145,7 +145,7 @@ App.ClearForm = (object, attrs, toggle_selector, value) => {
     } else {
       App.ClearInputs(object, attrs)
     }
-    
+
   })
 }
 
@@ -162,7 +162,7 @@ App.AddressSubmitCheckShipAttrs = () => {
   var shipAttrs = ['ship_street1','ship_city','ship_state','ship_zip']
   var disabled = false
   shipAttrs.forEach(function(attr) {
-    var i = '[name="customer_order['+attr+']"]'
+    var i = '[name="ec_customer_order['+attr+']"]'
     if(!$(i).val()) {
       disabled = true
     }
@@ -173,9 +173,9 @@ App.AddressSubmitCheckShipAttrs = () => {
 App.AddressSubmitButton = () => {
   var validate = function() {
     var disabled = false
-    var shipTo = $('form').find('input:checked[name="customer_order[ship_to]"]')
+    var shipTo = $('form').find('input:checked[name="ec_customer_order[ship_to]"]')
     if(shipTo.val() === 'ship_to_customer') {
-      var address = $('form').find('input:checked[name="customer_order[address_id]"]')
+      var address = $('form').find('input:checked[name="ec_customer_order[address_id]"]')
       if($(address).val() === 'new_address') {
         disabled = App.AddressSubmitCheckShipAttrs()
       } else {
@@ -194,16 +194,10 @@ App.AddressSubmitButton = () => {
 App.ShippingChoiceSubmitButton = () => {
   $('form').find('input').change(function() {
     var disabled = true
-    var shippingChoice = $('form').find('input:checked[name="customer_order[shipping_choice]"]')
+    var shippingChoice = $('form').find('input:checked[name="ec_customer_order[shipping_choice]"]')
     if(shippingChoice.length > 0) {
       disabled = false
     }
     App.EnableSubmit(disabled)
   })
 }
-
-
-
-
-
-

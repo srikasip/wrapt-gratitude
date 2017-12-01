@@ -1,7 +1,7 @@
 class Vendor < ApplicationRecord
   has_many :products, inverse_of: :vendor, dependent: :destroy
 
-  has_many :vendor_service_levels
+  has_many :vendor_service_levels, class_name: 'Ec::VendorServiceLevel'
   has_many :shipping_service_levels, through: :vendor_service_levels
 
   validates :wrapt_sku_code, presence: true, format: {with: /\A[A-Z]{2}\z/, message: 'must be 2 uppercase letters'}, uniqueness: true
@@ -26,7 +26,7 @@ class Vendor < ApplicationRecord
   before_destroy -> { raise "Cannot destroy" unless deleteable? }
 
   def deleteable?
-    PurchaseOrder.where(vendor: self).none?
+    Ec::PurchaseOrder.where(vendor: self).none?
   end
 
   def purchase_order_markup_in_dollars

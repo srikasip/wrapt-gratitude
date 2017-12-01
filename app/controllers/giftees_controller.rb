@@ -12,6 +12,12 @@ class GifteesController < ApplicationController
 
   skip_before_action :require_login_or_invitation, only: [:create]
 
+  # This is for story #153216815
+  # Can't verify myself, but I think you can get to some kind of cached version
+  # of our homepage through the Facebook app which then means the authenticity
+  # token is invalid on submitting that form.
+  skip_before_action :verify_authenticity_token, only: [:create]
+
   def login_required?
     false
   end

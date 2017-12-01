@@ -5,7 +5,7 @@ carrier_names = [
 ]
 
 carrier_names.each do |name|
-  carrier = ShippingCarrier.where(name: name).first_or_initialize
+  carrier = Ec::ShippingCarrier.where(name: name).first_or_initialize
   carrier.shippo_provider_name = name
   carrier.save!
 end
@@ -48,9 +48,9 @@ service_level_params = [
 service_level_params.each do |_p|
   p = OpenStruct.new(_p)
 
-  ssl = ShippingServiceLevel.where(shippo_token: p.token).first_or_initialize
+  ssl = Ec::ShippingServiceLevel.where(shippo_token: p.token).first_or_initialize
 
-  ssl.shipping_carrier = ShippingCarrier.find_by(name: p.provider)
+  ssl.shipping_carrier = Ec::ShippingCarrier.find_by(name: p.provider)
 
   ssl.estimated_days = p.estimated_days
   ssl.name = p.name

@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :shipment do
+  factory :shipment, class: Ec::Shipment do
     address_from {{
             "zip" => "66212",
            "city" => "Leawood",

@@ -1,7 +1,7 @@
 module ShippoShipments
   def shipment
     @shipment ||= \
-      Shipment.new({
+      Ec::Shipment.new({
         address_to: {
           name: 'Todd Blackman',
           street1: '319 Hague Rd',

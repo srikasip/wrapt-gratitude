@@ -17,8 +17,8 @@ FactoryGirl.define do
     product_subcategory
 
     before(:create) do |gift|
-      gift.gift_parcels.build(parcel: Parcel.active.pretty.first)
-      gift.gift_parcels.build(parcel: Parcel.active.shipping.first)
+      gift.gift_parcels.build(parcel: Ec::Parcel.active.pretty.first)
+      gift.gift_parcels.build(parcel: Ec::Parcel.active.shipping.first)
       gift.gift_products.build(product: FactoryGirl.create(:product))
     end
 
