@@ -40,11 +40,11 @@
         $('.app-loading__container').show();
       })
 
-      App.ShowSelectAddress('customer_order', 'ship_to', 'ship_to_customer', true, '.j-select-my-address')
+      App.ShowSelectAddress('ec_customer_order', 'ship_to', 'ship_to_customer', true, '.j-select-my-address')
 
-      App.ShowAddressForm('customer_order', 'ship_to', false, true, '.j-address', 'new_address')
+      App.ShowAddressForm('ec_customer_order', 'ship_to', false, true, '.j-address', 'new_address')
 
-      App.ShowAddressForm('customer_order', 'address_id', 'new_address', true, '.j-address', 'new_address')
+      App.ShowAddressForm('ec_customer_order', 'address_id', 'new_address', true, '.j-address', 'new_address')
 
       var input_names = [
         'ship_street1',
@@ -53,8 +53,8 @@
         'ship_state',
         'ship_zip'
       ]
-      App.ClearForm('customer_order', input_names, '[name="customer_order[ship_to]"]', false)
-      App.ClearForm('customer_order', input_names, '[name="customer_order[address_id]"]', 'new_address')
+      App.ClearForm('ec_customer_order', input_names, '[name="ec_customer_order[ship_to]"]', false)
+      App.ClearForm('ec_customer_order', input_names, '[name="ec_customer_order[address_id]"]', 'new_address')
 
       App.AddressSubmitButton()
 
