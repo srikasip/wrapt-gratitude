@@ -1,5 +1,42 @@
 module GiftRecommendationsHelper
 
+  def indicators_index(mobile, index, group)
+    if mobile
+      index = (@page == 1 ? index : ((@page-1)*@mobile_max)+index)
+    else
+      index = (group == 0 ? index : (group*@max)+index)
+    end
+  end
+
+  def gift_path(recommendation, opts={})
+    giftee_gift_recommendation_path(
+      @giftee_id, 
+      recommendation, 
+      direction: opts[:direction],
+      carousel_page: opts[:page] || @page || 1,
+      previous_page: opts[:previous]
+    )
+  end
+
+  def gift_image_path(gift_image, opts={})
+    giftee_gift_recommendation_image_path(
+      @giftee_id,
+      @gift_recommendation,
+      gift_image,
+      direction: opts[:direction]
+    )
+  end
+
+  def direction_css_class
+    css_classes = ['active']
+    if @direction == 'next'
+      css_classes.push('slideInLeft')
+    elsif @direction == 'prev'
+      css_classes.push('slideInRight')
+    end
+    css_classes
+  end
+
   def load_gift_recommendation_carousel_data(gift_recommendations)
     gifts = gift_recommendations.map do |gr|
       {

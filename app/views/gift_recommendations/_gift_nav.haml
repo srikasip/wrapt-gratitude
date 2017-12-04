@@ -1,10 +1,9 @@
-- css_classes = locals[:css_classes]
-%div{class: css_classes[:container]}
-  = link_to '#', class: "#{css_classes[:link]} prev", onClick: "ga('send', 'event', 'recommendation', 'navigation', 'gift nav');" do 
+.gr-carousel__nav-container
+  = link_to gift_path(@prev_recommendation, {direction: 'prev'}), class: 'wrapt-carousel__nav gr-carousel__nav prev', onClick: "ga('send', 'event', 'recommendation', 'navigation', 'gift nav');", data: {loads_in_pjax_carousel: true} do
     .gr-carousel__nav-icon
       =embedded_svg('icon-caret-left', class: "gr-carousel__nav--caret-left")
     .gr-carousel__nav-inner
-  = link_to '#', class: "#{css_classes[:link]} next", onClick: "ga('send', 'event', 'recommendation', 'navigation', 'gift nav');" do
+  = link_to gift_path(@next_recommendation, {direction: 'next'}), class: 'wrapt-carousel__nav gr-carousel__nav next', onClick: "ga('send', 'event', 'recommendation', 'navigation', 'gift nav');", data: {loads_in_pjax_carousel: true} do
     .gr-carousel__nav-icon
-      =embedded_svg('icon-caret-right', xlink_class: 'icon-caret-right-use', class: "gr-carousel__nav--caret-right")
+      =embedded_svg('icon-caret-right', class: "gr-carousel__nav--caret-right")
     .gr-carousel__nav-inner

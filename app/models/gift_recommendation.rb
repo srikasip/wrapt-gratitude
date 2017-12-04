@@ -5,6 +5,7 @@ class GiftRecommendation < ApplicationRecord
   belongs_to :gift
   
   MAX_SHOWN_TO_USER = 6
+  MAX_SHOWN_TO_USER_MOBILE = 4
   
   delegate :featured?, :experience?, to: :gift
   
@@ -34,11 +35,31 @@ class GiftRecommendation < ApplicationRecord
   end
   before_save :normalize_expert_score
   
-  def self.select_for_display(gift_recommendations)
+  def self.select_for_display(gift_recommendations, page=1, mobile: false)
     expert_picks = gift_recommendations.select(&:added_by_expert)
     auto_picks = gift_recommendations - expert_picks
-    
-    expert_picks + auto_picks.take(MAX_SHOWN_TO_USER)
+    max = mobile ? MAX_SHOWN_TO_USER_MOBILE : MAX_SHOWN_TO_USER
+    if page == 'all'
+      expert_picks + auto_picks
+    else
+      if mobile
+        start_picks = page == 1 ? 0 : (page-1)*max
+        end_picks = (max*page) - 1
+        (expert_picks + auto_picks)[start_picks..end_picks] || []
+      else
+        end_picks = (max*page) - 1
+        (expert_picks + auto_picks)[0..end_picks] || []
+      end
+    end
+  end
+
+  def self.pages(gift_recommendations, mobile: false)
+    max = mobile ? MAX_SHOWN_TO_USER_MOBILE : MAX_SHOWN_TO_USER
+    gift_recommendations.in_groups_of(max, false).size
+  end
+
+  def self.max(mobile: false)
+    mobile ? MAX_SHOWN_TO_USER_MOBILE : MAX_SHOWN_TO_USER
   end
 
 end

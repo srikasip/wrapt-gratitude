@@ -1,0 +1,12 @@
+- gift_index = action_name == 'show' ? @index : @parent_index
+- group.each_with_index do |gr, index|
+  - index = indicators_index(mobile, index, i)
+  - if gift_index == index
+    - direction = nil
+  - else
+    - direction = gift_index > index ? 'prev' : 'next'
+  - css_classes = ['wrapt-carousel__indicator', 'gr-carousel__indicator']
+  - css_classes.push('active') unless direction
+  - path = direction ? gift_path(gr, {direction: direction}) : 'javascript:void(0)'
+  = link_to path, class: css_classes, data: {loads_in_pjax_carousel: true} do
+    = render 'thumbnail', locals: {image: gr.gift.carousel_thumb, gift: gr.gift}

@@ -1,0 +1,9 @@
+= render 'gift_nav'
+.wrapt-carousel__slides.gr-carousel__gifts
+  .wrapt-carousel__slide.gr-carousel__gift-container{class: direction_css_class}
+    = render 'gift', locals: {gift_recommendation: @gift_recommendation, index: @index}
+= render 'gift_indicators'
+
+- content_for :page_js do
+  :javascript
+    new window.GiftCarousel('.gr-carousel', '.gr-carousel__indicators', '.gr-carousel__gift-container')

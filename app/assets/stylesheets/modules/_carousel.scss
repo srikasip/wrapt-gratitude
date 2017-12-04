@@ -6,6 +6,7 @@
 // basic styles for carousel
 .wrapt-carousel {
   position: relative;
+  // height: 520px;
 }
 .wrapt-carousel--wrapper {
   margin-top: 36px;
@@ -16,6 +17,7 @@
   overflow: hidden;
   position: relative;
   width: 100%;
+  // height: 520px;
 }
 
 .wrapt-carousel__slide {
@@ -244,6 +246,12 @@ $gr-carousel-nav__width: 82.5px;
   }
 }
 
+// .gr-carousel__indicators-group {
+//   @media (max-width: $screen-xs-max) {
+//     display: inline-block;
+//   }
+// }
+
 .hgec-carousel__indicators {
   @media(max-width: $screen-xs-max) {
     margin-top: 24px;
@@ -362,13 +370,14 @@ $gr-carousel-nav__width: 82.5px;
   }
 }
 
-.gr-carousel__indicator {
-  @media(max-width: $screen-xs-max) {
-    position: relative;
-    &:nth-child(4n+1) {
-      margin-right: 20%;
-    }
-  }
+.gr-carousel__indicators-small .gr-carousel__indicator:last-child .gr__indicator-thumbnail,
+.gr-carousel__indicators-small .gr-carousel__indicator:nth-child(7) .gr__indicator-thumbnail,
+.gr-carousel__indicators-small .gr__indicator-thumbnail{
+  margin-right: 4%;
+} 
+
+.gr-carousel__indicators-small .gr-carousel__indicator:nth-child(4n) .gr__indicator-thumbnail {
+  margin-right: 24%;
 }
 
 .gr-carousel__indicator img {
@@ -426,7 +435,7 @@ $gr-carousel-nav__width: 82.5px;
 
 .gr-carousel__sm-nav-text {
   text-align: center;
-  width: 50%;
+  width: 49%;
   display: inline-block;
   overflow: hidden;
   vertical-align: middle;

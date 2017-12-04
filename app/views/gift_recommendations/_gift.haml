@@ -1,11 +1,10 @@
-- gift = locals[:gift]
 - gr = locals[:gift_recommendation]
+- gift = gr&.gift
 - index = locals[:index]
 
 .gr-carousel__gift.clearfix
   .gr-carousel__gift-image
-    - gift_images = load_gift_image_carousel_data(gift.carousel_images)
-    = carousel(carousel: gift_images, unique_carousel_name: 'gr-image-carousel', slide_content_singular: 'image', container:'.gr-carousel', parent_slide_index: index)
+    .wrapt-carousel.gr-image-carousel{data: {pjax_carousel: true, first_item_url: gift_image_path(gift.carousel_images.first)}}
   .gr-carousel__gift-content.pl2.pt1.pr1
     .pull-right.text-right.pb1
       .gr-carousel__like{data: {behavior: 'gift-like-wrapper'}}
@@ -28,3 +27,10 @@
             = number_to_currency gift.selling_price
           .gr-carousel__quantity.text-right{data: {behavior: 'add-to-gift-basket-wrapper', gift_id: gift.id}}
             = render 'add_to_basket_button', gift_selection: gift_selection, profile: @profile
+
+- content_for :page_js do
+  :javascript
+    new window.PjaxCarousel(".gr-image-carousel[data-pjax-carousel]", ".gr-image-carousel__image-container", "[data-loads-in-pjax-image-carousel]").listen();
+
+    new App.GiftLikeDislikeButtons();
+

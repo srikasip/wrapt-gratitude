@@ -1,0 +1,34 @@
+- indicators = (@indicators || @gift_recommendations)
+.visible-xs
+  .wrapt-carousel__indicators.gr-carousel__indicators
+    - css_classes = "gr-carousel__sm-nav-link grc_small_nav"
+    - prev_classes = "#{css_classes} prev #{@page > 1 ? '' : 'disabled'}"
+    =link_to "< Prev", gift_path(@gift_recommendation, {page: (@page == 1 ? 1 : @page-1)}), class: prev_classes, data: {loads_in_pjax_carousel: true}
+    .grc_small_title.gr-carousel__sm-nav-text= @gift_recommendation.gift.title
+    - next_classes = "#{css_classes} next #{@page < @mobile_total_pages ? '' : 'disabled'}"
+    = link_to "Next >", gift_path(@gift_recommendation, {page: @page+1}), class: next_classes, data: {loads_in_pjax_carousel: true}
+    .gr-carousel__indicators-small
+      - @mobile_indicators.in_groups_of(@mobile_max, false).each_with_index do |group, i|
+        = render 'gift_indicator', group: group, mobile: true, i: i
+.hidden-xs
+  .wrapt-carousel__indicators.gr-carousel__indicators
+    - indicators.in_groups_of(@max, false).each_with_index do |group, i|
+      - css_classes = []
+      - if @previous
+        - if i+1 > @page
+          - css_classes.push('gci_hide')
+        - else
+          - css_classes.push('gci_show')
+      - else
+        - style = i == 0 ? '' : 'display:none;'
+        - css_classes.push('gci_show') 
+      .gr-carousel__indicators-group{class: css_classes, style: style}
+        = render 'gift_indicator', group: group, mobile: false, i: i
+    .clearfix
+      - if @page < @total_pages
+        .pull-right
+          = link_to 'NEXT', gift_path(@gift_recommendation, {page: @page+1}), data: {loads_in_pjax_carousel: true}, class: 'btn btn-default btn-xs btn-default__white'
+      - if @page > 1
+        .pull-left
+          = link_to 'PREVIOUS', gift_path(@gift_recommendation, {page: (@page == 1 ? 1 : @page-1), previous: @page}), data: {loads_in_pjax_carousel: true}, class: 'btn btn-default btn-xs btn-default__white'
+

@@ -1,0 +1,11 @@
+.wrapt-carousel__slides.gr-image-carousel__images
+  .wrapt-carousel__slide.gr-image-carousel__image-container{class: direction_css_class}
+    = render 'gift_image', locals: {image_url: @gift_image.image_url(:small), zoom_url: @gift_image.image_url(:large), index: @index, parent_slide_index: @parent_index}
+- if @gift_images.size > 1
+  .gr-image-carousel__nav-container.clearfix
+    .gr-image-carousel__nav-links.clearfix.pull-right
+      = yield :gift_image_nav
+
+
+:javascript
+  new window.GiftImageCarousel(".gr-image-carousel[data-pjax-carousel]", ".gr-image-carousel__image", ".gr-image-carousel__image-container")
