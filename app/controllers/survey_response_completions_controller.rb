@@ -17,9 +17,14 @@ class SurveyResponseCompletionsController < ApplicationController
   end
 
   def show
-    @render_loading_spinner = true
-    @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
-    @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
+    if session['just_completed_profile_id'].to_i == @profile.id
+      @render_loading_spinner = true
+      @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
+      @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
+    else
+      # It was a user probably using a back button or a bookmark. Don't allow that
+      redirect_to my_account_giftees_path
+    end
   end
 
   def create_via_redirect
@@ -27,6 +32,13 @@ class SurveyResponseCompletionsController < ApplicationController
   end
 
   def create
+    if session['just_completed_profile_id'].to_i != @profile.id
+      session.delete('just_completed_profile_id')
+      redirect_to my_account_giftees_path
+      return
+    end
+    session.delete('just_completed_profile_id')
+
     # stash a copy if these params we may end up editing them
     srcp = survey_response_completion_params
 
