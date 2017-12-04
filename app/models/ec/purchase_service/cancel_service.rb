@@ -12,7 +12,7 @@ module Ec
       self.tax_service      = PurchaseService::TaxService.new(cart_id: self.customer_order.cart_id)
     end
 
-    def self.run_for_customer_order!(customer_order, force: false)
+    def self.run_for_customer_order!(customer_order)
       customer_order.purchase_orders.each do |purchase_order|
         cancel_service = new(purchase_order: purchase_order)
         cancel_service.run!
@@ -32,8 +32,9 @@ module Ec
     private
 
     def _refund_credit_card!
-      return if self.customer_order.charge.blank?
-      return if self.purchase_order.amount_to_refund_in_cents < 1
+      return if self.customer_order.charge.blank?                  # Not even far enough to have a record
+      return if self.purchase_order.amount_to_refund_in_cents < 1  # Can't refund nothing
+      return unless self.customer_order.charge.charged?            # Can't refund if we haven't successfully charged.
 
       if self.purchase_order.not_customer_refunded?
         extra_metadata = {
@@ -52,7 +53,9 @@ module Ec
     end
 
     def _adjust_tax_record!
-      self.tax_service.adjust!
+      if self.tax_service.adjustable?
+        self.tax_service.adjust!
+      end
     end
 
     def  _update_statuses!

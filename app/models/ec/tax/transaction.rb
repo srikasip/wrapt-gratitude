@@ -23,6 +23,7 @@ module Ec
 
     define_method(:tax_in_cents) { self.tax_in_dollars * 100 }
     define_method(:client) { @client ||= AvaTax::Client.new(:logger => true) }
+    define_method(:adjustable?) { self.captured? && self.reconciled? }
 
     # Nothing shows up in Avalara. This is just to get an approximatation
     def estimate!

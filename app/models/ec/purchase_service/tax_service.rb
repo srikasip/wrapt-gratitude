@@ -2,7 +2,7 @@ module Ec
   class PurchaseService::TaxService
     attr_accessor :cart_id, :client, :customer_order
 
-    delegate :api_response, :success?, :tax_in_cents, :tax_in_dollars, to: :our_transaction
+    delegate :api_response, :adjustable?, :success?, :tax_in_cents, :tax_in_dollars, to: :our_transaction
 
     def initialize(cart_id: nil, customer_order: nil)
       if cart_id.nil? && customer_order.nil?
