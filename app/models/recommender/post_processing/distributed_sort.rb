@@ -64,6 +64,7 @@ module Recommender
 
         vendor_counts = {}
         category_counts = {}
+        vendor_category_counts = {}
         
         # loop though the gifts adding only one gift from each vendor or category
         # in each pass until they have all been added to the output array.
@@ -78,8 +79,12 @@ module Recommender
             
             vendor_count = vendor_counts[vendor_id].to_i
             category_count = category_counts[category_id].to_i
+            vendor_category_count = category_counts[[vendor_id, category_id]].to_i
             
-            if skip_vendor_ids.include?(vendor_id) || skip_category_ids.include?(category_id)
+            if vendor_category_count > 0
+              # only one vendor/cat allowed
+              true
+            elsif skip_vendor_ids.include?(vendor_id) || skip_category_ids.include?(category_id)
               # penalize gifts that are similar to those in the output array
               penalty = 2 * (vendor_count + category_count)
               gift_score[:adjusted_score] = gift_score[:score].to_f / penalty
@@ -92,6 +97,7 @@ module Recommender
               skip_category_ids << category_id
               vendor_counts[vendor_id] = vendor_count + 1
               category_counts[vendor_id] = category_count + 1
+              category_counts[[vendor_id, category_id]] = vendor_category_count + 1
               true
             end
           end
