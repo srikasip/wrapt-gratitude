@@ -81,7 +81,8 @@ module Recommender
             
             if skip_vendor_ids.include?(vendor_id) || skip_category_ids.include?(category_id)
               # penalize gifts that are similar to those in the output array
-              gift_score[:adjusted_score] = gift_score[:score] - vendor_count - category_count
+              penalty = 2 * (vendor_count + category_count)
+              gift_score[:adjusted_score] = gift_score[:score].to_f / penalty
               # keep this gift in the available list for the next pass
               false
             else
