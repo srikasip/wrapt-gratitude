@@ -19,7 +19,7 @@
     = f.input :purchase_order_markup_in_dollars, hint: "This is a handling fee added to each PO that we pay the vendor"
     = f.input :notes
     = f.input :wrapt_sku_code, label: 'Wrapt SKU Code (2 uppercase letters)'
-    = f.association :shipping_service_levels, as: :check_boxes, collection: ShippingServiceLevel.active.all, value_method: :id, label_method: :full_name
+    = f.association :shipping_service_levels, as: :check_boxes, collection: Ec::ShippingServiceLevel.active.all, value_method: :id, label_method: :full_name
 
   .form-actions
     = f.button :submit, class: 'btn btn-primary'

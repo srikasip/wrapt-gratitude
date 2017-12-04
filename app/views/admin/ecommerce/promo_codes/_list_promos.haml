@@ -1,0 +1,40 @@
+.row
+  .col-sm-12
+    %h2= yield :promo_section_title
+
+.row
+  .col-sm-12
+    = page_entries_info promo_codes
+
+- if promo_codes.any?
+  .row
+    .col-sm-12
+      %table.table.index-table
+        %thead
+          %tr
+            %th Code
+            %th.text-right Amount
+            %th Start Date
+            %th End Date
+            %th Description
+            %th
+        %tbody
+          - promo_codes.each do |promo_code|
+            %tr
+              %td= promo_code.value
+              %td.text-right
+                - if promo_code.percent?
+                  = number_to_percentage(promo_code.amount, precision: 0)
+                - else
+                  = number_to_currency(promo_code.amount)
+              %td= format_date(promo_code.start_date)
+              %td= format_date(promo_code.end_date)
+              %td= promo_code.description
+              %td
+                - if promo_code.current?
+                  .display-inline-block
+                    - data = { confirm: "Are you sure you'd like to end the promo #{promo_code.value} now?" }
+                    = button_to 'End Now', admin_ecommerce_promo_code_path(promo_code), method: :delete, class: 'btn btn-danger btn-sm', data: data
+                = link_to 'Edit', edit_admin_ecommerce_promo_code_path(promo_code), class: 'btn btn-default btn-sm'
+
+      =paginate(promo_codes, param_name: pagination_param)

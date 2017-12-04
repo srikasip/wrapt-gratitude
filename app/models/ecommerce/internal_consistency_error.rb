@@ -1,1 +1,0 @@
-InternalConsistencyError = Class.new(StandardError)

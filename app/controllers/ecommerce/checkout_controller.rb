@@ -12,7 +12,7 @@ class Ecommerce::CheckoutController < ApplicationController
   def start
     profile = current_user.owned_profiles.find(params[:giftee_id])
 
-    customer_purchase = ::PurchaseService.find_existing_cart_or_initialize(profile: profile, user: current_user)
+    customer_purchase = Ec::PurchaseService.find_existing_cart_or_initialize(profile: profile, user: current_user)
 
     customer_purchase.generate_order!
 
@@ -89,7 +89,7 @@ class Ecommerce::CheckoutController < ApplicationController
   def save_shipping
     @checkout_step = :shipping
 
-    if @customer_purchase.pick_shipping!(params.dig(:customer_order, :shipping_choice))
+    if @customer_purchase.pick_shipping!(params.dig(:ec_customer_order, :shipping_choice))
       redirect_to action: :edit_payment
     else
       flash.now[:notice] = "There was a problem saving your response."
@@ -146,7 +146,7 @@ class Ecommerce::CheckoutController < ApplicationController
   private
 
   def _load_progress_bar
-    @pb = ::ProgressBarViewModel.new(@customer_order, @customer_purchase, @checkout_step)
+    @pb = Ec::ProgressBarViewModel.new(@customer_order, @customer_purchase, @checkout_step)
   end
 
   def _load_service_object
@@ -158,7 +158,7 @@ class Ecommerce::CheckoutController < ApplicationController
       return redirect_to :root
     end
 
-    @customer_purchase = ::PurchaseService.new(cart_id: session[:cart_id])
+    @customer_purchase = Ec::PurchaseService.new(cart_id: session[:cart_id])
     @customer_order = @customer_purchase.customer_order
 
     # Shouldn't be messing with orders that have been submitted

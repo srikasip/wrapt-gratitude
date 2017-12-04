@@ -34,7 +34,7 @@ class User < ApplicationRecord
 
   has_many :addresses, as: :addressable
   has_many :comments, as: :commentable
-  has_many :customer_orders do
+  has_many :customer_orders, class_name: 'Ec::CustomerOrder' do
     def for_profile(p)
       where(profile_id: p.id)
     end

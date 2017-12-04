@@ -1,0 +1,18 @@
+= render "admin/ecommerce/styles"
+
+.row.admin__intro
+  .col-sm-12
+    %h1 Promotional Codes
+
+.row
+  .col-sm-12
+    = link_to 'Add Promo', new_admin_ecommerce_promo_code_path, class: 'btn btn-primary pull-right'
+    .mb2
+      - content_for(:promo_section_title) { 'Current Promotions' }
+      = render 'list_promos', promo_codes: @promo_codes, pagination_param: :page
+    .mb2
+      - content_for(:promo_section_title, flush: true) { 'Future Promotions' }
+      = render 'list_promos', promo_codes: @future_promo_codes, pagination_param: :future_page
+    .mb2
+      - content_for(:promo_section_title, flush: true) { 'Past Promotions' }
+      = render 'list_promos', promo_codes: @past_promo_codes, pagination_param: :other_page

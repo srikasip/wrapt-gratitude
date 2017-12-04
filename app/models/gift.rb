@@ -42,9 +42,9 @@ class Gift < ApplicationRecord
   has_many :uploaded_gift_images, class_name: 'GiftImages::Uploaded'
   has_many :gift_images_from_products, class_name: 'GiftImages::FromProduct'
 
-  has_many :gift_parcels, dependent: :destroy
-  has_many :pretty_parcels, -> { joins(:parcel).where(parcels: { usage: 'pretty' }) }, class_name: 'GiftParcel'
-  has_many :shipping_parcels, -> { joins(:parcel).where(parcels: { usage: 'shipping' }) }, class_name: 'GiftParcel'
+  has_many :gift_parcels, dependent: :destroy, class_name: 'Ec::GiftParcel'
+  has_many :pretty_parcels, -> { joins(:parcel).where(parcels: { usage: 'pretty' }) }, class_name: 'Ec::GiftParcel'
+  has_many :shipping_parcels, -> { joins(:parcel).where(parcels: { usage: 'shipping' }) }, class_name: 'Ec::GiftParcel'
   define_method(:pretty_parcel) { pretty_parcels.first&.parcel }
   define_method(:shipping_parcel) { shipping_parcels.first&.parcel }
 
@@ -59,12 +59,12 @@ class Gift < ApplicationRecord
 
   belongs_to :product_category, required: true
   belongs_to :product_subcategory, required: true, class_name: 'ProductCategory'
-  belongs_to :tax_code, class_name: 'Tax::Code'
+  belongs_to :tax_code, class_name: 'Ec::Tax::Code'
 
   has_one :calculated_gift_field
   delegate :units_available, to: :calculated_gift_field, allow_nil: true
 
-  before_validation -> { self.tax_code ||= Tax::Code.default }
+  before_validation -> { self.tax_code ||= Ec::Tax::Code.default }
 
   before_save :generate_wrapt_sku, if: :sku_needs_updating?
   before_save :set_can_be_sold_flag
@@ -87,7 +87,7 @@ class Gift < ApplicationRecord
   end
 
   def deleteable?
-    LineItem.where(orderable: self).none?
+    Ec::LineItem.where(orderable: self).none?
   end
 
   def vendor

@@ -1,0 +1,9 @@
+%h2 Edit Promo Code
+= simple_form_for [:admin, :ecommerce, promo_code] do |f|
+  = f.input :value, label: 'Promo code', hint: 'We recommend creating a code with no spaces'
+  = f.input :start_date
+  = f.input :end_date
+  = f.input :amount, hint: "Percentage or dollar amount", input_html: { class: 'max-width-01' }
+  = f.input :mode, collection: PromoCode::MODES, input_html: { class: 'max-width-01' }
+  = f.input :description, hint: "This won't appear on the site; it's just for anything you want to remember about this promotion"
+  %button.btn.btn-primary Save

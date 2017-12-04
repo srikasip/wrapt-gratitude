@@ -3,11 +3,11 @@ class MyAccount::OrdersController < MyAccount::BaseController
   helper :address
 
   def index
-    @orders = UserOrderSearch.new(current_user, params).results
+    @orders = Ec::UserOrderSearch.new(current_user, params).results
   end
 
   def show
     @order = current_user.customer_orders.find(params[:id])
-    @charge = @order.charge || Charge.new
+    @charge = @order.charge || Ec::Charge.new
   end
 end

@@ -69,7 +69,7 @@
               = link_to line_item.vendor_name, admin_vendor_path(line_item.vendor)
             %td
               :ruby
-                purchase_orders = PurchaseOrder.where({
+                purchase_orders = Ec::PurchaseOrder.where({
                   customer_order: @order,
                   vendor: line_item.vendor,
                   gift: line_item.orderable

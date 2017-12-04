@@ -1,5 +1,5 @@
 module OrdersHelper
-  include OrderStatuses
+  include Ec::OrderStatuses
 
   def status_to_human customer_order
     case customer_order.status
