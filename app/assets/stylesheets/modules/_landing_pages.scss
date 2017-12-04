@@ -59,6 +59,7 @@
   background-size: 100vw;
   background-repeat: no-repeat;
   background-position: bottom;
+  background-color: black;
   border: none;
   margin-bottom: 24px;
   padding-top: 48px;
@@ -225,7 +226,6 @@
 
 .home__about-steps {
   margin-top: 40px;
-  border-bottom: solid 1px $gray-005;
   @media (max-width: $screen-xs-max) {
     margin-top: 0px;
   }
@@ -463,73 +463,21 @@ body.home,
   @include akkurat-regular;
   font-size: rem(10);
 }
-
-// .home__gift-examples {
-//   display: flex;
-//   width: 100%;
-//   margin-top: 60px;
-//   @media (max-width: $screen-xs-max) {
-//     flex-direction: column;
-//   }
-// }
-
-// .home__gift-example {
-//   position: relative;
-//   overflow: hidden;
-// }
-
-// .home__gift-example img {
-//   width: 100%;
-// }
-
-
-// .home__gift-example .flyover {
-//   height: 0;
-//   position: absolute;
-//   width: 100%;
-//   height: 33%;
-//   transition: transform 0.25s;
-//   overflow: hidden;
-// }
-
-// .home__gift-example:hover .flyover {
-//   display: block;
-//   height: 33%;
-//   transform: translateY(0);
-//   color: white;
-// }
-
-// .home__gift-example .flyover.top {
-//   top: 0;
-//   transform-origin: top;
-//   transform: translateY(-100%);
-//   text-align: center;
-//   background-color: $gray-012;
-// }
-// .home__gift-example:hover .flyover.top {
-//   transform: translateY(0);
-// }
-
-// .home__gift-example .flyover.bottom {
-//   bottom: 0;
-//   transform-origin: bottom;
-//   transform: translateY(100%);
-//   background-color: rgba(161, 172, 178, 0.8)
-// }
-// .home__gift-example:hover .flyover.bottom {
-//   transform: translateY(0);
-// }
-
-// .home__flyover-header {
-//   position: relative;
-//   top: 50%;
-//   text-transform: uppercase;
-//   font-size: rem(58);
-// }
-
-// .home__flyover-description {
-//   padding: 8.163265306122%;
-//   line-height: 1.2;
-//   opacity: 1;
-//   font-size: rem(20);
-// }
+.home__gift-images {
+  border-bottom: solid 1px $gray-005;
+}
+.gift-images {
+  @include flexbox();
+  justify-content: space-around;
+  @include flexwrap();
+}
+.gift-image {
+  width: 23%;
+  @media(max-width: $screen-xs-max) {
+    width: 48%;
+    margin-bottom: 2%;
+  }
+}
+.gift-image img {
+  width: 100%;
+}
