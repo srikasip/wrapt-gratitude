@@ -20,6 +20,9 @@
             = af.input :state, collection: UsaState.abbreviations
           .col-xs-7.col-sm-4
             = af.input :zip
+  .row
+    .col-xs-12
+      = f.input :birthday, order: [:month, :day, :year]
   = f.submit 'SAVE CHANGES', class: 'btn btn-block btn-primary'
   .text-center.mt2
     =link_to 'Cancel Changes', '#', data: {pjax_modal_close: true}

@@ -42,6 +42,6 @@ class MyAccount::GifteesController < MyAccount::BaseController
   end
 
   def _permitted_attributes
-    params.require(:profile).permit(:name, :first_name, :last_name, :email, :address_attributes => [:id, :street1, :city, :state, :zip])
+    params.require(:profile).permit(:name, :first_name, :last_name, :email, :birthday, :address_attributes => [:id, :street1, :city, :state, :zip])
   end
 end

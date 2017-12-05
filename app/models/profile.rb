@@ -23,13 +23,16 @@ class Profile < ApplicationRecord
 
   before_create :generate_recipient_access_token
 
-  accepts_nested_attributes_for :address
+  addresses_blank_proc = proc do |attributes|
+    [:street1, :city, :state, :zip].all? { |msg| attributes[msg].blank? }
+  end
+  accepts_nested_attributes_for :address, reject_if: addresses_blank_proc
 
   scope :well_ordered, -> { order('first_name asc, last_name asc') }
-  
+
   scope :unarchived, -> {where(archived_at: nil)}
   scope :archived, -> {where.not(archived_at: nil)}
-  
+
   def archived?
     archived_at.present?
   end
