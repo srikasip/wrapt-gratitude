@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171204165151) do
+ActiveRecord::Schema.define(version: 20171205145818) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -476,6 +476,7 @@ ActiveRecord::Schema.define(version: 20171204165151) do
     t.datetime "customer_refunded_at"
     t.integer  "gift_amount_for_customer_in_cents", default: 0,             null: false
     t.integer  "tax_amount_for_customer_in_cents",  default: 0,             null: false
+    t.datetime "cancellation_emails_sent_at"
     t.index ["customer_order_id"], name: "index_purchase_orders_on_customer_order_id", using: :btree
     t.index ["gift_id"], name: "index_purchase_orders_on_gift_id", using: :btree
     t.index ["order_number"], name: "index_purchase_orders_on_order_number", unique: true, using: :btree

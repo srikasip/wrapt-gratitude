@@ -2,7 +2,7 @@
 
 module Ec
   module OrderFactory
-    NUM_GIFTS = 4
+    NUM_GIFTS = 6
 
     # This is designed to allow a real order on production, but for a dummy gift.
     # Real shipping labels, credit cards, and taxes are involved.
@@ -240,7 +240,7 @@ module Ec
       customer_purchase.init_our_charge_record!(params)
 
       # A different virtual page load in the shopping process
-      customer_purchase = PurchaseService.new(cart_id: cart_id)
+      customer_purchase = Ec::PurchaseService.new(cart_id: cart_id)
       customer_purchase.authorize!
 
       unless customer_purchase.card_authorized?

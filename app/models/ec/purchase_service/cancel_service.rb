@@ -19,14 +19,32 @@ module Ec
       end
     end
 
+    # If...
+    # a vendor rejects an order ...
+    # and then a subsequent order is accepted...
+    #
+    # ...the first order is not automatically "rolled
+    # back" since there was nothing to roll back when
+    # it was cancelled initially.
+    #
+    # This method re-cancels all cancelled POs which is
+    # a no-op for already rolled back POs but fixes
+    # the situation above for those cancelled before a
+    # subsequent vendor approval.
+    def self.recancel_if_needed!(customer_order)
+      customer_order.purchase_orders.recancelable.each do |purchase_order|
+        cancel_service = new(purchase_order: purchase_order)
+        cancel_service.run!
+      end
+    end
+
     # This is idempotent (or at least was originally designed to be)
     def run!
       shipping_label.refund!
       _refund_credit_card!
       _update_statuses!
       _adjust_tax_record!
-      CustomerOrderMailer.cannot_ship(purchase_order.id).deliver_later
-      VendorMailer.order_cancelled(purchase_order.id).deliver_later
+      _email!
     end
 
     private
@@ -66,6 +84,15 @@ module Ec
       else
         self.customer_order.update_attribute(:status, PARTIALLY_CANCELLED)
       end
+    end
+
+    def _email!
+      return if purchase_order.cancellation_emails_sent_at.present?
+
+      CustomerOrderMailer.cannot_ship(purchase_order.id).deliver_later
+      VendorMailer.order_cancelled(purchase_order.id).deliver_later
+
+      self.purchase_order.update_attribute(:cancellation_emails_sent_at, Time.now)
     end
   end
 end

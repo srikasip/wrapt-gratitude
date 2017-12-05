@@ -315,7 +315,10 @@ module Ec
       Rails.logger.info "Charging cart ID #{cart_id}. Also adjusting inventory."
       charging_service.charge!({
         before_hook: -> { _adjust_inventory! },
-        after_hook: -> { self.tax_service.reconcile! }
+        after_hook: -> {
+          self.tax_service.reconcile!
+          Ec::PurchaseService::CancelService.recancel_if_needed!(customer_order)
+        }
       })
     end
 
@@ -442,7 +445,7 @@ module Ec
     end
 
     def _email_customer_that_order_was_received!
-      CustomerOrderMailer.order_received(customer_order.id).deliver_later
+      ::CustomerOrderMailer.order_received(customer_order.id).deliver_later
     end
 
     def gifts_span_vendors?

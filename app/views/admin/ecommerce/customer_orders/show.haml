@@ -131,7 +131,7 @@
           %td.text-right
             %b= number_to_currency(@order.total_to_charge_in_dollars)
 
-        - if @order.charge.amount_refunded_in_dollars > 0
+        - if @order.charge&.amount_refunded_in_dollars.to_f > 0
           %tr{style: 'background: #F8CDCD'}
             %td
               %i Refunded
