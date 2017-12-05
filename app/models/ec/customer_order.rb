@@ -67,6 +67,8 @@ module Ec
     define_method(:bad_tax_transaction?) { self.tax_transactions.present? && !self.tax_transactions&.all?(&:success?) }
     define_method(:bad_labels?) { !self.shipping_labels.all?(&:success?) }
 
+    define_method(:include_note?) { read_attribute(:include_note) && self.note_content.present? || self.note_envelope_text.present? }
+
     def non_cancelled_line_items
       line_items.reject do |line_item|
         purchase_order = line_item.related_order
