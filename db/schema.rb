@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171205145818) do
+ActiveRecord::Schema.define(version: 20171205191826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -431,11 +431,13 @@ ActiveRecord::Schema.define(version: 20171205145818) do
     t.boolean  "recipient_reviewed",           default: false, null: false
     t.datetime "recipient_invited_at"
     t.text     "recommendation_stats"
-    t.date     "birthday"
     t.integer  "gifts_sent",                   default: 0,     null: false
     t.string   "last_name",                    default: ""
     t.integer  "expert_id"
     t.datetime "archived_at"
+    t.integer  "birthday_day"
+    t.integer  "birthday_month"
+    t.integer  "birthday_year"
     t.index ["created_at"], name: "index_profiles_on_created_at", using: :btree
     t.index ["recipient_invited_at"], name: "index_profiles_on_recipient_invited_at", using: :btree
   end

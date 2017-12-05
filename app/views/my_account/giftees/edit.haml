@@ -21,8 +21,16 @@
           .col-xs-7.col-sm-4
             = af.input :zip
   .row
-    .col-xs-12
-      = f.input :birthday, order: [:month, :day, :year]
+    .col-xs-12.col-sm-12
+      %label Birthday
+  .row
+    .col-xs-3.col-sm-3
+      = f.input :birthday_month, collection: Month.all, allow_blank: true, label: 'Month'
+    .col-xs-3.col-sm-3
+      = f.input :birthday_day, collection: 1..31, allow_blank: true, label: 'Day'
+    .col-xs-3.col-sm-3
+      = f.input :birthday_year, label: 'Year'
+
   = f.submit 'SAVE CHANGES', class: 'btn btn-block btn-primary'
   .text-center.mt2
     =link_to 'Cancel Changes', '#', data: {pjax_modal_close: true}

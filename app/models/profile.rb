@@ -3,6 +3,9 @@
 
 class Profile < ApplicationRecord
   validates :first_name, presence: true
+  validates :birthday_day, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 31}, allow_nil: true, allow_blank: true
+  validates :birthday_month, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 12}, allow_nil: true, allow_blank: true
+  validates :birthday_year, numericality: { only_integer: true, greater_than_or_equal_to: 1900, less_than_or_equal_to: Date.today.year}, allow_nil: true, allow_blank: true
 
   belongs_to :owner, class_name: 'User'
   belongs_to :expert, class_name: 'User'
@@ -32,6 +35,12 @@ class Profile < ApplicationRecord
 
   scope :unarchived, -> {where(archived_at: nil)}
   scope :archived, -> {where.not(archived_at: nil)}
+
+  def birthday
+    return nil if birthday_month.blank? || birthday_day.blank?
+
+    @birthday ||= Date.parse("#{birthday_year||1000}-#{"%02d"%birthday_month}-#{"%02d"%birthday_day}")
+  end
 
   def archived?
     archived_at.present?

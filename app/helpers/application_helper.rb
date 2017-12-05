@@ -186,7 +186,12 @@ module ApplicationHelper
 
   def format_date date
     return 'N/A' if date.nil?
-    date.strftime("%b %e, %Y")
+
+    if date.year == 1000
+      date.strftime("%b %e")
+    else
+      date.strftime("%b %e, %Y")
+    end
   end
 
   def format_datetime datetime, with_zone: false
