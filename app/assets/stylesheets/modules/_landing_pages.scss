@@ -58,36 +58,57 @@
 .home__hero {
   background-size: 100vw;
   background-repeat: no-repeat;
-  background-position: left 40%;
+  background-position: bottom;
+  background-color: black;
   border: none;
   margin-bottom: 24px;
   padding-top: 48px;
   position: relative;
   @media (max-width: $screen-xs-max) {
-    padding-top: 20px;
+    padding-top: 36px;
     background-size: cover;
-    background-position: 55% 50%;
+    background-position: bottom;
   }
   @media (max-width: $screen-sm-max) {
-    background-image: image-url('hero-image-v2-1536');
+    background-image: image-url('hero-image-v4-mobile-crop');
   }
-  @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
-    background-image: image-url('hero-image-v2-1984');
+  @media (min-width: $screen-md-min) {
+    background-image: image-url('hero-image-v4');
   }
-  @media (min-width: $screen-lg-min) {
-    background-image: image-url('hero-image-v2');
+  @media (min-width: 1800px) {
+    background-position: left 90%;
+  }
+  &:before {
+    content:'';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background-image: linear-gradient(to top, $blue-008, black);
+    @media (min-width: 1200px) and (max-width: 1525px) {
+      height: 40px;
+    }
+    @media (min-width: 1526px) and (max-width: 1799px) {
+      height: 70px;
+    }
+    @media (min-width: 1800px) {
+      height: 50px;
+    }
+    @media (min-width: 2160px) {
+      height: 30px;
+    }
   }
 }
 
 
 .home__hero-text h1 {
   font-size: rem(40);
-  color: $gray-010;
-  -webkit-text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
-  -moz-text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
-  text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
+  color: #fff;
+  @include akkurat-bold;
+  text-transform: uppercase;
   @media (max-width: $screen-xs-max) {
-    margin-bottom: 500px;
+    margin-bottom: 336px;
   }
   @media (min-width: $screen-sm-min) {
     line-height: 1;
@@ -98,39 +119,36 @@
   @media (min-width: $screen-md-min) {
     margin-bottom: 500px;
     line-height: 1.2;
-  }
-  @media (min-width: $screen-lg-min) {
-    font-size: rem(50);
+    font-size: rem(56);
   }
 }
 .home__hero-text-secondary .home__hero-text-secondary__p {
-  font-size: rem(28px);
+  font-size: rem(26);
   line-height: 1.5em;
-  color: $gray-010;
-  -webkit-text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
-  -moz-text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
-  text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
+  color: #fff;
+  text-transform: uppercase;
+  @include akkurat-light;
+  padding-top: 20px;
   @media (max-width: $screen-xs-max) {
-    @include akkurat-regular;
     font-size: rem(26px);
     margin: 0px auto;
-    margin-top: -520px;
+    margin-top: -356px;
     max-width: 577px;
-
   } 
   @media (max-width: $screen-sm-max) {
     br {display: none;}
   } 
   @media (min-width: $screen-sm-min) {
     margin-top: -440px;
-    font-size: rem(22px);
-    @include akkurat-regular;
+    
   }
   @media (min-width: $screen-md-min) {
-    margin-top: -500px;
+    margin-top: -490px;
+    font-size: rem(42px);
+    padding-top: 0;
   }
   @media (min-width: $screen-lg-min) {
-    margin-top: -500px;
+    margin-top: -490px;
   }
 }
 
@@ -208,7 +226,6 @@
 
 .home__about-steps {
   margin-top: 40px;
-  border-bottom: solid 1px $gray-005;
   @media (max-width: $screen-xs-max) {
     margin-top: 0px;
   }
@@ -446,73 +463,21 @@ body.home,
   @include akkurat-regular;
   font-size: rem(10);
 }
-
-// .home__gift-examples {
-//   display: flex;
-//   width: 100%;
-//   margin-top: 60px;
-//   @media (max-width: $screen-xs-max) {
-//     flex-direction: column;
-//   }
-// }
-
-// .home__gift-example {
-//   position: relative;
-//   overflow: hidden;
-// }
-
-// .home__gift-example img {
-//   width: 100%;
-// }
-
-
-// .home__gift-example .flyover {
-//   height: 0;
-//   position: absolute;
-//   width: 100%;
-//   height: 33%;
-//   transition: transform 0.25s;
-//   overflow: hidden;
-// }
-
-// .home__gift-example:hover .flyover {
-//   display: block;
-//   height: 33%;
-//   transform: translateY(0);
-//   color: white;
-// }
-
-// .home__gift-example .flyover.top {
-//   top: 0;
-//   transform-origin: top;
-//   transform: translateY(-100%);
-//   text-align: center;
-//   background-color: $gray-012;
-// }
-// .home__gift-example:hover .flyover.top {
-//   transform: translateY(0);
-// }
-
-// .home__gift-example .flyover.bottom {
-//   bottom: 0;
-//   transform-origin: bottom;
-//   transform: translateY(100%);
-//   background-color: rgba(161, 172, 178, 0.8)
-// }
-// .home__gift-example:hover .flyover.bottom {
-//   transform: translateY(0);
-// }
-
-// .home__flyover-header {
-//   position: relative;
-//   top: 50%;
-//   text-transform: uppercase;
-//   font-size: rem(58);
-// }
-
-// .home__flyover-description {
-//   padding: 8.163265306122%;
-//   line-height: 1.2;
-//   opacity: 1;
-//   font-size: rem(20);
-// }
+.home__gift-images {
+  border-bottom: solid 1px $gray-005;
+}
+.gift-images {
+  @include flexbox();
+  justify-content: space-around;
+  @include flexwrap();
+}
+.gift-image {
+  width: 23%;
+  @media(max-width: $screen-xs-max) {
+    width: 48%;
+    margin-bottom: 2%;
+  }
+}
+.gift-image img {
+  width: 100%;
+}
