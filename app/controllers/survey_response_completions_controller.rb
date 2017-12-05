@@ -37,7 +37,6 @@ class SurveyResponseCompletionsController < ApplicationController
       redirect_to my_account_giftees_path
       return
     end
-    session.delete('just_completed_profile_id')
 
     # stash a copy if these params we may end up editing them
     srcp = survey_response_completion_params
@@ -76,6 +75,7 @@ class SurveyResponseCompletionsController < ApplicationController
       job = GenerateRecommendationsJob.new
       job.perform(@survey_response)
       session[:last_completed_survey_at] = Time.now
+      session.delete('just_completed_profile_id')
       redirect_to giftee_gift_recommendations_path(@profile)
     else
       if User.where(email: user.email).any?
