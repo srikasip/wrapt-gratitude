@@ -29,7 +29,11 @@ module Ec
         line['taxCalculated'].to_f
       end
 
-      (dollars * 100).to_i
+      # e.g. dollars ==  4.14
+      # 4.14 * 100 = 413.99999999999994
+      # (4.14 * 100).to_i = 413 (not 414)
+      # (4.14 * 100).round = 414 (correct)
+      (dollars * 100).round
     end
 
     def estimate!
