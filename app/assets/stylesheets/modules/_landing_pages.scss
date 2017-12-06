@@ -126,7 +126,7 @@
   font-size: rem(26);
   line-height: 1.5em;
   color: #fff;
-  text-transform: uppercase;
+  text-transform: none;
   @include akkurat-light;
   padding-top: 20px;
   @media (max-width: $screen-xs-max) {
