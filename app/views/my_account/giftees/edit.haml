@@ -12,14 +12,14 @@
     .col-xs-12
       = f.simple_fields_for :address do |af|
         = af.input :id, as: :hidden
-        = af.input :street1, label: 'Street Address'
+        = af.input :street1, label: 'Street Address', required: false
         .row
           .col-xs-12.col-sm-6
-            = af.input :city
+            = af.input :city, required: false
           .col-xs-5.col-sm-2
-            = af.input :state, collection: UsaState.abbreviations
+            = af.input :state, collection: UsaState.abbreviations, required: false
           .col-xs-7.col-sm-4
-            = af.input :zip
+            = af.input :zip, required: false
   .row
     .col-xs-12.col-sm-12
       %label Birthday
@@ -29,7 +29,7 @@
     .col-xs-3.col-sm-3
       = f.input :birthday_day, collection: 1..31, allow_blank: true, label: 'Day'
     .col-xs-3.col-sm-3
-      = f.input :birthday_year, label: 'Year'
+      = f.input :birthday_year, label: 'Year', as: :string
 
   = f.submit 'SAVE CHANGES', class: 'btn btn-block btn-primary'
   .text-center.mt2

@@ -185,7 +185,7 @@ module ApplicationHelper
   end
 
   def format_date date
-    return 'N/A' if date.nil?
+    return '' if date.nil?
 
     if date.year == 1000
       date.strftime("%b %e")
