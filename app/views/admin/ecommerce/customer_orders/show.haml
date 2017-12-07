@@ -4,7 +4,8 @@
     %h1
       Customer Order
       = @order.order_number
-      = link_to 'Cancel Order', admin_ecommerce_customer_order_path(@order), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
+      - if @order.cancelable?
+        = link_to 'Cancel Order', admin_ecommerce_customer_order_path(@order), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger btn-xs'
       - if @order.submitted_on.present?
         = link_to 'Resend Customer Notification', send_customer_notification_admin_ecommerce_customer_order_path(@order), :method => :post, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-warning btn-xs'
 
@@ -33,6 +34,11 @@
       %br
       %strong Customer Email:
       =@order.user.email
+      - if @order.tax_transactions.present?
+        %br
+        %strong Tax Document Code:
+        %br
+        = @order.tax_transactions.first.transaction_code
   .col-sm-4
     %p
       %b Status:
@@ -69,7 +75,7 @@
               = link_to line_item.vendor_name, admin_vendor_path(line_item.vendor)
             %td
               :ruby
-                purchase_orders = PurchaseOrder.where({
+                purchase_orders = Ec::PurchaseOrder.where({
                   customer_order: @order,
                   vendor: line_item.vendor,
                   gift: line_item.orderable
@@ -124,5 +130,13 @@
           %td{colspan: 6}
           %td.text-right
             %b= number_to_currency(@order.total_to_charge_in_dollars)
+
+        - if @order.charge&.amount_refunded_in_dollars.to_f > 0
+          %tr{style: 'background: #F8CDCD'}
+            %td
+              %i Refunded
+            %td{colspan: 6}
+            %td.text-right
+              %b= number_to_currency(@order.charge.amount_refunded_in_dollars)
 
 =render 'details'

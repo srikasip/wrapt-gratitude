@@ -16,6 +16,7 @@ module Ec
 
     has_many :comments, as: :commentable, dependent: :destroy
     has_many :line_items, as: :order, dependent: :destroy
+    has_many :related_line_items, dependent: :destroy
 
     has_one :shipment, dependent: :destroy
     has_one :shipping_label, through: :shipment
@@ -56,15 +57,26 @@ module Ec
     define_method(:shipping_service_level)       { forced_shipping_service_level || ShippingServiceLevel.find_by(shippo_token: shipping_rate.dig('servicelevel', 'token')) }
     define_method(:shipping_parcel)              { forced_shipping_parcel || gift.shipping_parcel }
     define_method(:can_change_acknowledgements?) { self.status.in? [ SUBMITTED, ORDER_INITIALIZED ] }
-    define_method(:vendor_accepted?)             { self.vendor_acknowledgement_status == FULFILL }
+    define_method(:vendor_accepted?)             { self.vendor_acknowledgement_status == FULFILL  && !cancelled? }
     define_method(:vendor_rejected?)             { self.vendor_acknowledgement_status == DO_NOT_FULFILL }
     define_method(:total_due_in_dollars)         { self.total_due_in_cents.to_i / 100.0 }
     define_method(:handling_cost_in_dollars)     { self.handling_cost_in_cents.to_i / 100.0 }
     define_method(:shipping_cost_in_dollars)     { self.shipping_cost_in_cents.to_i / 100.0 }
     define_method(:fulfill?)                     { self.vendor_acknowledgement_status == 'fulfill' }
+    define_method(:customer_refunded?)           { !!self.customer_refunded_at }
+    define_method(:not_customer_refunded?)       { !customer_refunded? }
 
     delegate :name, to: :shipping_carrier, prefix: true
     delegate :name, to: :shipping_service_level, prefix: true
+
+    def amount_to_refund_in_cents
+      (
+        gift_amount_for_customer_in_cents +
+        tax_amount_for_customer_in_cents +
+        handling_in_cents +
+        shipping_in_cents
+      ).to_i
+    end
 
     def shippo_parcel_hash
       return unless shipping_parcel.present?

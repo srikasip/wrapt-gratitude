@@ -20,16 +20,9 @@ module Ec
       self.status.in?(CHARGED_STATES)
     end
 
-    def amount_in_dollars
-      self.amount_in_cents / 100.0
-    end
-
-    def auth_success?
-      self.status.in? AUTHED_OKAY_STATES
-    end
-
-    def bad_state?
-      !self.status.in?(AUTHED_OKAY_STATES+[INITIALIZED])
-    end
+    define_method(:amount_in_dollars)          { self.amount_in_cents / 100.0 }
+    define_method(:amount_refunded_in_dollars) { self.amount_refunded_in_cents.to_i / 100.0 }
+    define_method(:auth_success?)              { self.status.in? AUTHED_OKAY_STATES }
+    define_method(:bad_state?)                 { !self.status.in?(AUTHED_OKAY_STATES+[INITIALIZED]) }
   end
 end

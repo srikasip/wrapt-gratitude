@@ -88,7 +88,7 @@ Rails.application.routes.draw do
   ###################################
   namespace :ecommerce do
     patch "checkout/start/:giftee_id" => "checkout#start", as: 'checkout_start'
-    VALID_STEPS = ['gift-wrapt', 'giftee-name', 'address', 'shipping', 'payment', 'review']
+    VALID_STEPS = ['gift-wrapt', 'giftee-name', 'address', 'payment', 'review']
     VALID_STEPS.each do |step|
       action = step.tr('-', '_')
       get "checkout/#{step}" => "checkout#edit_#{action}"

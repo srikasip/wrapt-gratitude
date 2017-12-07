@@ -1,0 +1,16 @@
+Hello <%= @vendor.name %>,
+
+Order <%= @purchase_order.order_number %> has been cancelled on wrapt.com.
+Please follow this link:
+
+<%= ecommerce_vendor_confirmation_url(@purchase_order.vendor_token) %>
+
+to see more details.
+
+<% @purchase_order.line_items.each do |line_item| %>
+  <% product = line_item.orderable %>
+<%= product.vendor_sku %>: <%= product.description %> x <%= line_item.quantity %>
+<% end %>
+
+Thanks,
+The Wrapt Team

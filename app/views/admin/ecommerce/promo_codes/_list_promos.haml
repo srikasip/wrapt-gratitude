@@ -32,8 +32,9 @@
               %td= promo_code.description
               %td
                 - if promo_code.current?
-                  - data = { confirm: "Are you sure you'd like to end the promo #{promo_code.value} now?" }
-                  = button_to 'end now', admin_ecommerce_promo_code_path(promo_code), method: :delete, class: 'btn btn-default', data: data
-                = link_to 'edit', edit_admin_ecommerce_promo_code_path(promo_code), class: 'btn btn-default'
+                  .display-inline-block
+                    - data = { confirm: "Are you sure you'd like to end the promo #{promo_code.value} now?" }
+                    = button_to 'End Now', admin_ecommerce_promo_code_path(promo_code), method: :delete, class: 'btn btn-danger btn-sm', data: data
+                = link_to 'Edit', edit_admin_ecommerce_promo_code_path(promo_code), class: 'btn btn-default btn-sm'
 
       =paginate(promo_codes, param_name: pagination_param)

@@ -7,7 +7,14 @@
           We're sorry to say we have a problem with your order
         %p{style: "text-align: center; font-size: 16px; color: #444; font-weight: normal; line-height: 1.75;"}
           Because our gifts are one-of-a-kind and often limited editions, we
-          learned that your gift is currently out of stock. Would you like to
+          learned that
+
+          - if @customer_order.line_items.count > 1
+            one of your gifts
+          - else
+            your gift
+
+          is currently out of stock. Would you like to
           review #{@profile.name}’s other recommended gifts and choose from her
           personalized collection?
         = link_to "View More Gift Recommendations", giftee_gift_recommendations_url(@profile), style: "display: block; background-color: #ABBAD5; color: #333; text-transform: uppercase; font-size: 12px; letter-spacing: 1.4px; padding: 16px; text-align: center; text-decoration: none; line-height: 1;"

@@ -61,7 +61,7 @@ class Ecommerce::VendorConfirmationsController < ApplicationController
   end
 
   def po_attributes
-    permitted = params.require(:purchase_order).permit(:vendor_acknowledgement_status, :vendor_acknowledgement_reason)
+    permitted = params.require(:ec_purchase_order).permit(:vendor_acknowledgement_status, :vendor_acknowledgement_reason)
 
     if permitted[:vendor_acknowledgement_status] == Ec::PurchaseOrder::FULFILL
       permitted[:vendor_acknowledgement_reason] = nil

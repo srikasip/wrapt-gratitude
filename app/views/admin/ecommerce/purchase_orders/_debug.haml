@@ -2,42 +2,115 @@
   shipment = @order.shipment
 
 - if shipment.present?
-  - chossen_rate = Ec::PurchaseService::ShippingService.find_rate(rates: shipment.rates, shipping_choice: @order.customer_order.shipping_choice, vendor: @order.vendor)
-  - messages = shipment.api_response['messages']
+  :ruby
+    chossen_rate = Ec::PurchaseService::ShippingService.find_rate(rates: shipment.rates, shipping_choice: @order.customer_order.shipping_choice, vendor: @order.vendor)
+    messages = shipment.api_response['messages']
 
-  - if messages.present?
-    %h3 Shippo Messages
-    %ul
-      - messages.each do |msg|
-        %li
-          %strong= msg['source']
-          %br
-          = msg['text']
+    if shipment.shipping_label.present?
+      messages += Array.wrap(shipment.shipping_label.api_response['messages'])
+    end
 
 
   - rates = shipment.rates.sort_by { |r| r['amount'].to_f }.sort_by { |r| r['provider'] }
   - blacklist = Ec::ShippingServiceLevel.inactive.pluck(:shippo_token)
-  %h3 Rates Available
-  %table.table
-    %thead
-      %tr
-        %th
-        %th{style: 'text-align: right'} Amount
-        %th Service
-        %th Days
-    %tbody
-      - rates.each do |rate|
-        %tr
-          %td
-            - if rate.dig('servicelevel', 'token') == chossen_rate.dig('servicelevel', 'token')
-              * Chossen rate
-            - elsif blacklist.include?(rate.dig('servicelevel', 'token'))
-              Blacklisted
-          %td{style: 'text-align: right'}
-            = number_to_currency(rate['amount'])
-          %td
-            %strong= rate['provider']
-            = rate['servicelevel']['name']
-          %td= rate['estimated_days']
 
-  %pre=shipment.ai(plain: true)
+  #accordion.panel-group
+    - if messages.present?
+      .panel.panel-default
+        .panel-heading
+          %h4.panel-title
+            %span.glyphicon.glyphicon-plus
+            %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseA"}
+              Shippo Messages
+        #collapseA.panel-collapse.collapse
+          .panel-body
+            %ul
+              - messages.each do |msg|
+                %li
+                  - if msg['text'].match(/Hard/)
+                    %strong
+                      = msg['source']
+                      (FATAL ERROR)
+                    %br
+                    %span{style: 'color: red'}= msg['text']
+                  - else
+                    %strong= msg['source']
+                    %br
+                    = msg['text']
+
+    .panel.panel-default
+      .panel-heading
+        %h4.panel-title
+          %span.glyphicon.glyphicon-plus
+          %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseB"}
+            Rates Available
+      #collapseB.panel-collapse.collapse
+        .panel-body
+          %table.table
+            %thead
+              %tr
+                %th
+                %th{style: 'text-align: right'} Amount
+                %th Service
+                %th Days
+            %tbody
+              - rates.each do |rate|
+                %tr
+                  %td
+                    - if rate.dig('servicelevel', 'token') == chossen_rate.dig('servicelevel', 'token')
+                      * Chossen rate
+                    - elsif blacklist.include?(rate.dig('servicelevel', 'token'))
+                      Blacklisted
+                  %td{style: 'text-align: right'}
+                    = number_to_currency(rate['amount'])
+                  %td
+                    %strong= rate['provider']
+                    = rate['servicelevel']['name']
+                  %td= rate['estimated_days']
+
+    .panel.panel-default
+      .panel-heading
+        %h4.panel-title
+          %span.glyphicon.glyphicon-plus
+          %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseC"}
+            Raw shipment
+      #collapseC.panel-collapse.collapse
+        .panel-body
+          %pre=shipment.ai(plain: true)
+
+    - if shipment.shipping_label.present?
+      .panel.panel-default
+        .panel-heading
+          %h4.panel-title
+            %span.glyphicon.glyphicon-plus
+            %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseD"}
+              Raw Label
+        #collapseD.panel-collapse.collapse
+          .panel-body
+            %pre=shipment.shipping_label.ai(plain: true)
+
+    .panel.panel-default
+      .panel-heading
+        %h4.panel-title
+          %span.glyphicon.glyphicon-plus
+          %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseE"}
+            Raw Order
+      #collapseE.panel-collapse.collapse
+        .panel-body
+          %pre=@order.ai(plain: true)
+
+
+:javascript
+  $(document).ready(function(){
+    // Add minus icon for collapse element which is open by default
+    $(".collapse.in").each(function(){
+      $(this).siblings(".panel-heading").find(".glyphicon").addClass("glyphicon-minus").removeClass("glyphicon-plus");
+    });
+
+    // Toggle plus minus icon on show hide of collapse element
+    $(".collapse").on('show.bs.collapse', function(){
+      $(this).parent().find(".glyphicon").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+    }).on('hide.bs.collapse', function(){
+      $(this).parent().find(".glyphicon").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+    });
+  });

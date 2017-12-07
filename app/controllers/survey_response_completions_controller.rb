@@ -35,8 +35,17 @@ class SurveyResponseCompletionsController < ApplicationController
     
     # remove close button from modal
     @disable_close = true
-    @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
-    @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
+    # @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
+    # @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
+
+    if session['just_completed_profile_id'].to_i == @profile.id
+      @render_loading_spinner = true
+      @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
+      @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
+    else
+      # It was a user probably using a back button or a bookmark. Don't allow that
+      redirect_to my_account_giftees_path
+    end
   end
 
   def create_via_redirect
@@ -46,6 +55,12 @@ class SurveyResponseCompletionsController < ApplicationController
   def create
     # remove close button from modal
     @disable_close = true
+    if session['just_completed_profile_id'].to_i != @profile.id
+      session.delete('just_completed_profile_id')
+      redirect_to my_account_giftees_path
+      return
+    end
+
     # stash a copy if these params we may end up editing them
     srcp = survey_response_completion_params
 
@@ -84,6 +99,8 @@ class SurveyResponseCompletionsController < ApplicationController
       # moved to show action so we can show recommendations in background
       # job = GenerateRecommendationsJob.new
       # job.perform(@survey_response)
+      session[:last_completed_survey_at] = Time.now
+      session.delete('just_completed_profile_id')
       redirect_to giftee_gift_recommendations_path(@profile)
     else
       @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)

@@ -1,14 +1,41 @@
-%h3 Order
-%pre= order.ai(plain: true)
+.panel.panel-default
+  .panel-heading
+    %h4.panel-title
+      %span.glyphicon.glyphicon-plus
+      %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseOrder"}
+        Order
+  #collapseOrder.panel-collapse.collapse
+    .panel-body
+      %pre= order.ai(plain: true)
 
-%h3 Charge
-%pre= order.charge.ai(plain: true)
+.panel.panel-default
+  .panel-heading
+    %h4.panel-title
+      %span.glyphicon.glyphicon-plus
+      %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseCharge"}
+        Charge
+  #collapseCharge.panel-collapse.collapse
+    .panel-body
+      %pre= order.charge.ai(plain: true)
 
-%h3 Taxes
-%pre= order.tax_transactions.ai(plain: true)
+.panel.panel-default
+  .panel-heading
+    %h4.panel-title
+      %span.glyphicon.glyphicon-plus
+      %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseTax"}
+        Taxes
+  #collapseTax.panel-collapse.collapse
+    .panel-body
+      %pre= order.tax_transactions.ai(plain: true)
 
-%h3 Shipping Labels
 - order.purchase_orders.each do |po|
-  %h4= po.order_number
-  %pre= po.shipment.ai(plain: true)
-  %pre= po.shipping_label.ai(plain: true)
+  .panel.panel-default
+    .panel-heading
+      %h4.panel-title
+        %span.glyphicon.glyphicon-plus
+        %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseShipment#{po.id}"}
+          Shipment for #{po.order_number}
+    .panel-collapse.collapse{id: "collapseShipment#{po.id}"}
+      .panel-body
+        %pre= po.shipment.ai(plain: true)
+        %pre= po.shipping_label.ai(plain: true)
