@@ -26,7 +26,7 @@
   padding: 0px;
   color: $blue-001;
   opacity: 0.8;
-  @media(max-width: $screen-xs-max) {
+  @media(max-width: 835px) {
     display: inline-block;
   }
 }
@@ -62,7 +62,7 @@
 
 .top-navigation__menu {
   transition: opacity 0.5s ease-in-out;
-  @media(max-width: $screen-xs-max) {
+  @media(max-width: 835px) {
     width: 100vw;
     height: 100vh;
     padding-top: 91px;
@@ -79,20 +79,20 @@
 }
 
 .top-navigation__menu.tnm__closed {
-  @media(max-width: $screen-xs-max) {
+  @media(max-width: 835px) {
     height: 0px;
     padding-top: 0px;
   }
 }
 
 .top-navigation__menu.tnm-fade__in {
-  @media(max-width: $screen-xs-max) {
+  @media(max-width: 835px) {
     opacity: 1;
   }
 }
 
 .top-navigation__menu.tnm-fade__out {
-  @media(max-width: $screen-xs-max) {
+  @media(max-width: 835px) {
     opacity: 0; 
   }
 }
@@ -106,7 +106,7 @@
   color: $gray-008;
   padding: 0 15px;
   position: relative;
-  @media(max-width: $screen-xs-max) {
+  @media(max-width: 835px) {
     display: block;
     text-align: center;
     font-size: 16px;
@@ -136,7 +136,7 @@
   box-shadow: 0 6px 16px 0 rgba(0,0,0,0.05);
   min-width: 200px;
   margin-top: 10px;
-  @media(max-width: $screen-xs-max) {
+  @media(max-width: 835px) {
     width: 100%;
     text-align: center;
   }
@@ -150,7 +150,7 @@
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     border-bottom: 8px solid #ffffff;
-    @media(max-width: $screen-xs-max) {
+    @media(max-width: 835px) {
       right: 50%;
       margin-right: -6px;
     }
@@ -159,7 +159,7 @@
 
 .top-navigation__menu-item a {
   color: $gray-008;
-  @media(max-width: $screen-xs-max) {
+  @media(max-width: 835px) {
     color: #FFFFFF;
     svg{display: none;}
   }
@@ -170,7 +170,7 @@
 .top-navigation__menu-item a:focus {
   text-decoration: none;
   background-color: transparent;
-  @media(max-width: $screen-xs-max) {
+  @media(max-width: 835px) {
     svg{display: none;}
   }
 }
@@ -253,7 +253,7 @@
 }
 
 .ma-subnav-mobile-trigger {
-  @media(min-width: $screen-sm-min) {
+  @media(min-width: 835px) {
     display: none;
   }
   display: block;
@@ -305,7 +305,7 @@
 .ma-subnav {
   @include shadowed-box__gray;
   margin-bottom: 20px;
-  @media(min-width: $screen-sm-min) {
+  @media(min-width: 836px) {
     box-shadow: none;
     display: table;
     table-layout: fixed;
@@ -318,7 +318,7 @@
 }
 
 .ma-subnav__row {
-  @media(min-width: $screen-sm-min) {
+  @media(min-width: 836px) {
     display: table-row;
   }
 }
@@ -352,12 +352,12 @@
 
 .ma-subnav__link:first-child {
   border-left: 1px solid $blue-006;
-  @media(max-width: $screen-xs-max) {
+  @media(max-width: 835px) {
     border-left: none;
   }
 }
 
-@media(max-width: $screen-xs-max) {
+@media(max-width: 835px) {
   .ma-subnav__link {
     display: block;
     text-align: left;
