@@ -3,7 +3,14 @@
     .gr-carousel__nav-icon
       =embedded_svg('icon-caret-left', class: "gr-carousel__nav--caret-left")
     .gr-carousel__nav-inner
-  = link_to gift_path(@next_recommendation, {direction: 'next'}), class: 'wrapt-carousel__nav gr-carousel__nav next', onClick: "ga('send', 'event', 'recommendation', 'navigation', 'gift nav');", data: {loads_in_pjax_carousel: true} do
-    .gr-carousel__nav-icon
-      =embedded_svg('icon-caret-right', class: "gr-carousel__nav--caret-right")
-    .gr-carousel__nav-inner
+  - if !@profile.has_viewed_initial_recommendations? && @gift_index+1 == @gift_recommendations.size
+    = link_to giftee_more_recommendations_path(@giftee_id), class: 'wrapt-carousel__nav gr-carousel__nav next', onClick: "ga('send', 'event', 'recommendation', 'navigation', 'gift nav');", data: {loads_in_pjax_carousel_load_more: true} do
+      .gr-carousel__nav-icon
+        =embedded_svg('icon-caret-right', class: "gr-carousel__nav--caret-right")
+      .gr-carousel__nav-inner
+
+  - else
+    = link_to gift_path(@next_recommendation, {direction: 'next'}), class: 'wrapt-carousel__nav gr-carousel__nav next', onClick: "ga('send', 'event', 'recommendation', 'navigation', 'gift nav');", data: {loads_in_pjax_carousel: true} do
+      .gr-carousel__nav-icon
+        =embedded_svg('icon-caret-right', class: "gr-carousel__nav--caret-right")
+      .gr-carousel__nav-inner

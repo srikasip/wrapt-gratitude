@@ -35,6 +35,8 @@ Rails.application.routes.draw do
   resources :invitations, only: :show, concerns: :profile_builder
 
   resources :giftees, only: [:new, :create] do
+    get 'more_recommendations', controller: 'gift_recommendations', action: 'more_recommendations'
+    post 'load_more_recommendations', controller: 'gift_recommendations', action: 'load_more_recommendations'
     resources :gift_recommendations, only: [:index, :show] do
       resources :images, only: :show, controller: 'gift_recommendations', action: 'image'
     end

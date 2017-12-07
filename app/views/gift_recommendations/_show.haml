@@ -1,0 +1,11 @@
+.wrapt-carousel.gr-carousel{id: gr_carousel_id}
+  = render 'gift_nav'
+  .wrapt-carousel__slides.gr-carousel__gifts
+    .wrapt-carousel__slide.gr-carousel__gift-container{class: direction_css_class}
+      = render 'gift'
+  = render 'gift_indicators'
+
+- content_for :page_js do
+  :javascript
+    new window.GiftCarousel('#{gr_carousel_selector}', '.gr-carousel__indicators', '.gr-carousel__gift-container', '.gr-carousel__indicators-small')
+    

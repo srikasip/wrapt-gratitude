@@ -39,18 +39,21 @@ class GiftRecommendation < ApplicationRecord
     expert_picks = gift_recommendations.select(&:added_by_expert)
     auto_picks = gift_recommendations - expert_picks
     max = mobile ? MAX_SHOWN_TO_USER_MOBILE : MAX_SHOWN_TO_USER
+    all_picks = expert_picks + auto_picks || []
     if page == 'all'
-      expert_picks + auto_picks
+      picks_to_show = all_picks
     else
-      if mobile
-        start_picks = page == 1 ? 0 : (page-1)*max
-        end_picks = (max*page) - 1
-        (expert_picks + auto_picks)[start_picks..end_picks] || []
-      else
-        end_picks = (max*page) - 1
-        (expert_picks + auto_picks)[0..end_picks] || []
+      all_picks_by_page = all_picks.in_groups_of(max, false)
+      page_index = page - 1
+      last_page_index = all_picks_by_page.size - 1
+      if page_index < 0
+        page_index = 0
+      elsif page_index > last_page_index
+        page_index = last_page_index
       end
+      picks_to_show = all_picks_by_page[page_index]
     end
+    picks_to_show
   end
 
   def self.pages(gift_recommendations, mobile: false)

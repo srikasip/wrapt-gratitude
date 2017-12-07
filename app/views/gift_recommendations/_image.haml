@@ -1,0 +1,12 @@
+.wrapt-carousel.gr-image-carousel{id: gr_image_carousel_id}
+  .wrapt-carousel__slides.gr-image-carousel__images
+    .wrapt-carousel__slide.gr-image-carousel__image-container{class: direction_css_class}
+      = render 'gift_image'
+  - if @gift_images.size > 1
+    .gr-image-carousel__nav-container.clearfix
+      .gr-image-carousel__nav-links.clearfix.pull-right
+        = yield :gift_image_nav
+
+- content_for :page_js do
+  :javascript
+    new window.GiftImageCarousel("#{gr_image_carousel_selector}", ".gr-image-carousel__image", ".gr-image-carousel__image-container")

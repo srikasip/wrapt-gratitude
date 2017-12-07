@@ -15,6 +15,64 @@
   }
 }
 
+.gr-carousel-more-recommendations__overlay {
+  background-color: rgba(111,111,111,0.7);
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  z-index: $zIndex-10;
+}
+
+.gr-carousel-more-recommendations__content {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  z-index: $zIndex-10;
+  background-color: rgba($blue-008, 0.8);
+  color: #FFFFFF;
+  text-align: center;
+  padding: 16px;
+  @include flexbox();
+  align-items: center;
+  a {
+    color: #FFFFFF;
+    fill: #FFFFFF;
+  }
+  input[type=submit] {
+    background-color: transparent;
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+    width: 100%;
+    max-width: 300px;
+    padding: 6px 20px;
+    margin-bottom: 32px;
+  }
+  input[type=submit]:hover,
+  input[type=submit]:active,
+  input[type=submit]:focus {
+    background-color: rgba(#333, 0.1);
+  }
+  @media(max-width: $screen-xs-max) {
+    position: fixed;
+  }
+}
+
+.gr-cmr__close {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+}
+
+.gr-cmrc__content {
+  @include flex(1);
+
+}
+
+
 .recommendations-intro__next-step {
   background-color: rgba(170, 186, 213, 0.45);
   width: 500px;
