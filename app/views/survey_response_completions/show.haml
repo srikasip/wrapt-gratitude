@@ -6,7 +6,7 @@
       %h1.text-center
         = "#{@profile.name}'s Gift Recommendations"
       %p.lead.tan-002.ph2.text-center
-        ="Wrapt found these #{@gift_recommendations.count} items uniquely suited to #{@profile.name} based on her personality, passions, & purpose.".html_safe
+        ="Wrapt found these items uniquely suited to #{@profile.name} based on her personality, passions, & purpose.".html_safe
   = render 'gift_recommendation', gift: @gift_recommendations.first.gift
 
 - if @render_loading_spinner
