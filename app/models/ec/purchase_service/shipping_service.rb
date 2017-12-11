@@ -220,9 +220,7 @@ module Ec
 
     # This is used before we've purchased the labels
     def expected_delivery
-      if customer_order.submitted_on.blank?
-        return OpenStruct.new(text: "soon", range: [])
-      end
+      start_date = customer_order.submitted_on || Date.today
 
       estimated_days_min = 10
       estimated_days_max = 1
@@ -240,7 +238,7 @@ module Ec
       estimated_days_min += DAYS_FOR_VENDORS_TO_APPROVE
       estimated_days_max += DAYS_FOR_VENDORS_TO_APPROVE + SHIPPING_FUDGE_DAYS
 
-      range = [customer_order.submitted_on + estimated_days_min, Date.today + estimated_days_max]
+      range = [start_date + estimated_days_min, Date.today + estimated_days_max]
 
       fmt = ->(d) { d.strftime('%b %d, %Y') }
 
