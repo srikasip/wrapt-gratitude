@@ -23,7 +23,7 @@ module Ec
         base_scope = base_scope.where(status: search_params[:status].keys)
       end
 
-      base_scope.order('created_at desc').preload(:user, :line_items => :orderable).page(params[:page])
+      base_scope.order('updated_at desc').preload(:user, :line_items => :orderable).page(params[:page])
     end
   end
 end
