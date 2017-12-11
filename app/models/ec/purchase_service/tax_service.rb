@@ -19,7 +19,7 @@ module Ec
 
     def tax_in_cents_for_purchase_order(purchase_order)
       response = self.our_transaction.api_capture_response || self.our_transaction.api_estimation_response
-      lines    = response['lines']
+      lines    = Array.wrap(response['lines'])
 
       relevant_lines = lines.select do |line|
         line['ref2'].include?(purchase_order.order_number)
