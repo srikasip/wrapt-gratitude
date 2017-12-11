@@ -7,7 +7,6 @@ class SurveyResponseCompletionsController < ApplicationController
 
   before_action :set_profile
   before_action :set_survey_response
-  before_action :testing_redirect, only: :show
 
   def login_required?
     false
@@ -113,13 +112,6 @@ class SurveyResponseCompletionsController < ApplicationController
   end
 
   private
-
-  def testing_redirect
-    if params[:giftee_id].present? && current_user&.unmoderated_testing_platform?
-      # go directly to pretty url for loop11 testing (do not collect $200)
-      redirect_to testing_survey_complete_path
-    end
-  end
 
   def set_profile
     giftee_id = params[:giftee_id] || session[:giftee_id]
