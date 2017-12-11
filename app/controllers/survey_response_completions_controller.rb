@@ -1,20 +1,12 @@
 class SurveyResponseCompletionsController < ApplicationController
-  
   include PjaxModalController
-
-  include FeatureFlagsHelper
-  extend FeatureFlagsHelper
   include InvitationsHelper
+
   helper :invitations
   helper :carousel
 
-  if require_invites?
-    include RequiresLoginOrInvitation
-  end
-
   before_action :set_profile
   before_action :set_survey_response
-  # before_action :load_recommendations, only: :show
   before_action :testing_redirect, only: :show
 
   def login_required?
@@ -22,6 +14,14 @@ class SurveyResponseCompletionsController < ApplicationController
   end
 
   def show
+    if @profile.recommendations_generated_at.present? && current_user.present?
+      redirect_to my_account_giftees_path
+      return
+    elsif session['just_completed_profile_id'].to_i != @profile.id
+      redirect_to my_account_giftees_path
+      return
+    end
+
     @render_loading_spinner = true
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
     @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
@@ -32,20 +32,13 @@ class SurveyResponseCompletionsController < ApplicationController
 
   def sign_up
     # modal content on page load show action
-    
+
     # remove close button from modal
     @disable_close = true
-    # @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
-    # @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
 
-    if session['just_completed_profile_id'].to_i == @profile.id
-      @render_loading_spinner = true
-      @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
-      @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
-    else
-      # It was a user probably using a back button or a bookmark. Don't allow that
-      redirect_to my_account_giftees_path
-    end
+    @render_loading_spinner = true
+    @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
+    @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
   end
 
   def create_via_redirect
@@ -55,21 +48,11 @@ class SurveyResponseCompletionsController < ApplicationController
   def create
     # remove close button from modal
     @disable_close = true
-    if session['just_completed_profile_id'].to_i != @profile.id
-      session.delete('just_completed_profile_id')
-      redirect_to my_account_giftees_path
-      return
-    end
 
     # stash a copy if these params we may end up editing them
     srcp = survey_response_completion_params
 
-    user = \
-      if require_invites?
-        current_user
-      else
-        current_user || User.new(source: 'auto_create_on_quiz_taking')
-      end
+    user = current_user || User.new(source: 'auto_create_on_quiz_taking')
 
     # check for an existing user who is forgetting that they are already logged in
     if (existing_user = login(srcp[:user_email], srcp[:user_password]))
@@ -87,18 +70,12 @@ class SurveyResponseCompletionsController < ApplicationController
       @survey_response_completion.add_terms_of_service_error!
       flash.now['alert'] = 'Oops! You forgot to accept our terms of service.'
       @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
-      # render :show
       render :sign_up
     elsif @survey_response_completion.save
-      if !require_invites? || authentication_from_invitation_only?
-        auto_login(user)
-      end
+      auto_login(user)
       @profile.owner = user
       @profile.save!
       @survey_response.update_attribute :completed_at, Time.now
-      # moved to show action so we can show recommendations in background
-      # job = GenerateRecommendationsJob.new
-      # job.perform(@survey_response)
       session[:last_completed_survey_at] = Time.now
       session.delete('just_completed_profile_id')
       redirect_to giftee_gift_recommendations_path(@profile)
@@ -170,7 +147,7 @@ class SurveyResponseCompletionsController < ApplicationController
        gift_recommendations.
        where(gift_id: Gift.select(:id).can_be_sold, removed_by_expert: false).
        preload(gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field])
-           
+
     @gift_recommendations = GiftRecommendation.select_for_display(@gift_recommendations)
   end
 

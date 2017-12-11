@@ -36,6 +36,10 @@ class Profile < ApplicationRecord
   scope :unarchived, -> {where(archived_at: nil)}
   scope :archived, -> {where.not(archived_at: nil)}
 
+  def allow_new_recommendations!
+    update_attribute(:recommendations_generated_at, nil)
+  end
+
   def birthday
     return nil if birthday_month.blank? || birthday_day.blank?
 
