@@ -1,0 +1,29 @@
+-# this is a watered down version of the gift recommendation carousel. Just used as a backdrop for page.
+.row.wrapt-carousel--wrapper
+  .col-xs-12
+    .wrapt-carousel.gr-carousel
+      .wrapt-carousel__slides.gr-carousel__gifts{style: 'height: 520px;'}
+        .wrapt-carousel__slide.gr-carousel__gift-container.actve
+          .gr-carousel__gift.clearfix
+            .gr-carousel__gift-image
+              .gr-image-carousel__image{style: "background-image: url(#{gift.carousel_images.first.image_url(:small)}); height: 520px;"}
+            .gr-carousel__gift-content.pl2.pt1.pr1.hidden-xs
+              %h3.carousel__gift-name= gift.name
+              .gr-carousel__gift-details
+                %p.gift-description= gift.description
+                - unless gift.single_product_gift?
+                  %h5.gift-inclusion-heading Included In Gift
+                  %ul
+                    - gift.products.each do |product|
+                      %li.gift-item= product.description || product.title
+              .gr-carousel__gift-actions
+                %div
+                  - gift_selection = GiftSelection.new(gift: gift, profile: @profile)
+                  %h3.gr-carousel__price= number_to_currency gift.selling_price
+      .wrapt-carousel__indicators.gr-carousel__indicators
+        %div
+        - @gift_recommendations.each do |gr|
+          = link_to '#', class: 'wrapt-carousel__indicator gr-carousel__indicator' do
+            %span.gr__indicator-thumbnail
+              %span.gr__indicator-inactive-overlay
+              = image_tag gr.gift.carousel_thumb.image_url(:small)

@@ -1,0 +1,25 @@
+.found-account.d-0
+  %h2.text-center
+    We found your account
+  %p.text-center.color-tan-002
+    Looks like you’ve already got a Wrapt account 
+    %br 
+    but the password you entered wasn’t a match.  
+  %p.text-center.color-tan-002 
+    We sent your email a password reset link. 
+    %br
+    Go click on the link in your email or try a different password below.
+  = simple_form_for @user_session, url: user_session_path(return_to: @sign_in_return_to), html: { data: {submits_to_pjax_modal: true} } do |form|
+    = hidden_field_tag :return_to, (params[:return_to] || request.referrer)
+    .form-inputs
+      = form.input :email
+      = form.input :password
+      .text-right.lost-password-container
+        = link_to "Need a New Password?", '#need-a-new-password-hint', data: {toggle: 'collapse'}, 'aria-expanded'=>'false', 'aria-controls'=>'need-a-new-password-hint'
+      .collapse#need-a-new-password-hint
+        .text-center.mt2.mb2.color-tan-002 Check your email! We've already sent you a link to reset your password.
+      .pull-left
+        = form.input :remember, label: 'Keep me signed in', as: :boolean
+      .clearfix
+    .form-actions
+      = form.submit 'Sign In', class: 'btn btn-primary btn-full-width'

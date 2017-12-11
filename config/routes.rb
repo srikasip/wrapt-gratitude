@@ -24,6 +24,7 @@ Rails.application.routes.draw do
         resource :completion, only: [:show, :create], controller: 'survey_response_completions' do
           collection do
             get :create_via_redirect
+            get :sign_up
           end
         end
       end
@@ -34,7 +35,11 @@ Rails.application.routes.draw do
   resources :invitations, only: :show, concerns: :profile_builder
 
   resources :giftees, only: [:new, :create] do
-    resources :gift_recommendations, only: :index
+    get 'more_recommendations', controller: 'gift_recommendations', action: 'more_recommendations'
+    post 'load_more_recommendations', controller: 'gift_recommendations', action: 'load_more_recommendations'
+    resources :gift_recommendations, only: [:index, :show] do
+      resources :images, only: :show, controller: 'gift_recommendations', action: 'image'
+    end
     resources :gift_selections, only: [:create, :destroy]
     resources :giftee_invitations, only: [:new, :create]
     resources :gift_likes, only: [:create, :destroy]
@@ -83,7 +88,7 @@ Rails.application.routes.draw do
   ###################################
   namespace :ecommerce do
     patch "checkout/start/:giftee_id" => "checkout#start", as: 'checkout_start'
-    VALID_STEPS = ['gift-wrapt', 'giftee-name', 'address', 'shipping', 'payment', 'review']
+    VALID_STEPS = ['gift-wrapt', 'giftee-name', 'address', 'payment', 'review']
     VALID_STEPS.each do |step|
       action = step.tr('-', '_')
       get "checkout/#{step}" => "checkout#edit_#{action}"

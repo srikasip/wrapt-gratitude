@@ -1,4 +1,5 @@
 class VendorMailer < ApplicationMailer
+  helper :email
   default from: 'Wrapt Orders <orders@wrapt.com>'
 
   EMAIL_DELIMITER_REGEX = /\s*(,|;)\s*/
@@ -14,6 +15,16 @@ class VendorMailer < ApplicationMailer
     mail({
       to: @vendor.email.split(EMAIL_DELIMITER_REGEX),
       subject: "Order Placed"
+    })
+  end
+
+  def order_cancelled(purchase_order_id)
+    @purchase_order = Ec::PurchaseOrder.find(purchase_order_id)
+    @vendor = @purchase_order.vendor
+
+    mail({
+      to: @vendor.email.split(EMAIL_DELIMITER_REGEX),
+      subject: "Order #{@purchase_order.order_number} Cancelled"
     })
   end
 end

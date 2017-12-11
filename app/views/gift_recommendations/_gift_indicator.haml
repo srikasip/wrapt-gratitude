@@ -1,0 +1,15 @@
+- gift_index = @gift_index
+- gr = gr
+- if gift_index == index
+  - direction = nil
+- else
+  - direction = gift_index > index ? 'prev' : 'next'
+- css_classes = ['wrapt-carousel__indicator', 'gr-carousel__indicator']
+
+- if mobile && !mobile_indicators_to_show.include?(gr)
+  - css_classes.push('hidden-xs')
+
+- css_classes.push('active') unless direction
+- path = direction ? gift_path(gr, {direction: direction}) : 'javascript:void(0)'
+= link_to path, class: css_classes, data: {loads_in_pjax_carousel: true} do
+  = render 'thumbnail', locals: {image: gr.gift.carousel_thumb, gift: gr.gift}
