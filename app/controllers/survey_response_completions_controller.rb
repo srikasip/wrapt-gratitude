@@ -1,8 +1,12 @@
 class SurveyResponseCompletionsController < ApplicationController
+  
+  include PjaxModalController
+
   include FeatureFlagsHelper
   extend FeatureFlagsHelper
   include InvitationsHelper
   helper :invitations
+  helper :carousel
 
   if require_invites?
     include RequiresLoginOrInvitation
@@ -10,6 +14,7 @@ class SurveyResponseCompletionsController < ApplicationController
 
   before_action :set_profile
   before_action :set_survey_response
+  # before_action :load_recommendations, only: :show
   before_action :testing_redirect, only: :show
 
   def login_required?
@@ -20,6 +25,27 @@ class SurveyResponseCompletionsController < ApplicationController
     @render_loading_spinner = true
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
     @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
+    job = GenerateRecommendationsJob.new
+    job.perform(@survey_response)
+    load_recommendations
+  end
+
+  def sign_up
+    # modal content on page load show action
+    
+    # remove close button from modal
+    @disable_close = true
+    # @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
+    # @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
+
+    if session['just_completed_profile_id'].to_i == @profile.id
+      @render_loading_spinner = true
+      @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
+      @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
+    else
+      # It was a user probably using a back button or a bookmark. Don't allow that
+      redirect_to my_account_giftees_path
+    end
   end
 
   def create_via_redirect
@@ -27,6 +53,14 @@ class SurveyResponseCompletionsController < ApplicationController
   end
 
   def create
+    # remove close button from modal
+    @disable_close = true
+    if session['just_completed_profile_id'].to_i != @profile.id
+      session.delete('just_completed_profile_id')
+      redirect_to my_account_giftees_path
+      return
+    end
+
     # stash a copy if these params we may end up editing them
     srcp = survey_response_completion_params
 
@@ -53,7 +87,8 @@ class SurveyResponseCompletionsController < ApplicationController
       @survey_response_completion.add_terms_of_service_error!
       flash.now['alert'] = 'Oops! You forgot to accept our terms of service.'
       @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
-      render :show
+      # render :show
+      render :sign_up
     elsif @survey_response_completion.save
       if !require_invites? || authentication_from_invitation_only?
         auto_login(user)
@@ -61,18 +96,30 @@ class SurveyResponseCompletionsController < ApplicationController
       @profile.owner = user
       @profile.save!
       @survey_response.update_attribute :completed_at, Time.now
-      job = GenerateRecommendationsJob.new
-      job.perform(@survey_response)
+      # moved to show action so we can show recommendations in background
+      # job = GenerateRecommendationsJob.new
+      # job.perform(@survey_response)
       session[:last_completed_survey_at] = Time.now
+      session.delete('just_completed_profile_id')
       redirect_to giftee_gift_recommendations_path(@profile)
     else
-      if User.where(email: user.email).any?
-        flash.now['alert'] = %[Oops! Looks like that account already exists. Try #{view_context.link_to 'signing in', new_user_session_path}.]
+      @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
+      @existing_user = User.find_by(email: srcp[:user_email])
+      if @existing_user
+        # Make it easier for someone to recover thier password by:
+        # - prementively sending them a reset and also
+        PasswordResetRequest.new(email: @existing_user.email).save
+        # - preparing a friendly login modal form for them to try again
+        @user_session = UserSession.new(email: @existing_user.email)
+        # - resetting the create account for so it's less confusing
+        @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
+        # - not showing the spinner since we've already compiled the recommendations
+        @render_loading_spinner = false
+        render :existing_user
       else
         flash.now['alert'] = 'Oops! Looks like we need a bit more info.'
+        render :sign_up
       end
-      @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
-      render :show
     end
   end
 
@@ -116,6 +163,15 @@ class SurveyResponseCompletionsController < ApplicationController
       flash[:alert] = 'Giftee not found'
       redirect_to :root
     end
+  end
+
+  def load_recommendations
+    @gift_recommendations = @profile.
+       gift_recommendations.
+       where(gift_id: Gift.select(:id).can_be_sold, removed_by_expert: false).
+       preload(gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field])
+           
+    @gift_recommendations = GiftRecommendation.select_for_display(@gift_recommendations)
   end
 
   def set_survey_response

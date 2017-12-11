@@ -33,6 +33,7 @@ class SurveyQuestionResponsesController < ApplicationController
         if @question_response.next_response.present?
           redirect_to with_invitation_scope(giftee_survey_question_path(@profile, @survey_response, @question_response.next_response))
         else
+          session[:just_completed_profile_id] = @profile.id
           redirect_to with_invitation_scope(giftee_survey_completion_path(@profile, @survey_response))
         end
       end

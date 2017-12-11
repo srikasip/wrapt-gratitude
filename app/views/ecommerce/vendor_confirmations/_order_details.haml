@@ -37,7 +37,7 @@
             = wrapt_parcel.description
           %td
           %td 1
-        - if @customer_order.include_note?
+        - if @customer_order.valid_note?
           %tr
             %td.hidden-xs
             %td Hand written note
@@ -46,7 +46,7 @@
 
 
 .row
-  - if @customer_order.include_note?
+  - if @customer_order.valid_note?
     .col-xs-12.col-sm-6
       %h3 Note Details
       %strong Content:

@@ -1,30 +1,35 @@
 App.PasswordRevealer = class PasswordRevealer {
 
   constructor() {
-    this.addShowHideButton();
-    this.handleShowHideClick();
+    this.addShowHideButtons();
+    this.attachShowHideClickHandlers();
   }
 
-  addShowHideButton() {
-    $( "input[type='password']" ).wrap( "<div class='input-wrapper'></div>" );
-    $( "input[type='password']" ).attr( 'id', 'js-pw-input-for-show-hide');
-    $( "input[type='password']" ).after( "<div class='input-wrapper--show-hide' id='js-toggle-show-hide'><i class='fa fa-eye'></i><span>Show</span></div>" );
-  }
-
-  handleShowHideClick() {
-    $('#js-toggle-show-hide').click(function() {
-      if ($('#js-pw-input-for-show-hide').attr('type') === 'password') {
-        $('#js-pw-input-for-show-hide').attr('type', 'text');
-        $(this).children('i').addClass('fa-eye-slash');
-        $(this).children('i').removeClass('fa-eye');
-        $(this).children('span').text( "Hide" );
-      } else {
-        $('#js-pw-input-for-show-hide').attr('type', 'password');
-        $(this).children('i').addClass('fa-eye');
-        $(this).children('i').removeClass('fa-eye-slash');
-        $(this).children('span').text( "Show" );
-      }
+  addShowHideButtons() {
+    $( "input[type='password']" ).each(function() {
+      $(this).wrap( "<div class='input-wrapper'></div>" );
+      $(this).addClass('js-pw-input-for-show-hide');
+      $(this).after( "<div class='input-wrapper--show-hide js-toggle-show-hide'><i class='fa fa-eye'></i><span>Show</span></div>" );
     });
   }
 
+  attachShowHideClickHandlers() {
+    $(document).on('click', '.js-toggle-show-hide', function() {
+      let button = $(this)
+      let wrapper = button.closest('.input-wrapper')
+      let input = wrapper.find('input')
+      console.log('clicked!', this, wrapper, input, input.attr('type'))
+      if (input.attr('type') === 'password') {
+        input.attr('type', 'text');
+        button.children('i').addClass('fa-eye-slash');
+        button.children('i').removeClass('fa-eye');
+        button.children('span').text( "Hide" );
+      } else {
+        input.attr('type', 'password');
+        button.children('i').addClass('fa-eye');
+        button.children('i').removeClass('fa-eye-slash');
+        button.children('span').text( "Show" );
+      }
+    });
+  }
 }

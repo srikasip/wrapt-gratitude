@@ -3,6 +3,7 @@ module Ec
     include ChargeConstants
 
     attr_accessor :cart_id, :customer_order, :our_charge, :stripe_charge
+    attr_reader :refund_suceeded
 
     def initialize(cart_id:, customer_order:nil)
       self.cart_id        = cart_id
@@ -95,6 +96,39 @@ module Ec
 
     def authed_or_charged?
       authed? || charged?
+    end
+
+    def refund!(amount_in_cents, extra_metadata: {})
+      if amount_in_cents.blank? || amount_in_cents.to_i != amount_in_cents || amount_in_cents < 1
+        @refund_suceeded = false
+        return
+      end
+
+      begin
+        # https://stripe.com/docs/api/ruby#create_refund
+        refund = Stripe::Refund.create(
+          charge: self.our_charge.charge_id,
+          amount: amount_in_cents,
+          metadata: {
+            customer_order: customer_order.order_number
+          }.merge(extra_metadata),
+          reason: 'requested_by_customer'
+        )
+
+        if refund.status == 'succeeded'
+          @refund_suceeded = true
+          self.our_charge.amount_refunded_in_cents ||= 0
+          self.our_charge.amount_refunded_in_cents += amount_in_cents
+          self.our_charge.refund_stack ||= []
+          self.our_charge.refund_stack << refund
+          self.our_charge.save!
+        else
+          @refund_suceeded = false
+        end
+      rescue Stripe::InvalidRequestError => e
+        @refund_suceeded = false
+        self.our_charge.update_attribute(:error_message, e.message)
+      end
     end
 
     private

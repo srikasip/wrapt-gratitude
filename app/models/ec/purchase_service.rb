@@ -183,6 +183,7 @@ module Ec
 
     def authorize!
       _sanity_check!
+
       charging_service.authorize!({
         after_hook: -> {
           self.customer_order.status = SUBMITTED
@@ -204,9 +205,8 @@ module Ec
       _sanity_check!
 
       purchase_orders.each do |po|
-        if po.vendor_rejected?
-          po.update_attribute(:status, CANCELLED)
-          customer_order.update_attribute(:status, PARTIALLY_CANCELLED)
+        if po.vendor_rejected? && !po.cancelled?
+          CancelService.new(purchase_order: po).run!
         elsif po.vendor_accepted?
           po.update_attribute(:status, PROCESSING)
         else
@@ -216,33 +216,15 @@ module Ec
 
       if all_vendors_accepted?
         customer_order.update_attribute(:status, PROCESSING)
-      elsif all_vendors_cancelled?
-        customer_order.update_attribute(:status, CANCELLED)
       end
 
       if okay_to_charge?
         _unconditional_charge!
-      elsif should_cancel?
-        cancel_order!
       else
-        Rails.logger.info(<<~EOS)
-          Already charged or cannot cannot yet cancel for sure.  There are only
-          un-acknowledged vendor purchase orders left.
-        EOS
+        Rails.logger.info "Already charged"
       end
 
       self.shipping_service.purchase_shipping_labels!
-    end
-
-    def cancel_order!
-      Rails.logger.info "Canceling some or all of cart ID #{cart_id}. One or more vendors cannot fulfill."
-      return
-      _figure_which_pos_to_cancel
-      _calculate_amount_to_refund
-      self.charging_service.refund(x)
-      _update_status_of_customer_order
-      _email_customer_about_cancel
-      _email_vendors_about_cancel
     end
 
     def okay_to_charge?
@@ -262,7 +244,9 @@ module Ec
     end
 
     def all_vendors_accepted?
-      purchase_orders.okay_to_fulfill.count == purchase_orders.count
+      purchase_orders.okay_to_fulfill.count == purchase_orders.count \
+      &&
+      purchase_orders.none?(&:cancelled?)
     end
 
     def all_vendors_cancelled?
@@ -272,7 +256,9 @@ module Ec
     delegate :need_shipping_calculated, to: :customer_order
 
     def update_order_totals!
-      co = self.customer_order
+      self.tax_service.capture!
+
+      co = self.customer_order.reload
       shipping_choice = co.shipping_choice
 
       co.subtotal_in_cents        = 0
@@ -286,6 +272,8 @@ module Ec
         co.subtotal_in_cents += line_item.total_price_in_dollars * 100
       end
 
+      co.taxes_in_cents = self.tax_service.tax_in_cents
+
       co.purchase_orders.each do |po|
         vendor = po.vendor
         rate = ShippingService.find_rate(rates: po.shipment.rates, shipping_choice: shipping_choice, vendor: vendor)
@@ -298,17 +286,21 @@ module Ec
         co.handling_in_cents      += s_and_h.handling_in_cents
         co.shipping_in_cents      += s_and_h.shipping_in_cents
 
+        # If we have to refund, we need to know this at the PO level.
+        gifts = po.line_items.flat_map(&:related_line_items).uniq
+        raise "Should only be one gift" if gifts.length != 1
+        gift_amount_for_customer_in_cents = \
+          (gifts.first.price_per_each_in_dollars.to_f * 100).to_i
+
         po.update_attributes({
           shipping_cost_in_cents: s_and_h.shipping_cost_in_cents,
           shipping_in_cents: s_and_h.shipping_in_cents,
           handling_cost_in_cents: s_and_h.handling_cost_in_cents,
-          handling_in_cents: s_and_h.handling_in_cents
+          handling_in_cents: s_and_h.handling_in_cents,
+          gift_amount_for_customer_in_cents: gift_amount_for_customer_in_cents,
+          tax_amount_for_customer_in_cents: self.tax_service.tax_in_cents_for_purchase_order(po)
         })
       end
-
-      self.tax_service = TaxService.new(cart_id: self.cart_id, customer_order: co)
-      self.tax_service.estimate!
-      co.taxes_in_cents = self.tax_service.tax_in_cents
 
       co.total_to_charge_in_cents = co.subtotal_in_cents + co.shipping_in_cents + co.handling_in_cents + co.taxes_in_cents
 
@@ -323,7 +315,10 @@ module Ec
       Rails.logger.info "Charging cart ID #{cart_id}. Also adjusting inventory."
       charging_service.charge!({
         before_hook: -> { _adjust_inventory! },
-        after_hook: -> { self.tax_service.reconcile! }
+        after_hook: -> {
+          self.tax_service.reconcile!
+          Ec::PurchaseService::CancelService.recancel_if_needed!(customer_order)
+        }
       })
     end
 
@@ -450,7 +445,7 @@ module Ec
     end
 
     def _email_customer_that_order_was_received!
-      CustomerOrderMailer.order_received(customer_order.id).deliver_later
+      ::CustomerOrderMailer.order_received(customer_order.id).deliver_later
     end
 
     def gifts_span_vendors?

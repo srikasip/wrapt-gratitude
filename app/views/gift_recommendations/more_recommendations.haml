@@ -1,0 +1,10 @@
+.gr-carousel-more-recommendations
+  .gr-carousel-more-recommendations__overlay{data: {pjax_load_more_close: true}}
+  .gr-carousel-more-recommendations__content
+    = link_to giftee_gift_recommendations_path(@giftee_id), data: {pjax_load_more_close: true}, class: 'gr-cmr__close' do
+      =embedded_svg('icon-close', class: 'modal__icon-close')
+    .gr-cmrc__content
+      %h1 Want a few more Recommendations?
+      = simple_form_for :more_recommendations, url: giftee_load_more_recommendations_path(@giftee_id, carousel_page: @page) do |f|
+        = f.submit "YES! LET'S GO"
+      = link_to 'No Thanks. I am happy with the recommendations I already have.', giftee_gift_recommendations_path(@giftee_id), data: {pjax_load_more_close: true}

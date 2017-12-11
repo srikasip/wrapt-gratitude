@@ -68,34 +68,16 @@ class Ecommerce::CheckoutController < ApplicationController
   def save_address
     @checkout_step = :shipping
     @customer_purchase.set_address!(params)
+    @customer_purchase.pick_shipping!('cheapest')
 
     if @customer_purchase.things_look_shipable?
-      redirect_to action: :edit_shipping
+      redirect_to action: :edit_payment
     else
       error_message = @customer_purchase.customer_order.errors.full_messages.join('. ')
       flash.now[:notice] = "Please make sure you've specified an address to continue. #{error_message}"
       _load_addresses
       _load_progress_bar
       render :edit_address
-    end
-  end
-
-  def edit_shipping
-    @checkout_step = :shipping
-    _load_progress_bar
-    @shipping_choices = @customer_purchase.shipping_choices_for_view
-  end
-
-  def save_shipping
-    @checkout_step = :shipping
-
-    if @customer_purchase.pick_shipping!(params.dig(:ec_customer_order, :shipping_choice))
-      redirect_to action: :edit_payment
-    else
-      flash.now[:notice] = "There was a problem saving your response."
-      @shipping_choices = @customer_purchase.shipping_choices_for_view
-      _load_progress_bar
-      render :edit_shipping
     end
   end
 
