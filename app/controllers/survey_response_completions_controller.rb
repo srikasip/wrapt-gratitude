@@ -1,5 +1,5 @@
 class SurveyResponseCompletionsController < ApplicationController
-  
+
   include PjaxModalController
 
   include FeatureFlagsHelper
@@ -32,7 +32,7 @@ class SurveyResponseCompletionsController < ApplicationController
 
   def sign_up
     # modal content on page load show action
-    
+
     # remove close button from modal
     @disable_close = true
     # @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
@@ -170,7 +170,7 @@ class SurveyResponseCompletionsController < ApplicationController
        gift_recommendations.
        where(gift_id: Gift.select(:id).can_be_sold, removed_by_expert: false).
        preload(gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field])
-           
+
     @gift_recommendations = GiftRecommendation.select_for_display(@gift_recommendations)
   end
 
