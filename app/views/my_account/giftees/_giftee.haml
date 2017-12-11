@@ -5,7 +5,9 @@
     .ma-giftee__name
       = giftee.name
       %small= giftee.relationship
-    - tabs = [{text: 'details', tab_pane_id: "ma-giftee-details__#{giftee.id}", active: true, tab_pane_partial: 'giftee_details'}, {text: 'reminders', tab_pane_id: "ma-giftee-reminders__#{giftee.id}", tab_pane_partial: 'giftee_reminders'}]
+    -# removing reminders leaving this around if we bring back.
+    -# tabs = [{text: 'details', tab_pane_id: "ma-giftee-details__#{giftee.id}", active: true, tab_pane_partial: 'giftee_details'}, {text: 'reminders', tab_pane_id: "ma-giftee-reminders__#{giftee.id}", tab_pane_partial: 'giftee_reminders'}]
+    - tabs = [{text: 'details', tab_pane_id: "ma-giftee-details__#{giftee.id}", active: true, tab_pane_partial: 'giftee_details'}]
     = wrapt_styled_tabs_1(tabs)
   .ma-giftee-card__content
     .tab-content.mb2
