@@ -1,3 +1,5 @@
+- rate = @customer_purchase.rate_for_gift(gift)
+
 .row
   .col-xs-12
     .co-ro-item
@@ -14,9 +16,12 @@
             %h5.light= number_to_currency gift.selling_price
       .co-ro-item__shipping-and-status
         .co-detail
-          .co-detail__label Shipping Method
-          .co-detail__item TODO: expected delivery date
-          .co-detail__item TODO: carrier
+          .co-detail__label Shipping Details
+          .co-detail__item
+            = rate.carrier
+          .co-detail__item
+            Estimated Arrival
+            = rate.expected_delivery.text
           - if show_order_status
             .co-detail__label Status
             .co-detail__item= customer_order.status.titleize
