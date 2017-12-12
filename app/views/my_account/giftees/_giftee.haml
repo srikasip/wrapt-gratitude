@@ -17,14 +17,14 @@
     - if giftee.finished_surveys?
       - num_recommendations = GiftRecommendation.select_for_display(giftee.gift_recommendations)&.size || 0
       - if num_recommendations > 0
-        = link_to giftee_gift_recommendations_path(giftee), class: 'btn btn-primary btn-block' do
+        = link_to giftee_gift_recommendations_path(giftee), class: 'btn btn-primary btn-block ma-giftee-card__btn' do
           VIEW #{num_recommendations} RECOMMENDATIONS
       - else
-        .btn.btn-primary.btn-block
+        .btn.btn-primary.btn-block.ma-giftee-card__btn
           NO RECOMMENDATIONS
     - else
       :ruby
         question_response = giftee.first_unanswered_response
       - if question_response.present?
-        = link_to giftee_survey_question_path(giftee_id: giftee.id, survey_id: question_response.survey_response_id, id: question_response.to_param), class: 'btn btn-default btn-block' do
+        = link_to giftee_survey_question_path(giftee_id: giftee.id, survey_id: question_response.survey_response_id, id: question_response.to_param), class: 'btn btn-default btn-block ma-giftee-card__btn' do
           COMPLETE THE QUIZ
