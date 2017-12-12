@@ -3,6 +3,10 @@ class GenerateRecommendationsJob < ApplicationJob
 
   def perform(survey_response)
     profile = survey_response.profile
+
+    return if profile.recommendations_in_progress
+    return if profile.recommendations_generated_at.present?
+
     profile.update_attribute :recommendations_in_progress, true
     engine = Recommender::Engine.new(survey_response)
     engine.run
