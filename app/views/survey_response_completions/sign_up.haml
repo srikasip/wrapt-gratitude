@@ -32,6 +32,6 @@
           - tos_link = link_to "Terms of Service", terms_of_service_path, class: 'clean', data: data
           = form.input :user_terms_of_service_accepted, as: :wrapt_styled_checkbox, label: "I agree to Wrapt's #{tos_link}".html_safe, input_html: {checked: true}
     - if current_user&.active?
-      = form.submit 'View Gift Recommendations'.upcase.html_safe, class: 'btn btn-primary btn-sm center-block'
+      = form.submit 'View Gift Recommendations'.upcase.html_safe, class: 'btn btn-primary btn-sm btn-block'
     - else
-      = form.submit 'Create Profile &amp; View Gift Recommendations'.upcase.html_safe, class: 'btn btn-primary btn-sm center-block'
+      = form.submit 'Create Profile &amp; View Gift Recommendations'.upcase.html_safe, class: 'btn btn-primary btn-sm btn-block'
