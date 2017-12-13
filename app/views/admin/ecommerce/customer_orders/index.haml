@@ -84,6 +84,18 @@
             %td.text-right
               %i= number_to_currency(order.taxes_in_dollars)
             %td
+          - if order.promo_code.present?
+            %tr{class: this_cycle_class}
+              %td
+              %td{colspan: 3}
+                %i= "Promo: #{order.promo_code || 'None'}"
+                - if order.promo_code.present? && order.promo_code_mode == 'percent'
+                  %i= "(#{order.promo_code_amount}%)"
+              %td.text-right
+                - if order.promo_code
+                  %i= "-#{number_to_currency(order.promo_delta_in_dollars)}"
+              %td
+
 
 
     %p=paginate @orders

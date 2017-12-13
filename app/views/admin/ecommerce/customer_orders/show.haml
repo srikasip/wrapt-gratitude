@@ -123,7 +123,16 @@
           %td{colspan: 6}
           %td.text-right
             %i= number_to_currency(@order.taxes_in_dollars)
-
+        - if @order.promo_code.present?
+          %tr
+            %td
+              %i= "Promo: #{@order.promo_code}"
+              - if @order.promo_code_mode == 'percent'
+                %i= "(#{@order.promo_code_amount}%)"
+            %td{colspan: 6}
+            %td.text-right
+              %i= "-#{number_to_currency(@order.promo_delta_in_dollars)}"
+        
         %tr{style: 'border-top-style: double'}
           %td
             %i Total
