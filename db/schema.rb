@@ -438,10 +438,10 @@ ActiveRecord::Schema.define(version: 20171212193558) do
     t.string   "last_name",                          default: ""
     t.integer  "expert_id"
     t.datetime "archived_at"
-    t.boolean  "has_viewed_initial_recommendations", default: false, null: false
     t.integer  "birthday_day"
     t.integer  "birthday_month"
     t.integer  "birthday_year"
+    t.boolean  "has_viewed_initial_recommendations", default: false, null: false
     t.index ["created_at"], name: "index_profiles_on_created_at", using: :btree
     t.index ["recipient_invited_at"], name: "index_profiles_on_recipient_invited_at", using: :btree
   end
