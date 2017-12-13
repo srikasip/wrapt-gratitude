@@ -5,4 +5,4 @@
 = render 'ecommerce/checkout/edit_review_summary_item', label: 'Curation Fee', co_attr: nil, value_in_dollars: true, value: Ec::CustomerOrder.uncharged_curation_fee_in_dollars, customer_order: customer_order, markout: true
 = render 'ecommerce/checkout/edit_review_summary_item', label: 'Shipping', co_attr: nil, value_in_dollars: true, value: customer_order.combined_handling_in_dollars, customer_order: customer_order, markout: false
 - if customer_order.promo_code.present?
-  = render 'ecommerce/checkout/edit_review_summary_item', label: 'Promo Code', value: customer_order.promotion_in_dollars, markout: false, value_in_dollars: true, co_attr: false, customer_order: @customer_order, deduction: true
+  = render 'ecommerce/checkout/edit_review_summary_item', label: 'Promo Code', value: customer_order.promo_delta_in_dollars, markout: false, value_in_dollars: true, co_attr: false, customer_order: @customer_order, deduction: true

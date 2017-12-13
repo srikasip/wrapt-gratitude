@@ -57,6 +57,7 @@ module Ec
     define_method(:handling_cost_in_dollars)     { self.handling_in_cents / 100.0 }
     define_method(:combined_handling_in_dollars) { (self.shipping_in_cents + self.handling_in_cents) / 100.0 }
     define_method(:total_to_charge_in_dollars)   { self.total_to_charge_in_cents / 100.0 }
+    define_method(:promo_delta_in_dollars)       { self.promo_delta_in_cents / 100.0 }
 
     define_method(:to_service)                   { PurchaseService.new(cart_id: self.cart_id) }
 
@@ -88,17 +89,6 @@ module Ec
       self.promo_code = promo.value
       self.promo_code_amount = promo.amount
       self.promo_code_mode = promo.mode
-    end
-
-    def promotion_in_dollars
-      if promo_code.present?
-        # TODO: promotion in dollars here
-        # can be fixed or percentage see promo_code_mode
-        # they always want this shown in a dollar amount 
-        10
-      else
-        0
-      end
     end
 
     private

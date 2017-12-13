@@ -179,7 +179,12 @@ module Ec
       end
     end
 
-    delegate :init_our_charge_record!, to: :charging_service
+    def init_our_charge_record!(params)
+      _safely do
+        update_order_totals!
+      end
+      self.charging_service.init_our_charge_record!(params)
+    end
 
     def authorize!
       _sanity_check!
@@ -302,7 +307,12 @@ module Ec
         })
       end
 
-      co.total_to_charge_in_cents = co.subtotal_in_cents + co.shipping_in_cents + co.handling_in_cents + co.taxes_in_cents
+      co.pre_promo_total_to_charge_in_cents = co.subtotal_in_cents + co.shipping_in_cents + co.handling_in_cents + co.taxes_in_cents
+
+      promo_code = PromoCode.new(mode: co.promo_code_mode, amount: co.promo_code_amount)
+      co.promo_delta_in_cents = promo_code.delta_in_cents(co.pre_promo_total_to_charge_in_cents)
+
+      co.total_to_charge_in_cents = co.pre_promo_total_to_charge_in_cents - co.promo_delta_in_cents
 
       co.save!
     end
