@@ -154,6 +154,19 @@ module Ec
       end
     end
 
+    def rate_for_gift(gift)
+       line_item = customer_order.line_items.where(orderable: gift).first
+       purchase_order = line_item.related_order
+       shipment = purchase_order.shipment
+       rate = PurchaseService::ShippingService.find_rate(rates: shipment.rates, shipping_choice: customer_order.shipping_choice, vendor: gift.vendor)
+
+       OpenStruct.new(
+         _rate: rate,
+         expected_delivery: expected_delivery(purchase_orders: [purchase_order]),
+         carrier: rate['provider']
+       )
+    end
+
     def self.find_rate(rates:, shipping_choice:, vendor:)
       return nil if rates.empty?
 
@@ -219,15 +232,17 @@ module Ec
     end
 
     # This is used before we've purchased the labels
-    def expected_delivery
-      if customer_order.submitted_on.blank?
-        return OpenStruct.new(text: "soon", range: [])
-      end
+    def expected_delivery(purchase_orders: nil)
+      start_date = customer_order.submitted_on || Date.today
 
       estimated_days_min = 10
       estimated_days_max = 1
 
-      _each_po_with_rate do |_, rate|
+      _each_po_with_rate do |po, rate|
+        if purchase_orders.present?
+          next if purchase_orders.exclude?(po)
+        end
+
         if rate['estimated_days'] > estimated_days_max
           estimated_days_max = rate['estimated_days']
         end
@@ -240,7 +255,7 @@ module Ec
       estimated_days_min += DAYS_FOR_VENDORS_TO_APPROVE
       estimated_days_max += DAYS_FOR_VENDORS_TO_APPROVE + SHIPPING_FUDGE_DAYS
 
-      range = [customer_order.submitted_on + estimated_days_min, Date.today + estimated_days_max]
+      range = [start_date + estimated_days_min, Date.today + estimated_days_max]
 
       fmt = ->(d) { d.strftime('%b %d, %Y') }
 

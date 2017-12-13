@@ -307,7 +307,7 @@ module Ec
       co.save!
     end
 
-    delegate :force_shipping!, to: :shipping_service
+    delegate :force_shipping!, :rate_for_gift, to: :shipping_service
 
     private
 

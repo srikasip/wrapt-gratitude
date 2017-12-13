@@ -195,8 +195,15 @@
 .ma-giftee-card__content {
   padding: 16px;
   background-color: #FDFDFD;
-  position: relative;
-  z-index: 1;
+  margin-bottom: 72px;
+}
+
+.ma-giftee-card__btn {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  width: auto;
 }
 
 .ma-giftee-details__table {

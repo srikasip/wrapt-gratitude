@@ -1,0 +1,49 @@
+= form_tag(url_for, method: :patch) do
+  .col-xs-12.col-md-8
+    .row
+      .col-xs-12.col-md-12
+        .form-group
+          %label{for: 'cardholder-name'} Name On Card
+          %input#cardholder-name.name-on-card.field.form-control.string{name: 'cardholder-name'}
+    .row
+      .col-xs-12.col-md-12
+        .form-group
+          %label{for: 'js-card-number'}
+            <abbr title="required">*</abbr>
+            Card Number
+          #js-card-number.field.form-control.string.required
+    .row
+      .col-xs-4.col-md-4
+        .form-group
+          %label{for: 'js-expiry-field'}
+            <abbr title="required">*</abbr>
+            Expiration Date
+          #js-expiry.field.form-control.string.required
+      .col-xs-4.col-md-4
+        .form-group
+          %label{for: 'js-cvc'}
+            <abbr title="required">*</abbr>
+            CVC #
+          #js-cvc.field.form-control.string.required
+    .row
+      .col-xs-12
+        .form-group
+          = wrapt_styled_checkbox(true, 'same_billing_zip', true, {label: 'Billing Zip Code & Shipping Zip Code are the same.', data: {zip: @customer_order.ship_zip}})
+    .row.j-zip-code{style: 'display:none;'}
+      .col-xs-12.col-md-12
+        %h4.light Billing Information
+        .form-group
+          %label{for: 'js-postal-code'} Zip Code
+          %input#js-postal-code.field.form-control.string{name: 'address-zip', value: @customer_order.ship_zip}
+
+    .row
+      .col-xs-12
+        .form-group{class: @promo_error_message.present? ? 'has-error' : ''}
+          %label{for: 'promo_code'} Promo Code
+          - if @promo_error_message.present?
+            .help-block= @promo_error_message
+          %input.form-control.string{name: 'promo_code', value: @customer_order.promo_code, class: @promo_error_message.present? ? 'error' : ''}
+
+  %button.btn.btn-primary{type: 'submit', disabled: true}
+    = next_button_text
+
