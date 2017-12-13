@@ -84,6 +84,23 @@ module Ec
       names.first
     end
 
+    def set_promo_code(promo)
+      self.promo_code = promo.value
+      self.promo_code_amount = promo.amount
+      self.promo_code_mode = promo.mode
+    end
+
+    def promotion_in_dollars
+      if promo_code.present?
+        # TODO: promotion in dollars here
+        # can be fixed or percentage see promo_code_mode
+        # they always want this shown in a dollar amount 
+        10
+      else
+        0
+      end
+    end
+
     private
 
     def _set_submitted_date

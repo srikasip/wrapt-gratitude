@@ -1,11 +1,15 @@
 :ruby
   css_class = markout ? 'markout' : ''
+  deduction = defined?(deduction) ? deduction : false
 .co-ro-summary__item.clearfix
   %div= label
   - if value_in_dollars
-    - if co_attr
-      %div{class: css_class}= number_with_precision(customer_order.send(co_attr), precision: 2)
-    - else
-      %div{class: css_class}= number_with_precision(value, precision: 2)
+    - dollars = co_attr ? number_with_precision(customer_order.send(co_attr), precision: 2) : number_with_precision(value, precision: 2)
+    %div{class: css_class}= deduction ? "-#{dollars}" : dollars
+    -#
+      - if co_attr
+        %div{class: css_class}= number_with_precision(customer_order.send(co_attr), precision: 2)
+      - else
+        %div{class: css_class}= number_with_precision(value, precision: 2)
   - elsif value
     %div{class: css_class}= value
