@@ -55,6 +55,12 @@ class SurveyQuestionResponsesController < ApplicationController
     # because it hasn't been associated yet with the user.
     @profile ||= Profile.where(owner_id: nil).find giftee_id
 
+    # Stop users from updating anything if the recommendations have been generated
+    if @profile.recommendations_generated_at.present?
+      redirect_to my_account_giftees_path
+      return
+    end
+
     # Maybe you started a giftee anonymously and logged in mid-quiz. We need to
     # connect the anonymous giftee to your account. Yes, it's possible to steal
     # an anonymous giftee somebody else started, but so what?

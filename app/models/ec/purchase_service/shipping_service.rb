@@ -154,6 +154,19 @@ module Ec
       end
     end
 
+    def rate_for_gift(gift)
+       line_item = customer_order.line_items.where(orderable: gift).first
+       purchase_order = line_item.related_order
+       shipment = purchase_order.shipment
+       rate = PurchaseService::ShippingService.find_rate(rates: shipment.rates, shipping_choice: customer_order.shipping_choice, vendor: gift.vendor)
+
+       OpenStruct.new(
+         _rate: rate,
+         expected_delivery: expected_delivery(purchase_orders: [purchase_order]),
+         carrier: rate['provider']
+       )
+    end
+
     def self.find_rate(rates:, shipping_choice:, vendor:)
       return nil if rates.empty?
 
@@ -219,13 +232,17 @@ module Ec
     end
 
     # This is used before we've purchased the labels
-    def expected_delivery
+    def expected_delivery(purchase_orders: nil)
       start_date = customer_order.submitted_on || Date.today
 
       estimated_days_min = 10
       estimated_days_max = 1
 
-      _each_po_with_rate do |_, rate|
+      _each_po_with_rate do |po, rate|
+        if purchase_orders.present?
+          next if purchase_orders.exclude?(po)
+        end
+
         if rate['estimated_days'] > estimated_days_max
           estimated_days_max = rate['estimated_days']
         end
@@ -292,7 +309,7 @@ module Ec
         if po.forced_shipping_service_level.present?
           shipping_label.carrier = po.forced_shipping_carrier.name
           shipping_label.service_level = po.forced_shipping_service_level.name
-          shipping_label.shippo_rate_object_id = shipment.rates.find { |r| r.dig('servicelevel', 'name') == po.forced_shipping_service_level.name }['object_id']
+          shipping_label.shippo_rate_object_id = po.shipment.rates.find { |r| r.dig('servicelevel', 'token') == po.forced_shipping_service_level.shippo_token }['object_id']
         else
           shipping_label.shippo_rate_object_id = rate['object_id']
           shipping_label.carrier = rate['provider']

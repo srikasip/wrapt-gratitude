@@ -8,6 +8,7 @@ class MyAccount::OrdersController < MyAccount::BaseController
 
   def show
     @order = current_user.customer_orders.find(params[:id])
+    @customer_purchase = @order.to_service
     @charge = @order.charge || Ec::Charge.new
   end
 end
