@@ -1,44 +1,13 @@
+-# just holds link for modal
+#example-gift-recommendations{data: {sign_up: sign_up_giftee_survey_completion_path(params[:giftee_id], params[:survey_id])}}
 .container
   .row
     .col-xs-12
-      .quiz-complete__text.pa3.text-center
-        %h1 Terrific, we have gift recommendations for #{@survey_response.giftee_name}.
-
-      = simple_form_for @survey_response_completion, url: with_invitation_scope(giftee_survey_completion_path(@profile, @survey_response)), html: {class: 'quiz-complete__form'} do |form|
-        .pa4
-          - unless current_user&.active?
-            .row
-              .col-sm-12
-                .create-and-sign-in.mb2
-                  %h4.create-account Save your login to see Wrapt's recommendations!
-                  .already-have-account
-                    Already have an account?
-                    - return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
-                    = link_to new_user_session_path(return_to: return_to), data: {loads_in_pjax_modal: true, toggle: "fade out", target: '.top-navigation__menu'} do
-                      Sign In
-
-            .row
-              .col-sm-6
-                = form.input :user_first_name, label: 'First Name'
-              .col-sm-6
-                = form.input :user_last_name, label: 'Last Name'
-            .row
-              .col-sm-6
-                = form.input :user_email, label: 'Email Address'
-              .col-sm-6
-                = form.input :user_password, label: 'Password', value: ''
-            .row
-              .col-xs-12.col-md-12
-                = form.input :user_wants_newsletter, as: :wrapt_styled_checkbox, label: 'Please send me occasional updates, such as when there are new Wrapt makers and quiz questions', input_html: {checked: true}
-            .row
-              .col-xs-12.col-md-12
-                - data = {loads_in_pjax_modal: true, toggle: "fade out"}
-                - tos_link = link_to "Terms of Service", terms_of_service_path, class: 'clean', data: data
-                = form.input :user_terms_of_service_accepted, as: :wrapt_styled_checkbox, label: "I agree to Wrapt's #{tos_link}".html_safe, input_html: {checked: true}
-          - if current_user&.active?
-            = form.submit 'View Gift Recommendations'.upcase.html_safe, class: 'btn btn-primary btn-sm center-block'
-          - else
-            = form.submit 'Create Profile &amp; View Gift Recommendations'.upcase.html_safe, class: 'btn btn-primary btn-sm center-block'
+      %h1.text-center
+        = "#{@profile.name}'s Gift Recommendations"
+      %p.lead.tan-002.ph2.text-center
+        ="Wrapt found these items uniquely suited to #{@profile.name} based on her personality, passions, & purpose.".html_safe
+  = render 'gift_recommendation', gift: @gift_recommendations.first.gift
 
 - if @render_loading_spinner
   = render 'application/loading', hidden: false
@@ -49,9 +18,20 @@
         setTimeout(function() {
           loading.fadeOut('slow', function() {
             $(this).addClass('hidden');
+           var url = $('#example-gift-recommendations').data('sign-up')
+           new App.PjaxModalLoader(url, {backdrop: 'static', show: true})
           });
         }, 5000)
       });
+
 = content_for :page_js do
   :javascript
     new App.PasswordRevealer()
+    $(document).ready(function() {
+      $('#pjax-modal').on('hidden.bs.modal', function() {
+        console.log('hide modal')
+        var url = $('#example-gift-recommendations').data('sign-up')
+        new App.PjaxModalLoader(url, {backdrop: 'static', show: true})
+      })
+    })
+    

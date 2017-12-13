@@ -1,0 +1,25 @@
+- indicators = @gift_recommendations
+.visible-xs
+  .wrapt-carousel__indicators.gr-carousel__indicators
+    =link_to "< Prev", mobile_nav_prev_path, class: mobile_nav_prev_classes, data: mobile_nav_prev_data
+    .grc_small_title.gr-carousel__sm-nav-text= @gift_recommendation.gift.title
+    = link_to "Next >", mobile_nav_next_path, class: mobile_nav_next_classes, data: mobile_nav_next_data
+    .gr-carousel__indicators-small
+      - @gift_recommendations.each_with_index do |gr, i|
+        = render 'gift_indicator', gr: gr, mobile: true, index: i
+.hidden-xs
+  .wrapt-carousel__indicators.gr-carousel__indicators
+    .gr-carousel__indicators-group
+      - @gift_recommendations.each_with_index do |gr, i|
+        = render 'gift_indicator', gr: gr, mobile: false, index: i
+    .clearfix
+      - if @page != @next_page
+        .pull-right
+          - if @profile.has_viewed_initial_recommendations?
+            = link_to 'NEXT', giftee_gift_recommendations_path(@giftee_id, carousel_page: @next_page), class: 'btn btn-default btn-xs btn-default__white'
+          - else
+            = link_to 'NEXT', giftee_more_recommendations_path(@giftee_id), class: 'btn btn-default btn-xs btn-default__white', data: {loads_in_pjax_carousel_load_more: true}
+      - if @page > 1
+        .pull-left
+          = link_to 'PREVIOUS', giftee_gift_recommendations_path(@giftee_id, carousel_page: @prev_page), class: 'btn btn-default btn-xs btn-default__white'
+

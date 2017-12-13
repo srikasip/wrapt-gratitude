@@ -60,15 +60,7 @@
         .panel-body
           = render "versions", versions: @order.charge.versions
 
-  .panel.panel-default
-    .panel-heading
-      %h4.panel-title
-        %span.glyphicon.glyphicon-plus
-        %a{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseFour"}
-          Raw Data
-    #collapseFour.panel-collapse.collapse
-      .panel-body
-        = render "raw_data", order: @order
+  = render "raw_data", order: @order
 
 :javascript
   $(document).ready(function(){

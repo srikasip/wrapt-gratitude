@@ -9,7 +9,21 @@
       = top_nav_toggle(:out)
       - top_nav_links.each do |link|
         - path, text, link_method = link
-        = send("top_nav_link_#{link_method.to_s}", path, text)
+        - if link_method == :dropdown
+          - dropdown_links = link[3]
+          %span.top-navigation__menu-item
+            = link_to '#', class: 'dropdown-toggle', data: {toggle: 'dropdown'} do
+              = embedded_svg('icon-circle', class: 'icon navbar-static-top__icon-circle')
+              = text
+            %ul.dropdown-menu
+              - dropdown_links.each do |dl|
+                %li
+                  - dl_path, dl_text = dl
+                  = top_nav_dropdown_link(dl_path, dl_text)
+
+        - else
+          = send("top_nav_link_#{link_method.to_s}", path, text)
+
 
 - content_for :page_js do
   :javascript

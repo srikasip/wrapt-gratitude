@@ -4,15 +4,18 @@
       %h1.text-center
         = "#{@profile.name}'s Gift Recommendations"
       %p.lead.tan-002.ph2.text-center
-        ="Wrapt found these #{@gift_recommendations.count} items uniquely suited to #{@profile.name} based on her personality, passions, & purpose.".html_safe
+        ="Wrapt found these items uniquely suited to #{@profile.name} based on her personality, passions, & purpose.".html_safe
   .row.wrapt-carousel--wrapper
     .col-xs-12
-      - gifts = load_gift_recommendation_carousel_data(@gift_recommendations)
-      = carousel(carousel: gifts, unique_carousel_name: 'gr-carousel', slide_content_singular: 'gift', id: 'gr-carousel')
+      - if @gift_recommendations.any?
+        .gr-pjax-carousel{data: {pjax_carousel: true}}
+          - @override_gr_carousel_id = 'initial'  
+          = render 'show'
   
 - content_for :page_js do
-  = render '/application/carousel_js'
   :javascript
-    new App.GiftLikeDislikeButtons();
+    new window.PjaxCarousel(".gr-pjax-carousel[data-pjax-carousel]", ".gr-carousel__gift-container", "[data-loads-in-pjax-carousel]");
+
+
 
 

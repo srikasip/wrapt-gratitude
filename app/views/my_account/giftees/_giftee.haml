@@ -13,8 +13,13 @@
         .tab-pane.fade{class: (tab[:active] ? 'in active' : ''), id: tab[:tab_pane_id]}
           = render tab[:tab_pane_partial], giftee: giftee
     - if giftee.finished_surveys?
-      = link_to giftee_gift_recommendations_path(giftee), class: 'btn btn-primary btn-block' do
-        VIEW #{GiftRecommendation.select_for_display(giftee.gift_recommendations).size} RECOMMENDATIONS
+      - num_recommendations = GiftRecommendation.select_for_display(giftee.gift_recommendations)&.size || 0
+      - if num_recommendations > 0
+        = link_to giftee_gift_recommendations_path(giftee), class: 'btn btn-primary btn-block' do
+          VIEW #{num_recommendations} RECOMMENDATIONS
+      - else
+        .btn.btn-primary.btn-block
+          NO RECOMMENDATIONS
     - else
       :ruby
         question_response = giftee.first_unanswered_response

@@ -1,8 +1,4 @@
-- css_classes = locals[:css_classes]
-%div.clearfix{class: css_classes[:container]}
-  -# .gr-image-carousel__image-text
-  .gr-image-carousel__nav-links.clearfix.pull-right
-    = link_to '#', class: 'wrapt-carousel__nav gr-image-carousel__nav prev', onClick: "ga('send', 'event', 'recommendation', 'navigation', 'picture nav');" do
-      =embedded_svg('icon-caret-left', class: "gr-carousel__image-nav--caret-left")
-    = link_to '#', class: 'wrapt-carousel__nav gr-image-carousel__nav next', onClick: "ga('send', 'event', 'recommendation', 'navigation', 'picture nav');" do
-      =embedded_svg('icon-caret-right', class: "gr-carousel__image-nav--caret-right")
+= link_to gift_image_path(@prev_gift_image, {direction: 'prev'}), class: 'wrapt-carousel__nav gr-image-carousel__nav prev', onClick: "ga('send', 'event', 'recommendation', 'navigation', 'picture nav');", data: {loads_in_pjax_image_carousel: true} do
+  =embedded_svg('icon-caret-left', class: "gr-carousel__image-nav--caret-left")
+= link_to gift_image_path(@next_gift_image, {direction: 'next'}), class: 'wrapt-carousel__nav gr-image-carousel__nav prev', onClick: "ga('send', 'event', 'recommendation', 'navigation', 'picture nav');", data: {loads_in_pjax_image_carousel: true} do
+  =embedded_svg('icon-caret-right', class: "gr-carousel__image-nav--caret-right")

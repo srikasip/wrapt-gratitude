@@ -1,55 +1,61 @@
 %h3 Shipping Details
 
-.row
-  .col-xs-6
-    %p
-      %strong Via:
-      = @purchase_order.shipping_carrier_name
-      = @purchase_order.shipping_service_level_name
-      %br
-      %strong Box:
-      = @purchase_order.shipping_parcel.description
-      %br
-      - if @purchase_order.shipping_label&.url.present?
-        = link_to @purchase_order.shipping_label.url, target: '_blank' do
-          [Download Shipping Label]
-      - elsif @purchase_order.cancelled?
-        %strong Order rejected by vendor
-      - elsif params[:action] != 'details'
-        = form_tag url_for(action: :change_shipping),method: :patch do
-          %div{style: 'display: none;'}
-            Change the carrier to
-            %br
-            = collection_select :shipping_carrier, :id, @shipping_carriers, :id, :name, selected: @purchase_order.shipping_carrier.id
-            %br
-            Change the service to
-            %br
-            = collection_select :shipping_service_level, :id, @shipping_service_levels, :id, :name, selected:  @purchase_order.shipping_service_level.id
-            %br
-          Change the shipping box to
-          %br
-          = collection_select :parcel, :id, @shipping_parcels, :id, :description, selected: @purchase_order.shipping_parcel.id
-          :javascript
-            $('#parcel_id, #shipping_carrier_id, #shipping_service_level_id').change(function() {
-              $(this).closest('form').submit();
-            })
-
-        - if @purchase_order.vendor_acknowledgement_status.present?
-          %br
-          %p
-            The shipping label isn't quite ready yet, but
-            = link_to 'click here', url_for
-            to check again.  It shouldn't take more than a few moments.
-      - elsif @purchase_order.shipping_label.present? && !@purchase_order.shipping_label.success
-        %p
-          Please contact Wrapt about the shipping label as there was a problem
-          generating one.
-      - else
-        = link_to 'click here to check for the shipping label', url_for
-
-  - if @purchase_order.fulfill?
+- if @purchase_order.cancelled?
+  .row
     .col-xs-6
       %p
-        %strong Ship To:
+        Order Cancelled
+- else
+  .row
+    .col-xs-6
+      %p
+        %strong Via:
+        = @purchase_order.shipping_carrier_name
+        = @purchase_order.shipping_service_level_name
         %br
-        =formatted_address_from_hash(@purchase_order.shipment.address_to)
+        %strong Box:
+        = @purchase_order.shipping_parcel.description
+        %br
+        - if @purchase_order.shipping_label&.url.present?
+          = link_to @purchase_order.shipping_label.url, target: '_blank' do
+            [Download Shipping Label]
+        - elsif @purchase_order.cancelled?
+          %strong Order rejected by vendor
+        - elsif params[:action] != 'details'
+          = form_tag url_for(action: :change_shipping),method: :patch do
+            %div{style: 'display: none;'}
+              Change the carrier to
+              %br
+              = collection_select :shipping_carrier, :id, @shipping_carriers, :id, :name, selected: @purchase_order.shipping_carrier.id
+              %br
+              Change the service to
+              %br
+              = collection_select :shipping_service_level, :id, @shipping_service_levels, :id, :name, selected:  @purchase_order.shipping_service_level.id
+              %br
+            Change the shipping box to
+            %br
+            = collection_select :parcel, :id, @shipping_parcels, :id, :description, selected: @purchase_order.shipping_parcel.id
+            :javascript
+              $('#parcel_id, #shipping_carrier_id, #shipping_service_level_id').change(function() {
+                $(this).closest('form').submit();
+              })
+
+          - if @purchase_order.vendor_acknowledgement_status.present?
+            %br
+            %p
+              The shipping label isn't quite ready yet, but
+              = link_to 'click here', url_for
+              to check again.  It shouldn't take more than a few moments.
+        - elsif @purchase_order.shipping_label.present? && !@purchase_order.shipping_label.success
+          %p
+            Please contact Wrapt about the shipping label as there was a problem
+            generating one.
+        - else
+          = link_to 'click here to check for the shipping label', url_for
+
+    - if @purchase_order.fulfill?
+      .col-xs-6
+        %p
+          %strong Ship To:
+          %br
+          =formatted_address_from_hash(@purchase_order.shipment.address_to)

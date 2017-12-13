@@ -294,9 +294,9 @@ module Ec
         if po.forced_shipping_service_level.present?
           shipping_label.carrier = po.forced_shipping_carrier.name
           shipping_label.service_level = po.forced_shipping_service_level.name
-          shipping_label.shippo_object_id = po.rates.find { |r| r.dig('servicelevel', 'name') == po.forced_shipping_service_level.name }[:object_id]
+          shipping_label.shippo_rate_object_id = po.shipment.rates.find { |r| r.dig('servicelevel', 'token') == po.forced_shipping_service_level.shippo_token }['object_id']
         else
-          shipping_label.shippo_object_id = rate['object_id']
+          shipping_label.shippo_rate_object_id = rate['object_id']
           shipping_label.carrier = rate['provider']
           shipping_label.service_level = rate.dig('servicelevel', 'name')
         end

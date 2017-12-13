@@ -21,13 +21,13 @@ module Ec
     belongs_to :purchase_order
     belongs_to :customer_order
 
-    validates :shippo_object_id, length: { is: 32 }, presence: true
+    validates :shippo_rate_object_id, length: { is: 32 }, presence: true
     validates :shipment_id, uniqueness: true
 
     validates :tracking_number, presence: true, if: :success
     validates :url, presence: true, if: :success
 
-    delegate :cart_id, to: :shipment, prefix: false
+    delegate :cart_id, to: :shipment, prefix: false, allow_nil: true
 
     define_method(:shipped?)   { self.tracking_status == T_TRANSIT }
     define_method(:delivered?) { self.tracking_status == T_DELIVERED }
@@ -35,7 +35,7 @@ module Ec
     def run!
       # Purchase the desired rate.
       self.api_response = Shippo::Transaction.create(
-        :rate            => self.shippo_object_id,
+        :rate            => self.shippo_rate_object_id,
         :label_file_type => "PDF",
         :async           => false
       )
@@ -51,6 +51,36 @@ module Ec
 
       self.success = false
       self.api_response = JSON.parse(e.response.body) rescue {msg: e.message}
+    end
+
+    def refund!
+      return unless shippo_object_id.present?
+
+      begin
+        # https://goshippo.com/docs/refunds
+        self.refund_api_response = Shippo::Refund.create({
+          transaction: shippo_object_id,
+          async: false
+        })
+      rescue Shippo::Exceptions::APIServerError => e
+        self.refund_api_response = {error: e.response.to_s}
+
+        if e.response.to_s.match(/Refund with this Transaction already exists/)
+          self.cancelled = true
+        end
+      end
+
+      if refund_api_response['status'] != 'ERROR'
+        self.cancelled = true
+      end
+
+      save!
+    end
+
+    def shippo_object_id
+      return nil unless api_response.present?
+
+      api_response.dig('object_id')
     end
 
     private def _cache_the_results
