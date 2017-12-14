@@ -271,9 +271,9 @@ module Ec
       co.shipping_cost_in_cents   = 0
       co.total_to_charge_in_cents = 0
       co.promo_total_in_cents     = 0
+      co.promo_free_subtotal_in_cents = 0
 
       _calculate_promo_discount!
-
 
       co.purchase_orders.each do |po|
         vendor = po.vendor
@@ -287,27 +287,33 @@ module Ec
         co.handling_in_cents      += s_and_h.handling_in_cents
         co.shipping_in_cents      += s_and_h.shipping_in_cents
 
-        # If we have to refund, we need to know this at the PO level.
-        gift_line_items = po.line_items.flat_map(&:related_line_items).uniq
-        raise "Should only be one gift" if gift_line_items.length != 1
-        gift_amount_for_customer_in_cents = \
-          (gift_line_items.first.taxable_total_price_in_dollars * 100.0).round
-
-        co.subtotal_in_cents += gift_amount_for_customer_in_cents
-
         po.update_attributes({
           shipping_cost_in_cents: s_and_h.shipping_cost_in_cents,
           shipping_in_cents: s_and_h.shipping_in_cents,
           handling_cost_in_cents: s_and_h.handling_cost_in_cents,
           handling_in_cents: s_and_h.handling_in_cents,
-          gift_amount_for_customer_in_cents: gift_amount_for_customer_in_cents,
-          tax_amount_for_customer_in_cents: self.tax_service.tax_in_cents_for_purchase_order(po)
         })
       end
 
       # Must come after shipping and promo code taken care of as those affect taxable amount
       self.tax_service.estimate!
       co.taxes_in_cents = self.tax_service.tax_in_cents
+
+      co.purchase_orders.each do |po|
+        # If we have to refund, we need to know this at the PO level.
+        gift_line_items = po.line_items.flat_map(&:related_line_items).uniq
+        raise "Should only be one gift" if gift_line_items.length != 1
+        gift_amount_for_customer_in_cents = (gift_line_items.first.taxable_total_price_in_dollars * 100.0).round
+
+        co.subtotal_in_cents += gift_amount_for_customer_in_cents
+
+        co.promo_free_subtotal_in_cents += (gift_line_items.first.total_price_in_dollars * 100.0).round
+
+        po.update_attributes({
+          tax_amount_for_customer_in_cents: self.tax_service.tax_in_cents_for_purchase_order(po),
+          gift_amount_for_customer_in_cents: gift_amount_for_customer_in_cents
+        })
+      end
 
       co.total_to_charge_in_cents = \
         co.subtotal_in_cents +
@@ -353,9 +359,7 @@ module Ec
 
         customer_order.promo_total_in_cents += delta_in_cents
 
-        line_item.taxable_total_price_in_dollars = line_item.total_price_in_dollars - (delta_in_cents / 100).round
-
-        #debugger
+        line_item.taxable_total_price_in_dollars = (line_item.total_price_in_dollars - (delta_in_cents / 100.0)).round(2)
 
         line_item.save!
       end

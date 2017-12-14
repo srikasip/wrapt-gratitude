@@ -114,6 +114,7 @@ class Ecommerce::CheckoutController < ApplicationController
       @shipping_recalculated = true
       @customer_purchase.update_order_totals!
     end
+@customer_purchase.update_order_totals!
     _load_progress_bar
   end
 

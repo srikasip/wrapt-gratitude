@@ -1,4 +1,4 @@
-= render 'ecommerce/checkout/edit_review_summary_item', label: 'Subtotal', co_attr: :subtotal_in_dollars, value_in_dollars: true, value: nil, customer_order: customer_order, markout: false
+= render 'ecommerce/checkout/edit_review_summary_item', label: 'Subtotal', co_attr: :promo_free_subtotal_in_dollars, value_in_dollars: true, value: nil, customer_order: customer_order, markout: false
 = render 'ecommerce/checkout/edit_review_summary_item', label: 'Tax', co_attr: :taxes_in_dollars, value_in_dollars: true, value: nil, customer_order: customer_order, markout: false
 - if customer_order.gift_wrapt?
   = render 'ecommerce/checkout/edit_review_summary_item', label: 'Gift Wrapt', co_attr: :uncharged_gift_wrapt_fee_in_dollars, value_in_dollars: true, value: nil , customer_order: customer_order, markout: true
