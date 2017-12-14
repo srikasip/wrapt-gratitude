@@ -275,9 +275,6 @@ module Ec
       _calculate_promo_discount!
 
 
-      self.tax_service.capture!
-      co.taxes_in_cents = self.tax_service.tax_in_cents
-
       co.purchase_orders.each do |po|
         vendor = po.vendor
         rate = ShippingService.find_rate(rates: po.shipment.rates, shipping_choice: shipping_choice, vendor: vendor)
@@ -307,6 +304,10 @@ module Ec
           tax_amount_for_customer_in_cents: self.tax_service.tax_in_cents_for_purchase_order(po)
         })
       end
+
+      # Must come after shipping and promo code taken care of as those affect taxable amount
+      self.tax_service.estimate!
+      co.taxes_in_cents = self.tax_service.tax_in_cents
 
       co.total_to_charge_in_cents = \
         co.subtotal_in_cents +
@@ -365,6 +366,7 @@ module Ec
       charging_service.charge!({
         before_hook: -> { _adjust_inventory! },
         after_hook: -> {
+          self.tax_service.capture!
           self.tax_service.reconcile!
           Ec::PurchaseService::CancelService.recancel_if_needed!(customer_order)
         }

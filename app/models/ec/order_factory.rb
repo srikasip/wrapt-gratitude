@@ -3,7 +3,7 @@
 module Ec
   module OrderFactory
     NUM_GIFTS = 1
-    PROMO_CHANCE = 1.00
+    PROMO_CHANCE = 0.75
 
     # This is designed to allow a real order on production, but for a dummy gift.
     # Real shipping labels, credit cards, and taxes are involved.
@@ -248,10 +248,8 @@ module Ec
             description: 'auto',
             start_date: Date.yesterday,
             end_date: Date.tomorrow,
-            #amount: Random.rand(10)+1,
-            #mode: PromoCode::MODES.sample
-            amount: 50,
-            mode: 'percent'
+            amount: Random.rand(10)+1,
+            mode: PromoCode::MODES.sample
           })
           co = customer_purchase.customer_order
           co.set_promo_code(promo_code)
