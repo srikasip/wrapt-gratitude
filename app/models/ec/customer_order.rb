@@ -57,7 +57,7 @@ module Ec
     define_method(:handling_cost_in_dollars)     { self.handling_in_cents / 100.0 }
     define_method(:combined_handling_in_dollars) { (self.shipping_in_cents + self.handling_in_cents) / 100.0 }
     define_method(:total_to_charge_in_dollars)   { self.total_to_charge_in_cents / 100.0 }
-    define_method(:promo_delta_in_dollars)       { self.promo_delta_in_cents / 100.0 }
+    define_method(:promo_total_in_dollars)       { self.promo_total_in_cents / 100.0 }
 
     define_method(:to_service)                   { PurchaseService.new(cart_id: self.cart_id) }
 

@@ -63,6 +63,7 @@
           %th.text-right Quantity
           %th.text-right Price Each
           %th.text-right Total Price
+          %th.text-right After Discount Total Price
 
       %tbody
         - @order.line_items.each do |line_item|
@@ -95,48 +96,54 @@
             %td.text-right= number_to_currency(line_item.price_per_each_in_dollars)
             %td.text-right
               %i= number_to_currency(line_item.total_price_in_dollars)
+            %td.text-right
+              %i= number_to_currency(line_item.taxable_total_price_in_dollars)
 
         %tr{style: 'border-top-style: double'}
           %td
             %i Sub-total
-          %td{colspan: 6}
+          %td{colspan: 7}
           %td.text-right
             %b= number_to_currency(@order.subtotal_in_dollars)
 
         %tr
           %td
             %i Shipping
-          %td{colspan: 6}
+          %td{colspan: 7}
           %td.text-right
             %i= number_to_currency(@order.shipping_in_dollars)
 
         %tr
           %td
             %i Handling
-          %td{colspan: 6}
+          %td{colspan: 7}
           %td.text-right
             %i= number_to_currency(@order.handling_in_dollars)
 
         %tr
           %td
             %i Taxes
-          %td{colspan: 6}
+          %td{colspan: 7}
           %td.text-right
             %i= number_to_currency(@order.taxes_in_dollars)
         - if @order.promo_code.present?
           %tr
-            %td
-              %i= "Promo: #{@order.promo_code}"
-              - if @order.promo_code_mode == 'percent'
-                %i= "(#{@order.promo_code_amount}%)"
-            %td{colspan: 6}
-            %td.text-right
-              %i= "-#{number_to_currency(@order.promo_delta_in_dollars)}"
-        
+            %td{colspan: 3}
+              %i
+                Promo
+                %strong= @order.promo_code
+                - if @order.promo_code_mode == 'percent'
+                  = "(#{@order.promo_code_amount}% off)"
+                -else
+                  = "#{number_to_currency(@order.promo_total_in_dollars)} off"
+            %td{colspan: 4}
+            %td.text-right{colspan: 2}
+              %i applied above
+
         %tr{style: 'border-top-style: double'}
           %td
             %i Total
-          %td{colspan: 6}
+          %td{colspan: 7}
           %td.text-right
             %b= number_to_currency(@order.total_to_charge_in_dollars)
 
@@ -144,7 +151,7 @@
           %tr{style: 'background: #F8CDCD'}
             %td
               %i Refunded
-            %td{colspan: 6}
+            %td{colspan: 7}
             %td.text-right
               %b= number_to_currency(@order.charge.amount_refunded_in_dollars)
 

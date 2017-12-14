@@ -93,7 +93,7 @@
                   %i= "(#{order.promo_code_amount}%)"
               %td.text-right
                 - if order.promo_code
-                  %i= "-#{number_to_currency(order.promo_delta_in_dollars)}"
+                  %i= "-#{number_to_currency(order.promo_total_in_dollars)}"
               %td
 
 

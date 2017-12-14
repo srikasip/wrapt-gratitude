@@ -50,12 +50,12 @@ module Ec
         raise "Cannot capture a reconciled transaction"
       end
 
-
       _safely do
         if our_transaction.captured?
           our_transaction.void!
         end
         our_transaction.capture!
+debugger if !our_transaction.valid?
         our_transaction.save!
       end
     end

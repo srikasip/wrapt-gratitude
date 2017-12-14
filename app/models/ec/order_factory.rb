@@ -2,7 +2,8 @@
 
 module Ec
   module OrderFactory
-    NUM_GIFTS = 6
+    NUM_GIFTS = 1
+    PROMO_CHANCE = 1.00
 
     # This is designed to allow a real order on production, but for a dummy gift.
     # Real shipping labels, credit cards, and taxes are involved.
@@ -115,6 +116,7 @@ module Ec
             gift.gift_parcels.create(parcel: Parcel.active.where(usage: 'shipping').first)
           end
         end
+
       end
 
       good_cards = [
@@ -210,36 +212,62 @@ module Ec
         }})
       )
 
-      # A different page in the shopping process
-      customer_purchase = PurchaseService.new(cart_id: cart_id)
-      customer_purchase.set_address!(
-        ActionController::Parameters.new({ec_customer_order: {
-          ship_street1: '1990 M St NW',
-          ship_street2: '102',
-          ship_city: 'Washington',
-          ship_zip: '20036',
-          ship_state: 'DC',
-          ship_country: 'US',
-          email: 'example@example.com',
-        }})
-      )
+      again = true
+      while(again) do
+        # A different page in the shopping process
+        customer_purchase = PurchaseService.new(cart_id: cart_id)
+        customer_purchase.set_address!(
+          ActionController::Parameters.new({ec_customer_order: {
+            ship_street1: '1990 M St NW',
+            ship_street2: "Unit #{Random.rand(9000)}",
+            ship_city: 'Washington',
+            ship_zip: '20036',
+            ship_state: 'DC',
+            ship_country: 'US',
+            email: 'example@example.com',
+          }})
+        )
 
-      # usps only since I haven't yet developed the logic for handling shipping
-      # across all the choices/vendors/pos to be consistent yet. usps options are always
-      # choices, so they're safe.
-      choices = customer_purchase.shipping_choices_for_view
-      picked_choice = choices.sample
+        # usps only since I haven't yet developed the logic for handling shipping
+        # across all the choices/vendors/pos to be consistent yet. usps options are always
+        # choices, so they're safe.
+        #choices = customer_purchase.shipping_choices_for_view
+        #picked_choice = choices.sample
 
-      # A different virtual page load in the shopping process
-      customer_purchase = PurchaseService.new(cart_id: cart_id)
-      customer_purchase.pick_shipping!(picked_choice.value)
+        # A different virtual page load in the shopping process
+        customer_purchase = PurchaseService.new(cart_id: cart_id)
+        #customer_purchase.pick_shipping!(picked_choice.value)
+        customer_purchase.pick_shipping!('cheapest')
 
-      # A different virtual page load in the shopping process
-      customer_purchase = PurchaseService.new(cart_id: cart_id)
-      params = ActionController::Parameters.new({stripeToken: stripe_token.id, 'address-zip'.to_sym => '66212'})
-      customer_purchase.init_our_charge_record!(params)
+        # A different virtual page load in the shopping process
+        customer_purchase = PurchaseService.new(cart_id: cart_id)
 
-      # A different virtual page load in the shopping process
+        if Random.rand > (1 - PROMO_CHANCE)
+          promo_code = PromoCode.create!({
+            value: SecureRandom.hex(5),
+            description: 'auto',
+            start_date: Date.yesterday,
+            end_date: Date.tomorrow,
+            #amount: Random.rand(10)+1,
+            #mode: PromoCode::MODES.sample
+            amount: 50,
+            mode: 'percent'
+          })
+          co = customer_purchase.customer_order
+          co.set_promo_code(promo_code)
+          co.save!
+        end
+
+        params = ActionController::Parameters.new({stripeToken: stripe_token.id, 'address-zip'.to_sym => '66212'})
+        customer_purchase.init_our_charge_record!(params)
+
+        # Simulate going back and changing things
+        if Random.rand > 0.5
+          again = false
+        end
+      end
+
+      # A different virtual page load in the shopping process (finalize step)
       customer_purchase = Ec::PurchaseService.new(cart_id: cart_id)
       customer_purchase.authorize!
 

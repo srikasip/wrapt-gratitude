@@ -35,7 +35,7 @@ class PromoCode < ApplicationRecord
     self.amount ||= 10
   end
 
-  def delta_in_cents cents
+  def delta_in_cents cents=0
     delta = \
       if percent?
         (cents * percentage_in_maths).round
