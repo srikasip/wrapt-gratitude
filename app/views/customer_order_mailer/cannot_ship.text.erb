@@ -3,7 +3,7 @@ Dear <%= @user.full_name %>,
 Because our gifts are one-of-a-kind and often limited editions, we learned
 that <%= @customer_order.line_items.count > 1 ? 'one of your gifts' : 'your gift' %> is currently out of stock.
 Would you like to review <% @customer_order.profile_name %>’s
-other recommended gifts and choose from her personalized collection?
+other recommended gifts and choose from their personalized collection?
 
 View More Gift Recommendations
 <%= giftee_gift_recommendations_url(@profile) %>
