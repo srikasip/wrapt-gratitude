@@ -49,16 +49,18 @@ module Ec
 
     define_method(:ship_street1_present?) { self.ship_street1.present?  }
 
-    define_method(:subtotal_in_dollars)          { self.subtotal_in_cents / 100.0 } # gifts' amount, summed
-    define_method(:shipping_in_dollars)          { self.shipping_in_cents / 100.0 } # Shipping amount charged to customer
-    define_method(:shipping_cost_in_dollars)     { self.shipping_cost_in_cents / 100.0 } # Wrapt's cost
-    define_method(:taxes_in_dollars)             { self.taxes_in_cents / 100.0 } # duh, taxes.
-    define_method(:handling_in_dollars)          { self.handling_in_cents / 100.0 }
-    define_method(:handling_cost_in_dollars)     { self.handling_in_cents / 100.0 }
-    define_method(:combined_handling_in_dollars) { (self.shipping_in_cents + self.handling_in_cents) / 100.0 }
-    define_method(:total_to_charge_in_dollars)   { self.total_to_charge_in_cents / 100.0 }
+    define_method(:subtotal_in_dollars)            { self.subtotal_in_cents / 100.0 } # gifts' amount, summed
+    define_method(:promo_free_subtotal_in_dollars) { self.promo_free_subtotal_in_cents / 100.0 } # gifts' amount, summed
+    define_method(:shipping_in_dollars)            { self.shipping_in_cents / 100.0 } # Shipping amount charged to customer
+    define_method(:shipping_cost_in_dollars)       { self.shipping_cost_in_cents / 100.0 } # Wrapt's cost
+    define_method(:taxes_in_dollars)               { self.taxes_in_cents / 100.0 } # duh, taxes.
+    define_method(:handling_in_dollars)            { self.handling_in_cents / 100.0 }
+    define_method(:handling_cost_in_dollars)       { self.handling_in_cents / 100.0 }
+    define_method(:combined_handling_in_dollars)   { (self.shipping_in_cents + self.handling_in_cents) / 100.0 }
+    define_method(:total_to_charge_in_dollars)     { self.total_to_charge_in_cents / 100.0 }
+    define_method(:promo_total_in_dollars)         { self.promo_total_in_cents / 100.0 }
 
-    define_method(:to_service)                   { PurchaseService.new(cart_id: self.cart_id) }
+    define_method(:to_service)                     { PurchaseService.new(cart_id: self.cart_id) }
 
     define_method(:uncharged_gift_wrapt_fee_in_dollars)         { line_items.sum(&:quantity) * 8 }
     define_singleton_method(:uncharged_curation_fee_in_dollars) { 15 }
@@ -82,6 +84,12 @@ module Ec
       names = shipments.map { |x| x.address_to['name'] }.uniq
       raise "what?" if names.length != 1
       names.first
+    end
+
+    def set_promo_code(promo)
+      self.promo_code = promo.value
+      self.promo_code_amount = promo.amount
+      self.promo_code_mode = promo.mode
     end
 
     private

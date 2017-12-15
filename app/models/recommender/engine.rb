@@ -102,7 +102,8 @@ module Recommender
     end
 
     def sort_gift_scores
-      sorter = Recommender::PostProcessing::CategorySort.new(@gift_scores)
+      #sorter = Recommender::PostProcessing::CategorySort.new(@gift_scores)
+      sorter = Recommender::PostProcessing::DistributedSort.new(@gift_scores)
       @gift_scores = sorter.sort
     end
 

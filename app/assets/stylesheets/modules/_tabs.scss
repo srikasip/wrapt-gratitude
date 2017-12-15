@@ -24,6 +24,12 @@
   }
 }
 
+.ma-giftee-card__header .wrapt-styled-tabs-1__tab a {
+  // we removed the reminders tab. to keep the styling the same this bit is here.
+  // if we add reminders tab back in you can remove
+  width: 50%;
+}
+
 .wrapt-styled-tabs-1__tab.active a,
 .wrapt-styled-tabs-1__tab a:hover,
 .wrapt-styled-tabs-1__tab a:active,

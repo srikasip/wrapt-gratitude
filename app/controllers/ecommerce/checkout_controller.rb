@@ -87,14 +87,24 @@ class Ecommerce::CheckoutController < ApplicationController
   end
 
   def save_payment
-    if @customer_purchase.init_our_charge_record!(params)
-      redirect_to action: :edit_review
-    else
-      flash.now[:notice] = "There was a problem saving your response."
-      render :edit_payment
+    @promo_code = params[:promo_code]
+    if @promo_code.present?
+      _add_promo!
     end
-
-    @checkout_step = :payment
+    if @promo_error_message.present?
+      @checkout_step = :payment
+      _load_progress_bar
+      render :edit_payment
+    else
+      if @customer_purchase.init_our_charge_record!(params)
+        redirect_to action: :edit_review
+      else
+        flash.now[:notice] = "There was a problem saving your response."
+        @checkout_step = :payment
+        _load_progress_bar
+        render :edit_payment
+      end
+    end
   end
 
   def edit_review
@@ -126,6 +136,20 @@ class Ecommerce::CheckoutController < ApplicationController
   end
 
   private
+
+  def _add_promo!
+    @promo = PromoCode.where('start_date <= ?', Date.today).find_by(value: @promo_code)
+    if @promo.present?
+      if @promo.end_date >= Date.today
+        @customer_order.set_promo_code(@promo)
+        @customer_order.save!
+      else
+        @promo_error_message = "We're Sorry &#8212; That code has expired.".html_safe
+      end
+    else
+      @promo_error_message = "We're Sorry &#8212; We don't recognize that that promo code.".html_safe
+    end
+  end
 
   def _load_progress_bar
     @pb = Ec::ProgressBarViewModel.new(@customer_order, @customer_purchase, @checkout_step)
