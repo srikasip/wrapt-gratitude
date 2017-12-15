@@ -98,7 +98,7 @@ module Ec
                 }
               },
               {
-                "amount": line_item.total_price_in_dollars,
+                "amount": line_item.taxable_total_price_in_dollars,
                 "taxCode": (gift.tax_code&.code || Tax::Code.default.code),
                 "description": gift.title,
                 "Ref1": "Vendor: #{vendor.name}",

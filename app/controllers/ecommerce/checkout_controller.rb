@@ -138,9 +138,9 @@ class Ecommerce::CheckoutController < ApplicationController
   private
 
   def _add_promo!
-    @promo = PromoCode.where('start_date <= ?', Time.now).find_by(value: @promo_code)
+    @promo = PromoCode.where('start_date <= ?', Date.today).find_by(value: @promo_code)
     if @promo.present?
-      if @promo.end_date >= Time.now
+      if @promo.end_date >= Date.today
         @customer_order.set_promo_code(@promo)
         @customer_order.save!
       else

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171212193558) do
+ActiveRecord::Schema.define(version: 20171214164206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,43 +82,46 @@ ActiveRecord::Schema.define(version: 20171212193558) do
   end
 
   create_table "customer_orders", force: :cascade do |t|
-    t.integer  "user_id",                                 null: false
-    t.integer  "profile_id",                              null: false
-    t.string   "cart_id",                                 null: false
+    t.integer  "user_id",                                     null: false
+    t.integer  "profile_id",                                  null: false
+    t.string   "cart_id",                                     null: false
     t.string   "shipping_choice"
-    t.string   "order_number",                            null: false
-    t.string   "status",                                  null: false
-    t.string   "recipient_name",                          null: false
-    t.string   "ship_street1",                            null: false
+    t.string   "order_number",                                null: false
+    t.string   "status",                                      null: false
+    t.string   "recipient_name",                              null: false
+    t.string   "ship_street1",                                null: false
     t.string   "ship_street2"
     t.string   "ship_street3"
-    t.string   "ship_city",                               null: false
-    t.string   "ship_state",                              null: false
-    t.string   "ship_zip",                                null: false
-    t.string   "ship_country",                            null: false
+    t.string   "ship_city",                                   null: false
+    t.string   "ship_state",                                  null: false
+    t.string   "ship_zip",                                    null: false
+    t.string   "ship_country",                                null: false
     t.text     "notes"
-    t.integer  "subtotal_in_cents",        default: 0,    null: false
-    t.integer  "taxes_in_cents",           default: 0,    null: false
-    t.integer  "shipping_in_cents",        default: 0,    null: false
-    t.integer  "shipping_cost_in_cents",   default: 0,    null: false
-    t.integer  "total_to_charge_in_cents", default: 0,    null: false
-    t.date     "created_on",                              null: false
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
-    t.boolean  "gift_wrapt",               default: true, null: false
-    t.boolean  "include_note",             default: true, null: false
+    t.integer  "subtotal_in_cents",            default: 0,    null: false
+    t.integer  "taxes_in_cents",               default: 0,    null: false
+    t.integer  "shipping_in_cents",            default: 0,    null: false
+    t.integer  "shipping_cost_in_cents",       default: 0,    null: false
+    t.integer  "total_to_charge_in_cents",     default: 0,    null: false
+    t.date     "created_on",                                  null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+    t.boolean  "gift_wrapt",                   default: true, null: false
+    t.boolean  "include_note",                 default: true, null: false
     t.text     "note_content"
-    t.integer  "handling_cost_in_cents",   default: 0,    null: false
-    t.integer  "handling_in_cents",        default: 0,    null: false
+    t.integer  "handling_cost_in_cents",       default: 0,    null: false
+    t.integer  "handling_in_cents",            default: 0,    null: false
     t.date     "submitted_on"
-    t.integer  "ship_to",                  default: 0
+    t.integer  "ship_to",                      default: 0
     t.integer  "address_id"
-    t.boolean  "shipping_to_giftee",       default: true, null: false
-    t.boolean  "need_shipping_calculated", default: true, null: false
+    t.boolean  "shipping_to_giftee",           default: true, null: false
+    t.boolean  "need_shipping_calculated",     default: true, null: false
     t.string   "note_envelope_text"
     t.string   "promo_code"
     t.string   "promo_code_mode"
     t.integer  "promo_code_amount"
+    t.integer  "promo_delta_in_cents",         default: 0,    null: false
+    t.integer  "promo_total_in_cents",         default: 0
+    t.integer  "promo_free_subtotal_in_cents", default: 0
     t.index ["address_id"], name: "index_customer_orders_on_address_id", using: :btree
     t.index ["order_number"], name: "index_customer_orders_on_order_number", unique: true, using: :btree
     t.index ["profile_id"], name: "index_customer_orders_on_profile_id", using: :btree
@@ -278,17 +281,18 @@ ActiveRecord::Schema.define(version: 20171212193558) do
   end
 
   create_table "line_items", force: :cascade do |t|
-    t.integer  "orderable_id",                               null: false
-    t.string   "orderable_type",                             null: false
-    t.integer  "order_id",                                   null: false
-    t.string   "order_type",                                 null: false
+    t.integer  "orderable_id",                                   null: false
+    t.string   "orderable_type",                                 null: false
+    t.integer  "order_id",                                       null: false
+    t.string   "order_type",                                     null: false
     t.integer  "vendor_id"
-    t.boolean  "accounted_for_in_inventory", default: false, null: false
+    t.boolean  "accounted_for_in_inventory",     default: false, null: false
     t.decimal  "price_per_each_in_dollars"
     t.integer  "quantity"
     t.decimal  "total_price_in_dollars"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.decimal  "taxable_total_price_in_dollars"
     t.index ["vendor_id"], name: "index_line_items_on_vendor_id", using: :btree
   end
 

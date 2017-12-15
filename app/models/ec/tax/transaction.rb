@@ -16,7 +16,7 @@ module Ec
     belongs_to :customer_order
 
     validates :api_request_payload, presence: true
-    validates :api_capture_response, presence: true
+    validate  :_some_response
     validates :cart_id, presence: true
     validates :tax_in_dollars, numericality: { greater_than_or_equal_to: 0 }, if: :success?
     validates :transaction_code, presence: true, if: :success?
@@ -101,13 +101,20 @@ module Ec
 
     private
 
+    def _some_response
+      return if api_estimation_response.present? || api_capture_response.present?
+
+      errors[:api_estimation_response] << "should be set (or the capture response)"
+      errors[:api_capture_response] << "should be set (or the estimation response)"
+    end
+
     def _cache_estimation_results
       if api_estimation_response['error'].present?
         self.success = false
         _email_error(api_estimation_response['error'])
       else
         self.tax_in_dollars = api_estimation_response['lines'].sum { |x| x['taxCalculated'].to_f }
-        self.transaction_code = api_estimation_response['code']
+        self.transaction_code = 'N/A (estimated tax)' #api_estimation_response['code']
         self.success = true
       end
     end

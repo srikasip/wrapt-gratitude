@@ -179,7 +179,12 @@ module Ec
       end
     end
 
-    delegate :init_our_charge_record!, to: :charging_service
+    def init_our_charge_record!(params)
+      _safely do
+        update_order_totals!
+      end
+      self.charging_service.init_our_charge_record!(params)
+    end
 
     def authorize!
       _sanity_check!
@@ -256,8 +261,6 @@ module Ec
     delegate :need_shipping_calculated, to: :customer_order
 
     def update_order_totals!
-      self.tax_service.capture!
-
       co = self.customer_order.reload
       shipping_choice = co.shipping_choice
 
@@ -267,12 +270,10 @@ module Ec
       co.shipping_in_cents        = 0
       co.shipping_cost_in_cents   = 0
       co.total_to_charge_in_cents = 0
+      co.promo_total_in_cents     = 0
+      co.promo_free_subtotal_in_cents = 0
 
-      co.line_items.each do |line_item|
-        co.subtotal_in_cents += line_item.total_price_in_dollars * 100
-      end
-
-      co.taxes_in_cents = self.tax_service.tax_in_cents
+      _calculate_promo_discount!
 
       co.purchase_orders.each do |po|
         vendor = po.vendor
@@ -286,23 +287,39 @@ module Ec
         co.handling_in_cents      += s_and_h.handling_in_cents
         co.shipping_in_cents      += s_and_h.shipping_in_cents
 
-        # If we have to refund, we need to know this at the PO level.
-        gifts = po.line_items.flat_map(&:related_line_items).uniq
-        raise "Should only be one gift" if gifts.length != 1
-        gift_amount_for_customer_in_cents = \
-          (gifts.first.price_per_each_in_dollars.to_f * 100).to_i
-
         po.update_attributes({
           shipping_cost_in_cents: s_and_h.shipping_cost_in_cents,
           shipping_in_cents: s_and_h.shipping_in_cents,
           handling_cost_in_cents: s_and_h.handling_cost_in_cents,
           handling_in_cents: s_and_h.handling_in_cents,
-          gift_amount_for_customer_in_cents: gift_amount_for_customer_in_cents,
-          tax_amount_for_customer_in_cents: self.tax_service.tax_in_cents_for_purchase_order(po)
         })
       end
 
-      co.total_to_charge_in_cents = co.subtotal_in_cents + co.shipping_in_cents + co.handling_in_cents + co.taxes_in_cents
+      # Must come after shipping and promo code taken care of as those affect taxable amount
+      self.tax_service.estimate!
+      co.taxes_in_cents = self.tax_service.tax_in_cents
+
+      co.purchase_orders.each do |po|
+        # If we have to refund, we need to know this at the PO level.
+        gift_line_items = po.line_items.flat_map(&:related_line_items).uniq
+        raise "Should only be one gift" if gift_line_items.length != 1
+        gift_amount_for_customer_in_cents = (gift_line_items.first.taxable_total_price_in_dollars * 100.0).round
+
+        co.subtotal_in_cents += gift_amount_for_customer_in_cents
+
+        co.promo_free_subtotal_in_cents += (gift_line_items.first.total_price_in_dollars * 100.0).round
+
+        po.update_attributes({
+          tax_amount_for_customer_in_cents: self.tax_service.tax_in_cents_for_purchase_order(po),
+          gift_amount_for_customer_in_cents: gift_amount_for_customer_in_cents
+        })
+      end
+
+      co.total_to_charge_in_cents = \
+        co.subtotal_in_cents +
+        co.shipping_in_cents +
+        co.handling_in_cents +
+        co.taxes_in_cents
 
       co.save!
     end
@@ -311,11 +328,49 @@ module Ec
 
     private
 
+    def promo_code
+      PromoCode.new(mode: customer_order.promo_code_mode, amount: customer_order.promo_code_amount)
+    end
+
+    def _calculate_promo_discount!
+      discount_cents_remaining =
+        if promo_code.fixed?
+          promo_code.delta_in_cents()
+        else
+          0
+        end
+
+      customer_order.line_items.each do |line_item|
+        amount_in_cents = line_item.total_price_in_dollars * 100
+
+        delta_in_cents = \
+          if promo_code.percent?
+            promo_code.delta_in_cents(amount_in_cents)
+          elsif promo_code.fixed? && amount_in_cents >= discount_cents_remaining
+            saveit = discount_cents_remaining
+            discount_cents_remaining -= discount_cents_remaining
+            saveit
+          elsif promo_code.fixed? && amount_in_cents < discount_cents_remaining
+            discount_cents_remaining -= amount_in_cents
+            amount_in_cents
+          else
+            0
+          end
+
+        customer_order.promo_total_in_cents += delta_in_cents
+
+        line_item.taxable_total_price_in_dollars = (line_item.total_price_in_dollars - (delta_in_cents / 100.0)).round(2)
+
+        line_item.save!
+      end
+    end
+
     def _unconditional_charge!
       Rails.logger.info "Charging cart ID #{cart_id}. Also adjusting inventory."
       charging_service.charge!({
         before_hook: -> { _adjust_inventory! },
         after_hook: -> {
+          self.tax_service.capture!
           self.tax_service.reconcile!
           Ec::PurchaseService::CancelService.recancel_if_needed!(customer_order)
         }
