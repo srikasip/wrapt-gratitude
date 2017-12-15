@@ -20,7 +20,7 @@
             = status.titleize
       .form-group{style: 'margin-top: 10px'}
         = search_field_tag 'search[order_number]', :order_number, placeholder: 'Order Number', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:order_number]
-        = date_field_tag 'search[created_on]', :created_on, placeholder: 'Date Created', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:created_on]
+        = date_field_tag 'search[updated_at]', :created_on, placeholder: 'Date Updated', class: 'form-control', style: 'min-width: 200px;', value: params[:search][:updated_at]
         = search_field_tag 'search[email]', :email, placeholder: 'Email', class: 'form-control', style: 'min-width: 300px;', value: params[:search][:email]
 
         %button.btn.btn-primary
@@ -34,7 +34,7 @@
       %thead
         %tr
           %th Order Number
-          %th Date Created
+          %th Date Updated
           %th Customer Email
           %th Status
           %th.text-right Amount
@@ -45,7 +45,7 @@
           - this_cycle_class = cycle('even-order', 'odd-order')
           %tr{class: this_cycle_class, style: 'border-top-style: double'}
             %td= order.order_number
-            %td= format_date(order.created_on)
+            %td= format_date(order.updated_at)
             %td= order.user_email
             %td= render "status", order:  order
             %td.text-right

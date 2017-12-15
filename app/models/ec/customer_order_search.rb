@@ -9,8 +9,10 @@ module Ec
         base_scope = base_scope.where("order_number ilike ?", '%'+search_params[:order_number].strip+'%')
       end
 
-      if search_params[:created_on].present?
-        base_scope = base_scope.where("created_on = ?", search_params[:created_on])
+      if search_params[:updated_at].present?
+        start_datetime = Date.parse(search_params[:updated_at])
+        end_datetime = start_datetime.tomorrow
+        base_scope = base_scope.where("updated_at between ? AND ?", start_datetime, end_datetime)
       end
 
       if search_params[:email].present?
