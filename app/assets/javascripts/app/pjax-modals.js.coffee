@@ -45,6 +45,7 @@ class window.PjaxModal
 
   closeModal: ->
     $('.js-ios-hack').show()
+    $('body').css(position: 'static')
     @modal.modal('hide')
     @reset()
 
@@ -57,6 +58,7 @@ class window.PjaxModal
     # https://hackernoon.com/how-to-fix-the-ios-11-input-element-in-fixed-modals-bug-aaf66c7ba3f8
     if navigator.userAgent.match(/iPhone/)
       $('.js-ios-hack').hide()
+      $('body').css(position: 'fixed')
 
 
 
