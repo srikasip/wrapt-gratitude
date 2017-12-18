@@ -24,6 +24,7 @@
 //= require cable
 //= require jquery.elevatezoom
 //= require d3.min
+//= require underscore
 
 // Application Code
 //= require app/init

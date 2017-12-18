@@ -10,6 +10,8 @@
   - css_classes.push('hidden-xs')
 
 - css_classes.push('active') unless direction
-- path = direction ? gift_path(gr, {direction: direction}) : 'javascript:void(0)'
+-# path = direction ? gift_path(gr, {direction: direction}) : 'javascript:void(0)'
+- path = gift_path(gr, {direction: direction})
+
 = link_to path, class: css_classes, data: {loads_in_pjax_carousel: true} do
   = render 'thumbnail', locals: {image: gr.gift.carousel_thumb, gift: gr.gift}
