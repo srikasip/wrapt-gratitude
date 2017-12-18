@@ -1,6 +1,6 @@
 module Admin
-  class PublicSurveyExportsController < ApplicationController
-    
+  class PublicSurveyExportsController < BaseController
+
     def create
       FileUtils.mkdir_p Rails.root.join("tmp", "public_survey_exports")
       target_file_path = Rails.root.join("tmp", "public_survey_exports", export_filename).to_s

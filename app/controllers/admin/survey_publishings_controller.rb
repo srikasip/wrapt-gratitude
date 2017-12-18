@@ -1,5 +1,5 @@
 module Admin
-  class SurveyPublishingsController < ApplicationController
+  class SurveyPublishingsController < BaseController
 
     before_action :set_survey
 

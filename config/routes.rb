@@ -116,6 +116,8 @@ Rails.application.routes.draw do
     resources :users, except: :show do
       member do
         post :resend_invitation
+        post :impersonate, controller: :impersonation
+        delete :deimpersonate, controller: :impersonation
       end
       collection do
         get :pending_invites
@@ -217,6 +219,7 @@ Rails.application.routes.draw do
     end
 
     resources :comments, only: [:create]
+
   end
 
   ####################
