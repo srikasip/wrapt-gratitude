@@ -44,14 +44,24 @@ class window.PjaxModal
       @closeModal()
 
   closeModal: ->
+    $('.js-ios-hack').show()
     @modal.modal('hide')
     @reset()
 
   open: ->
     @modal.modal('show')
 
+    # iOS 11 devices like iPhone 8 can display the cursor in the wrong
+    # place on the screen when the keyboard shows up. Hiding everything
+    # besides the modal seems to fix it.
+    # https://hackernoon.com/how-to-fix-the-ios-11-input-element-in-fixed-modals-bug-aaf66c7ba3f8
+    if navigator.userAgent.match(/iPhone/)
+      $('.js-ios-hack').hide()
+
+
+
   reset: ->
     @title.html("")
     @body.html("")
     @footer.html("")
-    @loading.show()      
+    @loading.show()
