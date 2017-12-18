@@ -1,25 +1,17 @@
 module PjaxCarouselController
-  # This module sets up controllers to load their content in a modal
-  # in response to pjax requests.  See pjax-modals.js.coffee for client side details
+  # This module sets up controllers to load their content in a carousel
+  # in response to pjax requests.  See pjax-carousel.js.coffee for client side details
   #
   # calling render will render a template to the modal
   # and calling redirect_to will trigger a redirect on the underlying page
   #
-  # note that inbound links should have `data-loads-in-pjax-modal` attributes
-  # and forms should have `data-submits-to-pjax-modal`
+  # note that inbound links should have `data-loads-in-pjax-carousel` attributes
 
   extend ActiveSupport::Concern
 
   included do
     layout ->(c) { pjax_request? ? pjax_layout : nil }
     after_action :set_pjax_url, if: :pjax_request?
-
-    # def form_html_options
-    #   Hash.new.tap do |result|
-    #     result['data-submits-to-pjax-modal'] = true if pjax_request?
-    #   end
-    # end
-    # helper_method :form_html_options
 
     def redirect_to_with_xhr_redirect(*args)
       if pjax_request?

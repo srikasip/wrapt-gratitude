@@ -4,7 +4,7 @@ class GiftRecommendationsController < ApplicationController
 
   before_action -> { @enable_chat = true }
 
-  GIFT_RECOMMENDATION_LIMIT = 6
+  # GIFT_RECOMMENDATION_LIMIT = 6
 
   helper CarouselHelper
 
@@ -14,6 +14,7 @@ class GiftRecommendationsController < ApplicationController
 
   def index
     current_user.update_attribute :last_viewed_profile_id, @profile.id
+    @gift_recommendation_id = params[:gift_recommendation_id].try(:to_i)
     load_gift_recommendation
     load_gift_image
   end
@@ -22,6 +23,9 @@ class GiftRecommendationsController < ApplicationController
     @gift_recommendation_id = params[:id].to_i
     load_gift_recommendation
     load_gift_image
+    unless pjax_request?
+      redirect_to giftee_gift_recommendations_path(@giftee_id, gift_recommendation_id: @gift_recommendation_id, carousel_page: @page)
+    end
   end
 
   def image
@@ -29,6 +33,9 @@ class GiftRecommendationsController < ApplicationController
     @gift_image_id = params[:id].to_i
     load_gift_recommendation
     load_gift_image 
+    unless pjax_request?
+      redirect_to giftee_gift_recommendations_path(@giftee_id, gift_recommendation_id: @gift_recommendation_id, carousel_page: @page)
+    end
   end
 
   def more_recommendations
@@ -72,7 +79,7 @@ class GiftRecommendationsController < ApplicationController
     gift_rec_size = @gift_recommendations.size
     if @gift_recommendations.any?
       if @gift_recommendation_id.present?
-        @gift_recommendation = @gift_recommendations.select{ |gr| gr.id == @gift_recommendation_id}.first || @gift_recommendations.first
+        @gift_recommendation = @gift_recommendations.select{ |gr| gr.id == @gift_recommendation_id }.first || @gift_recommendations.first
         @gift_index = @gift_recommendations.index(@gift_recommendation) || 0
       else
         @gift_recommendation = @gift_recommendations.first
@@ -116,8 +123,8 @@ class GiftRecommendationsController < ApplicationController
        gift_recommendations.
        where(gift_id: Gift.select(:id).can_be_sold, removed_by_expert: false).
        preload(gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field])
-    @all_gift_recommendations = all_gift_recommendations
+    
     load_pages(all_gift_recommendations)
-    @gift_recommendations = GiftRecommendation.select_for_display(all_gift_recommendations, @page)
+    @gift_recommendations = GiftRecommendation.select_for_display(all_gift_recommendations, @page) || []
   end
 end

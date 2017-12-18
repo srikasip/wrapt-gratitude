@@ -27,42 +27,10 @@ class window.PjaxCarouselLoadMore
     $('body').pjax @link_selector, @container.selector, timeout: false, push: false
     $('body').on 'click', @close_trigger_selector, (e) =>
       e.preventDefault()
-      console.log('click on close')
       @_close()
 
   _close: ->
     $(@close_selector).hide()
-
-
-window.CarouselDebounce = (func, wait, immediate) ->
-  result = null
-  args = null
-  timeout = null
-  timestamp = null
-  context = null
-  later = () =>
-    last = new Date - timestamp
-    if last < wait && last >= 0
-      timeout = setTimeout(later, wait - last)
-    else 
-      timeout = null
-      if !immediate
-        result = func.apply(context, args)
-        if !timeout
-          context = args = null
-  () =>
-    context = this
-    args = arguments
-    timestamp = new Date
-    callNow = immediate && !timeout
-    if !timeout
-      timeout = setTimeout(later, wait)
-    if callNow
-      result = func.apply(context, args)
-      context = args = null
-    result 
-
-
 
 class window.GiftImageCarousel
   constructor: (carousel_selector, image_selector, slides_selector) ->
@@ -78,7 +46,8 @@ class window.GiftImageCarousel
     @debounce = window.CarouselDebounce
 
     @_setHeight()
-    $(window).resize @debounce(@_setHeight, 1000)
+    resize = _.debounce(@_setHeight.bind(@), 1000)
+    $(window).resize resize
 
   _setHeight: ->
     @_setCarouselHeight()
@@ -117,7 +86,8 @@ class window.GiftCarousel
     @debounce = window.CarouselDebounce
     @_setHeight()
     @_setMobileClickEvents()
-    $(window).resize @debounce(@_setHeight, 1000)
+    resize = _.debounce(@_setHeight.bind(@), 1000)
+    $(window).resize resize
 
   _setHeight: ->
     @_setCarouselHeight()
