@@ -1,0 +1,3 @@
+- if session[:was_admin].present?
+  .wrapper--full-bleed__bg-03.pa1.impersonation_section
+    = link_to "Stop Impersonation of #{current_user.full_name}", deimpersonate_admin_user_path(session[:was_admin]), method: :delete

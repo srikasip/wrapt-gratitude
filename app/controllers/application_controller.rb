@@ -32,13 +32,8 @@ class ApplicationController < ActionController::Base
     true
   end
 
-  def admin_login_required?
-    false
-  end
-  helper_method :admin_login_required?
-
   def loop11_enabled?
-    !admin_login_required?
+    false
   end
   helper_method :loop11_enabled?
 

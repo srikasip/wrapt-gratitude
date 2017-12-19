@@ -51,6 +51,17 @@ parcels = [
 
   {
     active: true,
+    code: 'no-gift-box',
+    description: "No Gift Box",
+    height_in_inches: 0.01,
+    length_in_inches: 0.01,
+    usage: 'pretty',
+    weight_in_pounds: 0.01,
+    width_in_inches: 0.01,
+  },
+
+  {
+    active: true,
     code: 'usps-flat-rate-small',
     description: "Small USPS flat-rate box",
     shippo_template_name: 'USPS_SmallFlatRateBox',
@@ -82,6 +93,30 @@ parcels = [
     height_in_inches:  3.50,
     length_in_inches: 14.00,
     width_in_inches: 12.00,
+    usage: 'shipping'
+  },
+
+  {
+    active: true,
+    code: 'usps-flat-rate-envelope',
+    description: "USPS flat-rate envelope",
+    shippo_template_name: '',
+    weight_in_pounds: 0.5 * OUNZE_TO_POUNDS, # estimated
+    height_in_inches: 9.5,
+    length_in_inches: 12.5,
+    width_in_inches: 0.75,
+    usage: 'shipping'
+  },
+
+  {
+    active: true,
+    code: 'usps-flat-rate-cardboard-envelope',
+    description: "USPS flat-rate cardboard envelope",
+    shippo_template_name: 'USPS_FlatRateCardboardEnvelope',
+    weight_in_pounds: 0.75 * OUNZE_TO_POUNDS, # estimated
+    height_in_inches: 9.5,
+    length_in_inches: 12.5,
+    width_in_inches: 0.75,
     usage: 'shipping'
   },
 

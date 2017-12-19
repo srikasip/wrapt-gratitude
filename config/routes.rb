@@ -116,6 +116,8 @@ Rails.application.routes.draw do
     resources :users, except: :show do
       member do
         post :resend_invitation
+        post :impersonate, controller: :impersonation
+        delete :deimpersonate, controller: :impersonation
       end
       collection do
         get :pending_invites
@@ -190,6 +192,11 @@ Rails.application.routes.draw do
     namespace :ecommerce do
       get '/' => 'dashboard#index'
       get '/stats' => 'dashboard#stats'
+      resources :parcels do
+        member do
+          patch :undestroy
+        end
+      end
       resources :inventory_items, only: [:index] do
         collection do
           get :upload, action: 'upload_form'
@@ -217,6 +224,7 @@ Rails.application.routes.draw do
     end
 
     resources :comments, only: [:create]
+
   end
 
   ####################

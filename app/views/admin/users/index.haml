@@ -1,27 +1,38 @@
 = render 'index_header'
 
+- if params[:extended_view] != 'on'
+  = link_to 'Show extra columns', {extended_view: 'on'}
+- else
+  = link_to 'Hide extra columns', {extended_view: 'off'}
+
 .row
   .col-md-12
     %table.table
       %thead
         %tr
           %th Name
+          %th
           %th Email
           %th Access
-          %th Source
-          %th How Found
-          %th Beta Round
+          - if params[:extended_view] == 'on'
+            %th Source
+            %th How Found
+            %th Beta Round
           %th
 
       %tbody
         - @users.each do |user|
           %tr
-            %td= user.full_name
+            %td
+              = user.full_name
+            %td
+              = link_to 'Impersonate', impersonate_admin_user_path(user, context_params), :method => :post, class: 'btn btn-warning btn-xs'
             %td= user.email
             %td= user.admin? ? 'Admin' : 'Regular'
-            %td= user_sources[user.source]
-            %td= user.invitation_request_humanized_how_found
-            %td= beta_rounds[user.beta_round]
+            - if params[:extended_view] == 'on'
+              %td= user_sources[user.source]
+              %td= user.invitation_request_humanized_how_found
+              %td= beta_rounds[user.beta_round]
             %td
               = link_to 'Edit', edit_admin_user_path(user), class: 'btn btn-default btn-xs'
               = link_to 'Delete', admin_user_path(user, context_params), :method => :delete, :data => { :confirm => "Are you sure you want to delete this account?" }, class: 'btn btn-danger btn-xs'

@@ -9,9 +9,17 @@ App.PjaxModalLoader = class PjaxModalLoader {
     })
     if(modal_options) {
       $(".modal[data-pjax-modal]").modal(modal_options)
+      if (navigator.userAgent.match(/iPhone/)) {
+        $('.js-ios-hack').hide()
+        $('body').css({position: 'fixed'})
+      }
     }
     else{
       $(".modal[data-pjax-modal]").modal('show')
+      if (navigator.userAgent.match(/iPhone/)) {
+        $('.js-ios-hack').hide()
+        $('body').css({position: 'fixed'})
+      }
     }
 
   }
