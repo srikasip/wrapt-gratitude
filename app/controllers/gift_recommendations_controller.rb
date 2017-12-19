@@ -1,5 +1,5 @@
 class GiftRecommendationsController < ApplicationController
-  
+
   include PjaxCarouselController
 
   before_action -> { @enable_chat = true }
@@ -9,7 +9,6 @@ class GiftRecommendationsController < ApplicationController
   helper CarouselHelper
 
   before_action :load_profile
-  before_action :testing_redirect
   before_action :load_recommendations
 
   def index
@@ -32,7 +31,7 @@ class GiftRecommendationsController < ApplicationController
     @gift_recommendation_id = params[:gift_recommendation_id].to_i
     @gift_image_id = params[:id].to_i
     load_gift_recommendation
-    load_gift_image 
+    load_gift_image
     unless pjax_request?
       redirect_to giftee_gift_recommendations_path(@giftee_id, gift_recommendation_id: @gift_recommendation_id, carousel_page: @page)
     end
@@ -51,7 +50,7 @@ class GiftRecommendationsController < ApplicationController
 
   def next_index(current_index, size)
     n = current_index + 1
-    n > size-1 ? 0 : n 
+    n > size-1 ? 0 : n
   end
 
   def prev_index(current_index, size)
@@ -84,7 +83,7 @@ class GiftRecommendationsController < ApplicationController
       else
         @gift_recommendation = @gift_recommendations.first
         @gift_index = 0
-      end 
+      end
       @next_recommendation = @gift_recommendations[next_index(@gift_index, gift_rec_size)]
       @prev_recommendation = @gift_recommendations[prev_index(@gift_index, gift_rec_size)]
       @gift = @gift_recommendation.gift
@@ -96,13 +95,6 @@ class GiftRecommendationsController < ApplicationController
     @giftee_id = giftee_id
     @profile = current_user.owned_profiles.find(giftee_id)
     session[:giftee_id] = @profile.id
-  end
-
-  def testing_redirect
-    if params[:giftee_id].present? && current_user.unmoderated_testing_platform?
-      # send them to pretty url for loop11 testing
-      redirect_to testing_gift_recommendations_path
-    end
   end
 
   def load_pages(all_gift_recommendations)
@@ -123,7 +115,7 @@ class GiftRecommendationsController < ApplicationController
        gift_recommendations.
        where(gift_id: Gift.select(:id).can_be_sold, removed_by_expert: false).
        preload(gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field])
-    
+
     load_pages(all_gift_recommendations)
     @gift_recommendations = GiftRecommendation.select_for_display(all_gift_recommendations, @page) || []
   end
