@@ -25,7 +25,7 @@
     = svg 'symbol-defs'
     -# responsive is disabled so use .col-xs-* everywhere for bs columns
     = render 'layouts/impersonation'
-    .wrapper--full-bleed__bg-03.pb5
+    .wrapper--full-bleed__bg-03.pb5.js-ios-hack
       - if show_top_nav?
         = render 'layouts/top_nav'
         -# .container.container--main
@@ -37,9 +37,10 @@
         = render 'ecommerce/checkout/nav'
         = render 'layouts/alerts'
       = yield
-    = yield :after_wrapper
+    .js-ios-hack
+      = yield :after_wrapper
 
-    %footer.footer
+    %footer.footer.js-ios-hack
       = render 'layouts/footer'
 
     = render 'pjax_modal_frame'
