@@ -110,6 +110,18 @@ parcels = [
 
   {
     active: true,
+    code: 'usps-flat-rate-cardboard-envelope',
+    description: "USPS flat-rate cardboard envelope",
+    shippo_template_name: 'USPS_FlatRateCardboardEnvelope',
+    weight_in_pounds: 0.75 * OUNZE_TO_POUNDS, # estimated
+    height_in_inches: 9.5,
+    length_in_inches: 12.5,
+    width_in_inches: 0.75,
+    usage: 'shipping'
+  },
+
+  {
+    active: true,
     code: 'shipping-a',
     description: 'Shipping Box: 12" x 12" x 8"',
     weight_in_pounds: 10 * OUNZE_TO_POUNDS, # estimated

@@ -9,7 +9,8 @@ module Ec
       'USPS_SmallFlatRateBox',
       'USPS_MediumFlatRateBox1',
       'USPS_MediumFlatRateBox2',
-      'USPS_FlatRateEnvelope'
+      'USPS_FlatRateEnvelope',
+      'USPS_FlatRateCardboardEnvelope'
     ]
 
     validates :description,      presence: true

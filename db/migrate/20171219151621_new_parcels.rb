@@ -23,6 +23,17 @@ class NewParcels < ActiveRecord::Migration[5.0]
         usage: 'pretty',
         weight_in_pounds: 0.01,
         width_in_inches: 0.01,
+      },
+      {
+        active: true,
+        code: 'usps-flat-rate-cardboard-envelope',
+        description: "USPS flat-rate cardboard envelope",
+        shippo_template_name: 'USPS_FlatRateCardboardEnvelope',
+        weight_in_pounds: 0.75 * OUNZE_TO_POUNDS, # estimated
+        height_in_inches: 9.5,
+        length_in_inches: 12.5,
+        width_in_inches: 0.75,
+        usage: 'shipping'
       }
     ]
 
