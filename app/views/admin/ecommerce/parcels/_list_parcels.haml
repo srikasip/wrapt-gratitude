@@ -1,0 +1,46 @@
+.row
+  .col-sm-12
+    %h2= yield :parcel_section_title
+
+.row
+  .col-sm-12
+    = page_entries_info parcels
+
+- if parcels.any?
+  .row
+    .col-sm-12
+      %table.table.index-table
+        %thead
+          %tr
+            %th Description
+            %th Code
+            %th.text-right Height (in)
+            %th.text-right Length (in)
+            %th.text-right Width (in)
+            %th.text-right Weight (lb)
+            %th Shippo Template
+            %th
+
+        %tbody
+          - parcels.each do |parcel|
+            %tr
+              %td= parcel.description
+              %td= parcel.code
+              %td.text-right= number_with_precision(parcel.height_in_inches, precision: 2)
+              %td.text-right= number_with_precision(parcel.length_in_inches, precision: 2)
+              %td.text-right= number_with_precision(parcel.width_in_inches, precision: 2)
+              %td.text-right= number_with_precision(parcel.weight_in_pounds, precision: 2)
+              %td= parcel.shippo_template_name
+              %td
+                .display-inline-block
+                  - if parcel.active?
+                    - data = { confirm: "Are you sure you'd like to deactivate the parcel now?" }
+                    = button_to 'Deactivate', admin_ecommerce_parcel_path(parcel), method: :delete, class: 'btn btn-danger btn-sm', data: data
+                  - else
+                    - data = { confirm: "Are you sure you'd like to activate the parcel now?" }
+                    = button_to 'Reactivate', undestroy_admin_ecommerce_parcel_path(parcel), method: :patch, class: 'btn btn-success btn-sm', data: data
+                = link_to 'Edit', edit_admin_ecommerce_parcel_path(parcel), class: 'btn btn-default btn-sm'
+
+
+
+      =paginate(parcels, param_name: pagination_param)

@@ -1,0 +1,15 @@
+%h2= words
+= simple_form_for parcel, url: url do |f|
+
+  - if f.object.persisted?
+    = f.input :code, hint: 'Cannot be changed after creation', readonly: true
+  - else
+    = f.input :code, hint: 'Unique database identifier'
+
+  = f.input :height_in_inches
+  = f.input :length_in_inches
+  = f.input :width_in_inches
+  = f.input :weight_in_pounds
+  = f.input :shippo_template_name, collection: Ec::Parcel::TEMPLATES, allow_blank: true
+  = f.input :description
+  %button.btn.btn-primary Save

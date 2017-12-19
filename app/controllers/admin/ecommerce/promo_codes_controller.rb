@@ -1,7 +1,6 @@
 module Admin
   module Ecommerce
     class PromoCodesController < BaseController
-      skip_before_action :verify_authenticity_token
       before_action :_load_promo_code, only: [:edit, :update, :destroy]
 
       def index

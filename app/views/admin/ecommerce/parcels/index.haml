@@ -1,0 +1,18 @@
+= render "admin/ecommerce/styles"
+
+.row.admin__intro
+  .col-sm-12
+    %h1 Shipping Boxes
+
+.row
+  .col-sm-12
+    = link_to 'Add Box', new_admin_ecommerce_parcel_path, class: 'btn btn-primary pull-right'
+    .mb2
+      - content_for(:parcel_section_title) { 'Gift Boxes' }
+      = render 'list_parcels', parcels: @gift_parcels, pagination_param: :gift_page
+    .mb2
+      - content_for(:parcel_section_title, flush: true) { 'Shipping Boxes' }
+      = render 'list_parcels', parcels: @shipping_parcels, pagination_param: :shipping_page
+    .mb2
+      - content_for(:parcel_section_title, flush: true) { 'Inactive Boxes' }
+      = render 'list_parcels', parcels: @inactive_parcels, pagination_param: :inactive_page
