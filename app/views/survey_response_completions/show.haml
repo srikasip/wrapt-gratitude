@@ -1,6 +1,6 @@
 -# just holds link for modal
 #example-gift-recommendations{data: {sign_up: sign_up_giftee_survey_completion_path(params[:giftee_id], params[:survey_id])}}
-.container
+.container.js-ios-hack
   .row
     .col-xs-12
       %h1.text-center
@@ -34,4 +34,4 @@
         new App.PjaxModalLoader(url, {backdrop: 'static', show: true})
       })
     })
-    
+
