@@ -26,6 +26,17 @@
           = f.select :expert_score, (1..10)
         .form-group
           = f.submit "Add Gift", class: 'btn btn-default'
+    .well
+      - if @profile.expert_note.present?
+        #show-expert-notes
+          %label Expert Note
+          %p= @profile.expert_note
+      #edit-expert-notes{class: @profile.expert_note.present? ? 'collapse' : ''}
+        = simple_form_for(@profile, url: admin_profile_gift_recommendation_update_expert_notes_path(params[:id]), method: :post) do |f|
+          = f.input :expert_note
+          = f.submit 'Save Note', class: 'btn btn-primary'
+      - if @profile.expert_note.present?
+        = link_to 'Edit Note', '#edit-expert-notes', class: 'btn btn-default', data: {toggle: 'collapse'}, style: "margin-top: 10px;"
         
 .row
   .col-sm-12
@@ -64,6 +75,15 @@
 = content_for :page_js do
   :coffeescript
     $ ->
+      $('#edit-expert-notes').on 'show.bs.collapse', (e) ->
+        $('#show-expert-notes').slideUp()
+        $('a[href="#edit-expert-notes"]').text('Cancel')
+
+      $('#edit-expert-notes').on 'hide.bs.collapse', (e) ->
+        $('#show-expert-notes').slideDown()
+        $('a[href="#edit-expert-notes"]').text('Edit Note')
+
+
       $('.js_auto_save').change (e) ->
         $('input').prop('disable', true)
         $(@).closest('tr').after("<tr class='info'><td colspan='4' style='padding-right:40px;text-align:right;'>Saving changes...</td></tr>")

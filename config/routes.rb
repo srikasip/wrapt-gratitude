@@ -186,7 +186,9 @@ Rails.application.routes.draw do
     resources :top_gifts_reports, only: :index
     resources :survey_response_reports, only: :index
 
-    resources :profile_gift_recommendations, only: :edit
+    resources :profile_gift_recommendations, only: :edit do
+      post 'update_expert_notes' => 'profile_gift_recommendations#update_expert_notes'
+    end
     resources :gift_recommendations, only: [:create, :update]
 
     namespace :ecommerce do
