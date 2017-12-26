@@ -1,5 +1,5 @@
 module Recommender
-  module Parameters
+  module SurveyResponseParameters
     def find_params(name)
       params = []
       engine.question_responses.each do |response|

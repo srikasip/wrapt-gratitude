@@ -1,23 +1,19 @@
 module Recommender
-  class Engine
+  class SurveyResponseEngine < EngineBase
 
-    attr_reader :survey_response, :recommendations, :filters, :scorers,
-      :max_total, :gift_scope, :stats
+    attr_reader :survey_response, :filters, :scorers, :gift_scope
 
-    delegate :profile, :survey, :question_responses, to: :survey_response
+    delegate :survey, :question_responses, to: :survey_response
 
-    def initialize(survey_response)
-      @survey_response = survey_response
-
-      @max_total = 18
-
-      reset
+    def initialize(recommendation_set)
+      super(recommendation_set)
+      
+      load_survey_response
     end
 
     def run
-      reset
+      super
 
-      preload_models
       load_filters
       build_gift_scope
       load_scorers
@@ -30,20 +26,11 @@ module Recommender
     end
 
     def reset
-      @recommendations = []
+      super
       @filters = []
       @scorers = []
       @gift_scope = nil
       @gift_scores = []
-      @stats = {}
-    end
-
-    def create_recommendations!
-      @recommendations.map(&:save)
-    end
-
-    def destroy_recommendations!
-      GiftRecommendation.where(profile: profile).destroy_all
     end
 
     def load_filters
@@ -60,17 +47,6 @@ module Recommender
         {name: scorer.name, description: scorer.description}
       end
       @scorers
-    end
-
-    def preload_models
-      preloader = ActiveRecord::Associations::Preloader.new
-      preloader.preload([@survey_response],
-        [
-          :profile,
-          :survey,
-          question_responses: [:survey_question_options]
-        ]
-      )
     end
 
     def build_gift_scope
@@ -102,7 +78,6 @@ module Recommender
     end
 
     def sort_gift_scores
-      #sorter = Recommender::PostProcessing::CategorySort.new(@gift_scores)
       sorter = Recommender::PostProcessing::DistributedSort.new(@gift_scores)
       @gift_scores = sorter.sort
     end
@@ -118,10 +93,19 @@ module Recommender
           gift_id: gift_score[:id],
           score: gift_score[:score],
           position: position,
-          profile: profile
+          profile: profile,
+          recommendation_set: recommendation_set
         )
         recommendations << recommendation
       end
+    end
+    
+    def load_survey_response
+      @survey_response = SurveyResponse.preload([
+          :profile,
+          :survey,
+          question_responses: [:survey_question_options]
+        ]).find(engine_params['survey_response_id'])
     end
 
   end

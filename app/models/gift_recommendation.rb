@@ -1,8 +1,9 @@
 class GiftRecommendation < ApplicationRecord
   
-  belongs_to :survey_response
-  belongs_to :profile
   belongs_to :gift
+  belongs_to :recommendation_set, class_name: 'GiftRecommendationSet'
+  
+  delegate :profile, to: :recommendation_set
   
   MAX_SHOWN_TO_USER = 6
   

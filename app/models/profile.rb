@@ -12,7 +12,8 @@ class Profile < ApplicationRecord
   has_many :addresses, as: :addressable
   # FIXME: which is the primary? That's incomplete.
   has_one :address, as: :addressable, class_name: "Address"
-  has_many :gift_recommendations, -> {order 'gift_recommendations.expert_score desc, gift_recommendations.position, gift_recommendations.score desc, gift_recommendations.id'}, dependent: :destroy
+  has_many :gift_recommendation_sets, -> {order(created_at: :desc)}, dependent: :destroy
+  
   has_many :survey_responses, dependent: :destroy, inverse_of: :profile
   has_many :gift_selections, -> {order 'gift_selections.id'}, dependent: :destroy
 
@@ -84,5 +85,9 @@ class Profile < ApplicationRecord
 
   def selling_price_total
     gift_selections.map(&:gift).map(&:selling_price).sum
+  end
+  
+  def gift_recommendations
+    GiftRecommendations.preload(recommendation_set: :profile).where(recommendation_set_id: gift_recommendation_sets.first)
   end
 end

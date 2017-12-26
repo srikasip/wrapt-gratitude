@@ -4,7 +4,7 @@ module Recommender
       
       attr_reader :engine
       
-      include Recommender::Parameters
+      include Recommender::SurveyResponseParameters
       
       def initialize(engine)
         @engine = engine
