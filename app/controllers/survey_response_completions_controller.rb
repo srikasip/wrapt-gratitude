@@ -26,7 +26,12 @@ class SurveyResponseCompletionsController < ApplicationController
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
     @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
     job = GenerateRecommendationsJob.new
-    job.perform(@survey_response)
+    job.perform(
+      @profile.recommendation_sets.build(
+        engine_type: 'survey_response_engine',
+        engine_params: {survey_response_id: @survey_response.id}
+      )
+    )
 
     if current_user&.present?
       redirect_to action: :create_via_redirect

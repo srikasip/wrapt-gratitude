@@ -25,8 +25,9 @@ module Recommender
     end
 
     def save_recommendations!
-      @recommendation_set.update_attributes(engine_stats: stats)
-      @recommendations.map(&:save)
+      @recommendation_set.engine_stats = stats
+      @recommendation_set.save!
+      @recommendations.map(&:save!)
     end
 
     def destroy_recommendations!

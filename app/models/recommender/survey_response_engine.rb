@@ -101,6 +101,7 @@ module Recommender
     end
     
     def load_survey_response
+      engine_params['survey_response_id'] ||= profile.survey_responses.maximum(:id)
       @survey_response = SurveyResponse.preload([
           :profile,
           :survey,
