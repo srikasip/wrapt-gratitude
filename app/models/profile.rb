@@ -88,7 +88,7 @@ class Profile < ApplicationRecord
   end
   
   def gift_recommendations
-    GiftRecommendations.
+    GiftRecommendation.
       where(recommendation_set_id: gift_recommendation_sets.select(:id).order(created_at: :desc).limit(1))
   end
 end

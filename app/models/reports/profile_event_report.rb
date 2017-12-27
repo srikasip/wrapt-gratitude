@@ -25,11 +25,7 @@ module Reports
       load_gift_selected_events
       load_gift_liked_events
       load_gift_disliked_events
-      load_recipient_invited_events
       load_recommendations_generated_events
-      load_recipient_gift_liked_events
-      load_recipient_gift_disliked_events
-      load_recipient_gift_selected_events
 
       sort_events
       sort_and_filter_profile_ids
@@ -50,28 +46,12 @@ module Reports
         gifts_selected: 0,
         gifts_liked: 0,
         gifts_disliked: 0,
-        recipients_invited: 0,
-        recipient_gifts_selected: 0,
-        recipient_gifts_liked: 0,
-        recipient_gifts_disliked: 0,
-        both_gifts_selected: 0,
-        both_gifts_liked: 0,
-        both_gifts_disliked: 0,
         recommended_gifts_selected: 0,
         recommended_gifts_liked: 0,
         recommended_gifts_disliked: 0,
-        recipient_recommended_gifts_selected: 0,
-        recipient_recommended_gifts_liked: 0,
-        recipient_recommended_gifts_disliked: 0,
-        both_recommended_gifts_selected: 0,
-        both_recommended_gifts_liked: 0,
-        both_recommended_gifts_disliked: 0,
       }
 
       profile_gifts = {liked: [], disliked: [], selected: []}
-      recipient_profile_gifts = {liked: [], disliked: [], selected: []}
-      profile_recommended_gifts = {liked: [], disliked: [], selected: []}
-      recipient_profile_recommended_gifts = {liked: [], disliked: [], selected: []}
 
       events.values.flatten.each do |event|
         case event[:type]
@@ -88,23 +68,8 @@ module Reports
         when 'gift_disliked'
           @stats[:gifts_disliked] += 1
           profile_gifts[:disliked] << [event[:profile_id], event[:gift_id]]
-        when 'recipient_gift_selected'
-          @stats[:recipient_gifts_selected] += 1
-          recipient_profile_gifts[:selected] << [event[:profile_id], event[:gift_id]]
-        when 'recipient_gift_liked'
-          @stats[:recipient_gifts_liked] += 1
-          recipient_profile_gifts[:liked] << [event[:profile_id], event[:gift_id]]
-        when 'recipient_gift_disliked'
-          @stats[:gifts_disliked] += 1
-          recipient_profile_gifts[:disliked] << [event[:profile_id], event[:gift_id]]
-        when 'recipient_invited'
-          @stats[:recipients_invited] += 1
         end
       end
-
-      @stats[:both_gifts_selected] = (profile_gifts[:selected] & recipient_profile_gifts[:selected]).size
-      @stats[:both_gifts_liked] = (profile_gifts[:liked] & recipient_profile_gifts[:liked]).size
-      @stats[:both_gifts_disliked] = (profile_gifts[:disliked] & recipient_profile_gifts[:disliked]).size
 
       @stats
     end
@@ -159,7 +124,7 @@ module Reports
       @preloaded_profiles = {}
       ids = events.keys
       if ids.any?
-        profiles = Profile.preload(:owner, {gift_recommendations: [:gift]}).where(id: ids)
+        profiles = Profile.preload(:owner, {gift_recommendation_sets: {recommendations: [:gift]}}).where(id: ids)
         profiles.each do |profile|
           @preloaded_profiles[profile.id] = profile
         end
@@ -198,13 +163,6 @@ module Reports
       end
     end
 
-    def load_recipient_invited_events
-      sql = %{select id, recipient_invited_at from profiles where recipient_invited_at #{date_range_sql} and #{profile_clause}}
-      Profile.connection.select_rows(sql).each do |row|
-        add_event(row[0].to_i, 'recipient_invited', parse_time(row[1]))
-      end
-    end
-
     def load_question_answered_events
       another_profile_clause = self.giftee_id.present? ? "sr.profile_id = #{self.giftee_id.to_i}" : "true"
       sql = %{
@@ -225,13 +183,13 @@ module Reports
     end
 
     def load_recommendations_generated_events
-      another_profile_clause = self.giftee_id.present? ? "gift_recommendations.profile_id = #{self.giftee_id.to_i}" : "true"
+      another_profile_clause = self.giftee_id.present? ? "gift_recommendation_sets.profile_id = #{self.giftee_id.to_i}" : "true"
       sql = %{
-        select profile_id, max(created_at) from gift_recommendations
-        where created_at #{date_range_sql} and #{another_profile_clause} group by profile_id
+        select profile_id, created_at, id from gift_recommendation_sets
+        where created_at #{date_range_sql} and #{another_profile_clause}
       }
       Profile.connection.select_rows(sql).each do |row|
-        add_event(row[0].to_i, 'recommendations_generated', parse_time(row[1]))
+        add_event(row[0].to_i, 'recommendations_generated', parse_time(row[1]), {gift_recommendation_set_id: row[2].to_i})
       end
     end
 
@@ -268,34 +226,6 @@ module Reports
       Profile.connection.select_rows(sql).each do |row|
         reason = reason_lookup[row[3].to_i] || ''
         add_event(row[0].to_i, 'gift_liked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
-      end
-    end
-
-    def load_recipient_gift_selected_events
-      another_profile_clause = self.giftee_id.present? ? "recipient_gift_selections.profile_id = #{self.giftee_id.to_i}" : "true"
-      sql = %{select profile_id, created_at, gift_id from recipient_gift_selections where created_at #{date_range_sql} and #{another_profile_clause}}
-      Profile.connection.select_rows(sql).each do |row|
-        add_event(row[0].to_i, 'recipient_gift_selected', parse_time(row[1]), {gift_id: row[2].to_i})
-      end
-    end
-
-    def load_recipient_gift_disliked_events
-      reason_lookup = RecipientGiftDislike.reasons.invert
-      another_profile_clause = self.giftee_id.present? ? "recipient_gift_dislikes.profile_id = #{self.giftee_id.to_i}" : "true"
-      sql = %{select profile_id, created_at, gift_id, reason from recipient_gift_dislikes where created_at #{date_range_sql} and #{another_profile_clause}}
-      Profile.connection.select_rows(sql).each do |row|
-        reason = reason_lookup[row[3].to_i] || ''
-        add_event(row[0].to_i, 'recipient_gift_disliked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
-      end
-    end
-
-    def load_recipient_gift_liked_events
-      reason_lookup = RecipientGiftLike.reasons.invert
-      another_profile_clause = self.giftee_id.present? ? "recipient_gift_likes.profile_id = #{self.giftee_id.to_i}" : "true"
-      sql = %{select profile_id, created_at, gift_id, reason from recipient_gift_likes where created_at #{date_range_sql} and #{another_profile_clause}}
-      Profile.connection.select_rows(sql).each do |row|
-        reason = reason_lookup[row[3].to_i] || ''
-        add_event(row[0].to_i, 'recipient_gift_liked', parse_time(row[1]), {gift_id: row[2].to_i, reason: reason})
       end
     end
 

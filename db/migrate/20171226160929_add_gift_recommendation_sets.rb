@@ -17,9 +17,9 @@ class AddGiftRecommendationSets < ActiveRecord::Migration[5.0]
     GiftRecommendationSet.reset_column_information
       
     #move all of the recommendations into a recommendation set on the profile
-    Profile.each do |profile|
+    Profile.all.each do |profile|
       rec_set = profile.gift_recommendation_sets.build(engine_type: 'survey_response_engine')
-      rec_set.engine_params['survey_response_id'] = profile.survey_responses.first&.id
+      rec_set.engine_params['survey_response_id'] = profile.survey_responses.order(created_at: :desc).first&.id
       rec_set.engine_stats = profile.recommendation_stats
       rec_set.expert_note = profile.expert_note
       rec_set.expert_id = profile.expert_id

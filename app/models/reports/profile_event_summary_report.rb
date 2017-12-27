@@ -53,10 +53,7 @@ module Reports
       event_gifts = {
         gift_liked: [],
         gift_disliked: [],
-        gift_selected: [],
-        recipient_gift_liked: [],
-        recipient_gift_disliked: [],
-        recipient_gift_selected: []
+        gift_selected: []
       }
       
       profile_events.each do |event|
@@ -74,23 +71,9 @@ module Reports
         end
       end
       
-      both_selected_gifts = event_gifts[:gift_selected] & event_gifts[:recipient_gift_selected]
-      record[:both_gift_selected_count] = both_selected_gifts.size
-      record[:both_recommended_gift_selected_count] = (both_selected_gifts & non_random_gifts).size
       record[:recommended_gift_selected_count] = (event_gifts[:gift_selected] & non_random_gifts).size
-      record[:recipient_recommended_gift_selected_count] = (event_gifts[:recipient_gift_selected] & non_random_gifts).size
-
-      both_liked_gifts = event_gifts[:gift_liked] & event_gifts[:recipient_gift_liked]
-      record[:both_gift_liked_count] = both_liked_gifts.size
-      record[:both_recommended_gift_liked_count] = (both_liked_gifts & non_random_gifts).size
       record[:recommended_gift_liked_count] = (event_gifts[:gift_liked] & non_random_gifts).size
-      record[:recipient_recommended_gift_liked_count] = (event_gifts[:recipient_gift_liked] & non_random_gifts).size
-
-      both_disliked_gifts = event_gifts[:gift_disliked] & event_gifts[:recipient_gift_disliked]
-      record[:both_gift_disliked_count] = both_disliked_gifts.size
-      record[:both_recommended_gift_disliked_count] = (both_disliked_gifts & non_random_gifts).size
       record[:recommended_gift_disliked_count] = (event_gifts[:gift_disliked] & non_random_gifts).size
-      record[:recipient_recommended_gift_disliked_count] = (event_gifts[:recipient_gift_disliked] & non_random_gifts).size
       
       record
     end
@@ -99,31 +82,14 @@ module Reports
       {
         profile_created_count: 0,
         survey_completed_count: 0,
-        recipient_invited_count: 0,
         
         gift_selected_count: 0,
         gift_liked_count: 0,
         gift_disliked_count: 0,
-
-        recipient_gift_selected_count: 0,
-        recipient_gift_liked_count: 0,
-        recipient_gift_disliked_count: 0,
-        
-        both_gift_selected_count: 0,
-        both_gift_liked_count: 0,
-        both_gift_disliked_count: 0,
         
         recommended_gift_selected_count: 0,
         recommended_gift_liked_count: 0,
         recommended_gift_disliked_count: 0,
-        
-        recipient_recommended_gift_selected_count: 0,
-        recipient_recommended_gift_liked_count: 0,
-        recipient_recommended_gift_disliked_count: 0,
-        
-        both_recommended_gift_selected_count: 0,
-        both_recommended_gift_liked_count: 0,
-        both_recommended_gift_disliked_count: 0,
       }
     end
 

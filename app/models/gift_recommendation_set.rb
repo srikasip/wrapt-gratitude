@@ -2,7 +2,7 @@ class GiftRecommendationSet < ApplicationRecord
   belongs_to :profile
   has_many :recommendations,
     -> {order(expert_score: :desc, position: :asc, score: :desc, id: :asc)},
-    dependent: :destroy, class_name: 'GiftRecommendationSet'
+    dependent: :destroy, class_name: 'GiftRecommendation', foreign_key: :recommendation_set_id
   
   belongs_to :expert, class_name: 'User'
 
@@ -28,4 +28,9 @@ class GiftRecommendationSet < ApplicationRecord
     engine.save_recommendations!
     gift_recommendations
   end
+  
+  def engine_params
+    self[:engine_params] ||= {}
+  end
+  
 end

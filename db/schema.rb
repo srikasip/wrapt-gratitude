@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171222070201) do
+ActiveRecord::Schema.define(version: 20171227171707) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -221,18 +221,31 @@ ActiveRecord::Schema.define(version: 20171222070201) do
     t.index ["training_set_id"], name: "index_gift_question_impacts_on_training_set_id", using: :btree
   end
 
+  create_table "gift_recommendation_sets", force: :cascade do |t|
+    t.integer  "profile_id",    null: false
+    t.string   "engine_type"
+    t.text     "engine_params"
+    t.text     "engine_stats"
+    t.text     "expert_note"
+    t.integer  "expert_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["profile_id"], name: "index_gift_recommendation_sets_on_profile_id", using: :btree
+  end
+
   create_table "gift_recommendations", force: :cascade do |t|
     t.integer  "gift_id"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
-    t.integer  "profile_id"
-    t.float    "score",             default: 0.0,   null: false
-    t.integer  "position",          default: 0
-    t.float    "expert_score",      default: 0.0,   null: false
-    t.boolean  "removed_by_expert", default: false, null: false
-    t.boolean  "added_by_expert",   default: false, null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.integer  "deprecated_profile_id"
+    t.float    "score",                 default: 0.0,   null: false
+    t.integer  "position",              default: 0
+    t.float    "expert_score",          default: 0.0,   null: false
+    t.boolean  "removed_by_expert",     default: false, null: false
+    t.boolean  "added_by_expert",       default: false, null: false
+    t.integer  "recommendation_set_id",                 null: false
+    t.index ["deprecated_profile_id"], name: "index_gift_recommendations_on_deprecated_profile_id", using: :btree
     t.index ["gift_id"], name: "index_gift_recommendations_on_gift_id", using: :btree
-    t.index ["profile_id"], name: "index_gift_recommendations_on_profile_id", using: :btree
   end
 
   create_table "gift_selections", force: :cascade do |t|
@@ -437,16 +450,13 @@ ActiveRecord::Schema.define(version: 20171222070201) do
     t.string   "recipient_access_token"
     t.boolean  "recipient_reviewed",                 default: false, null: false
     t.datetime "recipient_invited_at"
-    t.text     "recommendation_stats"
     t.integer  "gifts_sent",                         default: 0,     null: false
     t.string   "last_name",                          default: ""
-    t.integer  "expert_id"
     t.datetime "archived_at"
-    t.boolean  "has_viewed_initial_recommendations", default: false, null: false
     t.integer  "birthday_day"
     t.integer  "birthday_month"
     t.integer  "birthday_year"
-    t.text     "expert_note"
+    t.boolean  "has_viewed_initial_recommendations", default: false, null: false
     t.index ["created_at"], name: "index_profiles_on_created_at", using: :btree
     t.index ["recipient_invited_at"], name: "index_profiles_on_recipient_invited_at", using: :btree
   end
@@ -921,7 +931,7 @@ ActiveRecord::Schema.define(version: 20171222070201) do
   add_foreign_key "gift_products", "gifts"
   add_foreign_key "gift_products", "products"
   add_foreign_key "gift_recommendations", "gifts"
-  add_foreign_key "gift_recommendations", "profiles"
+  add_foreign_key "gift_recommendations", "profiles", column: "deprecated_profile_id"
   add_foreign_key "gift_selections", "gifts"
   add_foreign_key "gift_selections", "profiles"
   add_foreign_key "gifts", "product_categories"
