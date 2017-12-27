@@ -8,11 +8,11 @@ class Profile < ApplicationRecord
   validates :birthday_year, numericality: { only_integer: true, greater_than_or_equal_to: 1900, less_than_or_equal_to: Date.today.year}, allow_nil: true, allow_blank: true
 
   belongs_to :owner, class_name: 'User'
-  belongs_to :expert, class_name: 'User'
+
   has_many :addresses, as: :addressable
   # FIXME: which is the primary? That's incomplete.
   has_one :address, as: :addressable, class_name: "Address"
-  has_many :gift_recommendation_sets, -> {order(created_at: :desc)}, dependent: :destroy
+  has_many :gift_recommendation_sets, dependent: :destroy
   
   has_many :survey_responses, dependent: :destroy, inverse_of: :profile
   has_many :gift_selections, -> {order 'gift_selections.id'}, dependent: :destroy
@@ -88,6 +88,7 @@ class Profile < ApplicationRecord
   end
   
   def gift_recommendations
-    GiftRecommendations.preload(recommendation_set: :profile).where(recommendation_set_id: gift_recommendation_sets.first)
+    GiftRecommendations.
+      where(recommendation_set_id: gift_recommendation_sets.select(:id).order(created_at: :desc).limit(1))
   end
 end

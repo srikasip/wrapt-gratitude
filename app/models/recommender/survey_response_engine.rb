@@ -101,12 +101,23 @@ module Recommender
     end
     
     def load_survey_response
-      engine_params['survey_response_id'] ||= profile.survey_responses.maximum(:id)
-      @survey_response = SurveyResponse.preload([
+      scope = SurveyResponse.preload([
           :profile,
           :survey,
           question_responses: [:survey_question_options]
-        ]).find(engine_params['survey_response_id'])
+        ])
+      
+      if engine_params[:survey_response_id].present?
+        scope = scope.where(id: engine_params[:survey_response_id])
+      else
+        scope = where(profile_id: profile.id).order(created_at: :desc)
+      end
+      
+      @survey_response = scope.first!
+      
+      engine_params[:survey_response_id] = @survey_response.id
+      
+      return @survey_response
     end
 
   end

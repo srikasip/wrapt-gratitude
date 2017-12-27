@@ -4,6 +4,8 @@ class GiftRecommendationSet < ApplicationRecord
     -> {order(expert_score: :desc, position: :asc, score: :desc, id: :asc)},
     dependent: :destroy, class_name: 'GiftRecommendationSet'
   
+  belongs_to :expert, class_name: 'User'
+
   serialize :engine_params
   
   ENGINE_TYPES = %w{survey_response_engine}

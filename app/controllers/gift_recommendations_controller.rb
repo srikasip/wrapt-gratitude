@@ -114,7 +114,9 @@ class GiftRecommendationsController < ApplicationController
     all_gift_recommendations = @profile.
        gift_recommendations.
        where(gift_id: Gift.select(:id).can_be_sold, removed_by_expert: false).
-       preload(gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field])
+       preload(
+        recommendation_set: [:profile],
+        gift: [:gift_images, :primary_gift_image, :products, :product_subcategory, :calculated_gift_field])
 
     load_pages(all_gift_recommendations)
     @gift_recommendations = GiftRecommendation.select_for_display(all_gift_recommendations, @page) || []
