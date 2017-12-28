@@ -10,7 +10,6 @@
   .col-sm-6
     %table.table.table-bordered.table-condensed{style: 'margin-top:30px;'}
       %tr.active
-        %th
         %td.text-align-right
           %span.glyphicon.glyphicon-gift
           Selected
@@ -20,10 +19,7 @@
         %td.text-align-right
           %span.glyphicon.glyphicon-thumbs-down
           Disliked
-      %tr.active
-        %th{colspan: 4} All Gifts
       %tr
-        %td Gifter
         %td.text-align-right #{aggregate_stats[:gift_selected_count]}
         %td.text-align-right #{aggregate_stats[:gift_liked_count]}
         %td.text-align-right #{aggregate_stats[:gift_disliked_count]}
