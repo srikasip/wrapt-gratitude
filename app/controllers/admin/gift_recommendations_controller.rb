@@ -1,9 +1,10 @@
 module Admin
   class GiftRecommendationsController < BaseController
     before_filter :load_gift_recommendation, only: :update
+    before_filter :load_gift_recommendation_set, only: :create
     
     def create
-      attrs = params.require(:gift_recommendation).permit(:profile_id, :gift_id, :expert_score)
+      attrs = params.require(:gift_recommendation).permit(:gift_id, :expert_score)
       
       @profile = Profile.find(attrs[:profile_id])
       
@@ -12,7 +13,7 @@ module Admin
       @gift = Gift.where(wrapt_sku: wrapt_sku).first
       
       if @gift.blank?
-        redirect_to edit_admin_profile_gift_recommendation_path(@profile), alert: "SKU (#{wrapt_sku}) not found"
+        redirect_to edit_path, alert: "SKU (#{wrapt_sku}) not found"
         return
       end
       
@@ -20,11 +21,10 @@ module Admin
       attrs[:added_by_expert] = true
       
       GiftRecommendation.transaction do
-        @gift_recommendation = GiftRecommendation.create(attrs)
-        @profile.expert = current_user
-        @profile.save
+        @gift_recommendation = @recommendation_set.recommendations.create(attrs)
+        @recommendation_set.update_attribute(expert: current_user)
       end
-      redirect_to edit_admin_profile_gift_recommendation_path(@profile), notice: "#{@gift.title} (#{@gift.wrapt_sku}) added"
+      redirect_to edit_path, notice: "#{@gift.title} (#{@gift.wrapt_sku}) added"
     end
     
     def update
@@ -34,16 +34,25 @@ module Admin
       attrs = params.require(:gift_recommendation).permit(allow_params)
       GiftRecommendation.transaction do
         @gift_recommendation.update_attributes(attrs)
-        @profile.expert = current_user
-        @profile.save
-      end
-      redirect_to edit_admin_profile_gift_recommendation_path(@profile), notice: "#{@gift.title} (#{@gift.wrapt_sku}) updated"
+        @recommendation_set.update_attribute(expert: current_user)
+     end
+      redirect_to edit_path, notice: "#{@gift.title} (#{@gift.wrapt_sku}) updated"
+    end
+    
+    def edit_path
+      edit_admin_gift_recommendation_set_path(@recommendation_set)
     end
     
     def load_gift_recommendation
-      @gift_recommendation = GiftRecommendation.preload(:profile, :gift).where(id: params[:id]).first!
+      @gift_recommendation = GiftRecommendation.preload(:profile, :gift).find(params[:id])
       @gift = @gift_recommendation.gift
-      @profile = @gift_recommendation.profile
+      @recommendation_set = @recommendation.recommendation_set
+      @profile = @recommendation_set.profile
+    end
+    
+    def load_gift_recommendation_set
+      @recommendation_set = GiftRecommendationSet.find(params[:gift_recommendation_set_id])
+      @profile = @recommendation_set.profile
     end
   end
 end

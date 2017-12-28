@@ -186,10 +186,10 @@ Rails.application.routes.draw do
     resources :top_gifts_reports, only: :index
     resources :survey_response_reports, only: :index
 
-    resources :profile_gift_recommendations, only: :edit do
-      post 'update_expert_notes' => 'profile_gift_recommendations#update_expert_notes'
+    resources :gift_recommendation_sets, only: [:edit, :update] do
+      resources :gift_recommendations, as: :recommendations, only: :create
     end
-    resources :gift_recommendations, only: [:create, :update]
+    resources :gift_recommendations, only: :update
 
     namespace :ecommerce do
       get '/' => 'dashboard#index'

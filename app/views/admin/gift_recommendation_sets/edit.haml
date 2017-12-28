@@ -1,6 +1,6 @@
 .row.admin__intro
   .col-sm-12
-    %h1 Edit Profile Recommendations
+    %h1 Edit Recommendation Set
     
 .row
   .col-sm-12
@@ -10,14 +10,11 @@
         for #{@profile.name} (#{@profile.id})
       - if @profile.email.present?
         [#{@profile.email}]
-      - generated_at = @recommendations.map(&:created_at).min
-      - if generated_at.present?
-        = "on #{format_datetime(generated_at)}"
+      on #{format_datetime(@recommendation_set.created_at)}
 .row
   .col-sm-12
     .well
-      = simple_form_for(@new_gift_recommendation, url: admin_gift_recommendations_path, method: 'post', html: {class: 'form-inline'}) do |f|
-        = f.hidden_field :profile_id
+      = simple_form_for(@new_gift_recommendation, url: admin_gift_recommendation_set_recommendations_path(@recommendation_set), method: :post, html: {class: 'form-inline'}) do |f|
         .form-group
           %label SKU
           = f.text_field :gift_id, size: 30
@@ -27,12 +24,12 @@
         .form-group
           = f.submit "Add Gift", class: 'btn btn-default'
     .well
-      - if @profile.expert_note.present?
+      - if @recommendation_set.expert_note.present?
         #show-expert-notes
           %label Expert Note
-          %p= @profile.expert_note
-      #edit-expert-notes{class: @profile.expert_note.present? ? 'collapse' : ''}
-        = simple_form_for(@profile, url: admin_profile_gift_recommendation_update_expert_notes_path(params[:id]), method: :post) do |f|
+          %p= @recommendation_set.expert_note
+      #edit-expert-notes{class: @recommendation_set.expert_note.present? ? 'collapse' : ''}
+        = simple_form_for(@recommendation_set, url: admin_gift_recommendation_set_path(@recommendation_set), method: :patch) do |f|
           = f.input :expert_note
           = f.submit 'Save Note', class: 'btn btn-primary'
       - if @profile.expert_note.present?

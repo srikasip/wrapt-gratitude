@@ -74,7 +74,7 @@
                   Recommendations generated:
                   - rec_set = profile.gift_recommendation_sets.find{|grs| grs.id = event[:gift_recommendation_set_id]}
                   - recs = rec_set.recommendations
-                  -# = link_to "edit", edit_admin_profile_gift_recommendation_path(profile)
+                  = link_to "edit", edit_admin_gift_recommendation_set_path(rec_set)
                   %ol
                     - recs.each do |rec|
                       %li
@@ -90,7 +90,7 @@
 
                   Parameters:
                   %ul
-                    - stats = rec_set.engine_stats.to_hash
+                    - stats = rec_set.engine_stats || {}
                     - if stats[:filters].is_a?(Array)
                       - stats[:filters].each do |filter|
                         %li #{filter[:name]} Filter: #{filter[:description]}
