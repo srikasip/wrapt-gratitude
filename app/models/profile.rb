@@ -23,6 +23,7 @@ class Profile < ApplicationRecord
   has_many :recipient_gift_dislikes, inverse_of: :profile, dependent: :destroy
   has_many :recipient_gift_selections, -> {order 'recipient_gift_selections.id'}, dependent: :destroy
 
+  # this can go away once the migrations have been run to copy and remove it.
   serialize :recommendation_stats, Hash
 
   before_create :generate_recipient_access_token

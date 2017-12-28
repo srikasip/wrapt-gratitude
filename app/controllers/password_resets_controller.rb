@@ -29,7 +29,7 @@ class PasswordResetsController < ApplicationController
         if profile.gift_recommendations.blank?
           job = GenerateRecommendationsJob.new
           job.perform(
-            profile.recommendation_sets.build(
+            profile.gift_recommendation_sets.build(
               engine_type: 'survey_response_engine',
               engine_params: {survey_response_id: @survey_response.id}
             )

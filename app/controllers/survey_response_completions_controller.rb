@@ -27,7 +27,7 @@ class SurveyResponseCompletionsController < ApplicationController
     @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
     job = GenerateRecommendationsJob.new
     job.perform(
-      @profile.recommendation_sets.build(
+      @profile.gift_recommendation_sets.build(
         engine_type: 'survey_response_engine',
         engine_params: {survey_response_id: @survey_response.id}
       )

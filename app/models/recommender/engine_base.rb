@@ -3,7 +3,7 @@ module Recommender
     
     attr_reader :recommendation_set, :recommendations, :stats
     
-    delegate :profile, :engine_params, to: recommendation_set
+    delegate :profile, :engine_params, to: :recommendation_set
     
     def initialize(recommendation_set)
       @recommendation_set = recommendation_set
@@ -31,7 +31,7 @@ module Recommender
     end
 
     def destroy_recommendations!
-      GiftRecommendation.where(profile: profile).destroy_all
+      GiftRecommendation.where(recommendation_set_id: recommendation_set).destroy_all
     end
   end
 end

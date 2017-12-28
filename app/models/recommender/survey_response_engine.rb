@@ -93,7 +93,6 @@ module Recommender
           gift_id: gift_score[:id],
           score: gift_score[:score],
           position: position,
-          profile: profile,
           recommendation_set: recommendation_set
         )
         recommendations << recommendation

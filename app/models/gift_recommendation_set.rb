@@ -28,7 +28,7 @@ class GiftRecommendationSet < ApplicationRecord
     engine.destroy_recommendations!
     engine.run
     engine.save_recommendations!
-    gift_recommendations
+    return recommendations
   end
   
   def engine_params
