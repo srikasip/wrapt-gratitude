@@ -4,7 +4,7 @@
 .row
   .col-sm-2 Profiles Created: #{aggregate_stats[:profile_created_count]}
   .col-sm-2 Surveys Completed: #{aggregate_stats[:survey_completed_count]}
-  .col-sm-2 Recipient Invites: #{aggregate_stats[:recipient_invited_count]}
+
 
 .row
   .col-sm-6
@@ -28,12 +28,3 @@
         %td.text-align-right #{aggregate_stats[:gift_liked_count]}
         %td.text-align-right #{aggregate_stats[:gift_disliked_count]}
 
-      %tr.active
-        %th{colspan: 4}
-          %span.glyphicon.glyphicon-star
-          Recommended Gifts
-      %tr
-        %td Gifter
-        %td.text-align-right #{aggregate_stats[:recommended_gift_selected_count]}
-        %td.text-align-right #{aggregate_stats[:recommended_gift_liked_count]}
-        %td.text-align-right #{aggregate_stats[:recommended_gift_disliked_count]}

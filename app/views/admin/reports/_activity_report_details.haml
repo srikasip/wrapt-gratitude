@@ -7,7 +7,6 @@
           :ruby
             profile = @report.preloaded_profiles[id]
             next if profile.blank?
-            non_random_gifts = profile.gift_recommendations.reject(&:random?).map(&:gift)
           %tr.active
             %th{colspan: 3}
               = profile.owner&.email
@@ -20,30 +19,6 @@
             if events.detect{|e| e[:type] == 'survey_completed'}
               events.reject!{|e| e[:type] == 'question_answered'}
             end
-
-            gifter_liked_gifts = events.map do |event|
-              if event[:type] == 'gift_liked'
-                @report.preloaded_gifts[event[:gift_id]]
-              else
-                nil
-              end
-            end.compact.uniq
-
-            gifter_disliked_gifts = events.map do |event|
-              if event[:type] == 'gift_disliked'
-                @report.preloaded_gifts[event[:gift_id]]
-              else
-                nil
-              end
-            end.compact.uniq
-
-            gifter_selected_gifts = events.map do |event|
-              if event[:type] == 'gift_selected'
-                @report.preloaded_gifts[event[:gift_id]]
-              else
-                nil
-              end
-            end.compact.uniq
 
           - events.each do |event|
             %tr
@@ -69,25 +44,7 @@
                   - gift = @report.preloaded_gifts[event[:gift_id]]
                   - if gift.present?
                     '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
-                    - if non_random_gifts.include?(gift)
-                      %span.glyphicon.glyphicon-star
                     %span.glyphicon.glyphicon-gift
-
-                - when 'recipient_gift_selected'
-                  Recipient add gift to basket:
-                  - gift = @report.preloaded_gifts[event[:gift_id]]
-                  - if gift.present?
-                    '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
-                    - if non_random_gifts.include?(gift)
-                      %span.glyphicon.glyphicon-star
-                    - if gifter_selected_gifts.include?(gift)
-                      %span.glyphicon.glyphicon-gift
-                    - elsif gifter_liked_gifts.include?(gift)
-                      %span.glyphicon.glyphicon-thumbs-up
-                    - elsif gifter_disliked_gifts.include?(gift)
-                      %span.glyphicon.glyphicon-thumbs-down
-                    %span.glyphicon.glyphicon-gift
-
 
                 - when 'gift_liked'
                   Liked gift
@@ -98,27 +55,6 @@
                   - gift = @report.preloaded_gifts[event[:gift_id]]
                   - if gift.present?
                     '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
-                    - if non_random_gifts.include?(gift)
-                      %span.glyphicon.glyphicon-star
-                    %span.glyphicon.glyphicon-thumbs-up
-
-                - when 'recipient_gift_liked'
-                  Recipient Liked gift
-                  - reason_description = ProfileRecipientReviewsHelper.like_reason_label(event[:reason])
-                  - if reason_description.present?
-                    = " - #{reason_description}"
-                  = ":"
-                  - gift = @report.preloaded_gifts[event[:gift_id]]
-                  - if gift.present?
-                    '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
-                    - if non_random_gifts.include?(gift)
-                      %span.glyphicon.glyphicon-star
-                    - if gifter_selected_gifts.include?(gift)
-                      %span.glyphicon.glyphicon-gift
-                    - elsif gifter_liked_gifts.include?(gift)
-                      %span.glyphicon.glyphicon-thumbs-up
-                    - elsif gifter_disliked_gifts.include?(gift)
-                      %span.glyphicon.glyphicon-thumbs-down
                     %span.glyphicon.glyphicon-thumbs-up
 
                 - when 'gift_disliked'
@@ -134,32 +70,11 @@
                       %span.glyphicon.glyphicon-star
                     %span.glyphicon.glyphicon-thumbs-down
 
-                - when 'recipient_gift_disliked'
-                  Recipient Disiked gift
-                  - reason_description = like_reason_label(event[:reason])
-                  - if reason_description.present?
-                    = " - #{reason_description}"
-                  = ":"
-                  - gift = @report.preloaded_gifts[event[:gift_id]]
-                  - if gift.present?
-                    '#{truncate(gift.title, length: 60)}' (#{gift.wrapt_sku})
-                    - if non_random_gifts.include?(gift)
-                      %span.glyphicon.glyphicon-star
-                    - if gifter_selected_gifts.include?(gift)
-                      %span.glyphicon.glyphicon-gift
-                    - elsif gifter_liked_gifts.include?(gift)
-                      %span.glyphicon.glyphicon-thumbs-up
-                    - elsif gifter_disliked_gifts.include?(gift)
-                      %span.glyphicon.glyphicon-thumbs-down
-                    %span.glyphicon.glyphicon-thumbs-down
-
-                - when 'recipient_invited'
-                  Recipient invited
-
                 - when'recommendations_generated'
                   Recommendations generated:
-                  = link_to "edit", edit_admin_profile_gift_recommendation_path(profile)
-                  - recs = profile.gift_recommendations
+                  - rec_set = profile.gift_recommendation_sets.find{|grs| grs.id = event[:gift_recommendation_set_id]}
+                  - recs = rec_set.recommendations
+                  -# = link_to "edit", edit_admin_profile_gift_recommendation_path(profile)
                   %ol
                     - recs.each do |rec|
                       %li
@@ -175,7 +90,7 @@
 
                   Parameters:
                   %ul
-                    - stats = profile.recommendation_stats
+                    - stats = rec_set.engine_stats.to_hash
                     - if stats[:filters].is_a?(Array)
                       - stats[:filters].each do |filter|
                         %li #{filter[:name]} Filter: #{filter[:description]}

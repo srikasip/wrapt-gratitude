@@ -246,6 +246,7 @@ ActiveRecord::Schema.define(version: 20171227171707) do
     t.integer  "recommendation_set_id",                 null: false
     t.index ["deprecated_profile_id"], name: "index_gift_recommendations_on_deprecated_profile_id", using: :btree
     t.index ["gift_id"], name: "index_gift_recommendations_on_gift_id", using: :btree
+    t.index ["recommendation_set_id"], name: "index_gift_recommendations_on_recommendation_set_id", using: :btree
   end
 
   create_table "gift_selections", force: :cascade do |t|

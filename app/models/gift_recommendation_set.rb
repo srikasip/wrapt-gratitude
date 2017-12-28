@@ -7,6 +7,8 @@ class GiftRecommendationSet < ApplicationRecord
   belongs_to :expert, class_name: 'User'
 
   serialize :engine_params
+  serialize :engine_stats
+  
   
   ENGINE_TYPES = %w{survey_response_engine}
   

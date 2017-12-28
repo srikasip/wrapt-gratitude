@@ -46,8 +46,6 @@ module Reports
     end
     
     def generate_profile_stats(record, profile, profile_events)
-      # get the recommended gifts that were generated via the algorithm (non-random)
-      non_random_gifts = profile.gift_recommendations.reject(&:random?).map(&:gift)
       
       # gather up the gift models for calculating some more interesting stats
       event_gifts = {
@@ -70,11 +68,7 @@ module Reports
           end
         end
       end
-      
-      record[:recommended_gift_selected_count] = (event_gifts[:gift_selected] & non_random_gifts).size
-      record[:recommended_gift_liked_count] = (event_gifts[:gift_liked] & non_random_gifts).size
-      record[:recommended_gift_disliked_count] = (event_gifts[:gift_disliked] & non_random_gifts).size
-      
+            
       record
     end
     
@@ -86,10 +80,6 @@ module Reports
         gift_selected_count: 0,
         gift_liked_count: 0,
         gift_disliked_count: 0,
-        
-        recommended_gift_selected_count: 0,
-        recommended_gift_liked_count: 0,
-        recommended_gift_disliked_count: 0,
       }
     end
 

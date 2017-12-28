@@ -1,7 +1,8 @@
 class AddGiftRecommendationSets < ActiveRecord::Migration[5.0]
   def up
     create_table :gift_recommendation_sets do |t|
-      t.integer :profile_id, null: false, index: true
+      t.integer :profile_id, null: false
+      t.index :profile_id
       t.string :engine_type
       t.text :engine_params
       t.text :engine_stats
@@ -10,7 +11,8 @@ class AddGiftRecommendationSets < ActiveRecord::Migration[5.0]
       t.timestamps
     end
     
-    add_column :gift_recommendations, :recommendation_set_id, :integer, index: true
+    add_column :gift_recommendations, :recommendation_set_id, :integer
+    add_index :gift_recommendations, :recommendation_set_id
     
     Profile.reset_column_information
     GiftRecommendation.reset_column_information
@@ -18,13 +20,15 @@ class AddGiftRecommendationSets < ActiveRecord::Migration[5.0]
       
     #move all of the recommendations into a recommendation set on the profile
     Profile.all.each do |profile|
-      rec_set = profile.gift_recommendation_sets.build(engine_type: 'survey_response_engine')
-      rec_set.engine_params['survey_response_id'] = profile.survey_responses.order(created_at: :desc).first&.id
-      rec_set.engine_stats = profile.recommendation_stats
-      rec_set.expert_note = profile.expert_note
-      rec_set.expert_id = profile.expert_id
-      rec_set.save!
-      GiftRecommendation.where(profile_id: profile.id).update_all(recommendation_set_id: rec_set.id)
+      if GiftRecommendation.where(profile_id: profile.id).count > 0
+        rec_set = profile.gift_recommendation_sets.build(engine_type: 'survey_response_engine')
+        rec_set.engine_params['survey_response_id'] = profile.survey_responses.order(created_at: :desc).first&.id
+        rec_set.engine_stats = profile.recommendation_stats
+        rec_set.expert_note = profile.expert_note
+        rec_set.expert_id = profile.expert_id
+        rec_set.save!
+        GiftRecommendation.where(profile_id: profile.id).update_all(recommendation_set_id: rec_set.id)
+      end
     end
     
     #keep the profile_id column for a bit just in case something goes wrong it will make it easier to recover
