@@ -6,7 +6,7 @@ module Admin
     def create
       attrs = params.require(:gift_recommendation).permit(:gift_id, :expert_score)
       
-      @profile = Profile.find(attrs[:profile_id])
+      @profile = @recommendation_set.profile
       
       # very hackish
       wrapt_sku = attrs[:gift_id].to_s.strip
@@ -22,7 +22,7 @@ module Admin
       
       GiftRecommendation.transaction do
         @gift_recommendation = @recommendation_set.recommendations.create(attrs)
-        @recommendation_set.update_attribute(expert: current_user)
+        @recommendation_set.update_attribute(:expert, current_user)
       end
       redirect_to edit_path, notice: "#{@gift.title} (#{@gift.wrapt_sku}) added"
     end
@@ -34,7 +34,7 @@ module Admin
       attrs = params.require(:gift_recommendation).permit(allow_params)
       GiftRecommendation.transaction do
         @gift_recommendation.update_attributes(attrs)
-        @recommendation_set.update_attribute(expert: current_user)
+        @recommendation_set.update_attribute(:expert, current_user)
      end
       redirect_to edit_path, notice: "#{@gift.title} (#{@gift.wrapt_sku}) updated"
     end
@@ -44,9 +44,9 @@ module Admin
     end
     
     def load_gift_recommendation
-      @gift_recommendation = GiftRecommendation.preload(:profile, :gift).find(params[:id])
+      @gift_recommendation = GiftRecommendation.preload({recommendation_set: :profile}, :gift).find(params[:id])
       @gift = @gift_recommendation.gift
-      @recommendation_set = @recommendation.recommendation_set
+      @recommendation_set = @gift_recommendation.recommendation_set
       @profile = @recommendation_set.profile
     end
     
