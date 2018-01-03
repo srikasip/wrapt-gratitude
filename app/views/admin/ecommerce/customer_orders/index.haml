@@ -34,7 +34,7 @@
       %thead
         %tr
           %th Order Number
-          %th Date Updated
+          %th Date Created
           %th Customer Email
           %th Status
           %th.text-right Amount
@@ -45,7 +45,7 @@
           - this_cycle_class = cycle('even-order', 'odd-order')
           %tr{class: this_cycle_class, style: 'border-top-style: double'}
             %td= order.order_number
-            %td= format_date(order.updated_at)
+            %td= format_date(order.created_at)
             %td= order.user_email
             %td= render "status", order:  order
             %td.text-right
