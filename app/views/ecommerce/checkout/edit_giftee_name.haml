@@ -4,3 +4,13 @@
     .col-xs-12.col-md-10.col-md-offset-1
       .co-container
         = render 'edit_giftee_name_form'
+
+- content_for :page_js do
+  :javascript
+    $(document).ready(function() {
+      //Google Analytics Enhanced Ecommerce
+      ga('ec:setAction', 'checkout', {
+        'option': 'Checkout 2: Shipping: Giftee Name', 
+        'step': 2
+      });
+    })

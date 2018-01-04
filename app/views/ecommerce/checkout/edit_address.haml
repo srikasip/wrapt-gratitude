@@ -57,5 +57,10 @@
       App.ClearForm('ec_customer_order', input_names, '[name="ec_customer_order[address_id]"]', 'new_address')
 
       App.AddressSubmitButton()
-
+      
+      //Google Analytics Enhanced Ecommerce
+      ga('ec:setAction', 'checkout', {
+        'option': 'Checkout 3: Shipping: Address', 
+        'step': 3
+      });
     })
