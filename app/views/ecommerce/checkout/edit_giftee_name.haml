@@ -11,6 +11,8 @@
       //Google Analytics Enhanced Ecommerce
       ga('ec:setAction', 'checkout', {
         'option': 'Checkout 2: Shipping: Giftee Name', 
-        'step': 2
+        'step': 2,
+        'dimension1': '#{analytics_gifter_id || -1}',
+        'dimension4': 'n/a'
       });
     })

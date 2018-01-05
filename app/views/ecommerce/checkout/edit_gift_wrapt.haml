@@ -20,6 +20,8 @@
       //Google Analytics Enhanced Ecommerce
       ga('ec:setAction', 'checkout', {
         'option': 'Checkout 1: Note', 
-        'step': 1
+        'step': 1,
+        'dimension1': '#{analytics_gifter_id || -1}',
+        'dimension4': 'n/a'
       });
     })

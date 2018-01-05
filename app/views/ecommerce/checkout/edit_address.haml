@@ -61,6 +61,8 @@
       //Google Analytics Enhanced Ecommerce
       ga('ec:setAction', 'checkout', {
         'option': 'Checkout 3: Shipping: Address', 
-        'step': 3
+        'step': 3,
+        'dimension1': '#{analytics_gifter_id || -1}',
+        'dimension4': 'n/a'
       });
     })
