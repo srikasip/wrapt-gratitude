@@ -195,15 +195,15 @@
 .ma-giftee-card__content {
   padding: 16px;
   background-color: #FDFDFD;
-  margin-bottom: 72px;
+  // margin-bottom: 72px;
 }
 
 .ma-giftee-card__btn {
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
-  right: 16px;
-  width: auto;
+  // position: absolute;
+  // bottom: 16px;
+  // left: 16px;
+  // right: 16px;
+  // width: auto;
 }
 
 .ma-giftee-details__table {
@@ -249,6 +249,26 @@
 .ma-giftee-reminders {
   min-height: 200px;
 }
+
+.ma-giftee-recs {
+  @include flexbox();
+  justify-content: space-between;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.ma-giftee-rec {
+  @include flex(0 1 auto);
+  width: 18%;
+  height: 100px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  img {
+    width: 100%;
+  }
+}
+
 
 
 

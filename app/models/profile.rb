@@ -87,6 +87,32 @@ class Profile < ApplicationRecord
   def selling_price_total
     gift_selections.map(&:gift).map(&:selling_price).sum
   end
+
+  def display_last_rec_added_date
+    last_rec = (GiftRecommendation.load_recommendations_for_display(display_gift_recommendations) || []).first
+    if last_rec
+      last_rec.created_at.strftime('%b %e, %l:%M %p')
+    elsif recommendations_generated_at.present?
+      recommendations_generated_at.strftime('%b %e, %l:%M %p')
+    else
+      'unknown'
+    end
+  end
+
+  def display_gift_recommendations
+    gift_recommendations.
+      where(gift_id: Gift.select(:id).can_be_sold, removed_by_expert: false).
+      preload(
+        recommendation_set: [:profile], 
+        gift: [
+          :gift_images, 
+          :primary_gift_image, 
+          :products, 
+          :product_subcategory, 
+          :calculated_gift_field
+        ]
+      )
+  end
   
   def gift_recommendations
     GiftRecommendation.
