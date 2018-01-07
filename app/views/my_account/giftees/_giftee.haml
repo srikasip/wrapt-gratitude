@@ -1,6 +1,5 @@
 - all_recs = giftee.display_gift_recommendations || []
-- first_five_recs = (GiftRecommendation.select_for_display(all_recs)).take(5)
-
+- first_five_recs = (GiftRecommendation.select_for_display(all_recs) || []).take(5)
 .ma-giftee-card
   .ma-giftee-card__header
     = link_to edit_my_account_giftee_path(giftee), data: {loads_in_pjax_modal: true}, class: 'btn btn-xs btn-default btn-narrower-xs btn-upcase-gray ma-giftee-card__action' do
@@ -11,7 +10,7 @@
   .ma-giftee-card__content
     - if giftee.finished_surveys?
       .ma-giftee-recs__details.clearfix
-        %small.pull-right= giftee.display_last_rec_added_date
+        %small.pull-right= giftee.display_rec_set_last_update
       - if all_recs.size > 0
         - if giftee.has_viewed_initial_recommendations?
           - recs = GiftRecommendation.load_recommendations_for_display(all_recs)
@@ -29,9 +28,7 @@
       
       .ma-giftee-recs
         - first_five_recs.each do |rec|
-          .ma-giftee-rec{style: "background-image: url(#{rec.gift.carousel_thumb.image_url(:small)});"}
-            -#= image_tag rec.gift.carousel_thumb.image_url(:small), alt: rec.gift.title
-          
+          .ma-giftee-rec{style: "background-image: url(#{rec.gift.carousel_thumb.image_url(:small)});"}      
     - else
       :ruby
         question_response = giftee.first_unanswered_response
@@ -40,34 +37,3 @@
           COMPLETE THE QUIZ
 
 
--#
-  .ma-giftee-card
-    .ma-giftee-card__header
-      = link_to edit_my_account_giftee_path(giftee), data: {loads_in_pjax_modal: true}, class: 'btn btn-xs btn-default btn-narrower-xs btn-upcase-gray ma-giftee-card__action' do
-        Edit
-      .ma-giftee__name
-        = giftee.name
-        %small= giftee.relationship
-      -# removing reminders leaving this around if we bring back.
-      -# tabs = [{text: 'details', tab_pane_id: "ma-giftee-details__#{giftee.id}", active: true, tab_pane_partial: 'giftee_details'}, {text: 'reminders', tab_pane_id: "ma-giftee-reminders__#{giftee.id}", tab_pane_partial: 'giftee_reminders'}]
-      - tabs = [{text: 'details', tab_pane_id: "ma-giftee-details__#{giftee.id}", active: true, tab_pane_partial: 'giftee_details'}]
-      = wrapt_styled_tabs_1(tabs)
-    .ma-giftee-card__content
-      .tab-content.mb2
-        - tabs.each do |tab|
-          .tab-pane.fade{class: (tab[:active] ? 'in active' : ''), id: tab[:tab_pane_id]}
-            = render tab[:tab_pane_partial], giftee: giftee
-      - if giftee.finished_surveys?
-        - num_recommendations = GiftRecommendation.select_for_display(giftee.gift_recommendations)&.size || 0
-        - if num_recommendations > 0
-          = link_to giftee_gift_recommendations_path(giftee), class: 'btn btn-primary btn-block ma-giftee-card__btn' do
-            VIEW #{num_recommendations} RECOMMENDATIONS
-        - else
-          .btn.btn-primary.btn-block.ma-giftee-card__btn
-            NO RECOMMENDATIONS
-      - else
-        :ruby
-          question_response = giftee.first_unanswered_response
-        - if question_response.present?
-          = link_to giftee_survey_question_path(giftee_id: giftee.id, survey_id: question_response.survey_response_id, id: question_response.to_param), class: 'btn btn-default btn-block ma-giftee-card__btn' do
-            COMPLETE THE QUIZ

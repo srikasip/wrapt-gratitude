@@ -88,14 +88,15 @@ class Profile < ApplicationRecord
     gift_selections.map(&:gift).map(&:selling_price).sum
   end
 
-  def display_last_rec_added_date
-    last_rec = (GiftRecommendation.load_recommendations_for_display(display_gift_recommendations) || []).first
-    if last_rec
-      last_rec.created_at.strftime('%b %e, %l:%M %p')
+  def display_rec_set_last_update
+    # set = gift_recommendation_sets.order(created_at: :desc).first
+    set = most_recent_gift_recommendation_set
+    if set.present?
+      date = set.updated_at.strftime('%b %e, %l:%M %p')
     elsif recommendations_generated_at.present?
-      recommendations_generated_at.strftime('%b %e, %l:%M %p')
+      date = recommendations_generated_at.strftime('%b %e, %l:%M %p')
     else
-      'unknown'
+      nil
     end
   end
 
@@ -112,6 +113,10 @@ class Profile < ApplicationRecord
           :calculated_gift_field
         ]
       )
+  end
+
+  def most_recent_gift_recommendation_set
+    gift_recommendation_sets.order(created_at: :desc).first
   end
   
   def gift_recommendations

@@ -6,12 +6,16 @@
   .row
     .col-xs-12
       .ma-giftees
+        -#
+          - @sets.each do |set|
+            = render 'giftee', giftee: set.profile
         - @giftees.each do |giftee|
           = render 'giftee', giftee: giftee
   
   .row
     .col-xs-12
-      = paginate(@giftees)
+      = paginate(@sets)
+      -#= paginate(@giftees)
 = content_tag :page_js do
   :javascript
     $(document).ready(function() {
