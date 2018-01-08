@@ -19,9 +19,6 @@
           %label SKU
           = f.text_field :gift_id, size: 30
         .form-group
-          %label Score
-          = f.select :expert_score, (1..10)
-        .form-group
           = f.submit "Add Gift", class: 'btn btn-default'
         
 .row
@@ -29,6 +26,7 @@
     %table.table
       %thead
         %tr
+          %th Position
           %th Gift
           %th Source
           %th Remove?
@@ -39,6 +37,8 @@
           - css_classes << 'active' if rec.removed_by_expert?
           %tr{class: css_classes}
             - gift = rec.gift
+            %td
+              = rec.position + 1
             %td
               = "#{gift.title} (#{gift.wrapt_sku})"
               .save-notice
@@ -52,8 +52,7 @@
                 = f.input :removed_by_expert, input_html: {class: 'js_auto_save', id: nil}
             %td
               - if rec.added_by_expert?
-                = simple_form_for(rec, url: admin_gift_recommendation_path(rec), method: 'patch') do |f|
-                  = f.input :expert_score, label: false, collection: 1..10, selected: rec.expert_score.to_i, input_html: {class: 'js_auto_save', id: nil}
+                n/a
               - else
                 = rec.score.round
           

@@ -82,8 +82,7 @@
                           %span.glyphicon.glyphicon-remove{title: 'removed by expert'}
                         '#{truncate(rec.gift.title, length: 60)}' (#{rec.gift.wrapt_sku})
                         - if rec.added_by_expert?
-                          = "#{rec.expert_score.round}"
-                          %span.glyphicon.glyphicon-education{title: "added by expert (score: #{rec.expert_score.round})"}
+                          %span.glyphicon.glyphicon-education{title: "added by expert"}
                         - elsif !rec.random?
                           = "#{rec.score.round}"
                           %span.glyphicon.glyphicon-star{title: "added by algorithm (score: #{rec.score.round})"}

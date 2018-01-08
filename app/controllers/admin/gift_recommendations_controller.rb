@@ -4,7 +4,7 @@ module Admin
     before_filter :load_gift_recommendation_set, only: :create
     
     def create
-      attrs = params.require(:gift_recommendation).permit(:gift_id, :expert_score)
+      attrs = params.require(:gift_recommendation).permit(:gift_id)
       
       @profile = @recommendation_set.profile
       
@@ -19,19 +19,19 @@ module Admin
       
       attrs[:gift_id] = @gift.id
       attrs[:added_by_expert] = true
+      attrs[:position] = -1
       
       GiftRecommendation.transaction do
         @gift_recommendation = @recommendation_set.recommendations.create(attrs)
         @recommendation_set.update_attribute(:expert, current_user)
+        @recommendation_set.normalize_recommendation_positions!
       end
       redirect_to edit_path, notice: "#{@gift.title} (#{@gift.wrapt_sku}) added"
     end
     
     def update
       # can only score expert recs
-      allow_params = [:removed_by_expert]
-      allow_params << :expert_score if @gift_recommendation.added_by_expert?
-      attrs = params.require(:gift_recommendation).permit(allow_params)
+      attrs = params.require(:gift_recommendation).permit(:removed_by_expert)
       GiftRecommendation.transaction do
         @gift_recommendation.update_attributes(attrs)
         @recommendation_set.update_attribute(:expert, current_user)

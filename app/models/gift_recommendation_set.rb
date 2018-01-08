@@ -1,7 +1,6 @@
 class GiftRecommendationSet < ApplicationRecord
   belongs_to :profile
-  has_many :recommendations,
-    -> {order(expert_score: :desc, position: :asc, score: :desc, id: :asc)},
+  has_many :recommendations, -> {order(position: :asc)},
     dependent: :destroy, class_name: 'GiftRecommendation', foreign_key: :recommendation_set_id
   
   belongs_to :expert, class_name: 'User'
@@ -33,6 +32,12 @@ class GiftRecommendationSet < ApplicationRecord
   
   def engine_params
     self[:engine_params] ||= {}
+  end
+  
+  def normalize_recommendation_positions!
+    recommendations.reorder(position: :asc, score: :desc, id: :asc).each_with_index do |rec, position|
+      rec.update_attribute(:position, position)
+    end
   end
   
 end
