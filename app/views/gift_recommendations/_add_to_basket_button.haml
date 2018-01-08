@@ -3,5 +3,17 @@
   -#= submit_tag 'ADDED TO BASKET', class: 'btn btn-primary btn-narrower', disabled: true
   = link_to 'VIEW BASKET', '#', class: 'btn btn-primary btn-narrower btn-full-width', data: {behavior: 'open-gift-basket'}
 - else
-  = submit_tag 'ADD TO BASKET', class: 'btn btn-primary btn-narrower', onClick:"ga('send', 'event', 'basket', 'add to basket', '#{gift_selection.gift.title.gsub(/'/, "\x5c\x27")}');"
+  = submit_tag 'ADD TO BASKET', class: 'btn btn-primary btn-narrower', data: {analytics: 'add-gift-to-basket'}
 
+- content_for :page_js do
+  :javascript
+    $(document).ready(function() {
+      $('[data-analytics="add-gift-to-basket"]').click(function() {
+        ga('send', 'event', 'basket', 'add to basket', '#{gift_selection.gift.title.gsub(/'/, "\x5c\x27")}');
+        ga('ec:setAction', 'add', {
+          'dimension1': '#{@profile.try(:id) || -1}', 
+          'dimension4': 'n/a'
+        });
+      });
+    });
+    

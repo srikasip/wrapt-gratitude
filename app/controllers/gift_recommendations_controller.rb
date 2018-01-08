@@ -10,6 +10,7 @@ class GiftRecommendationsController < ApplicationController
 
   before_action :load_profile
   before_action :load_recommendations
+  before_action :include_enhanced_ecommerce_analytics
 
   def index
     current_user.update_attribute :last_viewed_profile_id, @profile.id

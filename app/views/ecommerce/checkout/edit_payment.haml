@@ -24,6 +24,18 @@
       stripeCharger.activate();
 
       App.ShowBillingAddress('', 'same_billing_zip', 'true', false, '.j-zip-code')
+
+      //Google Analytics Enhanced Ecommerce
+      var actionData = {
+        'option': 'Checkout 4: Payment Info',
+        'step': 4,
+        'tax': '#{@customer_order.taxes_in_dollars}',
+        'shipping': '#{@customer_order.combined_handling_in_dollars}',
+        'revenue': '#{@customer_order.total_to_charge_in_dollars}',
+        'dimension1': '#{analytics_gifter_id || -1}',
+        'dimension4': 'n/a'
+      }
+      ga('ec:setAction', 'checkout', actionData)
     })
 
 
