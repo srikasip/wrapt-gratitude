@@ -140,28 +140,33 @@
 .ma-giftees {
   @include flexbox();
   @include flexwrap();
+  @include flexcolumn();
+  align-content: space-between;
+  @media(max-width: $screen-xs-max) {
+    height: auto !important;
+  }
 }
 
 .ma-giftee-card {
+  @include flex(0 0 auto);
   margin-bottom: 30px;
   background-color: #FFFFFF;
   position: relative;
   @include shadowed-box__gray;
   width: 48%;
-  &:nth-child(odd) {
-    margin-right: 2%;
-    @media(max-width: $screen-xs-max) {
-      margin-right: 0px;
-    }
-  }
-  &:nth-child(even) {
-    margin-left: 2%;
-    @media(max-width: $screen-xs-max) {
-      margin-left: 0px;
-    }
-  }
   @media(max-width: $screen-xs-max) {
     width: 100%;
+  }
+}
+
+.ma-giftee-card:nth-child(odd) {
+  order: 1;
+}
+
+.ma-giftee-card:nth-child(even) {
+  order: 2;
+  @media(max-width: $screen-xs-max) {
+    order: 1;
   }
 }
 
@@ -195,15 +200,35 @@
 .ma-giftee-card__content {
   padding: 16px;
   background-color: #FDFDFD;
-  // margin-bottom: 72px;
 }
 
-.ma-giftee-card__btn {
-  // position: absolute;
-  // bottom: 16px;
-  // left: 16px;
-  // right: 16px;
-  // width: auto;
+.ma-giftee-recs__details {
+  line-height: 1.1;
+  font-size: 80%;
+  padding-left: 20px;
+  position: relative;
+}
+
+.ma-giftee-recs__notification {
+  display: inline-block;
+  position: absolute;
+  left: -8px;
+  bottom: -11px;
+  .icon-notify {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+  span {
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+    text-align: center;
+    color: #FFFFFF;
+    position: relative;
+    z-index: 2;
+  }
 }
 
 .ma-giftee-details__table {

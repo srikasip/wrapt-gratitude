@@ -17,8 +17,9 @@ class MyAccount::GifteesController < MyAccount::BaseController
   end
 
   def index
-    Kaminari.paginate_array(
-      @giftees = current_user.owned_profiles.unarchived.
+    @giftees = Kaminari.paginate_array(
+      current_user.owned_profiles.unarchived.
+        preload(gift_recommendation_sets: :recommendations).
         sort_by do |profile|
           if profile.most_recent_gift_recommendation_set.present?
             profile.most_recent_gift_recommendation_set.updated_at

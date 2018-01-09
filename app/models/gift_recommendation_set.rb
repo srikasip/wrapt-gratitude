@@ -8,6 +8,8 @@ class GiftRecommendationSet < ApplicationRecord
 
   serialize :engine_params
   serialize :engine_stats
+
+  has_many :gift_recommendation_notifications, dependent: :destroy
   
   
   ENGINE_TYPES = %w{survey_response_engine}

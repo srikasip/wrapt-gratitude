@@ -10,7 +10,13 @@
   .ma-giftee-card__content
     - if giftee.finished_surveys?
       .ma-giftee-recs__details.clearfix
-        %small.pull-right= giftee.display_rec_set_last_update
+        - notifications = @my_giftee_notifications[giftee.most_recent_gift_recommendation_set] || []
+        - if notifications.any?
+          .ma-giftee-recs__notification
+            %span= notifications.size
+            = embedded_svg('icon-wrapt-heart', class: 'svg-icon icon-notify')
+          .pull-left= link_to 'See New WRAPT Recommendations', giftee_gift_recommendations_path(giftee)
+        .pull-right= giftee.display_rec_set_last_update
       - if all_recs.size > 0
         - if giftee.has_viewed_initial_recommendations?
           - recs = GiftRecommendation.load_recommendations_for_display(all_recs)

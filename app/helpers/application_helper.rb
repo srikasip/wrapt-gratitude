@@ -63,7 +63,15 @@ module ApplicationHelper
     elsif text == 'Sign In'
       content = link_to path, data: {loads_in_pjax_modal: true, toggle: "fade out", target: '.top-navigation__menu'} do
         concat embedded_svg('icon-circle', class: 'icon navbar-static-top__icon-circle')
+        concat " #{text}" 
+      end
+    elsif text == 'My Giftees'
+      content = link_to path do
+        concat embedded_svg('icon-circle', class: 'icon navbar-static-top__icon-circle')
         concat " #{text}"
+        if @my_giftee_notifications.keys.any?
+          concat top_nav_link_notification
+        end
       end
     else
       content = link_to path do
@@ -72,6 +80,13 @@ module ApplicationHelper
       end
     end
     top_nav_link(content)
+  end
+
+  def top_nav_link_notification
+    content_tag :div, class: 'top-navigation__notification' do
+      concat content_tag :span, @my_giftee_notifications.keys.size
+      concat embedded_svg('icon-wrapt-heart', class: 'svg-icon icon-notify navbar-static-top__icon-notify')
+    end
   end
 
   def top_nav_link_gift_basket(path, text, options={})

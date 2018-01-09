@@ -8,6 +8,18 @@
   stroke: currentColor;
   fill: currentColor;
 }
+.icon-notify {
+  width: 2em;
+  height: 2em;
+  stroke: #8F1622;
+  fill: #8F1622;
+}
+.navbar-static-top__icon-notify {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  z-index: 1;
+}
 .navbar-static-top__icon-circle {
   display: inline-block;
   width: 12px;

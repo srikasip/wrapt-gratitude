@@ -10,6 +10,7 @@ class GiftRecommendationsController < ApplicationController
 
   before_action :load_profile
   before_action :load_recommendations
+  before_action :update_notifications, only: [:index]
 
   def index
     current_user.update_attribute :last_viewed_profile_id, @profile.id
@@ -47,6 +48,15 @@ class GiftRecommendationsController < ApplicationController
   end
 
   private
+
+  def update_notifications
+    @gift_recommendation_set = @gift_recommendations.first.recommendation_set
+    set_notification_ids = (@my_giftee_notifications[@gift_recommendation_set] || []).map(&:id)
+    if set_notification_ids.any?
+      GiftRecommendationNotification.where(id: set_notification_ids).update_all(viewed: true)
+      @my_giftee_notifications = @my_giftee_notifications.except!(@gift_recommendation_set)
+    end
+  end
 
   def next_index(current_index, size)
     n = current_index + 1

@@ -6,18 +6,33 @@
   .row
     .col-xs-12
       .ma-giftees
-        -#
-          - @sets.each do |set|
-            = render 'giftee', giftee: set.profile
         - @giftees.each do |giftee|
           = render 'giftee', giftee: giftee
   
   .row
     .col-xs-12
-      = paginate(@sets)
-      -#= paginate(@giftees)
+      = paginate(@giftees)
 = content_tag :page_js do
   :javascript
     $(document).ready(function() {
       App.WraptStyledTabs('.wrapt-styled-tabs-1', '.wrapt-styled-tabs-1__tab');
+
+      var cards = $('.ma-giftee-card');
+      var col1Height = 0;
+      var col2Height = 0;
+
+      cards.each(function(index) {
+        var h = $(this).outerHeight(true);
+        if(index%2 === 0) {
+          col1Height += h;
+        } else {
+          col2Height += h;
+        }
+      });
+      var height = col1Height;
+      if(col2Height > col1Height) {
+        height = col2Height;
+      }
+
+      $('.ma-giftees').css('height', height+'px');
     })

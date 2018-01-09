@@ -24,6 +24,7 @@ module Admin
         @gift_recommendation = @recommendation_set.recommendations.create(attrs)
         @recommendation_set.update_attribute(:expert, current_user)
         @recommendation_set.touch
+        @recommendation_set.gift_recommendation_notifications.create(user: @profile.owner)
       end
       redirect_to edit_path, notice: "#{@gift.title} (#{@gift.wrapt_sku}) added"
     end
