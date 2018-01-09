@@ -24,7 +24,10 @@ module Admin
         @gift_recommendation = @recommendation_set.recommendations.create(attrs)
         @recommendation_set.update_attribute(:expert, current_user)
         @recommendation_set.touch
-        @recommendation_set.gift_recommendation_notifications.create(user: @profile.owner)
+        @recommendation_set.gift_recommendation_notifications.create(
+          user: @profile.owner,
+          gift_recommendation: @gift_recommendation
+        )
       end
       redirect_to edit_path, notice: "#{@gift.title} (#{@gift.wrapt_sku}) added"
     end
@@ -37,7 +40,10 @@ module Admin
       GiftRecommendation.transaction do
         @gift_recommendation.update_attributes(attrs)
         @recommendation_set.update_attribute(:expert, current_user)
-     end
+        if @gift_recommendation.removed_by_expert?
+          @gift_recommendation.notifications.destroy_all
+        end
+      end
       redirect_to edit_path, notice: "#{@gift.title} (#{@gift.wrapt_sku}) updated"
     end
     

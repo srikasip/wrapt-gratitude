@@ -8,6 +8,8 @@ class GiftRecommendation < ApplicationRecord
   MAX_SHOWN_TO_USER = 6
   
   delegate :featured?, :experience?, to: :gift
+
+  has_many :notifications, class_name: 'GiftRecommendationNotification', dependent: :destroy
   
   def self.available
     where(gift_id: Gift.select(:id).can_be_sold, removed_by_expert: false)
