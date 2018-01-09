@@ -25,11 +25,22 @@
         in your cart
 
       - if checkout_enabled?
-        = link_to 'CHECK OUT', ecommerce_checkout_start_path(giftee_id: profile.id), class: 'btn btn-primary btn-full-width btn-gift-basket-submit', id: 'js-checkout', method: :patch
+        = link_to 'CHECK OUT', ecommerce_checkout_start_path(giftee_id: profile.id), class: 'btn btn-primary btn-full-width btn-gift-basket-submit', id: 'js-checkout', method: :patch, data: {analytics: 'start-checkout'}
       - else
         = link_to 'CHECK OUT COMING SOON', 'javascript:void(0)', class: 'btn btn-primary btn-full-width btn-gift-basket-submit'
 
 
-- content_for :page_js do
+
+= content_for :page_js do
   :javascript
     new App.GiftBasket({num_gifts: #{profile.gift_selections.count}})
+    $(document).ready(function() {
+      $('body').on('click', '[data-analytics="start-checkout"]', function() {
+        ga('ec:setAction', 'checkout', {
+          'option': 'initiate checkout', 
+          'step': 0, 
+          'dimension1': '#{@profile.try(:id) || -1}', 
+          'dimension4': 'n/a'
+        });
+      })
+    })

@@ -16,4 +16,12 @@
     $(document).ready(function() {
       App.NoteBehavior('customer_order', 'gift_wrapt', 'true', true, '.j-co-gift-wrapt__note-1')
       App.NoteBehavior('customer_order', 'include_note', '0', false, '.j-co-gift-wrapt__note-2')
+      
+      //Google Analytics Enhanced Ecommerce
+      ga('ec:setAction', 'checkout', {
+        'option': 'Checkout 1: Note', 
+        'step': 1,
+        'dimension1': '#{analytics_gifter_id || -1}',
+        'dimension4': 'n/a'
+      });
     })

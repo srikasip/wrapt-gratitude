@@ -55,4 +55,8 @@ class ApplicationController < ActionController::Base
     cookies.signed[:user_id] = current_user&.id
   end
 
+  def include_enhanced_ecommerce_analytics
+    @include_enhanced_ecommerce_analytics = true
+  end
+
 end

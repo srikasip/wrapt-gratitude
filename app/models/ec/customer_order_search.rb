@@ -12,7 +12,7 @@ module Ec
       if search_params[:updated_at].present?
         start_datetime = Date.parse(search_params[:updated_at])
         end_datetime = start_datetime.tomorrow
-        base_scope = base_scope.where("updated_at between ? AND ?", start_datetime, end_datetime)
+        base_scope = base_scope.where("created_at between ? AND ?", start_datetime, end_datetime)
       end
 
       if search_params[:email].present?
@@ -25,7 +25,7 @@ module Ec
         base_scope = base_scope.where(status: search_params[:status].keys)
       end
 
-      base_scope.order('updated_at desc').preload(:user, :line_items => :orderable).page(params[:page])
+      base_scope.order('created_at desc').preload(:user, :line_items => :orderable).page(params[:page])
     end
   end
 end

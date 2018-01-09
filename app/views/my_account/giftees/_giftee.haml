@@ -26,6 +26,7 @@
           - non_expert_recs = all_recs.select{|r| !r.added_by_expert}
           - recs = expert_recs + GiftRecommendation.select_for_display(non_expert_recs)
           - btn_text = "VIEW #{recs.size} AND GET MORE"
+        
         = link_to giftee_gift_recommendations_path(giftee), class: 'btn btn-primary btn-block ma-giftee-card__btn' do
           =btn_text
       - else
