@@ -75,10 +75,7 @@ class GifteesController < ApplicationController
   end
 
   private def set_survey
-    if current_user&.admin? && params[:survey_id]
-      @survey = Survey.where(id: params[:survey_id], test_mode: true).first
-    end
-    @survey ||= Survey.published.first
+    @survey = Survey.published.first
   end
 
   # TODO - dead method no longer used?
