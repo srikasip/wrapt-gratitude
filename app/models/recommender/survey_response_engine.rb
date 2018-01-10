@@ -8,7 +8,7 @@ module Recommender
     def initialize(recommendation_set)
       super(recommendation_set)
       
-      @max_total_new = recommendation_set.engine_params['max_total_new'] ||= 12
+      @max_total_new = recommendation_set.engine_params[:max_total_new] ||= 12
       
       load_survey_response
     end

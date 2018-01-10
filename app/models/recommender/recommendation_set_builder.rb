@@ -1,11 +1,12 @@
 module Recommender
   class RecommendationSetBuilder
     
-    attr_reader :recommendation_set, :profile, :previous_recommendation_set
+    attr_reader :recommendation_set, :profile, :previous_recommendation_set, :max_generation_count
 
     def initialize(profile, params = {})
       @profile = profile
       @previous_recommendation_set = profile.current_gift_recommendation_set
+      @max_generation_count = params[:engine_type] || 2
       @recommendation_set = profile.gift_recommendation_sets.build(
         engine_type: params[:engine_type].presence || 'survey_response_engine',
         engine_params: params
@@ -26,6 +27,7 @@ module Recommender
      
     def copy_previous_recommendations
       return false if previous_recommendation_set.blank?
+      return false if previous_recommendation_set.generation_number >= max_generation_count - 1
       
       recommendation_set.generation_number = previous_recommendation_set.generation_number + 1
       
