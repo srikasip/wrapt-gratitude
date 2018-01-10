@@ -95,7 +95,7 @@ module Recommender
     end
 
     def generate_recommendations
-      @gift_scores.take(max_total_new).each_with_index do |gift_score|
+      @gift_scores.take(max_total_new).each_with_index do |gift_score, position|
         recommendation = GiftRecommendation.new(
           gift_id: gift_score[:id],
           score: gift_score[:score],

@@ -7,8 +7,8 @@ class GenerateRecommendationsJob < ApplicationJob
     return if profile.recommendations_generated_at.present?
 
     profile.update_attribute :recommendations_in_progress, true
-    profile.generate_recommendation_set!(params)
-    profile.update_attribute(:recommendations_generated_at, Time.now)
+    
+    profile.generate_gift_recommendation_set!(params)
   ensure
     profile.update_attribute :recommendations_in_progress, false
   end
