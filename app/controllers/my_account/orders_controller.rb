@@ -4,6 +4,9 @@ class MyAccount::OrdersController < MyAccount::BaseController
 
   def index
     @orders = Ec::UserOrderSearch.new(current_user, params).results
+    if params[:search].present? && params[:search][:profile_id].present?
+      @profile_id = params[:search][:profile_id]
+    end
   end
 
   def show

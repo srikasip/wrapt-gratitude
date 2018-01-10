@@ -12,7 +12,10 @@
             ['Completed Orders', 'completed']
           ]
         - options.each do |option|
-          = link_to my_account_orders_path(search: {filter: option[1]}) do 
+          - search_params = {filter: option[1]}
+          - if @profile_id.present?
+            - search_params[:profile_id] = @profile_id
+          = link_to my_account_orders_path(search: search_params) do 
             = option[0]
   .row
     .col-xs-12

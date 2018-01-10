@@ -39,7 +39,7 @@ class Profile < ApplicationRecord
   scope :unarchived, -> {where(archived_at: nil)}
   scope :archived, -> {where.not(archived_at: nil)}
 
-  STALE_DATE = DateTime.now.beginning_of_day - 30.days
+  STALE_DATE = DateTime.now.utc.beginning_of_day - 30.days
 
   def is_fresh?
     active_gift_recommendation_set.present? || updated_at >= STALE_DATE || has_orders?

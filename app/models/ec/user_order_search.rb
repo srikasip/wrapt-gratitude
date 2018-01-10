@@ -25,6 +25,10 @@ module Ec
         end
       end
 
+      if search_params[:profile_id].present?
+        base_scope = base_scope.where(profile_id: search_params[:profile_id])
+      end
+
       base_scope.order('submitted_on desc, created_at desc')
         .preload(:profile, :purchase_orders => {shipment: :shipping_label}).
          page(params[:page])
