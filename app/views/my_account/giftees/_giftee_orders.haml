@@ -1,0 +1,7 @@
+- if giftee.has_orders?
+  %small.pull-right
+    - sent_gift_size = giftee.customer_orders.size
+    - if sent_gift_size > 1
+      = link_to "See #{sent_gift_size} gifts sent", my_account_orders_path
+    - else
+      = link_to "See #{sent_gift_size} gift sent", my_account_order_path(giftee.customer_orders.first)

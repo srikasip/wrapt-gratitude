@@ -20,15 +20,10 @@ class MyAccount::GifteesController < MyAccount::BaseController
     @giftees = Kaminari.paginate_array(
       current_user.owned_profiles.unarchived.
         preload(gift_recommendation_sets: :recommendations).
-        sort_by do |profile|
-          if profile.most_recent_gift_recommendation_set.present?
-            profile.most_recent_gift_recommendation_set.updated_at
-          else
-            profile.updated_at
-          end
-        end.reverse!
+        select{|profile| profile.is_fresh?}.
+        sort_by{|profile| profile.sorting_and_display_updated_at}.
+        reverse!
       ).page(params[:page])
-
   end
 
   def edit

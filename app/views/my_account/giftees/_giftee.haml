@@ -6,11 +6,15 @@
       Edit
     .ma-giftee__name
       = giftee.name
-      %small= giftee.relationship
+      .ma-giftee__sub-name
+        %small= giftee.relationship
+        = render 'giftee_orders', giftee: giftee
   .ma-giftee-card__content
-    - if giftee.finished_surveys?
+    - if giftee.has_orders?
+      TODO
+    - elsif giftee.finished_surveys?
       .ma-giftee-recs__details.clearfix
-        - notifications = @my_giftee_notifications[giftee.most_recent_gift_recommendation_set] || []
+        - notifications = @my_giftee_notifications[giftee.active_gift_recommendation_set] || []
         - if notifications.any?
           .ma-giftee-recs__notification
             %span= notifications.size

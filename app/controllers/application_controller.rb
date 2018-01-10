@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
     if current_user.present?
       gift_recommendation_set_ids = current_user.owned_profiles.unarchived.
         map do |profile|
-          profile.most_recent_gift_recommendation_set.try(:id)
+          profile.active_gift_recommendation_set.try(:id)
         end
       @my_giftee_notifications = current_user.gift_recommendation_notifications.
         where(gift_recommendation_set_id: gift_recommendation_set_ids).

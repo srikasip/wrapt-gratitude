@@ -23,6 +23,7 @@ class Profile < ApplicationRecord
   has_many :recipient_gift_dislikes, inverse_of: :profile, dependent: :destroy
   has_many :recipient_gift_selections, -> {order 'recipient_gift_selections.id'}, dependent: :destroy
 
+  has_many :customer_orders, class_name: "Ec::CustomerOrder"
   # this can go away once the migrations have been run to copy and remove it.
   serialize :recommendation_stats, Hash
 
@@ -37,6 +38,16 @@ class Profile < ApplicationRecord
 
   scope :unarchived, -> {where(archived_at: nil)}
   scope :archived, -> {where.not(archived_at: nil)}
+
+  STALE_DATE = DateTime.now.beginning_of_day - 30.days
+
+  def is_fresh?
+    active_gift_recommendation_set.present? || updated_at >= STALE_DATE || has_orders?
+  end
+
+  def has_orders?
+    customer_orders.any?
+  end
 
   def allow_new_recommendations!
     update_attribute(:recommendations_generated_at, nil)
@@ -88,16 +99,17 @@ class Profile < ApplicationRecord
     gift_selections.map(&:gift).map(&:selling_price).sum
   end
 
-  def display_rec_set_last_update
-    # set = gift_recommendation_sets.order(created_at: :desc).first
-    set = most_recent_gift_recommendation_set
+  def sorting_and_display_updated_at
+    set = active_gift_recommendation_set
     if set.present?
-      date = set.updated_at.strftime('%b %e, %l:%M %p')
-    elsif recommendations_generated_at.present?
-      date = recommendations_generated_at.strftime('%b %e, %l:%M %p')
+      set.updated_at
     else
-      nil
+      updated_at
     end
+  end
+
+  def display_rec_set_last_update
+    sorting_and_display_updated_at.strftime('%b %e, %l:%M %p')
   end
 
   def display_gift_recommendations
@@ -115,8 +127,15 @@ class Profile < ApplicationRecord
       )
   end
 
-  def most_recent_gift_recommendation_set
-    gift_recommendation_sets.order(created_at: :desc).first
+  def active_gift_recommendation_set
+    # give me the most recent set
+    # that has notifications
+    # or
+    # is after STALE_DATE
+    set = gift_recommendation_sets.order(created_at: :desc).first
+    if set.present? && set.recommendations.any? && set.is_fresh?
+      set
+    end
   end
   
   def gift_recommendations
