@@ -16,8 +16,7 @@ class GiftRecommendationSet < ApplicationRecord
   validates :engine_type, inclusion: {in: ENGINE_TYPES}
 
   def is_fresh?
-    # (gift_recommendation_notifications.where(viewed: false).any? || updated_at >= STALE_DATE)
-    updated_at >= STALE_DATE
+    gift_recommendation_notifications.where(viewed: false).any? || updated_at >= STALE_DATE
   end
 
   def engine
