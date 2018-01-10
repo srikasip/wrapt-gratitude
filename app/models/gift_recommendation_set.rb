@@ -8,36 +8,7 @@ class GiftRecommendationSet < ApplicationRecord
   serialize :engine_params
   serialize :engine_stats
   
-  
   ENGINE_TYPES = %w{survey_response_engine}
   
-  validates :engine_type, inclusion: {in: ENGINE_TYPES}
-  
-  def engine
-    @_engine || create_engine
-  end
-  
-  def create_engine
-    type_to_class = {'survey_response_engine' => Recommender::SurveyResponseEngine}
-    engine_class = type_to_class[engine_type]
-    @_engine = engine_class.new(self)
-  end
-  
-  def generate_recommendations!
-    engine.destroy_recommendations!
-    engine.run
-    engine.save_recommendations!
-    return recommendations
-  end
-  
-  def engine_params
-    self[:engine_params] ||= {}
-  end
-  
-  def normalize_recommendation_positions!
-    recommendations.reorder(position: :asc, score: :desc, id: :asc).each_with_index do |rec, position|
-      rec.update_attribute(:position, position)
-    end
-  end
-  
+  validates :engine_type, inclusion: {in: ENGINE_TYPES}  
 end

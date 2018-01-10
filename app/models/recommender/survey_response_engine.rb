@@ -1,12 +1,14 @@
 module Recommender
   class SurveyResponseEngine < EngineBase
 
-    attr_reader :survey_response, :filters, :scorers, :gift_scope
+    attr_reader :survey_response, :filters, :scorers, :gift_scope, :max_total_new
 
     delegate :survey, :question_responses, to: :survey_response
 
     def initialize(recommendation_set)
       super(recommendation_set)
+      
+      @max_total_new = recommendation_set.engine_params['max_total_new'] ||= 12
       
       load_survey_response
     end
@@ -58,6 +60,11 @@ module Recommender
           @gift_scope.where("gifts.id in (#{filter.gift_scope.to_sql})")
         end
       end
+      if recommendation_set.recommendations.any?
+        #excluded any gift currently in the set
+        t = Gift.arel_table
+        @gift_scope.where(t[:id].not_in(recommendation_set.recommendations.map(&:gift_id)))
+      end
       @gift_scope
     end
 
@@ -68,7 +75,7 @@ module Recommender
         from (#{sql_union_scorers}) as raw
         group by id
         order by score desc, random()
-        limit #{10 * max_total}
+        limit #{20 * max_total_new}
       }
       rows = Gift.connection.select_rows(sql_scores)
 
@@ -83,17 +90,16 @@ module Recommender
     end
 
     def filter_gift_scores
-      filter = Recommender::PostProcessing::UniqueProductFilter.new(@gift_scores, max_total)
+      filter = Recommender::PostProcessing::UniqueProductFilter.new(@gift_scores, max_total_new)
       @gift_scores = filter.filter
     end
 
     def generate_recommendations
-      @gift_scores.take(max_total).each_with_index do |gift_score, position|
+      @gift_scores.take(max_total_new).each_with_index do |gift_score|
         recommendation = GiftRecommendation.new(
           gift_id: gift_score[:id],
           score: gift_score[:score],
-          position: position,
-          recommendation_set: recommendation_set
+          position: position
         )
         recommendations << recommendation
       end

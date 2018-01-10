@@ -88,8 +88,23 @@ class Profile < ApplicationRecord
     gift_selections.map(&:gift).map(&:selling_price).sum
   end
   
+  def current_recommendation_set
+    t = GiftRecommendationSet.arel_table
+    gift_recommendation_sets.where(t[:created_at].gt(30.days.ago)).order(created_at: :desc).first
+  end
+  
   def gift_recommendations
-    GiftRecommendation.
-      where(recommendation_set_id: gift_recommendation_sets.select(:id).order(created_at: :desc).limit(1))
+    current_recommendation_set.recommendations
+  end
+  
+  def generate_recommendation_set!(params = {})
+    params = {
+      engine_type:      'survey_response_engine',
+      max_total_new:    GiftRecommendation::MAX_SHOWN_TO_USER
+    }.merge(params)
+    
+    builder = Recommender::RecommendationSetBuilder.new(profile, params)
+    builder.build
+    builder.save!
   end
 end
