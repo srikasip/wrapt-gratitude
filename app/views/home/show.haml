@@ -5,16 +5,7 @@
   .container
     .row
       .hero-overrun.col-sm-10.col-sm-offset-1
-        - if require_invites? && current_user.blank?
-          = render "shared/invitation_request"
-        - else
-          = simple_form_for @question_response, url: giftees_path, html: {data: {behavior: 'question-response-form'}, class: 'sqr-form'} do |form|
-            - if current_user&.admin?
-              = hidden_field_tag :survey_id, @survey.id
-            = render response_fields_partial, form: form, label: @question_response.survey_question.prompt
-            .sqr-submit__container.text-right#js-sqr-submit__container
-              %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}
-                Next
+        = render 'shared/start_quiz'
 
 - content_for :after_wrapper do
   = render 'home/how_wrapt_works'

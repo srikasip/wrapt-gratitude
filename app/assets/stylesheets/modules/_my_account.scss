@@ -137,6 +137,10 @@
   }
 }
 
+.ma-giftees__container {
+  border-bottom: 1px solid $gray-005;
+}
+
 .ma-giftees {
   @include flexbox();
   @include flexwrap();
