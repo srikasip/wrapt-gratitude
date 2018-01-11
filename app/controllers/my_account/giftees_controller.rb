@@ -5,6 +5,7 @@ class MyAccount::GifteesController < MyAccount::BaseController
   helper :survey_question_responses
 
   before_action :_load_giftee, only: [:edit, :update]
+  before_action :_load_survey, only: [:index]
 
   def new
     @survey ||= Survey.published.first
@@ -42,6 +43,17 @@ class MyAccount::GifteesController < MyAccount::BaseController
   end
 
   private
+
+  def _load_survey
+    @survey ||= Survey.published.first
+
+    first_question = if @survey.sections.any?
+      @survey.sections.first.questions.first
+    else
+      @survey.questions.first
+    end
+    @question_response = SurveyQuestionResponse.new survey_question: first_question
+  end
 
   def _load_giftee
     @giftee = current_user.owned_profiles.find(params[:id])

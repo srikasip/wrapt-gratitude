@@ -1,17 +1,26 @@
 .container
   = render 'header'
-  .row
-    .col-xs-12.visible-xs.mb3
-      = link_to 'New Giftee', new_my_account_giftee_path, class: 'btn btn-sm btn-primary uppercase btn-block', style: 'margin-top: -18px;', data: {loads_in_pjax_modal: true}
-  .row
-    .col-xs-12
-      .ma-giftees
-        - @giftees.each do |giftee|
-          = render 'giftee', giftee: giftee
-  
-  .row
-    .col-xs-12
-      = paginate(@giftees)
+  .ma-giftees__container.pb5.mb5
+    .row
+      .col-xs-12.visible-xs.mb3
+        = link_to 'New Giftee', new_my_account_giftee_path, class: 'btn btn-sm btn-primary uppercase btn-block', style: 'margin-top: -18px;', data: {loads_in_pjax_modal: true}
+    .row
+      .col-xs-12
+        .ma-giftees
+          - @giftees.each do |giftee|
+            = render 'giftee', giftee: giftee
+    
+    .row
+      .col-xs-12
+        = paginate(@giftees)
+  .ma-giftees__start-quiz
+    .row
+      .col-xs-12
+        %h2.about-page__header Find Gifts for Someone New
+    .row
+      .col-sm-10.col-sm-offset-1.sg-question
+        = render 'shared/start_quiz'
+
 = content_tag :page_js do
   :javascript
     $(document).ready(function() {

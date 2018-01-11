@@ -13,7 +13,13 @@ class Survey < ApplicationRecord
 
   has_many :sections, -> {order 'sort_order ASC'}, class_name: 'SurveySection', inverse_of: :survey, dependent: :destroy
 
-  scope :published, -> { where(published: true) }
+  def self.published
+    if !Rails.env.production? && where(test_mode: true).any?
+      where(test_mode: true)
+    else
+      where(published: true)
+    end
+  end
 
   def sections_with_uncategorized
     sections.to_a.push uncategorized_section
