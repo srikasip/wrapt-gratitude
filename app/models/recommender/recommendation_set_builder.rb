@@ -46,6 +46,7 @@ module Recommender
       recommendation_set.engine_stats = engine.stats
       engine.recommendations.each do |rec|
         rec.position = recommendations.size
+        rec.generation_number = recommendation_set.generation_number
         recommendations << rec
       end
       true
