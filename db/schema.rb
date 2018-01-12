@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180112180457) do
+ActiveRecord::Schema.define(version: 20180112194803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -219,15 +219,6 @@ ActiveRecord::Schema.define(version: 20180112180457) do
     t.index ["gift_id"], name: "index_gift_question_impacts_on_gift_id", using: :btree
     t.index ["survey_question_id"], name: "index_gift_question_impacts_on_survey_question_id", using: :btree
     t.index ["training_set_id"], name: "index_gift_question_impacts_on_training_set_id", using: :btree
-  end
-
-  create_table "gift_recommendation_notifications", force: :cascade do |t|
-    t.integer  "gift_recommendation_set_id"
-    t.integer  "user_id"
-    t.boolean  "viewed",                     default: false, null: false
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
-    t.integer  "gift_recommendation_id"
   end
 
   create_table "gift_recommendation_sets", force: :cascade do |t|

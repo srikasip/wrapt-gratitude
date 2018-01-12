@@ -8,8 +8,6 @@ class GiftRecommendation < ApplicationRecord
   MAX_SHOWN_TO_USER = 6
   
   delegate :featured?, :experience?, to: :gift
-
-  has_many :notifications, class_name: 'GiftRecommendationNotification', dependent: :destroy
   
   def self.available
     where(gift_id: Gift.select(:id).can_be_sold, removed_by_expert: false)
@@ -25,6 +23,10 @@ class GiftRecommendation < ApplicationRecord
 
   def random?
     score == 0
+  end
+  
+  def notify?
+    added_by_expert && !removed_by_expert && !viewed
   end
   
   def normalize_expert_score

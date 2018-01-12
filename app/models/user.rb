@@ -44,7 +44,6 @@ class User < ApplicationRecord
   belongs_to :last_viewed_profile, class_name: 'Profile'
   belongs_to :recipient_referring_profile, class_name: 'Profile'
   has_one :invitation_request, foreign_key: :invited_user_id
-  has_many :gift_recommendation_notifications, dependent: :destroy
   
   has_many :expert_gift_recommendation_sets, class_name: 'GiftRecommendationSet', foreign_key: :expert_id, dependent: :nullify
 
@@ -94,6 +93,10 @@ class User < ApplicationRecord
     if unmoderated_testing_platform?
       self.source = 'unmoderated_testing_platform'
     end
+  end
+  
+  def profile_notifications
+    @_profile_notifications ||= ProfileNotifications.new(self)
   end
 
 end

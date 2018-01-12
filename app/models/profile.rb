@@ -90,7 +90,7 @@ class Profile < ApplicationRecord
 
   def display_rec_set_last_update
     # set = gift_recommendation_sets.order(created_at: :desc).first
-    set = most_recent_gift_recommendation_set
+    set = current_gift_recommendation_set
     if set.present?
       date = set.updated_at.strftime('%b %e, %l:%M %p')
     elsif recommendations_generated_at.present?
@@ -114,15 +114,15 @@ class Profile < ApplicationRecord
         ]
       )
   end
-
-  def most_recent_gift_recommendation_set
-    gift_recommendation_sets.order(created_at: :desc).first
-  end
   
   def current_gift_recommendation_set
     if !defined?(@_current_gift_recommendation_set)
       t = GiftRecommendationSet.arel_table
-      @_current_gift_recommendation_set = gift_recommendation_sets.where(t[:created_at].gt(30.days.ago)).order(created_at: :desc).first
+      @_current_gift_recommendation_set =
+        gift_recommendation_sets.
+          preload(recommendations: {gift: :primary_gift_image}).
+          where(t[:created_at].gt(30.days.ago)).
+          order(created_at: :desc).first
     end
     @_current_gift_recommendation_set
   end
@@ -133,6 +133,10 @@ class Profile < ApplicationRecord
     else
       GiftRecommendation.none
     end
+  end
+  
+  def notification_count
+    gift_recommendations.select(&:notify?).size
   end
   
   def generate_gift_recommendation_set!(params = {})

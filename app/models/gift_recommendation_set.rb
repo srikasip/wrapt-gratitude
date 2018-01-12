@@ -7,10 +7,29 @@ class GiftRecommendationSet < ApplicationRecord
 
   serialize :engine_params
   serialize :engine_stats
-
-  has_many :gift_recommendation_notifications, dependent: :destroy
   
   ENGINE_TYPES = %w{survey_response_engine}
   
-  validates :engine_type, inclusion: {in: ENGINE_TYPES}  
+  TTL = 30.days
+  
+  validates :engine_type, inclusion: {in: ENGINE_TYPES}
+  
+  def self.active
+    t = GiftRecommendationSet.arel_table
+    where(t[:updated_at].gt(TTL.ago))
+  end
+  
+  def active?
+    updated_at > TTL.ago
+  end
+
+  def engine_params
+    self[:engine_params] ||= {}
+  end
+  
+  def normalize_recommendation_positions!
+    recommendations.reorder(position: :asc, score: :desc, id: :asc).each_with_index do |rec, position|
+      rec.update_attribute(:position, position)
+    end
+  end
 end

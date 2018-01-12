@@ -22,8 +22,8 @@ class MyAccount::GifteesController < MyAccount::BaseController
       current_user.owned_profiles.unarchived.
         preload(gift_recommendation_sets: :recommendations).
         sort_by do |profile|
-          if profile.most_recent_gift_recommendation_set.present?
-            profile.most_recent_gift_recommendation_set.updated_at
+          if profile.current_gift_recommendation_set.present?
+            profile.current_gift_recommendation_set.updated_at
           else
             profile.updated_at
           end
