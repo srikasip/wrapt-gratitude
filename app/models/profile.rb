@@ -119,8 +119,30 @@ class Profile < ApplicationRecord
     gift_recommendation_sets.order(created_at: :desc).first
   end
   
+  def current_gift_recommendation_set
+    if !defined?(@_current_gift_recommendation_set)
+      t = GiftRecommendationSet.arel_table
+      @_current_gift_recommendation_set = gift_recommendation_sets.where(t[:created_at].gt(30.days.ago)).order(created_at: :desc).first
+    end
+    @_current_gift_recommendation_set
+  end
+  
   def gift_recommendations
-    GiftRecommendation.
-      where(recommendation_set_id: gift_recommendation_sets.select(:id).order(created_at: :desc).limit(1))
+    if current_gift_recommendation_set.present?
+      current_gift_recommendation_set.recommendations
+    else
+      GiftRecommendation.none
+    end
+  end
+  
+  def generate_gift_recommendation_set!(params = {})
+    params = {
+      engine_type:      'survey_response_engine',
+      max_total_new:    GiftRecommendation::MAX_SHOWN_TO_USER
+    }.merge(params)
+    
+    builder = Recommender::RecommendationSetBuilder.new(self, params)
+    builder.build
+    builder.save!
   end
 end
