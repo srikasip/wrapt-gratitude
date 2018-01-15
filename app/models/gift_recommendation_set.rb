@@ -12,30 +12,27 @@ class GiftRecommendationSet < ApplicationRecord
   
   STALE_DATE = DateTime.now.utc.beginning_of_day - 30.days
   ENGINE_TYPES = %w{survey_response_engine}
+  TTL = 30.days
   
   validates :engine_type, inclusion: {in: ENGINE_TYPES}
 
   def is_fresh?
-    gift_recommendation_notifications.where(viewed: false).any? || updated_at >= STALE_DATE
+    updated_at >= STALE_DATE
   end
 
   def engine
     @_engine || create_engine
   end
   
-  def create_engine
-    type_to_class = {'survey_response_engine' => Recommender::SurveyResponseEngine}
-    engine_class = type_to_class[engine_type]
-    @_engine = engine_class.new(self)
+  def self.active
+    t = GiftRecommendationSet.arel_table
+    where(t[:updated_at].gt(TTL.ago))
   end
   
-  def generate_recommendations!
-    engine.destroy_recommendations!
-    engine.run
-    engine.save_recommendations!
-    return recommendations
+  def active?
+    updated_at > TTL.ago
   end
-  
+
   def engine_params
     self[:engine_params] ||= {}
   end
@@ -45,5 +42,4 @@ class GiftRecommendationSet < ApplicationRecord
       rec.update_attribute(:position, position)
     end
   end
-  
 end

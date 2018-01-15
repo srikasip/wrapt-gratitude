@@ -22,16 +22,15 @@ class SurveyResponseCompletionsController < ApplicationController
     end
 
     @render_loading_spinner = true
+    
+    # mark the survey response completed before generating recommendations so the show up
+    # in proper sequence in the admin reports
+    @survey_response.update_attribute :completed_at, Time.now
 
     @survey_response_completion = SurveyResponseCompletion.new profile: @profile, user: current_user
     @sign_in_return_to = create_via_redirect_giftee_survey_completion_path(@profile, @survey_response)
     job = GenerateRecommendationsJob.new
-    job.perform(
-      @profile.gift_recommendation_sets.build(
-        engine_type: 'survey_response_engine',
-        engine_params: {survey_response_id: @survey_response.id}
-      )
-    )
+    job.perform(@profile, survey_response_id: @survey_response.id)
 
     if current_user&.present?
       redirect_to action: :create_via_redirect
@@ -85,8 +84,8 @@ class SurveyResponseCompletionsController < ApplicationController
       auto_login(user)
       @profile.owner = user
       @profile.save!
-      @survey_response.update_attribute :completed_at, Time.now
-      session[:last_completed_survey_at] = Time.now
+      @survey_response.update_attribute :completed_at, Time.now if @survey_response.completed_at.blank?
+      session[:last_completed_survey_at] = @survey_response.completed_at
       session.delete('just_completed_profile_id')
       redirect_to giftee_gift_recommendations_path(@profile)
     else

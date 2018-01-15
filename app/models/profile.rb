@@ -42,7 +42,7 @@ class Profile < ApplicationRecord
   STALE_DATE = DateTime.now.utc.beginning_of_day - 30.days
 
   def is_fresh?
-    active_gift_recommendation_set.present? || updated_at >= STALE_DATE || has_orders?
+    current_gift_recommendation_set.present? || updated_at >= STALE_DATE || has_orders?
   end
 
   def has_orders?
@@ -100,7 +100,7 @@ class Profile < ApplicationRecord
   end
 
   def sorting_and_display_updated_at
-    set = active_gift_recommendation_set
+    set = current_gift_recommendation_set
     if set.present?
       set.updated_at
     else
@@ -126,20 +126,39 @@ class Profile < ApplicationRecord
         ]
       )
   end
-
-  def active_gift_recommendation_set
-    # give me the most recent set
-    # that has notifications
-    # or
-    # is after STALE_DATE
-    set = gift_recommendation_sets.order(created_at: :desc).first
-    if set.present? && set.recommendations.any? && set.is_fresh?
-      set
+  
+  def current_gift_recommendation_set
+    if !defined?(@_current_gift_recommendation_set)
+      t = GiftRecommendationSet.arel_table
+      @_current_gift_recommendation_set =
+        gift_recommendation_sets.
+          preload(recommendations: {gift: :primary_gift_image}).
+          where(t[:created_at].gt(30.days.ago)).
+          order(created_at: :desc).first
     end
+    @_current_gift_recommendation_set
   end
   
   def gift_recommendations
-    GiftRecommendation.
-      where(recommendation_set_id: gift_recommendation_sets.select(:id).order(created_at: :desc).limit(1))
+    if current_gift_recommendation_set.present?
+      current_gift_recommendation_set.recommendations
+    else
+      GiftRecommendation.none
+    end
+  end
+  
+  def notification_count
+    gift_recommendations.select(&:notify?).size
+  end
+  
+  def generate_gift_recommendation_set!(params = {})
+    params = {
+      engine_type:      'survey_response_engine',
+      max_total_new:    GiftRecommendation::MAX_SHOWN_TO_USER
+    }.merge(params)
+    
+    builder = Recommender::RecommendationSetBuilder.new(self, params)
+    builder.build
+    builder.save!
   end
 end

@@ -14,10 +14,9 @@
       TODO
     - elsif giftee.finished_surveys?
       .ma-giftee-recs__details.clearfix
-        - notifications = @my_giftee_notifications[giftee.active_gift_recommendation_set] || []
-        - if notifications.any?
+        - if giftee.notification_count > 0
           .ma-giftee-recs__notification
-            %span= notifications.size
+            %span= giftee.notification_count
             = embedded_svg('icon-wrapt-heart', class: 'svg-icon icon-notify')
           .pull-left= link_to 'See New WRAPT Recommendations', giftee_gift_recommendations_path(giftee)
         .pull-right= giftee.display_rec_set_last_update
