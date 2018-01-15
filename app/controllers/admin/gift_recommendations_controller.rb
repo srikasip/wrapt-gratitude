@@ -36,9 +36,6 @@ module Admin
       GiftRecommendation.transaction do
         @gift_recommendation.update_attributes(attrs)
         @recommendation_set.update_attribute(:expert, current_user)
-        if @gift_recommendation.removed_by_expert?
-          @gift_recommendation.notifications.destroy_all
-        end
       end
       redirect_to edit_path, notice: "#{@gift.title} (#{@gift.wrapt_sku}) updated"
     end

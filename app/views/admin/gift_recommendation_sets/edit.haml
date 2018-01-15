@@ -10,7 +10,22 @@
         for #{@profile.name} (#{@profile.id})
       - if @profile.email.present?
         [#{@profile.email}]
-      on #{format_datetime(@recommendation_set.created_at)}
+    %p
+      created at: #{format_datetime(@recommendation_set.created_at)}
+      updated at: #{format_datetime(@recommendation_set.updated_at)}
+      
+    %p
+      Parameters:
+      %ul
+        - stats = @recommendation_set.engine_stats || {}
+        - if stats[:filters].is_a?(Array)
+          - stats[:filters].each do |filter|
+            %li #{filter[:name]} Filter: #{filter[:description]}
+
+        - if stats[:scorers].is_a?(Array)
+          - stats[:scorers].each do |scorer|
+            %li #{scorer[:name]} Scoring: #{scorer[:description]}
+
 .row
   .col-sm-12
     .well
@@ -29,32 +44,43 @@
           %th Position
           %th Gift
           %th Source
-          %th Remove?
-          %th Score
+          %th Removed by expert
       %tbody
         - @recommendations.each do |rec|
           - css_classes = []
-          - css_classes << 'active' if rec.removed_by_expert?
+          - css_classes << 'active' if !@shown_to_user.include?(rec)
           %tr{class: css_classes}
             - gift = rec.gift
             %td
               = rec.position + 1
             %td
-              = "#{gift.title} (#{gift.wrapt_sku})"
+              - if gift.primary_gift_image.present?
+                = image_tag gift.primary_gift_image.image_url(:small), class: 'admin-index-table--image', alt: gift.title
+              %h4.admin-index-table--item-title= "#{gift.title} (#{gift.wrapt_sku})"
+              .admin-index-table--item-description
+                = gift.description
+                %p= number_to_currency(gift.selling_price)
+                %p
+                  - if gift.product_category.present?
+                    %span.label.label-default= gift.product_category&.name
+                  - if gift.product_subcategory.present?
+                    %span.label.label-default= gift.product_subcategory&.name
+                  - if gift.featured?
+                    %span.label.label-default featured
+                  - gift.tags.sort_by(&:name).each do |tag|
+                    %span.label.label-primary.label-inverse= tag.name
+
+                %p= gift.availability_string
+                
               .save-notice
             %td
               - if rec.added_by_expert?
                 Expert
               - else
-                Algorithm
+                Algorithm (score: #{rec.score.round})
             %td
-              = simple_form_for(rec, url: admin_gift_recommendation_path(rec), method: 'patch') do |f|
-                = f.input :removed_by_expert, input_html: {class: 'js_auto_save', id: nil}
-            %td
-              - if rec.added_by_expert?
-                n/a
-              - else
-                = rec.score.round
+              = simple_form_for(rec, url: admin_gift_recommendation_path(rec), method: 'patch', html: {class: 'form-inline'}) do |f|
+                = f.check_box :removed_by_expert, class: 'js_auto_save', id: nil
           
 .row
   .col-sm-12
