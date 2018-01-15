@@ -10,15 +10,11 @@ class GiftRecommendationSet < ApplicationRecord
 
   has_many :gift_recommendation_notifications, dependent: :destroy
   
-  STALE_DATE = DateTime.now.utc.beginning_of_day - 30.days
   ENGINE_TYPES = %w{survey_response_engine}
   TTL = 30.days
+  MAX_TOTAL_NEW = 6
   
   validates :engine_type, inclusion: {in: ENGINE_TYPES}
-
-  def is_fresh?
-    updated_at >= STALE_DATE
-  end
 
   def engine
     @_engine || create_engine

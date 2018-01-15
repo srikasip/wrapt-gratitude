@@ -38,11 +38,19 @@ class Profile < ApplicationRecord
 
   scope :unarchived, -> {where(archived_at: nil)}
   scope :archived, -> {where.not(archived_at: nil)}
+  
+  def self.active
+    p_t = Profile.arel_table
+    rs_t = GiftRecommendationSet.arel_table
+    o_t = Ec::CustomerOrder.arel_table
+    
+    where(GiftRecommendationSet.active.where(rs_t[:profile_id].eq(p_t[:id])).exists
+      .or(Ec::CustomerOrder.where(o_t[:profile_id].eq(p_t[:id])).exists)
+    )
+  end
 
-  STALE_DATE = DateTime.now.utc.beginning_of_day - 30.days
-
-  def is_fresh?
-    current_gift_recommendation_set.present? || updated_at >= STALE_DATE || has_orders?
+  def active?
+    gift_recommendation_sets.active.any? || has_orders?
   end
 
   def has_orders?
@@ -154,7 +162,8 @@ class Profile < ApplicationRecord
   def generate_gift_recommendation_set!(params = {})
     params = {
       engine_type:      'survey_response_engine',
-      max_total_new:    GiftRecommendation::MAX_SHOWN_TO_USER
+      max_total_new:    GiftRecommendationSet::MAX_TOTAL_NEW,
+      append:           false
     }.merge(params)
     
     builder = Recommender::RecommendationSetBuilder.new(self, params)
