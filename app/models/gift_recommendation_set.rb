@@ -32,4 +32,18 @@ class GiftRecommendationSet < ApplicationRecord
       rec.update_attribute(:position, position)
     end
   end
+  
+  def visible_recommendations
+    if @_visible_recommendations.nil?
+      @_visible_recommendations = []
+      recommendations.each do |rec|
+        if !rec.removed_by_expert? && rec.gift.available?
+          if rec.added_by_expert? || @_visible_recommendations.size < 12
+            @_visible_recommendations << rec
+          end
+        end
+      end
+    end
+    @_visible_recommendations
+  end
 end
