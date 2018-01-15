@@ -124,7 +124,7 @@ Rails.application.routes.draw do
         get :export
       end
       
-      resources :gift_recommendation_sets, controller: 'user/gift_recommendation_sets', only: :index
+      resources :profiles, controller: 'users/profiles', only: :index
     end
     resources :user_imports, only: [:new, :create]
     resources :invitation_requests, only: [:index, :update, :destroy]
