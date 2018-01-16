@@ -1,6 +1,6 @@
 .container
   = render 'header'
-  .ma-giftees__container.pb5.mb5
+  .ma-giftees__container.pb3.mb5
     .row
       .col-xs-12.visible-xs.mb3
         = link_to 'New Giftee', new_my_account_giftee_path, class: 'btn btn-sm btn-primary uppercase btn-block', style: 'margin-top: -18px;', data: {loads_in_pjax_modal: true}
@@ -29,19 +29,30 @@
       var cards = $('.ma-giftee-card');
       var col1Height = 0;
       var col2Height = 0;
+      var col1 = [];
+      var col2 = [];
 
       cards.each(function(index) {
         var h = $(this).outerHeight(true);
         if(index%2 === 0) {
           col1Height += h;
+          col1.push(this);
         } else {
           col2Height += h;
+          col2.push(this)
         }
       });
       var height = col1Height;
       if(col2Height > col1Height) {
+        var lastCol1 = col1[col1.length-1];
+        var dif = col2Height - col1Height;
+        //console.log(lastCol1);
+        //console.log(dif);
+        $(lastCol1).css('margin-bottom', dif+'px');
         height = col2Height;
       }
+      height += 20;
 
       $('.ma-giftees').css('height', height+'px');
+      $('.ma-giftees').css('min-height', '0');
     })
