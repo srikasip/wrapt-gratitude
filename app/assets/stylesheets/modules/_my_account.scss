@@ -145,7 +145,8 @@
   @include flexbox();
   @include flexwrap();
   @include flexcolumn();
-  align-content: space-between;
+  // align-content: space-between;
+  @include alignContent(space-between);
   @media(max-width: $screen-xs-max) {
     height: auto !important;
   }
@@ -158,19 +159,24 @@
   position: relative;
   @include shadowed-box__gray;
   width: 48%;
+  height: auto;
   @media(max-width: $screen-xs-max) {
     width: 100%;
+    margin-bottom: 30px !important;
   }
 }
 
 .ma-giftee-card:nth-child(odd) {
-  order: 1;
+  // order: 1;
+  @include order(1);
 }
 
 .ma-giftee-card:nth-child(even) {
-  order: 2;
+  // order: 2;
+  @include order(2);
   @media(max-width: $screen-xs-max) {
-    order: 1;
+    // order: 1;
+    @include order(1);
   }
 }
 
