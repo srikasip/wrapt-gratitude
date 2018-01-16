@@ -119,9 +119,8 @@ class Profile < ApplicationRecord
     if !defined?(@_current_gift_recommendation_set)
       t = GiftRecommendationSet.arel_table
       @_current_gift_recommendation_set =
-        gift_recommendation_sets.
+        gift_recommendation_sets.active.
           preload(recommendations: {gift: :primary_gift_image}).
-          where(t[:created_at].gt(30.days.ago)).
           order(created_at: :desc).first
     end
     @_current_gift_recommendation_set
