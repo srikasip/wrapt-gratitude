@@ -1,5 +1,5 @@
 class GiftRecommendationSet < ApplicationRecord
-  belongs_to :profile
+  belongs_to :profile, touch: true
   has_many :recommendations, -> {order(position: :asc)},
     dependent: :destroy, class_name: 'GiftRecommendation', foreign_key: :recommendation_set_id
   
@@ -10,15 +10,11 @@ class GiftRecommendationSet < ApplicationRecord
 
   has_many :gift_recommendation_notifications, dependent: :destroy
   
-  STALE_DATE = DateTime.now.utc.beginning_of_day - 30.days
   ENGINE_TYPES = %w{survey_response_engine}
   TTL = 30.days
+  MAX_TOTAL_NEW = 6
   
   validates :engine_type, inclusion: {in: ENGINE_TYPES}
-
-  def is_fresh?
-    updated_at >= STALE_DATE
-  end
 
   def engine
     @_engine || create_engine
@@ -41,5 +37,19 @@ class GiftRecommendationSet < ApplicationRecord
     recommendations.reorder(position: :asc, score: :desc, id: :asc).each_with_index do |rec, position|
       rec.update_attribute(:position, position)
     end
+  end
+  
+  def visible_recommendations
+    if @_visible_recommendations.nil?
+      @_visible_recommendations = []
+      recommendations.each do |rec|
+        if !rec.removed_by_expert? && rec.gift.available?
+          if rec.added_by_expert? || @_visible_recommendations.size < 12
+            @_visible_recommendations << rec
+          end
+        end
+      end
+    end
+    @_visible_recommendations
   end
 end

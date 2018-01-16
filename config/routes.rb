@@ -126,6 +126,8 @@ Rails.application.routes.draw do
         get :pending_invites
         get :export
       end
+      
+      resources :profiles, controller: 'users/profiles', only: :index
     end
     resources :user_imports, only: [:new, :create]
     resources :invitation_requests, only: [:index, :update, :destroy]

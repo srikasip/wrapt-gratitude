@@ -28,7 +28,7 @@ class PasswordResetsController < ApplicationController
 
         if profile.gift_recommendations.blank?
           job = GenerateRecommendationsJob.new
-          job.perform(profile, survey_response_id: @survey_response.id)
+          job.perform(profile, survey_response_id: @survey_response.id, append: false)
         end
 
         if profile.owner != current_user

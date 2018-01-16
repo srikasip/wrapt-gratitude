@@ -115,5 +115,8 @@ class GiftRecommendationsController < ApplicationController
     all_gift_recommendations = @profile.display_gift_recommendations
     load_pages(all_gift_recommendations)
     @gift_recommendations = GiftRecommendation.select_for_display(all_gift_recommendations, @page) || []
+    if @gift_recommendations.any?
+      GiftRecommendation.where(id: @gift_recommendations).update_all(viewed: true)
+    end
   end
 end

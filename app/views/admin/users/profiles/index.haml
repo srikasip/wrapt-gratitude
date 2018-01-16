@@ -1,0 +1,42 @@
+.row.admin__intro
+  .col-sm-12
+    %h1 Profiles for #{@user.full_name} (#{@user.email})
+
+.row
+  .col-md-12
+    %table.table
+      %thead
+        %tr
+          %th Name
+          %th Relationship
+          %th Recommendations
+          %th Last Updated
+          %th
+          
+      %tbody
+        - @profiles.each do |profile|
+          - recommendation_set = profile.gift_recommendation_sets.order(updated_at: :desc).first
+          %tr
+            %td
+              #{profile.first_name}
+              (#{profile.id})
+              
+            %td
+              #{profile.relationship}
+              
+            %td
+              - if recommendation_set.present?
+                #{pluralize(recommendation_set.visible_recommendations.size, 'recommendation')}
+              - else
+                none
+                
+            %td
+              - if recommendation_set.present?
+                #{format_datetime(recommendation_set.updated_at)}
+              - else
+                #{format_datetime(profile.updated_at)}
+                
+            %td
+              - if recommendation_set.present?
+                = link_to "Edit Recommendations", edit_admin_gift_recommendation_set_path(recommendation_set), class: 'btn btn-default'
+            
