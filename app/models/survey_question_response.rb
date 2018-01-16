@@ -17,6 +17,25 @@ class SurveyQuestionResponse < ApplicationRecord
   after_save :update_profile_relationship
   after_save :update_profile_name
 
+  def attrs_to_copy
+    [
+      "survey_question_id", 
+      "text_response", 
+      "range_response", 
+      "name", 
+      "other_option_text", 
+      "survey_response_type"
+    ]
+  end
+
+  def copy_attributes
+    self.dup.attributes.reject{|k, v| !attrs_to_copy.include?(k)}.merge({answered_at: Time.now})
+  end
+
+  def copy_option!(option)
+    survey_question_response_options.create!(option.copy_attributes)
+  end
+
   def survey
     survey_question.survey
   end

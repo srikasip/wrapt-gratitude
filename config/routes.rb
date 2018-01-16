@@ -48,6 +48,9 @@ Rails.application.routes.draw do
     resources :recipient_gift_dislikes, only: [:create, :destroy]
     resources :recipient_gift_selections, only: [:create, :destroy]
     resources :recipient_originated_referrals, only: [:new, :create]
+    resources :survey_responses, controller: 'giftee_survey_responses', only: [:index, :edit, :update] do
+      post 'copy'
+    end
   end
 
   resources :profile_recipient_reviews, only: :show
