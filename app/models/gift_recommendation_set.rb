@@ -1,5 +1,5 @@
 class GiftRecommendationSet < ApplicationRecord
-  belongs_to :profile
+  belongs_to :profile, touch: true
   has_many :recommendations, -> {order(position: :asc)},
     dependent: :destroy, class_name: 'GiftRecommendation', foreign_key: :recommendation_set_id
   
