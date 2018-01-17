@@ -144,6 +144,11 @@
   order: $val;
 }
 
+@mixin alignContent($val) {
+  -webkit-align-content: $val;
+  align-content: $val;
+}
+
 @mixin triangle-up($left, $right, $bottom, $color) {
   width: 0;
   height: 0;

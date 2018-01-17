@@ -28,6 +28,13 @@
 
 .row
   .col-sm-12
+    %h4
+      #{pluralize(@recommendation_set.visible_recommendations.size, 'visible recommendation')}
+
+%hr
+
+.row
+  .col-sm-12
     .well
       = simple_form_for(@new_gift_recommendation, url: admin_gift_recommendation_set_recommendations_path(@recommendation_set), method: :post, html: {class: 'form-inline'}) do |f|
         .form-group
@@ -56,7 +63,12 @@
             %td
               - if gift.primary_gift_image.present?
                 = image_tag gift.primary_gift_image.image_url(:small), class: 'admin-index-table--image', alt: gift.title
-              %h4.admin-index-table--item-title= "#{gift.title} (#{gift.wrapt_sku})"
+              %h4.admin-index-table--item-title
+                #{gift.title} (#{gift.wrapt_sku})
+                - if @shown_to_user.include?(rec)
+                  [Visible]
+                - else
+                  [Hidden]
               .admin-index-table--item-description
                 = gift.description
                 %p= number_to_currency(gift.selling_price)
@@ -81,7 +93,7 @@
             %td
               = simple_form_for(rec, url: admin_gift_recommendation_path(rec), method: 'patch', html: {class: 'form-inline'}) do |f|
                 = f.check_box :removed_by_expert, class: 'js_auto_save', id: nil
-          
+
 .row
   .col-sm-12
     .well
