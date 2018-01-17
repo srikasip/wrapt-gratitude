@@ -65,7 +65,7 @@ module Recommender
 
         criteria = arel_criteria_for_range(ranges.first)
         ranges[1..-1].each do |range|
-          criteria.or(arel_criteria_for_range(ranges))
+          criteria = criteria.or(arel_criteria_for_range(range))
         end
         
         scope.select(:id).where(criteria)

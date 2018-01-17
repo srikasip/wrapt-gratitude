@@ -168,5 +168,6 @@ class Profile < ApplicationRecord
     builder = Recommender::RecommendationSetBuilder.new(self, params)
     builder.build
     builder.save!
+    @_current_gift_recommendation_set = builder.recommendation_set
   end
 end
