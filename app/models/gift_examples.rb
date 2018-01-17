@@ -60,7 +60,7 @@ class GiftExamples
 
   EXAMPLE_4 = {
     image: 'gift-example__chickahisa.jpg',
-    title: 'Chikihisa Studio',
+    title: 'Chikahisa Studio',
     tagline: 'Showcasing the \'beauty of imperfection\'',
     details: [
       "Ann Chikahisa never planned on becoming a jewelry designer until she took a metal-smithing class that inspired her and gave her the confidence to start a whole new direction in life.",
