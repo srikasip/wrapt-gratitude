@@ -196,23 +196,31 @@
   color: $gray-007;
 }
 
+.co-ro-item {
+  @include flexbox();
+  @include flexwrap();
+  align-items: center;
+}
+
 .co-ro-item__img {
+  @include flex(1 0 auto);
   display: inline-block;
-  width: 19%;
+  width: 20%;
   max-width: 120px;
   overflow: hidden;
   vertical-align: middle;
   padding-right: 16px;
   box-sizing: border-box;
+  margin-bottom: 10px;
   @media(max-width: $screen-sm-max) {
-    width: 41%
+    width: 40%
   }
 }
 
 .co-ro-item__details {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: middle;
+  @include flex(1 1 auto);
+  width: 50%;
+  margin-right: 28px;
   h4 {
     font-size: 20px;
   }
@@ -226,14 +234,14 @@
     line-height: 1.2;
     letter-spacing: 1.2px;
   }
+  @media(min-width: $screen-sm-max) {
+    width: 40%;
+  }
 }
 
 .co-ro-item__shipping-and-status {
-  float: right;
-  @media(max-width: $screen-xs-max) {
-    float: none;
-    margin-top: 10px;
-  }
+  @include flex(0 0 auto);
+  width: 140px;
 }
 
 .co-ro-summary {
