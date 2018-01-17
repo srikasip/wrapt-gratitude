@@ -6,7 +6,7 @@ module Recommender
     def initialize(profile, params = {})
       @profile = profile
       @previous_recommendation_set = profile.current_gift_recommendation_set
-      @max_generation_count = params[:engine_type] || 2
+      @max_generation_count = params[:max_generation_count] || 1
       @recommendation_set = profile.gift_recommendation_sets.build(
         engine_type: params[:engine_type].presence || 'survey_response_engine',
         engine_params: params

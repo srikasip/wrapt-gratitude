@@ -140,7 +140,7 @@ class Profile < ApplicationRecord
   def generate_gift_recommendation_set!(params = {})
     params = {
       engine_type:      'survey_response_engine',
-      max_total_new:    GiftRecommendation::MAX_SHOWN_TO_USER
+      max_total_new:    12 #GiftRecommendation::MAX_SHOWN_TO_USER
     }.merge(params)
     
     builder = Recommender::RecommendationSetBuilder.new(self, params)
