@@ -9,11 +9,10 @@
           = image_tag url, class: 'img-responsive', alt: gift.title
         - else
           %img{alt: gift.title}
-      .co-ro-item__details.clearfix
-        .pull-left
-          %h4.light= gift.title
-          - if show_price
-            %h5.light= number_to_currency gift.selling_price
+      .co-ro-item__details
+        %h4.light= gift.title
+        - if show_price
+          %h5.light= number_to_currency gift.selling_price
       .co-ro-item__shipping-and-status
         .co-detail
           .co-detail__label Shipping Details
@@ -21,6 +20,7 @@
             = rate.carrier
           .co-detail__item
             Estimated Arrival
+          .co-detail__item
             = rate.expected_delivery.text
           - if show_order_status
             .co-detail__label Status

@@ -14,4 +14,6 @@
 - path = gift_path(gr, {direction: direction})
 
 = link_to path, class: css_classes, data: {loads_in_pjax_carousel: true} do
+  - if gr.added_by_expert?
+    = embedded_svg('icon-wrapt-heart', class: 'svg-icon icon-notify added-by-expert-icon')
   = render 'thumbnail', locals: {image: gr.gift.carousel_thumb, gift: gr.gift}
