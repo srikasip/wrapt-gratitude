@@ -86,14 +86,14 @@ class Profile < ApplicationRecord
   end
 
   def last_survey
-    survey_responses.order('updated_at desc').first
+    @_last_survey ||= survey_responses.order('updated_at desc').first
   end
 
   def name
     ([first_name, last_name].compact.join " ").strip
   end
 
-  delegate :first_unanswered_response, to: :last_survey, prefix: false
+  delegate :first_unanswered_response, :last_answered_response, to: :last_survey, prefix: false
 
   def finished_surveys?
     self.survey_responses.all? { |x| x.completed_at.present? }

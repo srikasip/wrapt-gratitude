@@ -44,5 +44,19 @@ class ApplicationController < ActionController::Base
   def include_enhanced_ecommerce_analytics
     @include_enhanced_ecommerce_analytics = true
   end
+  
+  def impersonation_mode?
+    session[:was_admin].present?
+  end
+  helper_method :impersonation_mode?
+  
+  def real_user
+    if impersonating?
+      @_real_user ||= User.find(session[:was_admin])
+    else
+      current_user
+    end
+  end
+  helper_method :real_user
 
 end
