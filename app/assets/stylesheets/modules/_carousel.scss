@@ -286,6 +286,12 @@ $gr-carousel-nav__width: 82.5px;
   border: none;
   width: auto;
   height: auto;
+  display: inline-block;
+  position: relative;
+  @media(max-width: $screen-xs-max) {
+    width: 16%;
+    margin-right: 4%;
+  }
 }
 .gr-carousel__indicator:hover,
 .gr-carousel__indicator:focus,
@@ -369,11 +375,12 @@ $gr-carousel-nav__width: 82.5px;
 .gr__indicator-thumbnail {
   @media(max-width: $screen-xs-max) {
     margin: 0px;
-    width: 16%;
-    margin-right: 4%;
+    // width: 16%;
+    // margin-right: 4%;
     // height: auto;
     // height: 60px;
     height: 65px;
+    width: 100%;
   }
 }
 
