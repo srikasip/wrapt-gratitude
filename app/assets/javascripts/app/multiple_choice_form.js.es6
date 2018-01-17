@@ -1,5 +1,6 @@
 App.MultipleChoiceForm = class MultipleChoiceForm {
   constructor(options = {}) {
+    this.doNotSubmit = options.doNotSubmit || false
     if(options.formSelector) {
       this.formSelector = '[data-behavior~="'+options.formSelector+'"]'
     } else {
@@ -72,8 +73,10 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
     // submit the form if something was selected and it's not an other button
     const selectedOtherOptionInput = $(this.hidden_inputs_selector).filter('[data-behavior~="other-option"]:checked')
     if (selectedOtherOptionInput.length == 0 && option_input_selector.is(':checked')) {
-      this.submitting = true;
-      this.form_element.submit()
+      if(!this.doNotSubmit) {
+        this.submitting = true;
+        this.form_element.submit()
+      }
     }
   }
 

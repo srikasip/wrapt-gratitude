@@ -24,7 +24,7 @@
   - content_for :page_js do
     :javascript
         new App.MultipleChoiceForm({
-          multipleOptionResponses: #{@question_response.survey_question.use_multiple_response_form?.to_json}, formSelector: '#{@form_selector}'
+          multipleOptionResponses: #{@question_response.survey_question.use_multiple_response_form?.to_json}, formSelector: '#{@form_selector}', doNotSubmit: false
         })
 
 - else

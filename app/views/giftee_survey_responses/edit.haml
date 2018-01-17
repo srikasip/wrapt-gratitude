@@ -1,9 +1,11 @@
 .container
   %h1 Edit Survey Response Basic Questions
+
   - @last_survey_question_responses.values.flatten.each do |question_response|
     - @form_selector = "question-response-form-#{question_response.id}"
     - @question_response = question_response
-    = simple_form_for question_response, url: giftee_survey_question_path(@profile, @last_survey_response, question_response), html: {data: {behavior: @form_selector}, class: 'sqr-form'} do |form|
+    = simple_form_for question_response, url: giftee_survey_response_path(@profile, @last_survey_response), html: {data: {behavior: @form_selector}, class: 'sqr-form'} do |form|
+      = form.input :id, as: :hidden
       = render response_fields_partial, form: form, label: question_response.survey_question.prompt_with_substitutions(@last_survey_response)
       .sqr-submit__container.text-right#js-sqr-submit__container
         %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}
