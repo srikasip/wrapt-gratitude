@@ -17,7 +17,7 @@ class GiftRecommendationSet < ApplicationRecord
   def self.active
     rs_t = GiftRecommendationSet.arel_table
     where(rs_t[:updated_at].gt(TTL.ago)).
-    where(id: GiftRecommendation.available.select(:profile_id))
+    where(id: GiftRecommendation.available.select(:recommendation_set_id))
   end
   
   def active?
