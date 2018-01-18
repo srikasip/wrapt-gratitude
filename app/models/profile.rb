@@ -22,6 +22,7 @@ class Profile < ApplicationRecord
   has_many :recipient_gift_likes, inverse_of: :profile, dependent: :destroy
   has_many :recipient_gift_dislikes, inverse_of: :profile, dependent: :destroy
   has_many :recipient_gift_selections, -> {order 'recipient_gift_selections.id'}, dependent: :destroy
+  has_many :customer_orders, class_name: 'Ec::CustomerOrder', dependent: :nullify
 
   # this can go away once the migrations have been run to copy and remove it.
   serialize :recommendation_stats, Hash
@@ -37,6 +38,13 @@ class Profile < ApplicationRecord
 
   scope :unarchived, -> {where(archived_at: nil)}
   scope :archived, -> {where.not(archived_at: nil)}
+
+  def self.active
+    active_recommendation_sets = where(id: GiftRecommendationSet.active.select(:profile_id))
+    previous_orders = where(id: Ec::CustomerOrder.where.not(status: Ec::OrderStatuses::ORDER_INITIALIZED).select(:profile_id))
+    
+    active_recommendation_sets.or(previous_orders)
+  end
 
   def allow_new_recommendations!
     update_attribute(:recommendations_generated_at, nil)

@@ -19,7 +19,7 @@ class MyAccount::GifteesController < MyAccount::BaseController
 
   def index
     @giftees = Kaminari.paginate_array(
-      current_user.owned_profiles.unarchived.
+      current_user.owned_profiles.unarchived.active.
         preload(gift_recommendation_sets: :recommendations).
         sort_by do |profile|
           if profile.current_gift_recommendation_set.present?

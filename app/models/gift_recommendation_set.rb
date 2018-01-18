@@ -15,8 +15,9 @@ class GiftRecommendationSet < ApplicationRecord
   validates :engine_type, inclusion: {in: ENGINE_TYPES}
   
   def self.active
-    t = GiftRecommendationSet.arel_table
-    where(t[:updated_at].gt(TTL.ago))
+    rs_t = GiftRecommendationSet.arel_table
+    where(rs_t[:updated_at].gt(TTL.ago)).
+    where(id: GiftRecommendation.available.select(:profile_id))
   end
   
   def active?
