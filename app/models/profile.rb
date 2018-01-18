@@ -45,6 +45,10 @@ class Profile < ApplicationRecord
     
     active_recommendation_sets.or(previous_orders)
   end
+  
+  def active?
+    current_gift_recommendation_set && customer_orders.select(&:not_initialized?)
+  end
 
   def allow_new_recommendations!
     update_attribute(:recommendations_generated_at, nil)
@@ -109,7 +113,7 @@ class Profile < ApplicationRecord
 
   def display_gift_recommendations
     gift_recommendations.
-      where(gift_id: Gift.select(:id).can_be_sold, removed_by_expert: false).
+      available.
       preload(
         recommendation_set: [:profile], 
         gift: [

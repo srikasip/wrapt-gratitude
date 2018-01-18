@@ -10,6 +10,7 @@
           %th Name
           %th Relationship
           %th Recommendations
+          %th Status
           %th Last Updated
           %th
           
@@ -29,6 +30,12 @@
                 #{pluralize(recommendation_set.visible_recommendations.size, 'recommendation')}
               - else
                 none
+                
+            %td
+              - if @active_profiles.include?(profile)
+                Active
+              - else
+                Inactive
                 
             %td
               - if recommendation_set.present?
