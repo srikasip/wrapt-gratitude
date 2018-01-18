@@ -1,4 +1,4 @@
-.container.bq-container{style: 'background-color: rgba(145, 166, 205, 0.8);'}
+.bq-container
   %h1 Adjust any Basics?
   = simple_form_for @last_survey_response, url: giftee_survey_response_path(@profile, @last_survey_response) do |form|
     = form.simple_fields_for :question_responses do |f|
@@ -15,6 +15,7 @@
             = render 'range_input', f: f, label: label
           - elsif f.object.survey_question.is_a?(SurveyQuestions::Text)
             = render 'text_input', f: f, label: label
-    = form.submit
+    .text-center
+      = form.submit 'View Recommendations', class: 'btn btn-default uppercase'
 
 = render 'edit_js'

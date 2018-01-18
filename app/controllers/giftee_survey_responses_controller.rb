@@ -1,21 +1,27 @@
 class GifteeSurveyResponsesController < ApplicationController
 
   before_action :set_profile
+  before_action :load_last_survey_response
 
   helper SurveyQuestionResponsesHelper
+  include PjaxModalController
   
   def index
     # just for testing
-    
   end
 
   def edit
-
   end
 
   def update
     @survey_response = SurveyResponse.find(params[:id])
-    @survey_response.update_attributes!(survey_response_params)
+    if @survey_response.update_attributes(survey_response_params)
+      job = GenerateRecommendationsJob.new
+      job.perform(@profile, survey_response_id: @survey_response.id, append: true)
+      redirect_to giftee_gift_recommendations_path(@profile)
+    else
+      render :edit
+    end
   end
 
   def copy
@@ -36,7 +42,7 @@ class GifteeSurveyResponsesController < ApplicationController
       flash[:alert] = "Sorry, sometheing went wrong! Please try again!"
       redirect_to my_account_giftees_path
     end
-    redirect_to edit_giftee_survey_response_path(@profile, @copy)
+    render :edit
   end
 
   private
@@ -60,6 +66,9 @@ class GifteeSurveyResponsesController < ApplicationController
 
   def set_profile
     @profile = current_user.owned_profiles.find params[:giftee_id]
+  end
+
+  def load_last_survey_response
     @last_survey_response = @profile.last_survey
     @last_survey_question_responses = @last_survey_response.question_responses.group_by(&:survey_question)
   end

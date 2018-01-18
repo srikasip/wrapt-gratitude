@@ -397,6 +397,7 @@ label {
 }
 
 // start a new shopping trip edit the basics modal
+.modal .bq-container,
 .bq-container {
   color: #FFFFFF;
   h1{
@@ -434,11 +435,26 @@ form.edit_survey_response {
   .radio,
   .checkbox {
     display: inline-block;
+    @media(max-width: $screen-xs-max) {
+      width: 50%;
+    }
+  }
+  .radio:nth-child(odd),
+  .checkbox:nth-child(odd) {
+    @media(max-width: $screen-xs-max) {
+      padding-right: 7px;
+    }
+  }
+  .radio:nth-child(even),
+  .checkbox:nth-child(even) {
+    @media(max-width: $screen-xs-max) {
+      padding-left: 7px;
+    }
   }
   .radio label,
   .checkbox label {
     display: inline-block;
-    min-width: 158px;
+    min-width: 167px;
     text-align: center;
     background-color: #FFFFFF;
     margin-right: 13px;
@@ -446,9 +462,23 @@ form.edit_survey_response {
     padding: 19px 10px;
     border: 1px solid $gray-005;
     input {display: none;}
+    @media(max-width: $screen-xs-max) {
+      min-width: 0px;
+      width: 100%;
+    }
   }
   .radio label.selected,
   .checkbox label.selected {
     background-color: $tan-003;
+  }
+  input[type='submit'] {
+    border-color: #FFFFFF;
+    color: #FFFFFF
+  }
+
+  input[type='submit']:hover,
+  input[type='submit']:focus,
+  input[type='submit']:active {
+    background-color: darken($blue-001, 2%);
   }
 }
