@@ -8,6 +8,8 @@ class SurveyResponse < ApplicationRecord
     as: :survey_response,
     dependent: :destroy
 
+  accepts_nested_attributes_for :question_responses
+
   scope :completed, -> { where.not(completed_at: nil) }
   scope :incomplete, -> { where(completed_at: nil) }
 

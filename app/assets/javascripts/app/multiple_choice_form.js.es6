@@ -1,11 +1,6 @@
 App.MultipleChoiceForm = class MultipleChoiceForm {
   constructor(options = {}) {
-    this.doNotSubmit = options.doNotSubmit || false
-    if(options.formSelector) {
-      this.formSelector = '[data-behavior~="'+options.formSelector+'"]'
-    } else {
-      this.formSelector = '[data-behavior~="question-response-form"]'
-    }
+    this.formSelector = '[data-behavior~="question-response-form"]'
     this.form_element = $(this.formSelector)[0];
     this.hidden_inputs_selector = $(this.form_element).find('[data-behavior~="option-id-input"]');
     this.buttons_selector = $(this.form_element).find('[data-behavior~="option-button"]')
@@ -73,10 +68,8 @@ App.MultipleChoiceForm = class MultipleChoiceForm {
     // submit the form if something was selected and it's not an other button
     const selectedOtherOptionInput = $(this.hidden_inputs_selector).filter('[data-behavior~="other-option"]:checked')
     if (selectedOtherOptionInput.length == 0 && option_input_selector.is(':checked')) {
-      if(!this.doNotSubmit) {
-        this.submitting = true;
-        this.form_element.submit()
-      }
+      this.submitting = true;
+      this.form_element.submit()
     }
   }
 

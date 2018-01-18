@@ -14,11 +14,8 @@ class GifteeSurveyResponsesController < ApplicationController
   end
 
   def update
-    question_response_id = params[:survey_question_response][:id]
-    @question_response = SurveyQuestionResponse.find(question_response_id)
-    if @question_response.update question_response_params
-      render json: {question_response: @question_response}
-    end
+    @survey_response = SurveyResponse.find(params[:id])
+    @survey_response.update_attributes!(survey_response_params)
   end
 
   def copy
@@ -44,6 +41,19 @@ class GifteeSurveyResponsesController < ApplicationController
 
   private
 
+  def survey_response_params
+    params.require(:survey_response).permit(
+      question_responses_attributes: [
+        :survey_question_option_ids,
+        :id,
+        :range_response,
+        :text_response,
+        :other_option_text,
+        survey_question_option_ids: []
+      ]
+    )
+  end
+
   def login_required?
     true
   end
@@ -52,17 +62,6 @@ class GifteeSurveyResponsesController < ApplicationController
     @profile = current_user.owned_profiles.find params[:giftee_id]
     @last_survey_response = @profile.last_survey
     @last_survey_question_responses = @last_survey_response.question_responses.group_by(&:survey_question)
-  end
-
-  def question_response_params
-    params.require(:survey_question_response).permit(
-      :text_response,
-      :range_response,
-      :other_option_text,
-      :survey_question_id,
-      :survey_question_option_id,
-      survey_question_option_ids: []
-    )
   end
 
 end

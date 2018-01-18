@@ -1,12 +1,20 @@
-.container
-  %h1 Edit Survey Response Basic Questions
+.container.bq-container{style: 'background-color: rgba(145, 166, 205, 0.8);'}
+  %h1 Adjust any Basics?
+  = simple_form_for @last_survey_response, url: giftee_survey_response_path(@profile, @last_survey_response) do |form|
+    = form.simple_fields_for :question_responses do |f|
+      .j-bq-question-response.bq-question-response
+        - label = f.object.survey_question.prompt_with_substitutions(@last_survey_response)
+        - if f.object.survey_question.is_a?(SurveyQuestions::MultipleChoice)
+          - if f.object.survey_question.use_multiple_response_form?
+            = render 'multiple_option_input', f: f, label: label
+          - else
+            = render 'single_option_input', f: f, label: label
+          = render 'explanations', f: f
+        - else
+          - if f.object.survey_question.is_a?(SurveyQuestions::Range)
+            = render 'range_input', f: f, label: label
+          - elsif f.object.survey_question.is_a?(SurveyQuestions::Text)
+            = render 'text_input', f: f, label: label
+    = form.submit
 
-  - @last_survey_question_responses.values.flatten.each do |question_response|
-    - @form_selector = "question-response-form-#{question_response.id}"
-    - @question_response = question_response
-    = simple_form_for question_response, url: giftee_survey_response_path(@profile, @last_survey_response), html: {data: {behavior: @form_selector}, class: 'sqr-form'} do |form|
-      = form.input :id, as: :hidden
-      = render response_fields_partial, form: form, label: question_response.survey_question.prompt_with_substitutions(@last_survey_response)
-      .sqr-submit__container.text-right#js-sqr-submit__container
-        %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}
-          = question_response_next_button_text.html_safe
+= render 'edit_js'

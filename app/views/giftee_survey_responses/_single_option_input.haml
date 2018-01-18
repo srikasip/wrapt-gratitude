@@ -1,0 +1,9 @@
+- collection = f.object.survey_question.options.standard.to_a
+- wrapper_data = {}
+- if f.object.survey_question.other_option
+  - collection.push(f.object.survey_question.other_option)
+  - wrapper_data[:other_id] = f.object.survey_question.other_option.id
+  - wrapper_data[:behavior] = 'other'
+= f.association :survey_question_options, as: :radio_buttons, collection: collection, label_method: :text, value_method: :id, checked: f.object.survey_question_response_options.first.survey_question_option.id, label: label, wrapper_html: {data: wrapper_data}
+- if f.object.survey_question.other_option
+  = f.input :other_option_text, as: :string, label: false, wrapper_html: { data: {behavior: 'other-text-input-wrapper'}, style: other_optional_text_init_style(f.object)}, input_html: {data: {behavior: 'other-text-input'}}

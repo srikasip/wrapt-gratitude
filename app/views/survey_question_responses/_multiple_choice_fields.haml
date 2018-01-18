@@ -20,16 +20,9 @@
       - if option.explanation.present?
         .sqr-option-explanation{data: {behavior: 'option-explantion', option_id: option.id}}= option.explanation
 
-- if @form_selector.present?
-  - content_for :page_js do
-    :javascript
-        new App.MultipleChoiceForm({
-          multipleOptionResponses: #{@question_response.survey_question.use_multiple_response_form?.to_json}, formSelector: '#{@form_selector}', doNotSubmit: false
-        })
 
-- else
-  - content_for :page_js do
-    :javascript
-        new App.MultipleChoiceForm({
-          multipleOptionResponses: #{@question_response.survey_question.use_multiple_response_form?.to_json}
-        })
+- content_for :page_js do
+  :javascript
+      new App.MultipleChoiceForm({
+        multipleOptionResponses: #{@question_response.survey_question.use_multiple_response_form?.to_json}
+      })
