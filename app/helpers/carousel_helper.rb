@@ -46,7 +46,7 @@ module CarouselHelper
   end
 
   def carousel_small_indicator_nav(carousel, slides, carousel_classes)
-    nav_max_ele = carousel[:small_nav_max_elements]
+    nav_max_ele = carousel[:small_nav_max_elements] || 4
     next_num = (slides.in_groups_of(nav_max_ele, false)[1] || []).size
     content_tag :div, class: 'visible-xs' do
       concat link_to "< Prev 0", '#', class: "#{carousel_classes[:small_nav]} prev disabled", data: {group: 0}

@@ -97,7 +97,7 @@ class Profile < ApplicationRecord
   end
 
   def last_survey
-    survey_responses.order('updated_at desc').first
+    @_last_survey ||= survey_responses.order('updated_at desc').first
   end
 
   def copy_last_survey_response!
@@ -108,7 +108,7 @@ class Profile < ApplicationRecord
     ([first_name, last_name].compact.join " ").strip
   end
 
-  delegate :first_unanswered_response, to: :last_survey, prefix: false
+  delegate :first_unanswered_response, :last_answered_response, to: :last_survey, prefix: false
 
   def finished_surveys?
     self.survey_responses.all? { |x| x.completed_at.present? }
@@ -183,6 +183,7 @@ class Profile < ApplicationRecord
     builder = Recommender::RecommendationSetBuilder.new(self, params)
     builder.build
     builder.save!
+    @_current_gift_recommendation_set = builder.recommendation_set
   end
 
   def state_partial

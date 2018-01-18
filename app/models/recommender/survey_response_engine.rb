@@ -115,7 +115,7 @@ module Recommender
       if engine_params[:survey_response_id].present?
         scope = scope.where(id: engine_params[:survey_response_id])
       else
-        scope = where(profile_id: profile.id).order(created_at: :desc)
+        scope = scope.where(profile_id: profile.id).order(created_at: :desc)
       end
       
       @survey_response = scope.first!

@@ -43,7 +43,8 @@
           .ma-giftee-rec{style: "background-image: url(#{rec.gift.carousel_thumb.image_url(:small)});"}      
     - else
       :ruby
-        question_response = giftee.first_unanswered_response
+        question_response = giftee.first_unanswered_response || giftee.last_answered_response
+
       - if question_response.present?
         = link_to giftee_survey_question_path(giftee_id: giftee.id, survey_id: question_response.survey_response_id, id: question_response.to_param), class: 'btn btn-default btn-block ma-giftee-card__btn' do
           COMPLETE THE QUIZ
