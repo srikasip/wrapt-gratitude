@@ -482,3 +482,17 @@ form.edit_survey_response {
     background-color: darken($blue-001, 2%);
   }
 }
+
+.shopping-trip-form {
+  text-align: center;
+  .radio label {
+    display: inline-block;
+    width: 100%;
+    max-width: 260px;
+    text-align: center;
+    margin-bottom: 8px;
+    padding: 16px 10px;
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+  }
+}

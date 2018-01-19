@@ -7,7 +7,8 @@ class GifteeSurveyResponsesController < ApplicationController
   include PjaxModalController
   
   def index
-    # just for testing
+    # the route to this is gone
+    # nice to have around for debugging
   end
 
   def edit
@@ -20,6 +21,7 @@ class GifteeSurveyResponsesController < ApplicationController
       job.perform(@profile, survey_response_id: @survey_response.id, append: true)
       redirect_to giftee_gift_recommendations_path(@profile)
     else
+      flash[:alert] = "Sorry, sometheing went wrong! Please try again!"
       render :edit
     end
   end

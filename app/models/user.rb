@@ -68,6 +68,10 @@ class User < ApplicationRecord
     self.all.merge(UserSearch.new(search_params).to_scope)
   end
 
+  def has_other_giftees_with_relationship?(relationship)
+    owned_profiles.where(relationship: relationship).any?
+  end
+
   # MVP1a has users using a single profile
   def mvp_profile
     owned_profiles.last
