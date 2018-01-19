@@ -65,6 +65,7 @@ module Admin
     def update_params
       result = params.require(@survey_question.model_name.param_key).permit(
           :prompt,
+          :basic,
           :min_label,
           :max_label,
           :mid_label,

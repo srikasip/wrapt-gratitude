@@ -2,19 +2,20 @@
   %h1 Adjust any Basics?
   = simple_form_for @last_survey_response, url: giftee_survey_response_path(@profile, @last_survey_response) do |form|
     = form.simple_fields_for :question_responses do |f|
-      .j-bq-question-response.bq-question-response
-        - label = f.object.survey_question.prompt_with_substitutions(@last_survey_response)
-        - if f.object.survey_question.is_a?(SurveyQuestions::MultipleChoice)
-          - if f.object.survey_question.use_multiple_response_form?
-            = render 'multiple_option_input', f: f, label: label
+      - if f.object.survey_question.basic?
+        .j-bq-question-response.bq-question-response
+          - label = f.object.survey_question.prompt_with_substitutions(@last_survey_response)
+          - if f.object.survey_question.is_a?(SurveyQuestions::MultipleChoice)
+            - if f.object.survey_question.use_multiple_response_form?
+              = render 'multiple_option_input', f: f, label: label
+            - else
+              = render 'single_option_input', f: f, label: label
+            = render 'explanations', f: f
           - else
-            = render 'single_option_input', f: f, label: label
-          = render 'explanations', f: f
-        - else
-          - if f.object.survey_question.is_a?(SurveyQuestions::Range)
-            = render 'range_input', f: f, label: label
-          - elsif f.object.survey_question.is_a?(SurveyQuestions::Text)
-            = render 'text_input', f: f, label: label
+            - if f.object.survey_question.is_a?(SurveyQuestions::Range)
+              = render 'range_input', f: f, label: label
+            - elsif f.object.survey_question.is_a?(SurveyQuestions::Text)
+              = render 'text_input', f: f, label: label
     .text-center
       = form.submit 'View Recommendations', class: 'btn btn-default uppercase'
 

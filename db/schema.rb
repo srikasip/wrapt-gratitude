@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180112194803) do
+ActiveRecord::Schema.define(version: 20180119000833) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -457,10 +457,10 @@ ActiveRecord::Schema.define(version: 20180112194803) do
     t.integer  "gifts_sent",                         default: 0,     null: false
     t.string   "last_name",                          default: ""
     t.datetime "archived_at"
+    t.boolean  "has_viewed_initial_recommendations", default: false, null: false
     t.integer  "birthday_day"
     t.integer  "birthday_month"
     t.integer  "birthday_year"
-    t.boolean  "has_viewed_initial_recommendations", default: false, null: false
     t.index ["created_at"], name: "index_profiles_on_created_at", using: :btree
     t.index ["recipient_invited_at"], name: "index_profiles_on_recipient_invited_at", using: :btree
   end
@@ -682,6 +682,7 @@ ActiveRecord::Schema.define(version: 20180112194803) do
     t.boolean  "use_response_as_relationship", default: false, null: false
     t.boolean  "price_filter",                 default: false
     t.boolean  "category_filter",              default: false
+    t.boolean  "basic",                        default: false, null: false
     t.index ["survey_id"], name: "index_survey_questions_on_survey_id", using: :btree
     t.index ["survey_section_id"], name: "index_survey_questions_on_survey_section_id", using: :btree
   end
