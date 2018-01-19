@@ -25,7 +25,7 @@ module Ec
     validates :ship_zip, length: { within: 5..10}, if: :ship_street1_present?
     validates :ship_country, inclusion: { in: ['US'], message: 'only supports US right now' }, if: :ship_street1_present?
 
-    belongs_to :profile
+    belongs_to :profile, touch: true
     belongs_to :user
     belongs_to :address
 
@@ -42,6 +42,7 @@ module Ec
     has_many :tax_transactions, class_name: 'Tax::Transaction'
 
     scope :initialized_only, -> { where(status: ORDER_INITIALIZED) }
+    scope :not_initialized, -> {where.not(status: ORDER_INITIALIZED)}
     define_singleton_method(:newest) { order('updated_at desc').first }
 
     delegate :email, :name, to: :user, prefix: true
@@ -71,6 +72,10 @@ module Ec
 
     define_method(:valid_note?) { include_note? && self.note_content.present? || self.note_envelope_text.present? }
 
+    def not_initialized?
+      status != ORDER_INITIALIZED
+    end
+    
     def non_cancelled_line_items
       line_items.reject do |line_item|
         purchase_order = line_item.related_order

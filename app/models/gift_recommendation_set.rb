@@ -21,12 +21,13 @@ class GiftRecommendationSet < ApplicationRecord
   end
   
   def self.active
-    t = GiftRecommendationSet.arel_table
-    where(t[:updated_at].gt(TTL.ago))
+    rs_t = GiftRecommendationSet.arel_table
+    where(rs_t[:updated_at].gt(TTL.ago)).
+    where(id: GiftRecommendation.available.select(:recommendation_set_id))
   end
   
   def active?
-    updated_at > TTL.ago
+    updated_at > TTL.ago && recommendations.select(&:avaialble?).any?
   end
 
   def engine_params
@@ -39,17 +40,7 @@ class GiftRecommendationSet < ApplicationRecord
     end
   end
   
-  def visible_recommendations
-    if @_visible_recommendations.nil?
-      @_visible_recommendations = []
-      recommendations.each do |rec|
-        if !rec.removed_by_expert? && rec.gift.available?
-          if rec.added_by_expert? || @_visible_recommendations.size < 12
-            @_visible_recommendations << rec
-          end
-        end
-      end
-    end
-    @_visible_recommendations
+  def available_recommendations
+    recommendations.select(&:available?)
   end
 end

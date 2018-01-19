@@ -31,7 +31,7 @@ module Admin
       ).find(params[:id])
       @profile = @recommendation_set.profile
       @recommendations = @recommendation_set.recommendations
-      @shown_to_user = @recommendation_set.visible_recommendations
+      @shown_to_user = @recommendation_set.available_recommendations
     end
   end
 end

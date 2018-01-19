@@ -12,6 +12,10 @@ class GiftRecommendation < ApplicationRecord
   def self.available
     where(gift_id: Gift.select(:id).can_be_sold, removed_by_expert: false)
   end
+  
+  def available?
+    gift.can_be_sold? && !removed_by_expert
+  end
 
   def gift_dislike
     GiftDislike.where(profile: profile, gift: gift).first || GiftDislike.new(profile: profile, gift: gift)

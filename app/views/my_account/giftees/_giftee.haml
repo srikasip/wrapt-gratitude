@@ -1,4 +1,4 @@
-- all_recs = giftee.display_gift_recommendations || []
+- all_recs = giftee.display_gift_recommendations # || []
 - first_five_recs = (GiftRecommendation.select_for_display(all_recs) || []).take(5)
 .ma-giftee-card
   .ma-giftee-card__header

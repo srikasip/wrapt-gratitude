@@ -24,7 +24,7 @@ module Admin
       GiftRecommendation.transaction do
         @gift_recommendation = @recommendation_set.recommendations.create(attrs)
         @recommendation_set.update_attribute(:expert, current_user)
-        @recommendation_set.normalize_recommendation_positions!
+        @recommendation_set.update_attributes(expert: current_user, updated_at: Time.now)
       end
       redirect_to edit_path, notice: "#{@gift.title} (#{@gift.wrapt_sku}) added"
     end
@@ -34,7 +34,7 @@ module Admin
       attrs = params.require(:gift_recommendation).permit(:removed_by_expert)
       GiftRecommendation.transaction do
         @gift_recommendation.update_attributes(attrs)
-        @recommendation_set.update_attribute(:expert, current_user)
+        @recommendation_set.update_attributes(expert: current_user, updated_at: Time.now)
       end
       redirect_to edit_path, notice: "#{@gift.title} (#{@gift.wrapt_sku}) updated"
     end

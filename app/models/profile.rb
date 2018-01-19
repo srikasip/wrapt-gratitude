@@ -22,8 +22,8 @@ class Profile < ApplicationRecord
   has_many :recipient_gift_likes, inverse_of: :profile, dependent: :destroy
   has_many :recipient_gift_dislikes, inverse_of: :profile, dependent: :destroy
   has_many :recipient_gift_selections, -> {order 'recipient_gift_selections.id'}, dependent: :destroy
-
-  has_many :customer_orders, class_name: "Ec::CustomerOrder"
+  has_many :customer_orders, class_name: 'Ec::CustomerOrder', dependent: :nullify
+  
   # this can go away once the migrations have been run to copy and remove it.
   serialize :recommendation_stats, Hash
 
@@ -40,21 +40,18 @@ class Profile < ApplicationRecord
   scope :archived, -> {where.not(archived_at: nil)}
   
   def self.active
-    p_t = Profile.arel_table
-    rs_t = GiftRecommendationSet.arel_table
-    o_t = Ec::CustomerOrder.arel_table
+    active_recommendation_sets = where(id: GiftRecommendationSet.active.select(:profile_id))
+    previous_orders = where(id: Ec::CustomerOrder.where.not(status: Ec::OrderStatuses::ORDER_INITIALIZED).select(:profile_id))
     
-    where(GiftRecommendationSet.active.where(rs_t[:profile_id].eq(p_t[:id])).exists
-      .or(Ec::CustomerOrder.where(o_t[:profile_id].eq(p_t[:id])).exists)
-    )
+    active_recommendation_sets.or(previous_orders)
   end
-
+  
   def active?
-    gift_recommendation_sets.active.any? || has_orders?
+    current_gift_recommendation_set.present? && has_orders?
   end
 
   def has_orders?
-    customer_orders.any?
+    customer_orders.select(&:not_initialized?).any?
   end
 
   def allow_new_recommendations!
@@ -122,7 +119,7 @@ class Profile < ApplicationRecord
 
   def display_gift_recommendations
     gift_recommendations.
-      where(gift_id: Gift.select(:id).can_be_sold, removed_by_expert: false).
+      available.
       preload(
         recommendation_set: [:profile], 
         gift: [
