@@ -15,7 +15,7 @@
           = f.input_field :selling_price, class: 'form-control', value: number_with_precision(f.object.selling_price, precision: 2)
         = f.input :calculate_price_from_products, label: 'Auto-Calculate Price from Products'
 
-        = f.input :insurance_in_dollars, wrapper: :vertical_input_group, label: 'Insurarnce to buy when shipping' do
+        = f.input :insurance_in_dollars, wrapper: :vertical_input_group, label: 'Insurance to buy when shipping' do
           .input-group-addon $
           = f.input_field :insurance_in_dollars, class: 'form-control', value: number_with_precision(f.object.insurance_in_dollars, precision: 2)
 
@@ -46,7 +46,7 @@
           = gp.input :parcel_id, collection: Ec::Parcel.active.shipping.all, value_method: :id, label_method: :description, input_html: {}, label: 'Shipping Box'
           = gp.input :gift_id, as: :hidden, value: @gift.id
 
-    = f.input :available, label: 'Availabe to Customers'
+    = f.input :available, label: 'Available to Customers'
     = f.input :featured, label: 'Promote this gift in the recommendations'
 
   .form-actions
