@@ -31,7 +31,7 @@ class Gift < ApplicationRecord
     # if none find the first landscape in sort_order
     # if no landscape use primary image portrait
     primary = primary_gift_image
-    if primary.orientation == 'landscape'
+    if primary.present? && primary.orientation == 'landscape'
       thumb = primary
     else
       first_landscape = gift_images.select{|gi| gi.orientation == 'landscape'}.first
