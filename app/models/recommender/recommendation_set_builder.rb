@@ -37,6 +37,7 @@ module Recommender
       
       previous_recommendations.each_with_index do |prev_rec, position|
         copied_rec = prev_rec.dup
+        copied_rec.created_at = prev_rec.created_at
         copied_rec.position = position
         recommendations << copied_rec
       end

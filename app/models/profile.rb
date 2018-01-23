@@ -98,7 +98,7 @@ class Profile < ApplicationRecord
   end
 
   def copy_last_survey_response!
-    survey_responses.create!(survey: last_survey.survey, completed_at: Time.now)
+    @_last_survey = survey_responses.create!(survey: last_survey.survey, completed_at: Time.now)
   end
 
   def name
