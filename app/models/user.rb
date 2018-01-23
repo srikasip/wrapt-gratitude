@@ -69,7 +69,10 @@ class User < ApplicationRecord
   end
 
   def has_other_giftees_with_relationship?(relationship)
-    owned_profiles.where(relationship: relationship).any?
+    owned_profiles.unarchived.active.
+      where(relationship: relationship).
+      where.not(first_name: 'Unknown').
+      any?
   end
 
   # MVP1a has users using a single profile
