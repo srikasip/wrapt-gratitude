@@ -58,3 +58,37 @@
 .modal .alert {
   width: 90%;
 }
+
+// modal styles for blue modal
+#pjax-modal-two {
+  color: #FFFFFF;
+  text-align: center;
+  .modal-header .close {
+    background-color: transparent;
+  }
+  .modal-dialog {
+    max-width: 945px;
+    width: 100%;
+    @media(max-width: $screen-xs-max) {
+      max-width: 100%;
+      min-height: 100%;
+      margin: 0px auto;
+    }
+  }
+  .modal-body {
+    max-width: 768px;
+    margin: 0px auto;
+    padding: 0px 24px;
+    padding-bottom: 80px;
+  }
+  .modal-content {
+    background-color: rgba($blue-001, 0.95);
+  }
+}
+
+#pjax-modal-two.fade.in ~ .modal-backdrop.fade.in {
+  opacity: 0;
+}
+
+
+

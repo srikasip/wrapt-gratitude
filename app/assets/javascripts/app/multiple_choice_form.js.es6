@@ -1,6 +1,7 @@
 App.MultipleChoiceForm = class MultipleChoiceForm {
   constructor(options = {}) {
-    this.form_element = $('[data-behavior~="question-response-form"]')[0];
+    this.formSelector = '[data-behavior~="question-response-form"]'
+    this.form_element = $(this.formSelector)[0];
     this.hidden_inputs_selector = $(this.form_element).find('[data-behavior~="option-id-input"]');
     this.buttons_selector = $(this.form_element).find('[data-behavior~="option-button"]')
     this.multipleOptionResponses = options.multipleOptionResponses;

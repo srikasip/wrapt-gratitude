@@ -20,6 +20,7 @@
       - if option.explanation.present?
         .sqr-option-explanation{data: {behavior: 'option-explantion', option_id: option.id}}= option.explanation
 
+
 - content_for :page_js do
   :javascript
       new App.MultipleChoiceForm({

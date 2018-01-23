@@ -4,7 +4,7 @@ class GenerateRecommendationsJob < ApplicationJob
   def perform(profile, params)
 
     return if profile.recommendations_in_progress
-    return if profile.recommendations_generated_at.present?
+    # return if profile.recommendations_generated_at.present?
 
     profile.update_attribute :recommendations_in_progress, true
     

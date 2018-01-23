@@ -54,6 +54,16 @@ class Profile < ApplicationRecord
     customer_orders.select(&:not_initialized?).any?
   end
 
+  def has_ordered_from_current_recommendation_set?
+    set = current_gift_recommendation_set
+    orders = customer_orders.order(created_at: :desc)
+    if orders.any? && set.present?
+      orders.first.created_at > set.created_at
+    else
+      false
+    end
+  end
+
   def allow_new_recommendations!
     update_attribute(:recommendations_generated_at, nil)
   end
@@ -76,6 +86,7 @@ class Profile < ApplicationRecord
     word = read_attribute(:relationship)
 
     if word == 'Other'
+      # FIXME: relationship is not always the first question
       survey_responses.first.question_responses.where("other_option_text != '' and other_option_text is not null").pluck(:other_option_text).first rescue 'Giftee'
     else
       word
@@ -84,6 +95,10 @@ class Profile < ApplicationRecord
 
   def last_survey
     @_last_survey ||= survey_responses.order('updated_at desc').first
+  end
+
+  def copy_last_survey_response!
+    survey_responses.create!(survey: last_survey.survey, completed_at: Time.now)
   end
 
   def name
@@ -166,5 +181,15 @@ class Profile < ApplicationRecord
     builder.build
     builder.save!
     @_current_gift_recommendation_set = builder.recommendation_set
+  end
+
+  def state_partial
+    if has_ordered_from_current_recommendation_set? 
+      'my_account/giftees/refresh_recommendations'
+    elsif finished_surveys?
+      'my_account/giftees/recommendations'
+    else
+      'my_account/giftees/finish_survey'
+    end
   end
 end

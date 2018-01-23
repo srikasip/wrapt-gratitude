@@ -7,6 +7,7 @@
 
       .form-inputs.pt4
         = form.input :prompt
+        = form.input :basic, label: 'Include question in adjust the basics form?'
         = form.input :code, hint: '(required for importing)'
         = form.association :survey_section, as: :select, collection: @survey.sections, include_blank: false, label: 'Section'
 

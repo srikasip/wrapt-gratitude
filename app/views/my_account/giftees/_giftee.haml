@@ -10,8 +10,10 @@
         %small= giftee.relationship
         = render 'giftee_orders', giftee: giftee
   .ma-giftee-card__content
+    = render giftee.state_partial, giftee: giftee, all_recs: all_recs, first_five_recs: first_five_recs
+  -#
     - if giftee.has_orders?
-      TODO
+      = link_to 'GET FRESH SET OF RECOMMENDATIONS', giftee_survey_responses_path(giftee), class: 'btn btn-default btn-block ma-giftee-card__btn'
     - elsif giftee.finished_surveys?
       .ma-giftee-recs__details.clearfix
         - if giftee.notification_count > 0

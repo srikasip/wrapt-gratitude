@@ -19,6 +19,7 @@ class SurveyQuestionResponsesController < ApplicationController
     @question_response = @survey_response.question_responses.find params[:id]
     @survey_response = @question_response.survey_response
     @survey_questions = @survey_response.survey.questions
+    @open_new_shopping_trip_modal = params[:start_shopping_trip]
   end
 
   def update
@@ -27,18 +28,29 @@ class SurveyQuestionResponsesController < ApplicationController
     if @question_response.update question_response_params
       @question_response.update_attribute :answered_at, Time.now
       @profile.touch
+      @open_new_shopping_trip_modal = start_new_shopping_trip?
       if request.xhr?
         render :json => {question_response: @question_response}
       else
         if @question_response.next_response.present?
-          redirect_to with_invitation_scope(giftee_survey_question_path(@profile, @survey_response, @question_response.next_response))
+          redirect_to with_invitation_scope(giftee_survey_question_path(@profile, @survey_response, @question_response.next_response, start_shopping_trip: @open_new_shopping_trip_modal))
         else
           session[:just_completed_profile_id] = @profile.id
-          redirect_to with_invitation_scope(giftee_survey_completion_path(@profile, @survey_response))
+          redirect_to with_invitation_scope(giftee_survey_completion_path(@profile, @survey_response, start_shopping_trip: @open_new_shopping_trip_modal))
         end
       end
     else
       render :show
+    end
+  end
+
+  private def start_new_shopping_trip?
+    relationship_question = @question_response.survey_question.use_response_as_relationship
+    relationship = @profile.relationship
+    if relationship_question && relationship.present?
+      current_user.present? && current_user.has_other_giftees_with_relationship?(relationship)
+    else
+      false
     end
   end
 

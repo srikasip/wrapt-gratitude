@@ -4,15 +4,15 @@
 # Ajax modals
 #############
 
-class window.PjaxModal
-  constructor: ->
-    @modal = $(".modal[data-pjax-modal]")
+class window.PjaxModalBase
+  constructor: (modalSelector, linkTriggerSelector, formTriggerSelector) ->
+    @modal = $(modalSelector)
     @container = @modal.find("[data-pjax-modal-container]")
     @title = @modal.find("[data-pjax-modal-title]")
     @body = @modal.find("[data-pjax-modal-body]")
     @footer = @modal.find("[data-pjax-modal-footer]")
-    @linkTriggers = $('[data-loads-in-pjax-modal]')
-    @formTriggers = $('[data-submits-to-pjax-modal]')
+    @linkTriggers = $(linkTriggerSelector)
+    @formTriggers = $(formTriggerSelector)
     @loading = @modal.find("[data-pjax-modal-loading]")
 
   listen: ->
@@ -60,10 +60,22 @@ class window.PjaxModal
       $('.js-ios-hack').hide()
       $('body').css(position: 'fixed')
 
-
-
   reset: ->
     @title.html("")
     @body.html("")
     @footer.html("")
     @loading.show()
+
+class window.PjaxModal extends window.PjaxModalBase
+  constructor: ->
+    super(".modal[data-pjax-modal]", '[data-loads-in-pjax-modal]', '[data-submits-to-pjax-modal]')
+
+class window.PjaxModalTwo extends window.PjaxModalBase
+  constructor: ->
+    super(".modal[data-pjax-modal-two]", '[data-loads-in-pjax-modal-two]', '[data-submits-to-pjax-modal-two]')
+
+  reset: ->
+    super()
+    @formTriggers.find('input[type="submit"]').removeAttr('disabled')
+
+

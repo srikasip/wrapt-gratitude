@@ -395,3 +395,104 @@ label {
     margin-top: 18px;
   }
 }
+
+// start a new shopping trip edit the basics modal
+.modal .bq-container,
+.bq-container {
+  color: #FFFFFF;
+  h1{
+    text-align: center;
+    margin-bottom: 46px;
+  }
+  label.control-label {
+    color: #FFFFFF;
+    font-size: 20px;
+    line-height: 28px;
+    margin-bottom: 25px;
+  }
+  .form-group {
+    margin-bottom: 0px;
+  }
+}
+.bq-question-response {
+  margin-bottom: 60px;
+  position: relative;
+}
+.bq-explanations {
+  color: #FFFFFF;
+  text-align: center;
+  min-height: 48px;
+  position: absolute;
+  bottom: -40px;
+  left: 0px;
+  right: 0px;
+}
+form.edit_survey_response {
+  .radio_buttons label.control-label,
+  .check_boxes label.control-label {
+    display: block;
+  }
+  .radio,
+  .checkbox {
+    display: inline-block;
+    @media(max-width: $screen-xs-max) {
+      width: 50%;
+    }
+  }
+  .radio:nth-child(odd),
+  .checkbox:nth-child(odd) {
+    @media(max-width: $screen-xs-max) {
+      padding-right: 7px;
+    }
+  }
+  .radio:nth-child(even),
+  .checkbox:nth-child(even) {
+    @media(max-width: $screen-xs-max) {
+      padding-left: 7px;
+    }
+  }
+  .radio label,
+  .checkbox label {
+    display: inline-block;
+    min-width: 167px;
+    text-align: center;
+    background-color: #FFFFFF;
+    margin-right: 13px;
+    margin-bottom: 16px;
+    padding: 19px 10px;
+    border: 1px solid $gray-005;
+    input {display: none;}
+    @media(max-width: $screen-xs-max) {
+      min-width: 0px;
+      width: 100%;
+    }
+  }
+  .radio label.selected,
+  .checkbox label.selected {
+    background-color: $tan-003;
+  }
+  input[type='submit'] {
+    border-color: #FFFFFF;
+    color: #FFFFFF
+  }
+
+  input[type='submit']:hover,
+  input[type='submit']:focus,
+  input[type='submit']:active {
+    background-color: darken($blue-001, 2%);
+  }
+}
+
+.shopping-trip-form {
+  text-align: center;
+  .radio label {
+    display: inline-block;
+    width: 100%;
+    max-width: 260px;
+    text-align: center;
+    margin-bottom: 8px;
+    padding: 16px 10px;
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+  }
+}

@@ -1,0 +1,6 @@
+= link_to 'GET FRESH SET OF RECOMMENDATIONS', giftee_survey_response_copy_path(giftee, giftee.last_survey), class: 'btn btn-default btn-block ma-giftee-card__btn', data: {loads_in_pjax_modal_two: true}
+
+-#
+  -# changed action to get to work with other workflows
+  = simple_form_for :copy, url: giftee_survey_response_copy_path(giftee, giftee.last_survey), html: {data: {submits_to_pjax_modal_two: true}} do |f|
+    = f.submit 'GET FRESH SET OF RECOMMENDATIONS', class: 'btn btn-default btn-block ma-giftee-card__btn'
