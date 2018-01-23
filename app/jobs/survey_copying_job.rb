@@ -13,7 +13,7 @@ class SurveyCopyingJob < ApplicationJob
   ensure
     begin
       @target_survey.update!(copy_in_progress: false)
-    rescue ActiveRecord::RecordInvalid => e
+    rescue ActiveRecord::RecordInvalid, ActiveRecord::StatementInvalid => e
       Rails.logger.fatal "Failed to save survey in an ensure block #{e.message}"
     end
     ActionCable.server.broadcast "survey_copyings", html: render_survey(target_survey), survey_id: target_survey.id
@@ -27,6 +27,12 @@ class SurveyCopyingJob < ApplicationJob
       target_section.save!
 
       target_question.survey_section = target_section
+
+      # Avoids duplicate "Other option" option and having it as the first option
+      if target_question.is_a?(SurveyQuestions::MultipleChoice)
+        target_question.skip_other_option_handling = true
+      end
+
       target_question.save!
 
       @question_mapping[source_question.id] = target_question.id

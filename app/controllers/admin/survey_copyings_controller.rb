@@ -1,6 +1,6 @@
 module Admin
   class SurveyCopyingsController < BaseController
-    before_filter :find_survey
+    before_action :find_survey
 
     def create
       target_survey = Survey.new title: "Copy of #{@survey.title}", copy_in_progress: true
