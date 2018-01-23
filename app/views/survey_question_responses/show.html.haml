@@ -37,7 +37,8 @@
   :javascript
     new App.PrevButtonBehavior()
 
-- if @open_new_shopping_trip_modal
+- if @open_new_shopping_trip_modal == 'true'
   - content_for :page_js do
     :javascript
-      new App.PjaxModalTwoLoader('#{new_my_account_shopping_trip_path}', {backdrop: 'static'})
+      new App.PjaxModalTwoLoader('#{new_giftee_survey_response_path(@profile)}', {backdrop: 'static'})
+

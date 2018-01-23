@@ -48,7 +48,7 @@ Rails.application.routes.draw do
     resources :recipient_gift_dislikes, only: [:create, :destroy]
     resources :recipient_gift_selections, only: [:create, :destroy]
     resources :recipient_originated_referrals, only: [:new, :create]
-    resources :survey_responses, controller: 'giftee_survey_responses', only: [:edit, :update] do
+    resources :survey_responses, controller: 'giftee_survey_responses', only: [:edit, :update, :new, :create] do
       # post 'copy'
       get 'copy'
     end
@@ -78,7 +78,6 @@ Rails.application.routes.draw do
   ###################################
   #namespace :my_account, path: 'my-account' do
   resource :my_account, path: 'my-account', module: 'my_account' do
-    resources :shopping_trips, only: [:new, :create]
     resources :giftees, only: [ :new, :index, :edit, :update ]
     resource :profile, only: [ :show, :edit, :update ]
     resources :orders, only: [ :index, :show ]

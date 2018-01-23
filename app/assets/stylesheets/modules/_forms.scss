@@ -428,6 +428,7 @@ label {
   right: 0px;
 }
 form.edit_survey_response {
+  text-align: left;
   .radio_buttons label.control-label,
   .check_boxes label.control-label {
     display: block;
@@ -483,8 +484,16 @@ form.edit_survey_response {
   }
 }
 
+.modal .shopping-trip-container {
+  h1 {margin-bottom: 30px;}
+  p {margin-bottom: 30px;}
+}
+
 .shopping-trip-form {
   text-align: center;
+  .form-group {
+    margin-bottom: 0px;
+  }
   .radio label {
     display: inline-block;
     width: 100%;
@@ -494,5 +503,17 @@ form.edit_survey_response {
     padding: 16px 10px;
     border: 1px solid #FFFFFF;
     color: #FFFFFF;
+    input {display: none;}
+  }
+  .someone-new-btn {
+    background-color: transparent;
+    display: inline-block;
+    width: 100%;
+    max-width: 260px;
+    text-align: center;
+    padding: 16px 10px;
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+    line-height: 17.6px;
   }
 }
