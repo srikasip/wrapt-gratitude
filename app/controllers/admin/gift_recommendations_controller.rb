@@ -24,6 +24,10 @@ module Admin
       GiftRecommendation.transaction do
         @gift_recommendation = @recommendation_set.recommendations.create(attrs)
         @recommendation_set.update_attributes(expert: current_user, updated_at: Time.now)
+<<<<<<< HEAD
+=======
+        @recommendation_set.normalize_recommendation_positions!
+>>>>>>> master
       end
       redirect_to edit_path, notice: "#{@gift.title} (#{@gift.wrapt_sku}) added"
     end
