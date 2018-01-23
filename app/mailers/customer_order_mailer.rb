@@ -22,7 +22,7 @@ class CustomerOrderMailer < ApplicationMailer
   end
 
   def order_shipped(purchase_order_id)
-    @purchase_order = PurchaseOrder.find(purchase_order_id)
+    @purchase_order = Ec::PurchaseOrder.find(purchase_order_id)
     @customer_order = @purchase_order.customer_order
     @user = @customer_order.user
 
