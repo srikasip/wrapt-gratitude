@@ -100,7 +100,11 @@
               - if rec.added_by_expert?
                 Expert
               - else
-                Algorithm (score: #{rec.score.round})
+                Algorithm
+                %br
+                score: #{rec.score.round}
+                %br
+                gen: #{rec.generation_number}
             %td
               = simple_form_for(rec, url: admin_gift_recommendation_path(rec), method: 'patch', html: {class: 'form-inline'}) do |f|
                 = f.check_box :removed_by_expert, class: 'js_auto_save', id: nil
