@@ -82,8 +82,19 @@
                   - gift.tags.sort_by(&:name).each do |tag|
                     %span.label.label-primary.label-inverse= tag.name
 
-                %p= gift.availability_string
-                
+                %p
+                  :ruby
+                    statuses = [gift.availability_string]
+                    statuses << (rec.viewed? ? "Viewed" : "Not Viewed")
+                  #{statuses.join(", ")}
+                  
+                %p
+                  :ruby
+                    statuses = []
+                    statuses << "Added at #{format_datetime(rec.created_at)}"
+                    statuses << "Viewed at #{format_datetime(rec.viewed_at)}" if rec.viewed_at.present?
+                  #{statuses.join(", ")}
+                                  
               .save-notice
             %td
               - if rec.added_by_expert?

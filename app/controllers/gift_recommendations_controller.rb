@@ -116,7 +116,7 @@ class GiftRecommendationsController < ApplicationController
     load_pages(all_gift_recommendations)
     @gift_recommendations = GiftRecommendation.select_for_display(all_gift_recommendations, @page) || []
     if @gift_recommendations.any? && !impersonation_mode?
-      GiftRecommendation.where(id: @gift_recommendations).update_all(viewed: true)
+      GiftRecommendation.where(id: @gift_recommendations).update_all(viewed: true, viewed_at: Time.now)
     end
   end
 end

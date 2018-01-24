@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180123184357) do
+ActiveRecord::Schema.define(version: 20180124153259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -247,6 +247,7 @@ ActiveRecord::Schema.define(version: 20180123184357) do
     t.integer  "recommendation_set_id",                 null: false
     t.boolean  "viewed",                default: false, null: false
     t.integer  "generation_number",     default: 0,     null: false
+    t.datetime "viewed_at"
     t.index ["deprecated_profile_id"], name: "index_gift_recommendations_on_deprecated_profile_id", using: :btree
     t.index ["gift_id"], name: "index_gift_recommendations_on_gift_id", using: :btree
     t.index ["recommendation_set_id"], name: "index_gift_recommendations_on_recommendation_set_id", using: :btree
