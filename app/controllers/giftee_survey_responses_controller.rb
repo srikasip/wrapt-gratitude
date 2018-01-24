@@ -35,6 +35,8 @@ class GifteeSurveyResponsesController < ApplicationController
   def update
     @survey_response = SurveyResponse.find(params[:id])
     if @survey_response.update_attributes(survey_response_params)
+      @profile.has_viewed_initial_recommendations = true
+      @profile.save
       job = GenerateRecommendationsJob.new
       job.perform(@profile, survey_response_id: @survey_response.id, append: true)
       if params[:profile_to_be_removed].present?

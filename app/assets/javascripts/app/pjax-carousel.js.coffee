@@ -129,7 +129,9 @@ class window.GiftCarousel
 
   _updateMobileNav: (a, b) ->
     behavior = 'data-behavior'
-    pjax = 'data-loads-in-pjax-carousel-load-more'
+    # update to new behavior
+    # pjax = 'data-loads-in-pjax-carousel-load-more'
+    pjax = 'data-loads-in-pjax-modal-two'
     a.attr(behavior, 'scroll')
     a.removeAttr(pjax)
     a.removeClass('disabled')
