@@ -72,7 +72,7 @@
 
                 - when'recommendations_generated'
                   Recommendations generated:
-                  - rec_set = profile.gift_recommendation_sets.find{|grs| grs.id = event[:gift_recommendation_set_id]}
+                  - rec_set = profile.gift_recommendation_sets.detect{|grs| grs.id == event[:gift_recommendation_set_id]}
                   - recs = rec_set.recommendations
                   = link_to "edit", edit_admin_gift_recommendation_set_path(rec_set)
                   %ol

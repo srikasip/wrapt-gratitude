@@ -1,8 +1,10 @@
 module SurveyQuestions
   class MultipleChoice < ::SurveyQuestion
+    attr_accessor :skip_other_option_handling
 
     has_one :other_option, class_name: 'SurveyQuestionOtherOption', foreign_key: 'survey_question_id'
-    after_save :create_or_destroy_other_option_if_flag_changed
+
+    after_save :create_or_destroy_other_option_if_flag_changed, unless: :skip_other_option_handling
 
     def type_label
       "Multiple Choice"

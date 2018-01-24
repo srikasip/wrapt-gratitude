@@ -71,9 +71,12 @@ class GifteeSurveyResponsesController < ApplicationController
           end
         end
       end
+      # reload after copy operation
+      load_last_survey_response(profile_to_copy)
     rescue => e
       flash[:alert] = "Sorry, sometheing went wrong! Please try again!"
       redirect_to my_account_giftees_path
+      return
     end
     render :edit
   end
