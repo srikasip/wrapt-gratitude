@@ -249,11 +249,14 @@ sup:last-child {
 .sg-boxes {
   @include flexbox();
   @include flexwrap();
+  justify-content: space-between;
 }
 
 .sg-box {
-  @include flexbox();
-  @include flexcolumn();
+  width: 31%;
+  @media(max-width: $screen-sm-max) {
+    width: 100%;
+  }
 }
 
 .sg-box__content {
