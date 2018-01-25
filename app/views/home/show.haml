@@ -1,11 +1,15 @@
-.home__hero
-  = render 'hero_text_1'
+-#
+  .home__hero
+    = render 'hero_text_1'
+= render 'carousel'
 .container.home__hero-text-secondary
-  = render 'hero_text_2'
-  .container
-    .row
-      .hero-overrun.col-sm-10.col-sm-offset-1
-        = render 'shared/start_quiz'
+  = render 'start_quiz_occasion'
+  -#
+    = render 'hero_text_2'
+    .container
+      .row
+        .hero-overrun.col-sm-10.col-sm-offset-1
+          = render 'shared/start_quiz'
 
 - content_for :after_wrapper do
   = render 'home/how_wrapt_works'

@@ -2,6 +2,30 @@
 // e.g. Home Page and Quiz Landing page
 
 @import "helpers";
+
+#hpb-carousel {
+  margin: 10px 0px 50px;
+}
+
+#hpb-carousel,
+#hpb-carousel img {
+  width: 100vw;
+}
+
+#hpb-carousel .item {
+  max-height: 615px;
+  overflow: hidden;
+}
+
+#hpb-carousel .carousel-indicators {
+  position: static;
+  margin-left: 0px;
+  margin: 0px auto;
+  li {
+    background-color: #ccc;
+  }
+}
+
 .rotate-words__sentence {
   display: inline-block;
   text-align: left;
@@ -154,7 +178,7 @@
 
 .hero-overrun {
   @include shadowed-hero-box();
-  margin-top: -80px;
+  // margin-top: -80px;
 }
 
 .profiles.new .hero-overrun form {

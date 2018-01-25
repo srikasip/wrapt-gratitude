@@ -1,0 +1,40 @@
+-#<img src="vase-600.jpg" srcset="vase-600.jpg 600w, vase-1600.jpg 1600w, vase-2240.jpg 2240w" alt="hand-made vase painted with large blue flowers">
+:ruby
+  images = [
+    {
+      src: "home-page-carousel/scarf-600-min.jpg", 
+      srcset: [
+        ["home-page-carousel/scarf-600-min.jpg", "600w"],
+        ["home-page-carousel/scarf-1200-min.jpg", "1200w"],
+        ["home-page-carousel/scarf-2240-min.jpg", "2240w"]
+      ]
+    },
+    {
+      src: "home-page-carousel/soap-600-min.jpg", 
+      srcset: [
+        ["home-page-carousel/soap-600-min.jpg", "600w"],
+        ["home-page-carousel/soap-1200-min.jpg", "1200w"],
+        ["home-page-carousel/soap-2240-min.jpg", "2240w"]
+      ]
+    },
+    {
+      src: "home-page-carousel/vase-600-min.jpg", 
+      srcset: [
+        ["home-page-carousel/vase-600-min.jpg", "600w"],
+        ["home-page-carousel/vase-1200-min.jpg", "1200w"],
+        ["home-page-carousel/vase-2240-min.jpg", "2240w"]
+      ]
+    }
+  ]
+.carousel.slide#hpb-carousel{data: {ride: 'carousel'}}
+  .carousel-inner{role: 'listbox'}
+    - images.each_with_index do |image, index|
+      - css_classes = ['item']
+      - css_classes.push('active') if index == 0
+      %div{class: css_classes}
+        = image_tag image[:src], srcset: image_tag_srcset(image[:srcset])
+  %ol.carousel-indicators
+    - images.each_with_index do |image, index|
+      - css_class = index == 0 ? 'active' : ''
+      %li{class: css_class, data: {target: '#hpb-carousel', slide_to: index}}
+

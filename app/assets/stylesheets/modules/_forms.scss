@@ -517,3 +517,16 @@ form.edit_survey_response {
     line-height: 17.6px;
   }
 }
+
+
+.sqr-form__occasion .option-row .col-xs-12 { 
+  @include flexbox();
+  @include flexwrap();
+  justify-content: space-between;
+  a {
+    @include flex(0 1 18%);
+    
+  }
+}
+
+
