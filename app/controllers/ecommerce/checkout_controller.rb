@@ -148,7 +148,7 @@ class Ecommerce::CheckoutController < ApplicationController
         @promo_error_message = "We're Sorry &#8212; That code has expired.".html_safe
       end
     else
-      @promo_error_message = "We're Sorry &#8212; We don't recognize that that promo code.".html_safe
+      @promo_error_message = "We're Sorry &#8212; We don't recognize that promo code.".html_safe
     end
   end
 
