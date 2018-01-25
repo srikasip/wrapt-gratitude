@@ -1,3 +1,6 @@
+- all_recs = giftee.gift_recommendations
+- all_recs_size = all_recs.size
+- first_five_recs = all_recs.take(5)
 .ma-giftee-recs__details.clearfix
   - if giftee.notification_count > 0
     .ma-giftee-recs__notification
@@ -5,15 +8,11 @@
       = embedded_svg('icon-wrapt-heart', class: 'svg-icon icon-notify')
     .pull-left= link_to 'See New WRAPT Recommendations', giftee_gift_recommendations_path(giftee)
   .pull-right= giftee.display_rec_set_last_update
-- if all_recs.size > 0
-  - if giftee.has_viewed_initial_recommendations?
-    - recs = GiftRecommendation.load_recommendations_for_display(all_recs)
-    - btn_text = "VIEW #{recs.size} RECOMMENDATIONS"
+- if all_recs_size > 0
+  - if giftee.can_generate_more_recs?
+    - btn_text = "VIEW #{all_recs_size} AND GET MORE"
   - else
-    - expert_recs = all_recs.select(&:added_by_expert)
-    - non_expert_recs = all_recs.select{|r| !r.added_by_expert}
-    - recs = expert_recs + GiftRecommendation.select_for_display(non_expert_recs)
-    - btn_text = "VIEW #{recs.size} AND GET MORE"
+    - btn_text = "VIEW #{all_recs_size} RECOMMENDATIONS"
   
   = link_to giftee_gift_recommendations_path(giftee), class: 'btn btn-primary btn-block ma-giftee-card__btn' do
     =btn_text

@@ -5,8 +5,6 @@ class GiftRecommendation < ApplicationRecord
   
   delegate :profile, to: :recommendation_set
   
-  MAX_SHOWN_TO_USER = 6
-  
   delegate :featured?, :experience?, to: :gift
   
   def self.available
@@ -43,38 +41,38 @@ class GiftRecommendation < ApplicationRecord
   end
   before_save :normalize_expert_score
 
-  def self.load_recommendations_for_display(gift_recommendations)
-    expert_picks = gift_recommendations.reject(&:removed_by_expert).select(&:added_by_expert)
-    auto_picks = (gift_recommendations - expert_picks || []).take(12)
-    all_picks = expert_picks + auto_picks || []
-  end
+  # def self.load_recommendations_for_display(gift_recommendations)
+  #   expert_picks = gift_recommendations.reject(&:removed_by_expert).select(&:added_by_expert)
+  #   auto_picks = (gift_recommendations - expert_picks || []).take(12)
+  #   all_picks = expert_picks + auto_picks || []
+  # end
   
-  def self.select_for_display(gift_recommendations, page=1, mobile: false)
-    all_picks = load_recommendations_for_display(gift_recommendations)
-    if page == 'all'
-      picks_to_show = all_picks
-    else
-      all_picks_by_page = all_picks.in_groups_of(max, false)
-      page_index = page - 1
-      last_page_index = all_picks_by_page.size - 1
-      if page_index < 0
-        page_index = 0
-      elsif page_index > last_page_index
-        page_index = last_page_index
-      end
-      picks_to_show = all_picks_by_page[page_index]
-    end
-    picks_to_show
-  end
+  # def self.select_for_display(gift_recommendations, page=1, mobile: false)
+  #   all_picks = load_recommendations_for_display(gift_recommendations)
+  #   if page == 'all'
+  #     picks_to_show = all_picks
+  #   else
+  #     all_picks_by_page = all_picks.in_groups_of(max, false)
+  #     page_index = page - 1
+  #     last_page_index = all_picks_by_page.size - 1
+  #     if page_index < 0
+  #       page_index = 0
+  #     elsif page_index > last_page_index
+  #       page_index = last_page_index
+  #     end
+  #     picks_to_show = all_picks_by_page[page_index]
+  #   end
+  #   picks_to_show
+  # end
 
-  def self.pages(gift_recommendations, mobile: false)
-    max = MAX_SHOWN_TO_USER
-    all_picks = load_recommendations_for_display(gift_recommendations)
-    all_picks.in_groups_of(max, false).size
-  end
+  # def self.pages(gift_recommendations, mobile: false)
+  #   max = MAX_SHOWN_TO_USER
+  #   all_picks = load_recommendations_for_display(gift_recommendations)
+  #   all_picks.in_groups_of(max, false).size
+  # end
 
-  def self.max(mobile: false)
-    MAX_SHOWN_TO_USER
-  end
+  # def self.max(mobile: false)
+  #   MAX_SHOWN_TO_USER
+  # end
 
 end

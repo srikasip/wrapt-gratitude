@@ -1,6 +1,7 @@
 class GifteeSurveyResponsesController < ApplicationController
 
   before_action :set_profile
+  before_action :set_append
 
   helper SurveyQuestionResponsesHelper
   include PjaxModalController
@@ -38,7 +39,8 @@ class GifteeSurveyResponsesController < ApplicationController
       @profile.has_viewed_initial_recommendations = true
       @profile.save
       job = GenerateRecommendationsJob.new
-      job.perform(@profile, survey_response_id: @survey_response.id, append: true)
+      # job.perform(@profile, survey_response_id: @survey_response.id, append: true)
+      job.perform(@profile, survey_response_id: @survey_response.id, append: @append)
       if params[:profile_to_be_removed].present?
         @profile_to_be_removed = current_user.owned_profiles.where(id: params[:profile_to_be_removed]).first
         @profile_to_be_removed.destroy if @profile_to_be_removed.present?
@@ -55,6 +57,10 @@ class GifteeSurveyResponsesController < ApplicationController
   end
 
   private
+
+  def set_append
+    @append = params[:append] == '1'
+  end
 
   def make_a_copy!(profile_to_copy)
     load_last_survey_response(profile_to_copy)

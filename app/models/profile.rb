@@ -38,12 +38,15 @@ class Profile < ApplicationRecord
 
   scope :unarchived, -> {where(archived_at: nil)}
   scope :archived, -> {where.not(archived_at: nil)}
+
+  TTL = 30.days
   
   def self.active
     active_recommendation_sets = where(id: GiftRecommendationSet.active.select(:profile_id))
     previous_orders = where(id: Ec::CustomerOrder.where.not(status: Ec::OrderStatuses::ORDER_INITIALIZED).select(:profile_id))
-    
-    active_recommendation_sets.or(previous_orders)
+    active_unfinished_survey_responses = where(id: SurveyResponse.where(completed_at: nil).where('updated_at > ?', TTL.ago).select(:profile_id))
+
+    active_recommendation_sets.or(previous_orders).or(active_unfinished_survey_responses)
   end
   
   def active?
@@ -56,12 +59,16 @@ class Profile < ApplicationRecord
 
   def has_ordered_from_current_recommendation_set?
     set = current_gift_recommendation_set
-    orders = customer_orders.order(created_at: :desc)
+    orders = customer_orders.order(created_at: :desc).select(&:not_initialized?)
     if orders.any? && set.present?
       orders.first.created_at > set.created_at
     else
       false
     end
+  end
+
+  def can_generate_more_recs?
+    current_gift_recommendation_set.generation_number == 0
   end
 
   def allow_new_recommendations!

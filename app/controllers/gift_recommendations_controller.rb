@@ -4,8 +4,6 @@ class GiftRecommendationsController < ApplicationController
 
   before_action -> { @enable_chat = true }
 
-  # GIFT_RECOMMENDATION_LIMIT = 6
-
   helper CarouselHelper
 
   before_action :load_profile
@@ -98,23 +96,14 @@ class GiftRecommendationsController < ApplicationController
     session[:giftee_id] = @profile.id
   end
 
-  def load_pages(all_gift_recommendations)
-    @total_pages = GiftRecommendation.pages(all_gift_recommendations)
-    @page = (params[:carousel_page] || 1)&.to_i
-    if @page == 0
-      @page = 1
-    elsif @page > @total_pages
-      @page = @total_pages
-    end
-    @page = 1 if !@profile.has_viewed_initial_recommendations?
-    @prev_page = @page <= 1 ? 1 : @page-1
-    @next_page = @page >= @total_pages ? @total_pages : @page+1
-  end
-
   def load_recommendations
-    all_gift_recommendations = @profile.display_gift_recommendations
-    load_pages(all_gift_recommendations)
-    @gift_recommendations = GiftRecommendation.select_for_display(all_gift_recommendations, @page) || []
+    page_params = params[:carousel_page]&.to_i
+    pages = GiftRecommendationSetPages.new(@profile, page_params)
+    @total_pages = pages.page_count
+    @page = pages.active_page
+    @prev_page = pages.prev_page
+    @next_page = pages.next_page
+    @gift_recommendations = pages.page_recommendations
     if @gift_recommendations.any? && !impersonation_mode?
       GiftRecommendation.where(id: @gift_recommendations).update_all(viewed: true, viewed_at: Time.now)
     end

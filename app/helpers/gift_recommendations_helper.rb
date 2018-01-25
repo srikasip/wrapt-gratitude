@@ -51,13 +51,9 @@ module GiftRecommendationsHelper
       if @gift_index < MOBILE_INDICATORS
         data = {behavior: 'scroll'}
       elsif !@profile.has_viewed_initial_recommendations?
-        # update for new behavior
-        # data = {loads_in_pjax_carousel_load_more: true}
         data = {loads_in_pjax_modal_two: true}
       end
     elsif !@profile.has_viewed_initial_recommendations?
-      # update for new behavior
-      # data = {loads_in_pjax_carousel_load_more: true}
       data = {loads_in_pjax_modal_two: true}
     end
   end
@@ -72,15 +68,9 @@ module GiftRecommendationsHelper
   end
 
   def mobile_nav_next_path
-    # update for new behavior
-    # path = @page == @next_page ? '#' : giftee_gift_recommendations_path(@giftee_id, carousel_page: @next_page)
-    # if !@profile.has_viewed_initial_recommendations?
-    #   path = giftee_more_recommendations_path(@giftee_id)
-    # end
-    # path
     path = @page == @next_page ? '#' : giftee_gift_recommendations_path(@giftee_id, carousel_page: @next_page)
     if !@profile.has_viewed_initial_recommendations?
-      path = giftee_survey_response_copy_path(@profile, @profile.last_survey)
+      path = giftee_survey_response_copy_path(@profile, @profile.last_survey, append: '1')
     end
     path
   end

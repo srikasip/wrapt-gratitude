@@ -1,5 +1,3 @@
-- all_recs = giftee.display_gift_recommendations # || []
-- first_five_recs = (GiftRecommendation.select_for_display(all_recs) || []).take(5)
 .ma-giftee-card
   .ma-giftee-card__header
     = link_to edit_my_account_giftee_path(giftee), data: {loads_in_pjax_modal: true}, class: 'btn btn-xs btn-default btn-narrower-xs btn-upcase-gray ma-giftee-card__action' do
@@ -10,43 +8,6 @@
         %small= giftee.relationship
         = render 'giftee_orders', giftee: giftee
   .ma-giftee-card__content
-    = render giftee.state_partial, giftee: giftee, all_recs: all_recs, first_five_recs: first_five_recs
-  -#
-    - if giftee.has_orders?
-      = link_to 'GET FRESH SET OF RECOMMENDATIONS', giftee_survey_responses_path(giftee), class: 'btn btn-default btn-block ma-giftee-card__btn'
-    - elsif giftee.finished_surveys?
-      .ma-giftee-recs__details.clearfix
-        - if giftee.notification_count > 0
-          .ma-giftee-recs__notification
-            %span= giftee.notification_count
-            = embedded_svg('icon-wrapt-heart', class: 'svg-icon icon-notify')
-          .pull-left= link_to 'See New WRAPT Recommendations', giftee_gift_recommendations_path(giftee)
-        .pull-right= giftee.display_rec_set_last_update
-      - if all_recs.size > 0
-        - if giftee.has_viewed_initial_recommendations?
-          - recs = GiftRecommendation.load_recommendations_for_display(all_recs)
-          - btn_text = "VIEW #{recs.size} RECOMMENDATIONS"
-        - else
-          - expert_recs = all_recs.select(&:added_by_expert)
-          - non_expert_recs = all_recs.select{|r| !r.added_by_expert}
-          - recs = expert_recs + GiftRecommendation.select_for_display(non_expert_recs)
-          - btn_text = "VIEW #{recs.size} AND GET MORE"
-        
-        = link_to giftee_gift_recommendations_path(giftee), class: 'btn btn-primary btn-block ma-giftee-card__btn' do
-          =btn_text
-      - else
-        .btn.btn-primary.btn-block.ma-giftee-card__btn
-          NO RECOMMENDATIONS
-      
-      .ma-giftee-recs
-        - first_five_recs.each do |rec|
-          .ma-giftee-rec{style: "background-image: url(#{rec.gift.carousel_thumb.image_url(:small)});"}      
-    - else
-      :ruby
-        question_response = giftee.first_unanswered_response || giftee.last_answered_response
-
-      - if question_response.present?
-        = link_to giftee_survey_question_path(giftee_id: giftee.id, survey_id: question_response.survey_response_id, id: question_response.to_param), class: 'btn btn-default btn-block ma-giftee-card__btn' do
-          COMPLETE THE QUIZ
+    = render giftee.state_partial, giftee: giftee
 
 

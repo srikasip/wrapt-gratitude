@@ -3,6 +3,7 @@
   = simple_form_for @last_survey_response, url: giftee_survey_response_path(@profile, @last_survey_response) do |form|
     - if @profile_to_be_removed
       = hidden_field_tag :profile_to_be_removed, @profile_to_be_removed.id
+    = hidden_field_tag :append, @append ? '1' : '0'
     = form.simple_fields_for :question_responses do |f|
       - if f.object.survey_question.basic?
         .j-bq-question-response.bq-question-response

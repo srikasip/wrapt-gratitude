@@ -3,10 +3,8 @@
     .gr-carousel__nav-icon
       =embedded_svg('icon-caret-left', class: "gr-carousel__nav--caret-left")
     .gr-carousel__nav-inner
-  - if !@profile.has_viewed_initial_recommendations? && @gift_index+1 == @gift_recommendations.size
-    -# old behavior
-    -#= link_to giftee_more_recommendations_path(@giftee_id), class: 'wrapt-carousel__nav gr-carousel__nav next', onClick: "ga('send', 'event', 'recommendation', 'navigation', 'gift nav');", data: {loads_in_pjax_carousel_load_more: true} do
-    = link_to giftee_survey_response_copy_path(@profile, @profile.last_survey), class: 'wrapt-carousel__nav gr-carousel__nav next', onClick: "ga('send', 'event', 'recommendation', 'navigation', 'gift nav');", data: {loads_in_pjax_modal_two: true} do
+  - if @profile.can_generate_more_recs? && @gift_index+1 == @gift_recommendations.size
+    = link_to giftee_survey_response_copy_path(@profile, @profile.last_survey, append: '1'), class: 'wrapt-carousel__nav gr-carousel__nav next', onClick: "ga('send', 'event', 'recommendation', 'navigation', 'gift nav');", data: {loads_in_pjax_modal_two: true} do
       .gr-carousel__nav-icon
         =embedded_svg('icon-caret-right', class: "gr-carousel__nav--caret-right")
       .gr-carousel__nav-inner
