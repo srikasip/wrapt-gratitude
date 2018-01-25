@@ -8,9 +8,9 @@
     .row.sg-boxes__header
       .col-xs-12
         %h2.about-page__header Why is it so hard to get the right gift?
-    .row.sg-boxes
+    .sg-boxes
       - @boxes.each do |box|
-        .col-xs-12.col-md-4.sg-box
+        .sg-box
           .sg-box__content
             .sg-box__ill{id: box[:id]}
             %h5= box[:title]
