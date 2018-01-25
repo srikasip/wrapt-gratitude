@@ -33,6 +33,8 @@
                 %a.btn.btn-primary.btn-block.uppercase.mb6{href: my_account_order_path(@customer_order)} View Details
 
   = render "debug", customer_order: @customer_order
+
+= render 'adwords'
 = content_for :page_js do
   :javascript
     //Google Analytics Enhanced Ecommerce
