@@ -19,6 +19,23 @@ class SurveyResponse < ApplicationRecord
       question_responses.new survey_question: question
     end
   end
+  
+  def self.active
+    t = self.arel_table
+    where(t[:created_at].gt(Profile::TTL.ago))
+  end
+  
+  def active?
+    created_at > Profile::TTL.ago
+  end
+  
+  def completed?
+    completed_at.present?
+  end
+
+  def incomplete?
+    completed_at.blank?
+  end
 
   # Get a list of question resonses in the order they appear in the survey
   def ordered_question_responses

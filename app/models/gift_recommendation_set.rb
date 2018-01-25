@@ -23,6 +23,26 @@ class GiftRecommendationSet < ApplicationRecord
     where(rs_t[:updated_at].gt(TTL.ago)).
     where(id: GiftRecommendation.available.select(:recommendation_set_id))
   end
+
+  def self.current
+    t_rs = arel_table
+    # ugly sql to get newest active recommendation set from each profile
+    sql = %{
+      select id from (
+          #{active.select(:id, "row_number() over (partition by profile_id order by created_at desc) as row_number ").to_sql}
+        ) as _grouped_rec_sets
+        where row_number = 1
+    }
+    where("#{t_rs[:id].name} in (#{sql})")
+  end
+  
+  def self.with_notifications
+    where(id: GiftRecommendation.available.with_notifications.select(:recommendation_set_id))
+  end
+  
+  def recommendation_notifications
+    recommendations.select(&:available?).select(&:notify?)
+  end
   
   def active?
     updated_at > TTL.ago && recommendations.select(&:avaialble?).any?

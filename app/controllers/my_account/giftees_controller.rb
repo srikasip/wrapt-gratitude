@@ -23,7 +23,7 @@ class MyAccount::GifteesController < MyAccount::BaseController
         preload(gift_recommendation_sets: :recommendations).
         sort_by{|profile| profile.sorting_and_display_updated_at}.
         reverse!
-      ).page(params[:page])
+      ).page(params[:page]).per(50)
   end
 
   def edit

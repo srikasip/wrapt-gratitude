@@ -44,17 +44,25 @@ class Profile < ApplicationRecord
   def self.active
     active_recommendation_sets = where(id: GiftRecommendationSet.active.select(:profile_id))
     previous_orders = where(id: Ec::CustomerOrder.where.not(status: Ec::OrderStatuses::ORDER_INITIALIZED).select(:profile_id))
-    active_unfinished_survey_responses = where(id: SurveyResponse.where(completed_at: nil).where('updated_at > ?', TTL.ago).select(:profile_id))
+    active_unfinished_survey_responses = where(id: SurveyResponse.active.incomplete.select(:profile_id))
 
     active_recommendation_sets.or(previous_orders).or(active_unfinished_survey_responses)
   end
+    
+  def self.with_notifications
+    where(id: GiftRecommendationSet.current.with_notifications.select(:profile_id))
+  end
   
   def active?
-    current_gift_recommendation_set.present? || has_orders?
+    current_gift_recommendation_set.present? || has_orders? || has_active_incomplete_survey_responses?
   end
 
   def has_orders?
     customer_orders.select(&:not_initialized?).any?
+  end
+  
+  def has_active_incomplete_survey_responses?
+    survey_reponses.select(&:active?).select(&:incomplete).any?
   end
 
   def has_ordered_from_current_recommendation_set?
