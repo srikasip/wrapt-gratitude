@@ -50,7 +50,7 @@ class Profile < ApplicationRecord
   end
   
   def active?
-    current_gift_recommendation_set.present? && has_orders?
+    current_gift_recommendation_set.present? || has_orders?
   end
 
   def has_orders?

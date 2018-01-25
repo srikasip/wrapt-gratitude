@@ -84,15 +84,16 @@
 
                 %p
                   :ruby
-                    statuses = [gift.availability_string]
-                    statuses << (rec.viewed? ? "Viewed" : "Not Viewed")
+                    statuses = []
+                    statuses <<"Gift is #{gift.availability_string}"
+                    statuses << "Recommendation not viewed" if !rec.viewed?
                   #{statuses.join(", ")}
                   
                 %p
                   :ruby
                     statuses = []
-                    statuses << "Added at #{format_datetime(rec.created_at)}"
-                    statuses << "Viewed at #{format_datetime(rec.viewed_at)}" if rec.viewed_at.present?
+                    statuses << "Added: #{format_datetime(rec.created_at)}"
+                    statuses << "Viewed: #{format_datetime(rec.viewed_at)}" if rec.viewed_at.present?
                   #{statuses.join(", ")}
                                   
               .save-notice
@@ -100,7 +101,11 @@
               - if rec.added_by_expert?
                 Expert
               - else
-                Algorithm (score: #{rec.score.round})
+                Algorithm
+                %br
+                score: #{rec.score.round}
+                %br
+                gen: #{rec.generation_number}
             %td
               = simple_form_for(rec, url: admin_gift_recommendation_path(rec), method: 'patch', html: {class: 'form-inline'}) do |f|
                 = f.check_box :removed_by_expert, class: 'js_auto_save', id: nil
