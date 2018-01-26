@@ -56,9 +56,10 @@ class window.GiftImageCarousel
     if width > 768
       @elevateZoom = @image.elevateZoom()
     else
-      @elevateZoom = @image.elevateZoom({
-        zoomType: 'inner'
-      })
+      # remove zoom on mobile
+      # @elevateZoom = @image.elevateZoom({
+      #   zoomType: 'inner'
+      # })
 
 
   _setCarouselHeight: ->
