@@ -67,9 +67,9 @@ a:active .navbar-static-top__icon-circle,
 .navbar-brand__icon-wrapt-logo {
   height: 64px;
   width: 142px;
-  @media (max-width: $screen-xs-max) {
-    height: 31px;
-    width: 68px;
+  @media (max-width: 835px) {
+    height: 42px;
+    width: 92px;
     @include vertical-align;
   }
 }

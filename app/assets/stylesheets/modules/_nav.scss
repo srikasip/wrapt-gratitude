@@ -11,6 +11,10 @@
   .icon-bar {
     background-color: #FFFFFF;
   }
+  @media(max-width: 835px) {
+    display: inline-block;
+    margin-top: 7px;
+  }
 }
 
 .navbar-toggle__close {
@@ -58,6 +62,9 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  @media(max-width: 835px) {
+    display: block;
+  }
 }
 
 .top-navigation__menu {
@@ -115,6 +122,17 @@
     }
     .navbar-static-top__icon-circle{display:none;}
   } 
+}
+.top-navigation__my-giftees-mobile {
+  @media(max-width: 835px) {
+    display: inline-block;
+    margin-top: 16px;
+  }
+  display: none;
+}
+.top-navigation__menu-item.top-navigation__menu-item--mobile-visible a {
+  color: $gray-008;
+  font-size: 12px;
 }
 
 .top-navigation__notification {
@@ -190,7 +208,12 @@
     .navbar-static-top__icon-circle{display: none;}
   }
 }
-
+.top-navigation__brand {
+  @media(max-width: 835px) {
+    display: inline-block;
+    // @include vertical-align;
+  }
+}
 .top-navigation__brand-link {
   position: relative;
   height: 61px;
