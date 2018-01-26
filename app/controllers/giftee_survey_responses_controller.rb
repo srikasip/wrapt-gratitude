@@ -68,7 +68,20 @@ class GifteeSurveyResponsesController < ApplicationController
       SurveyResponse.transaction do
         @copy = profile_to_copy.copy_last_survey_response!
         @copy.question_responses.each do |question_response|
-          to_be_copied = (@last_survey_question_responses[question_response.survey_question] || []).first
+          survey_question = question_response.survey_question
+          # to_be_copied = (@last_survey_question_responses[survey_question] || []).first
+          # if to_be_copied.present?
+          #   question_response.update_attributes!(to_be_copied.copy_attributes) 
+          #   to_be_copied.survey_question_response_options.each do |option|
+          #     question_response.copy_option!(option)
+          #   end
+          # end
+          if @profile_to_be_removed.present? && survey_question.code == 'occasion'
+            # if this is from starting a new quiz copy the new occasion
+            to_be_copied = @profile_to_be_removed.last_survey.question_responses.where(survey_question: survey_question).first
+          else
+            to_be_copied = (@last_survey_question_responses[survey_question] || []).first
+          end
           if to_be_copied.present?
             question_response.update_attributes!(to_be_copied.copy_attributes) 
             to_be_copied.survey_question_response_options.each do |option|
