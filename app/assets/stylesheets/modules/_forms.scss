@@ -573,7 +573,7 @@ form.edit_survey_response {
     z-index: 1;
   }
   &:hover:after {
-    background-color: rgba(#93a8cd, 0.75);
+    background-color: rgba(#93a8cd, 0.25);
   }
   @media(max-width: $screen-md-min) {
     @include flex(0 1 160px);
