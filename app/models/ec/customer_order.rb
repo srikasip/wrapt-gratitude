@@ -15,6 +15,7 @@ module Ec
     before_validation -> { self.status ||= ORDER_INITIALIZED }
 
     before_save :_set_submitted_date
+    after_save :_update_gift_recommendation_set
 
     validates :status, inclusion: { in: VALID_ORDER_STATUSES }
     validates :order_number, presence: true
@@ -102,6 +103,19 @@ module Ec
     def _set_submitted_date
       if self.status_changed?(to: SUBMITTED)
         self.submitted_on = Date.today
+      end
+    end
+    
+    def _update_gift_recommendation_set
+      if status == SUBMITTED
+        t = GiftRecommendationSet.arel_table
+        # mark the recommendation sets associated with the profile
+        # as stale so they can be refreshed by the user for the next round
+        # of shopping
+        GiftRecommendationSet
+          .where(profile_id: profile_id)
+          .where(t[:updated_at].lt(created_at))
+          .update_all(stale: true)
       end
     end
   end

@@ -7,7 +7,7 @@ module Admin
     end
 
     def update
-      if @recommendation_set.update_attributes(update_params)
+      if @recommendation_set.update_attributes(update_params.merge(stale: false))
         flash.notice = "Note saved"
       else
         flash.alert = "The was a problem saving your note"

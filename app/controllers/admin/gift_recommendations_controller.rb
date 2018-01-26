@@ -24,7 +24,7 @@ module Admin
       GiftRecommendation.transaction do
         @gift_recommendation = @recommendation_set.recommendations.create(attrs)
         # make sure updated_at gets updated
-        @recommendation_set.update_attributes(expert: current_user, updated_at: Time.now)
+        @recommendation_set.update_attributes(expert: current_user, stale: false, updated_at: Time.now)
         @recommendation_set.normalize_recommendation_positions!
       end
       redirect_to edit_path, notice: "#{@gift.title} (#{@gift.wrapt_sku}) added"
@@ -36,7 +36,7 @@ module Admin
       GiftRecommendation.transaction do
         @gift_recommendation.update_attributes(attrs)
         # make sure updated_at gets updated
-        @recommendation_set.update_attributes(expert: current_user, updated_at: Time.now)
+        @recommendation_set.update_attributes(expert: current_user, stale: false, updated_at: Time.now)
       end
       redirect_to edit_path, notice: "#{@gift.title} (#{@gift.wrapt_sku}) updated"
     end

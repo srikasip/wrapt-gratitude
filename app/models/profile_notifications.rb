@@ -10,7 +10,7 @@ class ProfileNotifications
   end
   
   def load_profiles
-    @profiles = user.owned_profiles.unarchived.active.with_notifications
+    @profiles = user.owned_profiles.active.with_notifications
   end
   
   def count

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180124153259) do
+ActiveRecord::Schema.define(version: 20180126150506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -222,15 +222,16 @@ ActiveRecord::Schema.define(version: 20180124153259) do
   end
 
   create_table "gift_recommendation_sets", force: :cascade do |t|
-    t.integer  "profile_id",                    null: false
+    t.integer  "profile_id",                        null: false
     t.string   "engine_type"
     t.text     "engine_params"
     t.text     "engine_stats"
     t.text     "expert_note"
     t.integer  "expert_id"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.integer  "generation_number", default: 0, null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.integer  "generation_number", default: 0,     null: false
+    t.boolean  "stale",             default: false, null: false
     t.index ["profile_id"], name: "index_gift_recommendation_sets_on_profile_id", using: :btree
   end
 
@@ -458,10 +459,10 @@ ActiveRecord::Schema.define(version: 20180124153259) do
     t.integer  "gifts_sent",                         default: 0,     null: false
     t.string   "last_name",                          default: ""
     t.datetime "archived_at"
-    t.boolean  "has_viewed_initial_recommendations", default: false, null: false
     t.integer  "birthday_day"
     t.integer  "birthday_month"
     t.integer  "birthday_year"
+    t.boolean  "has_viewed_initial_recommendations", default: false, null: false
     t.index ["created_at"], name: "index_profiles_on_created_at", using: :btree
     t.index ["recipient_invited_at"], name: "index_profiles_on_recipient_invited_at", using: :btree
   end

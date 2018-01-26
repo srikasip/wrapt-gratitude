@@ -41,12 +41,16 @@ class Profile < ApplicationRecord
 
   TTL = 30.days
   
-  def self.active
+  def self.all_active
     active_recommendation_sets = where(id: GiftRecommendationSet.active.select(:profile_id))
     previous_orders = where(id: Ec::CustomerOrder.where.not(status: Ec::OrderStatuses::ORDER_INITIALIZED).select(:profile_id))
     active_unfinished_survey_responses = where(id: SurveyResponse.active.incomplete.select(:profile_id))
 
     active_recommendation_sets.or(previous_orders).or(active_unfinished_survey_responses)
+  end
+  
+  def self.active
+    unarchived.all_active
   end
     
   def self.with_notifications
@@ -54,7 +58,7 @@ class Profile < ApplicationRecord
   end
   
   def active?
-    current_gift_recommendation_set.present? || has_orders? || has_active_incomplete_survey_responses?
+    unarchived? && current_gift_recommendation_set.present? || has_orders? || has_active_incomplete_survey_responses?
   end
 
   def has_orders?
@@ -63,16 +67,6 @@ class Profile < ApplicationRecord
   
   def has_active_incomplete_survey_responses?
     survey_reponses.select(&:active?).select(&:incomplete).any?
-  end
-
-  def has_ordered_from_current_recommendation_set?
-    set = current_gift_recommendation_set
-    orders = customer_orders.order(created_at: :desc).select(&:not_initialized?)
-    if orders.any? && set.present?
-      orders.first.created_at > set.created_at
-    else
-      false
-    end
   end
 
   def can_generate_more_recs?
@@ -199,10 +193,12 @@ class Profile < ApplicationRecord
   end
 
   def state_partial
-    if has_ordered_from_current_recommendation_set? 
-      'my_account/giftees/refresh_recommendations'
-    elsif finished_surveys?
-      'my_account/giftees/recommendations'
+    if finished_surveys?
+      if current_gift_recommendation_set.blank?
+        'my_account/giftees/refresh_recommendations'
+      else
+        'my_account/giftees/recommendations'
+      end
     else
       'my_account/giftees/finish_survey'
     end
