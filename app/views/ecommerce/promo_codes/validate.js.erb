@@ -1,0 +1,14 @@
+var error = '<%= escape_javascript(@promo_error_message) %>'
+var promoInput = $('input[name="promo_code"]');
+var formGroup = promoInput.parents('.form-group');
+var submit = $('button[type="submit"]');
+
+if(error) {
+  formGroup.addClass('has-error');
+  formGroup.find('.help-block').remove();
+  $("<div class='help-block'>"+error+"</div>").insertBefore('input[name="promo_code"]');  
+} else {
+  formGroup.removeClass('has-error');
+  formGroup.find('.help-block').remove();
+  submit.removeAttr('disabled');
+}
