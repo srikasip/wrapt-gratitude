@@ -2,6 +2,12 @@
 // also used on the recipient review page
 @import "helpers";
 
+.gift_recommendations h1 {
+  @media(max-width: $screen-xs-max) {
+    font-size: 3.9rem;
+  }
+}
+
 .gr-pages__container {
   min-height: 28px;
   position: relative;
