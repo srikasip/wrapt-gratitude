@@ -2,6 +2,21 @@
 // also used on the recipient review page
 @import "helpers";
 
+.gr-pages__container {
+  min-height: 28px;
+  position: relative;
+  .gr-pages__next,
+  .gr-pages__prev {
+    position: absolute;
+  }
+  .gr-pages__next {
+    right: 0px;
+  }
+  .gr-pages__prev {
+    left: 0px;
+  }
+}
+
 .survey_response_completions .modal-dialog {
   width: 90%;
   max-width: 945px;

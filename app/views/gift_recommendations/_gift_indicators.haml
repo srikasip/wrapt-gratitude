@@ -12,18 +12,18 @@
     .gr-carousel__indicators-group
       - @gift_recommendations.each_with_index do |gr, i|
         = render 'gift_indicator', gr: gr, mobile: false, index: i
-    .clearfix
+    .gr-pages__container
       - if @page < @next_page
-        .pull-right
+        .gr-pages__next
           = link_to 'NEXT', giftee_gift_recommendations_path(@giftee_id, carousel_page: @next_page), class: 'btn btn-default btn-xs btn-default__white'
       - elsif @page == @next_page && @profile.can_generate_more_recs?
-        .pull-right
+        .gr-pages__next
           = link_to 'NEXT', giftee_survey_response_copy_path(@profile, @profile.last_survey, append: '1'), class: 'btn btn-default btn-xs btn-default__white', data: {loads_in_pjax_modal_two: true}
 
       - if @page > 1
-        .pull-left
+        .gr-pages__prev
           = link_to 'PREVIOUS', giftee_gift_recommendations_path(@giftee_id, carousel_page: @prev_page), class: 'btn btn-default btn-xs btn-default__white'
-
+ 
       - if @profile.can_generate_more_recs?
         .text-center
           = link_to 'GET MORE RECOMMENDATIONS!', giftee_survey_response_copy_path(@profile, @profile.last_survey, append: '1'), class: 'btn btn-default btn-xs btn-default__white', data: {loads_in_pjax_modal_two: true}
