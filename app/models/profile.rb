@@ -46,7 +46,7 @@ class Profile < ApplicationRecord
     previous_orders = where(id: Ec::CustomerOrder.where.not(status: Ec::OrderStatuses::ORDER_INITIALIZED).select(:profile_id))
     active_unfinished_survey_responses = where(id: SurveyResponse.active.incomplete.select(:profile_id))
 
-    active_recommendation_sets.or(previous_orders).or(active_unfinished_survey_responses)
+    active_recommendation_sets.or(previous_orders).or(active_unfinished_survey_responses).where.not(relationship: nil)
   end
   
   def self.active

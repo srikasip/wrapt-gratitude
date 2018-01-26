@@ -10,11 +10,7 @@ class UserSessionsController < ApplicationController
   def create
     @user_session = UserSession.new user_session_params.merge(controller: self)
     if login(@user_session.email.downcase, @user_session.password, @user_session.remember)
-      if params[:return_to].present?
-        redirect_to params[:return_to]
-      else
-        redirect_back fallback_location: default_location_for_user(current_user)
-      end
+      redirect_to default_location_for_user(current_user)
     else
       @user_session.errors.add :password, 'Sorry, that password isn\'t correct'
       render :new
@@ -31,8 +27,12 @@ class UserSessionsController < ApplicationController
   end
 
   private def default_location_for_user user
-    if user.last_viewed_profile.present?
-      giftee_gift_recommendations_path(user.last_viewed_profile)
+    profiles = user.owned_profiles.active.order(updated_at: :desc)
+    last_profile = profiles.first
+    if last_profile.present? && last_profile.updated_at > 2.hours.ago && last_profile.current_gift_recommendation_set.present?
+      giftee_gift_recommendations_path(last_profile)
+    elsif profiles.any?
+      my_account_giftees_path
     else
       root_path
     end
