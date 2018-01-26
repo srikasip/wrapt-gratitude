@@ -63,7 +63,7 @@ module Recommender
       if recommendation_set.recommendations.any?
         #excluded any gift currently in the set
         t = Gift.arel_table
-        @gift_scope.where(t[:id].not_in(recommendation_set.recommendations.map(&:gift_id)))
+        @gift_scope = @gift_scope.where(t[:id].not_in(recommendation_set.recommendations.map(&:gift_id)))
       end
       @gift_scope
     end

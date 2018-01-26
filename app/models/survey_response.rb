@@ -12,6 +12,8 @@ class SurveyResponse < ApplicationRecord
 
   scope :completed, -> { where.not(completed_at: nil) }
   scope :incomplete, -> { where(completed_at: nil) }
+  
+  TTL = 2.days
 
   before_create :build_question_responses
   def build_question_responses
@@ -22,11 +24,12 @@ class SurveyResponse < ApplicationRecord
   
   def self.active
     t = self.arel_table
-    where(t[:created_at].gt(Profile::TTL.ago))
+    where(t[:created_at].gt(TTL.ago)).
+    where(survey_id: Survey.published.select(:id))
   end
   
   def active?
-    created_at > Profile::TTL.ago
+    created_at > TTL.ago
   end
   
   def completed?
