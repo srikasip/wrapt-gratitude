@@ -23,7 +23,7 @@ class GifteesController < ApplicationController
   end
 
   def index
-    @profiles = current_user.unarchived.owned_profiles
+    @profiles = current_user.owned_profiles.active
   end
 
   def new
