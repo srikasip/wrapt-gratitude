@@ -89,9 +89,13 @@ module ApplicationHelper
   end
 
   def top_nav_link_notification
-    content_tag :div, class: 'top-navigation__notification' do
-      concat content_tag :span, current_user.profile_notifications.count
-      concat embedded_svg('icon-wrapt-heart', class: 'svg-icon icon-notify navbar-static-top__icon-notify')
+    if current_user.present?
+      content_tag :div, class: 'top-navigation__notification' do
+        concat content_tag :span, current_user.profile_notifications.count
+        concat embedded_svg('icon-wrapt-heart', class: 'svg-icon icon-notify navbar-static-top__icon-notify')
+      end
+    else
+      ""
     end
   end
 
