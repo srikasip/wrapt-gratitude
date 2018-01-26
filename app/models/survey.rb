@@ -20,7 +20,7 @@ class Survey < ApplicationRecord
       where(published: true)
     end
   end
-
+  
   def sections_with_uncategorized
     sections.to_a.push uncategorized_section
   end

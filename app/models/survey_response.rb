@@ -22,10 +22,17 @@ class SurveyResponse < ApplicationRecord
     end
   end
   
+  def self.valid
+    where(survey_id: Survey.published.select(:id))
+  end
+  
+  def valid_survey?
+    survey_id == Survey.published.first.id
+  end
+  
   def self.active
     t = self.arel_table
-    where(t[:created_at].gt(TTL.ago)).
-    where(survey_id: Survey.published.select(:id))
+    valid.where(t[:created_at].gt(TTL.ago))
   end
   
   def active?
