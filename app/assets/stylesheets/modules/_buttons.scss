@@ -181,7 +181,7 @@ label.btn-multiple-choice-option {
   }
   &:nth-child(even) {
     @media(max-width: $screen-sm-max) {
-      margin-right: 0px;
+      // margin-right: 0px;
     }
   }
 }

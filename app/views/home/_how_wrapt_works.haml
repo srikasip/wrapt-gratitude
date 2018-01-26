@@ -4,6 +4,24 @@
     ['Our recommendations', 'We will recommend unique, artisanal items, lovingly made with stories that inspire.'],
     ['Wrapt & delivered', 'We send to your gift recipient, Wrapt and delivered, with love.']
   ]
+  images = [
+    {
+      src: 'home-page-featured/featured-01-min.jpg',
+      alt: 'A Stone on a Thread earrings by Ann Chikahisa'
+    },
+    {
+      src: 'home-page-featured/featured-02-min.jpg',
+      alt: 'Pampering soaps from Aria by Lucia'
+    },
+    {
+      src: 'home-page-featured/featured-03-min.jpg',
+      alt: 'Incredible chocolates by Elements Truffles'
+    },
+    {
+      src: 'home-page-featured/featured-04-min.jpg',
+      alt: 'Light and Beauty by Giraffe Home'
+    }
+  ]
 .wrapper--full-bleed__bg-03.pb5  
   .container.hpl__container
     .row
@@ -25,11 +43,7 @@
     .row.home__gift-images.pb5
       .col-xs-12
         .gift-images
-          .gift-image
-            =image_tag 'home-image-scarf.jpg', alt: 'Plum Crazy scarf by Indigo Handloom'
-          .gift-image
-            =image_tag 'home-image-packaged.jpg', alt: 'Pampering bath gifts in beautiful Wrapt packaging'
-          .gift-image
-            =image_tag 'home-image-chocolate.jpg', alt: 'Chocolates by Elements Truffles'
-          .gift-image
-            =image_tag 'home-image-necklace.jpg', alt: 'Carcanet of Pearl and Moonstone by Kristin Ford'
+          - images.each do |image|
+            .gift-image
+              = image_tag image[:src], alt: image[:alt]
+        
