@@ -518,6 +518,17 @@ form.edit_survey_response {
   }
 }
 
+.sqr-form__occasion {
+  font-size: 12px;
+}
+
+.sqr-form__occasion label {
+  text-align: center;
+  font-size: 2.75em;
+  @include akkurat-light;
+  display: block;
+  margin-bottom: 40px;
+}
 
 .sqr-form__occasion .option-row .col-xs-12 { 
   @include flexbox();
