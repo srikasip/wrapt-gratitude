@@ -5,24 +5,77 @@
 
 #hpb-carousel {
   margin: 10px 0px 50px;
+  .item {
+    // position: relative;
+  }
+  .btn.btn-default {
+    border-width: 2px;
+    background-color: #FFFFFF;
+    text-transform: uppercase;
+    @include akkurat-light;
+    font-size: 1.8em;
+  }
+}
+
+.hpb-carousel-slide__text {
+  position: absolute;
+  top: 38%;
+  left: 0px;
+  right: 0px;
+  @media(max-width: $screen-xs-max) {
+    position: static;
+    margin-top: 20px;
+  }
+}
+
+.hpbcs__text-container {
+  width: 85%;
+  margin: 0px auto;
+  text-align: right;
+  font-size: 12px;
+  h1, h5 {
+    @include akkurat-light;
+  }
+  h5 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-size: 2.75em;
+  }
+  @media(max-width: $screen-md-max) {
+    width: 90%;
+  }
+  @media(max-width: $screen-xs-max) {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 #hpb-carousel,
 #hpb-carousel img {
-  width: 100vw;
-}
-
-#hpb-carousel .item {
-  max-height: 615px;
-  overflow: hidden;
+  width: 100%;
 }
 
 #hpb-carousel .carousel-indicators {
-  position: static;
-  margin-left: 0px;
-  margin: 0px auto;
   li {
-    background-color: #ccc;
+    background-color: #FFF;
+    border: none;
+  }
+  li.active {
+    background-color: darken(#FFF, 2%);
+  }
+  @media(max-width: $screen-xs-max) {
+    position: static;
+    margin-left: 0px;
+    margin: 0px auto;
+    margin-top: 10px;
+    li {
+      background-color: #CCC;
+    }
+    li.active {
+      background-color: darken(#CCC, 2%);
+    }
   }
 }
 

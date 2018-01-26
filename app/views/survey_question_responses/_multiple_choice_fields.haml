@@ -1,3 +1,4 @@
+- @show_options_as_images ||= false
 %div{data: {behavior: 'hidden-option-id-inputs'}}
   = form.association :survey_question_options, as: :check_boxes, collection: @question_response.survey_question.options.standard, label_method: :text, input_html: {data: {behavior: 'option-id-input'}}
   - if @question_response.survey_question.other_option
@@ -9,7 +10,16 @@
 .row.option-row
   .col-xs-12
     - @question_response.survey_question.options.each do |option|
-      = link_to option.text, '#', class: 'btn btn-default btn-multiple-choice-option', data: {behavior: 'option-button', option_id: option.id}
+      - link_css_classes = ['btn', 'btn-default', 'btn-multiple-choice-option']
+      - show_image = @show_options_as_images && option.image.present?
+      - if show_image
+        - link_css_classes.push('btn-choice-with-image')
+        - link_inline_style = "background-image: url(#{image_path option.image})"
+      = link_to '#', class: link_css_classes, data: {behavior: 'option-button', option_id: option.id}, style: link_inline_style do
+        - if show_image
+          .btn-choice-with-image__text= option.text
+        - else
+          = option.text 
 
 
 = form.input :other_option_text, as: :string, label: false, wrapper_html: { data: {behavior: 'other-text-input-wrapper'}, style: other_optional_text_init_style(@question_response)}, input_html: {data: {behavior: 'other-text-input'}}

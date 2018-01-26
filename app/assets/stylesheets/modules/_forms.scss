@@ -523,10 +523,63 @@ form.edit_survey_response {
   @include flexbox();
   @include flexwrap();
   justify-content: space-between;
-  a {
-    @include flex(0 1 18%);
-    
+  @media(max-width: $screen-md-min) {
+    justify-content: center;
   }
+  @media(max-width: $screen-xs-min) {
+    justify-content: space-between;
+  }
+}
+
+.sqr-form__occasion .option-row a.btn-choice-with-image {
+  @include flexbox();
+  white-space: normal;
+  min-width: 1px;
+  align-items: center;
+  justify-content: center;
+  @include flex(0 0 20%);
+  margin-right: 0px;
+  margin-bottom: 0px;
+  border:none;
+  background-color: transparent;
+  color: #FFF;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 150px;
+  position: relative;
+  padding: 0px;
+  @include akkurat-bold;
+  font-size: 1.5em;
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-color: rgba(#b2a0a1, 0.75);
+    z-index: 1;
+  }
+  &:hover:after {
+    background-color: rgba(#93a8cd, 0.75);
+  }
+  @media(max-width: $screen-md-min) {
+    @include flex(0 1 160px);
+    margin-right: 12px;
+    margin-bottom: 12px;
+  }
+  @media(max-width: $screen-xs-min) {
+    @include flex(0 1 49%);
+    margin-right: 0px;
+    margin-bottom: 12px;
+  }
+}
+
+.btn-choice-with-image__text {
+  @include flex(0 1 100%);
+  position: relative;
+  z-index: 2;
 }
 
 

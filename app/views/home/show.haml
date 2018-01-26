@@ -1,9 +1,10 @@
 -#
   .home__hero
     = render 'hero_text_1'
-= render 'carousel'
+.container= render 'carousel'
 .container.home__hero-text-secondary
-  = render 'start_quiz_occasion'
+  #home-page-get-started
+    = render 'start_quiz_occasion'
   -#
     = render 'hero_text_2'
     .container
