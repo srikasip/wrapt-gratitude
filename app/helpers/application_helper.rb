@@ -118,7 +118,7 @@ module ApplicationHelper
   end
 
   def top_nav_toggle(action)
-    css_classes = action == :in ? 'navbar-toggle' : 'navbar-toggle navbar-toggle__close'
+    css_classes = action == :in ? 'navbar-toggle' : 'navbar-toggle navbar-toggle__close pull-right'
     data = {toggle: "fade #{action.to_s}", target: '.top-navigation__menu'}
     content_tag :button, type: 'button', class: css_classes, data: data do
       if action == :in
