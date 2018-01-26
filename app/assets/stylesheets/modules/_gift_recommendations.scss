@@ -4,7 +4,9 @@
 
 .gift_recommendations h1 {
   @media(max-width: $screen-xs-max) {
-    font-size: 3.9rem;
+    font-size: 28px;
+    line-height: 1.1;
+    margin-bottom: 6px;
   }
 }
 
