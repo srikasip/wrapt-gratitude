@@ -7,6 +7,7 @@ class HomeController < ApplicationController
   helper SurveyQuestionResponsesHelper
 
   def show
+    @show_options_as_images = true
     if current_user && current_user.last_viewed_profile.present?
       if session[:last_completed_survey_at].present?
         completed_at = Time.parse(session[:last_completed_survey_at]) rescue Time.parse('1985-01-01')
