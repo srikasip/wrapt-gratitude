@@ -9,7 +9,7 @@
         = form.input :email
         = form.input :password
         .text-right.lost-password-container
-          = link_to "Need a new password?", new_password_reset_request_path, data: {loads_in_pjax_modal: true}
+          = link_to "Need a new password?", new_password_reset_request_path(email: @email), data: {loads_in_pjax_modal: true}
         .pull-left
           = form.input :remember, label: 'Keep me signed in', as: :boolean
         .clearfix

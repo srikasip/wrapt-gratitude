@@ -5,6 +5,9 @@ class PasswordResetRequestsController < ApplicationController
 
   def new
     @password_reset_request = PasswordResetRequest.new
+    if params[:email].present?
+      @password_reset_request.email = params[:email]
+    end
   end
 
   def create
