@@ -47,3 +47,22 @@
   %button.btn.btn-primary{type: 'submit', disabled: true}
     = next_button_text
 
+- content_for :page_js do 
+  :javascript
+    $(document).ready(function() {
+      var submit = $('button[type="submit"]');
+      var promoInput = $('input[name="promo_code"]');
+      var validateUrl = "#{ecommerce_checkout_validate_promo_path}";
+      promoInput.on('keyup', function() {
+        var value = $(this).val();
+        if(value) {
+          submit.attr('disabled', true);
+          $.ajax({
+            type: 'POST',
+            url: validateUrl,
+            data: {promo_code: $(this).val()},
+            dataType: 'script'
+          });
+        }
+      })
+    })

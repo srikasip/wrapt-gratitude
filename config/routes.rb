@@ -99,7 +99,7 @@ Rails.application.routes.draw do
       patch "checkout/#{step}" => "checkout#save_#{action}"
     end
     get "checkout/finalize" => "checkout#finalize"
-
+    post "checkout/validate_promo" => "promo_codes#validate"
     resources :vendor_confirmations, only: [:show, :update] do
       member do
         get :details
