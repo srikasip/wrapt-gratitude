@@ -6,12 +6,13 @@
         =embedded_svg('wrapt-logo', class: "navbar-brand__icon-wrapt-logo")
     
     = top_nav_toggle(:in)
-    .top-navigation__my-giftees-mobile.pull-right
-      %span.top-navigation__menu-item.top-navigation__menu-item--mobile-visible
-        = link_to my_account_giftees_path do
-          = embedded_svg('icon-circle', class: 'icon navbar-static-top__icon-circle')
-          My Giftees
-          = top_nav_link_notification
+    - if current_user.present?
+      .top-navigation__my-giftees-mobile.pull-right
+        %span.top-navigation__menu-item.top-navigation__menu-item--mobile-visible
+          = link_to my_account_giftees_path do
+            = embedded_svg('icon-circle', class: 'icon navbar-static-top__icon-circle')
+            My Giftees
+            = top_nav_link_notification
     .top-navigation__menu.navbar-right.tnm__closed
       = top_nav_toggle(:out)
       - top_nav_links.each do |link|
