@@ -56,22 +56,6 @@
       - @gift.tags.each do |tag|
         %span.label.label-primary.label-inverse= tag.name
 
-    %hr
-
-    %p
-      - if @gift.can_be_sold
-        = form_tag(url_for(action: :add_to_recommendations), method: :post) do
-          %button.btn.btn-success.btn-sm
-            Add this gift
-          to
-          = collection_select 'gift_recommendation', 'profile_id', current_user.owned_profiles, :id, :name
-          's
-          gift recommendations
-          in
-          %select{name: 'gift_recommendation[user_id]'}
-            %option{value: current_user.id}= current_user.full_name + "'s"
-
-          account.
 
 .row
   .col-sm-12

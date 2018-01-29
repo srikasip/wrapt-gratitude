@@ -1,6 +1,6 @@
 module Admin
   class GiftsController < BaseController
-    before_action :set_gift, only: [:show, :edit, :update, :destroy, :add_to_recommendations]
+    before_action :set_gift, only: [:show, :edit, :update, :destroy]
 
     def index
       @gift_search = GiftSearch.new(gift_search_params)
@@ -42,20 +42,6 @@ module Admin
         @error_message = @gift.errors.full_messages.join('. ')
         render :edit
       end
-    end
-
-    def add_to_recommendations
-      good_params = params.require(:gift_recommendation).permit(:profile_id, :user_id)
-
-      user = User.find(good_params[:user_id])
-      giftee = user.owned_profiles.find(good_params[:profile_id])
-
-      recommendation = giftee.gift_recommendations.where(gift: @gift, profile: giftee).first_or_initialize
-      recommendation.position = -1
-      recommendation.save!
-
-      flash[:notice] = 'The gift was added to their recommendations'
-      redirect_back(fallback_location: admin_gift_path(id: @gift.id))
     end
 
     def destroy

@@ -9,7 +9,7 @@ class GiftRecommendationSetPages
   end
 
   def page_recommendations
-    pages[active_page_index]
+    pages[active_page_index] || []
   end
 
   def prev_page
