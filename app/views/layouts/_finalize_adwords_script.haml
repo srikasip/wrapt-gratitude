@@ -1,0 +1,11 @@
+- if Rails.env.production?
+  -#Event snippet for Purchase conversion page -->
+  :javascript
+    gtag('event', 'conversion', {
+    'send_to': 'AW-819859038/UPY6CNOU43sQ3pz4hgM',
+    'value': #{@customer_order.total_to_charge_in_dollars.to_json},
+    'currency': 'USD',
+    'transaction_id': #{@customer_order.id.to_json}
+    });
+
+

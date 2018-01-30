@@ -132,6 +132,7 @@ class Ecommerce::CheckoutController < ApplicationController
   end
 
   def finalize
+    @include_finalize_adwords_script = true
     @checkout_step = :finalize
     @expected_delivery = @customer_purchase.expected_delivery.text
   end
