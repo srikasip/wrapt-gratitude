@@ -36,11 +36,15 @@
     new App.GiftBasket({num_gifts: #{profile.gift_selections.count}})
     $(document).ready(function() {
       $('body').on('click', '[data-analytics="start-checkout"]', function() {
+        //What I think I need
+        // see _add_to_basket_button.haml
+        //addProduct
         ga('ec:setAction', 'checkout', {
           'option': 'initiate checkout', 
           'step': 0, 
           'dimension1': '#{@profile.try(:id) || -1}', 
           'dimension4': 'n/a'
         });
+        // send event
       })
     })

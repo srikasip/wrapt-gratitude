@@ -26,6 +26,8 @@
       App.ShowBillingAddress('', 'same_billing_zip', 'true', false, '.j-zip-code')
 
       //Google Analytics Enhanced Ecommerce
+      //What I think I need
+      //Maybe this should happen on submit?
       var actionData = {
         'option': 'Checkout 4: Payment Info',
         'step': 4,
@@ -36,6 +38,7 @@
         'dimension4': 'n/a'
       }
       ga('ec:setAction', 'checkout', actionData)
+      // send event
     })
 
 

@@ -9,11 +9,14 @@
   :javascript
     $(document).ready(function() {
       $('[data-analytics="add-gift-to-basket"]').click(function() {
-        ga('send', 'event', 'basket', 'add to basket', '#{gift_selection.gift.title.gsub(/'/, "\x5c\x27")}');
+        //What I think I need
+        // TODO: define productData 
+        //ga('ec:addProduct', productData);
         ga('ec:setAction', 'add', {
           'dimension1': '#{@profile.try(:id) || -1}', 
           'dimension4': 'n/a'
         });
+        ga('send', 'event', 'basket', 'add to basket', '#{gift_selection.gift.title.gsub(/'/, "\x5c\x27")}');
       });
     });
     

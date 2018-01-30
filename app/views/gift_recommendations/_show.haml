@@ -20,5 +20,12 @@
       'dimension1': '#{analytics_gifter_id || -1}',
       'dimension4': 'n/a'
     };
+    //console.log(productData);
     ga('ec:addProduct', productData);
+    //What I think is needed
+    //ga('ec:setAction', 'detail', {
+      //'list': 'Gift Recommendations'
+    //})
+    // see layouts/google_analytics.erb
+    //ga('send', 'pageview');
     

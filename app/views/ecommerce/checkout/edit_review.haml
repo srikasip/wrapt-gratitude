@@ -31,6 +31,8 @@
 = content_for :page_js do
   :javascript
     //Google Analytics Enhanced Ecommerce
+    //What I think I need
+    //Maybe this should happen on submit?
     $('document').ready(function() {
       var actionData = {
         'option': 'Checkout 5: Review Details',
@@ -42,4 +44,5 @@
         'dimension4': '#{@customer_order.promo_code}'
       }
       ga('ec:setAction', 'checkout', actionData);
+      // send event
     })

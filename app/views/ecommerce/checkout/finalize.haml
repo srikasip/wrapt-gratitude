@@ -38,6 +38,8 @@
 = content_for :page_js do
   :javascript
     //Google Analytics Enhanced Ecommerce
+    // What I think I need
+    // add product for ead product purchased
     $('document').ready(function() {
       var actionData = {
         'id': '#{@customer_order.id}',
@@ -48,4 +50,5 @@
         'dimension4': '#{@customer_order.promo_code}'
       }
       ga('ec:setAction', 'purchase', actionData);
+      // send event
     })

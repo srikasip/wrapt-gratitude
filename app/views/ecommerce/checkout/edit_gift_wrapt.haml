@@ -18,10 +18,15 @@
       App.NoteBehavior('customer_order', 'include_note', '0', false, '.j-co-gift-wrapt__note-2')
       
       //Google Analytics Enhanced Ecommerce
+      //What I think I need
+      //Maybe this should happen on submit?
+      //Maybe shouldn't send if they are editing
+      
       ga('ec:setAction', 'checkout', {
         'option': 'Checkout 1: Note', 
         'step': 1,
         'dimension1': '#{analytics_gifter_id || -1}',
         'dimension4': 'n/a'
       });
+      // send event
     })

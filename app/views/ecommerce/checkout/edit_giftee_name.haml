@@ -9,10 +9,14 @@
   :javascript
     $(document).ready(function() {
       //Google Analytics Enhanced Ecommerce
+      //What I think I need
+      //Maybe this should happen on submit?
+      
       ga('ec:setAction', 'checkout', {
         'option': 'Checkout 2: Shipping: Giftee Name', 
         'step': 2,
         'dimension1': '#{analytics_gifter_id || -1}',
         'dimension4': 'n/a'
       });
+      // send event
     })

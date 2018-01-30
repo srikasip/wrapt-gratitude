@@ -29,11 +29,13 @@
     $(document).ready(function() {
       $('body').on('click', '[data-analytics="remove-gift-from-basket"]', function() {
         var gift = $(this).data('gift');
-        ga('send', 'event', 'basket', 'remove from basket', gift);
+        //What I think I need
+        //addProduct
         ga('ec:setAction', 'remove', {
           'dimension1': '#{@profile.try(:id) || -1}', 
           'dimension4': 'n/a'
         });
+        ga('send', 'event', 'basket', 'remove from basket', gift);
       });
     })
     

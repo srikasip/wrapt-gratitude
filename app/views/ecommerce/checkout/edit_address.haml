@@ -59,10 +59,13 @@
       App.AddressSubmitButton()
       
       //Google Analytics Enhanced Ecommerce
+      //What I think I need
+      //Maybe this should happen on submit?
       ga('ec:setAction', 'checkout', {
         'option': 'Checkout 3: Shipping: Address', 
         'step': 3,
         'dimension1': '#{analytics_gifter_id || -1}',
         'dimension4': 'n/a'
       });
+      // send event
     })
