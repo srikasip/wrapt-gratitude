@@ -4,7 +4,7 @@
     %h1 Sign In
 
     = simple_form_for @user_session, url: user_session_path, html: { data: {submits_to_pjax_modal: true} } do |form|
-      = hidden_field_tag :return_to, (params[:return_to] || request.referrer)
+      = hidden_field_tag :return_to, params[:return_to]
       .form-inputs
         = form.input :email
         = form.input :password

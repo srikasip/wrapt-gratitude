@@ -30,7 +30,9 @@ class UserSessionsController < ApplicationController
   private def default_location_for_user user
     profiles = user.owned_profiles.active.order(updated_at: :desc)
     last_profile = profiles.first
-    if last_profile.present? && last_profile.updated_at > 2.hours.ago && last_profile.current_gift_recommendation_set.present?
+    if params[:return_to].present?
+      params[:return_to]
+    elsif last_profile.present? && last_profile.updated_at > 2.hours.ago && last_profile.current_gift_recommendation_set.present?
       giftee_gift_recommendations_path(last_profile)
     elsif profiles.any?
       my_account_giftees_path
