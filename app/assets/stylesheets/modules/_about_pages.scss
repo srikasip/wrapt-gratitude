@@ -15,7 +15,7 @@
   display: inline-block;
   padding: 0px 40px 20px;
   margin: 0 auto 40px;
-  border-bottom: solid 2px $tan-001;
+  border-bottom: solid 3px $tan-001;
   color: $gray-010;
 }
 .about-page__header__second-line {
@@ -107,14 +107,14 @@ sup:last-child {
   .icon {
     width: 22px;
     height: 22px;
-    fill: $blue-005;
+    fill: $blue-001;
     margin-left: 1px;
     vertical-align: middle;
   }
 }
 
 .about-page__mv p {
-  border-left: 2px solid $blue-005;
+  border-left: 2px solid $blue-001;
   padding-left: 10px;
 }
 
@@ -279,6 +279,11 @@ sup:last-child {
     margin-bottom: 0px;
     color: $gray-007;
     font-size: 14px;
+  }
+}
+.page_404 .sg-box__content {
+  @media(max-width: $screen-sm-max) {
+    @include shadowed-box__gray;
   }
 }
 
