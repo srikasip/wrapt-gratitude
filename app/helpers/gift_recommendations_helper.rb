@@ -15,17 +15,16 @@ module GiftRecommendationsHelper
   def mobile_nav_next_classes
     c = mobile_nav_base_classes
     c.push('next')
-    if @gift_recommendations.size > MOBILE_INDICATORS
-      if @gift_index >= MOBILE_INDICATORS && @page == @next_page
+    if @profile.can_generate_more_recs?
+      c.push('more-recommendations__trigger')
+    else
+      if @gift_recommendations.size > MOBILE_INDICATORS
+        if @gift_index >= MOBILE_INDICATORS && @page == @next_page
+          c.push('disabled')
+        end
+      elsif @page == @next_page
         c.push('disabled')
       end
-    else
-      if @page == @next_page
-        c.push('disabled') 
-      end
-    end
-    if !@profile.has_viewed_initial_recommendations?
-      c.push('more-recommendations__trigger')
     end
     c
   end
@@ -50,10 +49,10 @@ module GiftRecommendationsHelper
     if @gift_recommendations.size > MOBILE_INDICATORS
       if @gift_index < MOBILE_INDICATORS
         data = {behavior: 'scroll'}
-      elsif !@profile.has_viewed_initial_recommendations?
+      elsif @profile.can_generate_more_recs?
         data = {loads_in_pjax_modal_two: true}
       end
-    elsif !@profile.has_viewed_initial_recommendations?
+    elsif @profile.can_generate_more_recs?
       data = {loads_in_pjax_modal_two: true}
     end
   end
@@ -69,7 +68,7 @@ module GiftRecommendationsHelper
 
   def mobile_nav_next_path
     path = @page == @next_page ? '#' : giftee_gift_recommendations_path(@giftee_id, carousel_page: @next_page)
-    if !@profile.has_viewed_initial_recommendations?
+    if @profile.can_generate_more_recs?
       path = giftee_survey_response_copy_path(@profile, @profile.last_survey, append: '1')
     end
     path
