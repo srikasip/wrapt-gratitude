@@ -1,0 +1,25 @@
+.bq-container
+  %h1 Adjust any Basics?
+  = simple_form_for @last_survey_response, url: giftee_survey_response_path(@profile, @last_survey_response) do |form|
+    - if @profile_to_be_removed
+      = hidden_field_tag :profile_to_be_removed, @profile_to_be_removed.id
+    = hidden_field_tag :append, @append ? '1' : '0'
+    = form.simple_fields_for :question_responses do |f|
+      - if f.object.survey_question.basic?
+        .j-bq-question-response.bq-question-response
+          - label = f.object.survey_question.prompt_with_substitutions(@last_survey_response)
+          - if f.object.survey_question.is_a?(SurveyQuestions::MultipleChoice)
+            - if f.object.survey_question.use_multiple_response_form?
+              = render 'multiple_option_input', f: f, label: label
+            - else
+              = render 'single_option_input', f: f, label: label
+            = render 'explanations', f: f
+          - else
+            - if f.object.survey_question.is_a?(SurveyQuestions::Range)
+              = render 'range_input', f: f, label: label
+            - elsif f.object.survey_question.is_a?(SurveyQuestions::Text)
+              = render 'text_input', f: f, label: label
+    .text-center
+      = form.submit 'View Recommendations', class: 'btn btn-default uppercase'
+
+= render 'edit_js'

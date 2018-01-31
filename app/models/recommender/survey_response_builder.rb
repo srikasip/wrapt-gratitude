@@ -8,21 +8,28 @@ module Recommender
       @survey = opts[:survey] || Survey.published.first
     end
     
-    def copy!(source)
+    def survey_response
+      @survey_response || survey_responses.order('updated_at desc').first
+    end
+    
+    def create!
+      @survey_response = profile.survey_responses.create!(survey: survey, completed_at: Time.now)
+    end
+        
+    def copy!(source = nil)
       SurveyResponse.transaction do
-        destination = profile.survey_responses.create!(survey: survey, completed_at: Time.now)
-        return merge(source, destination)
+        source ||= survey_response
+        create!
+        merge(source)
       end
+      return survey_response
     end
   
-    def merge!(source, destination)
-      @destination_survey_response = destination
+    def merge!(source)
       @source_survey_response = source
       
       SurveyResponse.transaction do
-        @destination_survey_response = profile.survey_responses.create!(survey: survey, completed_at: Time.now)
-        
-        @destination_survey_response.question_responses.each do |destination_question_response|
+        survey_response.question_responses.each do |destination_question_response|
           source_question_response = match_question_response(destination_question_response)
           if source_question_response.present?
             copy_question_response(source_question_response, destination_question_response)
@@ -30,7 +37,7 @@ module Recommender
         end
       end
       
-      return @destination_survey_response
+      return survey_response
     end
   
     protected

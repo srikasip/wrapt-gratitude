@@ -54,6 +54,13 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :basic_quiz do
+    resources :profiles, only: :none do
+      resources :recommendation_sets, only: [:new, :create]
+      resources :change_profiles, only: [:new, :create]
+    end
+  end
+
   resources :profile_recipient_reviews, only: :show
   resources :funds, only: :index
 
