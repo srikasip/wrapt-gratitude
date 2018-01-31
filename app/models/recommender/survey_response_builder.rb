@@ -9,7 +9,7 @@ module Recommender
     end
     
     def survey_response
-      @survey_response || survey_responses.order('updated_at desc').first
+      @survey_response || @profile.survey_responses.order('updated_at desc').first
     end
     
     def create!
@@ -20,7 +20,7 @@ module Recommender
       SurveyResponse.transaction do
         source ||= survey_response
         create!
-        merge(source)
+        merge!(source)
       end
       return survey_response
     end
@@ -43,6 +43,8 @@ module Recommender
     protected
     
     def match_question_response(target)
+      # try to match the question responses based on the question.
+      # note: the questions may be from different surveys
       @source_survey_response.question_responses.detect do |candidate|
         (candidate.survey_question.id == target.survey_question.id ||
         candidate.survey_question.code == target.survey_question.code) &&
@@ -83,6 +85,7 @@ module Recommender
     end
     
     def match_question_option(question, target)
+      # try to match the question option (note: they may be from different surveys)
       question.options.detect do |candidate|
         candidate.id == target.id || candidate.text.to_s == target.text.to_s
       end

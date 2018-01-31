@@ -40,5 +40,5 @@
 - if @open_new_shopping_trip_modal == 'true'
   - content_for :page_js do
     :javascript
-      new App.PjaxModalTwoLoader('#{new_giftee_survey_response_path(@profile)}', {backdrop: 'static'})
+      new App.PjaxModalTwoLoader('#{new_basic_quiz_profile_change_profile_path(@profile)}', {backdrop: 'static'})
 

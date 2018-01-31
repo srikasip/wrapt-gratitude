@@ -1,0 +1,19 @@
+= simple_form_for @survey_response, url: basic_quiz_profile_recommendation_sets_path(@profile), method: :post do |form|
+  = hidden_field_tag :survey_response_id, @survey_response.id
+  = form.simple_fields_for :question_responses do |f|
+    - if f.object.survey_question.basic?
+      .j-bq-question-response.bq-question-response
+        - label = f.object.survey_question.prompt_with_substitutions(@survey_response)
+        - if f.object.survey_question.is_a?(SurveyQuestions::MultipleChoice)
+          - if f.object.survey_question.use_multiple_response_form?
+            = render 'basic_quiz/shared/multiple_option_input', f: f, label: label
+          - else
+            = render 'basic_quiz/shared/single_option_input', f: f, label: label
+          = render 'basic_quiz/shared/explanations', f: f
+        - else
+          - if f.object.survey_question.is_a?(SurveyQuestions::Range)
+            = render 'basic_quiz/shared/range_input', f: f, label: label
+          - elsif f.object.survey_question.is_a?(SurveyQuestions::Text)
+            = render 'basic_quiz/shared/text_input', f: f, label: label
+  .text-center
+    = form.submit 'View Recommendations', class: 'btn btn-default uppercase'

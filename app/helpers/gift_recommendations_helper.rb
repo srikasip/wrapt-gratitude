@@ -70,7 +70,7 @@ module GiftRecommendationsHelper
   def mobile_nav_next_path
     path = @page == @next_page ? '#' : giftee_gift_recommendations_path(@giftee_id, carousel_page: @next_page)
     if !@profile.has_viewed_initial_recommendations?
-      path = giftee_survey_response_copy_path(@profile, @profile.last_survey, append: '1')
+      path = new_basic_quiz_profile_recommendation_set_path(@profile)
     end
     path
   end
