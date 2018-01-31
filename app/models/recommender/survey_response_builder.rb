@@ -9,15 +9,23 @@ module Recommender
     end
     
     def copy!(source)
+      SurveyResponse.transaction do
+        destination = profile.survey_responses.create!(survey: survey, completed_at: Time.now)
+        return merge(source, destination)
+      end
+    end
+  
+    def merge!(source, destination)
+      @destination_survey_response = destination
       @source_survey_response = source
       
       SurveyResponse.transaction do
         @destination_survey_response = profile.survey_responses.create!(survey: survey, completed_at: Time.now)
         
-        @destination_survey_response.question_responses.each do |destination|
-          source = match_question_response(destination)
-          if source.present?
-            copy_question_response(source, destination)
+        @destination_survey_response.question_responses.each do |destination_question_response|
+          source_question_response = match_question_response(destination_question_response)
+          if source_question_response.present?
+            copy_question_response(source_question_response, destination_question_response)
           end
         end
       end
@@ -36,6 +44,8 @@ module Recommender
     end
     
     def copy_question_response(source, destination)
+      return false if source.unanswered?
+      
       case source.survey_question.type
       when 'SurveyQuestions::MultipleChoice'
         copy_multiple_choice_question_response(source, destination)
@@ -50,7 +60,7 @@ module Recommender
       destination.update_attributes(text_response: source.text_response, answered_at: Time.now)
     end
     
-    def copy_range_question_response(source, destination)
+    def copy_range_question_response(source, destination)      
       destination.update_attributes(range_response: source.range_response, answered_at: Time.now)
     end
     
@@ -59,8 +69,10 @@ module Recommender
         destination_option = match_question_option(destination.survey_question, source_option)
         if destination_option.present?
           destination.survey_question_response_options.create(survey_question_option: destination_option)
+          destination.update_attributes(answered_at: Time.now) if destination.unanswered?
         end
       end
+      return destination.answered?
     end
     
     def match_question_option(question, target)

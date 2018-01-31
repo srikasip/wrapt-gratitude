@@ -27,6 +27,14 @@ class SurveyQuestionResponse < ApplicationRecord
       "survey_response_type"
     ]
   end
+  
+  def answered?
+    answered_at.present?
+  end
+
+  def unanswered?
+    answered_at.blank?
+  end
 
   def copy_attributes
     self.dup.attributes.reject{|k, v| !attrs_to_copy.include?(k)}.merge({answered_at: Time.now})
