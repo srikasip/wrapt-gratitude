@@ -23,6 +23,8 @@ module Recommender
       sort_gift_scores
       filter_gift_scores
       generate_recommendations
+      
+      survey_response.update_attribute(:recommendations_generated_at, Time.now)
 
       @recommendations
     end

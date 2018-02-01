@@ -30,6 +30,10 @@ class SurveyResponse < ApplicationRecord
     survey_id == Survey.published.first.id
   end
   
+  def recommendations_generated?
+    recommendations_generated_at.present?
+  end
+  
   def self.active
     t = self.arel_table
     valid.where(t[:created_at].gt(TTL.ago))

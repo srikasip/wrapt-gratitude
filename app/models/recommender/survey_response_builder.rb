@@ -12,15 +12,21 @@ module Recommender
       @survey_response || @profile.survey_responses.order('updated_at desc').first
     end
     
+    def copy_needed?
+      survey_response.blank? ||
+      survey_response.survey_id != survey.id ||
+      survey_response.recommendations_generated?
+    end
+    
     def create!
-      @survey_response = profile.survey_responses.create!(survey: survey, completed_at: Time.now)
+      @survey_response = profile.survey_responses.create!(survey: survey)
     end
         
-    def copy!(source = nil)
+    def copy!
       SurveyResponse.transaction do
-        source ||= survey_response
+        source = survey_response
         create!
-        merge!(source)
+        merge!(source) if source.present?
       end
       return survey_response
     end

@@ -1,6 +1,7 @@
 = simple_form_for @survey_response, url: basic_quiz_profile_recommendation_sets_path(@profile), method: :post do |form|
   = hidden_field_tag :survey_response_id, @survey_response.id
-  = form.simple_fields_for :question_responses do |f|
+  - question_responses = @question_responses || @survey_response.question_responses
+  = form.simple_fields_for :question_responses, question_responses do |f|
     - if f.object.survey_question.basic?
       .j-bq-question-response.bq-question-response
         - label = f.object.survey_question.prompt_with_substitutions(@survey_response)

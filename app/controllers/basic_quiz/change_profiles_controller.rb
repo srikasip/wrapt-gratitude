@@ -16,7 +16,7 @@ module BasicQuiz
         active.where(relationship: @survey_response.profile.relationship)
     end
     
-    def created
+    def create
       # create a new survey response on the selected profile
       # copy the last set of survey responses from the selected profile
       # merge in any responses from the current survey response
@@ -28,16 +28,29 @@ module BasicQuiz
         builder.copy!
         builder.merge!(@survey_response)
         # destroy the models if they are single purpose
-        @survey_response.destroy
-        @profile.destroy if @profile.survey_responses.none?
+        #@survey_response.destroy
+        #@profile.destroy if @profile.survey_responses.none?
       end
       
-      redirect_to new_basic_quiz_profile_recommendation_set_path(selected_profile)
+      set_question_responses
+      
+      render :edit
     end
     
     def load_profile
       @profile = current_user.owned_profiles.find(params[:profile_id])
       @survey_response = @profile.last_survey
+    end
+    
+    def set_question_responses
+      unordered_list = @survey_response.question_responses.to_a
+      preferred_order = %w{whatlike spend occassion}
+      @question_responses = []
+      preferred_order.each do|code|
+        question_response = unordered_list.detect{|_| _.survey_question.code == code}
+        @question_responses << unordered_list.delete(question_response) if question_response.present?
+      end
+      @question_responses += unordered_list
     end
   end
 end
