@@ -210,6 +210,22 @@ module ApplicationHelper
     gift_basket_profile&.id
   end
 
+  def analytics_product_info(gift, profile, opts={})
+    info = {
+      id: gift.wrapt_sku,
+      name: gift.title,
+      category: "#{gift.product_category&.name}/#{gift.product_subcategory&.name}",
+      brand: gift.wrapt_sku.split('-')[1],
+      price: number_to_currency(gift.selling_price),
+      dimension1: profile&.owner_id || -1,
+      dimension4: opts[:promo] || 'n/a'
+    }
+    if opts[:position].present?
+      info[:position] = opts[:position]
+    end
+    opts[:plain] ? info : info.to_json.html_safe
+  end
+
   def analytics_role
     case current_user
     when nil then 'guest'

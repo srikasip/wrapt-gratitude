@@ -46,8 +46,7 @@
     = render 'pjax_modal_two_frame'
     = render_gift_basket if enable_gift_basket?
     - if @include_enhanced_ecommerce_analytics
-      %script
-        ga('require', 'ec');
+      = render 'layouts/enhanced_ecommerce_script'
     = yield :page_js
     - if enable_chat?
       %script
