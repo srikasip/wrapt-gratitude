@@ -32,7 +32,10 @@ module BasicQuiz
         #@profile.destroy if @profile.survey_responses.none?
       end
       
-      set_question_responses
+      @question_responses = builder.order_question_responses(
+        first: %w{whatlike spend},
+        last: 'occassion'
+      )
       
       render :edit
     end
@@ -42,16 +45,6 @@ module BasicQuiz
       @survey_response = @profile.last_survey
     end
     
-    def set_question_responses
-      unordered_list = @survey_response.question_responses.to_a
-      preferred_order = %w{whatlike spend occassion}
-      @question_responses = []
-      preferred_order.each do|code|
-        question_response = unordered_list.detect{|_| _.survey_question.code == code}
-        @question_responses << unordered_list.delete(question_response) if question_response.present?
-      end
-      @question_responses += unordered_list
-    end
   end
 end
 

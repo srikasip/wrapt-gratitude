@@ -45,6 +45,26 @@ module Recommender
       
       return survey_response
     end
+    
+    def order_question_responses(opts = {})
+      unordered= survey_response.question_responses.to_a
+      
+      prefix = []
+      first_codes = Array.wrap(opts[:first])
+      first_codes.each do|code|
+        question_response = unordered.detect{|_| _.survey_question.code == code}
+        prefix << unordered.delete(question_response) if question_response.present?
+      end
+      
+      postfix = []
+      last_codes = Array.wrap(opts[:last])
+      last_codes.each do|code|
+        question_response = unordered.detect{|_| _.survey_question.code == code}
+        postfix << unordered.delete(question_response) if question_response.present?
+      end
+      
+      return prefix + unordered + postfix
+    end
   
     protected
     

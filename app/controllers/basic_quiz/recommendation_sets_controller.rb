@@ -19,6 +19,11 @@ module BasicQuiz
       else
         @survey_response = builder.survey_response
       end
+            
+      @question_responses = builder.order_question_responses(
+        first: %w{whatlike spend},
+        last: 'occassion'
+      )
     end
     
     def create
