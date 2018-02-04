@@ -4,7 +4,7 @@
   = simple_form_for @question_response, url: giftees_path, html: {data: {behavior: 'question-response-form'}, class: 'sqr-form__occasion'} do |form|
     - if current_user&.admin?
       = hidden_field_tag :survey_id, @survey.id
-    - label = "Need a Gift? Choose an Occassion to Get Started"
+    - label = "Need a Gift? Choose an Occasion to Get Started"
     = render response_fields_partial, form: form, label: label
     .sqr-submit__container.text-right#js-sqr-submit__container
       %button{type: "submit", class: 'btn btn-primary sqr-submit__btn', data: {behavior: 'next-question-button'}}
