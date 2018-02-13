@@ -9,10 +9,9 @@
   :javascript
     $(document).ready(function() {
       //Google Analytics Enhanced Ecommerce
-      ga('ec:setAction', 'checkout', {
-        'option': 'Checkout 2: Shipping: Giftee Name', 
-        'step': 2,
-        'dimension1': '#{analytics_gifter_id || -1}',
-        'dimension4': 'n/a'
-      });
+      var products = #{@products_data}
+      gaAddProduct(products);
+      var actionData = #{@action_data};
+      gaSetAction('checkout', actionData);
+      ga('send', 'event', 'ecommerce', 'Checkout 2: Shipping: Giftee Name');
     })

@@ -21,19 +21,19 @@
         .gift-basket__price-count
           %span.gift-basket__gift-price.small
             = number_to_currency gift.selling_price
-      = link_to giftee_gift_selection_path(profile, gift_selection), data: {remote: true, behavior: 'remove-gift-from-basket', analytics: 'remove-gift-from-basket', gift: "#{gift.title}"}, method: :delete, class: 'gift-basket__remove-gift-link' do
+      = link_to giftee_gift_selection_path(profile, gift_selection), data: {remote: true, behavior: 'remove-gift-from-basket', analytics: 'remove-gift-from-basket', gift_name: "#{gift.title}", gift: analytics_product_info(gift, @profile)}, method: :delete, class: 'gift-basket__remove-gift-link' do
         =embedded_svg('icon-close', class: 'remove-gift-link__icon-close')
 
 = content_for :page_js do
   :javascript
     $(document).ready(function() {
       $('body').on('click', '[data-analytics="remove-gift-from-basket"]', function() {
+        //Google Analytics Enhanced Ecommerce
+        var giftName = $(this).data('gift-name');
         var gift = $(this).data('gift');
-        ga('send', 'event', 'basket', 'remove from basket', gift);
-        ga('ec:setAction', 'remove', {
-          'dimension1': '#{@profile.try(:id) || -1}', 
-          'dimension4': 'n/a'
-        });
+        ga('ec:addProduct', gift);
+        ga('ec:setAction', 'remove');
+        ga('send', 'event', 'basket', 'remove from basket', giftName);
       });
     })
     

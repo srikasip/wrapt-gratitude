@@ -5,20 +5,15 @@
       = render 'gift'
   = render 'gift_indicators'
 
+- @product_data = analytics_product_info(@gift, @profile, {position: @gift_index+1})
+
 - content_for :page_js do
   :javascript
     new window.GiftCarousel('#{gr_carousel_selector}', '.gr-carousel__indicators', '.gr-carousel__gift-container', '.gr-carousel__indicators-small')
 
     //Google Analytics Enhanced Ecommerce
-    var productData = {
-      'id': '#{@gift.wrapt_sku}',
-      'name': '#{@gift.title}',
-      'category': '#{@gift.product_category.try(:name)}/#{@gift.product_subcategory.try(:name)}',
-      'brand': '#{@gift.wrapt_sku.split('-')[1]}',
-      'position': '#{@gift_index+1}',
-      'price': '#{number_to_currency @gift.selling_price}',
-      'dimension1': '#{analytics_gifter_id || -1}',
-      'dimension4': 'n/a'
-    };
-    ga('ec:addProduct', productData);
+    var product = #{@product_data};
+    ga('ec:addProduct', product);
+    ga('ec:setAction', 'detail');
+    ga('send', 'event', 'ecommerce', 'view product');
     

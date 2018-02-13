@@ -1,0 +1,16 @@
+- content_for :page_js do
+  :javascript
+    ga('require', 'ec');
+    var gaAddProduct = function(products) {
+      $.each(products, function() {
+        //console.log('Add Product');
+        //console.log(this);
+        ga('ec:addProduct', this);
+      });
+    }
+    var gaSetAction = function(action, data) {
+      //console.log('Set Action');
+      //console.log('Action: '+action);
+      //console.log(data);
+      ga('ec:setAction', action, data);
+    }

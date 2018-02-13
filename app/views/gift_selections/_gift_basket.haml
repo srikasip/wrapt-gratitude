@@ -34,13 +34,4 @@
 = content_for :page_js do
   :javascript
     new App.GiftBasket({num_gifts: #{profile.gift_selections.count}})
-    $(document).ready(function() {
-      $('body').on('click', '[data-analytics="start-checkout"]', function() {
-        ga('ec:setAction', 'checkout', {
-          'option': 'initiate checkout', 
-          'step': 0, 
-          'dimension1': '#{@profile.try(:id) || -1}', 
-          'dimension4': 'n/a'
-        });
-      })
-    })
+    

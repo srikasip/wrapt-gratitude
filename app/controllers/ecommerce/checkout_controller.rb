@@ -7,6 +7,7 @@ class Ecommerce::CheckoutController < ApplicationController
   before_action :_load_service_object, except: [:start]
   before_action -> { @enable_chat = true }
   before_action :include_enhanced_ecommerce_analytics
+  before_action :load_enhanced_analytics_data, only: [:edit_gift_wrapt, :edit_giftee_name, :edit_address, :edit_payment, :edit_review, :finalize]
 
   helper :orders
 
@@ -132,11 +133,43 @@ class Ecommerce::CheckoutController < ApplicationController
   end
 
   def finalize
+    @include_finalize_adwords_script = true
     @checkout_step = :finalize
     @expected_delivery = @customer_purchase.expected_delivery.text
   end
 
   private
+
+  def load_enhanced_analytics_data 
+    step_options = {
+      edit_gift_wrapt: {option: 'Checkout 1: Note', step: 1},
+      edit_giftee_name: {option: 'Checkout 2: Shipping: Giftee Name', step: 2},
+      edit_address: {option: 'Checkout 3: Shipping: Address', step: 3},
+      edit_payment: {option: 'Checkout 4: Payment Info', step: 4},
+      edit_review: {option: 'Checkout 5: Review Details', step: 5},
+      finalize: {id: @customer_order.id},
+      customer_order_details: {
+        tax: @customer_order.taxes_in_dollars,
+        shipping: @customer_order.combined_handling_in_dollars,
+        revenue: @customer_order.total_to_charge_in_dollars,
+        coupon: @customer_order.promo_code || 'n/a'
+      },
+      other_details: {
+        dimension1: @profile.owner_id || -1,
+        dimension4: @customer_order.promo_code || 'n/a'
+      }
+    }
+    @products_data = @customer_order.
+      line_items.map(&:orderable).
+      map{|gift| helpers.analytics_product_info(gift, @profile, {plain: true})}.
+      to_json.html_safe
+    key = action_name.to_sym
+    data = step_options[key].merge(step_options[:other_details])
+    if key == :finalize || data[:step] > 3
+      data = data.merge(step_options[:customer_order_details])
+    end
+    @action_data = data.to_json.html_safe
+  end
 
   def _add_promo!
     @promo = PromoCode.where('start_date <= ?', Date.today).find_by(value: @promo_code)

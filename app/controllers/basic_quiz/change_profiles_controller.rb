@@ -10,7 +10,6 @@ module BasicQuiz
     
     def new
       # select an existing profile to associated with the survey response
-      # ask if they want to shop for profile they already have
       @disable_close = true
       @relationship_profiles = current_user.owned_profiles.
         active.where(relationship: @survey_response.profile.relationship)
@@ -32,10 +31,16 @@ module BasicQuiz
         #@profile.destroy if @profile.survey_responses.none?
       end
       
+      @profile = builder.profile
+      @survey_response = builder.survey_response
       @question_responses = builder.order_question_responses(
         first: %w{whatlike spend},
         last: 'occassion'
       )
+      
+      # invalidate any existing rec sets so they can get a fresh set
+      # of recommendations for this profile
+      @profile.gift_recommendation_sets.update_all(stale: true)
       
       render :edit
     end

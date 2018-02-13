@@ -13,7 +13,7 @@ class SurveyResponse < ApplicationRecord
   scope :completed, -> { where.not(completed_at: nil) }
   scope :incomplete, -> { where(completed_at: nil) }
   
-  TTL = 2.days
+  TTL = 10.minutes
 
   before_create :build_question_responses
   def build_question_responses

@@ -32,6 +32,7 @@
 
   = render "debug", customer_order: @customer_order
 = render 'application/loading', hidden: true
+
 - content_for :page_js do
   :javascript
     $(document).ready(function() {
@@ -59,10 +60,9 @@
       App.AddressSubmitButton()
       
       //Google Analytics Enhanced Ecommerce
-      ga('ec:setAction', 'checkout', {
-        'option': 'Checkout 3: Shipping: Address', 
-        'step': 3,
-        'dimension1': '#{analytics_gifter_id || -1}',
-        'dimension4': 'n/a'
-      });
+      var products = #{@products_data};
+      gaAddProduct(products);
+      var actionData = #{@action_data};
+      gaSetAction('checkout', actionData);
+      ga('send', 'event', 'ecommerce', 'Checkout 3: Shipping: Address');
     })

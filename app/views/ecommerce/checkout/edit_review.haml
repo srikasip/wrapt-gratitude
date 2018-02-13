@@ -32,14 +32,9 @@
   :javascript
     //Google Analytics Enhanced Ecommerce
     $('document').ready(function() {
-      var actionData = {
-        'option': 'Checkout 5: Review Details',
-        'step': 5,
-        'tax': '#{@customer_order.taxes_in_dollars}',
-        'shipping': '#{@customer_order.combined_handling_in_dollars}',
-        'revenue': '#{@customer_order.total_to_charge_in_dollars}',
-        'dimension1': '#{analytics_gifter_id || -1}',
-        'dimension4': '#{@customer_order.promo_code}'
-      }
-      ga('ec:setAction', 'checkout', actionData);
+      var products = #{@products_data}
+      gaAddProduct(products);
+      var actionData = #{@action_data}
+      gaSetAction('checkout', actionData);
+      ga('send', 'event', 'ecommerce', 'Checkout 5: Review Details');
     })

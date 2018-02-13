@@ -1,19 +1,20 @@
+- gift = gift_selection.gift
 - @_selected_gift_ids ||= profile.gift_selections.pluck(:gift_id)
 - if gift_selection.gift_id.in? @_selected_gift_ids
   -#= submit_tag 'ADDED TO BASKET', class: 'btn btn-primary btn-narrower', disabled: true
   = link_to 'VIEW BASKET', '#', class: 'btn btn-primary btn-narrower btn-full-width', data: {behavior: 'open-gift-basket'}
 - else
   = submit_tag 'ADD TO BASKET', class: 'btn btn-primary btn-narrower', data: {analytics: 'add-gift-to-basket'}
-
+- @product_data = analytics_product_info(gift, @profile)
 - content_for :page_js do
   :javascript
     $(document).ready(function() {
       $('[data-analytics="add-gift-to-basket"]').click(function() {
+        //Google Analytics Enhanced Ecommerce
+        var product = #{@product_data}
+        ga('ec:addProduct', product);
+        ga('ec:setAction', 'add');
         ga('send', 'event', 'basket', 'add to basket', '#{gift_selection.gift.title.gsub(/'/, "\x5c\x27")}');
-        ga('ec:setAction', 'add', {
-          'dimension1': '#{@profile.try(:id) || -1}', 
-          'dimension4': 'n/a'
-        });
       });
     });
     

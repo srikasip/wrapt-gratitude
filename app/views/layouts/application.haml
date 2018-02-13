@@ -10,6 +10,9 @@
     %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
     %meta{content: "IE=edge", "http-equiv": "X-UA-Compatible"}
     = render 'layouts/google_analytics'
+    = render 'layouts/adwords'
+    - if @include_finalize_adwords_script
+      = render 'layouts/finalize_adwords_script'
     = csrf_meta_tags
     = action_cable_meta_tag
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
@@ -46,8 +49,7 @@
     = render 'pjax_modal_two_frame'
     = render_gift_basket if enable_gift_basket?
     - if @include_enhanced_ecommerce_analytics
-      %script
-        ga('require', 'ec');
+      = render 'layouts/enhanced_ecommerce_script'
     = yield :page_js
     - if enable_chat?
       %script

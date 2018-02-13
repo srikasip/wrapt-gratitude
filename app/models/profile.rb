@@ -193,14 +193,10 @@ class Profile < ApplicationRecord
   end
 
   def state_partial
-    if finished_surveys?
-      if current_gift_recommendation_set.blank?
-        'my_account/giftees/refresh_recommendations'
-      else
-        'my_account/giftees/recommendations'
-      end
+    if current_gift_recommendation_set.blank?
+      'my_account/giftees/refresh_recommendations'
     else
-      'my_account/giftees/finish_survey'
+      'my_account/giftees/recommendations'
     end
   end
 end

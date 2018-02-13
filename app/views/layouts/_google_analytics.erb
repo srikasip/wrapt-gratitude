@@ -6,6 +6,9 @@
   ga('set', 'dimension1', '<%= analytics_gifter_id || -1 %>'); // Gifter ID. Even if gifter value is same as userID (used above), we still want it as a dimension. If giftee, this is *their* gifter's ID.
   ga('set', 'dimension2', '<%= analytics_profile_id || -1 %>'); // Profile ID. If user is a giftee ID, this dimension gets set.
   ga('set', 'dimension3', '<%= analytics_role %>'); // Role. Value should be either: admin, tester, tester-loop11, guest (if not logged in)
+  
+  // TODO: add variable to stop this on pages that need to send this event after enhanced analytics have been added
+  // I think instead of sending a page view event after enhanced analytics we should send custom event
   ga('send', 'pageview');
   </script>
   <script async src='https://www.google-analytics.com/analytics.js'></script>
