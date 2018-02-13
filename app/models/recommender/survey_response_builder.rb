@@ -100,6 +100,7 @@ module Recommender
     end
     
     def copy_multiple_choice_question_response(source, destination)
+      destination.survey_question_response_options.destroy_all
       source.survey_question_response_options.map(&:survey_question_option).each do |source_option|
         destination_option = match_question_option(destination.survey_question, source_option)
         if destination_option.present?
