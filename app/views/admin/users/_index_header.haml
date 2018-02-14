@@ -6,7 +6,6 @@
   .col-sm-12
     = link_to 'Invite One User', new_admin_user_path, class: 'btn btn-primary'
     = link_to 'Import Multiple Users', new_admin_user_import_path, class: 'btn btn-primary'
-    = link_to 'Invitation Requests', admin_invitation_requests_path, class: 'btn btn-primary'
     = link_to 'Export CSV', export_admin_users_path(format: :csv), class: 'btn btn-primary'
 
 .row.admin__search
@@ -15,7 +14,6 @@
       .form-group
         = form.search_field :keyword, placeholder: 'Name or email', class: 'form-control', style: 'min-width: 300px;'
         = form.collection_select :source, user_sources, :first, :last, {prompt: 'Source', include_blank: @user_search.source.present?}, class: 'form-control'
-        = form.collection_select :beta_round, beta_rounds, :first, :last, {prompt: 'Beta Round', include_blank: @user_search.beta_round.present?}, class: 'form-control'
         %button.btn.btn-primary
           %i.glyphicon.glyphicon-search
           Search

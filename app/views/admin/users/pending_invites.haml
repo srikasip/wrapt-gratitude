@@ -9,8 +9,6 @@
           %th Email
           %th Access
           %th Source
-          %th How Found
-          %th Beta Round
           %th Invitation Sent
           %th
 
@@ -21,8 +19,6 @@
             %td= user.email
             %td= user.admin? ? 'Admin' : 'Regular'
             %td= user_sources[user.source]
-            %td= user.invitation_request_humanized_how_found
-            %td= beta_rounds[user.beta_round]
             %td
               #{time_ago_in_words(user.activation_token_generated_at || user.created_at)} ago
             %td

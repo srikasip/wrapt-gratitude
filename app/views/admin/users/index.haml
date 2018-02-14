@@ -16,8 +16,6 @@
           %th Access
           - if params[:extended_view] == 'on'
             %th Source
-            %th How Found
-            %th Beta Round
           %th
 
       %tbody
@@ -31,8 +29,6 @@
             %td= user.admin? ? 'Admin' : 'Regular'
             - if params[:extended_view] == 'on'
               %td= user_sources[user.source]
-              %td= user.invitation_request_humanized_how_found
-              %td= beta_rounds[user.beta_round]
             %td
               = link_to 'Edit', edit_admin_user_path(user), class: 'btn btn-default btn-xs'
               = link_to 'Manage Profiles', admin_user_profiles_path(user), class: 'btn btn-default btn-xs'

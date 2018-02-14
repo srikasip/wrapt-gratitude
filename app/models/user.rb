@@ -42,18 +42,12 @@ class User < ApplicationRecord
   has_many :file_exports
   has_many :owned_profiles, class_name: 'Profile', foreign_key: :owner_id, dependent: :destroy
   belongs_to :last_viewed_profile, class_name: 'Profile'
-  has_one :invitation_request, foreign_key: :invited_user_id
   
   has_many :expert_gift_recommendation_sets, class_name: 'GiftRecommendationSet', foreign_key: :expert_id, dependent: :nullify
 
   ###########################
   ### Methods
   ###########################
-
-  delegate :how_found, :humanized_how_found,
-    to: :invitation_request,
-    prefix: true,
-    allow_nil: true
 
   def full_name
     [first_name, last_name].compact.join " "

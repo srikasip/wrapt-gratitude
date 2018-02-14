@@ -6,7 +6,6 @@ module Admin
       @user_search = UserSearch.new(user_search_params)
       @users = User
         .where(activation_state: 'active')
-        .preload(:invitation_request)
         .search(user_search_params)
         .order(:email)
         .page(params[:page])
@@ -17,7 +16,6 @@ module Admin
       @user_search = UserSearch.new(user_search_params)
       @users = User
         .where(activation_state: 'pending')
-        .preload(:invitation_request)
         .search(user_search_params)
         .order(:activation_token_generated_at, :email)
         .page(params[:page])

@@ -11,7 +11,6 @@ Rails.application.routes.draw do
   get 'rewrapt', to: 'static_pages#rewrapt', as: :rewrapt
   get 'about', to: 'static_pages#about', as: :about
 
-  resources :invitation_requests, only: :create
 
   ##########################
   # Survey responses
@@ -41,7 +40,6 @@ Rails.application.routes.draw do
       resources :images, only: :show, controller: 'gift_recommendations', action: 'image'
     end
     resources :gift_selections, only: [:create, :destroy]
-    resources :giftee_invitations, only: [:new, :create]
     resources :gift_likes, only: [:create, :destroy]
     resources :gift_dislikes, only: [:create, :destroy]
   end
@@ -226,7 +224,7 @@ Rails.application.routes.draw do
   ####################
   ## Misc
   ####################
-  unless Rails.env.production?
+  unless Rails.env.inoduction?
     resource :style_guide, only: :none do
       member do
         # Add style guide routes here and to app/controllers/style_guides_controller.rb
