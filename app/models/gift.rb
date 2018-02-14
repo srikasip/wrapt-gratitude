@@ -254,8 +254,6 @@ class Gift < ApplicationRecord
   # not sure why the association below exists?
   #has_many :survey_responses, dependent: :destroy
   has_many :gift_selections, dependent: :destroy
-  has_many :recipient_gift_likes, dependent: :destroy
-  has_many :recipient_gift_dislikes, dependent: :destroy
   has_many :gift_dislikes, dependent: :destroy
   has_many :gift_likes, dependent: :destroy
 

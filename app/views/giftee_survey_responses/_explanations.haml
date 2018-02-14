@@ -1,5 +1,0 @@
-- explanations = f.object.survey_question.options.select{|o| o.explanation.present?}.map{|o| [o.explanation, o.id]}
-- if explanations.any?
-  .bq-explanations.pa1
-    - explanations.each do |e|
-      .j-bq-explanation{style: 'display:none;',data: {option_id: e[1]}}= e[0]

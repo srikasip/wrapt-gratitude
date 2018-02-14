@@ -44,14 +44,6 @@ Rails.application.routes.draw do
     resources :giftee_invitations, only: [:new, :create]
     resources :gift_likes, only: [:create, :destroy]
     resources :gift_dislikes, only: [:create, :destroy]
-    resources :recipient_gift_likes, only: [:create, :destroy]
-    resources :recipient_gift_dislikes, only: [:create, :destroy]
-    resources :recipient_gift_selections, only: [:create, :destroy]
-    resources :recipient_originated_referrals, only: [:new, :create]
-    resources :survey_responses, controller: 'giftee_survey_responses', only: [:edit, :update, :new, :create] do
-      # post 'copy'
-      get 'copy'
-    end
   end
 
   namespace :basic_quiz do
@@ -61,14 +53,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :profile_recipient_reviews, only: :show
   resources :funds, only: :index
-
-  # removed pt story #149729697
-  # resources :mvp1b_user_surveys, only: [:show, :new, :create]
-
-  get 'testing/survey_complete', to: 'survey_response_completions#show'
-  get 'testing/gift_recommendations', to: 'gift_recommendations#index'
 
 
   #####################################################
@@ -192,7 +177,6 @@ Rails.application.routes.draw do
     end
 
     resources :reports, only: :index
-    resources :mvp1b_user_surveys, only: :index
     resources :top_gifts_reports, only: :index
     resources :survey_response_reports, only: :index
 

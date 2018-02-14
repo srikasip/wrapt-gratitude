@@ -19,15 +19,10 @@ class Profile < ApplicationRecord
 
   has_many :gift_likes, inverse_of: :profile, dependent: :destroy
   has_many :gift_dislikes, inverse_of: :profile, dependent: :destroy
-  has_many :recipient_gift_likes, inverse_of: :profile, dependent: :destroy
-  has_many :recipient_gift_dislikes, inverse_of: :profile, dependent: :destroy
-  has_many :recipient_gift_selections, -> {order 'recipient_gift_selections.id'}, dependent: :destroy
   has_many :customer_orders, class_name: 'Ec::CustomerOrder', dependent: :nullify
   
   # this can go away once the migrations have been run to copy and remove it.
   serialize :recommendation_stats, Hash
-
-  before_create :generate_recipient_access_token
 
   addresses_blank_proc = proc do |attributes|
     [:street1, :city, :state, :zip].all? { |msg| attributes[msg].blank? }
@@ -118,10 +113,6 @@ class Profile < ApplicationRecord
 
   def finished_surveys?
     self.survey_responses.all? { |x| x.completed_at.present? }
-  end
-
-  def generate_recipient_access_token
-    self.recipient_access_token = SecureRandom.urlsafe_base64(nil, false)
   end
 
   def selling_price_total

@@ -39,7 +39,8 @@ module Reports
           (#{sql_likes}) as liked_count,
           (#{sql_dislikes}) as disliked_count
         from gift_recommendations as gr
-        where profile_id in (#{profile_id_sql})
+        join gift_recommendation_sets as grs on gr.recommendation_set_id = grs.id
+        where grs.profile_id in (#{profile_id_sql})
         group by gr.gift_id
         order by recommendation_count desc, avg_position asc, avg_score desc
         limit 100
@@ -49,10 +50,11 @@ module Reports
     
     def load_most_selected_gifts
       sql_recommended = %{
-        select gift_id, count(id) as recommendation_count,
+        select gift_id, count(gr.id) as recommendation_count,
           avg(position + 1) as avg_position, avg(score) as avg_score
-        from gift_recommendations
-        where profile_id in (#{profile_id_sql})
+        from gift_recommendations as gr
+        join gift_recommendation_sets as grs on gr.recommendation_set_id = grs.id
+        where grs.profile_id in (#{profile_id_sql})
         group by gift_id
       }
       sql_selection = %{
