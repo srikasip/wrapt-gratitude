@@ -63,6 +63,11 @@ class Profile < ApplicationRecord
   def has_active_incomplete_survey_responses?
     survey_reponses.select(&:active?).select(&:incomplete).any?
   end
+  
+  def self.with_abandon_cart
+    where(id: GiftSelection.select(:profile_id)).
+    where.not(id: Ec::CustomerOrder.where(status: Ec::CustomerOrder::PURCHASED).select(:profile_id))
+  end
 
   def can_generate_more_recs?
     current_gift_recommendation_set.generation_number == 0
