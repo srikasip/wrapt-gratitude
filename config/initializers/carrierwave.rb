@@ -8,8 +8,7 @@ CarrierWave.configure do |config|
     endpoint:              'https://s3.amazonaws.com'
   }
 
-  config.fog_directory  = "wrapt-gratitude-#{Rails.env}"
-  # config.fog_directory  = "wrapt-gratitude-production"
+  config.fog_directory  = ENV.fetch('BUCKET_NAME') { "wrapt-alternate" }
   config.fog_public     = false # defaults to true
   config.fog_attributes = { 'Cache-Control' => "max-age=#{365.day.to_i}" }
   config.fog_authenticated_url_expiration = 7.days.to_i
