@@ -1,7 +1,7 @@
 class SurveyQuestion < ApplicationRecord
   # abstract base class for survey questions
   belongs_to :survey, inverse_of: :questions
-  has_many :gift_question_impacts, dependent: :destroy
+  #has_many :gift_question_impacts, dependent: :destroy
 
   # type-specific associations are on the base class for preloading
   has_many :options, -> {order :sort_order}, inverse_of: :question, dependent: :destroy, class_name: 'SurveyQuestionOption'
