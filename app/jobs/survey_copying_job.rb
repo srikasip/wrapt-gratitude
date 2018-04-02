@@ -3,20 +3,25 @@ class SurveyCopyingJob < ApplicationJob
   attr_reader :source_survey, :target_survey
 
   def perform source_survey, target_survey
+    if target_survey.questions.count > 0
+      Rails.logger.fatal "Refusing to process target survey #{target_survey.id}: It already has questions."
+      return
+    end
+
     @source_survey = source_survey
     @target_survey = target_survey
     @question_mapping = {}
     Survey.transaction do
       copy_questions!
       copy_question_options!
+      target_survey.update!(copy_in_progress: false)
     end
   ensure
     begin
-      @target_survey.update!(copy_in_progress: false)
-    rescue ActiveRecord::RecordInvalid, ActiveRecord::StatementInvalid => e
-      Rails.logger.fatal "Failed to save survey in an ensure block #{e.message}"
+      ActionCable.server.broadcast "survey_copyings", html: render_survey(target_survey), survey_id: target_survey.id
+    rescue Exception => e
+      Rails.logger.fatal "Failed to broadcast about survey #{target_survey.id}: #{e.message}"
     end
-    ActionCable.server.broadcast "survey_copyings", html: render_survey(target_survey), survey_id: target_survey.id
   end
 
   private def copy_questions!
